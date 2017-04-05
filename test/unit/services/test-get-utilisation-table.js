@@ -4,7 +4,7 @@ const proxyquire = require('proxyquire')
 const DisplayTable = require('../../../app/services/domain/display-table')
 
 const HEADINGS_MONTH = 'June'
-const VALUES_UTILISATION = 118
+const VALUES_UTILISATION = 70
 const UTILISATION_RESULTS = { headings:
    [ 'January',
      'February',
@@ -28,7 +28,7 @@ describe('services/get-utilisation-table', function () {
     getUtilisationTable
       = proxyquire('../../../app/services/get-utilisation-table', {'./get-utilisation': getUtilisation})
 
-    results  = getUtilisationTable('offendermanager', 2016, 5)
+    results  = getUtilisationTable('offendermanager', 5, 2016)
 
     expect(results.headings[5]).to.equal(HEADINGS_MONTH)
     expect(results.rows[0].values[5]).to.equal(VALUES_UTILISATION)
