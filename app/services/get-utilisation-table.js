@@ -2,13 +2,14 @@ const getUtilisation = require('./data/get-utilisation')
 const DisplayTable = require('./domain/display-table')
 
 module.exports = function (orgUnitType, id, year) {
+
     var headings = []
     var rows = []
     var row = { label: "orgUnitType " + id, values: [] }
 
     //TODO validate orgUnitType, id and year
 
-    utilisationResults = getUtilisation(id, year)
+    utilisationResults = getUtilisation(orgUnitType, id, year)
 
     utilisationResults.forEach(function (utilisation) {
       headings.push(utilisation['month'])
