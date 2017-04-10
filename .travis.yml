@@ -3,5 +3,5 @@ node_js:
 - '6'
 cache: yarn
 before_script:
-  - yarn add -g gulp
-script: yarn && yarn test
+  - yarn global add gulp
+script: yarn install && yarn test
