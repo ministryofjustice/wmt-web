@@ -14,7 +14,6 @@ module.exports = function (id, capacityDateRange) {
     capacityDateRange.capacityToDate.toISOString()
   ).then((capacityResults) => {
     capacityResults.forEach(function (capacity) {
-      console.log(capacity)
       headings.push(capacity['workload_report_date'])
       capacityRow.values.push(capacity['capacity_percentage'])
       reductionRow.values.push(capacity['reductions'])
