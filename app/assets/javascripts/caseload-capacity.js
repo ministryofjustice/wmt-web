@@ -11,7 +11,7 @@ trace1 = {
 };
 trace2 = {
     x: capacityTable.headings,
-    y: capacityTable.rows[0].values,
+    y: capacityTable.rows[1].values,
     line: {width: 3.5},
     marker: {
         line: {width: -0.5},
