@@ -9,7 +9,17 @@ trace1 = {
     },
     name: 'Capacity %',
 };
-data = [trace1];
+trace2 = {
+    x: capacityTable.headings,
+    y: capacityTable.rows[0].values,
+    line: {width: 3.5},
+    marker: {
+        line: {width: -0.5},
+        size: 9
+    },
+    name: 'Reduction Hours ',
+};
+data = [trace1, trace2];
 layout = {
     hovermode: 'closest',
     legend: {
@@ -58,6 +68,15 @@ layout = {
         type: 'date',
         zeroline: false,
         zerolinewidth: 11
+    },
+    yaxis: {
+        autorange: false,
+        fixedrange: true,
+        range: [0, 120],
+        showline: true,
+        ticks: 'outside',
+        title: 'Capacity %',
+        type: 'linear'
     },
     yaxis: {
         autorange: false,
