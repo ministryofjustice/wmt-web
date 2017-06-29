@@ -12,7 +12,11 @@
 <table class="non-javascript">
     <tr>
     {% for heading in capacity.headings %}
+        {% if heading|isObject %}
+        <th scope="col">{{ heading | date("MMM DD, YYYY")}}</th>
+        {% else %}
         <th scope="col">{{ heading }}</th>
+        {% endif%}
     {% endfor %}
     </tr>
     <tr>

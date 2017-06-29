@@ -17,12 +17,15 @@ var developmentMode = app.get('env') === 'development'
 app.set('view engine', 'html')
 app.set('views', path.join(__dirname, 'views'))
 
-nunjucks(app, {
+var nunjucksObj = nunjucks(app, {
   watch: developmentMode,
   noCache: developmentMode
 })
 
-dateFilter.install()
+nunjucksObj.env.addFilter('date', dateFilter)
+nunjucksObj.env.addFilter('isObject', function (obj) {
+  return typeof obj === 'object'
+})
 
 app.use('/public', express.static(path.join(__dirname, 'public')))
 app.use('/public', express.static(path.join(__dirname, 'govuk_modules', 'govuk_template')))
