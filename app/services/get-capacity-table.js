@@ -15,7 +15,6 @@ module.exports = function (id, capacityDateRange) {
   ).then((capacityResults) => {
     capacityResults.forEach(function (capacity) {
       headings.push(capacity['workload_report_date'])
-      headings.push('Reduction Hours')
       capacityRow.values.push(capacity['capacity_percentage'])
       reductionRow.values.push(capacity['reductions'])
     })
