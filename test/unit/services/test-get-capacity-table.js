@@ -6,6 +6,7 @@ const DisplayTable = require('../../../app/services/domain/display-table')
 const CapacityDateRange = require('../../../app/services/domain/capacity-date-range')
 
 const HEADINGS_MONTH = '2017-01-06'
+const HEADINGS_REDUCTIONS = 'Reduction Hours'
 const VALUES_CAPACITY = 80
 const REDUCTION_HOURS = 6
 const CAPACITY_RESULTS = [
@@ -84,7 +85,8 @@ describe('services/get-capacity-table', function () {
 
     getCapacity.resolves(CAPACITY_RESULTS)
     getCapacityTable(5, capacityDateRange).then((results) => {
-      expect(results.headings[5]).to.equal(HEADINGS_MONTH)
+      expect(results.headings[10]).to.equal(HEADINGS_MONTH)
+      expect(results.headings[1]).to.equal(HEADINGS_REDUCTIONS)
       expect(results.rows[0].values[5]).to.equal(VALUES_CAPACITY)
       expect(results.rows[1].values[1]).to.equal(REDUCTION_HOURS)
       expect(results instanceof DisplayTable)

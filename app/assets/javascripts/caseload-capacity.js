@@ -17,7 +17,7 @@ trace2 = {
         line: {width: -0.5},
         size: 9
     },
-    name: 'Reduction Hours ',
+    name: 'Reduction Hours',
 };
 data = [trace1, trace2];
 layout = {
@@ -68,15 +68,6 @@ layout = {
         type: 'date',
         zeroline: false,
         zerolinewidth: 11
-    },
-    yaxis: {
-        autorange: false,
-        fixedrange: true,
-        range: [0, 120],
-        showline: true,
-        ticks: 'outside',
-        title: 'Capacity %',
-        type: 'linear'
     },
     yaxis: {
         autorange: false,

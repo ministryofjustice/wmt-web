@@ -3,6 +3,7 @@ const express = require('express')
 const favicon = require('serve-favicon')
 const helmet = require('helmet')
 const nunjucks = require('express-nunjucks')
+const dateFilter = require('nunjucks-date-filter')
 const path = require('path')
 const routes = require('./routes')
 
@@ -20,6 +21,8 @@ nunjucks(app, {
   watch: developmentMode,
   noCache: developmentMode
 })
+
+dateFilter.install()
 
 app.use('/public', express.static(path.join(__dirname, 'public')))
 app.use('/public', express.static(path.join(__dirname, 'govuk_modules', 'govuk_template')))
