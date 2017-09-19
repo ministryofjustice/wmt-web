@@ -1,3 +1,4 @@
+const moment = require('moment')
 const expect = require('chai').expect
 const assert = require('chai').assert
 const sinon = require('sinon')
@@ -26,7 +27,11 @@ var reductionHelper
 var newReductionId = 9
 var existingReductionId = 10
 var workloadOwnerId = 11
-var reduction = new Reduction(1, 1, new Date(), new Date(), 'This is a test note', reductionStatusType.ACTIVE)
+var activeStartDate = moment().subtract(30, 'days').toDate()
+var activeEndDate = moment().add(30, 'days').toDate()
+var reduction = new Reduction('1', '10',
+  [activeStartDate.getDate(), activeStartDate.getMonth(), activeStartDate.getFullYear()],
+  [activeEndDate.getDate(), activeEndDate.getMonth(), activeEndDate.getFullYear()], 'active note')
 
 var referenceData = [
   {
