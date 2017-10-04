@@ -19,12 +19,30 @@ module.exports = function (router) {
       })
   })
 
+  router.get('/admin/workload-points/t2a', function (req, res) {
+    var success = req.query.success
+    var successText = success ? 'You have successfully updated the workload points for transition to adulthood cases!' : null
+
+    return workloadPointsService.getWorkloadPoints(true)
+      .then(function (result) {
+        return res.render('workload-points', {
+          title: result.title,
+          subTitle: result.subTitle,
+          breadcrumbs: result.breadcrumbs,
+          wp: result.workloadPoints,
+          successText: successText,
+          isT2a: true
+        })
+      })
+  })
+
   router.post('/admin/workload-points', function (req, res, next) {
     var updatedWorkloadPoints
     try {
       updatedWorkloadPoints = new WorkloadPoints(req.body)
     } catch (error) {
       if (error instanceof ValidationError) {
+        // TODO Update error handling to return correct set of WP
         return workloadPointsService.getWorkloadPoints()
           .then(function (result) {
             return res.status(400).render('workload-points', {

@@ -1,7 +1,13 @@
 const config = require('../../../knexfile').web
 const knex = require('knex')(config)
 
-module.exports = function () {
+module.exports = function (t2a = false) {
+
+  var whereObject = {}
+  if (t2a === true) {
+    whereObject.isT2a = true
+  }
+
   return knex('workload_points')
     .first('id AS workloadPointsId',
             'comm_tier_1 AS commD2',
@@ -39,4 +45,5 @@ module.exports = function () {
             'effective_from AS effectiveFrom')
     .whereNotNull('effective_from')
     .whereNull('effective_to')
+    .where(whereObject)
 }

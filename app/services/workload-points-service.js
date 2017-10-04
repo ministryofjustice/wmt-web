@@ -6,7 +6,7 @@ const createCalculateWorkloadPointsTask = require('./data/create-calculate-workl
 const Link = require('./domain/link')
 const dateFormatter = require('./date-formatter')
 
-module.exports.getWorkloadPoints = function (id, organisationLevel) {
+module.exports.getWorkloadPoints = function (isT2a) {
   var result = {}
 
   var breadcrumbs = [
@@ -14,7 +14,7 @@ module.exports.getWorkloadPoints = function (id, organisationLevel) {
     new Link('Admin', '/admin')
   ]
 
-  return getWorkloadPoints().then(function (results) {
+  return getWorkloadPoints(isT2a).then(function (results) {
     if (results !== undefined) {
       var formattedUpdateDate = dateFormatter.formatDate(results.effectiveFrom, 'DD/MM/YYYY')
       results.effectiveFrom = formattedUpdateDate
@@ -28,6 +28,7 @@ module.exports.getWorkloadPoints = function (id, organisationLevel) {
 }
 
 module.exports.updateWorkloadPoints = function (workloadPoints) {
+  // TODO Need to make sure to close the correct WP (T2A or not)
   return updatePreviousWorkloadPointsEffectiveTo(workloadPoints.previousWpId).then(function (updateResults) {
     return insertNewWorkloadPoints(workloadPoints).then(function (insertResults) {
       return getWorkloadIdsForWpRecalc(workloadPoints.previousWpId).then(function (ids) {
