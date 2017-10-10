@@ -41,6 +41,8 @@ module.exports = function (t2a = false) {
             'weighting_o AS weightingOverdue',
             'weighting_w AS weightingWarrants',
             'weighting_u AS weightingUpw',
+            'weighting_arms_comm AS weightingArmsCommunity',
+            'weighting_arms_lic AS weightingArmsLicense',
             'parom AS parom',
             'effective_from AS effectiveFrom')
     .whereNotNull('effective_from')
