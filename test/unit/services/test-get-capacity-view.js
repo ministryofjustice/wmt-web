@@ -17,6 +17,7 @@ const TEAM_REULTS = [
   { name: 'Test name',
     grade: 'Test grade',
     totalCases: 39,
+    t2aCases: 29,
     linkId: 1,
     totalPoints: 50,
     availablePoints: 100,
@@ -30,6 +31,7 @@ const LDU_RESULTS = [
     name: 'Test ldu 1',
     grade: 'Test grade 1',
     totalCases: 39,
+    t2aCases: 29,
     linkId: 1,
     totalPoints: 50,
     availablePoints: 100,
@@ -40,6 +42,7 @@ const LDU_RESULTS = [
     name: 'Test ldu 1',
     grade: 'Test grade 2',
     totalCases: 40,
+    t2aCases: 30,
     linkId: 1,
     totalPoints: 50,
     availablePoints: 100,
@@ -52,6 +55,7 @@ const EXPECTED_TEAM_BREAKDOWN = [
   { name: 'Test name',
     grade: 'Test grade',
     totalCases: 39,
+    t2aCases: 29,
     linkId: 1,
     capacityPercentage: 50,
     cmsPercentage: 20
@@ -67,6 +71,7 @@ const EXPECTED_LDU_BREAKDOWN = [
         name: 'Test ldu 1',
         grade: 'Test grade 1',
         totalCases: 39,
+        t2aCases: 29,
         linkId: 1,
         capacityPercentage: 50,
         cmsPercentage: 20
@@ -75,6 +80,7 @@ const EXPECTED_LDU_BREAKDOWN = [
         name: 'Test ldu 1',
         grade: 'Test grade 2',
         totalCases: 40,
+        t2aCases: 30,
         linkId: 1,
         capacityPercentage: 50,
         cmsPercentage: 20

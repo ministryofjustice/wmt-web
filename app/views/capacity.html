@@ -111,12 +111,13 @@
     <thead>
       <tr>
         <th colspan="2" id="org">{{ childOrganisationLevelDisplayText }}</th>
-        <th colspan="8" id="breakdown">Capacity breakdown</th>
+        <th colspan="9" id="breakdown">Capacity breakdown</th>
       </tr>
       <tr>
         <th id="name">Name</th>
         <th id="grade">Grade</th>
         <th id="capacity">Capacity(%)</th>
+        <th id="t2aCases">T2A</th>
         <th id="cases">Cases</th>
         <th id="paroms"><abbr title="Parole Assessment Reports by the Offender Manager">PAROMs</abbr></th>
         <th id="fdrs"><abbr title="Fast Delivery Reports">FDRs</abbr></th>
@@ -133,6 +134,7 @@
           <td headers="name org"><a href="/offender-manager/{{ member.linkId }}">{{ member.name }}</a></td>
           <td headers="grade org">{{ member.grade }}</td>
           <td headers="capacity breakdown">{{ member.capacityPercentage | round(1) }}%</td>
+          <td headers="t2a breakdown">{{ member.t2aCases | round(1) }}</td>
           <td headers="cases breakdown">{{ member.totalCases | round(1) }}</td>
           <td headers="paroms breakdown">-</td>
           <td headers="fdrs breakdown">-</td>
@@ -154,6 +156,7 @@
             {% endif %}
           <td headers="grade org">{{ member.grades[i].grade }}</td>
           <td headers="capacity breakdown">{{ member.grades[i].capacityPercentage | round(1) }}%</td>
+          <td headers="t2a breakdown">{{ member.grades[i].t2aCases | round(1) }}</td>
           <td headers="cases breakdown">{{ member.grades[i].totalCases | round(1) }}</td>
           <td headers="paroms breakdown">-</td>
           <td headers="fdrs breakdown">-</td>

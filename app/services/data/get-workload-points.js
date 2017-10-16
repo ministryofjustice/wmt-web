@@ -2,10 +2,9 @@ const config = require('../../../knexfile').web
 const knex = require('knex')(config)
 
 module.exports = function (t2a = false) {
-
   var whereObject = {}
   if (t2a === true) {
-    whereObject.isT2a = true
+    whereObject.isT2A = true
   }
 
   return knex('workload_points')
@@ -44,7 +43,8 @@ module.exports = function (t2a = false) {
             'weighting_arms_comm AS weightingArmsCommunity',
             'weighting_arms_lic AS weightingArmsLicense',
             'parom AS parom',
-            'effective_from AS effectiveFrom')
+            'effective_from AS effectiveFrom',
+            'isT2A')
     .whereNotNull('effective_from')
     .whereNull('effective_to')
     .where(whereObject)

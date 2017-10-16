@@ -49,6 +49,13 @@ class FieldValidator {
     return this
   }
 
+  isBoolean () {
+    if (this.data && !validator.isBoolean(this.data.toString())) {
+      this.errors.add(this.fieldName, ERROR_MESSAGES.getIsBooleanMessage)
+    }
+    return this
+  }
+
   isValidUsername (username) {
     if (!username || !validator.isEmail(username) ||
       !username.endsWith('@' + config.ACTIVE_DIRECTORY_DOMAIN)) {

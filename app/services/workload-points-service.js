@@ -14,23 +14,22 @@ module.exports.getWorkloadPoints = function (isT2a) {
     new Link('Workload Points', '/admin/workload-points'),
     new Link('Admin', '/admin')
   ]
-
-  return getWorkloadPoints(isT2a).then(function (results) {
-    if (results !== undefined) {
-      var formattedUpdateDate = dateFormatter.formatDate(results.effectiveFrom, 'DD/MM/YYYY')
-      results.effectiveFrom = formattedUpdateDate
+  return getWorkloadPoints(isT2a).then(function (workloadPoints) {
+    var userId = null
+    if (workloadPoints !== undefined) {
+      var formattedUpdateDate = dateFormatter.formatDate(workloadPoints.effectiveFrom, 'DD/MM/YYYY')
+      workloadPoints.effectiveFrom = formattedUpdateDate
+      userId = workloadPoints.updatedByUserId
     }
-    return userRoleService.getUserById(workloadPoints.updatedByUserId)
+    return userRoleService.getUserById(userId)
     .then(function (user) {
-      var updatedBy = workloadPoints.updatedByUserId // Default to the user id
+      var updatedBy = userId // Default to the user id
+      var title = (isT2a) ? breadcrumbs[0].title + ' (Transition to Adulthood)' : breadcrumbs[0].title
       if (user) {
-        if (user.name) { // If there is a valid use that
-          updatedBy = user.name
-        } else {
-          updatedBy = user.username
-        }
+        // If there is a valid use that
+        updatedBy = (user.name) ? user.name : user.username
       }
-      result.title = breadcrumbs[0].title
+      result.title = title
       result.subTitle = breadcrumbs[1].title
       result.workloadPoints = workloadPoints
       result.updatedBy = updatedBy
@@ -41,7 +40,6 @@ module.exports.getWorkloadPoints = function (isT2a) {
 }
 
 module.exports.updateWorkloadPoints = function (workloadPoints) {
-  // TODO Need to make sure to close the correct WP (T2A or not)
   return updatePreviousWorkloadPointsEffectiveTo(workloadPoints.previousWpId).then(function (updateResults) {
     return insertNewWorkloadPoints(workloadPoints).then(function (insertResults) {
       return getWorkloadIdsForWpRecalc(workloadPoints.previousWpId).then(function (ids) {

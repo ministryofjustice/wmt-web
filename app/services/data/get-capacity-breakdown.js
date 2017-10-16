@@ -21,6 +21,7 @@ module.exports = function (id, type) {
             'name',
             'grade_code AS grade',
             'total_cases AS totalCases',
+            't2a_cases AS t2aCases',
             'cms_adjustment_points AS cmsAdjustmentPoints',
             'contracted_hours AS contractedHours')
     .then(function (results) {

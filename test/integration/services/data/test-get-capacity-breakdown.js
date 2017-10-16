@@ -12,6 +12,7 @@ var teamCapacityBreakdown = {
   name: 'Test_Forename Test_Surname',
   grade: 'PO',
   totalCases: 5,
+  t2aCases: 3,
   cmsAdjustmentPoints: 0,
   contractedHours: 37.5
 }
@@ -22,6 +23,7 @@ var lduAndAboveExpectedCapacity = {
   reductionHours: 6,
   grade: 'PO',
   totalCases: 10,
+  t2aCases: 6,
   cmsAdjustmentPoints: 0,
   contractedHours: 75
 }

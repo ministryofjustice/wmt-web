@@ -7,6 +7,7 @@ module.exports.maxStagingId = null
 
 var defaultWorkload = {
   total_cases: 5,
+  t2a_cases: 3,
   total_community_cases: 0,
   total_custody_cases: 0,
   total_license_cases: 0,
@@ -54,7 +55,8 @@ module.exports.defaultWorkloadPoints = {
   paroms_enabled: 1,
   parom: 99,
   effective_from: '2017-04-01',
-  effective_to: null
+  effective_to: null,
+  isT2A: false
 }
 
 module.exports.addOrgHierarchyWithPoAndPso = function () {
