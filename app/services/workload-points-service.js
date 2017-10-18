@@ -26,7 +26,6 @@ module.exports.getWorkloadPoints = function (isT2a) {
       var updatedBy = userId // Default to the user id
       var title = (isT2a) ? breadcrumbs[0].title + ' (Transition to Adulthood)' : breadcrumbs[0].title
       if (user) {
-        // If there is a valid use that
         updatedBy = (user.name) ? user.name : user.username
       }
       result.title = title
