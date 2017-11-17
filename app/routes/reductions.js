@@ -90,8 +90,11 @@ module.exports = function (router) {
 
     return reductionsService.getAddReductionsRefData(id, organisationLevel, workloadType)
       .then(function (result) {
-        var errors = req.session.addReductionErrors
-        delete req.session.addReductionErrors
+        var errors
+        if (authorisedUserRole.authorisation) {
+          errors = req.session.addReductionErrors
+          delete req.session.addReductionErrors
+        }
         return res.render('add-reduction', {
           breadcrumbs: result.breadcrumbs,
           linkId: id,
@@ -191,52 +194,52 @@ module.exports = function (router) {
     var reductionReason
 
     return reductionsService.getAddReductionsRefData(id, organisationLevel, workloadType)
-    .then(function (result) {
-      try {
-        // Dummy option in dropdown means array is offset by one
-        reductionReason = result.referenceData[req.body.reasonForReductionId - 1]
-        reduction = generateNewReductionFromRequest(req.body, reductionReason)
-      } catch (error) {
-        if (error instanceof ValidationError) {
-          var authorisedUserRole = authorisation.getAuthorisedUserRole(req)
-          return res.status(400).render('add-reduction', {
-            breadcrumbs: result.breadcrumbs,
-            linkId: id,
-            title: result.title,
-            subTitle: result.subTitle,
-            subNav: getSubNav(id, organisationLevel, req.path, workloadType),
-            referenceData: result.referenceData,
-            reduction: {
-              id: req.body.reductionId,
-              reasonId: req.body.reasonForReductionId,
-              hours: req.body.reductionHours,
-              start_day: req.body.redStartDay,
-              start_month: req.body.redStartMonth,
-              start_year: req.body.redStartYear,
-              end_day: req.body.redEndDay,
-              end_month: req.body.redEndMonth,
-              end_year: req.body.redEndYear,
-              notes: req.body.notes
-            },
-            errors: error.validationErrors,
-            workloadType: workloadType,
-            userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-            authorisation: authorisedUserRole.authorisation  // used by proposition-link for the admin role
-          })
-        } else {
-          next(error)
+      .then(function (result) {
+        try {
+          // Dummy option in dropdown means array is offset by one
+          reductionReason = result.referenceData[req.body.reasonForReductionId - 1]
+          reduction = generateNewReductionFromRequest(req.body, reductionReason)
+        } catch (error) {
+          if (error instanceof ValidationError) {
+            var authorisedUserRole = authorisation.getAuthorisedUserRole(req)
+            return res.status(400).render('add-reduction', {
+              breadcrumbs: result.breadcrumbs,
+              linkId: id,
+              title: result.title,
+              subTitle: result.subTitle,
+              subNav: getSubNav(id, organisationLevel, req.path, workloadType),
+              referenceData: result.referenceData,
+              reduction: {
+                id: req.body.reductionId,
+                reasonId: req.body.reasonForReductionId,
+                hours: req.body.reductionHours,
+                start_day: req.body.redStartDay,
+                start_month: req.body.redStartMonth,
+                start_year: req.body.redStartYear,
+                end_day: req.body.redEndDay,
+                end_month: req.body.redEndMonth,
+                end_year: req.body.redEndYear,
+                notes: req.body.notes
+              },
+              errors: error.validationErrors,
+              workloadType: workloadType,
+              userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
+              authorisation: authorisedUserRole.authorisation  // used by proposition-link for the admin role
+            })
+          } else {
+            next(error)
+          }
         }
-      }
 
-      return reductionsService.addReduction(id, reduction, workloadType).then(function () {
-        return res.redirect(302, '/' + workloadType + '/' + organisationLevel + '/' + id + '/reductions?success=true')
-      }).catch(function (error) {
+        return reductionsService.addReduction(id, reduction, workloadType).then(function () {
+          return res.redirect(302, '/' + workloadType + '/' + organisationLevel + '/' + id + '/reductions?success=true')
+        }).catch(function (error) {
+          next(error)
+        })
+      })
+      .catch(function (error) {
         next(error)
       })
-    })
-    .catch(function (error) {
-      next(error)
-    })
   })
 
   router.post('/:workloadType/:organisationLevel/:id/edit-reduction', function (req, res, next) {
@@ -268,52 +271,52 @@ module.exports = function (router) {
     var reductionReason
 
     return reductionsService.getAddReductionsRefData(id, organisationLevel, workloadType)
-    .then(function (result) {
-      try {
-        // Dummy option in dropdown means array is offset by one
-        reductionReason = result.referenceData[req.body.reasonForReductionId - 1]
-        reduction = generateNewReductionFromRequest(req.body, reductionReason)
-      } catch (error) {
-        if (error instanceof ValidationError) {
-          var authorisedUserRole = authorisation.getAuthorisedUserRole(req)
-          return res.status(400).render('add-reduction', {
-            breadcrumbs: result.breadcrumbs,
-            linkId: id,
-            title: result.title,
-            subTitle: result.subTitle,
-            subNav: getSubNav(id, organisationLevel, req.path, workloadType),
-            referenceData: result.referenceData,
-            reduction: {
-              id: req.body.reductionId,
-              reasonId: req.body.reasonForReductionId,
-              hours: req.body.reductionHours,
-              start_day: req.body.redStartDay,
-              start_month: req.body.redStartMonth,
-              start_year: req.body.redStartYear,
-              end_day: req.body.redEndDay,
-              end_month: req.body.redEndMonth,
-              end_year: req.body.redEndYear,
-              notes: req.body.notes
-            },
-            errors: error.validationErrors,
-            userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-            authorisation: authorisedUserRole.authorisation  // used by proposition-link for the admin role
-          })
-        } else {
-          next(error)
+      .then(function (result) {
+        try {
+          // Dummy option in dropdown means array is offset by one
+          reductionReason = result.referenceData[req.body.reasonForReductionId - 1]
+          reduction = generateNewReductionFromRequest(req.body, reductionReason)
+        } catch (error) {
+          if (error instanceof ValidationError) {
+            var authorisedUserRole = authorisation.getAuthorisedUserRole(req)
+            return res.status(400).render('add-reduction', {
+              breadcrumbs: result.breadcrumbs,
+              linkId: id,
+              title: result.title,
+              subTitle: result.subTitle,
+              subNav: getSubNav(id, organisationLevel, req.path, workloadType),
+              referenceData: result.referenceData,
+              reduction: {
+                id: req.body.reductionId,
+                reasonId: req.body.reasonForReductionId,
+                hours: req.body.reductionHours,
+                start_day: req.body.redStartDay,
+                start_month: req.body.redStartMonth,
+                start_year: req.body.redStartYear,
+                end_day: req.body.redEndDay,
+                end_month: req.body.redEndMonth,
+                end_year: req.body.redEndYear,
+                notes: req.body.notes
+              },
+              errors: error.validationErrors,
+              userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
+              authorisation: authorisedUserRole.authorisation  // used by proposition-link for the admin role
+            })
+          } else {
+            next(error)
+          }
         }
-      }
 
-      return reductionsService.updateReduction(id, reductionId, reduction, workloadType)
-      .then(function () {
-        return res.redirect(302, '/' + workloadType + '/' + organisationLevel + '/' + id + '/reductions?edited=true')
-      }).catch(function (error) {
+        return reductionsService.updateReduction(id, reductionId, reduction, workloadType)
+          .then(function () {
+            return res.redirect(302, '/' + workloadType + '/' + organisationLevel + '/' + id + '/reductions?edited=true')
+          }).catch(function (error) {
+            next(error)
+          })
+      })
+      .catch(function (error) {
         next(error)
       })
-    })
-    .catch(function (error) {
-      next(error)
-    })
   })
 
   router.post('/:workloadType/:organisationLevel/:id/update-reduction-status', function (req, res, next) {
@@ -355,11 +358,11 @@ module.exports = function (router) {
     }
 
     return reductionsService.updateReductionStatus(id, reductionId, reductionStatus, workloadType)
-    .then(function () {
-      return res.redirect(302, '/' + workloadType + '/' + organisationLevel + '/' + id + '/reductions' + successType)
-    }).catch(function (error) {
-      next(error)
-    })
+      .then(function () {
+        return res.redirect(302, '/' + workloadType + '/' + organisationLevel + '/' + id + '/reductions' + successType)
+      }).catch(function (error) {
+        next(error)
+      })
   })
 
   var getStatusText = function (request) {
