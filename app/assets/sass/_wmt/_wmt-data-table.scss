@@ -10,23 +10,21 @@ table.data-table {
     max-width: 1024px!important;
 }
 
-table.data-table tr th{
+table.data-table tr th {
     padding: 0 10px;
-    border: 1px solid #d9d9d9;
-}
-
-table.data-table tr th{
     text-align: center;
 }
 
-table tr.headers th{
+table.data-table tr, table.data-table th, table.data-table td {
+    border: 2px solid #000000;
+}
+
+table tr.headers th {
     padding-right: 30px;
 }
 
 table.data-table tr td{
     padding:5px 10px 5px 10px;
-    border-left: 1px solid #d9d9d9;
-    border: 1px solid #d9d9d9!important;
 }
 
 table.data-table th, table.data-table td {
@@ -61,8 +59,7 @@ table.data-table tr.data-sub-header td {
     padding: 5px 10px 5px 10px;
 }
 
-table.data-table tr.data-sub-header td:first-child{
-
+table.data-table tr.data-sub-header td:first-child {
     padding: 5px 5px 5px  15px;
 }
 
