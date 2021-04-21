@@ -11,6 +11,7 @@ const getCMSExport = require('../services/data/get-cms-export')
 const getCaseDetailsExport = require('../services/data/get-case-details-export')
 const getSuspendedLifersExport = require('../services/data/get-suspended-lifers-export')
 const getGroupSupervisionExport = require('../services/data/get-group-supervision-export')
+const getT2aDetailExport = require('../services/data/get-t2a-detail-export')
 const getScenarioExport = require('../services/get-scenario')
 const getWorkloadPercentageBreakdown = require('../services/data/get-workload-percentage-breakdown')
 const getExportCsv = require('../services/get-export-csv')
@@ -85,6 +86,7 @@ module.exports = function (router) {
     const scenarioPromise = getScenarioExport(id, organisationLevel)
     const getWorkloadPercentageBreakdownPromise = getWorkloadPercentageBreakdown(id, organisationLevel)
     const suspendedLifersPromise = getSuspendedLifersExport(id, organisationLevel)
+    const t2aPromise = getT2aDetailExport(id, organisationLevel)
 
     let tabType
 
@@ -139,6 +141,10 @@ module.exports = function (router) {
       case '8':
         exportPromise = expiringReductionsPromise
         tabType = tabs.EXPORT.EXPIRING_REDUCTIONS
+        break
+      case '9':
+        exportPromise = t2aPromise
+        tabType = tabs.EXPORT.T2A_EXPORT
         break
       default:
         exportPromise = Promise.resolve()
