@@ -90,7 +90,7 @@ module.exports = function (router) {
 
     let tabType
 
-    if (radioButton === '8') {
+    if (radioButton === '9') {
       try {
         authorisation.assertUserAuthenticated(req)
         authorisation.hasRole(req, [roles.DATA_ADMIN, roles.MANAGER])
@@ -197,6 +197,15 @@ const formatResults = function (results, tabType) {
       dt = newDate.getDate()
 
       result.completedDate = dt + '-' + month + '-' + year
+    }
+
+    if (tabType === tabs.EXPORT.T2A_EXPORT) {
+      newDate = new Date(result.Allocation_Date)
+      year = newDate.getFullYear()
+      month = newDate.getMonth() + 1
+      dt = newDate.getDate()
+
+      result.Allocation_Date = dt + '-' + month + '-' + year
     }
 
     if ((tabType === tabs.EXPORT.GROUP_SUPERVISION_EXPORT) || (tabType === tabs.EXPORT.CMS_EXPORT)) {

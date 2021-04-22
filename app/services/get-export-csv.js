@@ -40,6 +40,9 @@ const WORKLOAD_PERCENTAGE_BREAKDOWN_EXPORT_FIELDS = ['regionName', 'lduName', 't
 const SUSPENDED_LIFERS_EXPORT_FIELD_NAMES = ['Region Name', 'Probation Delivery Unit', 'Team Name', 'Tier Code', 'Row Type', 'CRN', 'Case Type', 'Offender Manager Name', 'Grade Code', 'In Custody?', 'Register Level', 'Register Category', 'Register Category Description', 'Registration Date']
 const SUSPENDED_LIFERS_EXPORT_FIELDS = ['regionName', 'lduName', 'teamName', 'tierCode', 'rowType', 'caseReferenceNo', 'caseType', 'offenderManagerName', 'gradeCode', 'inCustody', 'registerLevel', 'registerCategory', 'registerCategoryDescription', 'registrationDate']
 
+const T2A_EXPORT_FIELD_NAMES = ['Region Name', 'Region Id',' lduName', 'lduId', 'TeamN ame', 'Team Id', 'CRN', 'Workload Owner Id', 'Om Name', 'Om Code', 'Event Number', 'Allocation Date', 'NSI Outcome Code', 'NSI Outcome Descript']
+const T2A_EXPORT_FIELDS = ['regionName', 'regionId', 'lduName', 'lduId', 'teamName', 'teamId', 'CRN', 'workload_owner_id', 'omName', 'omCode', 'Event_No', 'Allocation_Date', 'NSI_Outcome_Cd', 'NSI_Outcome_Desc']
+
 module.exports = function (organisationLevel, result, tab) {
   let filename
   if (tab === tabs.ADMIN.DAILY_ARCHIVE || tab === tabs.ADMIN.FORTNIGHTLY_ARCHIVE || tab === tabs.ADMIN.REDUCTION_ARCHIVE) {
@@ -107,6 +110,12 @@ const getFilename = function (orgName, screen) {
       return 'Percentage_Workload_Breakdown_Export.csv'
     } else {
       return (orgName + ' Percentage_Workload_Breakdown_Export.csv').replace(replaceSpaces, '_')
+    }
+  } else if (screen === tabs.EXPORT.T2A_EXPORT) {
+    if (orgName === null) {
+      return 'T2A_Export.csv'
+    } else {
+      return (orgName + ' T2A_Export.csv').replace(replaceSpaces, '_')
     }
   } else if (screen === tabs.EXPORT.EXPIRING_REDUCTIONS) {
     if (orgName === null) {
@@ -194,6 +203,10 @@ const getFields = function (organisationLevel, tab) {
       fields = SUSPENDED_LIFERS_EXPORT_FIELDS
       fieldNames = SUSPENDED_LIFERS_EXPORT_FIELD_NAMES
       break
+    case tabs.EXPORT.T2A_EXPORT:
+      fields = T2A_EXPORT_FIELDS
+      fieldNames = T2A_EXPORT_FIELD_NAMES
+      break
     case tabs.EXPORT.EXPIRING_REDUCTIONS:
       fields = EXPIRING_REDUCTIONS_FIELDS
       fieldNames = EXPIRING_REDUCTIONS_FIELD_NAMES
@@ -280,6 +293,7 @@ const getCsv = function (organisationLevel, result, tab, fields, fieldNames) {
     case tabs.EXPORT.CMS_EXPORT:
     case tabs.EXPORT.WORKLOAD_PERCENTAGE_EXPORT:
     case tabs.EXPORT.SUSPENDED_LIFERS_EXPORT:
+    case tabs.EXPORT.T2A_EXPORT:
     case tabs.EXPORT.EXPIRING_REDUCTIONS:
       csv = generateCsv(result, fields, fieldNames)
       break
