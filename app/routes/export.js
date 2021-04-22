@@ -139,12 +139,12 @@ module.exports = function (router) {
         tabType = tabs.EXPORT.WORKLOAD_PERCENTAGE_EXPORT
         break
       case '8':
-        exportPromise = expiringReductionsPromise
-        tabType = tabs.EXPORT.EXPIRING_REDUCTIONS
-        break
-      case '9':
         exportPromise = t2aPromise
         tabType = tabs.EXPORT.T2A_EXPORT
+        break
+      case '9':
+        exportPromise = expiringReductionsPromise
+        tabType = tabs.EXPORT.EXPIRING_REDUCTIONS
         break
       default:
         exportPromise = Promise.resolve()
