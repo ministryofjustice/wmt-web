@@ -40,7 +40,7 @@ const WORKLOAD_PERCENTAGE_BREAKDOWN_EXPORT_FIELDS = ['regionName', 'lduName', 't
 const SUSPENDED_LIFERS_EXPORT_FIELD_NAMES = ['Region Name', 'Probation Delivery Unit', 'Team Name', 'Tier Code', 'Row Type', 'CRN', 'Case Type', 'Offender Manager Name', 'Grade Code', 'In Custody?', 'Register Level', 'Register Category', 'Register Category Description', 'Registration Date']
 const SUSPENDED_LIFERS_EXPORT_FIELDS = ['regionName', 'lduName', 'teamName', 'tierCode', 'rowType', 'caseReferenceNo', 'caseType', 'offenderManagerName', 'gradeCode', 'inCustody', 'registerLevel', 'registerCategory', 'registerCategoryDescription', 'registrationDate']
 
-const T2A_EXPORT_FIELD_NAMES = ['Region Name', 'Region Id',' lduName', 'lduId', 'TeamN ame', 'Team Id', 'CRN', 'Workload Owner Id', 'Om Name', 'Om Code', 'Event Number', 'Allocation Date', 'NSI Outcome Code', 'NSI Outcome Descript']
+const T2A_EXPORT_FIELD_NAMES = ['Region Name', 'Region Id', ' lduName', 'lduId', 'TeamN ame', 'Team Id', 'CRN', 'Workload Owner Id', 'Om Name', 'Om Code', 'Event Number', 'Allocation Date', 'NSI Outcome Code', 'NSI Outcome Descript']
 const T2A_EXPORT_FIELDS = ['regionName', 'regionId', 'lduName', 'lduId', 'teamName', 'teamId', 'CRN', 'workload_owner_id', 'omName', 'omCode', 'Event_No', 'Allocation_Date', 'NSI_Outcome_Cd', 'NSI_Outcome_Desc']
 
 module.exports = function (organisationLevel, result, tab) {
