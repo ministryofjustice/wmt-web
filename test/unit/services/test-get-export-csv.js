@@ -78,7 +78,7 @@ describe('services/get-export-csv', function () {
       expect(getExportCsv(orgUnit.TEAM.name, helper.SUSPENDED_LIFER_EXPORT_RESULT.suspendedLiferExportDetails, tabs.EXPORT.SUSPENDED_LIFERS_EXPORT).csv).to.eql(helper.SUSPENDED_LIFER_CSV.csv)
     })
 
-    it('for ARMS Export', function () {
+    it('for T2A Export', function () {
       expect(getExportCsv(orgUnit.TEAM.name, helper.T2A_EXPORT_RESULT.armsExportDetails, tabs.EXPORT.T2A_EXPORT).csv).to.eql(helper.T2A_EXPORT_CSV.csv)
     })
 
