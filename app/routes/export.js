@@ -11,6 +11,7 @@ const getCMSExport = require('../services/data/get-cms-export')
 const getCaseDetailsExport = require('../services/data/get-case-details-export')
 const getSuspendedLifersExport = require('../services/data/get-suspended-lifers-export')
 const getGroupSupervisionExport = require('../services/data/get-group-supervision-export')
+const getT2aDetailExport = require('../services/data/get-t2a-detail-export')
 const getScenarioExport = require('../services/get-scenario')
 const getWorkloadPercentageBreakdown = require('../services/data/get-workload-percentage-breakdown')
 const getExportCsv = require('../services/get-export-csv')
@@ -85,10 +86,11 @@ module.exports = function (router) {
     const scenarioPromise = getScenarioExport(id, organisationLevel)
     const getWorkloadPercentageBreakdownPromise = getWorkloadPercentageBreakdown(id, organisationLevel)
     const suspendedLifersPromise = getSuspendedLifersExport(id, organisationLevel)
+    const t2aPromise = getT2aDetailExport(id, organisationLevel)
 
     let tabType
 
-    if (radioButton === '8') {
+    if (radioButton === '9') {
       try {
         authorisation.assertUserAuthenticated(req)
         authorisation.hasRole(req, [roles.DATA_ADMIN, roles.MANAGER])
@@ -137,6 +139,10 @@ module.exports = function (router) {
         tabType = tabs.EXPORT.WORKLOAD_PERCENTAGE_EXPORT
         break
       case '8':
+        exportPromise = t2aPromise
+        tabType = tabs.EXPORT.T2A_EXPORT
+        break
+      case '9':
         exportPromise = expiringReductionsPromise
         tabType = tabs.EXPORT.EXPIRING_REDUCTIONS
         break
@@ -191,6 +197,15 @@ const formatResults = function (results, tabType) {
       dt = newDate.getDate()
 
       result.completedDate = dt + '-' + month + '-' + year
+    }
+
+    if (tabType === tabs.EXPORT.T2A_EXPORT) {
+      newDate = new Date(result.Allocation_Date)
+      year = newDate.getFullYear()
+      month = newDate.getMonth() + 1
+      dt = newDate.getDate()
+
+      result.Allocation_Date = dt + '-' + month + '-' + year
     }
 
     if ((tabType === tabs.EXPORT.GROUP_SUPERVISION_EXPORT) || (tabType === tabs.EXPORT.CMS_EXPORT)) {
