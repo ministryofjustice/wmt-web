@@ -101,7 +101,7 @@ const replaceIncorrectPercentageAverages = function (originalPercentageTotals, c
     originalPercentageTotals[key].a2 = correctPercentages[key].a2
     originalPercentageTotals[key].a1 = correctPercentages[key].a1
     originalPercentageTotals[key].a0 = correctPercentages[key].a0
-    
+
     originalPercentageTotals[key].b3 = correctPercentages[key].b3
     originalPercentageTotals[key].b2 = correctPercentages[key].b2
     originalPercentageTotals[key].b1 = correctPercentages[key].b1

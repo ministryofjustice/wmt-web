@@ -13,11 +13,11 @@ describe('services/helpers/group-scenario-data', function () {
     expect(scenarioObjectsArray.length).to.eql(2)
   })
 
-  it('should return 3 arrays of 8 objects within each Scenario Object', function () {
+  it('should return 3 arrays of 17 objects within each Scenario Object', function () {
     scenarioObjectsArray.forEach(function (scenarioObject) {
-      expect(scenarioObject.licenceCaseNumbers.length).to.eql(11)
-      expect(scenarioObject.custodyCaseNumbers.length).to.eql(11)
-      expect(scenarioObject.communityCaseNumbers.length).to.eql(11)
+      expect(scenarioObject.licenceCaseNumbers.length).to.eql(17)
+      expect(scenarioObject.custodyCaseNumbers.length).to.eql(17)
+      expect(scenarioObject.communityCaseNumbers.length).to.eql(17)
     })
   })
 })
