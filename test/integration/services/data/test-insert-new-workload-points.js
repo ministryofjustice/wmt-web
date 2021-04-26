@@ -45,7 +45,7 @@ const defaultWorkloadPoints = {
   licB3: 161,
   licB2: 132,
   licB1: 119,
-  lic80: 0,
+  licB0: 0,
   licC3: 77,
   licC2: 65,
   licC1: 52,
@@ -72,7 +72,7 @@ const defaultWorkloadPoints = {
 
 const defaultWorkloadPointsT2A = Object.assign({}, defaultWorkloadPoints, { isT2A: true })
 
-describe.only('services/data/insert-new-workload-points', function () {
+describe('services/data/insert-new-workload-points', function () {
   it('should return an id when a valid workload points object has been added, and the row should exist in the DB', function () {
     return insertWorkloadPoints(defaultWorkloadPoints)
       .then(function (id) {
@@ -80,7 +80,7 @@ describe.only('services/data/insert-new-workload-points', function () {
         expect(id[0]).to.be.a('number')
         return dataHelper.getAllWorkloadPointsForTest()
           .then(function (workloadPoints) {
-            expect(workloadPoints).to.deep.include(defaultWorkloadPoints)
+            expect(workloadPoints).to.deep.contain(defaultWorkloadPoints)
           })
       })
   })
