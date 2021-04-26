@@ -42,12 +42,12 @@ module.exports.ARMS_EXPORT_CSV = {
 
 module.exports.T2A_EXPORT_CSV = {
   filename: ('Test_Arms_Export ' + timestamp + '.csv').replace(replaceSpaces, '_'),
-  csv: '"Region Name","Region Id"," lduName","lduId","TeamN ame","Team Id","CRN","Workload Owner Id","Om Name","Om Code","Event Number","Allocation Date","NSI Outcome Code","NSI Outcome Descript"\n' +
-    '"NPS East of England",39,"Essex South",806,"EXS-SEE and Southend OM2",5121,"E312593",26012,"N56B266 ","PO","1","15-10-2020","ROL01","ROL01"\n' +
-    '"NPS East of England",39,"Essex South",806,"EXS-SEE and Southend OM2",5121,"E312604",28125,"N56B441 ","PO","2","30-12-2020","ROL01","ROL01"\n' +
-    '"NPS East of England",39,"Essex South",806,"EXS-SEE and Southend OM2",5121,"E345090",26027,"N56B267 ","PO","1","26-9-2020","ROL01","ROL01"\n' +
-    '"NPS East of England",39,"Essex South",806,"EXS-SEE and Southend OM1",5142,"E220534",25854,"N56B249 ","PO","1","26-9-2020","ROL01","ROL01"\n' +
-    '"NPS East of England",39,"Essex South",806,"EXS-SEE and Southend OM1",5142,"E324828",25893,"N56B252 ","PO","2","25-2-2021","ROL01","ROL01"'
+  csv: '"Region Name","Probation Delivery Unit","Team Name","CRN","Offender Manager Name","Grade Code","Event Number","Allocation Date","NSI Outcome Code","NSI Outcome Description"\n' +
+    '"NPS East of England","Essex South","EXS-SEE and Southend OM2","E312593","N56B266 ","PO","1","15-10-2020","ROL01","ROL01"\n' +
+    '"NPS East of England","Essex South","EXS-SEE and Southend OM2","E312604","N56B441 ","PO","2","30-12-2020","ROL01","ROL01"\n' +
+    '"NPS East of England","Essex South","EXS-SEE and Southend OM2","E345090","N56B267 ","PO","1","26-9-2020","ROL01","ROL01"\n' +
+    '"NPS East of England","Essex South","EXS-SEE and Southend OM1","E220534","N56B249 ","PO","1","26-9-2020","ROL01","ROL01"\n' +
+    '"NPS East of England","Essex South","EXS-SEE and Southend OM1","E324828","N56B252 ","PO","2","25-2-2021","ROL01","ROL01"'
 }
 
 module.exports.ARMS_EXPORT_RESULT = {
