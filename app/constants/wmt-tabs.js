@@ -19,7 +19,6 @@ module.exports = {
     CMS_EXPORT: 'CMS Export',
     WORKLOAD_PERCENTAGE_EXPORT: 'Percentage Workload Breakdown Export',
     SUSPENDED_LIFERS_EXPORT: 'Suspended Lifers',
-    EXPIRING_REDUCTIONS: 'Expiring Reductions',
-    T2A_EXPORT: 'T2A Detail Export'
+    EXPIRING_REDUCTIONS: 'Expiring Reductions'
   }
 }

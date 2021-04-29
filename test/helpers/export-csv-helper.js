@@ -40,16 +40,6 @@ module.exports.ARMS_EXPORT_CSV = {
     '"NPS North West","Cumbria","Rehabilitation","19-9-2018","CASEREF30065","A.N. Offender Manager N01B324NPSM","PO","Community","16-12-2016","16-12-2020"'
 }
 
-module.exports.T2A_EXPORT_CSV = {
-  filename: ('Test_Arms_Export ' + timestamp + '.csv').replace(replaceSpaces, '_'),
-  csv: '"Region Name","Probation Delivery Unit","Team Name","CRN","Offender Manager Name","Grade Code","Event Number","Allocation Date","NSI Outcome Code","NSI Outcome Description"\n' +
-    '"NPS East of England","Essex South","EXS-SEE and Southend OM2","E312593","N56B266 ","PO","1","15-10-2020","ROL01","ROL01"\n' +
-    '"NPS East of England","Essex South","EXS-SEE and Southend OM2","E312604","N56B441 ","PO","2","30-12-2020","ROL01","ROL01"\n' +
-    '"NPS East of England","Essex South","EXS-SEE and Southend OM2","E345090","N56B267 ","PO","1","26-9-2020","ROL01","ROL01"\n' +
-    '"NPS East of England","Essex South","EXS-SEE and Southend OM1","E220534","N56B249 ","PO","1","26-9-2020","ROL01","ROL01"\n' +
-    '"NPS East of England","Essex South","EXS-SEE and Southend OM1","E324828","N56B252 ","PO","2","25-2-2021","ROL01","ROL01"'
-}
-
 module.exports.ARMS_EXPORT_RESULT = {
   title: 'ARMS Export',
   armsExportDetails:
@@ -112,91 +102,6 @@ module.exports.ARMS_EXPORT_RESULT = {
     sentencetype: 'Community',
     releaseDate: '16-12-2016',
     completedDate: '16-12-2020'
-  }]
-}
-
-module.exports.T2A_EXPORT_RESULT = {
-  title: 'ARMS Export',
-  armsExportDetails:
-  [{
-    regionName: 'NPS East of England',
-    regionId: 39,
-    lduName: 'Essex South',
-    lduId: 806,
-    teamName: 'EXS-SEE and Southend OM2',
-    teamId: 5121,
-    CRN: 'E312593',
-    workload_owner_id: 26012,
-    omName: 'N56B266 ',
-    omCode: 'PO',
-    Event_No: '1',
-    Allocation_Date: '15-10-2020',
-    NSI_Outcome_Cd: 'ROL01',
-    NSI_Outcome_Desc: 'ROL01'
-  },
-  {
-    regionName: 'NPS East of England',
-    regionId: 39,
-    lduName: 'Essex South',
-    lduId: 806,
-    teamName: 'EXS-SEE and Southend OM2',
-    teamId: 5121,
-    CRN: 'E312604',
-    workload_owner_id: 28125,
-    omName: 'N56B441 ',
-    omCode: 'PO',
-    Event_No: '2',
-    Allocation_Date: '30-12-2020',
-    NSI_Outcome_Cd: 'ROL01',
-    NSI_Outcome_Desc: 'ROL01'
-  },
-  {
-    regionName: 'NPS East of England',
-    regionId: 39,
-    lduName: 'Essex South',
-    lduId: 806,
-    teamName: 'EXS-SEE and Southend OM2',
-    teamId: 5121,
-    CRN: 'E345090',
-    workload_owner_id: 26027,
-    omName: 'N56B267 ',
-    omCode: 'PO',
-    Event_No: '1',
-    Allocation_Date: '26-9-2020',
-    NSI_Outcome_Cd: 'ROL01',
-    NSI_Outcome_Desc: 'ROL01'
-  },
-  {
-    regionName: 'NPS East of England',
-    regionId: 39,
-    lduName: 'Essex South',
-    lduId: 806,
-    teamName: 'EXS-SEE and Southend OM1',
-    teamId: 5142,
-    CRN: 'E220534',
-    workload_owner_id: 25854,
-    omName: 'N56B249 ',
-    omCode: 'PO',
-    Event_No: '1',
-    Allocation_Date: '26-9-2020',
-    NSI_Outcome_Cd: 'ROL01',
-    NSI_Outcome_Desc: 'ROL01'
-  },
-  {
-    regionName: 'NPS East of England',
-    regionId: 39,
-    lduName: 'Essex South',
-    lduId: 806,
-    teamName: 'EXS-SEE and Southend OM1',
-    teamId: 5142,
-    CRN: 'E324828',
-    workload_owner_id: 25893,
-    omName: 'N56B252 ',
-    omCode: 'PO',
-    Event_No: '2',
-    Allocation_Date: '25-2-2021',
-    NSI_Outcome_Cd: 'ROL01',
-    NSI_Outcome_Desc: 'ROL01'
   }]
 }
 
