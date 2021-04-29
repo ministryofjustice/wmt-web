@@ -78,6 +78,10 @@ describe('services/get-export-csv', function () {
       expect(getExportCsv(orgUnit.TEAM.name, helper.SUSPENDED_LIFER_EXPORT_RESULT.suspendedLiferExportDetails, tabs.EXPORT.SUSPENDED_LIFERS_EXPORT).csv).to.eql(helper.SUSPENDED_LIFER_CSV.csv)
     })
 
+    it('for T2A Export', function () {
+      expect(getExportCsv(orgUnit.TEAM.name, helper.T2A_EXPORT_RESULT.armsExportDetails, tabs.EXPORT.T2A_EXPORT).csv).to.eql(helper.T2A_EXPORT_CSV.csv)
+    })
+
     it('for Expiring Reductions Export', function () {
       expect(getExportCsv(orgUnit.TEAM.name, helper.TEAM_EXPIRING_REDUCTIONS_RESULT.reductionNotes, tabs.EXPORT.EXPIRING_REDUCTIONS).csv).to.eql(helper.TEAM_EXPIRING_REDUCTIONS_CSV.csv)
     })
