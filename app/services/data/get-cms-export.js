@@ -1,12 +1,13 @@
 const knex = require('../../../knex').web
 
 module.exports = function (id, type) {
-  var table = 'contact_cms_export_view AS contactCMS'
-  var selectList = [
+  const table = 'contact_cms_export_view AS contactCMS'
+  const selectList = [
     'contactRegionName',
     'contactLduName',
     'contactTeamName',
     'contactDate',
+    'omContactDate',
     'contactName',
     'contactGradeCode',
     'omRegionName',
@@ -19,12 +20,15 @@ module.exports = function (id, type) {
     'contactCMS.contactCode',
     'contactCMS.contactPoints',
     'omCMS.omPoints',
-    'contactCMS.caseRefNo'
+    'contactCMS.caseRefNo',
+    'omCMS.caseRefNo AS omCaseRefNo',
+    'omCMS.contactDescription AS omContactDescription',
+    'omCMS.contactCode AS omContactCode'
   ]
 
-  var table2 = 'om_cms_export_view AS omCMS'
+  const table2 = 'om_cms_export_view AS omCMS'
 
-  var whereString
+  let whereString
 
   if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
     whereString = ' WHERE ' + 'om' + type + 'id = ' + id +
@@ -33,9 +37,23 @@ module.exports = function (id, type) {
 
   return knex.schema.raw('SELECT ' + selectList.join(', ') +
       ' FROM ' + table +
-      ' JOIN ' + table2 + ' ON contactCMS.contactId = omCMS.contactId' +
+      ' FULL OUTER JOIN ' + table2 + ' ON contactCMS.contactId = omCMS.contactId' +
         whereString)
-      .then(function (results) {
-        return results
+    .then(function (results) {
+      results.forEach(function (result) {
+        if (!result.caseRefNo) {
+          result.caseRefNo = result.omCaseRefNo
+        }
+        if (!result.contactDescription) {
+          result.contactDescription = result.omContactDescription
+        }
+        if (!result.contactCode) {
+          result.contactCode = result.omContactCode
+        }
+        if (!result.contactDate) {
+          result.contactDate = result.omContactDate
+        }
       })
+      return results
+    })
 }

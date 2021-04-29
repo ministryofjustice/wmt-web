@@ -4,10 +4,10 @@ const organisationUnitConstants = require('../constants/organisation-unit')
 const workloadConstants = require('../constants/workload-type')
 
 module.exports = function (id, organisationalUnitName, currentPath, workloadType = workloadConstants.PROBATION, authorisation, userRole) {
-  var baseLink = linkGenerator.fromIdAndNameAndWorkloadType(id, organisationalUnitName, workloadType)
-  var navigation = []
+  const baseLink = linkGenerator.fromIdAndNameAndWorkloadType(id, organisationalUnitName, workloadType)
+  const navigation = []
 
-  var isOffenderManager = organisationalUnitName === organisationUnitConstants.OFFENDER_MANAGER.name
+  const isOffenderManager = organisationalUnitName === organisationUnitConstants.OFFENDER_MANAGER.name
   switch (workloadType) {
     case workloadConstants.COURT_REPORTS:
       if (isOffenderManager) {
@@ -43,6 +43,9 @@ module.exports = function (id, organisationalUnitName, currentPath, workloadType
     case workloadConstants.OMIC:
       navigation.push(new Link('OMIC Overview', baseLink + '/overview'))
       // navigation.push(new Link('OMIC Caseload', baseLink + '/caseload'))
+      if (organisationalUnitName !== organisationUnitConstants.NATIONAL.name) {
+        navigation.push(new Link('Export', baseLink + '/export'))
+      }
       break
   }
 

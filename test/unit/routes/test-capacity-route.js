@@ -3,7 +3,6 @@ const supertest = require('supertest')
 const proxyquire = require('proxyquire')
 const expect = require('chai').expect
 const sinon = require('sinon')
-require('sinon-bluebird')
 
 const workloadTypes = require('../../../app/constants/workload-type')
 
@@ -14,24 +13,24 @@ const REGION_CAPACITY_URI_MISSING_ID = '/' + workloadTypes.PROBATION + '/region/
 const TEAM_CAPACITY_URI = '/' + workloadTypes.PROBATION + '/team/1/caseload-capacity'
 const LDU_CAPACITY_URI = '/' + workloadTypes.PROBATION + '/ldu/1/caseload-capacity'
 
-const CAPACITY_FROM_DAY = 'capacity-from-day='
-const CAPACITY_FROM_MONTH = 'capacity-from-month='
-const CAPACITY_FROM_YEAR = 'capacity-from-year='
-
-const CAPACITY_TO_DAY = 'capacity-to-day='
-const CAPACITY_TO_MONTH = 'capacity-to-month='
-const CAPACITY_TO_YEAR = 'capacity-to-year='
+const dateToPost = {
+  'capacity-from-day': '01',
+  'capacity-from-month': '01',
+  'capacity-from-year': '2017',
+  'capacity-to-day': '03',
+  'capacity-to-month': '03',
+  'capacity-to-year': '2017'
+}
 
 describe('/caseload-capacity', function () {
-  var app
-  var getCapacityStub
-  var getOutstandingReportsStub
-  var getSubNavStub
-  var getLastUpdated
-  var capacityStubResult = {title: 'Test', capacityTable: {}, subNav: [{}]}
-  var authorisationService
-  var getCaseDetailsStub
-  authorisationService = {
+  let app
+  let getCapacityStub
+  let getOutstandingReportsStub
+  let getSubNavStub
+  let getLastUpdated
+  const capacityStubResult = { title: 'Test', capacityTable: {}, subNav: [{}] }
+  let getCaseDetailsStub
+  const authorisationService = {
     assertUserAuthenticated: sinon.stub()
   }
   beforeEach(function () {
@@ -40,7 +39,7 @@ describe('/caseload-capacity', function () {
     getOutstandingReportsStub = sinon.stub().resolves()
     getSubNavStub = sinon.stub()
     getLastUpdated = sinon.stub().resolves(new Date(2017, 11, 1))
-    var route = proxyquire(
+    const route = proxyquire(
       '../../../app/routes/capacity-route', {
         '../services/get-capacity-view': getCapacityStub,
         '../services/get-outstanding-reports': getOutstandingReportsStub,
@@ -53,16 +52,11 @@ describe('/caseload-capacity', function () {
   })
 
   describe('/probation/ldu/{id}/caseload-capacity', function () {
-    it('should respond with 200 when ldu and id is used with date parameters', function () {
+    it('should post the correct data and respond with 200 when ldu and id is used with date parameters', function () {
       getCapacityStub.resolves(capacityStubResult)
       return supertest(app)
-        .get(LDU_CAPACITY_URI + '?' +
-        CAPACITY_FROM_DAY + '01&' +
-        CAPACITY_FROM_MONTH + '01&' +
-        CAPACITY_FROM_YEAR + '2017&' +
-        CAPACITY_TO_DAY + '31&' +
-        CAPACITY_TO_MONTH + '03&' +
-        CAPACITY_TO_YEAR + '2017')
+        .post(LDU_CAPACITY_URI)
+        .send(dateToPost)
         .expect(200)
     })
 

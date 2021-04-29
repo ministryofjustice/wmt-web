@@ -20,7 +20,7 @@ const heDecode = require('he')
 const newArchiveDataStartDate = new moment(newArchiveDataStartDateString, 'DD/MM/YYYY')
 const newDataStartDate = new moment(newDataStartDateString, 'DD/MM/YYYY')
 
-var archiveDateRange
+let archiveDateRange
 
 module.exports = function (router) {
   router.get('/archive-data/daily-caseload-data', function (req, res, next) {
@@ -38,7 +38,7 @@ module.exports = function (router) {
       }
     }
 
-    var authorisedUserRole = authorisation.getAuthorisedUserRole(req)
+    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
     return renderResults(viewTemplate, title, res, null, null, authorisedUserRole)
   })
 
@@ -57,7 +57,7 @@ module.exports = function (router) {
       }
     }
 
-    var errors
+    let errors
 
     try {
       archiveDateRange = dateRangeHelper.createDailyArchiveDateRange(req.body)
@@ -70,13 +70,13 @@ module.exports = function (router) {
       }
     }
 
-    var authorisedUserRole = authorisation.getAuthorisedUserRole(req)
-    var extraCriteria = heDecode.decode(req.body['daily-multi-search-field-entry'])
+    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
+    const extraCriteria = heDecode.decode(req.body['daily-multi-search-field-entry'])
     if (errors) {
       return renderResults(viewTemplate, title, res, errors, null, authorisedUserRole, archiveDateRange, extraCriteria)
     }
 
-    var thisArchiveOption = archiveOptions.DAILY
+    let thisArchiveOption = archiveOptions.DAILY
     if (archiveDateRange.archiveFromDate.isSameOrAfter(newArchiveDataStartDate)) {
       thisArchiveOption = archiveOptions.NEW_DAILY_ARCHIVE
     }
@@ -107,7 +107,7 @@ module.exports = function (router) {
       }
     }
 
-    var errors
+    let errors
 
     try {
       archiveDateRange = dateRangeHelper.createDailyArchiveDateRange(req.body)
@@ -120,14 +120,14 @@ module.exports = function (router) {
       }
     }
 
-    var authorisedUserRole = authorisation.getAuthorisedUserRole(req)
-    var extraCriteria = heDecode.decode(req.body['daily-multi-search-field-entry'])
+    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
+    const extraCriteria = heDecode.decode(req.body['daily-multi-search-field-entry'])
 
     if (errors) {
       return renderResults(viewTemplate, title, res, errors, null, authorisedUserRole, archiveDateRange, extraCriteria)
     }
 
-    var thisArchiveOption = archiveOptions.DAILY
+    let thisArchiveOption = archiveOptions.DAILY
     if (archiveDateRange.archiveFromDate.isSameOrAfter(newArchiveDataStartDate)) {
       thisArchiveOption = archiveOptions.NEW_DAILY_ARCHIVE
     }
@@ -141,7 +141,7 @@ module.exports = function (router) {
       if (archiveDateRange !== null) {
         dateFileName = archiveDateRange.archiveFromDate.toISOString().substring(0, 10) + ' ' + archiveDateRange.archiveToDate.toISOString().substring(0, 10)
       }
-      var exportCsv = getExportCsv(dateFileName, results, tabs.ADMIN.DAILY_ARCHIVE)
+      const exportCsv = getExportCsv(dateFileName, results, tabs.ADMIN.DAILY_ARCHIVE)
       res.attachment(exportCsv.filename)
       res.send(exportCsv.csv)
     }).catch(function (error) {
@@ -150,7 +150,7 @@ module.exports = function (router) {
   })
 }
 
-var formatResults = function (results) {
+const formatResults = function (results) {
   results.forEach(function (result) {
     result.workloadDate = dateFormatter.formatDate(result.workloadDate, 'DD-MM-YYYY')
   })

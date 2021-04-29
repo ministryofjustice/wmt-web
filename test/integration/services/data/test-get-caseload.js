@@ -3,7 +3,7 @@ const expect = require('chai').expect
 const dataHelper = require('../../../helpers/data/aggregated-data-helper')
 const getCaseload = require('../../../../app/services/data/get-caseload')
 
-var inserts = []
+let inserts = []
 
 describe('services/data/get-caseload', function () {
   before(function () {
@@ -18,14 +18,23 @@ describe('services/data/get-caseload', function () {
       .then(function (results) {
         expect(results[0].grade).to.eql('PO')
         expect(results[0].untiered).to.eql(0)
-        expect(results[0].d2).to.eql(1)
-        expect(results[0].d1).to.eql(2)
-        expect(results[0].c2).to.eql(3)
-        expect(results[0].c1).to.eql(4)
-        expect(results[0].b2).to.eql(5)
-        expect(results[0].b1).to.eql(6)
-        expect(results[0].a).to.eql(7)
-        expect(results[0].totalCases).to.eql(28)
+        expect(results[0].a3).to.eql(1)
+        expect(results[0].a2).to.eql(2)
+        expect(results[0].a1).to.eql(3)
+        expect(results[0].a0).to.eql(4)
+        expect(results[0].b3).to.eql(5)
+        expect(results[0].b2).to.eql(6)
+        expect(results[0].b1).to.eql(7)
+        expect(results[0].b0).to.eql(8)
+        expect(results[0].c3).to.eql(9)
+        expect(results[0].c2).to.eql(10)
+        expect(results[0].c1).to.eql(11)
+        expect(results[0].c0).to.eql(12)
+        expect(results[0].d3).to.eql(13)
+        expect(results[0].d2).to.eql(14)
+        expect(results[0].d1).to.eql(15)
+        expect(results[0].d0).to.eql(16)
+        expect(results[0].totalCases).to.eql(136)
       })
   })
 
@@ -40,7 +49,7 @@ describe('services/data/get-caseload', function () {
   })
 
   it('should retrieve 6 rows per team in an ldu - one each for PO and PSO totals per location', function () {
-    var insertedLdus = inserts.filter((item) => item.table === 'ldu')
+    const insertedLdus = inserts.filter((item) => item.table === 'ldu')
     return getCaseload(insertedLdus[insertedLdus.length - 1].id, 'ldu')
       .then(function (results) {
         // Sort by team id
@@ -54,18 +63,27 @@ describe('services/data/get-caseload', function () {
   })
 
   it('should retrieve correct caseload breakdown totals for each team/grade combination in an ldu', function () {
-    var insertedLdus = inserts.filter((item) => item.table === 'ldu')
+    const insertedLdus = inserts.filter((item) => item.table === 'ldu')
     return getCaseload(insertedLdus[insertedLdus.length - 1].id, 'ldu')
       .then(function (results) {
         expect(results[0].untiered).to.eql(0)
-        expect(results[0].d2).to.eql(2)
-        expect(results[0].d1).to.eql(4)
-        expect(results[0].c2).to.eql(6)
-        expect(results[0].c1).to.eql(8)
-        expect(results[0].b2).to.eql(10)
-        expect(results[0].b1).to.eql(12)
-        expect(results[0].a).to.eql(14)
-        expect(results[0].totalCases).to.eql(56)
+        expect(results[0].a3).to.eql(2)
+        expect(results[0].a2).to.eql(4)
+        expect(results[0].a1).to.eql(6)
+        expect(results[0].a0).to.eql(8)
+        expect(results[0].b3).to.eql(10)
+        expect(results[0].b2).to.eql(12)
+        expect(results[0].b1).to.eql(14)
+        expect(results[0].b0).to.eql(16)
+        expect(results[0].c3).to.eql(18)
+        expect(results[0].c2).to.eql(20)
+        expect(results[0].c1).to.eql(22)
+        expect(results[0].c0).to.eql(24)
+        expect(results[0].d3).to.eql(26)
+        expect(results[0].d2).to.eql(28)
+        expect(results[0].d1).to.eql(30)
+        expect(results[0].d0).to.eql(32)
+        expect(results[0].totalCases).to.eql(272)
       })
   })
 

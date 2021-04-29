@@ -12,15 +12,15 @@ module.exports = function (router) {
       }
     }
 
-    var authorisedUserRole = authorisation.getAuthorisedUserRole(req)
+    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
 
     return res.render('search-for-officer', {
       userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-      authorisation: authorisedUserRole.authorisation  // used by proposition-link for the admin role
+      authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
     })
   })
 
-  router.post('/officer-search/search', function (req, res, next) {
+  router.post('/officer-search', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
     } catch (error) {
@@ -29,12 +29,12 @@ module.exports = function (router) {
       }
     }
 
-    var authorisedUserRole = authorisation.getAuthorisedUserRole(req)
+    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
 
     return offenderSearch(req.body.surnameBox).then(function (result) {
       res.render('search-for-officer', {
         userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-        authorisation: authorisedUserRole.authorisation,  // used by proposition-link for the admin role
+        authorisation: authorisedUserRole.authorisation, // used by proposition-link for the admin role
         results: result,
         surname: req.body.surnameBox
       })
