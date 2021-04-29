@@ -9,7 +9,7 @@ const determineStyles = require('./helpers/determine-styles')
 const armsCommMultiplier = require('../../config').ARMS_COMMUNITY_MULTIPLIER
 const armsLicMultiplier = require('../../config').ARMS_LICENCE_MULTIPLIER
 const typeTierGroupLength = 4 // the number of fields for each tier and type of case
-const tiersPerType = 11
+const tiersPerType = 17
 const casesColumnStart = 26
 const t2aCasesColumnStart = casesColumnStart + (tiersPerType * typeTierGroupLength * 3)
 const numberOfReportColumns = 5
@@ -126,9 +126,9 @@ const setTierWeightings = function (ws, styles, points) {
   }
   let count = 0
   let i
-  for (i = 0; i < 33; i++) {
+  for (i = 0; i < (tiersPerType * 3); i++) {
     const styleToApply = determineStyles.determineWeightingStyle(start, styles)
-    switch (i % 11) {
+    switch (i % tiersPerType) {
       case 0:
         ws.cell(4, start).number(0).style(styleToApply)
         ws.cell(4, start + 1).number(0).style(styleToApply)

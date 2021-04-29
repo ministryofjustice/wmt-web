@@ -33,6 +33,24 @@ module.exports.getTierType = function (tierNumber) {
     case 10:
       tier = TierType.TEN
       break
+    case 11:
+      tier = TierType.ELEVEN
+      break
+    case 12:
+      tier = TierType.TWELVE
+      break
+    case 13:
+      tier = TierType.THIRTEEN
+      break
+    case 14:
+      tier = TierType.FOURTEEN
+      break
+    case 15:
+      tier = TierType.FIFTEEN
+      break
+    case 16:
+      tier = TierType.SIXTEEN
+      break
   }
   return tier
 }

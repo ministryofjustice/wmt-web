@@ -23,14 +23,14 @@ describe('services/get-export-xlsx', function () {
       let columnNo = 26
 
       workloadPointsTester(workloadPointsConfig.workloadPointsConfig, workloadPointsKeys, columnNo)
-      columnNo = 158
+      columnNo = 230
       workloadPointsTester(workloadPointsConfig.t2aWorkloadPointsConfig, t2aWorkloadPointsKeys, columnNo)
     })
 
     it('with the correct totals for each tier', function () {
       let rowStart = 5
       let columnStart = 26
-      const tiersPerType = 11
+      const tiersPerType = 17
       const typeTierGroupLength = 4
 
       scenarioObjects.forEach(function (scenarioObject) {
@@ -39,13 +39,7 @@ describe('services/get-export-xlsx', function () {
         caseTotalsTester(rowStart, columnStart, casesForThisTier, false)
         columnStart = columnStart + typeTierGroupLength
 
-        for (let i = tiersPerType - 1; i >= tiersPerType - 3; i--) {
-          casesForThisTier = scenarioObject.communityCaseNumbers.filter(thisCase => thisCase.tier === i)
-          casesForThisTier = casesForThisTier[0]
-          caseTotalsTester(rowStart, columnStart, casesForThisTier, false)
-          columnStart = columnStart + typeTierGroupLength
-        }
-        for (let i = 1; i < tiersPerType - 3; i++) {
+        for (let i = tiersPerType - 1; i >= 1; i--) {
           casesForThisTier = scenarioObject.communityCaseNumbers.filter(thisCase => thisCase.tier === i)
           casesForThisTier = casesForThisTier[0]
           caseTotalsTester(rowStart, columnStart, casesForThisTier, false)
@@ -57,13 +51,7 @@ describe('services/get-export-xlsx', function () {
         caseTotalsTester(rowStart, columnStart, casesForThisTier, false)
         columnStart = columnStart + typeTierGroupLength
 
-        for (let i = tiersPerType - 1; i >= tiersPerType - 3; i--) {
-          casesForThisTier = scenarioObject.licenceCaseNumbers.filter(thisCase => thisCase.tier === i)
-          casesForThisTier = casesForThisTier[0]
-          caseTotalsTester(rowStart, columnStart, casesForThisTier, false)
-          columnStart = columnStart + typeTierGroupLength
-        }
-        for (let i = 1; i < tiersPerType - 3; i++) {
+        for (let i = tiersPerType - 1; i >= 1; i--) {
           casesForThisTier = scenarioObject.licenceCaseNumbers.filter(thisCase => thisCase.tier === i)
           casesForThisTier = casesForThisTier[0]
           caseTotalsTester(rowStart, columnStart, casesForThisTier, false)
@@ -75,13 +63,7 @@ describe('services/get-export-xlsx', function () {
         caseTotalsTester(rowStart, columnStart, casesForThisTier, false)
         columnStart = columnStart + typeTierGroupLength
 
-        for (let i = tiersPerType - 1; i >= tiersPerType - 3; i--) {
-          casesForThisTier = scenarioObject.custodyCaseNumbers.filter(thisCase => thisCase.tier === i)
-          casesForThisTier = casesForThisTier[0]
-          caseTotalsTester(rowStart, columnStart, casesForThisTier, false)
-          columnStart = columnStart + typeTierGroupLength
-        }
-        for (let i = 1; i < tiersPerType - 3; i++) {
+        for (let i = tiersPerType - 1; i >= 1; i--) {
           casesForThisTier = scenarioObject.custodyCaseNumbers.filter(thisCase => thisCase.tier === i)
           casesForThisTier = casesForThisTier[0]
           caseTotalsTester(rowStart, columnStart, casesForThisTier, false)
@@ -94,13 +76,7 @@ describe('services/get-export-xlsx', function () {
         caseTotalsTester(rowStart, columnStart, casesForThisTier, true)
         columnStart = columnStart + typeTierGroupLength
 
-        for (let i = tiersPerType - 1; i >= tiersPerType - 3; i--) {
-          casesForThisTier = scenarioObject.communityCaseNumbers.filter(thisCase => thisCase.tier === i)
-          casesForThisTier = casesForThisTier[0]
-          caseTotalsTester(rowStart, columnStart, casesForThisTier, true)
-          columnStart = columnStart + typeTierGroupLength
-        }
-        for (let i = 1; i < tiersPerType - 3; i++) {
+        for (let i = tiersPerType - 1; i >= 1; i--) {
           casesForThisTier = scenarioObject.communityCaseNumbers.filter(thisCase => thisCase.tier === i)
           casesForThisTier = casesForThisTier[0]
           caseTotalsTester(rowStart, columnStart, casesForThisTier, true)
@@ -112,13 +88,7 @@ describe('services/get-export-xlsx', function () {
         caseTotalsTester(rowStart, columnStart, casesForThisTier, true)
         columnStart = columnStart + typeTierGroupLength
 
-        for (let i = tiersPerType - 1; i >= tiersPerType - 3; i--) {
-          casesForThisTier = scenarioObject.licenceCaseNumbers.filter(thisCase => thisCase.tier === i)
-          casesForThisTier = casesForThisTier[0]
-          caseTotalsTester(rowStart, columnStart, casesForThisTier, true)
-          columnStart = columnStart + typeTierGroupLength
-        }
-        for (let i = 1; i < tiersPerType - 3; i++) {
+        for (let i = tiersPerType - 1; i >= 1; i--) {
           casesForThisTier = scenarioObject.licenceCaseNumbers.filter(thisCase => thisCase.tier === i)
           casesForThisTier = casesForThisTier[0]
           caseTotalsTester(rowStart, columnStart, casesForThisTier, true)
@@ -130,13 +100,7 @@ describe('services/get-export-xlsx', function () {
         caseTotalsTester(rowStart, columnStart, casesForThisTier, true)
         columnStart = columnStart + typeTierGroupLength
 
-        for (let i = tiersPerType - 1; i >= tiersPerType - 3; i--) {
-          casesForThisTier = scenarioObject.custodyCaseNumbers.filter(thisCase => thisCase.tier === i)
-          casesForThisTier = casesForThisTier[0]
-          caseTotalsTester(rowStart, columnStart, casesForThisTier, true)
-          columnStart = columnStart + typeTierGroupLength
-        }
-        for (let i = 1; i < tiersPerType - 3; i++) {
+        for (let i = tiersPerType - 1; i >= 1; i--) {
           casesForThisTier = scenarioObject.custodyCaseNumbers.filter(thisCase => thisCase.tier === i)
           casesForThisTier = casesForThisTier[0]
           caseTotalsTester(rowStart, columnStart, casesForThisTier, true)
@@ -229,8 +193,8 @@ describe('services/get-export-xlsx', function () {
 const workloadPointsTester = function (arrayToTest, keysToTest, columnNo) {
   const rowNo = 4
   let arrayIndex = 0
-  for (let i = 0; i < 33; i++) {
-    if (i % 11 !== 0) {
+  for (let i = 0; i < 51; i++) {
+    if (i % 17 !== 0) {
       expect(getCellValue(rowNo, columnNo)).to.eql(arrayToTest[keysToTest[arrayIndex]])
       expect(getCellValue(rowNo, columnNo + 1)).to.eql(0)
       expect(getCellValue(rowNo, columnNo + 2)).to.eql(0)

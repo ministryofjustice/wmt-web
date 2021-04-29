@@ -9,9 +9,9 @@ const baseCaseProgressRow = {
   communityLast16Weeks: 10,
   licenseLast16Weeks: 9,
   totalCases: 5,
-  warrantsTotal: 240,
-  overdueTerminationsTotal: 240,
-  unpaidWorkTotal: 240
+  warrantsTotal: 510,
+  overdueTerminationsTotal: 510,
+  unpaidWorkTotal: 510
 }
 
 describe('services/data/get-org-unit-caseload-progress', function () {
