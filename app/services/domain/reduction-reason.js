@@ -15,7 +15,7 @@ class ReductionReason {
   }
 
   isValid () {
-    var errors = ErrorHandler()
+    const errors = ErrorHandler()
 
     FieldValidator(this.reason, 'reductionName', errors)
       .isRequired()
@@ -27,6 +27,18 @@ class ReductionReason {
 
     FieldValidator(this.category, 'category', errors)
       .isRequired()
+
+    if (this.isBlank(this.maxAllowancePercentage)) {
+      this.maxAllowancePercentage = null
+    }
+
+    if (this.isBlank(this.allowancePercentage)) {
+      this.allowancePercentage = null
+    }
+
+    if (this.isBlank(this.monthsToExpiry)) {
+      this.monthsToExpiry = null
+    }
 
     if (this.maxAllowancePercentage) {
       FieldValidator(this.maxAllowancePercentage, 'maxAllowancePercentage', errors)
@@ -53,11 +65,15 @@ class ReductionReason {
     this.category = parseFloat(this.category)
     this.isEnabled = this.isEnabled === 'true'
 
-    var validationErrors = errors.get()
+    const validationErrors = errors.get()
 
     if (validationErrors) {
       throw new ValidationError(validationErrors)
     }
+  }
+
+  isBlank (field) {
+    return field === ''
   }
 }
 

@@ -5,7 +5,7 @@ const getTeam = require('../../../../app/services/data/get-team-by-name')
 const getLDU = require('../../../../app/services/data/get-ldu-by-name')
 const getRegion = require('../../../../app/services/data/get-region-by-name')
 
-var scenarioData
+let scenarioData
 
 describe('services/data/get-scenario team', function () {
   before(function () {
@@ -15,8 +15,8 @@ describe('services/data/get-scenario team', function () {
       })
     })
   })
-  it('should retrieve all 120 raw scenario records for HMPPS > Division 1 > LDU Cluster 1 > Team 1', function () {
-    expect(scenarioData.length).to.eql(120)
+  it('should retrieve all 255 raw scenario records for HMPPS > Region 1 > Probation Delivery Unit 1 > Team 1', function () {
+    expect(scenarioData.length).to.eql(255)
   })
 })
 
@@ -28,8 +28,8 @@ describe('services/data/get-scenario ldu', function () {
       })
     })
   })
-  it('should retrieve all 240 raw scenario records for HMPPS > Division 1 > LDU Cluster 1', function () {
-    expect(scenarioData.length).to.eql(240)
+  it('should retrieve all 510 raw scenario records for HMPPS > Region 1 > Probation Delivery Unit 1', function () {
+    expect(scenarioData.length).to.eql(510)
   })
 })
 
@@ -41,7 +41,7 @@ describe('services/data/get-scenario division', function () {
       })
     })
   })
-  it('should retrieve all 240 raw scenario records for HMPPS > Division 1', function () {
-    expect(scenarioData.length).to.eql(240)
+  it('should retrieve all 510 raw scenario records for HMPPS > Region 1', function () {
+    expect(scenarioData.length).to.eql(510)
   })
 })

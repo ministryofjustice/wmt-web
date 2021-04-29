@@ -1,10 +1,10 @@
 const knex = require('../../knex').integrationTests
-var Promise = require('bluebird').Promise
+const Promise = require('bluebird').Promise
 const _ = require('lodash')
 
 module.exports.maxStagingId = null
 
-var defaultWorkload = {
+const defaultWorkload = {
   total_cases: 5,
   total_community_cases: 0,
   total_custody_cases: 0,
@@ -23,27 +23,54 @@ var defaultWorkload = {
 }
 
 module.exports.defaultWorkloadPoints = {
-  comm_tier_1: 11,
-  comm_tier_2: 12,
-  comm_tier_3: 13,
-  comm_tier_4: 14,
-  comm_tier_5: 15,
-  comm_tier_6: 16,
-  comm_tier_7: 17,
-  cust_tier_1: 21,
-  cust_tier_2: 22,
-  cust_tier_3: 23,
-  cust_tier_4: 24,
-  cust_tier_5: 25,
-  cust_tier_6: 26,
-  cust_tier_7: 27,
-  lic_tier_1: 31,
-  lic_tier_2: 32,
-  lic_tier_3: 33,
-  lic_tier_4: 34,
-  lic_tier_5: 35,
-  lic_tier_6: 36,
-  lic_tier_7: 37,
+  comm_tier_1: 206,
+  comm_tier_2: 158,
+  comm_tier_3: 146,
+  comm_tier_4: 110,
+  comm_tier_5: 146,
+  comm_tier_6: 115,
+  comm_tier_7: 102,
+  comm_tier_8: 72,
+  comm_tier_9: 79,
+  comm_tier_10: 63,
+  comm_tier_11: 50,
+  comm_tier_12: 35,
+  comm_tier_13: 51,
+  comm_tier_14: 41,
+  comm_tier_15: 29,
+  comm_tier_16: 29,
+  cust_tier_1: 75,
+  cust_tier_2: 60,
+  cust_tier_3: 59,
+  cust_tier_4: 0,
+  cust_tier_5: 59,
+  cust_tier_6: 48,
+  cust_tier_7: 47,
+  cust_tier_8: 0,
+  cust_tier_9: 30,
+  cust_tier_10: 24,
+  cust_tier_11: 23,
+  cust_tier_12: 0,
+  cust_tier_13: 17,
+  cust_tier_14: 14,
+  cust_tier_15: 13,
+  cust_tier_16: 0,
+  lic_tier_1: 219,
+  lic_tier_2: 175,
+  lic_tier_3: 163,
+  lic_tier_4: 0,
+  lic_tier_5: 161,
+  lic_tier_6: 132,
+  lic_tier_7: 119,
+  lic_tier_8: 0,
+  lic_tier_9: 77,
+  lic_tier_10: 65,
+  lic_tier_11: 52,
+  lic_tier_12: 0,
+  lic_tier_13: 51,
+  lic_tier_14: 43,
+  lic_tier_15: 31,
+  lic_tier_16: 0,
   user_id: 123,
   sdr: 4,
   sdr_conversion: 5,
@@ -101,9 +128,9 @@ module.exports.addCaseProgressDataForAllOrgUnits = function () {
 }
 
 module.exports.addWorkloadCapacitiesForOffenderManager = function () {
-  var inserts = []
+  const inserts = []
 
-  var promise = module.exports.addWorkloadPoints(inserts)
+  const promise = module.exports.addWorkloadPoints(inserts)
     .then(function (inserts) {
       return module.exports.addWorkloadPointsT2A(inserts)
     })
@@ -111,7 +138,7 @@ module.exports.addWorkloadCapacitiesForOffenderManager = function () {
       return addWorkloadReports(inserts)
     })
     .then(function () {
-      var offenderManagerTypes = [
+      const offenderManagerTypes = [
         { grade_code: 'PO' },
         { grade_code: 'PSO' }
       ]
@@ -134,7 +161,7 @@ module.exports.addWorkloadPoints = function (inserts, isT2A = false) {
   if (inserts === undefined) {
     inserts = []
   }
-  var workloadPoints = [
+  const workloadPoints = [
     Object.assign({}, module.exports.defaultWorkloadPoints, {
       is_t2a: isT2A
     }),
@@ -157,8 +184,8 @@ module.exports.addWorkloadPoints = function (inserts, isT2A = false) {
     })
 }
 
-var addWorkloadReports = function (inserts) {
-  var workloadReports = [
+const addWorkloadReports = function (inserts) {
+  const workloadReports = [
     { effective_from: '2017-01-01', effective_to: '2017-02-01' },
     { effective_from: '2017-02-01' }
   ]
@@ -172,7 +199,7 @@ var addWorkloadReports = function (inserts) {
     })
 }
 
-var addRegion = function (inserts) {
+const addRegion = function (inserts) {
   return knex('region').returning('id').insert({ description: 'Test Region' })
     .then(function (ids) {
       inserts.push({ table: 'region', id: ids[0] })
@@ -183,8 +210,8 @@ var addRegion = function (inserts) {
     })
 }
 
-var addTeam = function (inserts) {
-  var ldus = inserts.filter((item) => item.table === 'ldu')
+const addTeam = function (inserts) {
+  const ldus = inserts.filter((item) => item.table === 'ldu')
   return knex('team').returning('id').insert({ ldu_id: ldus[ldus.length - 1].id, description: 'Test Team' })
     .then(function (ids) {
       inserts.push({ table: 'team', id: ids[0] })
@@ -195,8 +222,8 @@ var addTeam = function (inserts) {
     })
 }
 
-var addLdu = function (inserts) {
-  var regions = inserts.filter((item) => item.table === 'region')
+const addLdu = function (inserts) {
+  const regions = inserts.filter((item) => item.table === 'region')
   return knex('ldu').returning('id').insert({ region_id: regions[regions.length - 1].id, description: 'Test LDU' })
     .then(function (ids) {
       inserts.push({ table: 'ldu', id: ids[0] })
@@ -208,7 +235,7 @@ var addLdu = function (inserts) {
 }
 
 module.exports.addPoOffenderManager = function (inserts) {
-  var poOmType = inserts.filter((item) => item.table === 'offender_manager_type')[0]
+  const poOmType = inserts.filter((item) => item.table === 'offender_manager_type')[0]
   return knex('offender_manager').returning('id').insert(
     {
       type_id: poOmType.id,
@@ -224,8 +251,8 @@ module.exports.addPoOffenderManager = function (inserts) {
     })
 }
 
-var addPsoOffenderManager = function (inserts) {
-  var psoOmType = inserts.filter((item) => item.table === 'offender_manager_type')[1]
+const addPsoOffenderManager = function (inserts) {
+  const psoOmType = inserts.filter((item) => item.table === 'offender_manager_type')[1]
   return knex('offender_manager').returning('id').insert(
     {
       type_id: psoOmType.id,
@@ -241,9 +268,9 @@ var addPsoOffenderManager = function (inserts) {
     })
 }
 
-var addWorkloadOwner = function (inserts) {
-  var teams = inserts.filter((item) => item.table === 'team')
-  var offenderManagers = inserts.filter((item) => item.table === 'offender_manager')
+const addWorkloadOwner = function (inserts) {
+  const teams = inserts.filter((item) => item.table === 'team')
+  const offenderManagers = inserts.filter((item) => item.table === 'offender_manager')
 
   return knex('workload_owner').returning('id').insert(
     {
@@ -261,17 +288,17 @@ var addWorkloadOwner = function (inserts) {
     })
 }
 
-var addWorkloads = function (inserts) {
+const addWorkloads = function (inserts) {
   return getMaxStagingId()
     .then(function (upToDateMaxStagingId) {
       module.exports.maxStagingId = upToDateMaxStagingId
-      var workloadOwners = inserts.filter((item) => item.table === 'workload_owner')
-      var workloadReports = inserts.filter((item) => item.table === 'workload_report')
-      var currentWorkloadOwnerId = workloadOwners[workloadOwners.length - 1].id
+      const workloadOwners = inserts.filter((item) => item.table === 'workload_owner')
+      const workloadReports = inserts.filter((item) => item.table === 'workload_report')
+      const currentWorkloadOwnerId = workloadOwners[workloadOwners.length - 1].id
 
-      var workloads = []
+      const workloads = []
 
-      var i = 1
+      let i = 1
       workloadReports.forEach(function (report) {
         workloads.push(Object.assign({}, defaultWorkload, {
           workload_owner_id: currentWorkloadOwnerId,
@@ -287,10 +314,10 @@ var addWorkloads = function (inserts) {
         inserts.push({ table: 'workload', id: id })
       })
 
-      var workloads = inserts.filter((item) => item.table === 'workload')
-      var workloadReports = inserts.filter((item) => item.table === 'workload_report')
+      const workloads = inserts.filter((item) => item.table === 'workload')
+      const workloadReports = inserts.filter((item) => item.table === 'workload_report')
 
-      var defaultWorkloadPointsCalculations = {
+      const defaultWorkloadPointsCalculations = {
         workload_points_id: inserts.filter((item) => item.table === 'workload_points')[0].id,
         t2a_workload_points_id: inserts.filter((item) => item.table === 'workload_points')[2].id,
         total_points: 0,
@@ -306,7 +333,7 @@ var addWorkloads = function (inserts) {
         arms_total_cases: 5
       }
 
-      var calculations = []
+      const calculations = []
       calculations.push(Object.assign({}, defaultWorkloadPointsCalculations, {
         total_points: 20,
         available_points: 10,
@@ -326,8 +353,8 @@ var addWorkloads = function (inserts) {
       ids.forEach((id) => {
         inserts.push({ table: 'workload_points_calculations', id: id })
       })
-      var workloads = inserts.filter((item) => item.table === 'workload')
-      var defaultTier = {
+      const workloads = inserts.filter((item) => item.table === 'workload')
+      const defaultTier = {
         workload_id: workloads[workloads.length - 1].id,
         tier_number: 1,
         overdue_terminations_total: 10,
@@ -343,14 +370,14 @@ var addWorkloads = function (inserts) {
         location: 'COMMUNITY'
       }
 
-      var tiers = []
-      var locations = ['COMMUNITY', 'CUSTODY', 'LICENSE']
+      const tiers = []
+      const locations = ['COMMUNITY', 'CUSTODY', 'LICENSE']
       locations.forEach(function (location) {
-        for (var tierNumber = 0, totalCases = 0; tierNumber < 8; tierNumber++, totalCases++) {
+        for (let tierNumber = 0, totalCases = 0; tierNumber < 17; tierNumber++, totalCases++) {
           tiers.push(Object.assign({}, defaultTier, { tier_number: tierNumber, location: location, total_cases: totalCases, total_filtered_cases: totalCases }))
         }
       })
-      return knex('tiers').returning('id').insert(tiers)
+      return knex.batchInsert('tiers', tiers, 149).returning('id')
     })
     .then(function (ids) {
       ids.forEach((id) => {
@@ -365,9 +392,9 @@ module.exports.addCaseDetails = function (caseDetails) {
 }
 
 module.exports.selectIdsForWorkloadOwner = function () {
-  var results = []
+  const results = []
 
-  var promise = knex('workload_owner')
+  const promise = knex('workload_owner')
     .join('workload', 'workload.workload_owner_id', 'workload_owner.id')
     .join('workload_points_calculations', 'workload_points_calculations.workload_id', 'workload.id')
     .join('workload_report', 'workload_points_calculations.workload_report_id', 'workload_report.id')
@@ -390,7 +417,7 @@ module.exports.selectIdsForWorkloadOwner = function () {
 }
 
 module.exports.getAnyExistingWorkloadId = function () {
-  var promise = knex('workload')
+  const promise = knex('workload')
     .first('id')
     .then(function (result) {
       return result.id
@@ -399,8 +426,9 @@ module.exports.getAnyExistingWorkloadId = function () {
 }
 
 module.exports.getAnyExistingWorkloadOwnerId = function () {
-  var promise = knex('workload_owner')
-    .first('id')
+  const promise = knex('individual_case_overview')
+    .where('contracted_hours', '>', 0)
+    .first('workload_owner_id AS id')
     .then(function (result) {
       return result.id
     })
@@ -416,7 +444,7 @@ module.exports.getAnyExistingWorkloadReportId = function () {
 }
 
 module.exports.getAnyExistingReductionReasonId = function () {
-  var promise = knex('reduction_reason')
+  const promise = knex('reduction_reason')
     .first('id')
     .then(function (result) {
       return result.id
@@ -425,7 +453,7 @@ module.exports.getAnyExistingReductionReasonId = function () {
 }
 
 module.exports.getAnyExistingRegionId = function () {
-  var promise = knex('region')
+  const promise = knex('region')
     .first('id')
     .then(function (result) {
       return result.id
@@ -434,7 +462,7 @@ module.exports.getAnyExistingRegionId = function () {
 }
 
 module.exports.getAllExistingReductions = function () {
-  var promise = knex('reductions')
+  const promise = knex('reductions')
     .count('id')
     .then(function (result) {
       return result
@@ -443,7 +471,7 @@ module.exports.getAllExistingReductions = function () {
 }
 
 module.exports.selectGradeForWorkloadOwner = function (workloadOwnerId) {
-  var promise = knex('workload_owner')
+  const promise = knex('workload_owner')
     .join('offender_manager', 'offender_manager.id', 'offender_manager_id')
     .join('offender_manager_type', 'offender_manager.type_id', 'offender_manager_type.id')
     .first('offender_manager_type.grade_code')
@@ -456,7 +484,7 @@ module.exports.selectGradeForWorkloadOwner = function (workloadOwnerId) {
 
 module.exports.removeInsertedData = function (inserts) {
   inserts = inserts.reverse()
-  var deleteMap = {}
+  const deleteMap = {}
   inserts.forEach(function (insert) {
     if (deleteMap[insert.table] === undefined) {
       deleteMap[insert.table] = []
@@ -469,7 +497,7 @@ module.exports.removeInsertedData = function (inserts) {
 }
 
 module.exports.rowGenerator = function (name, baseRow, multiplier) {
-  var row = Object.assign({}, baseRow)
+  const row = Object.assign({}, baseRow)
   if (multiplier !== undefined) {
     _.forOwn(baseRow, function (value, key) {
       row[key] = value * multiplier
@@ -491,7 +519,7 @@ module.exports.getAnyExistingWorkloadOwnerIdWithActiveReduction = function () {
     .where('effective_to', '>', knex.raw('GETDATE()'))
     .andWhereNot('status', 'DELETED')
     .first('workload_owner.id AS workloadOwnerId',
-    'reductions.id AS reductionId')
+      'reductions.id AS reductionId')
 }
 
 module.exports.generateNonExistantWorkloadOwnerId = function () {
@@ -529,55 +557,106 @@ module.exports.generateNonExistantRegionId = function () {
 module.exports.getAllTasks = function () {
   return knex('tasks')
     .select('submitting_agent',
-    'type',
-    'additional_data',
-    'workload_report_id',
-    'status'
+      'type',
+      'additional_data',
+      'workload_report_id',
+      'status'
     )
 }
 
 module.exports.getAllWorkloadPointsForTest = function () {
   return knex('workload_points')
     .select(
-    'comm_tier_7 AS commA',
-    'comm_tier_6 AS commB1',
-    'comm_tier_5 AS commB2',
-    'comm_tier_4 AS commC1',
-    'comm_tier_3 AS commC2',
-    'comm_tier_2 AS commD1',
-    'comm_tier_1 AS commD2',
-    'cust_tier_7 AS cusA',
-    'cust_tier_6 AS cusB1',
-    'cust_tier_5 AS cusB2',
-    'cust_tier_4 AS cusC1',
-    'cust_tier_3 AS cusC2',
-    'cust_tier_2 AS cusD1',
-    'cust_tier_1 AS cusD2',
-    'lic_tier_7 AS licA',
-    'lic_tier_6 AS licB1',
-    'lic_tier_5 AS licB2',
-    'lic_tier_4 AS licC1',
-    'lic_tier_3 AS licC2',
-    'lic_tier_2 AS licD1',
-    'lic_tier_1 AS licD2',
-    'sdr AS sdr',
-    'user_id AS userId',
-    'sdr_conversion AS sdrConversion',
-    'nominal_target_spo AS nominalTargetPso',
-    'nominal_target_po AS nominalTargetPo',
-    'default_contracted_hours_po AS defaultContractedHoursPo',
-    'default_contracted_hours_pso AS defaultContractedHoursPso',
-    'default_contracted_hours_spo AS defaultContractedHoursSpo',
-    'weighting_o AS weightingOverdue',
-    'weighting_w AS weightingWarrants',
-    'weighting_u AS weightingUpw',
-    'parom AS parom',
-    'effective_to AS effectiveTo',
-    'is_t2a AS isT2A'
+      'comm_tier_1 AS commA3',
+      'comm_tier_2 AS commA2',
+      'comm_tier_3 AS commA1',
+      'comm_tier_4 AS commA0',
+      'comm_tier_5 AS commB3',
+      'comm_tier_6 AS commB2',
+      'comm_tier_7 AS commB1',
+      'comm_tier_8 AS commB0',
+      'comm_tier_9 AS commC3',
+      'comm_tier_10 AS commC2',
+      'comm_tier_11 AS commC1',
+      'comm_tier_12 AS commC0',
+      'comm_tier_13 AS commD3',
+      'comm_tier_14 AS commD2',
+      'comm_tier_15 AS commD1',
+      'comm_tier_16 AS commD0',
+      'cust_tier_1 AS cusA3',
+      'cust_tier_2 AS cusA2',
+      'cust_tier_3 AS cusA1',
+      'cust_tier_4 AS cusA0',
+      'cust_tier_5 AS cusB3',
+      'cust_tier_6 AS cusB2',
+      'cust_tier_7 AS cusB1',
+      'cust_tier_8 AS cusB0',
+      'cust_tier_9 AS cusC3',
+      'cust_tier_10 AS cusC2',
+      'cust_tier_11 AS cusC1',
+      'cust_tier_12 AS cusC0',
+      'cust_tier_13 AS cusD3',
+      'cust_tier_14 AS cusD2',
+      'cust_tier_15 AS cusD1',
+      'cust_tier_16 AS cusD0',
+      'lic_tier_1 AS licA3',
+      'lic_tier_2 AS licA2',
+      'lic_tier_3 AS licA1',
+      'lic_tier_4 AS licA0',
+      'lic_tier_5 AS licB3',
+      'lic_tier_6 AS licB2',
+      'lic_tier_7 AS licB1',
+      'lic_tier_8 AS licB0',
+      'lic_tier_9 AS licC3',
+      'lic_tier_10 AS licC2',
+      'lic_tier_11 AS licC1',
+      'lic_tier_12 AS licC0',
+      'lic_tier_13 AS licD3',
+      'lic_tier_14 AS licD2',
+      'lic_tier_15 AS licD1',
+      'lic_tier_16 AS licD0',
+      'sdr AS sdr',
+      'user_id AS userId',
+      'sdr_conversion AS sdrConversion',
+      'nominal_target_spo AS nominalTargetPso',
+      'nominal_target_po AS nominalTargetPo',
+      'default_contracted_hours_po AS defaultContractedHoursPo',
+      'default_contracted_hours_pso AS defaultContractedHoursPso',
+      'default_contracted_hours_spo AS defaultContractedHoursSpo',
+      'weighting_o AS weightingOverdue',
+      'weighting_w AS weightingWarrants',
+      'weighting_u AS weightingUpw',
+      'parom AS parom',
+      'effective_to AS effectiveTo',
+      'is_t2a AS isT2A'
     )
 }
 
-var getMaxStagingId = function () {
+module.exports.deleteLastRecordFromTables = function (tables) {
+  return Promise.each(tables, function (table) {
+    return knex(table)
+      .orderBy('id', 'desc')
+      .first()
+      .del()
+  })
+}
+
+module.exports.deleteRecordsFromTableForIds = function (table, ids) {
+  return knex(table)
+    .whereIn('id', ids)
+    .del()
+}
+
+module.exports.getLastRecordFromTable = function (table) {
+  return knex(table)
+    .orderBy('id', 'desc')
+    .first()
+    .then((results) => {
+      return results
+    })
+}
+
+const getMaxStagingId = function () {
   return knex('workload')
     .max('staging_id AS maxStagingId')
     .then(function (results) {

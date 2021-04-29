@@ -18,12 +18,12 @@ module.exports.calculateOverallPercentages = function (overallTotals, overallGra
 
 module.exports.getCaseloadSummaryTotalsByTeam = function (caseloads) {
   // Create a mapping for the linkId to do the aggregation
-  var linkIdToCaseloadMap = new Map()
-  for (var idx = 0; idx < caseloads.length; idx++) {
-    var key = caseloads[idx].linkId
+  const linkIdToCaseloadMap = new Map()
+  for (let idx = 0; idx < caseloads.length; idx++) {
+    const key = caseloads[idx].linkId
     if (!linkIdToCaseloadMap.has(key)) {
       // Make a copy of the object to ensure the original value isn't affected
-      var newValue = {
+      let newValue = {
         name: caseloads[idx].name,
         linkId: caseloads[idx].linkId,
         totalCases: 0,
@@ -35,7 +35,7 @@ module.exports.getCaseloadSummaryTotalsByTeam = function (caseloads) {
       newValue = updateTotals(newValue, caseloads[idx])
       linkIdToCaseloadMap.set(key, newValue)
     } else {
-      var existingValue = linkIdToCaseloadMap.get(key)
+      let existingValue = linkIdToCaseloadMap.get(key)
       existingValue = updateTotals(existingValue, caseloads[idx])
     }
   }
@@ -86,18 +86,28 @@ module.exports.getCaseloadTotalSummary = function (caseloads) {
 */
 module.exports.calculateTotalsRow = function (caseloads) {
   // WMT0160: add new tiers
-  var totals = {a: 0, b1: 0, b2: 0, c1: 0, c2: 0, d1: 0, d2: 0, e: 0, f: 0, g: 0, untiered: 0, overall: 0}
+  const totals = { a3: 0, a2: 0, a1: 0, a0: 0, b3: 0, b2: 0, b1: 0, b0: 0, c3: 0, c2: 0, c1: 0, c0: 0, d3: 0, d2: 0, d1: 0, d0: 0, untiered: 0, overall: 0 }
   caseloads.forEach(function (val, key) {
-    totals.a += val.a
-    totals.b1 += val.b1
+    totals.a3 += val.a3
+    totals.a2 += val.a2
+    totals.a1 += val.a1
+    totals.a0 += val.a0
+
+    totals.b3 += val.b3
     totals.b2 += val.b2
-    totals.c1 += val.c1
+    totals.b1 += val.b1
+    totals.b0 += val.b0
+
+    totals.c3 += val.c3
     totals.c2 += val.c2
-    totals.d1 += val.d1
+    totals.c1 += val.c1
+    totals.c0 += val.c0
+
+    totals.d3 += val.d3
     totals.d2 += val.d2
-    totals.e += val.e
-    totals.f += val.f
-    totals.g += val.g
+    totals.d1 += val.d1
+    totals.d0 += val.d0
+
     totals.untiered += val.untiered
     totals.overall += val.totalCases
   })
@@ -105,7 +115,7 @@ module.exports.calculateTotalsRow = function (caseloads) {
 }
 
 module.exports.calculateTotalTiersRow = function (summary) {
-  var totals = {totalCommunity: 0, totalLicense: 0, totalCustody: 0, totalTotalCases: 0}
+  const totals = { totalCommunity: 0, totalLicense: 0, totalCustody: 0, totalTotalCases: 0 }
   summary.forEach(function (val, key) {
     totals.totalCommunity += val.communityTotalCases
     totals.totalLicense += val.licenseTotalCases
@@ -115,7 +125,7 @@ module.exports.calculateTotalTiersRow = function (summary) {
   return totals
 }
 
-var updateTotals = function (entryToUpdate, caseload) {
+const updateTotals = function (entryToUpdate, caseload) {
   entryToUpdate.totalCases += caseload.totalCases
 
   if (caseload.caseType === caseTypes.LICENSE) {
@@ -129,8 +139,8 @@ var updateTotals = function (entryToUpdate, caseload) {
   return entryToUpdate
 }
 
-var convertMapToArray = function (map) {
-  var arrayResult = []
+const convertMapToArray = function (map) {
+  const arrayResult = []
   map.forEach(function (val, key) {
     arrayResult.push(val)
   })
@@ -138,32 +148,42 @@ var convertMapToArray = function (map) {
   return arrayResult
 }
 
-var transform = function (caseloadTotalsByGrade, calculatePercentage = false, isCSV = false) {
-  var transformedData = []
-  var caseloadTotalsByTeam = groupCaseload(caseloadTotalsByGrade, false)
-  var gradeTotals = {}
+const transform = function (caseloadTotalsByGrade, calculatePercentage = false, isCSV = false) {
+  const transformedData = []
+  const caseloadTotalsByTeam = groupCaseload(caseloadTotalsByGrade, false)
+  let gradeTotals = {}
 
   // For each team, create one entry in the new results set with one 'grade' sub-object per grade
-  for (var team in caseloadTotalsByTeam) {
-    var newTeamEntry = { linkId: caseloadTotalsByTeam[team].linkId, name: caseloadTotalsByTeam[team].name }
-    var teamGradeRecords = caseloadTotalsByGrade.filter((row) => row.linkId === caseloadTotalsByTeam[team].linkId)
-    var gradeRecords = []
-    for (var record in teamGradeRecords) {
-      var newGradeRecord
+  for (const team in caseloadTotalsByTeam) {
+    let newTeamEntry = { linkId: caseloadTotalsByTeam[team].linkId, name: caseloadTotalsByTeam[team].name }
+    const teamGradeRecords = caseloadTotalsByGrade.filter((row) => row.linkId === caseloadTotalsByTeam[team].linkId)
+    const gradeRecords = []
+    for (const record in teamGradeRecords) {
+      let newGradeRecord
       if (calculatePercentage) {
         newGradeRecord = {
           // WMT0160: add new tiers
           grade: teamGradeRecords[record].grade,
-          a: percentageCalculator.calculatePercentage(teamGradeRecords[record].a, caseloadTotalsByTeam[team].a),
-          b1: percentageCalculator.calculatePercentage(teamGradeRecords[record].b1, caseloadTotalsByTeam[team].b1),
+          a3: percentageCalculator.calculatePercentage(teamGradeRecords[record].a3, caseloadTotalsByTeam[team].a3),
+          a2: percentageCalculator.calculatePercentage(teamGradeRecords[record].a2, caseloadTotalsByTeam[team].a2),
+          a1: percentageCalculator.calculatePercentage(teamGradeRecords[record].a1, caseloadTotalsByTeam[team].a1),
+          a0: percentageCalculator.calculatePercentage(teamGradeRecords[record].a0, caseloadTotalsByTeam[team].a0),
+
+          b3: percentageCalculator.calculatePercentage(teamGradeRecords[record].b3, caseloadTotalsByTeam[team].b3),
           b2: percentageCalculator.calculatePercentage(teamGradeRecords[record].b2, caseloadTotalsByTeam[team].b2),
-          c1: percentageCalculator.calculatePercentage(teamGradeRecords[record].c1, caseloadTotalsByTeam[team].c1),
+          b1: percentageCalculator.calculatePercentage(teamGradeRecords[record].b1, caseloadTotalsByTeam[team].b1),
+          b0: percentageCalculator.calculatePercentage(teamGradeRecords[record].b0, caseloadTotalsByTeam[team].b0),
+
+          c3: percentageCalculator.calculatePercentage(teamGradeRecords[record].c3, caseloadTotalsByTeam[team].c3),
           c2: percentageCalculator.calculatePercentage(teamGradeRecords[record].c2, caseloadTotalsByTeam[team].c2),
-          d1: percentageCalculator.calculatePercentage(teamGradeRecords[record].d1, caseloadTotalsByTeam[team].d1),
+          c1: percentageCalculator.calculatePercentage(teamGradeRecords[record].c1, caseloadTotalsByTeam[team].c1),
+          c0: percentageCalculator.calculatePercentage(teamGradeRecords[record].c0, caseloadTotalsByTeam[team].c0),
+
+          d3: percentageCalculator.calculatePercentage(teamGradeRecords[record].d3, caseloadTotalsByTeam[team].d3),
           d2: percentageCalculator.calculatePercentage(teamGradeRecords[record].d2, caseloadTotalsByTeam[team].d2),
-          e: percentageCalculator.calculatePercentage(teamGradeRecords[record].e, caseloadTotalsByTeam[team].e),
-          f: percentageCalculator.calculatePercentage(teamGradeRecords[record].f, caseloadTotalsByTeam[team].f),
-          g: percentageCalculator.calculatePercentage(teamGradeRecords[record].g, caseloadTotalsByTeam[team].g),
+          d1: percentageCalculator.calculatePercentage(teamGradeRecords[record].d1, caseloadTotalsByTeam[team].d1),
+          d0: percentageCalculator.calculatePercentage(teamGradeRecords[record].d0, caseloadTotalsByTeam[team].d0),
+
           untiered: percentageCalculator.calculatePercentage(teamGradeRecords[record].untiered, caseloadTotalsByTeam[team].untiered),
           totalCases: percentageCalculator.calculatePercentage(teamGradeRecords[record].totalCases, caseloadTotalsByTeam[team].totalCases)
         }
@@ -174,16 +194,26 @@ var transform = function (caseloadTotalsByGrade, calculatePercentage = false, is
         newGradeRecord = {
           // WMT0160: add new tiers
           grade: teamGradeRecords[record].grade,
-          a: teamGradeRecords[record].a,
-          b1: teamGradeRecords[record].b1,
+          a3: teamGradeRecords[record].a3,
+          a2: teamGradeRecords[record].a2,
+          a1: teamGradeRecords[record].a1,
+          a0: teamGradeRecords[record].a0,
+
+          b3: teamGradeRecords[record].b3,
           b2: teamGradeRecords[record].b2,
-          c1: teamGradeRecords[record].c1,
+          b1: teamGradeRecords[record].b1,
+          b0: teamGradeRecords[record].b0,
+
+          c3: teamGradeRecords[record].c3,
           c2: teamGradeRecords[record].c2,
-          d1: teamGradeRecords[record].d1,
+          c1: teamGradeRecords[record].c1,
+          c0: teamGradeRecords[record].c0,
+
+          d3: teamGradeRecords[record].d3,
           d2: teamGradeRecords[record].d2,
-          e: teamGradeRecords[record].e,
-          f: teamGradeRecords[record].f,
-          g: teamGradeRecords[record].g,
+          d1: teamGradeRecords[record].d1,
+          d0: teamGradeRecords[record].d0,
+
           untiered: teamGradeRecords[record].untiered,
           totalCases: teamGradeRecords[record].totalCases
         }
@@ -193,22 +223,32 @@ var transform = function (caseloadTotalsByGrade, calculatePercentage = false, is
       }
       gradeRecords.push(newGradeRecord)
     }
-    newTeamEntry = Object.assign({}, newTeamEntry, {grades: gradeRecords})
+    newTeamEntry = Object.assign({}, newTeamEntry, { grades: gradeRecords })
     transformedData.push(newTeamEntry)
   }
   if (calculatePercentage) {
-    for (var key in gradeTotals) {
+    for (const key in gradeTotals) {
       // WMT0160: add new tiers
-      gradeTotals[key].a = gradeTotals[key].a / gradeTotals[key].numberOfType
-      gradeTotals[key].b1 = gradeTotals[key].b1 / gradeTotals[key].numberOfType
+      gradeTotals[key].a3 = gradeTotals[key].a3 / gradeTotals[key].numberOfType
+      gradeTotals[key].a2 = gradeTotals[key].a2 / gradeTotals[key].numberOfType
+      gradeTotals[key].a1 = gradeTotals[key].a1 / gradeTotals[key].numberOfType
+      gradeTotals[key].a0 = gradeTotals[key].a0 / gradeTotals[key].numberOfType
+
+      gradeTotals[key].b3 = gradeTotals[key].b3 / gradeTotals[key].numberOfType
       gradeTotals[key].b2 = gradeTotals[key].b2 / gradeTotals[key].numberOfType
-      gradeTotals[key].c1 = gradeTotals[key].c1 / gradeTotals[key].numberOfType
+      gradeTotals[key].b1 = gradeTotals[key].b1 / gradeTotals[key].numberOfType
+      gradeTotals[key].b0 = gradeTotals[key].b0 / gradeTotals[key].numberOfType
+
+      gradeTotals[key].c3 = gradeTotals[key].c3 / gradeTotals[key].numberOfType
       gradeTotals[key].c2 = gradeTotals[key].c2 / gradeTotals[key].numberOfType
-      gradeTotals[key].d1 = gradeTotals[key].d1 / gradeTotals[key].numberOfType
+      gradeTotals[key].c1 = gradeTotals[key].c1 / gradeTotals[key].numberOfType
+      gradeTotals[key].c0 = gradeTotals[key].c0 / gradeTotals[key].numberOfType
+
+      gradeTotals[key].d3 = gradeTotals[key].d3 / gradeTotals[key].numberOfType
       gradeTotals[key].d2 = gradeTotals[key].d2 / gradeTotals[key].numberOfType
-      gradeTotals[key].e = gradeTotals[key].e / gradeTotals[key].numberOfType
-      gradeTotals[key].f = gradeTotals[key].f / gradeTotals[key].numberOfType
-      gradeTotals[key].g = gradeTotals[key].g / gradeTotals[key].numberOfType
+      gradeTotals[key].d1 = gradeTotals[key].d1 / gradeTotals[key].numberOfType
+      gradeTotals[key].d0 = gradeTotals[key].d0 / gradeTotals[key].numberOfType
+
       gradeTotals[key].untiered = gradeTotals[key].untiered / gradeTotals[key].numberOfType
       gradeTotals[key].totalCases = gradeTotals[key].totalCases / gradeTotals[key].numberOfType
     }
@@ -216,8 +256,8 @@ var transform = function (caseloadTotalsByGrade, calculatePercentage = false, is
   return { details: transformedData, totals: gradeTotals }
 }
 
-var collectTransformedData = function (caseloadTotalsByGrade, isCsv = false) {
-  var data = {}
+const collectTransformedData = function (caseloadTotalsByGrade, isCsv = false) {
+  const data = {}
   data.details = transform(caseloadTotalsByGrade, false, false).details
   data.totals = transform(caseloadTotalsByGrade, false, false).totals
   data.detailsPercentages = transform(caseloadTotalsByGrade, true, false).details
@@ -225,19 +265,29 @@ var collectTransformedData = function (caseloadTotalsByGrade, isCsv = false) {
   return data
 }
 
-var addGradeTotals = function (gradeTotals, newGradeRecord) {
+const addGradeTotals = function (gradeTotals, newGradeRecord) {
   // WMT0160: add new tiers
   if (gradeTotals[newGradeRecord.grade] !== undefined) {
-    gradeTotals[newGradeRecord.grade].a += newGradeRecord.a
-    gradeTotals[newGradeRecord.grade].b1 += newGradeRecord.b1
+    gradeTotals[newGradeRecord.grade].a3 += newGradeRecord.a3
+    gradeTotals[newGradeRecord.grade].a2 += newGradeRecord.a2
+    gradeTotals[newGradeRecord.grade].a1 += newGradeRecord.a1
+    gradeTotals[newGradeRecord.grade].a0 += newGradeRecord.a0
+
+    gradeTotals[newGradeRecord.grade].b3 += newGradeRecord.b3
     gradeTotals[newGradeRecord.grade].b2 += newGradeRecord.b2
-    gradeTotals[newGradeRecord.grade].c1 += newGradeRecord.c1
+    gradeTotals[newGradeRecord.grade].b1 += newGradeRecord.b1
+    gradeTotals[newGradeRecord.grade].b0 += newGradeRecord.b0
+
+    gradeTotals[newGradeRecord.grade].c3 += newGradeRecord.c3
     gradeTotals[newGradeRecord.grade].c2 += newGradeRecord.c2
-    gradeTotals[newGradeRecord.grade].d1 += newGradeRecord.d1
+    gradeTotals[newGradeRecord.grade].c1 += newGradeRecord.c1
+    gradeTotals[newGradeRecord.grade].c0 += newGradeRecord.c0
+
+    gradeTotals[newGradeRecord.grade].d3 += newGradeRecord.d3
     gradeTotals[newGradeRecord.grade].d2 += newGradeRecord.d2
-    gradeTotals[newGradeRecord.grade].e += newGradeRecord.e
-    gradeTotals[newGradeRecord.grade].f += newGradeRecord.f
-    gradeTotals[newGradeRecord.grade].g += newGradeRecord.g
+    gradeTotals[newGradeRecord.grade].d1 += newGradeRecord.d1
+    gradeTotals[newGradeRecord.grade].d0 += newGradeRecord.d0
+
     gradeTotals[newGradeRecord.grade].untiered += newGradeRecord.untiered
     gradeTotals[newGradeRecord.grade].totalCases += newGradeRecord.totalCases
     gradeTotals[newGradeRecord.grade].numberOfType++
@@ -248,32 +298,42 @@ var addGradeTotals = function (gradeTotals, newGradeRecord) {
   return gradeTotals
 }
 
-var groupCaseload = function (caseloads, splitByGrade = false) {
+const groupCaseload = function (caseloads, splitByGrade = false) {
   // WMT0160: add new tiers
   // Create a mapping for the linkId to do the aggregation
-  var linkIdToCaseloadMap = new Map()
-  for (var idx = 0; idx < caseloads.length; idx++) {
-    var key = caseloads[idx].linkId
+  const linkIdToCaseloadMap = new Map()
+  for (let idx = 0; idx < caseloads.length; idx++) {
+    let key = caseloads[idx].linkId
     if (splitByGrade) {
       key += caseloads[idx].grade
     }
     if (!linkIdToCaseloadMap.has(key)) {
       // Make a copy of the object to ensure the original value isn't affected
-      var newValue = Object.assign({}, caseloads[idx])
+      const newValue = Object.assign({}, caseloads[idx])
       linkIdToCaseloadMap.set(key, newValue)
     } else {
-      var existingValue = linkIdToCaseloadMap.get(key)
+      const existingValue = linkIdToCaseloadMap.get(key)
       existingValue.untiered += caseloads[idx].untiered
-      existingValue.g += caseloads[idx].g
-      existingValue.f += caseloads[idx].f
-      existingValue.e += caseloads[idx].e
-      existingValue.d2 += caseloads[idx].d2
+      existingValue.d0 += caseloads[idx].d0
       existingValue.d1 += caseloads[idx].d1
-      existingValue.c2 += caseloads[idx].c2
+      existingValue.d2 += caseloads[idx].d2
+      existingValue.d3 += caseloads[idx].d3
+
+      existingValue.c0 += caseloads[idx].c0
       existingValue.c1 += caseloads[idx].c1
-      existingValue.b2 += caseloads[idx].b2
+      existingValue.c2 += caseloads[idx].c2
+      existingValue.c3 += caseloads[idx].c3
+
+      existingValue.b0 += caseloads[idx].b0
       existingValue.b1 += caseloads[idx].b1
-      existingValue.a += caseloads[idx].a
+      existingValue.b2 += caseloads[idx].b2
+      existingValue.b3 += caseloads[idx].b3
+
+      existingValue.a0 += caseloads[idx].a0
+      existingValue.a1 += caseloads[idx].a1
+      existingValue.a2 += caseloads[idx].a2
+      existingValue.a3 += caseloads[idx].a3
+
       existingValue.totalCases += caseloads[idx].totalCases
     }
   }
@@ -281,29 +341,39 @@ var groupCaseload = function (caseloads, splitByGrade = false) {
   return convertMapToArray(linkIdToCaseloadMap)
 }
 
-var groupOverallCaseloadByGrade = function (caseloads) {
+const groupOverallCaseloadByGrade = function (caseloads) {
   // WMT0160: add new tiers to selectList
   // Create a mapping for the linkId to do the aggregation
-  var linkIdToCaseloadMap = new Map()
-  for (var idx = 0; idx < caseloads.length; idx++) {
-    var key = caseloads[idx].grade
+  const linkIdToCaseloadMap = new Map()
+  for (let idx = 0; idx < caseloads.length; idx++) {
+    const key = caseloads[idx].grade
     if (!linkIdToCaseloadMap.has(key)) {
       // Make a copy of the object to ensure the original value isn't affected
-      var newValue = Object.assign({}, caseloads[idx])
+      const newValue = Object.assign({}, caseloads[idx])
       linkIdToCaseloadMap.set(key, newValue)
     } else {
-      var existingValue = linkIdToCaseloadMap.get(key)
+      const existingValue = linkIdToCaseloadMap.get(key)
       existingValue.untiered += caseloads[idx].untiered
-      existingValue.g += caseloads[idx].g
-      existingValue.f += caseloads[idx].f
-      existingValue.e += caseloads[idx].e
-      existingValue.d2 += caseloads[idx].d2
+      existingValue.d0 += caseloads[idx].d0
       existingValue.d1 += caseloads[idx].d1
-      existingValue.c2 += caseloads[idx].c2
+      existingValue.d2 += caseloads[idx].d2
+      existingValue.d3 += caseloads[idx].d3
+
+      existingValue.c0 += caseloads[idx].c0
       existingValue.c1 += caseloads[idx].c1
-      existingValue.b2 += caseloads[idx].b2
+      existingValue.c2 += caseloads[idx].c2
+      existingValue.c3 += caseloads[idx].c3
+
+      existingValue.b0 += caseloads[idx].b0
       existingValue.b1 += caseloads[idx].b1
-      existingValue.a += caseloads[idx].a
+      existingValue.b2 += caseloads[idx].b2
+      existingValue.b3 += caseloads[idx].b3
+
+      existingValue.a0 += caseloads[idx].a0
+      existingValue.a1 += caseloads[idx].a1
+      existingValue.a2 += caseloads[idx].a2
+      existingValue.a3 += caseloads[idx].a3
+
       existingValue.totalCases += caseloads[idx].totalCases
     }
   }
@@ -311,52 +381,72 @@ var groupOverallCaseloadByGrade = function (caseloads) {
   return convertMapToArray(linkIdToCaseloadMap)
 }
 
-var totalWholeCaseload = function (caseloads) {
+const totalWholeCaseload = function (caseloads) {
   // WMT0160: add new tiers to tierTotals
-  var tierTotals = {a: 0, b1: 0, b2: 0, c1: 0, c2: 0, d1: 0, d2: 0, e: 0, f: 0, g: 0, untiered: 0, totalCases: 0}
+  const tierTotals = { a3: 0, a2: 0, a1: 0, a0: 0, b3: 0, b2: 0, b1: 0, b0: 0, c3: 0, c2: 0, c1: 0, c0: 0, d3: 0, d2: 0, d1: 0, d0: 0, untiered: 0, totalCases: 0 }
   if (caseloads.length > 0) {
     caseloads.forEach(function (caseload) {
-      tierTotals['a'] += caseload.a
-      tierTotals['b1'] += caseload.b1
-      tierTotals['b2'] += caseload.b2
-      tierTotals['c1'] += caseload.c1
-      tierTotals['c2'] += caseload.c2
-      tierTotals['d1'] += caseload.d1
-      tierTotals['d2'] += caseload.d2
-      tierTotals['e'] += caseload.e
-      tierTotals['f'] += caseload.f
-      tierTotals['g'] += caseload.g
-      tierTotals['untiered'] += caseload.untiered
-      tierTotals['totalCases'] += caseload.totalCases
+      tierTotals.a3 += caseload.a3
+      tierTotals.a2 += caseload.a2
+      tierTotals.a1 += caseload.a1
+      tierTotals.a0 += caseload.a0
+
+      tierTotals.b3 += caseload.b3
+      tierTotals.b2 += caseload.b2
+      tierTotals.b1 += caseload.b1
+      tierTotals.b0 += caseload.b0
+
+      tierTotals.c3 += caseload.c3
+      tierTotals.c2 += caseload.c2
+      tierTotals.c1 += caseload.c1
+      tierTotals.c0 += caseload.c0
+
+      tierTotals.d3 += caseload.d3
+      tierTotals.d2 += caseload.d2
+      tierTotals.d1 += caseload.d1
+      tierTotals.d0 += caseload.d0
+
+      tierTotals.untiered += caseload.untiered
+      tierTotals.totalCases += caseload.totalCases
     })
   }
   return tierTotals
 }
 
-var calculateOverallPercentages = function (overallTotals, overallGradeTotals) {
+const calculateOverallPercentages = function (overallTotals, overallGradeTotals) {
   // WMT0160: add new tiers
   // Create a mapping for the linkId to do the aggregation
-  var linkIdToCaseloadMap = new Map()
-  for (var idx = 0; idx < overallGradeTotals.length; idx++) {
-    var key = overallGradeTotals[idx].grade
-    var newValue = Object.assign({}, overallGradeTotals[idx])
+  const linkIdToCaseloadMap = new Map()
+  for (let idx = 0; idx < overallGradeTotals.length; idx++) {
+    const key = overallGradeTotals[idx].grade
+    const newValue = Object.assign({}, overallGradeTotals[idx])
     linkIdToCaseloadMap.set(key, newValue)
-    var existingValue = linkIdToCaseloadMap.get(key)
+    const existingValue = linkIdToCaseloadMap.get(key)
     existingValue.untiered = percentageCalculator.calculatePercentage(existingValue.untiered, overallTotals.untiered)
-    existingValue.g = percentageCalculator.calculatePercentage(existingValue.g, overallTotals.g)
-    existingValue.f = percentageCalculator.calculatePercentage(existingValue.f, overallTotals.f)
-    existingValue.e = percentageCalculator.calculatePercentage(existingValue.e, overallTotals.e)
-    existingValue.d2 = percentageCalculator.calculatePercentage(existingValue.d2, overallTotals.d2)
+    existingValue.d0 = percentageCalculator.calculatePercentage(existingValue.d0, overallTotals.d0)
     existingValue.d1 = percentageCalculator.calculatePercentage(existingValue.d1, overallTotals.d1)
-    existingValue.c2 = percentageCalculator.calculatePercentage(existingValue.c2, overallTotals.c2)
+    existingValue.d2 = percentageCalculator.calculatePercentage(existingValue.d2, overallTotals.d2)
+    existingValue.d3 = percentageCalculator.calculatePercentage(existingValue.d3, overallTotals.d3)
+
+    existingValue.c0 = percentageCalculator.calculatePercentage(existingValue.c0, overallTotals.c0)
     existingValue.c1 = percentageCalculator.calculatePercentage(existingValue.c1, overallTotals.c1)
-    existingValue.b2 = percentageCalculator.calculatePercentage(existingValue.b2, overallTotals.b2)
+    existingValue.c2 = percentageCalculator.calculatePercentage(existingValue.c2, overallTotals.c2)
+    existingValue.c3 = percentageCalculator.calculatePercentage(existingValue.c3, overallTotals.c3)
+
+    existingValue.b0 = percentageCalculator.calculatePercentage(existingValue.b0, overallTotals.b0)
     existingValue.b1 = percentageCalculator.calculatePercentage(existingValue.b1, overallTotals.b1)
-    existingValue.a = percentageCalculator.calculatePercentage(existingValue.a, overallTotals.a)
+    existingValue.b2 = percentageCalculator.calculatePercentage(existingValue.b2, overallTotals.b2)
+    existingValue.b3 = percentageCalculator.calculatePercentage(existingValue.b3, overallTotals.b3)
+
+    existingValue.a0 = percentageCalculator.calculatePercentage(existingValue.a0, overallTotals.a0)
+    existingValue.a1 = percentageCalculator.calculatePercentage(existingValue.a1, overallTotals.a1)
+    existingValue.a2 = percentageCalculator.calculatePercentage(existingValue.a2, overallTotals.a2)
+    existingValue.a3 = percentageCalculator.calculatePercentage(existingValue.a3, overallTotals.a3)
+
     existingValue.totalCases = percentageCalculator.calculatePercentage(existingValue.totalCases, overallTotals.totalCases)
   }
-  var array = convertMapToArray(linkIdToCaseloadMap)
-  var objects = {}
+  const array = convertMapToArray(linkIdToCaseloadMap)
+  const objects = {}
   array.forEach(function (obj) {
     objects[obj.grade] = obj
   })

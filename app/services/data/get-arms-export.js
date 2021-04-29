@@ -2,8 +2,8 @@ const knex = require('../../../knex').web
 const getWorkloadPointsExport = require('./get-workload-points-export')
 
 module.exports = function (id, type) {
-  var table = 'arms_export_view'
-  var selectList = [
+  const table = 'arms_export_view'
+  const selectList = [
     'regionName',
     'lduName',
     'teamName',
@@ -12,11 +12,12 @@ module.exports = function (id, type) {
     'omName',
     'grade_code AS omGrade',
     'sentencetype',
-    'releaseDate'
+    'releaseDate',
+    'completedDate'
   ]
 
-  var whereString
-  var armsDetails
+  let whereString
+  let armsDetails
 
   if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
     whereString = ' WHERE ' + type + 'id = ' + id

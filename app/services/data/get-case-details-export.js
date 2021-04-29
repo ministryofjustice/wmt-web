@@ -3,8 +3,8 @@ const getWorkloadPointsExport = require('./get-workload-points-export')
 // const groupCaseReferenceNumbers = require('../helpers/group-case-reference-numbers')
 
 module.exports = function (id, type) {
-  var table = 'case_details_export_view'
-  var selectList = [
+  const table = 'case_details_export_view'
+  const selectList = [
     'regionName',
     'lduName',
     'teamName',
@@ -16,8 +16,8 @@ module.exports = function (id, type) {
     'gradeCode'
   ]
 
-  var whereString
-  var caseDetails
+  let whereString
+  let caseDetails
 
   if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
     whereString = ' WHERE ' + type + 'id = ' + id
