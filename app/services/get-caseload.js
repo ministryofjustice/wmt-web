@@ -6,15 +6,15 @@ const organistaionUnit = require('../constants/organisation-unit')
 const caseType = require('../constants/case-type')
 
 module.exports = function (id, organisationLevel, isCSV = false) {
-  var organisationUnitType = getOrganisationUnit('name', organisationLevel)
+  const organisationUnitType = getOrganisationUnit('name', organisationLevel)
 
   return getCaseload(id, organisationLevel)
     .then(function (results) {
-      var breadcrumbs = getBreadcrumbs(id, organisationLevel)
-      var title = breadcrumbs[0].title
-      var subTitle = organisationUnitType.displayText
+      const breadcrumbs = getBreadcrumbs(id, organisationLevel)
+      const title = breadcrumbs[0].title
+      const subTitle = organisationUnitType.displayText
 
-      var caseloadResults = parseCaseloadResults(organisationLevel, results, isCSV)
+      const caseloadResults = parseCaseloadResults(organisationLevel, results, isCSV)
       return {
         breadcrumbs: breadcrumbs,
         title: title,
@@ -24,85 +24,99 @@ module.exports = function (id, organisationLevel, isCSV = false) {
     })
 }
 
-var parseCaseloadResults = function (organisationLevel, results, isCSV) {
-  // Overall cases
-  var allTotals = caseloadHelper.totalAllCases(results)
-  var caseloadGroupedByGrade = caseloadHelper.groupCaseloadByGrade(results)
-  var overallPercentages = caseloadHelper.calculateOverallPercentages(allTotals, caseloadGroupedByGrade)
+const parseCaseloadResults = function (organisationLevel, results, isCSV) {
+  if (results.length > 0) {
+    // Overall cases
+    const allTotals = caseloadHelper.totalAllCases(results)
+    const caseloadGroupedByGrade = caseloadHelper.groupCaseloadByGrade(results)
+    const overallPercentages = caseloadHelper.calculateOverallPercentages(allTotals, caseloadGroupedByGrade)
 
-  var overallResults = caseloadHelper.getCaseloadTierTotalsByTeamByGrade(results)
-  var overallSummary = caseloadHelper.getCaseloadSummaryTotalsByTeam(results)
-  // Custody cases
-  var custodyResults = caseloadHelper.getCaseloadByType(results, caseType.CUSTODY)
-  var custodySummary = caseloadHelper.getCaseloadTotalSummary(custodyResults)
-  // Community cases
-  var communityResults = caseloadHelper.getCaseloadByType(results, caseType.COMMUNITY)
-  var communitySummary = caseloadHelper.getCaseloadTotalSummary(communityResults)
-  // License cases
-  var licenseResults = caseloadHelper.getCaseloadByType(results, caseType.LICENSE)
-  var licenseSummary = caseloadHelper.getCaseloadTotalSummary(licenseResults)
+    let overallResults = caseloadHelper.getCaseloadTierTotalsByTeamByGrade(results)
+    const overallSummary = caseloadHelper.getCaseloadSummaryTotalsByTeam(results)
+    // Custody cases
+    let custodyResults = caseloadHelper.getCaseloadByType(results, caseType.CUSTODY)
+    const custodySummary = caseloadHelper.getCaseloadTotalSummary(custodyResults)
+    // Community cases
+    let communityResults = caseloadHelper.getCaseloadByType(results, caseType.COMMUNITY)
+    const communitySummary = caseloadHelper.getCaseloadTotalSummary(communityResults)
+    // License cases
+    let licenseResults = caseloadHelper.getCaseloadByType(results, caseType.LICENSE)
+    const licenseSummary = caseloadHelper.getCaseloadTotalSummary(licenseResults)
 
-  var custodyTotals = caseloadHelper.totalAllCases(custodyResults)
-  var custodyGroupedByGrade = caseloadHelper.groupCaseloadByGrade(custodyResults)
-  var custodyPercentages = caseloadHelper.calculateOverallPercentages(custodyTotals, custodyGroupedByGrade)
+    const custodyTotals = caseloadHelper.totalAllCases(custodyResults)
+    const custodyGroupedByGrade = caseloadHelper.groupCaseloadByGrade(custodyResults)
+    const custodyPercentages = caseloadHelper.calculateOverallPercentages(custodyTotals, custodyGroupedByGrade)
 
-  var communityTotals = caseloadHelper.totalAllCases(communityResults)
-  var communityGroupedByGrade = caseloadHelper.groupCaseloadByGrade(communityResults)
-  var communityPercentages = caseloadHelper.calculateOverallPercentages(communityTotals, communityGroupedByGrade)
+    const communityTotals = caseloadHelper.totalAllCases(communityResults)
+    const communityGroupedByGrade = caseloadHelper.groupCaseloadByGrade(communityResults)
+    const communityPercentages = caseloadHelper.calculateOverallPercentages(communityTotals, communityGroupedByGrade)
 
-  var licenseTotals = caseloadHelper.totalAllCases(licenseResults)
-  var licenseGroupedByGrade = caseloadHelper.groupCaseloadByGrade(licenseResults)
-  var licensePercentages = caseloadHelper.calculateOverallPercentages(licenseTotals, licenseGroupedByGrade)
+    const licenseTotals = caseloadHelper.totalAllCases(licenseResults)
+    const licenseGroupedByGrade = caseloadHelper.groupCaseloadByGrade(licenseResults)
+    const licensePercentages = caseloadHelper.calculateOverallPercentages(licenseTotals, licenseGroupedByGrade)
 
-  if (organisationLevel !== organistaionUnit.TEAM.name) {
-    overallResults = caseloadHelper.calculateTeamTierPercentages(overallResults)
-    replaceIncorrectPercentageAverages(overallResults.percentageTotals, overallPercentages)
+    if (organisationLevel !== organistaionUnit.TEAM.name) {
+      overallResults = caseloadHelper.calculateTeamTierPercentages(overallResults)
+      replaceIncorrectPercentageAverages(overallResults.percentageTotals, overallPercentages)
 
-    custodyResults = caseloadHelper.aggregateTeamTierTotals(custodyResults)
-    replaceIncorrectPercentageAverages(custodyResults.percentageTotals, custodyPercentages)
+      custodyResults = caseloadHelper.aggregateTeamTierTotals(custodyResults)
+      replaceIncorrectPercentageAverages(custodyResults.percentageTotals, custodyPercentages)
 
-    communityResults = caseloadHelper.aggregateTeamTierTotals(communityResults)
-    replaceIncorrectPercentageAverages(communityResults.percentageTotals, communityPercentages)
+      communityResults = caseloadHelper.aggregateTeamTierTotals(communityResults)
+      replaceIncorrectPercentageAverages(communityResults.percentageTotals, communityPercentages)
 
-    licenseResults = caseloadHelper.aggregateTeamTierTotals(licenseResults)
-    replaceIncorrectPercentageAverages(licenseResults.percentageTotals, licensePercentages)
-  } else if (!isCSV) {
-    overallResults.totals = caseloadHelper.calculateTotalsRow(overallResults)
-    communityResults.totals = caseloadHelper.calculateTotalsRow(communityResults)
-    custodyResults.totals = caseloadHelper.calculateTotalsRow(custodyResults)
-    licenseResults.totals = caseloadHelper.calculateTotalsRow(licenseResults)
+      licenseResults = caseloadHelper.aggregateTeamTierTotals(licenseResults)
+      replaceIncorrectPercentageAverages(licenseResults.percentageTotals, licensePercentages)
+    } else if (!isCSV) {
+      overallResults.totals = caseloadHelper.calculateTotalsRow(overallResults)
+      communityResults.totals = caseloadHelper.calculateTotalsRow(communityResults)
+      custodyResults.totals = caseloadHelper.calculateTotalsRow(custodyResults)
+      licenseResults.totals = caseloadHelper.calculateTotalsRow(licenseResults)
+    }
+    if (!isCSV) {
+      overallSummary[0].totals = caseloadHelper.calculateTotalTiersRow(overallSummary)
+    }
+
+    const caseloadResults = {
+      overallCaseloadDetails: overallResults,
+      communityCaseloadDetails: communityResults,
+      custodyCaseloadDetails: custodyResults,
+      licenseCaseloadDetails: licenseResults,
+      overallTotalSummary: overallSummary,
+      custodyTotalSummary: custodySummary,
+      communityTotalSummary: communitySummary,
+      licenseTotalSummary: licenseSummary
+    }
+    return caseloadResults
+  } else {
+    return undefined
   }
-  if (!isCSV) {
-    overallSummary[0].totals = caseloadHelper.calculateTotalTiersRow(overallSummary)
-  }
-
-  var caseloadResults = {
-    overallCaseloadDetails: overallResults,
-    communityCaseloadDetails: communityResults,
-    custodyCaseloadDetails: custodyResults,
-    licenseCaseloadDetails: licenseResults,
-    overallTotalSummary: overallSummary,
-    custodyTotalSummary: custodySummary,
-    communityTotalSummary: communitySummary,
-    licenseTotalSummary: licenseSummary
-  }
-  return caseloadResults
 }
 
-var replaceIncorrectPercentageAverages = function (originalPercentageTotals, correctPercentages) {
+const replaceIncorrectPercentageAverages = function (originalPercentageTotals, correctPercentages) {
   // WMT0160: add new tiers
-  var keys = Object.keys(originalPercentageTotals)
+  const keys = Object.keys(originalPercentageTotals)
   keys.forEach(function (key) {
-    originalPercentageTotals[key].a = correctPercentages[key].a
-    originalPercentageTotals[key].b1 = correctPercentages[key].b1
+    originalPercentageTotals[key].a3 = correctPercentages[key].a3
+    originalPercentageTotals[key].a2 = correctPercentages[key].a2
+    originalPercentageTotals[key].a1 = correctPercentages[key].a1
+    originalPercentageTotals[key].a0 = correctPercentages[key].a0
+
+    originalPercentageTotals[key].b3 = correctPercentages[key].b3
     originalPercentageTotals[key].b2 = correctPercentages[key].b2
-    originalPercentageTotals[key].c1 = correctPercentages[key].c1
+    originalPercentageTotals[key].b1 = correctPercentages[key].b1
+    originalPercentageTotals[key].b0 = correctPercentages[key].b0
+
+    originalPercentageTotals[key].c3 = correctPercentages[key].c3
     originalPercentageTotals[key].c2 = correctPercentages[key].c2
-    originalPercentageTotals[key].d1 = correctPercentages[key].d1
+    originalPercentageTotals[key].c1 = correctPercentages[key].c1
+    originalPercentageTotals[key].c0 = correctPercentages[key].c0
+
+    originalPercentageTotals[key].d3 = correctPercentages[key].d3
     originalPercentageTotals[key].d2 = correctPercentages[key].d2
-    originalPercentageTotals[key].e = correctPercentages[key].e
-    originalPercentageTotals[key].f = correctPercentages[key].f
-    originalPercentageTotals[key].g = correctPercentages[key].g
+    originalPercentageTotals[key].d1 = correctPercentages[key].d1
+    originalPercentageTotals[key].d0 = correctPercentages[key].d0
+
     originalPercentageTotals[key].untiered = correctPercentages[key].untiered
     originalPercentageTotals[key].totalCases = correctPercentages[key].totalCases
   })

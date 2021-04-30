@@ -1,14 +1,14 @@
-var dateFormatter = require('../../app/services/date-formatter')
+const dateFormatter = require('../../app/services/date-formatter')
 
-var replaceSpaces = / /g
-var timestamp = dateFormatter.formatDate(new Date(), 'DD MM YYYY THH mm').toString()
+const replaceSpaces = / /g
+const timestamp = dateFormatter.formatDate(new Date(), 'DD MM YYYY THH mm').toString()
 
 module.exports.TEAM_CASELOAD_RESULT = {
   title: 'Test Team',
   caseloadDetails: {
     overallCaseloadDetails: [
-      { linkId: 2767, name: 'John Smith', grade: 'PO', a: 9, b1: 18, b2: 12, c1: 6, c2: 9, d1: 6, d2: 3, e: 2, f: 1, g: 0, untiered: 0, totalCases: 189, caseType: 'COMMUNITY' },
-      { linkId: 2771, name: 'Tony Test', grade: 'PO', a: 9, b1: 18, b2: 12, c1: 6, c2: 9, d1: 6, d2: 3, e: 2, f: 1, g: 0, untiered: 0, totalCases: 189, caseType: 'COMMUNITY' }
+      { linkId: 2767, name: 'John Smith', grade: 'PO', untiered: 0, a3: 1, a2: 2, a1: 3, a0: 4, b3: 5, b2: 6, b1: 7, b0: 8, c3: 9, c2: 10, c1: 11, c0: 12, d3: 13, d2: 14, d1: 15, d0: 16, totalCases: 189, caseType: 'COMMUNITY' },
+      { linkId: 2771, name: 'Tony Test', grade: 'PO', untiered: 0, a3: 1, a2: 2, a1: 3, a0: 4, b3: 5, b2: 6, b1: 7, b0: 8, c3: 9, c2: 10, c1: 11, c0: 12, d3: 13, d2: 14, d1: 15, d0: 16, totalCases: 189, caseType: 'COMMUNITY' }
     ],
     custodyCaseloadDetails: [],
     communityCaseloadDetails: [],
@@ -19,25 +19,35 @@ module.exports.TEAM_CASELOAD_RESULT = {
 module.exports.TEAM_CASELOAD_CSV = {
   filename: ('Test_Team_Caseload ' + timestamp + '.csv').replace(replaceSpaces, '_'),
   csv: 'OVERALL\n' +
-    '"Offender Manager Name","Grade","A","B1","B2","C1","C2","D1","D2","E","F","G","Untiered","Overall"\n' +
-    '"John Smith","PO",9,18,12,6,9,6,3,2,1,0,0,189\n' +
-    '"Tony Test","PO",9,18,12,6,9,6,3,2,1,0,0,189\n\n\n' +
+    '"Offender Manager Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","Untiered","Overall"\n' +
+    '"John Smith","PO",1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,0,189\n' +
+    '"Tony Test","PO",1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,0,189\n\n\n' +
     'CUSTODY\n' +
-    '"Offender Manager Name","Grade","A","B1","B2","C1","C2","D1","D2","E","F","G","Untiered","Overall"\n\n\n' +
+    '"Offender Manager Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","Untiered","Overall"\n\n\n' +
     'COMMUNITY\n' +
-    '"Offender Manager Name","Grade","A","B1","B2","C1","C2","D1","D2","E","F","G","Untiered","Overall"\n\n\n' +
+    '"Offender Manager Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","Untiered","Overall"\n\n\n' +
     'LICENSE\n' +
-    '"Offender Manager Name","Grade","A","B1","B2","C1","C2","D1","D2","E","F","G","Untiered","Overall"'
+    '"Offender Manager Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","Untiered","Overall"'
 }
 
 module.exports.ARMS_EXPORT_CSV = {
   filename: ('Test_Arms_Export ' + timestamp + '.csv').replace(replaceSpaces, '_'),
-  csv: '"Region Name","LDU Cluster","Team Name","Assessment Date","CRN","Offender Manager Name","Offender Manager Grade","Sentence Type","Sentence or Release Date"\n' +
-    '"NPS North West","Cumbria","NPS - Carlisle 1","4-10-2018","CASEREF30134","A.N. Offender Manager CMBY478NPSM","PO","Licence","14-9-2018"\n' +
-    '"NPS North West","Cumbria","NPS - Carlisle 1","9-10-2018","CASEREF30154","A.N. Offender Manager CMBY478NPSM","PO","Community","22-2-2017"\n' +
-    '"NPS North West","Cumbria","NPS - Carlisle 1","28-9-2018","CASEREF30098","A.N. Offender Manager CMBE297NPSM","PO","Community","1-1-1800"\n' +
-    '"NPS North West","Cumbria","Rehabilitation","10-9-2018","CASEREF30027","A.N. Offender Manager N01B324NPSM","PO","Community","25-7-2018"\n' +
-    '"NPS North West","Cumbria","Rehabilitation","19-9-2018","CASEREF30065","A.N. Offender Manager N01B324NPSM","PO","Community","16-12-2016"'
+  csv: '"Region Name","Probation Delivery Unit","Team Name","Assessment Date","CRN","Offender Manager Name","Offender Manager Grade","Sentence Type","Sentence or Release Date","Completion Date"\n' +
+    '"NPS North West","Cumbria","NPS - Carlisle 1","4-10-2018","CASEREF30134","A.N. Offender Manager CMBY478NPSM","PO","Licence","14-9-2018","21-9-2018"\n' +
+    '"NPS North West","Cumbria","NPS - Carlisle 1","9-10-2018","CASEREF30154","A.N. Offender Manager CMBY478NPSM","PO","Community","22-2-2017","22-8-2017"\n' +
+    '"NPS North West","Cumbria","NPS - Carlisle 1","28-9-2018","CASEREF30098","A.N. Offender Manager CMBE297NPSM","PO","Community","1-1-1800","1-10-1800"\n' +
+    '"NPS North West","Cumbria","Rehabilitation","10-9-2018","CASEREF30027","A.N. Offender Manager N01B324NPSM","PO","Community","25-7-2018","01-01-2019"\n' +
+    '"NPS North West","Cumbria","Rehabilitation","19-9-2018","CASEREF30065","A.N. Offender Manager N01B324NPSM","PO","Community","16-12-2016","16-12-2020"'
+}
+
+module.exports.T2A_EXPORT_CSV = {
+  filename: ('Test_Arms_Export ' + timestamp + '.csv').replace(replaceSpaces, '_'),
+  csv: '"Region Name","Probation Delivery Unit","Team Name","CRN","Offender Manager Name","Grade Code","Event Number","Allocation Date","NSI Outcome Code","NSI Outcome Description"\n' +
+    '"NPS East of England","Essex South","EXS-SEE and Southend OM2","E312593","N56B266 ","PO","1","15-10-2020","ROL01","ROL01"\n' +
+    '"NPS East of England","Essex South","EXS-SEE and Southend OM2","E312604","N56B441 ","PO","2","30-12-2020","ROL01","ROL01"\n' +
+    '"NPS East of England","Essex South","EXS-SEE and Southend OM2","E345090","N56B267 ","PO","1","26-9-2020","ROL01","ROL01"\n' +
+    '"NPS East of England","Essex South","EXS-SEE and Southend OM1","E220534","N56B249 ","PO","1","26-9-2020","ROL01","ROL01"\n' +
+    '"NPS East of England","Essex South","EXS-SEE and Southend OM1","E324828","N56B252 ","PO","2","25-2-2021","ROL01","ROL01"'
 }
 
 module.exports.ARMS_EXPORT_RESULT = {
@@ -52,7 +62,8 @@ module.exports.ARMS_EXPORT_RESULT = {
     omName: 'A.N. Offender Manager CMBY478NPSM',
     omGrade: 'PO',
     sentencetype: 'Licence',
-    releaseDate: '14-9-2018'
+    releaseDate: '14-9-2018',
+    completedDate: '21-9-2018'
   },
   {
     regionName: 'NPS North West',
@@ -63,7 +74,8 @@ module.exports.ARMS_EXPORT_RESULT = {
     omName: 'A.N. Offender Manager CMBY478NPSM',
     omGrade: 'PO',
     sentencetype: 'Community',
-    releaseDate: '22-2-2017'
+    releaseDate: '22-2-2017',
+    completedDate: '22-8-2017'
   },
   {
     regionName: 'NPS North West',
@@ -74,7 +86,8 @@ module.exports.ARMS_EXPORT_RESULT = {
     omName: 'A.N. Offender Manager CMBE297NPSM',
     omGrade: 'PO',
     sentencetype: 'Community',
-    releaseDate: '1-1-1800'
+    releaseDate: '1-1-1800',
+    completedDate: '1-10-1800'
   },
   {
     regionName: 'NPS North West',
@@ -85,7 +98,8 @@ module.exports.ARMS_EXPORT_RESULT = {
     omName: 'A.N. Offender Manager N01B324NPSM',
     omGrade: 'PO',
     sentencetype: 'Community',
-    releaseDate: '25-7-2018'
+    releaseDate: '25-7-2018',
+    completedDate: '01-01-2019'
   },
   {
     regionName: 'NPS North West',
@@ -96,7 +110,93 @@ module.exports.ARMS_EXPORT_RESULT = {
     omName: 'A.N. Offender Manager N01B324NPSM',
     omGrade: 'PO',
     sentencetype: 'Community',
-    releaseDate: '16-12-2016'
+    releaseDate: '16-12-2016',
+    completedDate: '16-12-2020'
+  }]
+}
+
+module.exports.T2A_EXPORT_RESULT = {
+  title: 'ARMS Export',
+  armsExportDetails:
+  [{
+    regionName: 'NPS East of England',
+    regionId: 39,
+    lduName: 'Essex South',
+    lduId: 806,
+    teamName: 'EXS-SEE and Southend OM2',
+    teamId: 5121,
+    CRN: 'E312593',
+    workload_owner_id: 26012,
+    omName: 'N56B266 ',
+    omCode: 'PO',
+    Event_No: '1',
+    Allocation_Date: '15-10-2020',
+    NSI_Outcome_Cd: 'ROL01',
+    NSI_Outcome_Desc: 'ROL01'
+  },
+  {
+    regionName: 'NPS East of England',
+    regionId: 39,
+    lduName: 'Essex South',
+    lduId: 806,
+    teamName: 'EXS-SEE and Southend OM2',
+    teamId: 5121,
+    CRN: 'E312604',
+    workload_owner_id: 28125,
+    omName: 'N56B441 ',
+    omCode: 'PO',
+    Event_No: '2',
+    Allocation_Date: '30-12-2020',
+    NSI_Outcome_Cd: 'ROL01',
+    NSI_Outcome_Desc: 'ROL01'
+  },
+  {
+    regionName: 'NPS East of England',
+    regionId: 39,
+    lduName: 'Essex South',
+    lduId: 806,
+    teamName: 'EXS-SEE and Southend OM2',
+    teamId: 5121,
+    CRN: 'E345090',
+    workload_owner_id: 26027,
+    omName: 'N56B267 ',
+    omCode: 'PO',
+    Event_No: '1',
+    Allocation_Date: '26-9-2020',
+    NSI_Outcome_Cd: 'ROL01',
+    NSI_Outcome_Desc: 'ROL01'
+  },
+  {
+    regionName: 'NPS East of England',
+    regionId: 39,
+    lduName: 'Essex South',
+    lduId: 806,
+    teamName: 'EXS-SEE and Southend OM1',
+    teamId: 5142,
+    CRN: 'E220534',
+    workload_owner_id: 25854,
+    omName: 'N56B249 ',
+    omCode: 'PO',
+    Event_No: '1',
+    Allocation_Date: '26-9-2020',
+    NSI_Outcome_Cd: 'ROL01',
+    NSI_Outcome_Desc: 'ROL01'
+  },
+  {
+    regionName: 'NPS East of England',
+    regionId: 39,
+    lduName: 'Essex South',
+    lduId: 806,
+    teamName: 'EXS-SEE and Southend OM1',
+    teamId: 5142,
+    CRN: 'E324828',
+    workload_owner_id: 25893,
+    omName: 'N56B252 ',
+    omCode: 'PO',
+    Event_No: '2',
+    Allocation_Date: '25-2-2021',
+    NSI_Outcome_Cd: 'ROL01',
+    NSI_Outcome_Desc: 'ROL01'
   }]
 }
 
@@ -192,7 +292,7 @@ module.exports.PERCENTAGE_WORKLOAD_EXPORT_RESULT = {
 
 module.exports.PERCENTAGE_WORKLOAD_EXPORT_CSV = {
   filename: ('Test_Percentage_Workload_Export ' + timestamp + '.csv').replace(replaceSpaces, '_'),
-  csv: '"Region Name","LDU Cluster","Team Name","Offender Manager Name","Offender Manager Grade","Contracted Hours","Reduction Hours","Capacity","Case Contribution","CMS Contribution","GS Contribution","ARMS Contribution","PAROMS Contribution","SDR Contribution","FDR Contribution"\n' +
+  csv: '"Region Name","Probation Delivery Unit","Team Name","Offender Manager Name","Offender Manager Grade","Contracted Hours","Reduction Hours","Capacity","Case Contribution","CMS Contribution","GS Contribution","ARMS Contribution","PAROMS Contribution","SDR Contribution","FDR Contribution"\n' +
     '"NPS North West","Cumbria","NPS - Carlisle 1","A.N. Offender Manager CMBY478NPSM","PO",37,10,"100%","99%","98%","97%","96%","95%","94%","93%"\n' +
     '"NPS North West","Cumbria","NPS - Carlisle 1","A.N. Offender Manager CMBY478NPSM","PO",36,9,"99%","98%","97%","96%","95%","94%","93%","92%"\n' +
     '"NPS North West","Cumbria","NPS - Carlisle 1","A.N. Offender Manager CMBE297NPSM","PO",35,8,"98%","97%","96%","95%","94%","93%","92%","91%"\n' +
@@ -202,7 +302,7 @@ module.exports.PERCENTAGE_WORKLOAD_EXPORT_CSV = {
 
 module.exports.CASE_DETAILS_EXPORT_CSV = {
   filename: ('Test_Case_Details_Export ' + timestamp + '.csv').replace(replaceSpaces, '_'),
-  csv: '"Region Name","LDU Cluster","Team Name","Tier Code","Row Type","CRN","Case Type","Offender Manager Name","Grade Code"\n' +
+  csv: '"Region Name","Probation Delivery Unit","Team Name","Tier Code","Row Type","CRN","Case Type","Offender Manager Name","Grade Code"\n' +
   '"NPS North West","Cheshire","Crewe NPS OMU","D2","N","CASEREF5448","COMMUNITY","A.N. Offender Manager N01CA1U","DMY"\n' +
   '"NPS North West","Cheshire","Warrington NPS OMU","B1","N","CASEREF67","COMMUNITY","A.N. Offender Manager CHSZ943NPSM","PO"\n' +
     '"NPS North West","Cheshire","Warrington NPS OMU","C1","N","CASEREF2413","COMMUNITY","A.N. Offender Manager CHSZ943NPSM","PO"\n' +
@@ -272,7 +372,7 @@ module.exports.CASE_DETAILS_EXPORT_RESULT = {
 
 module.exports.CMS_EXPORT_CSV = {
   filename: ('Test_CMS_Export ' + timestamp + '.csv').replace(replaceSpaces, '_'),
-  csv: '"Contact Region Name","Contact LDU Cluster","Contact Team Name","Contact Date","Contact Name","Contact Grade","OM Region Name","OM LDU Cluster","OM Team Name","CRN","OM Name","OM Grade","Contact Type Description","Contact Code","Contact Points","OM Points"\n' +
+  csv: '"Contact Region Name","Contact Probation Delivery Unit","Contact Team Name","Contact Date","Contact Name","Contact Grade","OM Region Name","OM Probation Delivery Unit","OM Team Name","CRN","OM Name","OM Grade","Contact Type Description","Contact Code","Contact Points","OM Points"\n' +
   '"NPS North West","Lancashire NW","Blackpool OMU C - NPS","24-9-2018","A.N. Offender Manager N01D068NPSQ","PSO","NPS North West","Lancashire NW","Blackpool OMU C - NPS","CASEREF1000","A.N. Offender Manager LCSE771NPSM","PO","CMS - Case Related Communication - High","CMS30",18,-18\n' +
     '"NPS North West","Lancashire NW","Blackpool OMU C - NPS","24-9-2018","A.N. Offender Manager N01D068NPSQ","PSO","NPS North West","Lancashire NW","Blackpool OMU C - NPS","CASEREF1001","A.N. Offender Manager LCSE771NPSM","PO","CMS - Case Related Communication - High","CMS30",18,-18\n' +
     '"NPS North West","Lancashire NW","Blackpool OMU C - NPS","24-9-2018","A.N. Offender Manager N01D068NPSQ","PSO","NPS North West","Lancashire NW","Blackpool OMU C - NPS","CASEREF1002","A.N. Offender Manager LCSE771NPSM","PO","CMS - Case Related Communication - High","CMS30",18,-18\n' +
@@ -382,7 +482,7 @@ module.exports.CMS_EXPORT_RESULT = {
 
 module.exports.GS_EXPORT_CSV = {
   filename: ('Test_Group_Supervision_Export ' + timestamp + '.csv').replace(replaceSpaces, '_'),
-  csv: '"Region Name","LDU Cluster","Team Name","Contact Date","CRN","Offender Manager Name","Offender Manager Grade","Contact Type Description","Contact Code","Points"\n' +
+  csv: '"Region Name","Probation Delivery Unit","Team Name","Contact Date","CRN","Offender Manager Name","Offender Manager Grade","Contact Type Description","Contact Code","Points"\n' +
   '"NPS North West","Lancashire SE","NPS - Burnley 1","10-10-2018","GS2000","A.N. Offender Manager N01B320NPSM","PO","GS Employment session NS","NGS006",-15\n' +
     '"NPS North West","Lancashire SE","NPS - Burnley 1","10-10-2018","GS2001","A.N. Offender Manager N01B320NPSM","PO","GS Employment session NS","NGS006",-15\n' +
     '"NPS North West","Lancashire SE","NPS - Burnley 2","10-10-2018","GS2002","A.N. Offender Manager N01C411NPSN","PO","GS Employment session NS","NGS006",-15\n' +
@@ -462,7 +562,7 @@ module.exports.GS_EXPORT_RESULT = {
 
 module.exports.SUSPENDED_LIFER_CSV = {
   filename: ('Test_Suspended_Lifer_Export ' + timestamp + '.csv').replace(replaceSpaces, '_'),
-  csv: '"Region Name","LDU Cluster","Team Name","Tier Code","Row Type","CRN","Case Type","Offender Manager Name","Grade Code","In Custody?","Register Level","Register Category","Register Category Description","Registration Date"\n' +
+  csv: '"Region Name","Probation Delivery Unit","Team Name","Tier Code","Row Type","CRN","Case Type","Offender Manager Name","Grade Code","In Custody?","Register Level","Register Category","Register Category Description","Registration Date"\n' +
   '"NPS North West","Lancashire SE","NPS - Blackburn 2","D2","Suspended Lifer","N144966","LICENSE","Test Forename 511 Test Surname 511","PSO","No","L2","LF01","Lifer - IPP","28/02/2019"\n' +
   '"NPS North West","Lancashire SE","NPS - Blackburn 2","D2","Suspended Lifer","N145304","LICENSE","Test Forename 511 Test Surname 511","PSO","No","L2","LF03","Lifer - Life Imprisonment","19/12/1990"\n' +
   '"NPS North West","Lancashire SE","NPS - Blackburn 2","D2","Suspended Lifer","N146588","LICENSE","Test Forename 511 Test Surname 511","PSO","No","L2","LF03","Lifer - Life Imprisonment","28/05/1999"\n' +
@@ -535,7 +635,8 @@ module.exports.SUSPENDED_LIFER_EXPORT_RESULT = {
     registerLevel: 'L2',
     registerCategory: 'LF03',
     registerCategoryDescription: 'Lifer - Life Imprisonment',
-    registrationDate: '14/02/2019' },
+    registrationDate: '14/02/2019'
+  },
   {
     regionName: 'NPS North West',
     lduName: 'Lancashire SE',
@@ -555,511 +656,811 @@ module.exports.SUSPENDED_LIFER_EXPORT_RESULT = {
 }
 
 module.exports.LDU_CASELOAD_RESULT = {
-  title: 'LDU Cluster 2',
-  subTitle: 'LDU Cluster',
+  title: 'Probation Delivery Unit 2',
+  subTitle: 'Probation Delivery Unit',
   caseloadDetails:
-  { overallCaseloadDetails:
-  { details:
-  [ { linkId: 71,
+  {
+    overallCaseloadDetails:
+  {
+    details:
+  [{
+    linkId: 71,
     name: 'Team 2',
     grades:
-    [ { grade: 'PO',
-      a: 33,
-      b1: 33,
-      b2: 24,
-      c1: 27,
-      c2: 21,
-      d1: 27,
-      d2: 24,
-      e: 2,
-      f: 1,
-      g: 0,
-      untiered: 18,
-      totalCases: 207 },
-    { grade: 'PSO',
-      a: 22,
-      b1: 22,
-      b2: 16,
-      c1: 18,
-      c2: 14,
-      d1: 18,
-      d2: 16,
-      e: 2,
-      f: 1,
-      g: 0,
-      untiered: 12,
-      totalCases: 138 } ] } ],
+    [{
+      grade: 'PO',
+      a3: 1,
+      a2: 2,
+      a1: 3,
+      a0: 4,
+      b3: 5,
+      b2: 6,
+      b1: 7,
+      b0: 8,
+      c3: 9,
+      c2: 10,
+      c1: 11,
+      c0: 12,
+      d3: 13,
+      d2: 14,
+      d1: 15,
+      d0: 16,
+      untiered: 0,
+      totalCases: 207
+    },
+    {
+      grade: 'PSO',
+      a3: 5,
+      a2: 10,
+      a1: 15,
+      a0: 20,
+      b3: 25,
+      b2: 30,
+      b1: 35,
+      b0: 40,
+      c3: 45,
+      c2: 50,
+      c1: 45,
+      c0: 40,
+      d3: 35,
+      d2: 30,
+      d1: 25,
+      d0: 20,
+      untiered: 2,
+      totalCases: 138
+    }]
+  }],
     totals:
-    { PO:
-    { grade: 'PO',
-      a: 33,
-      b1: 33,
-      b2: 24,
-      c1: 27,
-      c2: 21,
-      d1: 27,
-      d2: 24,
-      e: 2,
-      f: 1,
-      g: 0,
-      untiered: 18,
+    {
+      PO:
+    {
+      grade: 'PO',
+      a3: 1,
+      a2: 2,
+      a1: 3,
+      a0: 4,
+      b3: 5,
+      b2: 6,
+      b1: 7,
+      b0: 8,
+      c3: 9,
+      c2: 10,
+      c1: 11,
+      c0: 12,
+      d3: 13,
+      d2: 14,
+      d1: 15,
+      d0: 16,
+      untiered: 0,
       totalCases: 207,
-      numberOfType: 1 },
+      numberOfType: 1
+    },
       PSO:
-      { grade: 'PSO',
-        a: 22,
-        b1: 22,
-        b2: 16,
-        c1: 18,
-        c2: 14,
-        d1: 18,
-        d2: 16,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 12,
+      {
+        grade: 'PSO',
+        a3: 5,
+        a2: 10,
+        a1: 15,
+        a0: 20,
+        b3: 25,
+        b2: 30,
+        b1: 35,
+        b0: 40,
+        c3: 45,
+        c2: 50,
+        c1: 45,
+        c0: 40,
+        d3: 35,
+        d2: 30,
+        d1: 25,
+        d0: 20,
+        untiered: 2,
         totalCases: 138,
-        numberOfType: 1 } },
+        numberOfType: 1
+      }
+    },
     detailsPercentages:
-    [ { linkId: 71,
+    [{
+      linkId: 71,
       name: 'Team 2',
       grades:
-      [ { grade: 'PO',
-        a: 60,
-        b1: 60,
-        b2: 60,
-        c1: 60,
-        c2: 60,
-        d1: 60,
-        d2: 60,
-        e: 0,
-        f: 0,
-        g: 0,
+      [{
+        grade: 'PO',
+        a3: 45,
+        a2: 70,
+        a1: 60,
+        a0: 50,
+        b3: 75,
+        b2: 50,
+        b1: 37,
+        b0: 25,
+        c3: 50,
+        c2: 50,
+        c1: 50,
+        c0: 50,
+        d3: 25,
+        d2: 25,
+        d1: 25,
+        d0: 25,
         untiered: 60,
-        totalCases: 60 },
-      { grade: 'PSO',
-        a: 40,
-        b1: 40,
-        b2: 40,
-        c1: 40,
-        c2: 40,
-        d1: 40,
-        d2: 40,
-        e: 0,
-        f: 0,
-        g: 0,
+        totalCases: 60
+      },
+      {
+        grade: 'PSO',
+        a3: 55,
+        a2: 30,
+        a1: 40,
+        a0: 50,
+        b3: 25,
+        b2: 50,
+        b1: 62,
+        b0: 75,
+        c3: 50,
+        c2: 50,
+        c1: 50,
+        c0: 50,
+        d3: 25,
+        d2: 25,
+        d1: 25,
+        d0: 25,
         untiered: 40,
-        totalCases: 40 } ] } ],
+        totalCases: 40
+      }]
+    }],
     percentageTotals:
-    { PO:
-    { grade: 'PO',
-      a: 60,
-      b1: 60,
-      b2: 60,
-      c1: 60,
-      c2: 60,
-      d1: 60,
-      d2: 60,
-      e: 0,
-      f: 0,
-      g: 0,
+    {
+      PO:
+    {
+      grade: 'PO',
+      a3: 45,
+      a2: 70,
+      a1: 60,
+      a0: 50,
+      b3: 75,
+      b2: 50,
+      b1: 37,
+      b0: 25,
+      c3: 50,
+      c2: 50,
+      c1: 50,
+      c0: 50,
+      d3: 25,
+      d2: 25,
+      d1: 25,
+      d0: 25,
       untiered: 60,
       totalCases: 60,
-      numberOfType: 1 },
+      numberOfType: 1
+    },
       PSO:
-      { grade: 'PSO',
-        a: 40,
-        b1: 40,
-        b2: 40,
-        c1: 40,
-        c2: 40,
-        d1: 40,
-        d2: 40,
-        e: 0,
-        f: 0,
-        g: 0,
+      {
+        grade: 'PSO',
+        a3: 55,
+        a2: 30,
+        a1: 40,
+        a0: 50,
+        b3: 25,
+        b2: 50,
+        b1: 62,
+        b0: 75,
+        c3: 50,
+        c2: 50,
+        c1: 50,
+        c0: 50,
+        d3: 25,
+        d2: 25,
+        d1: 25,
+        d0: 25,
         untiered: 40,
         totalCases: 40,
-        numberOfType: 1 } } },
+        numberOfType: 1
+      }
+    }
+  },
     communityCaseloadDetails:
-    { details:
-    [ { linkId: 71,
+    {
+      details:
+    [{
+      linkId: 71,
       name: 'Team 2',
       grades:
-      [ { grade: 'PO',
-        a: 9,
-        b1: 18,
-        b2: 12,
-        c1: 6,
-        c2: 9,
-        d1: 6,
+      [{
+        grade: 'PO',
+        a3: 9,
+        a2: 7,
+        a1: 6,
+        a0: 5,
+        b3: 30,
+        b2: 20,
+        b1: 15,
+        b0: 10,
+        c3: 5,
+        c2: 2,
+        c1: 3,
+        c0: 11,
+        d3: 1,
         d2: 3,
-        e: 2,
-        f: 1,
-        g: 0,
+        d1: 3,
+        d0: 12,
         untiered: 0,
-        totalCases: 63 },
-      { grade: 'PSO',
-        a: 6,
-        b1: 12,
-        b2: 8,
-        c1: 4,
-        c2: 6,
-        d1: 4,
-        d2: 2,
-        e: 2,
-        f: 1,
-        g: 0,
+        totalCases: 63
+      },
+      {
+        grade: 'PSO',
+        a3: 11,
+        a2: 3,
+        a1: 4,
+        a0: 15,
+        b3: 10,
+        b2: 20,
+        b1: 25,
+        b0: 30,
+        c3: 5,
+        c2: 2,
+        c1: 3,
+        c0: 11,
+        d3: 3,
+        d2: 9,
+        d1: 9,
+        d0: 36,
         untiered: 0,
-        totalCases: 42 } ] } ],
+        totalCases: 42
+      }]
+    }],
       totals:
-      { PO:
-      { grade: 'PO',
-        a: 9,
-        b1: 18,
-        b2: 12,
-        c1: 6,
-        c2: 9,
-        d1: 6,
+      {
+        PO:
+      {
+        grade: 'PO',
+        a3: 9,
+        a2: 7,
+        a1: 6,
+        a0: 5,
+        b3: 30,
+        b2: 20,
+        b1: 15,
+        b0: 10,
+        c3: 5,
+        c2: 2,
+        c1: 3,
+        c0: 11,
+        d3: 1,
         d2: 3,
-        e: 2,
-        f: 1,
-        g: 0,
+        d1: 3,
+        d0: 12,
         untiered: 0,
         totalCases: 63,
-        numberOfType: 1 },
+        numberOfType: 1
+      },
         PSO:
-        { grade: 'PSO',
-          a: 6,
-          b1: 12,
-          b2: 8,
-          c1: 4,
-          c2: 6,
-          d1: 4,
-          d2: 2,
-          e: 2,
-          f: 1,
-          g: 0,
+        {
+          grade: 'PSO',
+          a3: 11,
+          a2: 3,
+          a1: 4,
+          a0: 15,
+          b3: 10,
+          b2: 20,
+          b1: 25,
+          b0: 30,
+          c3: 5,
+          c2: 2,
+          c1: 3,
+          c0: 11,
+          d3: 3,
+          d2: 9,
+          d1: 9,
+          d0: 36,
           untiered: 0,
           totalCases: 42,
-          numberOfType: 1 } },
+          numberOfType: 1
+        }
+      },
       detailsPercentages:
-      [ { linkId: 71,
+      [{
+        linkId: 71,
         name: 'Team 2',
         grades:
-        [ { grade: 'PO',
-          a: 60,
-          b1: 60,
+        [{
+          grade: 'PO',
+          a3: 10,
+          a2: 20,
+          a1: 30,
+          a0: 40,
+          b3: 50,
           b2: 60,
-          c1: 60,
-          c2: 60,
-          d1: 60,
+          b1: 70,
+          b0: 80,
+          c3: 90,
+          c2: 100,
+          c1: 90,
+          c0: 80,
+          d3: 70,
           d2: 60,
-          e: 0,
-          f: 0,
-          g: 0,
+          d1: 50,
+          d0: 40,
           untiered: 0,
-          totalCases: 60 },
-        { grade: 'PSO',
-          a: 40,
-          b1: 40,
+          totalCases: 60
+        },
+        {
+          grade: 'PSO',
+          a3: 90,
+          a2: 80,
+          a1: 70,
+          a0: 60,
+          b3: 50,
           b2: 40,
-          c1: 40,
-          c2: 40,
-          d1: 40,
+          b1: 30,
+          b0: 20,
+          c3: 10,
+          c2: 0,
+          c1: 10,
+          c0: 20,
+          d3: 30,
           d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
+          d1: 50,
+          d0: 60,
           untiered: 0,
-          totalCases: 40 } ] } ],
+          totalCases: 40
+        }]
+      }],
       percentageTotals:
-      { PO:
-      { grade: 'PO',
-        a: 60,
-        b1: 60,
+      {
+        PO:
+      {
+        grade: 'PO',
+        a3: 10,
+        a2: 20,
+        a1: 30,
+        a0: 40,
+        b3: 50,
         b2: 60,
-        c1: 60,
-        c2: 60,
-        d1: 60,
+        b1: 70,
+        b0: 80,
+        c3: 90,
+        c2: 100,
+        c1: 90,
+        c0: 80,
+        d3: 70,
         d2: 60,
-        e: 0,
-        f: 0,
-        g: 0,
+        d1: 50,
+        d0: 40,
         untiered: 0,
         totalCases: 60,
-        numberOfType: 1 },
+        numberOfType: 1
+      },
         PSO:
-        { grade: 'PSO',
-          a: 40,
-          b1: 40,
+        {
+          grade: 'PSO',
+          a3: 90,
+          a2: 80,
+          a1: 70,
+          a0: 60,
+          b3: 50,
           b2: 40,
-          c1: 40,
-          c2: 40,
-          d1: 40,
+          b1: 30,
+          b0: 20,
+          c3: 10,
+          c2: 0,
+          c1: 10,
+          c0: 20,
+          d3: 30,
           d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
+          d1: 50,
+          d0: 60,
           untiered: 0,
           totalCases: 40,
-          numberOfType: 1 } } },
+          numberOfType: 1
+        }
+      }
+    },
     custodyCaseloadDetails:
-    { details:
-    [ { linkId: 71,
+    {
+      details:
+    [{
+      linkId: 71,
       name: 'Team 2',
       grades:
-      [ { grade: 'PO',
-        a: 18,
-        b1: 12,
-        b2: 6,
-        c1: 12,
+      [{
+        grade: 'PO',
+        a3: 1,
+        a2: 0,
+        a1: 2,
+        a0: 3,
+        b3: 0,
+        b2: 0,
+        b1: 0,
+        b0: 1,
+        c3: 2,
         c2: 6,
-        d1: 9,
-        d2: 3,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 3,
-        totalCases: 69 },
-      { grade: 'PSO',
-        a: 12,
-        b1: 8,
-        b2: 4,
         c1: 8,
-        c2: 4,
-        d1: 6,
-        d2: 2,
-        e: 2,
-        f: 1,
-        g: 0,
+        c0: 0,
+        d3: 7,
+        d2: 0,
+        d1: 1,
+        d0: 1,
+        untiered: 3,
+        totalCases: 69
+      },
+      {
+        grade: 'PSO',
+        a3: 0,
+        a2: 1,
+        a1: 0,
+        a0: 0,
+        b3: 1,
+        b2: 1,
+        b1: 1,
+        b0: 0,
+        c3: 0,
+        c2: 0,
+        c1: 0,
+        c0: 9,
+        d3: 0,
+        d2: 7,
+        d1: 0,
+        d0: 0,
         untiered: 2,
-        totalCases: 46 } ] } ],
+        totalCases: 46
+      }]
+    }],
       totals:
-      { PO:
-      { grade: 'PO',
-        a: 18,
-        b1: 12,
-        b2: 6,
-        c1: 12,
+      {
+        PO:
+      {
+        grade: 'PO',
+        a3: 1,
+        a2: 0,
+        a1: 2,
+        a0: 3,
+        b3: 0,
+        b2: 0,
+        b1: 0,
+        b0: 1,
+        c3: 2,
         c2: 6,
-        d1: 9,
-        d2: 3,
-        e: 2,
-        f: 1,
-        g: 0,
+        c1: 8,
+        c0: 0,
+        d3: 7,
+        d2: 0,
+        d1: 1,
+        d0: 1,
         untiered: 3,
         totalCases: 69,
-        numberOfType: 1 },
+        numberOfType: 1
+      },
         PSO:
-        { grade: 'PSO',
-          a: 12,
-          b1: 8,
-          b2: 4,
-          c1: 8,
-          c2: 4,
-          d1: 6,
-          d2: 2,
-          e: 2,
-          f: 1,
-          g: 0,
+        {
+          grade: 'PSO',
+          a3: 0,
+          a2: 1,
+          a1: 0,
+          a0: 0,
+          b3: 1,
+          b2: 1,
+          b1: 1,
+          b0: 0,
+          c3: 0,
+          c2: 0,
+          c1: 0,
+          c0: 9,
+          d3: 0,
+          d2: 7,
+          d1: 0,
+          d0: 0,
           untiered: 2,
           totalCases: 46,
-          numberOfType: 1 } },
+          numberOfType: 1
+        }
+      },
       detailsPercentages:
-      [ { linkId: 71,
+      [{
+        linkId: 71,
         name: 'Team 2',
         grades:
-        [ { grade: 'PO',
-          a: 60,
-          b1: 60,
-          b2: 60,
-          c1: 60,
-          c2: 60,
-          d1: 60,
-          d2: 60,
-          e: 0,
-          f: 0,
-          g: 0,
+        [{
+          grade: 'PO',
+          a3: 100,
+          a2: 0,
+          a1: 100,
+          a0: 100,
+          b3: 0,
+          b2: 0,
+          b1: 0,
+          b0: 100,
+          c3: 100,
+          c2: 100,
+          c1: 100,
+          c0: 0,
+          d3: 100,
+          d2: 0,
+          d1: 100,
+          d0: 100,
           untiered: 60,
-          totalCases: 60 },
-        { grade: 'PSO',
-          a: 40,
-          b1: 40,
-          b2: 40,
-          c1: 40,
-          c2: 40,
-          d1: 40,
-          d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
+          totalCases: 60
+        },
+        {
+          grade: 'PSO',
+          a3: 0,
+          a2: 100,
+          a1: 0,
+          a0: 0,
+          b3: 100,
+          b2: 100,
+          b1: 100,
+          b0: 0,
+          c3: 0,
+          c2: 0,
+          c1: 0,
+          c0: 100,
+          d3: 0,
+          d2: 100,
+          d1: 0,
+          d0: 0,
           untiered: 40,
-          totalCases: 40 } ] } ],
+          totalCases: 40
+        }]
+      }],
       percentageTotals:
-      { PO:
-      { grade: 'PO',
-        a: 60,
-        b1: 60,
-        b2: 60,
-        c1: 60,
-        c2: 60,
-        d1: 60,
-        d2: 60,
-        e: 0,
-        f: 0,
-        g: 0,
+      {
+        PO:
+      {
+        grade: 'PO',
+        a3: 100,
+        a2: 0,
+        a1: 100,
+        a0: 100,
+        b3: 0,
+        b2: 0,
+        b1: 0,
+        b0: 100,
+        c3: 100,
+        c2: 100,
+        c1: 100,
+        c0: 0,
+        d3: 100,
+        d2: 0,
+        d1: 100,
+        d0: 100,
         untiered: 60,
         totalCases: 60,
-        numberOfType: 1 },
+        numberOfType: 1
+      },
         PSO:
-        { grade: 'PSO',
-          a: 40,
-          b1: 40,
-          b2: 40,
-          c1: 40,
-          c2: 40,
-          d1: 40,
-          d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
+        {
+          grade: 'PSO',
+          a3: 0,
+          a2: 100,
+          a1: 0,
+          a0: 0,
+          b3: 100,
+          b2: 100,
+          b1: 100,
+          b0: 0,
+          c3: 0,
+          c2: 0,
+          c1: 0,
+          c0: 100,
+          d3: 0,
+          d2: 100,
+          d1: 0,
+          d0: 0,
           untiered: 40,
           totalCases: 40,
-          numberOfType: 1 } } },
+          numberOfType: 1
+        }
+      }
+    },
     licenseCaseloadDetails:
-    { details:
-    [ { linkId: 71,
+    {
+      details:
+    [{
+      linkId: 71,
       name: 'Team 2',
       grades:
-      [ { grade: 'PO',
-        a: 6,
-        b1: 3,
-        b2: 6,
-        c1: 9,
-        c2: 6,
-        d1: 12,
-        d2: 18,
-        e: 2,
-        f: 1,
-        g: 0,
+      [{
+        grade: 'PO',
+        a3: 8,
+        a2: 2,
+        a1: 4,
+        a0: 5,
+        b3: 6,
+        b2: 7,
+        b1: 8,
+        b0: 9,
+        c3: 10,
+        c2: 20,
+        c1: 30,
+        c0: 1,
+        d3: 2,
+        d2: 3,
+        d1: 5,
+        d0: 0,
         untiered: 15,
-        totalCases: 75 },
-      { grade: 'PSO',
-        a: 4,
+        totalCases: 75
+      },
+      {
+        grade: 'PSO',
+        a3: 2,
+        a2: 8,
+        a1: 1,
+        a0: 5,
+        b3: 4,
+        b2: 3,
         b1: 2,
-        b2: 4,
-        c1: 6,
-        c2: 4,
-        d1: 8,
-        d2: 12,
-        e: 2,
-        f: 1,
-        g: 0,
+        b0: 1,
+        c3: 10,
+        c2: 20,
+        c1: 30,
+        c0: 7,
+        d3: 0,
+        d2: 0,
+        d1: 1,
+        d0: 2,
         untiered: 10,
-        totalCases: 50 } ] } ],
+        totalCases: 50
+      }]
+    }],
       totals:
-      { PO:
-      { grade: 'PO',
-        a: 6,
-        b1: 3,
-        b2: 6,
-        c1: 9,
-        c2: 6,
-        d1: 12,
-        d2: 18,
-        e: 2,
-        f: 1,
-        g: 0,
+      {
+        PO:
+      {
+        grade: 'PO',
+        a3: 8,
+        a2: 2,
+        a1: 4,
+        a0: 5,
+        b3: 6,
+        b2: 7,
+        b1: 8,
+        b0: 9,
+        c3: 10,
+        c2: 20,
+        c1: 30,
+        c0: 1,
+        d3: 2,
+        d2: 3,
+        d1: 5,
+        d0: 0,
         untiered: 15,
         totalCases: 75,
-        numberOfType: 1 },
+        numberOfType: 1
+      },
         PSO:
-        { grade: 'PSO',
-          a: 4,
+        {
+          grade: 'PSO',
+          a3: 2,
+          a2: 8,
+          a1: 1,
+          a0: 5,
+          b3: 4,
+          b2: 3,
           b1: 2,
-          b2: 4,
-          c1: 6,
-          c2: 4,
-          d1: 8,
-          d2: 12,
-          e: 2,
-          f: 1,
-          g: 0,
+          b0: 1,
+          c3: 10,
+          c2: 20,
+          c1: 30,
+          c0: 7,
+          d3: 0,
+          d2: 0,
+          d1: 1,
+          d0: 2,
           untiered: 10,
           totalCases: 50,
-          numberOfType: 1 } },
+          numberOfType: 1
+        }
+      },
       detailsPercentages:
-      [ { linkId: 71,
+      [{
+        linkId: 71,
         name: 'Team 2',
         grades:
-        [ { grade: 'PO',
-          a: 60,
-          b1: 60,
-          b2: 60,
-          c1: 60,
-          c2: 60,
-          d1: 60,
-          d2: 60,
-          e: 0,
-          f: 0,
-          g: 0,
+        [{
+          grade: 'PO',
+          a3: 70,
+          a2: 30,
+          a1: 60,
+          a0: 40,
+          b3: 80,
+          b2: 20,
+          b1: 15,
+          b0: 45,
+          c3: 25,
+          c2: 35,
+          c1: 90,
+          c0: 100,
+          d3: 80,
+          d2: 20,
+          d1: 0,
+          d0: 0,
           untiered: 60,
-          totalCases: 60 },
-        { grade: 'PSO',
-          a: 40,
-          b1: 40,
-          b2: 40,
-          c1: 40,
-          c2: 40,
-          d1: 40,
-          d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
+          totalCases: 60
+        },
+        {
+          grade: 'PSO',
+          a3: 30,
+          a2: 70,
+          a1: 40,
+          a0: 60,
+          b3: 20,
+          b2: 80,
+          b1: 85,
+          b0: 55,
+          c3: 75,
+          c2: 65,
+          c1: 10,
+          c0: 0,
+          d3: 20,
+          d2: 80,
+          d1: 100,
+          d0: 100,
           untiered: 40,
-          totalCases: 40 } ] } ],
+          totalCases: 40
+        }]
+      }],
       percentageTotals:
-      { PO:
-      { grade: 'PO',
-        a: 60,
-        b1: 60,
-        b2: 60,
-        c1: 60,
-        c2: 60,
-        d1: 60,
-        d2: 60,
-        e: 0,
-        f: 0,
-        g: 0,
+      {
+        PO:
+      {
+        grade: 'PO',
+        a3: 70,
+        a2: 30,
+        a1: 60,
+        a0: 40,
+        b3: 80,
+        b2: 20,
+        b1: 15,
+        b0: 45,
+        c3: 25,
+        c2: 35,
+        c1: 90,
+        c0: 100,
+        d3: 80,
+        d2: 20,
+        d1: 0,
+        d0: 0,
         untiered: 60,
         totalCases: 60,
-        numberOfType: 1 },
+        numberOfType: 1
+      },
         PSO:
-        { grade: 'PSO',
-          a: 40,
-          b1: 40,
-          b2: 40,
-          c1: 40,
-          c2: 40,
-          d1: 40,
-          d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
+        {
+          grade: 'PSO',
+          a3: 30,
+          a2: 70,
+          a1: 40,
+          a0: 60,
+          b3: 20,
+          b2: 80,
+          b1: 85,
+          b0: 55,
+          c3: 75,
+          c2: 65,
+          c1: 10,
+          c0: 0,
+          d3: 20,
+          d2: 80,
+          d1: 100,
+          d0: 100,
           untiered: 40,
           totalCases: 40,
-          numberOfType: 1 } } },
+          numberOfType: 1
+        }
+      }
+    },
     overallTotalSummary:
-    [ { name: 'Team 2',
+    [{
+      name: 'Team 2',
       linkId: 71,
       totalCases: 345,
       custodyTotalCases: 115,
       communityTotalCases: 105,
-      licenseTotalCases: 125 } ],
+      licenseTotalCases: 125
+    }],
     custodyTotalSummary: 115,
     communityTotalSummary: 105,
-    licenseTotalSummary: 125 }
+    licenseTotalSummary: 125
+  }
 }
 
 module.exports.LDU_CASELOAD_CSV = {
@@ -1068,1584 +1469,2477 @@ module.exports.LDU_CASELOAD_CSV = {
   '"name","custodyCases","communityCases","licenseCases","totalCases"\n' +
   '"Team 2",115,105,125,345\n\n\n' +
   'CUSTODY\n' +
-  '"Team Name","Grade","A","B1","B2","C1","C2","D1","D2","E","F","G","Untiered","Overall"\n' +
-  '"Team 2","PO",18,12,6,12,6,9,3,2,1,0,3,69\n' +
-  '"Team 2","PSO",12,8,4,8,4,6,2,2,1,0,2,46\n\n\n' +
+  '"Team Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","Untiered","Overall"\n' +
+  '"Team 2","PO",1,0,2,3,0,0,0,1,2,6,8,0,7,0,1,1,3,69\n' +
+  '"Team 2","PSO",0,1,0,0,1,1,1,0,0,0,0,9,0,7,0,0,2,46\n\n\n' +
   'COMMUNITY\n' +
-  '"Team Name","Grade","A","B1","B2","C1","C2","D1","D2","E","F","G","Untiered","Overall"\n' +
-  '"Team 2","PO",9,18,12,6,9,6,3,2,1,0,0,63\n' +
-  '"Team 2","PSO",6,12,8,4,6,4,2,2,1,0,0,42\n\n\n' +
+  '"Team Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","Untiered","Overall"\n' +
+  '"Team 2","PO",9,7,6,5,30,20,15,10,5,2,3,11,1,3,3,12,0,63\n' +
+  '"Team 2","PSO",11,3,4,15,10,20,25,30,5,2,3,11,3,9,9,36,0,42\n\n\n' +
   'LICENSE\n' +
-  '"Team Name","Grade","A","B1","B2","C1","C2","D1","D2","E","F","G","Untiered","Overall"\n' +
-  '"Team 2","PO",6,3,6,9,6,12,18,2,1,0,15,75\n' +
-  '"Team 2","PSO",4,2,4,6,4,8,12,2,1,0,10,50\n\n\n' +
+  '"Team Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","Untiered","Overall"\n' +
+  '"Team 2","PO",8,2,4,5,6,7,8,9,10,20,30,1,2,3,5,0,15,75\n' +
+  '"Team 2","PSO",2,8,1,5,4,3,2,1,10,20,30,7,0,0,1,2,10,50\n\n\n' +
   'OVERALL: PERCENTAGE SPLIT OF CASES BY GRADE\n' +
-  '"Team Name","Grade","A","B1","B2","C1","C2","D1","D2","E","F","G","Untiered","Overall"\n' +
-  '"Team 2","PO","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","0.00%","0.00%","0.00%","60.00%","60.00%"\n' +
-  '"Team 2","PSO","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","0.00%","0.00%","0.00%","40.00%","40.00%"'
+  '"Team Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","Untiered","Overall"\n' +
+  '"Team 2","PO","45.00%","70.00%","60.00%","50.00%","75.00%","50.00%","37.00%","25.00%","50.00%","50.00%","50.00%","50.00%","25.00%","25.00%","25.00%","25.00%","60.00%","60.00%"\n' +
+  '"Team 2","PSO","55.00%","30.00%","40.00%","50.00%","25.00%","50.00%","62.00%","75.00%","50.00%","50.00%","50.00%","50.00%","25.00%","25.00%","25.00%","25.00%","40.00%","40.00%"'
 }
 
 module.exports.REGION_CASELOAD_RESULT = {
-  title: 'Division 2',
-  subTitle: 'Division',
+  title: 'Region 2',
+  subTitle: 'Region',
   caseloadDetails:
-  { overallCaseloadDetails:
-  { details:
-  [ { linkId: 70,
-    name: 'LDU Cluster 2',
+  {
+    overallCaseloadDetails:
+  {
+    details:
+  [{
+    linkId: 70,
+    name: 'Probation Delivery Unit 2',
     grades:
-    [ { grade: 'PO',
-      a: 33,
-      b1: 33,
-      b2: 24,
-      c1: 27,
-      c2: 21,
-      d1: 27,
-      d2: 24,
-      e: 2,
-      f: 1,
-      g: 0,
+    [{
+      grade: 'PO',
+      a3: 5,
+      a2: 4,
+      a1: 3,
+      a0: 2,
+      b3: 1,
+      b2: 1,
+      b1: 2,
+      b0: 4,
+      c3: 8,
+      c2: 16,
+      c1: 32,
+      c0: 0,
+      d3: 20,
+      d2: 40,
+      d1: 80,
+      d0: 60,
       untiered: 18,
-      totalCases: 207 },
-    { grade: 'PSO',
-      a: 22,
-      b1: 22,
-      b2: 16,
-      c1: 18,
-      c2: 14,
-      d1: 18,
-      d2: 16,
-      e: 2,
-      f: 1,
-      g: 0,
+      totalCases: 207
+    },
+    {
+      grade: 'PSO',
+      a3: 1,
+      a2: 2,
+      a1: 5,
+      a0: 4,
+      b3: 3,
+      b2: 1,
+      b1: 1,
+      b0: 2,
+      c3: 3,
+      c2: 5,
+      c1: 8,
+      c0: 13,
+      d3: 21,
+      d2: 34,
+      d1: 55,
+      d0: 89,
       untiered: 12,
-      totalCases: 138 } ] } ],
+      totalCases: 138
+    }]
+  }],
     totals:
-    { PO:
-    { grade: 'PO',
-      a: 33,
-      b1: 33,
-      b2: 24,
-      c1: 27,
-      c2: 21,
-      d1: 27,
-      d2: 24,
-      e: 2,
-      f: 1,
-      g: 0,
+    {
+      PO:
+    {
+      grade: 'PO',
+      a3: 5,
+      a2: 4,
+      a1: 3,
+      a0: 2,
+      b3: 1,
+      b2: 1,
+      b1: 2,
+      b0: 4,
+      c3: 8,
+      c2: 16,
+      c1: 32,
+      c0: 0,
+      d3: 20,
+      d2: 40,
+      d1: 80,
+      d0: 60,
       untiered: 18,
       totalCases: 207,
-      numberOfType: 1 },
+      numberOfType: 1
+    },
       PSO:
-      { grade: 'PSO',
-        a: 22,
-        b1: 22,
-        b2: 16,
-        c1: 18,
-        c2: 14,
-        d1: 18,
-        d2: 16,
-        e: 2,
-        f: 1,
-        g: 0,
+      {
+        grade: 'PSO',
+        a3: 1,
+        a2: 2,
+        a1: 5,
+        a0: 4,
+        b3: 3,
+        b2: 1,
+        b1: 1,
+        b0: 2,
+        c3: 3,
+        c2: 5,
+        c1: 8,
+        c0: 13,
+        d3: 21,
+        d2: 34,
+        d1: 55,
+        d0: 89,
         untiered: 12,
         totalCases: 138,
-        numberOfType: 1 } },
+        numberOfType: 1
+      }
+    },
     detailsPercentages:
-    [ { linkId: 70,
-      name: 'LDU Cluster 2',
+    [{
+      linkId: 70,
+      name: 'Probation Delivery Unit 2',
       grades:
-      [ { grade: 'PO',
-        a: 60,
-        b1: 60,
-        b2: 60,
-        c1: 60,
-        c2: 60,
-        d1: 60,
-        d2: 60,
-        e: 0,
-        f: 0,
-        g: 0,
-        untiered: 60,
-        totalCases: 60 },
-      { grade: 'PSO',
-        a: 40,
+      [{
+        grade: 'PO',
+        a3: 50,
+        a2: 90,
+        a1: 40,
+        a0: 30,
+        b3: 100,
+        b2: 70,
         b1: 40,
-        b2: 40,
-        c1: 40,
-        c2: 40,
-        d1: 40,
-        d2: 40,
-        e: 0,
-        f: 0,
-        g: 0,
+        b0: 25,
+        c3: 25,
+        c2: 100,
+        c1: 0,
+        c0: 65,
+        d3: 35,
+        d2: 20,
+        d1: 45,
+        d0: 80,
+        untiered: 60,
+        totalCases: 60
+      },
+      {
+        grade: 'PSO',
+        a3: 50,
+        a2: 10,
+        a1: 60,
+        a0: 70,
+        b3: 0,
+        b2: 30,
+        b1: 60,
+        b0: 75,
+        c3: 75,
+        c2: 0,
+        c1: 100,
+        c0: 35,
+        d3: 65,
+        d2: 80,
+        d1: 55,
+        d0: 20,
         untiered: 40,
-        totalCases: 40 } ] } ],
+        totalCases: 40
+      }]
+    }],
     percentageTotals:
-    { PO:
-    { grade: 'PO',
-      a: 60,
-      b1: 60,
-      b2: 60,
-      c1: 60,
-      c2: 60,
-      d1: 60,
-      d2: 60,
-      e: 0,
-      f: 0,
-      g: 0,
+    {
+      PO:
+    {
+      grade: 'PO',
+      a3: 50,
+      a2: 90,
+      a1: 40,
+      a0: 30,
+      b3: 100,
+      b2: 70,
+      b1: 40,
+      b0: 25,
+      c3: 25,
+      c2: 100,
+      c1: 0,
+      c0: 65,
+      d3: 35,
+      d2: 20,
+      d1: 45,
+      d0: 80,
       untiered: 60,
       totalCases: 60,
-      numberOfType: 1 },
+      numberOfType: 1
+    },
       PSO:
-      { grade: 'PSO',
-        a: 40,
-        b1: 40,
-        b2: 40,
-        c1: 40,
-        c2: 40,
-        d1: 40,
-        d2: 40,
-        e: 0,
-        f: 0,
-        g: 0,
+      {
+        grade: 'PSO',
+        a3: 50,
+        a2: 10,
+        a1: 60,
+        a0: 70,
+        b3: 0,
+        b2: 30,
+        b1: 60,
+        b0: 75,
+        c3: 75,
+        c2: 0,
+        c1: 100,
+        c0: 35,
+        d3: 65,
+        d2: 80,
+        d1: 55,
+        d0: 20,
         untiered: 40,
         totalCases: 40,
-        numberOfType: 1 } } },
+        numberOfType: 1
+      }
+    }
+  },
     communityCaseloadDetails:
-    { details:
-    [ { linkId: 70,
-      name: 'LDU Cluster 2',
+    {
+      details:
+    [{
+      linkId: 70,
+      name: 'Probation Delivery Unit 2',
       grades:
-      [ { grade: 'PO',
-        a: 9,
-        b1: 18,
-        b2: 12,
-        c1: 6,
-        c2: 9,
-        d1: 6,
-        d2: 3,
-        e: 2,
-        f: 1,
-        g: 0,
+      [{
+        grade: 'PO',
+        a3: 0,
+        a2: 1,
+        a1: 1,
+        a0: 2,
+        b3: 3,
+        b2: 5,
+        b1: 8,
+        b0: 13,
+        c3: 21,
+        c2: 34,
+        c1: 55,
+        c0: 89,
+        d3: 144,
+        d2: 233,
+        d1: 377,
+        d0: 610,
         untiered: 0,
-        totalCases: 63 },
-      { grade: 'PSO',
-        a: 6,
-        b1: 12,
-        b2: 8,
-        c1: 4,
-        c2: 6,
-        d1: 4,
-        d2: 2,
-        e: 2,
-        f: 1,
-        g: 0,
+        totalCases: 63
+      },
+      {
+        grade: 'PSO',
+        a3: 610,
+        a2: 377,
+        a1: 233,
+        a0: 144,
+        b3: 89,
+        b2: 55,
+        b1: 34,
+        b0: 21,
+        c3: 13,
+        c2: 8,
+        c1: 5,
+        c0: 3,
+        d3: 2,
+        d2: 1,
+        d1: 1,
+        d0: 0,
         untiered: 0,
-        totalCases: 42 } ] } ],
+        totalCases: 42
+      }]
+    }],
       totals:
-      { PO:
-      { grade: 'PO',
-        a: 9,
-        b1: 18,
-        b2: 12,
-        c1: 6,
-        c2: 9,
-        d1: 6,
-        d2: 3,
-        e: 2,
-        f: 1,
-        g: 0,
+      {
+        PO:
+      {
+        grade: 'PO',
+        a3: 0,
+        a2: 1,
+        a1: 1,
+        a0: 2,
+        b3: 3,
+        b2: 5,
+        b1: 8,
+        b0: 13,
+        c3: 21,
+        c2: 34,
+        c1: 55,
+        c0: 89,
+        d3: 144,
+        d2: 233,
+        d1: 377,
+        d0: 610,
         untiered: 0,
         totalCases: 63,
-        numberOfType: 1 },
+        numberOfType: 1
+      },
         PSO:
-        { grade: 'PSO',
-          a: 6,
-          b1: 12,
-          b2: 8,
-          c1: 4,
-          c2: 6,
-          d1: 4,
-          d2: 2,
-          e: 2,
-          f: 1,
-          g: 0,
+        {
+          grade: 'PSO',
+          a3: 610,
+          a2: 377,
+          a1: 233,
+          a0: 144,
+          b3: 89,
+          b2: 55,
+          b1: 34,
+          b0: 21,
+          c3: 13,
+          c2: 8,
+          c1: 5,
+          c0: 3,
+          d3: 2,
+          d2: 1,
+          d1: 1,
+          d0: 0,
           untiered: 0,
           totalCases: 42,
-          numberOfType: 1 } },
+          numberOfType: 1
+        }
+      },
       detailsPercentages:
-      [ { linkId: 70,
-        name: 'LDU Cluster 2',
+      [{
+        linkId: 70,
+        name: 'Probation Delivery Unit 2',
         grades:
-        [ { grade: 'PO',
-          a: 60,
-          b1: 60,
-          b2: 60,
-          c1: 60,
-          c2: 60,
-          d1: 60,
-          d2: 60,
-          e: 0,
-          f: 0,
-          g: 0,
-          untiered: 0,
-          totalCases: 60 },
-        { grade: 'PSO',
-          a: 40,
-          b1: 40,
-          b2: 40,
-          c1: 40,
-          c2: 40,
+        [{
+          grade: 'PO',
+          a3: 55,
+          a2: 60,
+          a1: 65,
+          a0: 70,
+          b3: 75,
+          b2: 80,
+          b1: 85,
+          b0: 90,
+          c3: 95,
+          c2: 100,
+          c1: 0,
+          c0: 10,
+          d3: 20,
+          d2: 30,
           d1: 40,
-          d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
+          d0: 100,
           untiered: 0,
-          totalCases: 40 } ] } ],
+          totalCases: 60
+        },
+        {
+          grade: 'PSO',
+          a3: 45,
+          a2: 40,
+          a1: 35,
+          a0: 30,
+          b3: 25,
+          b2: 20,
+          b1: 15,
+          b0: 10,
+          c3: 5,
+          c2: 0,
+          c1: 100,
+          c0: 90,
+          d3: 80,
+          d2: 70,
+          d1: 60,
+          d0: 0,
+          untiered: 0,
+          totalCases: 40
+        }]
+      }],
       percentageTotals:
-      { PO:
-      { grade: 'PO',
-        a: 60,
-        b1: 60,
-        b2: 60,
-        c1: 60,
-        c2: 60,
-        d1: 60,
-        d2: 60,
-        e: 0,
-        f: 0,
-        g: 0,
+      {
+        PO:
+      {
+        grade: 'PO',
+        a3: 55,
+        a2: 60,
+        a1: 65,
+        a0: 70,
+        b3: 75,
+        b2: 80,
+        b1: 85,
+        b0: 90,
+        c3: 95,
+        c2: 100,
+        c1: 0,
+        c0: 10,
+        d3: 20,
+        d2: 30,
+        d1: 40,
+        d0: 100,
         untiered: 0,
         totalCases: 60,
-        numberOfType: 1 },
+        numberOfType: 1
+      },
         PSO:
-        { grade: 'PSO',
-          a: 40,
-          b1: 40,
-          b2: 40,
-          c1: 40,
-          c2: 40,
-          d1: 40,
-          d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
-          untiered: 0,
-          totalCases: 40,
-          numberOfType: 1 } } },
+        {
+          grade: 'PSO',
+          a3: 45,
+          a2: 40,
+          a1: 35,
+          a0: 30,
+          b3: 25,
+          b2: 20,
+          b1: 15,
+          b0: 10,
+          c3: 5,
+          c2: 0,
+          c1: 100,
+          c0: 90,
+          d3: 80,
+          d2: 70,
+          d1: 60,
+          d0: 0,
+          numberOfType: 1
+        }
+      }
+    },
     custodyCaseloadDetails:
-    { details:
-    [ { linkId: 70,
-      name: 'LDU Cluster 2',
+    {
+      details:
+    [{
+      linkId: 70,
+      name: 'Probation Delivery Unit 2',
       grades:
-      [ { grade: 'PO',
-        a: 18,
-        b1: 12,
-        b2: 6,
-        c1: 12,
-        c2: 6,
-        d1: 9,
-        d2: 3,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 3,
-        totalCases: 69 },
-      { grade: 'PSO',
-        a: 12,
-        b1: 8,
-        b2: 4,
+      [{
+        grade: 'PO',
+        a3: 3,
+        a2: 2,
+        a1: 1,
+        a0: 0,
+        b3: 4,
+        b2: 5,
+        b1: 6,
+        b0: 1,
+        c3: 4,
+        c2: 0,
         c1: 8,
-        c2: 4,
-        d1: 6,
-        d2: 2,
-        e: 2,
-        f: 1,
-        g: 0,
+        c0: 5,
+        d3: 1,
+        d2: 4,
+        d1: 3,
+        d0: 6,
+        untiered: 3,
+        totalCases: 69
+      },
+      {
+        grade: 'PSO',
+        a3: 1,
+        a2: 4,
+        a1: 0,
+        a0: 9,
+        b3: 6,
+        b2: 1,
+        b1: 4,
+        b0: 0,
+        c3: 8,
+        c2: 0,
+        c1: 1,
+        c0: 4,
+        d3: 1,
+        d2: 1,
+        d1: 1,
+        d0: 2,
         untiered: 2,
-        totalCases: 46 } ] } ],
+        totalCases: 46
+      }]
+    }],
       totals:
-      { PO:
-      { grade: 'PO',
-        a: 18,
-        b1: 12,
-        b2: 6,
-        c1: 12,
-        c2: 6,
-        d1: 9,
-        d2: 3,
-        e: 2,
-        f: 1,
-        g: 0,
+      {
+        PO:
+      {
+        grade: 'PO',
+        a3: 3,
+        a2: 2,
+        a1: 1,
+        a0: 0,
+        b3: 4,
+        b2: 5,
+        b1: 6,
+        b0: 1,
+        c3: 4,
+        c2: 0,
+        c1: 8,
+        c0: 5,
+        d3: 1,
+        d2: 4,
+        d1: 3,
+        d0: 6,
         untiered: 3,
         totalCases: 69,
-        numberOfType: 1 },
+        numberOfType: 1
+      },
         PSO:
-        { grade: 'PSO',
-          a: 12,
-          b1: 8,
-          b2: 4,
-          c1: 8,
-          c2: 4,
-          d1: 6,
-          d2: 2,
-          e: 2,
-          f: 1,
-          g: 0,
+        {
+          grade: 'PSO',
+          a3: 1,
+          a2: 4,
+          a1: 0,
+          a0: 9,
+          b3: 6,
+          b2: 1,
+          b1: 4,
+          b0: 0,
+          c3: 8,
+          c2: 0,
+          c1: 1,
+          c0: 4,
+          d3: 1,
+          d2: 1,
+          d1: 1,
+          d0: 2,
           untiered: 2,
           totalCases: 46,
-          numberOfType: 1 } },
+          numberOfType: 1
+        }
+      },
       detailsPercentages:
-      [ { linkId: 70,
-        name: 'LDU Cluster 2',
+      [{
+        linkId: 70,
+        name: 'Probation Delivery Unit 2',
         grades:
-        [ { grade: 'PO',
-          a: 60,
-          b1: 60,
-          b2: 60,
-          c1: 60,
-          c2: 60,
-          d1: 60,
-          d2: 60,
-          e: 0,
-          f: 0,
-          g: 0,
+        [{
+          grade: 'PO',
+          a3: 30,
+          a2: 20,
+          a1: 40,
+          a0: 100,
+          b3: 0,
+          b2: 55,
+          b1: 10,
+          b0: 25,
+          c3: 15,
+          c2: 10,
+          c1: 1,
+          c0: 99,
+          d3: 18,
+          d2: 24,
+          d1: 90,
+          d0: 98,
           untiered: 60,
-          totalCases: 60 },
-        { grade: 'PSO',
-          a: 40,
-          b1: 40,
-          b2: 40,
-          c1: 40,
-          c2: 40,
-          d1: 40,
-          d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
+          totalCases: 60
+        },
+        {
+          grade: 'PSO',
+          a3: 70,
+          a2: 80,
+          a1: 60,
+          a0: 0,
+          b3: 100,
+          b2: 45,
+          b1: 90,
+          b0: 75,
+          c3: 85,
+          c2: 90,
+          c1: 99,
+          c0: 1,
+          d3: 82,
+          d2: 76,
+          d1: 10,
+          d0: 2,
           untiered: 40,
-          totalCases: 40 } ] } ],
+          totalCases: 40
+        }]
+      }],
       percentageTotals:
-      { PO:
-      { grade: 'PO',
-        a: 60,
-        b1: 60,
-        b2: 60,
-        c1: 60,
-        c2: 60,
-        d1: 60,
-        d2: 60,
-        e: 0,
-        f: 0,
-        g: 0,
+      {
+        PO:
+      {
+        grade: 'PO',
+        a3: 30,
+        a2: 20,
+        a1: 40,
+        a0: 100,
+        b3: 0,
+        b2: 55,
+        b1: 10,
+        b0: 25,
+        c3: 15,
+        c2: 10,
+        c1: 1,
+        c0: 99,
+        d3: 18,
+        d2: 24,
+        d1: 90,
+        d0: 98,
         untiered: 60,
         totalCases: 60,
-        numberOfType: 1 },
+        numberOfType: 1
+      },
         PSO:
-        { grade: 'PSO',
-          a: 40,
-          b1: 40,
-          b2: 40,
-          c1: 40,
-          c2: 40,
-          d1: 40,
-          d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
+        {
+          grade: 'PSO',
+          a3: 70,
+          a2: 80,
+          a1: 60,
+          a0: 0,
+          b3: 100,
+          b2: 45,
+          b1: 90,
+          b0: 75,
+          c3: 85,
+          c2: 90,
+          c1: 99,
+          c0: 1,
+          d3: 82,
+          d2: 76,
+          d1: 10,
+          d0: 2,
           untiered: 40,
           totalCases: 40,
-          numberOfType: 1 } } },
+          numberOfType: 1
+        }
+      }
+    },
     licenseCaseloadDetails:
-    { details:
-    [ { linkId: 70,
-      name: 'LDU Cluster 2',
+    {
+      details:
+    [{
+      linkId: 70,
+      name: 'Probation Delivery Unit 2',
       grades:
-      [ { grade: 'PO',
-        a: 6,
-        b1: 3,
-        b2: 6,
-        c1: 9,
-        c2: 6,
-        d1: 12,
-        d2: 18,
-        e: 2,
-        f: 1,
-        g: 0,
+      [{
+        grade: 'PO',
+        a3: 1,
+        a2: 8,
+        a1: 9,
+        a0: 9,
+        b3: 1,
+        b2: 9,
+        b1: 0,
+        b0: 7,
+        c3: 1,
+        c2: 9,
+        c1: 1,
+        c0: 1,
+        d3: 1,
+        d2: 9,
+        d1: 1,
+        d0: 4,
         untiered: 15,
-        totalCases: 75 },
-      { grade: 'PSO',
-        a: 4,
-        b1: 2,
-        b2: 4,
-        c1: 6,
-        c2: 4,
-        d1: 8,
-        d2: 12,
-        e: 2,
-        f: 1,
-        g: 0,
+        totalCases: 75
+      },
+      {
+        grade: 'PSO',
+        a3: 1,
+        a2: 9,
+        a1: 6,
+        a0: 4,
+        b3: 1,
+        b2: 9,
+        b1: 7,
+        b0: 0,
+        c3: 1,
+        c2: 9,
+        c1: 7,
+        c0: 4,
+        d3: 1,
+        d2: 9,
+        d1: 7,
+        d0: 5,
         untiered: 10,
-        totalCases: 50 } ] } ],
+        totalCases: 50
+      }]
+    }],
       totals:
-      { PO:
-      { grade: 'PO',
-        a: 6,
-        b1: 3,
-        b2: 6,
-        c1: 9,
-        c2: 6,
-        d1: 12,
-        d2: 18,
-        e: 2,
-        f: 1,
-        g: 0,
+      {
+        PO:
+      {
+        grade: 'PO',
+        a3: 1,
+        a2: 8,
+        a1: 9,
+        a0: 9,
+        b3: 1,
+        b2: 9,
+        b1: 0,
+        b0: 7,
+        c3: 1,
+        c2: 9,
+        c1: 1,
+        c0: 1,
+        d3: 1,
+        d2: 9,
+        d1: 1,
+        d0: 4,
         untiered: 15,
         totalCases: 75,
-        numberOfType: 1 },
+        numberOfType: 1
+      },
         PSO:
-        { grade: 'PSO',
-          a: 4,
-          b1: 2,
-          b2: 4,
-          c1: 6,
-          c2: 4,
-          d1: 8,
-          d2: 12,
-          e: 2,
-          f: 1,
-          g: 0,
+        {
+          grade: 'PSO',
+          a3: 1,
+          a2: 9,
+          a1: 6,
+          a0: 4,
+          b3: 1,
+          b2: 9,
+          b1: 7,
+          b0: 0,
+          c3: 1,
+          c2: 9,
+          c1: 7,
+          c0: 4,
+          d3: 1,
+          d2: 9,
+          d1: 7,
+          d0: 5,
           untiered: 10,
           totalCases: 50,
-          numberOfType: 1 } },
+          numberOfType: 1
+        }
+      },
       detailsPercentages:
-      [ { linkId: 70,
-        name: 'LDU Cluster 2',
+      [{
+        linkId: 70,
+        name: 'Probation Delivery Unit 2',
         grades:
-        [ { grade: 'PO',
-          a: 60,
-          b1: 60,
+        [{
+          grade: 'PO',
+          a3: 85,
+          a2: 80,
+          a1: 75,
+          a0: 70,
+          b3: 65,
           b2: 60,
-          c1: 60,
-          c2: 60,
-          d1: 60,
-          d2: 60,
-          e: 0,
-          f: 0,
-          g: 0,
-          untiered: 60,
-          totalCases: 60 },
-        { grade: 'PSO',
-          a: 40,
-          b1: 40,
-          b2: 40,
-          c1: 40,
+          b1: 55,
+          b0: 50,
+          c3: 45,
           c2: 40,
-          d1: 40,
-          d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
+          c1: 35,
+          c0: 25,
+          d3: 20,
+          d2: 15,
+          d1: 10,
+          d0: 0,
+          untiered: 60,
+          totalCases: 60
+        },
+        {
+          grade: 'PSO',
+          a3: 15,
+          a2: 20,
+          a1: 25,
+          a0: 30,
+          b3: 35,
+          b2: 40,
+          b1: 45,
+          b0: 50,
+          c3: 55,
+          c2: 50,
+          c1: 65,
+          c0: 70,
+          d3: 75,
+          d2: 80,
+          d1: 85,
+          d0: 90,
           untiered: 40,
-          totalCases: 40 } ] } ],
+          totalCases: 40
+        }]
+      }],
       percentageTotals:
-      { PO:
-      { grade: 'PO',
-        a: 60,
-        b1: 60,
+      {
+        PO:
+      {
+        grade: 'PO',
+        a3: 85,
+        a2: 80,
+        a1: 75,
+        a0: 70,
+        b3: 65,
         b2: 60,
-        c1: 60,
-        c2: 60,
-        d1: 60,
-        d2: 60,
-        e: 0,
-        f: 0,
-        g: 0,
+        b1: 55,
+        b0: 50,
+        c3: 45,
+        c2: 40,
+        c1: 35,
+        c0: 25,
+        d3: 20,
+        d2: 15,
+        d1: 10,
+        d0: 0,
         untiered: 60,
         totalCases: 60,
-        numberOfType: 1 },
+        numberOfType: 1
+      },
         PSO:
-        { grade: 'PSO',
-          a: 40,
-          b1: 40,
+        {
+          grade: 'PSO',
+          a3: 15,
+          a2: 20,
+          a1: 25,
+          a0: 30,
+          b3: 35,
           b2: 40,
-          c1: 40,
-          c2: 40,
-          d1: 40,
-          d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
+          b1: 45,
+          b0: 50,
+          c3: 55,
+          c2: 50,
+          c1: 65,
+          c0: 70,
+          d3: 75,
+          d2: 80,
+          d1: 85,
+          d0: 90,
           untiered: 40,
           totalCases: 40,
-          numberOfType: 1 } } },
+          numberOfType: 1
+        }
+      }
+    },
     overallTotalSummary:
-    [ { name: 'LDU Cluster 2',
+    [{
+      name: 'Probation Delivery Unit 2',
       linkId: 70,
       totalCases: 345,
       custodyTotalCases: 115,
       communityTotalCases: 105,
-      licenseTotalCases: 125 } ],
+      licenseTotalCases: 125
+    }],
     custodyTotalSummary: 115,
     communityTotalSummary: 105,
-    licenseTotalSummary: 125 }
+    licenseTotalSummary: 125
+  }
 }
 
 module.exports.REGION_CASELOAD_CSV = {
   filename: ('Test_Region_Caseload ' + timestamp + '.csv').replace(replaceSpaces, '_'),
   csv: 'OVERALL\n' +
   '"name","custodyCases","communityCases","licenseCases","totalCases"\n' +
-  '"LDU Cluster 2",115,105,125,345\n\n\n' +
+  '"Probation Delivery Unit 2",115,105,125,345\n\n\n' +
   'CUSTODY\n' +
-  '"LDU Cluster Name","Grade","A","B1","B2","C1","C2","D1","D2","E","F","G","Untiered","Overall"\n' +
-  '"LDU Cluster 2","PO",18,12,6,12,6,9,3,2,1,0,3,69\n' +
-  '"LDU Cluster 2","PSO",12,8,4,8,4,6,2,2,1,0,2,46\n\n\n' +
+  '"Probation Delivery Unit Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","Untiered","Overall"\n' +
+  '"Probation Delivery Unit 2","PO",3,2,1,0,4,5,6,1,4,0,8,5,1,4,3,6,3,69\n' +
+  '"Probation Delivery Unit 2","PSO",1,4,0,9,6,1,4,0,8,0,1,4,1,1,1,2,2,46\n\n\n' +
   'COMMUNITY\n' +
-  '"LDU Cluster Name","Grade","A","B1","B2","C1","C2","D1","D2","E","F","G","Untiered","Overall"\n' +
-  '"LDU Cluster 2","PO",9,18,12,6,9,6,3,2,1,0,0,63\n' +
-  '"LDU Cluster 2","PSO",6,12,8,4,6,4,2,2,1,0,0,42\n\n\n' +
+  '"Probation Delivery Unit Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","Untiered","Overall"\n' +
+  '"Probation Delivery Unit 2","PO",0,1,1,2,3,5,8,13,21,34,55,89,144,233,377,610,0,63\n' +
+  '"Probation Delivery Unit 2","PSO",610,377,233,144,89,55,34,21,13,8,5,3,2,1,1,0,0,42\n\n\n' +
   'LICENSE\n' +
-  '"LDU Cluster Name","Grade","A","B1","B2","C1","C2","D1","D2","E","F","G","Untiered","Overall"\n' +
-  '"LDU Cluster 2","PO",6,3,6,9,6,12,18,2,1,0,15,75\n' +
-  '"LDU Cluster 2","PSO",4,2,4,6,4,8,12,2,1,0,10,50\n\n\n' +
+  '"Probation Delivery Unit Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","Untiered","Overall"\n' +
+  '"Probation Delivery Unit 2","PO",1,8,9,9,1,9,0,7,1,9,1,1,1,9,1,4,15,75\n' +
+  '"Probation Delivery Unit 2","PSO",1,9,6,4,1,9,7,0,1,9,7,4,1,9,7,5,10,50\n\n\n' +
   'OVERALL: PERCENTAGE SPLIT OF CASES BY GRADE\n' +
-  '"LDU Cluster Name","Grade","A","B1","B2","C1","C2","D1","D2","E","F","G","Untiered","Overall"\n' +
-  '"LDU Cluster 2","PO","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","0.00%","0.00%","0.00%","60.00%","60.00%"\n' +
-  '"LDU Cluster 2","PSO","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","0.00%","0.00%","0.00%","40.00%","40.00%"'
+  '"Probation Delivery Unit Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","Untiered","Overall"\n' +
+  '"Probation Delivery Unit 2","PO","50.00%","90.00%","40.00%","30.00%","100.00%","70.00%","40.00%","25.00%","25.00%","100.00%","0.00%","65.00%","35.00%","20.00%","45.00%","80.00%","60.00%","60.00%"\n' +
+  '"Probation Delivery Unit 2","PSO","50.00%","10.00%","60.00%","70.00%","0.00%","30.00%","60.00%","75.00%","75.00%","0.00%","100.00%","35.00%","65.00%","80.00%","55.00%","20.00%","40.00%","40.00%"'
 }
 
 module.exports.NATIONAL_CASELOAD_RESULT = {
   title: 'HMPPS',
   subTitle: 'National',
-  caseloadDetails:
-  { overallCaseloadDetails:
-  { details:
-  [ { linkId: 63,
-    name: 'Division 1',
-    grades:
-    [ { grade: 'PO',
-      a: 66,
-      b1: 66,
-      b2: 48,
-      c1: 54,
-      c2: 42,
-      d1: 54,
-      d2: 48,
-      e: 2,
-      f: 1,
-      g: 0,
-      untiered: 36,
-      totalCases: 414 },
-    { grade: 'PSO',
-      a: 44,
-      b1: 44,
-      b2: 32,
-      c1: 36,
-      c2: 28,
-      d1: 36,
-      d2: 32,
-      e: 2,
-      f: 1,
-      g: 0,
-      untiered: 24,
-      totalCases: 276 } ] },
-  { linkId: 64,
-    name: 'Division 2',
-    grades:
-    [ { grade: 'PO',
-      a: 33,
-      b1: 33,
-      b2: 24,
-      c1: 27,
-      c2: 21,
-      d1: 27,
-      d2: 24,
-      e: 2,
-      f: 1,
-      g: 0,
-      untiered: 18,
-      totalCases: 207 },
-    { grade: 'PSO',
-      a: 22,
-      b1: 22,
-      b2: 16,
-      c1: 18,
-      c2: 14,
-      d1: 18,
-      d2: 16,
-      e: 2,
-      f: 1,
-      g: 0,
-      untiered: 12,
-      totalCases: 138 } ] },
-  { linkId: 65,
-    name: 'Division 3',
-    grades:
-    [ { grade: 'PO',
-      a: 33,
-      b1: 33,
-      b2: 24,
-      c1: 27,
-      c2: 21,
-      d1: 27,
-      d2: 24,
-      e: 2,
-      f: 1,
-      g: 0,
-      untiered: 18,
-      totalCases: 207 },
-    { grade: 'PSO',
-      a: 22,
-      b1: 22,
-      b2: 16,
-      c1: 18,
-      c2: 14,
-      d1: 18,
-      d2: 16,
-      e: 2,
-      f: 1,
-      g: 0,
-      untiered: 12,
-      totalCases: 138 } ] } ],
-    totals:
-    { PO:
-    { grade: 'PO',
-      a: 132,
-      b1: 132,
-      b2: 96,
-      c1: 108,
-      c2: 84,
-      d1: 108,
-      d2: 96,
-      e: 2,
-      f: 1,
-      g: 0,
-      untiered: 72,
-      totalCases: 828,
-      numberOfType: 3 },
-      PSO:
-      { grade: 'PSO',
-        a: 88,
-        b1: 88,
-        b2: 64,
-        c1: 72,
-        c2: 56,
-        d1: 72,
-        d2: 64,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 48,
-        totalCases: 552,
-        numberOfType: 3 } },
-    detailsPercentages:
-    [ { linkId: 63,
-      name: 'Division 1',
-      grades:
-      [ { grade: 'PO',
-        a: 60,
-        b1: 60,
-        b2: 60,
-        c1: 60,
-        c2: 60,
-        d1: 60,
-        d2: 60,
-        e: 0,
-        f: 0,
-        g: 0,
-        untiered: 60,
-        totalCases: 60 },
-      { grade: 'PSO',
-        a: 40,
-        b1: 40,
-        b2: 40,
-        c1: 40,
-        c2: 40,
-        d1: 40,
-        d2: 40,
-        e: 0,
-        f: 0,
-        g: 0,
-        untiered: 40,
-        totalCases: 40 } ] },
-    { linkId: 64,
-      name: 'Division 2',
-      grades:
-      [ { grade: 'PO',
-        a: 60,
-        b1: 60,
-        b2: 60,
-        c1: 60,
-        c2: 60,
-        d1: 60,
-        d2: 60,
-        e: 0,
-        f: 0,
-        g: 0,
-        untiered: 60,
-        totalCases: 60 },
-      { grade: 'PSO',
-        a: 40,
-        b1: 40,
-        b2: 40,
-        c1: 40,
-        c2: 40,
-        d1: 40,
-        d2: 40,
-        e: 0,
-        f: 0,
-        g: 0,
-        untiered: 40,
-        totalCases: 40 } ] },
-    { linkId: 65,
-      name: 'Division 3',
-      grades:
-      [ { grade: 'PO',
-        a: 60,
-        b1: 60,
-        b2: 60,
-        c1: 60,
-        c2: 60,
-        d1: 60,
-        d2: 60,
-        e: 0,
-        f: 0,
-        g: 0,
-        untiered: 60,
-        totalCases: 60 },
-      { grade: 'PSO',
-        a: 40,
-        b1: 40,
-        b2: 40,
-        c1: 40,
-        c2: 40,
-        d1: 40,
-        d2: 40,
-        e: 0,
-        f: 0,
-        g: 0,
-        untiered: 40,
-        totalCases: 40 } ] } ],
-    percentageTotals:
-    { PO:
-    { grade: 'PO',
-      a: 60,
-      b1: 60,
-      b2: 60,
-      c1: 60,
-      c2: 60,
-      d1: 60,
-      d2: 60,
-      e: 0,
-      f: 0,
-      g: 0,
-      untiered: 60,
-      totalCases: 60,
-      numberOfType: 3 },
-      PSO:
-      { grade: 'PSO',
-        a: 40,
-        b1: 40,
-        b2: 40,
-        c1: 40,
-        c2: 40,
-        d1: 40,
-        d2: 40,
-        e: 0,
-        f: 0,
-        g: 0,
-        untiered: 40,
-        totalCases: 40,
-        numberOfType: 3 } } },
-    communityCaseloadDetails:
-    { details:
-    [ { linkId: 63,
-      name: 'Division 1',
-      grades:
-      [ { grade: 'PO',
-        a: 18,
-        b1: 36,
-        b2: 24,
-        c1: 12,
-        c2: 18,
-        d1: 12,
-        d2: 6,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 0,
-        totalCases: 126 },
-      { grade: 'PSO',
-        a: 12,
-        b1: 24,
-        b2: 16,
-        c1: 8,
-        c2: 12,
-        d1: 8,
-        d2: 4,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 0,
-        totalCases: 84 } ] },
-    { linkId: 64,
-      name: 'Division 2',
-      grades:
-      [ { grade: 'PO',
-        a: 9,
-        b1: 18,
-        b2: 12,
-        c1: 6,
-        c2: 9,
-        d1: 6,
-        d2: 3,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 0,
-        totalCases: 63 },
-      { grade: 'PSO',
-        a: 6,
-        b1: 12,
-        b2: 8,
-        c1: 4,
-        c2: 6,
-        d1: 4,
-        d2: 2,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 0,
-        totalCases: 42 } ] },
-    { linkId: 65,
-      name: 'Division 3',
-      grades:
-      [ { grade: 'PO',
-        a: 9,
-        b1: 18,
-        b2: 12,
-        c1: 6,
-        c2: 9,
-        d1: 6,
-        d2: 3,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 0,
-        totalCases: 63 },
-      { grade: 'PSO',
-        a: 6,
-        b1: 12,
-        b2: 8,
-        c1: 4,
-        c2: 6,
-        d1: 4,
-        d2: 2,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 0,
-        totalCases: 42 } ] } ],
-      totals:
-      { PO:
-      { grade: 'PO',
-        a: 36,
-        b1: 72,
-        b2: 48,
-        c1: 24,
-        c2: 36,
-        d1: 24,
-        d2: 12,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 0,
-        totalCases: 252,
-        numberOfType: 3 },
-        PSO:
-        { grade: 'PSO',
-          a: 24,
+  caseloadDetails: {
+    overallCaseloadDetails: {
+      details: [
+        {
+          linkId: 15354,
+          name: 'Region 1',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 36,
+              a2: 42,
+              a1: 36,
+              a0: 42,
+              b3: 54,
+              b2: 84,
+              b1: 78,
+              b0: 180,
+              c3: 198,
+              c2: 216,
+              c1: 234,
+              c0: 252,
+              d3: 270,
+              d2: 288,
+              d1: 306,
+              d0: 324,
+              untiered: 42,
+              totalCases: 2682
+            },
+            {
+              grade: 'PSO',
+              a3: 24,
+              a2: 28,
+              a1: 24,
+              a0: 28,
+              b3: 36,
+              b2: 56,
+              b1: 52,
+              b0: 120,
+              c3: 132,
+              c2: 144,
+              c1: 156,
+              c0: 168,
+              d3: 180,
+              d2: 192,
+              d1: 204,
+              d0: 216,
+              untiered: 28,
+              totalCases: 1788
+            }
+          ]
+        },
+        {
+          linkId: 15355,
+          name: 'Region 2',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 18,
+              a2: 21,
+              a1: 18,
+              a0: 21,
+              b3: 27,
+              b2: 42,
+              b1: 39,
+              b0: 90,
+              c3: 99,
+              c2: 108,
+              c1: 117,
+              c0: 126,
+              d3: 135,
+              d2: 144,
+              d1: 153,
+              d0: 162,
+              untiered: 21,
+              totalCases: 1341
+            },
+            {
+              grade: 'PSO',
+              a3: 12,
+              a2: 14,
+              a1: 12,
+              a0: 14,
+              b3: 18,
+              b2: 28,
+              b1: 26,
+              b0: 60,
+              c3: 66,
+              c2: 72,
+              c1: 78,
+              c0: 84,
+              d3: 90,
+              d2: 96,
+              d1: 102,
+              d0: 108,
+              untiered: 14,
+              totalCases: 894
+            }
+          ]
+        },
+        {
+          linkId: 15356,
+          name: 'Region 3',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 18,
+              a2: 21,
+              a1: 18,
+              a0: 21,
+              b3: 27,
+              b2: 42,
+              b1: 39,
+              b0: 90,
+              c3: 99,
+              c2: 108,
+              c1: 117,
+              c0: 126,
+              d3: 135,
+              d2: 144,
+              d1: 153,
+              d0: 162,
+              untiered: 21,
+              totalCases: 1341
+            },
+            {
+              grade: 'PSO',
+              a3: 12,
+              a2: 14,
+              a1: 12,
+              a0: 14,
+              b3: 18,
+              b2: 28,
+              b1: 26,
+              b0: 60,
+              c3: 66,
+              c2: 72,
+              c1: 78,
+              c0: 84,
+              d3: 90,
+              d2: 96,
+              d1: 102,
+              d0: 108,
+              untiered: 14,
+              totalCases: 894
+            }
+          ]
+        }
+      ],
+      totals: {
+        PO: {
+          grade: 'PO',
+          a3: 72,
+          a2: 84,
+          a1: 72,
+          a0: 84,
+          b3: 108,
+          b2: 168,
+          b1: 156,
+          b0: 360,
+          c3: 396,
+          c2: 432,
+          c1: 468,
+          c0: 504,
+          d3: 540,
+          d2: 576,
+          d1: 612,
+          d0: 648,
+          untiered: 84,
+          totalCases: 5364,
+          numberOfType: 3
+        },
+        PSO: {
+          grade: 'PSO',
+          a3: 48,
+          a2: 56,
+          a1: 48,
+          a0: 56,
+          b3: 72,
+          b2: 112,
+          b1: 104,
+          b0: 240,
+          c3: 264,
+          c2: 288,
+          c1: 312,
+          c0: 336,
+          d3: 360,
+          d2: 384,
+          d1: 408,
+          d0: 432,
+          untiered: 56,
+          totalCases: 3576,
+          numberOfType: 3
+        }
+      },
+      detailsPercentages: [
+        {
+          linkId: 15354,
+          name: 'Region 1',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 60,
+              a2: 60,
+              a1: 60,
+              a0: 60,
+              b3: 60,
+              b2: 60,
+              b1: 60,
+              b0: 60,
+              c3: 60,
+              c2: 60,
+              c1: 60,
+              c0: 60,
+              d3: 60,
+              d2: 60,
+              d1: 60,
+              d0: 60,
+              untiered: 60,
+              totalCases: 60
+            },
+            {
+              grade: 'PSO',
+              a3: 40,
+              a2: 40,
+              a1: 40,
+              a0: 40,
+              b3: 40,
+              b2: 40,
+              b1: 40,
+              b0: 40,
+              c3: 40,
+              c2: 40,
+              c1: 40,
+              c0: 40,
+              d3: 40,
+              d2: 40,
+              d1: 40,
+              d0: 40,
+              untiered: 40,
+              totalCases: 40
+            }
+          ]
+        },
+        {
+          linkId: 15355,
+          name: 'Region 2',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 60,
+              a2: 60,
+              a1: 60,
+              a0: 60,
+              b3: 60,
+              b2: 60,
+              b1: 60,
+              b0: 60,
+              c3: 60,
+              c2: 60,
+              c1: 60,
+              c0: 60,
+              d3: 60,
+              d2: 60,
+              d1: 60,
+              d0: 60,
+              untiered: 60,
+              totalCases: 60
+            },
+            {
+              grade: 'PSO',
+              a3: 40,
+              a2: 40,
+              a1: 40,
+              a0: 40,
+              b3: 40,
+              b2: 40,
+              b1: 40,
+              b0: 40,
+              c3: 40,
+              c2: 40,
+              c1: 40,
+              c0: 40,
+              d3: 40,
+              d2: 40,
+              d1: 40,
+              d0: 40,
+              untiered: 40,
+              totalCases: 40
+            }
+          ]
+        },
+        {
+          linkId: 15356,
+          name: 'Region 3',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 60,
+              a2: 60,
+              a1: 60,
+              a0: 60,
+              b3: 60,
+              b2: 60,
+              b1: 60,
+              b0: 60,
+              c3: 60,
+              c2: 60,
+              c1: 60,
+              c0: 60,
+              d3: 60,
+              d2: 60,
+              d1: 60,
+              d0: 60,
+              untiered: 60,
+              totalCases: 60
+            },
+            {
+              grade: 'PSO',
+              a3: 40,
+              a2: 40,
+              a1: 40,
+              a0: 40,
+              b3: 40,
+              b2: 40,
+              b1: 40,
+              b0: 40,
+              c3: 40,
+              c2: 40,
+              c1: 40,
+              c0: 40,
+              d3: 40,
+              d2: 40,
+              d1: 40,
+              d0: 40,
+              untiered: 40,
+              totalCases: 40
+            }
+          ]
+        }
+      ],
+      percentageTotals: {
+        PO: {
+          grade: 'PO',
+          a3: 60,
+          a2: 60,
+          a1: 60,
+          a0: 60,
+          b3: 60,
+          b2: 60,
+          b1: 60,
+          b0: 60,
+          c3: 60,
+          c2: 60,
+          c1: 60,
+          c0: 60,
+          d3: 60,
+          d2: 60,
+          d1: 60,
+          d0: 60,
+          untiered: 60,
+          totalCases: 60,
+          numberOfType: 3
+        },
+        PSO: {
+          grade: 'PSO',
+          a3: 40,
+          a2: 40,
+          a1: 40,
+          a0: 40,
+          b3: 40,
+          b2: 40,
+          b1: 40,
+          b0: 40,
+          c3: 40,
+          c2: 40,
+          c1: 40,
+          c0: 40,
+          d3: 40,
+          d2: 40,
+          d1: 40,
+          d0: 40,
+          untiered: 40,
+          totalCases: 40,
+          numberOfType: 3
+        }
+      }
+    },
+    communityCaseloadDetails: {
+      details: [
+        {
+          linkId: 15354,
+          name: 'Region 1',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 18,
+              a2: 24,
+              a1: 12,
+              a0: 6,
+              b3: 24,
+              b2: 36,
+              b1: 24,
+              b0: 60,
+              c3: 66,
+              c2: 72,
+              c1: 78,
+              c0: 84,
+              d3: 90,
+              d2: 96,
+              d1: 102,
+              d0: 108,
+              untiered: 12,
+              totalCases: 912
+            },
+            {
+              grade: 'PSO',
+              a3: 12,
+              a2: 16,
+              a1: 8,
+              a0: 4,
+              b3: 16,
+              b2: 24,
+              b1: 16,
+              b0: 40,
+              c3: 44,
+              c2: 48,
+              c1: 52,
+              c0: 56,
+              d3: 60,
+              d2: 64,
+              d1: 68,
+              d0: 72,
+              untiered: 8,
+              totalCases: 608
+            }
+          ]
+        },
+        {
+          linkId: 15355,
+          name: 'Region 2',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 9,
+              a2: 12,
+              a1: 6,
+              a0: 3,
+              b3: 12,
+              b2: 18,
+              b1: 12,
+              b0: 30,
+              c3: 33,
+              c2: 36,
+              c1: 39,
+              c0: 42,
+              d3: 45,
+              d2: 48,
+              d1: 51,
+              d0: 54,
+              untiered: 6,
+              totalCases: 456
+            },
+            {
+              grade: 'PSO',
+              a3: 6,
+              a2: 8,
+              a1: 4,
+              a0: 2,
+              b3: 8,
+              b2: 12,
+              b1: 8,
+              b0: 20,
+              c3: 22,
+              c2: 24,
+              c1: 26,
+              c0: 28,
+              d3: 30,
+              d2: 32,
+              d1: 34,
+              d0: 36,
+              untiered: 4,
+              totalCases: 304
+            }
+          ]
+        },
+        {
+          linkId: 15356,
+          name: 'Region 3',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 9,
+              a2: 12,
+              a1: 6,
+              a0: 3,
+              b3: 12,
+              b2: 18,
+              b1: 12,
+              b0: 30,
+              c3: 33,
+              c2: 36,
+              c1: 39,
+              c0: 42,
+              d3: 45,
+              d2: 48,
+              d1: 51,
+              d0: 54,
+              untiered: 6,
+              totalCases: 456
+            },
+            {
+              grade: 'PSO',
+              a3: 6,
+              a2: 8,
+              a1: 4,
+              a0: 2,
+              b3: 8,
+              b2: 12,
+              b1: 8,
+              b0: 20,
+              c3: 22,
+              c2: 24,
+              c1: 26,
+              c0: 28,
+              d3: 30,
+              d2: 32,
+              d1: 34,
+              d0: 36,
+              untiered: 4,
+              totalCases: 304
+            }
+          ]
+        }
+      ],
+      totals: {
+        PO: {
+          grade: 'PO',
+          a3: 36,
+          a2: 48,
+          a1: 24,
+          a0: 12,
+          b3: 48,
+          b2: 72,
           b1: 48,
-          b2: 32,
-          c1: 16,
-          c2: 24,
-          d1: 16,
-          d2: 8,
-          e: 2,
-          f: 1,
-          g: 0,
-          untiered: 0,
-          totalCases: 168,
-          numberOfType: 3 } },
-      detailsPercentages:
-      [ { linkId: 63,
-        name: 'Division 1',
-        grades:
-        [ { grade: 'PO',
-          a: 60,
-          b1: 60,
-          b2: 60,
-          c1: 60,
-          c2: 60,
-          d1: 60,
-          d2: 60,
-          e: 0,
-          f: 0,
-          g: 0,
-          untiered: 0,
-          totalCases: 60 },
-        { grade: 'PSO',
-          a: 40,
-          b1: 40,
-          b2: 40,
-          c1: 40,
-          c2: 40,
-          d1: 40,
-          d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
-          untiered: 0,
-          totalCases: 40 } ] },
-      { linkId: 64,
-        name: 'Division 2',
-        grades:
-        [ { grade: 'PO',
-          a: 60,
-          b1: 60,
-          b2: 60,
-          c1: 60,
-          c2: 60,
-          d1: 60,
-          d2: 60,
-          e: 0,
-          f: 0,
-          g: 0,
-          untiered: 0,
-          totalCases: 60 },
-        { grade: 'PSO',
-          a: 40,
-          b1: 40,
-          b2: 40,
-          c1: 40,
-          c2: 40,
-          d1: 40,
-          d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
-          untiered: 0,
-          totalCases: 40 } ] },
-      { linkId: 65,
-        name: 'Division 3',
-        grades:
-        [ { grade: 'PO',
-          a: 60,
-          b1: 60,
-          b2: 60,
-          c1: 60,
-          c2: 60,
-          d1: 60,
-          d2: 60,
-          e: 0,
-          f: 0,
-          g: 0,
-          untiered: 0,
-          totalCases: 60 },
-        { grade: 'PSO',
-          a: 40,
-          b1: 40,
-          b2: 40,
-          c1: 40,
-          c2: 40,
-          d1: 40,
-          d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
-          untiered: 0,
-          totalCases: 40 } ] } ],
-      percentageTotals:
-      { PO:
-      { grade: 'PO',
-        a: 60,
-        b1: 60,
-        b2: 60,
-        c1: 60,
-        c2: 60,
-        d1: 60,
-        d2: 60,
-        e: 0,
-        f: 0,
-        g: 0,
-        untiered: 0,
-        totalCases: 60,
-        numberOfType: 3 },
-        PSO:
-        { grade: 'PSO',
-          a: 40,
-          b1: 40,
-          b2: 40,
-          c1: 40,
-          c2: 40,
-          d1: 40,
-          d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
-          untiered: 0,
-          totalCases: 40,
-          numberOfType: 3 } } },
-    custodyCaseloadDetails:
-    { details:
-    [ { linkId: 63,
-      name: 'Division 1',
-      grades:
-      [ { grade: 'PO',
-        a: 36,
-        b1: 24,
-        b2: 12,
-        c1: 24,
-        c2: 12,
-        d1: 18,
-        d2: 6,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 6,
-        totalCases: 138 },
-      { grade: 'PSO',
-        a: 24,
-        b1: 16,
-        b2: 8,
-        c1: 16,
-        c2: 8,
-        d1: 12,
-        d2: 4,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 4,
-        totalCases: 92 } ] },
-    { linkId: 64,
-      name: 'Division 2',
-      grades:
-      [ { grade: 'PO',
-        a: 18,
-        b1: 12,
-        b2: 6,
-        c1: 12,
-        c2: 6,
-        d1: 9,
-        d2: 3,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 3,
-        totalCases: 69 },
-      { grade: 'PSO',
-        a: 12,
-        b1: 8,
-        b2: 4,
-        c1: 8,
-        c2: 4,
-        d1: 6,
-        d2: 2,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 2,
-        totalCases: 46 } ] },
-    { linkId: 65,
-      name: 'Division 3',
-      grades:
-      [ { grade: 'PO',
-        a: 18,
-        b1: 12,
-        b2: 6,
-        c1: 12,
-        c2: 6,
-        d1: 9,
-        d2: 3,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 3,
-        totalCases: 69 },
-      { grade: 'PSO',
-        a: 12,
-        b1: 8,
-        b2: 4,
-        c1: 8,
-        c2: 4,
-        d1: 6,
-        d2: 2,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 2,
-        totalCases: 46 } ] } ],
-      totals:
-      { PO:
-      { grade: 'PO',
-        a: 72,
-        b1: 48,
-        b2: 24,
-        c1: 48,
-        c2: 24,
-        d1: 36,
-        d2: 12,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 12,
-        totalCases: 276,
-        numberOfType: 3 },
-        PSO:
-        { grade: 'PSO',
-          a: 48,
+          b0: 120,
+          c3: 132,
+          c2: 144,
+          c1: 156,
+          c0: 168,
+          d3: 180,
+          d2: 192,
+          d1: 204,
+          d0: 216,
+          untiered: 24,
+          totalCases: 1824,
+          numberOfType: 3
+        },
+        PSO: {
+          grade: 'PSO',
+          a3: 24,
+          a2: 32,
+          a1: 16,
+          a0: 8,
+          b3: 32,
+          b2: 48,
           b1: 32,
-          b2: 16,
-          c1: 32,
-          c2: 16,
-          d1: 24,
-          d2: 8,
-          e: 2,
-          f: 1,
-          g: 0,
-          untiered: 8,
-          totalCases: 184,
-          numberOfType: 3 } },
-      detailsPercentages:
-      [ { linkId: 63,
-        name: 'Division 1',
-        grades:
-        [ { grade: 'PO',
-          a: 60,
-          b1: 60,
+          b0: 80,
+          c3: 88,
+          c2: 96,
+          c1: 104,
+          c0: 112,
+          d3: 120,
+          d2: 128,
+          d1: 136,
+          d0: 144,
+          untiered: 16,
+          totalCases: 1216,
+          numberOfType: 3
+        }
+      },
+      detailsPercentages: [
+        {
+          linkId: 15354,
+          name: 'Region 1',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 60,
+              a2: 60,
+              a1: 60,
+              a0: 60,
+              b3: 60,
+              b2: 60,
+              b1: 60,
+              b0: 60,
+              c3: 60,
+              c2: 60,
+              c1: 60,
+              c0: 60,
+              d3: 60,
+              d2: 60,
+              d1: 60,
+              d0: 60,
+              untiered: 60,
+              totalCases: 60
+            },
+            {
+              grade: 'PSO',
+              a3: 40,
+              a2: 40,
+              a1: 40,
+              a0: 40,
+              b3: 40,
+              b2: 40,
+              b1: 40,
+              b0: 40,
+              c3: 40,
+              c2: 40,
+              c1: 40,
+              c0: 40,
+              d3: 40,
+              d2: 40,
+              d1: 40,
+              d0: 40,
+              untiered: 40,
+              totalCases: 40
+            }
+          ]
+        },
+        {
+          linkId: 15355,
+          name: 'Region 2',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 60,
+              a2: 60,
+              a1: 60,
+              a0: 60,
+              b3: 60,
+              b2: 60,
+              b1: 60,
+              b0: 60,
+              c3: 60,
+              c2: 60,
+              c1: 60,
+              c0: 60,
+              d3: 60,
+              d2: 60,
+              d1: 60,
+              d0: 60,
+              untiered: 60,
+              totalCases: 60
+            },
+            {
+              grade: 'PSO',
+              a3: 40,
+              a2: 40,
+              a1: 40,
+              a0: 40,
+              b3: 40,
+              b2: 40,
+              b1: 40,
+              b0: 40,
+              c3: 40,
+              c2: 40,
+              c1: 40,
+              c0: 40,
+              d3: 40,
+              d2: 40,
+              d1: 40,
+              d0: 40,
+              untiered: 40,
+              totalCases: 40
+            }
+          ]
+        },
+        {
+          linkId: 15356,
+          name: 'Region 3',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 60,
+              a2: 60,
+              a1: 60,
+              a0: 60,
+              b3: 60,
+              b2: 60,
+              b1: 60,
+              b0: 60,
+              c3: 60,
+              c2: 60,
+              c1: 60,
+              c0: 60,
+              d3: 60,
+              d2: 60,
+              d1: 60,
+              d0: 60,
+              untiered: 60,
+              totalCases: 60
+            },
+            {
+              grade: 'PSO',
+              a3: 40,
+              a2: 40,
+              a1: 40,
+              a0: 40,
+              b3: 40,
+              b2: 40,
+              b1: 40,
+              b0: 40,
+              c3: 40,
+              c2: 40,
+              c1: 40,
+              c0: 40,
+              d3: 40,
+              d2: 40,
+              d1: 40,
+              d0: 40,
+              untiered: 40,
+              totalCases: 40
+            }
+          ]
+        }
+      ],
+      percentageTotals: {
+        PO: {
+          grade: 'PO',
+          a3: 60,
+          a2: 60,
+          a1: 60,
+          a0: 60,
+          b3: 60,
           b2: 60,
-          c1: 60,
-          c2: 60,
-          d1: 60,
-          d2: 60,
-          e: 0,
-          f: 0,
-          g: 0,
-          untiered: 60,
-          totalCases: 60 },
-        { grade: 'PSO',
-          a: 40,
-          b1: 40,
-          b2: 40,
-          c1: 40,
-          c2: 40,
-          d1: 40,
-          d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
-          untiered: 40,
-          totalCases: 40 } ] },
-      { linkId: 64,
-        name: 'Division 2',
-        grades:
-        [ { grade: 'PO',
-          a: 60,
           b1: 60,
-          b2: 60,
-          c1: 60,
+          b0: 60,
+          c3: 60,
           c2: 60,
-          d1: 60,
-          d2: 60,
-          e: 0,
-          f: 0,
-          g: 0,
-          untiered: 60,
-          totalCases: 60 },
-        { grade: 'PSO',
-          a: 40,
-          b1: 40,
-          b2: 40,
-          c1: 40,
-          c2: 40,
-          d1: 40,
-          d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
-          untiered: 40,
-          totalCases: 40 } ] },
-      { linkId: 65,
-        name: 'Division 3',
-        grades:
-        [ { grade: 'PO',
-          a: 60,
-          b1: 60,
-          b2: 60,
           c1: 60,
-          c2: 60,
-          d1: 60,
+          c0: 60,
+          d3: 60,
           d2: 60,
-          e: 0,
-          f: 0,
-          g: 0,
+          d1: 60,
+          d0: 60,
           untiered: 60,
-          totalCases: 60 },
-        { grade: 'PSO',
-          a: 40,
-          b1: 40,
+          totalCases: 60,
+          numberOfType: 3
+        },
+        PSO: {
+          grade: 'PSO',
+          a3: 40,
+          a2: 40,
+          a1: 40,
+          a0: 40,
+          b3: 40,
           b2: 40,
-          c1: 40,
-          c2: 40,
-          d1: 40,
-          d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
-          untiered: 40,
-          totalCases: 40 } ] } ],
-      percentageTotals:
-      { PO:
-      { grade: 'PO',
-        a: 60,
-        b1: 60,
-        b2: 60,
-        c1: 60,
-        c2: 60,
-        d1: 60,
-        d2: 60,
-        e: 0,
-        f: 0,
-        g: 0,
-        untiered: 60,
-        totalCases: 60,
-        numberOfType: 3 },
-        PSO:
-        { grade: 'PSO',
-          a: 40,
           b1: 40,
-          b2: 40,
-          c1: 40,
+          b0: 40,
+          c3: 40,
           c2: 40,
-          d1: 40,
+          c1: 40,
+          c0: 40,
+          d3: 40,
           d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
+          d1: 40,
+          d0: 40,
           untiered: 40,
           totalCases: 40,
-          numberOfType: 3 } } },
-    licenseCaseloadDetails:
-    { details:
-    [ { linkId: 63,
-      name: 'Division 1',
-      grades:
-      [ { grade: 'PO',
-        a: 12,
-        b1: 6,
-        b2: 12,
-        c1: 18,
-        c2: 12,
-        d1: 24,
-        d2: 36,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 30,
-        totalCases: 150 },
-      { grade: 'PSO',
-        a: 8,
-        b1: 4,
-        b2: 8,
-        c1: 12,
-        c2: 8,
-        d1: 16,
-        d2: 24,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 20,
-        totalCases: 100 } ] },
-    { linkId: 64,
-      name: 'Division 2',
-      grades:
-      [ { grade: 'PO',
-        a: 6,
-        b1: 3,
-        b2: 6,
-        c1: 9,
-        c2: 6,
-        d1: 12,
-        d2: 18,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 15,
-        totalCases: 75 },
-      { grade: 'PSO',
-        a: 4,
-        b1: 2,
-        b2: 4,
-        c1: 6,
-        c2: 4,
-        d1: 8,
-        d2: 12,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 10,
-        totalCases: 50 } ] },
-    { linkId: 65,
-      name: 'Division 3',
-      grades:
-      [ { grade: 'PO',
-        a: 6,
-        b1: 3,
-        b2: 6,
-        c1: 9,
-        c2: 6,
-        d1: 12,
-        d2: 18,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 15,
-        totalCases: 75 },
-      { grade: 'PSO',
-        a: 4,
-        b1: 2,
-        b2: 4,
-        c1: 6,
-        c2: 4,
-        d1: 8,
-        d2: 12,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 10,
-        totalCases: 50 } ] } ],
-      totals:
-      { PO:
-      { grade: 'PO',
-        a: 24,
-        b1: 12,
-        b2: 24,
-        c1: 36,
-        c2: 24,
-        d1: 48,
-        d2: 72,
-        e: 2,
-        f: 1,
-        g: 0,
-        untiered: 60,
-        totalCases: 300,
-        numberOfType: 3 },
-        PSO:
-        { grade: 'PSO',
-          a: 16,
-          b1: 8,
-          b2: 16,
-          c1: 24,
-          c2: 16,
-          d1: 32,
-          d2: 48,
-          e: 2,
-          f: 1,
-          g: 0,
-          untiered: 40,
-          totalCases: 200,
-          numberOfType: 3 } },
-      detailsPercentages:
-      [ { linkId: 63,
-        name: 'Division 1',
-        grades:
-        [ { grade: 'PO',
-          a: 60,
-          b1: 60,
+          numberOfType: 3
+        }
+      }
+    },
+    custodyCaseloadDetails: {
+      details: [
+        {
+          linkId: 15354,
+          name: 'Region 1',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 12,
+              a2: 12,
+              a1: 24,
+              a0: 24,
+              b3: 6,
+              b2: 30,
+              b1: 36,
+              b0: 60,
+              c3: 66,
+              c2: 72,
+              c1: 78,
+              c0: 84,
+              d3: 90,
+              d2: 96,
+              d1: 102,
+              d0: 108,
+              untiered: 18,
+              totalCases: 918
+            },
+            {
+              grade: 'PSO',
+              a3: 8,
+              a2: 8,
+              a1: 16,
+              a0: 16,
+              b3: 4,
+              b2: 20,
+              b1: 24,
+              b0: 40,
+              c3: 44,
+              c2: 48,
+              c1: 52,
+              c0: 56,
+              d3: 60,
+              d2: 64,
+              d1: 68,
+              d0: 72,
+              untiered: 12,
+              totalCases: 612
+            }
+          ]
+        },
+        {
+          linkId: 15355,
+          name: 'Region 2',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 6,
+              a2: 6,
+              a1: 12,
+              a0: 12,
+              b3: 3,
+              b2: 15,
+              b1: 18,
+              b0: 30,
+              c3: 33,
+              c2: 36,
+              c1: 39,
+              c0: 42,
+              d3: 45,
+              d2: 48,
+              d1: 51,
+              d0: 54,
+              untiered: 9,
+              totalCases: 459
+            },
+            {
+              grade: 'PSO',
+              a3: 4,
+              a2: 4,
+              a1: 8,
+              a0: 8,
+              b3: 2,
+              b2: 10,
+              b1: 12,
+              b0: 20,
+              c3: 22,
+              c2: 24,
+              c1: 26,
+              c0: 28,
+              d3: 30,
+              d2: 32,
+              d1: 34,
+              d0: 36,
+              untiered: 6,
+              totalCases: 306
+            }
+          ]
+        },
+        {
+          linkId: 15356,
+          name: 'Region 3',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 6,
+              a2: 6,
+              a1: 12,
+              a0: 12,
+              b3: 3,
+              b2: 15,
+              b1: 18,
+              b0: 30,
+              c3: 33,
+              c2: 36,
+              c1: 39,
+              c0: 42,
+              d3: 45,
+              d2: 48,
+              d1: 51,
+              d0: 54,
+              untiered: 9,
+              totalCases: 459
+            },
+            {
+              grade: 'PSO',
+              a3: 4,
+              a2: 4,
+              a1: 8,
+              a0: 8,
+              b3: 2,
+              b2: 10,
+              b1: 12,
+              b0: 20,
+              c3: 22,
+              c2: 24,
+              c1: 26,
+              c0: 28,
+              d3: 30,
+              d2: 32,
+              d1: 34,
+              d0: 36,
+              untiered: 6,
+              totalCases: 306
+            }
+          ]
+        }
+      ],
+      totals: {
+        PO: {
+          grade: 'PO',
+          a3: 24,
+          a2: 24,
+          a1: 48,
+          a0: 48,
+          b3: 12,
           b2: 60,
-          c1: 60,
-          c2: 60,
-          d1: 60,
-          d2: 60,
-          e: 0,
-          f: 0,
-          g: 0,
-          untiered: 60,
-          totalCases: 60 },
-        { grade: 'PSO',
-          a: 40,
-          b1: 40,
+          b1: 72,
+          b0: 120,
+          c3: 132,
+          c2: 144,
+          c1: 156,
+          c0: 168,
+          d3: 180,
+          d2: 192,
+          d1: 204,
+          d0: 216,
+          untiered: 36,
+          totalCases: 1836,
+          numberOfType: 3
+        },
+        PSO: {
+          grade: 'PSO',
+          a3: 16,
+          a2: 16,
+          a1: 32,
+          a0: 32,
+          b3: 8,
           b2: 40,
-          c1: 40,
-          c2: 40,
-          d1: 40,
-          d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
-          untiered: 40,
-          totalCases: 40 } ] },
-      { linkId: 64,
-        name: 'Division 2',
-        grades:
-        [ { grade: 'PO',
-          a: 60,
-          b1: 60,
+          b1: 48,
+          b0: 80,
+          c3: 88,
+          c2: 96,
+          c1: 104,
+          c0: 112,
+          d3: 120,
+          d2: 128,
+          d1: 136,
+          d0: 144,
+          untiered: 24,
+          totalCases: 1224,
+          numberOfType: 3
+        }
+      },
+      detailsPercentages: [
+        {
+          linkId: 15354,
+          name: 'Region 1',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 60,
+              a2: 60,
+              a1: 60,
+              a0: 60,
+              b3: 60,
+              b2: 60,
+              b1: 60,
+              b0: 60,
+              c3: 60,
+              c2: 60,
+              c1: 60,
+              c0: 60,
+              d3: 60,
+              d2: 60,
+              d1: 60,
+              d0: 60,
+              untiered: 60,
+              totalCases: 60
+            },
+            {
+              grade: 'PSO',
+              a3: 40,
+              a2: 40,
+              a1: 40,
+              a0: 40,
+              b3: 40,
+              b2: 40,
+              b1: 40,
+              b0: 40,
+              c3: 40,
+              c2: 40,
+              c1: 40,
+              c0: 40,
+              d3: 40,
+              d2: 40,
+              d1: 40,
+              d0: 40,
+              untiered: 40,
+              totalCases: 40
+            }
+          ]
+        },
+        {
+          linkId: 15355,
+          name: 'Region 2',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 60,
+              a2: 60,
+              a1: 60,
+              a0: 60,
+              b3: 60,
+              b2: 60,
+              b1: 60,
+              b0: 60,
+              c3: 60,
+              c2: 60,
+              c1: 60,
+              c0: 60,
+              d3: 60,
+              d2: 60,
+              d1: 60,
+              d0: 60,
+              untiered: 60,
+              totalCases: 60
+            },
+            {
+              grade: 'PSO',
+              a3: 40,
+              a2: 40,
+              a1: 40,
+              a0: 40,
+              b3: 40,
+              b2: 40,
+              b1: 40,
+              b0: 40,
+              c3: 40,
+              c2: 40,
+              c1: 40,
+              c0: 40,
+              d3: 40,
+              d2: 40,
+              d1: 40,
+              d0: 40,
+              untiered: 40,
+              totalCases: 40
+            }
+          ]
+        },
+        {
+          linkId: 15356,
+          name: 'Region 3',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 60,
+              a2: 60,
+              a1: 60,
+              a0: 60,
+              b3: 60,
+              b2: 60,
+              b1: 60,
+              b0: 60,
+              c3: 60,
+              c2: 60,
+              c1: 60,
+              c0: 60,
+              d3: 60,
+              d2: 60,
+              d1: 60,
+              d0: 60,
+              untiered: 60,
+              totalCases: 60
+            },
+            {
+              grade: 'PSO',
+              a3: 40,
+              a2: 40,
+              a1: 40,
+              a0: 40,
+              b3: 40,
+              b2: 40,
+              b1: 40,
+              b0: 40,
+              c3: 40,
+              c2: 40,
+              c1: 40,
+              c0: 40,
+              d3: 40,
+              d2: 40,
+              d1: 40,
+              d0: 40,
+              untiered: 40,
+              totalCases: 40
+            }
+          ]
+        }
+      ],
+      percentageTotals: {
+        PO: {
+          grade: 'PO',
+          a3: 60,
+          a2: 60,
+          a1: 60,
+          a0: 60,
+          b3: 60,
           b2: 60,
-          c1: 60,
-          c2: 60,
-          d1: 60,
-          d2: 60,
-          e: 0,
-          f: 0,
-          g: 0,
-          untiered: 60,
-          totalCases: 60 },
-        { grade: 'PSO',
-          a: 40,
-          b1: 40,
-          b2: 40,
-          c1: 40,
-          c2: 40,
-          d1: 40,
-          d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
-          untiered: 40,
-          totalCases: 40 } ] },
-      { linkId: 65,
-        name: 'Division 3',
-        grades:
-        [ { grade: 'PO',
-          a: 60,
           b1: 60,
-          b2: 60,
-          c1: 60,
+          b0: 60,
+          c3: 60,
           c2: 60,
-          d1: 60,
+          c1: 60,
+          c0: 60,
+          d3: 60,
           d2: 60,
-          e: 0,
-          f: 0,
-          g: 0,
+          d1: 60,
+          d0: 60,
           untiered: 60,
-          totalCases: 60 },
-        { grade: 'PSO',
-          a: 40,
-          b1: 40,
+          totalCases: 60,
+          numberOfType: 3
+        },
+        PSO: {
+          grade: 'PSO',
+          a3: 40,
+          a2: 40,
+          a1: 40,
+          a0: 40,
+          b3: 40,
           b2: 40,
-          c1: 40,
-          c2: 40,
-          d1: 40,
-          d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
-          untiered: 40,
-          totalCases: 40 } ] } ],
-      percentageTotals:
-      { PO:
-      { grade: 'PO',
-        a: 60,
-        b1: 60,
-        b2: 60,
-        c1: 60,
-        c2: 60,
-        d1: 60,
-        d2: 60,
-        e: 0,
-        f: 0,
-        g: 0,
-        untiered: 60,
-        totalCases: 60,
-        numberOfType: 3 },
-        PSO:
-        { grade: 'PSO',
-          a: 40,
           b1: 40,
-          b2: 40,
-          c1: 40,
+          b0: 40,
+          c3: 40,
           c2: 40,
-          d1: 40,
+          c1: 40,
+          c0: 40,
+          d3: 40,
           d2: 40,
-          e: 0,
-          f: 0,
-          g: 0,
+          d1: 40,
+          d0: 40,
           untiered: 40,
           totalCases: 40,
-          numberOfType: 3 } } },
+          numberOfType: 3
+        }
+      }
+    },
+    licenseCaseloadDetails: {
+      details: [
+        {
+          linkId: 15354,
+          name: 'Region 1',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 6,
+              a2: 6,
+              a1: 0,
+              a0: 12,
+              b3: 24,
+              b2: 18,
+              b1: 18,
+              b0: 60,
+              c3: 66,
+              c2: 72,
+              c1: 78,
+              c0: 84,
+              d3: 90,
+              d2: 96,
+              d1: 102,
+              d0: 108,
+              untiered: 12,
+              totalCases: 852
+            },
+            {
+              grade: 'PSO',
+              a3: 4,
+              a2: 4,
+              a1: 0,
+              a0: 8,
+              b3: 16,
+              b2: 12,
+              b1: 12,
+              b0: 40,
+              c3: 44,
+              c2: 48,
+              c1: 52,
+              c0: 56,
+              d3: 60,
+              d2: 64,
+              d1: 68,
+              d0: 72,
+              untiered: 8,
+              totalCases: 568
+            }
+          ]
+        },
+        {
+          linkId: 15355,
+          name: 'Region 2',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 3,
+              a2: 3,
+              a1: 0,
+              a0: 6,
+              b3: 12,
+              b2: 9,
+              b1: 9,
+              b0: 30,
+              c3: 33,
+              c2: 36,
+              c1: 39,
+              c0: 42,
+              d3: 45,
+              d2: 48,
+              d1: 51,
+              d0: 54,
+              untiered: 6,
+              totalCases: 426
+            },
+            {
+              grade: 'PSO',
+              a3: 2,
+              a2: 2,
+              a1: 0,
+              a0: 4,
+              b3: 8,
+              b2: 6,
+              b1: 6,
+              b0: 20,
+              c3: 22,
+              c2: 24,
+              c1: 26,
+              c0: 28,
+              d3: 30,
+              d2: 32,
+              d1: 34,
+              d0: 36,
+              untiered: 4,
+              totalCases: 284
+            }
+          ]
+        },
+        {
+          linkId: 15356,
+          name: 'Region 3',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 3,
+              a2: 3,
+              a1: 0,
+              a0: 6,
+              b3: 12,
+              b2: 9,
+              b1: 9,
+              b0: 30,
+              c3: 33,
+              c2: 36,
+              c1: 39,
+              c0: 42,
+              d3: 45,
+              d2: 48,
+              d1: 51,
+              d0: 54,
+              untiered: 6,
+              totalCases: 426
+            },
+            {
+              grade: 'PSO',
+              a3: 2,
+              a2: 2,
+              a1: 0,
+              a0: 4,
+              b3: 8,
+              b2: 6,
+              b1: 6,
+              b0: 20,
+              c3: 22,
+              c2: 24,
+              c1: 26,
+              c0: 28,
+              d3: 30,
+              d2: 32,
+              d1: 34,
+              d0: 36,
+              untiered: 4,
+              totalCases: 284
+            }
+          ]
+        }
+      ],
+      totals: {
+        PO: {
+          grade: 'PO',
+          a3: 12,
+          a2: 12,
+          a1: 0,
+          a0: 24,
+          b3: 48,
+          b2: 36,
+          b1: 36,
+          b0: 120,
+          c3: 132,
+          c2: 144,
+          c1: 156,
+          c0: 168,
+          d3: 180,
+          d2: 192,
+          d1: 204,
+          d0: 216,
+          untiered: 24,
+          totalCases: 1704,
+          numberOfType: 3
+        },
+        PSO: {
+          grade: 'PSO',
+          a3: 8,
+          a2: 8,
+          a1: 0,
+          a0: 16,
+          b3: 32,
+          b2: 24,
+          b1: 24,
+          b0: 80,
+          c3: 88,
+          c2: 96,
+          c1: 104,
+          c0: 112,
+          d3: 120,
+          d2: 128,
+          d1: 136,
+          d0: 144,
+          untiered: 16,
+          totalCases: 1136,
+          numberOfType: 3
+        }
+      },
+      detailsPercentages: [
+        {
+          linkId: 15354,
+          name: 'Region 1',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 60,
+              a2: 60,
+              a1: 0,
+              a0: 60,
+              b3: 60,
+              b2: 60,
+              b1: 60,
+              b0: 60,
+              c3: 60,
+              c2: 60,
+              c1: 60,
+              c0: 60,
+              d3: 60,
+              d2: 60,
+              d1: 60,
+              d0: 60,
+              untiered: 60,
+              totalCases: 60
+            },
+            {
+              grade: 'PSO',
+              a3: 40,
+              a2: 40,
+              a1: 0,
+              a0: 40,
+              b3: 40,
+              b2: 40,
+              b1: 40,
+              b0: 40,
+              c3: 40,
+              c2: 40,
+              c1: 40,
+              c0: 40,
+              d3: 40,
+              d2: 40,
+              d1: 40,
+              d0: 40,
+              untiered: 40,
+              totalCases: 40
+            }
+          ]
+        },
+        {
+          linkId: 15355,
+          name: 'Region 2',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 60,
+              a2: 60,
+              a1: 0,
+              a0: 60,
+              b3: 60,
+              b2: 60,
+              b1: 60,
+              b0: 60,
+              c3: 60,
+              c2: 60,
+              c1: 60,
+              c0: 60,
+              d3: 60,
+              d2: 60,
+              d1: 60,
+              d0: 60,
+              untiered: 60,
+              totalCases: 60
+            },
+            {
+              grade: 'PSO',
+              a3: 40,
+              a2: 40,
+              a1: 0,
+              a0: 40,
+              b3: 40,
+              b2: 40,
+              b1: 40,
+              b0: 40,
+              c3: 40,
+              c2: 40,
+              c1: 40,
+              c0: 40,
+              d3: 40,
+              d2: 40,
+              d1: 40,
+              d0: 40,
+              untiered: 40,
+              totalCases: 40
+            }
+          ]
+        },
+        {
+          linkId: 15356,
+          name: 'Region 3',
+          grades: [
+            {
+              grade: 'PO',
+              a3: 60,
+              a2: 60,
+              a1: 0,
+              a0: 60,
+              b3: 60,
+              b2: 60,
+              b1: 60,
+              b0: 60,
+              c3: 60,
+              c2: 60,
+              c1: 60,
+              c0: 60,
+              d3: 60,
+              d2: 60,
+              d1: 60,
+              d0: 60,
+              untiered: 60,
+              totalCases: 60
+            },
+            {
+              grade: 'PSO',
+              a3: 40,
+              a2: 40,
+              a1: 0,
+              a0: 40,
+              b3: 40,
+              b2: 40,
+              b1: 40,
+              b0: 40,
+              c3: 40,
+              c2: 40,
+              c1: 40,
+              c0: 40,
+              d3: 40,
+              d2: 40,
+              d1: 40,
+              d0: 40,
+              untiered: 40,
+              totalCases: 40
+            }
+          ]
+        }
+      ],
+      percentageTotals: {
+        PO: {
+          grade: 'PO',
+          a3: 60,
+          a2: 60,
+          a1: 0,
+          a0: 60,
+          b3: 60,
+          b2: 60,
+          b1: 60,
+          b0: 60,
+          c3: 60,
+          c2: 60,
+          c1: 60,
+          c0: 60,
+          d3: 60,
+          d2: 60,
+          d1: 60,
+          d0: 60,
+          untiered: 60,
+          totalCases: 60,
+          numberOfType: 3
+        },
+        PSO: {
+          grade: 'PSO',
+          a3: 40,
+          a2: 40,
+          a1: 0,
+          a0: 40,
+          b3: 40,
+          b2: 40,
+          b1: 40,
+          b0: 40,
+          c3: 40,
+          c2: 40,
+          c1: 40,
+          c0: 40,
+          d3: 40,
+          d2: 40,
+          d1: 40,
+          d0: 40,
+          untiered: 40,
+          totalCases: 40,
+          numberOfType: 3
+        }
+      }
+    },
     overallTotalSummary:
-    [ { name: 'Division 1',
+    [{
+      name: 'Region 1',
       linkId: 63,
       totalCases: 690,
       custodyTotalCases: 230,
       communityTotalCases: 210,
-      licenseTotalCases: 250 },
-    { name: 'Division 2',
+      licenseTotalCases: 250
+    },
+    {
+      name: 'Region 2',
       linkId: 64,
       totalCases: 345,
       custodyTotalCases: 115,
       communityTotalCases: 105,
-      licenseTotalCases: 125 },
-    { name: 'Division 3',
+      licenseTotalCases: 125
+    },
+    {
+      name: 'Region 3',
       linkId: 65,
       totalCases: 345,
       custodyTotalCases: 115,
       communityTotalCases: 105,
-      licenseTotalCases: 125 } ],
+      licenseTotalCases: 125
+    }],
     custodyTotalSummary: 460,
     communityTotalSummary: 420,
-    licenseTotalSummary: 500 }
+    licenseTotalSummary: 500
+  }
 }
 
 module.exports.NATIONAL_CASELOAD_CSV = {
   filename: ('Test_National_Caseload ' + timestamp + '.csv').replace(replaceSpaces, '_'),
   csv: 'OVERALL\n' +
   '"name","custodyCases","communityCases","licenseCases","totalCases"\n' +
-  '"Division 1",230,210,250,690\n' +
-  '"Division 2",115,105,125,345\n' +
-  '"Division 3",115,105,125,345\n\n\n' +
+  '"Region 1",230,210,250,690\n' +
+  '"Region 2",115,105,125,345\n' +
+  '"Region 3",115,105,125,345\n\n\n' +
   'CUSTODY\n' +
-  '"Division Name","Grade","A","B1","B2","C1","C2","D1","D2","E","F","G","Untiered","Overall"\n' +
-  '"Division 1","PO",36,24,12,24,12,18,6,2,1,0,6,138\n' +
-  '"Division 1","PSO",24,16,8,16,8,12,4,2,1,0,4,92\n' +
-  '"Division 2","PO",18,12,6,12,6,9,3,2,1,0,3,69\n' +
-  '"Division 2","PSO",12,8,4,8,4,6,2,2,1,0,2,46\n' +
-  '"Division 3","PO",18,12,6,12,6,9,3,2,1,0,3,69\n' +
-  '"Division 3","PSO",12,8,4,8,4,6,2,2,1,0,2,46\n\n\n' +
+  '"Region Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","Untiered","Overall"\n' +
+  '"Region 1","PO",12,12,24,24,6,30,36,60,66,72,78,84,90,96,102,108,18,918\n' +
+  '"Region 1","PSO",8,8,16,16,4,20,24,40,44,48,52,56,60,64,68,72,12,612\n' +
+  '"Region 2","PO",6,6,12,12,3,15,18,30,33,36,39,42,45,48,51,54,9,459\n' +
+  '"Region 2","PSO",4,4,8,8,2,10,12,20,22,24,26,28,30,32,34,36,6,306\n' +
+  '"Region 3","PO",6,6,12,12,3,15,18,30,33,36,39,42,45,48,51,54,9,459\n' +
+  '"Region 3","PSO",4,4,8,8,2,10,12,20,22,24,26,28,30,32,34,36,6,306\n\n\n' +
   'COMMUNITY\n' +
-  '"Division Name","Grade","A","B1","B2","C1","C2","D1","D2","E","F","G","Untiered","Overall"\n' +
-  '"Division 1","PO",18,36,24,12,18,12,6,2,1,0,0,126\n' +
-  '"Division 1","PSO",12,24,16,8,12,8,4,2,1,0,0,84\n' +
-  '"Division 2","PO",9,18,12,6,9,6,3,2,1,0,0,63\n' +
-  '"Division 2","PSO",6,12,8,4,6,4,2,2,1,0,0,42\n' +
-  '"Division 3","PO",9,18,12,6,9,6,3,2,1,0,0,63\n' +
-  '"Division 3","PSO",6,12,8,4,6,4,2,2,1,0,0,42\n\n\n' +
+  '"Region Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","Untiered","Overall"\n' +
+  '"Region 1","PO",18,24,12,6,24,36,24,60,66,72,78,84,90,96,102,108,12,912\n' +
+  '"Region 1","PSO",12,16,8,4,16,24,16,40,44,48,52,56,60,64,68,72,8,608\n' +
+  '"Region 2","PO",9,12,6,3,12,18,12,30,33,36,39,42,45,48,51,54,6,456\n' +
+  '"Region 2","PSO",6,8,4,2,8,12,8,20,22,24,26,28,30,32,34,36,4,304\n' +
+  '"Region 3","PO",9,12,6,3,12,18,12,30,33,36,39,42,45,48,51,54,6,456\n' +
+  '"Region 3","PSO",6,8,4,2,8,12,8,20,22,24,26,28,30,32,34,36,4,304\n\n\n' +
   'LICENSE\n' +
-  '"Division Name","Grade","A","B1","B2","C1","C2","D1","D2","E","F","G","Untiered","Overall"\n' +
-  '"Division 1","PO",12,6,12,18,12,24,36,2,1,0,30,150\n' +
-  '"Division 1","PSO",8,4,8,12,8,16,24,2,1,0,20,100\n' +
-  '"Division 2","PO",6,3,6,9,6,12,18,2,1,0,15,75\n' +
-  '"Division 2","PSO",4,2,4,6,4,8,12,2,1,0,10,50\n' +
-  '"Division 3","PO",6,3,6,9,6,12,18,2,1,0,15,75\n' +
-  '"Division 3","PSO",4,2,4,6,4,8,12,2,1,0,10,50\n\n\n' +
+  '"Region Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","Untiered","Overall"\n' +
+  '"Region 1","PO",6,6,0,12,24,18,18,60,66,72,78,84,90,96,102,108,12,852\n' +
+  '"Region 1","PSO",4,4,0,8,16,12,12,40,44,48,52,56,60,64,68,72,8,568\n' +
+  '"Region 2","PO",3,3,0,6,12,9,9,30,33,36,39,42,45,48,51,54,6,426\n' +
+  '"Region 2","PSO",2,2,0,4,8,6,6,20,22,24,26,28,30,32,34,36,4,284\n' +
+  '"Region 3","PO",3,3,0,6,12,9,9,30,33,36,39,42,45,48,51,54,6,426\n' +
+  '"Region 3","PSO",2,2,0,4,8,6,6,20,22,24,26,28,30,32,34,36,4,284\n\n\n' +
   'OVERALL: PERCENTAGE SPLIT OF CASES BY GRADE\n' +
-  '"Division Name","Grade","A","B1","B2","C1","C2","D1","D2","E","F","G","Untiered","Overall"\n' +
-  '"Division 1","PO","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","0.00%","0.00%","0.00%","60.00%","60.00%"\n' +
-  '"Division 1","PSO","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","0.00%","0.00%","0.00%","40.00%","40.00%"\n' +
-  '"Division 2","PO","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","0.00%","0.00%","0.00%","60.00%","60.00%"\n' +
-  '"Division 2","PSO","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","0.00%","0.00%","0.00%","40.00%","40.00%"\n' +
-  '"Division 3","PO","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","0.00%","0.00%","0.00%","60.00%","60.00%"\n' +
-  '"Division 3","PSO","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","0.00%","0.00%","0.00%","40.00%","40.00%"'
+  '"Region Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","Untiered","Overall"\n' +
+  '"Region 1","PO","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%"\n' +
+  '"Region 1","PSO","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%"\n' +
+  '"Region 2","PO","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%"\n' +
+  '"Region 2","PSO","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%"\n' +
+  '"Region 3","PO","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%","60.00%"\n' +
+  '"Region 3","PSO","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%","40.00%"'
 }
 
 module.exports.OM_OVERVIEW_RESULT = {
   breadcrumbs:
-  [{title: 'John Smith'},
-  {title: 'Team 1'},
-  {title: 'Test Cluster'}],
+  [{ title: 'John Smith' },
+    { title: 'Team 1' },
+    { title: 'Test Cluster' }],
   title: 'John Smith',
   overviewDetails: {
     grade: 'PO',
@@ -2669,7 +3963,7 @@ module.exports.OM_OVERVIEW_RESULT = {
 
 module.exports.OM_OVERVIEW_CSV = {
   filename: ('John_Smith_Overview ' + timestamp + '.csv').replace(replaceSpaces, '_'),
-  csv: '"Region","LDU Cluster","Team Name","Grade Code","Capacity Percentage","Total Cases","Contracted Hours","Reduction Hours","CMS Points","CMS Percentage"' +
+  csv: '"Region","Probation Delivery Unit","Team Name","Grade Code","Capacity Percentage","Total Cases","Contracted Hours","Reduction Hours","CMS Points","CMS Percentage"' +
   '\n"Test Region","Test Cluster","Team 1","PO","105.3%",60,37,4,-121,"-3.9%"'
 }
 
@@ -2677,18 +3971,22 @@ module.exports.TEAM_OVERVIEW_RESULT = {
   breadcrumbs: [{
     title: 'Team 1',
     link: '/probation/team/95',
-    active: undefined },
+    active: undefined
+  },
   {
-    title: 'LDU Cluster 1',
+    title: 'Probation Delivery Unit 1',
     link: '/probation/ldu/85',
-    active: undefined },
+    active: undefined
+  },
   {
-    title: 'Division 1',
+    title: 'Region 1',
     link: '/probation/region/43',
-    active: undefined },
-    { title: 'HMPPS', link: '/probation/hmpps/0', active: undefined } ],
+    active: undefined
+  },
+  { title: 'HMPPS', link: '/probation/hmpps/0', active: undefined }],
   overviewDetails:
-  [ { lduCluster: 'LDU Cluster 1',
+  [{
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'John Smith',
     totalCases: 69,
@@ -2700,8 +3998,10 @@ module.exports.TEAM_OVERVIEW_RESULT = {
     capacityPercentage: 115.26315789473685,
     remainingPoints: -29,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'Tony Test',
     totalCases: 69,
@@ -2713,8 +4013,10 @@ module.exports.TEAM_OVERVIEW_RESULT = {
     capacityPercentage: 113.68421052631578,
     remainingPoints: -26,
     cmsAdjustmentPoints: -176,
-    cmsPercentage: -6.379122870605292 },
-  { lduCluster: 'LDU Cluster 1',
+    cmsPercentage: -6.379122870605292
+  },
+  {
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'Jane Doe',
     totalCases: 69,
@@ -2726,8 +4028,10 @@ module.exports.TEAM_OVERVIEW_RESULT = {
     capacityPercentage: 116.8421052631579,
     remainingPoints: -32,
     cmsAdjustmentPoints: 121,
-    cmsPercentage: 19.803600654664486 },
-  { lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 19.803600654664486
+  },
+  {
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'Marcin Martin',
     totalCases: 69,
@@ -2739,8 +4043,10 @@ module.exports.TEAM_OVERVIEW_RESULT = {
     capacityPercentage: 107.36842105263158,
     remainingPoints: -14,
     cmsAdjustmentPoints: 167,
-    cmsPercentage: 29.246935201401055 },
-  { lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 29.246935201401055
+  },
+  {
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'Courtney Larry',
     totalCases: 69,
@@ -2752,33 +4058,37 @@ module.exports.TEAM_OVERVIEW_RESULT = {
     capacityPercentage: 117.36842105263159,
     remainingPoints: -33,
     cmsAdjustmentPoints: -9,
-    cmsPercentage: -0.5096262740656852 } ],
+    cmsPercentage: -0.5096262740656852
+  }],
   title: 'Team 1',
   subTitle: 'Team'
 }
 
 module.exports.TEAM_OVERVIEW_CSV = {
   filename: ('Team_1_Overview ' + timestamp + '.csv').replace(replaceSpaces, '_'),
-  csv: '"LDU Cluster","Team Name","Offender Manager","Grade Code","Capacity Percentage","Capacity Points","Total Points Used","Remaining Points","Contracted Hours","Reduction Hours","Total Cases","CMS Points","CMS Percentage"' +
-  '\n"LDU Cluster 1","Team 1","John Smith","PO","115.3%",190,219,-29,37.5,6,69,0,"0.0%"' +
-  '\n"LDU Cluster 1","Team 1","Tony Test","PSO","113.7%",190,216,-26,37.5,3,69,-176,"-6.4%"' +
-  '\n"LDU Cluster 1","Team 1","Jane Doe","PO","116.8%",190,222,-32,37.5,1,69,121,"19.8%"' +
-  '\n"LDU Cluster 1","Team 1","Marcin Martin","PSO","107.4%",190,204,-14,37.5,6,69,167,"29.2%"' +
-  '\n"LDU Cluster 1","Team 1","Courtney Larry","PO","117.4%",190,223,-33,37.5,3,69,-9,"-0.5%"'
+  csv: '"Probation Delivery Unit","Team Name","Offender Manager","Grade Code","Capacity Percentage","Capacity Points","Total Points Used","Remaining Points","Contracted Hours","Reduction Hours","Total Cases","CMS Points","CMS Percentage"' +
+  '\n"Probation Delivery Unit 1","Team 1","John Smith","PO","115.3%",190,219,-29,37.5,6,69,0,"0.0%"' +
+  '\n"Probation Delivery Unit 1","Team 1","Tony Test","PSO","113.7%",190,216,-26,37.5,3,69,-176,"-6.4%"' +
+  '\n"Probation Delivery Unit 1","Team 1","Jane Doe","PO","116.8%",190,222,-32,37.5,1,69,121,"19.8%"' +
+  '\n"Probation Delivery Unit 1","Team 1","Marcin Martin","PSO","107.4%",190,204,-14,37.5,6,69,167,"29.2%"' +
+  '\n"Probation Delivery Unit 1","Team 1","Courtney Larry","PO","117.4%",190,223,-33,37.5,3,69,-9,"-0.5%"'
 }
 
 module.exports.LDU_OVERVIEW_RESULT = {
   breadcrumbs: [{
-    title: 'LDU Cluster 1',
+    title: 'Probation Delivery Unit 1',
     link: '/probation/ldu/85',
-    active: undefined },
+    active: undefined
+  },
   {
-    title: 'Division 1',
+    title: 'Region 1',
     link: '/probation/region/43',
-    active: undefined },
-  { title: 'HMPPS', link: '/probation/hmpps/0', active: undefined } ],
+    active: undefined
+  },
+  { title: 'HMPPS', link: '/probation/hmpps/0', active: undefined }],
   overviewDetails:
-  [ { lduCluster: 'LDU Cluster 1',
+  [{
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'John Smith',
     totalCases: 69,
@@ -2790,8 +4100,10 @@ module.exports.LDU_OVERVIEW_RESULT = {
     capacityPercentage: 115.26315789473685,
     remainingPoints: -29,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'Tony Test',
     totalCases: 69,
@@ -2803,8 +4115,10 @@ module.exports.LDU_OVERVIEW_RESULT = {
     capacityPercentage: 113.68421052631578,
     remainingPoints: -26,
     cmsAdjustmentPoints: -176,
-    cmsPercentage: -6.379122870605292 },
-  { lduCluster: 'LDU Cluster 1',
+    cmsPercentage: -6.379122870605292
+  },
+  {
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'Jane Doe',
     totalCases: 69,
@@ -2816,8 +4130,10 @@ module.exports.LDU_OVERVIEW_RESULT = {
     capacityPercentage: 116.8421052631579,
     remainingPoints: -32,
     cmsAdjustmentPoints: 121,
-    cmsPercentage: 19.803600654664486 },
-  { lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 19.803600654664486
+  },
+  {
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'Marcin Martin',
     totalCases: 69,
@@ -2829,8 +4145,10 @@ module.exports.LDU_OVERVIEW_RESULT = {
     capacityPercentage: 107.36842105263158,
     remainingPoints: -14,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'Courtney Larry',
     totalCases: 69,
@@ -2842,8 +4160,10 @@ module.exports.LDU_OVERVIEW_RESULT = {
     capacityPercentage: 117.36842105263159,
     remainingPoints: -33,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 4',
     offenderManager: 'Courtney Larry',
     totalCases: 69,
@@ -2855,8 +4175,10 @@ module.exports.LDU_OVERVIEW_RESULT = {
     capacityPercentage: 117.89473684210525,
     remainingPoints: -34,
     cmsAdjustmentPoints: -9,
-    cmsPercentage: -0.5096262740656852 },
-  { lduCluster: 'LDU Cluster 1',
+    cmsPercentage: -0.5096262740656852
+  },
+  {
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 4',
     offenderManager: 'Marcin Martin',
     totalCases: 69,
@@ -2868,8 +4190,10 @@ module.exports.LDU_OVERVIEW_RESULT = {
     capacityPercentage: 113.1578947368421,
     remainingPoints: -25,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 4',
     offenderManager: 'Jane Doe',
     totalCases: 69,
@@ -2881,8 +4205,10 @@ module.exports.LDU_OVERVIEW_RESULT = {
     capacityPercentage: 106.3157894736842,
     remainingPoints: -12,
     cmsAdjustmentPoints: -9,
-    cmsPercentage: -0.5096262740656852 },
-  { lduCluster: 'LDU Cluster 1',
+    cmsPercentage: -0.5096262740656852
+  },
+  {
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 4',
     offenderManager: 'Tony Test',
     totalCases: 69,
@@ -2894,8 +4220,10 @@ module.exports.LDU_OVERVIEW_RESULT = {
     capacityPercentage: 105.78947368421052,
     remainingPoints: -11,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 4',
     offenderManager: 'John Smith',
     totalCases: 69,
@@ -2907,36 +4235,38 @@ module.exports.LDU_OVERVIEW_RESULT = {
     capacityPercentage: 117.36842105263159,
     remainingPoints: -33,
     cmsAdjustmentPoints: -9,
-    cmsPercentage: -0.5096262740656852 } ],
-  title: 'LDU Cluster 1',
-  subTitle: 'LDU Cluster'
+    cmsPercentage: -0.5096262740656852
+  }],
+  title: 'Probation Delivery Unit 1',
+  subTitle: 'Probation Delivery Unit'
 }
 
 module.exports.LDU_OVERVIEW_CSV = {
   filename: ('LDU_Cluster_1_Overview ' + timestamp + '.csv').replace(replaceSpaces, '_'),
-  csv: '"LDU Cluster","Team Name","Offender Manager","Grade Code","Capacity Percentage","Capacity Points","Total Points Used","Remaining Points","Contracted Hours","Reduction Hours","Total Cases","CMS Points","CMS Percentage"' +
-  '\n"LDU Cluster 1","Team 1","John Smith","PO","115.3%",190,219,-29,37.5,6,69,0,"0.0%"' +
-  '\n"LDU Cluster 1","Team 1","Tony Test","PSO","113.7%",190,216,-26,37.5,3,69,-176,"-6.4%"' +
-  '\n"LDU Cluster 1","Team 1","Jane Doe","PO","116.8%",190,222,-32,37.5,1,69,121,"19.8%"' +
-  '\n"LDU Cluster 1","Team 1","Marcin Martin","PSO","107.4%",190,204,-14,37.5,6,69,0,"0.0%"' +
-  '\n"LDU Cluster 1","Team 1","Courtney Larry","PO","117.4%",190,223,-33,37.5,3,69,0,"0.0%"' +
-  '\n"LDU Cluster 1","Team 4","Courtney Larry","PO","117.9%",190,224,-34,37.5,6,69,-9,"-0.5%"' +
-  '\n"LDU Cluster 1","Team 4","Marcin Martin","PSO","113.2%",190,215,-25,37.5,6,69,0,"0.0%"' +
-  '\n"LDU Cluster 1","Team 4","Jane Doe","PO","106.3%",190,202,-12,37.5,4,69,-9,"-0.5%"' +
-  '\n"LDU Cluster 1","Team 4","Tony Test","PSO","105.8%",190,201,-11,37.5,3,69,0,"0.0%"' +
-  '\n"LDU Cluster 1","Team 4","John Smith","PO","117.4%",190,223,-33,37.5,3,69,-9,"-0.5%"'
+  csv: '"Probation Delivery Unit","Team Name","Offender Manager","Grade Code","Capacity Percentage","Capacity Points","Total Points Used","Remaining Points","Contracted Hours","Reduction Hours","Total Cases","CMS Points","CMS Percentage"' +
+  '\n"Probation Delivery Unit 1","Team 1","John Smith","PO","115.3%",190,219,-29,37.5,6,69,0,"0.0%"' +
+  '\n"Probation Delivery Unit 1","Team 1","Tony Test","PSO","113.7%",190,216,-26,37.5,3,69,-176,"-6.4%"' +
+  '\n"Probation Delivery Unit 1","Team 1","Jane Doe","PO","116.8%",190,222,-32,37.5,1,69,121,"19.8%"' +
+  '\n"Probation Delivery Unit 1","Team 1","Marcin Martin","PSO","107.4%",190,204,-14,37.5,6,69,0,"0.0%"' +
+  '\n"Probation Delivery Unit 1","Team 1","Courtney Larry","PO","117.4%",190,223,-33,37.5,3,69,0,"0.0%"' +
+  '\n"Probation Delivery Unit 1","Team 4","Courtney Larry","PO","117.9%",190,224,-34,37.5,6,69,-9,"-0.5%"' +
+  '\n"Probation Delivery Unit 1","Team 4","Marcin Martin","PSO","113.2%",190,215,-25,37.5,6,69,0,"0.0%"' +
+  '\n"Probation Delivery Unit 1","Team 4","Jane Doe","PO","106.3%",190,202,-12,37.5,4,69,-9,"-0.5%"' +
+  '\n"Probation Delivery Unit 1","Team 4","Tony Test","PSO","105.8%",190,201,-11,37.5,3,69,0,"0.0%"' +
+  '\n"Probation Delivery Unit 1","Team 4","John Smith","PO","117.4%",190,223,-33,37.5,3,69,-9,"-0.5%"'
 }
 
 module.exports.REGION_OVERVIEW_RESULT = {
   breadcrumbs:
   [{
-    title: 'Division 1',
+    title: 'Region 1',
     link: '/probation/region/43',
-    active: undefined },
-  { title: 'HMPPS', link: '/probation/hmpps/0', active: undefined } ],
+    active: undefined
+  },
+  { title: 'HMPPS', link: '/probation/hmpps/0', active: undefined }],
   overviewDetails: [{
-    regionName: 'Division 1',
-    lduCluster: 'LDU Cluster 1',
+    regionName: 'Region 1',
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'John Smith',
     totalCases: 69,
@@ -2948,9 +4278,11 @@ module.exports.REGION_OVERVIEW_RESULT = {
     capacityPercentage: 115.26315789473685,
     remainingPoints: -29,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 1',
-    lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 1',
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'Tony Test',
     totalCases: 69,
@@ -2962,9 +4294,11 @@ module.exports.REGION_OVERVIEW_RESULT = {
     capacityPercentage: 113.68421052631578,
     remainingPoints: -26,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 1',
-    lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 1',
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'Jane Doe',
     totalCases: 69,
@@ -2976,9 +4310,11 @@ module.exports.REGION_OVERVIEW_RESULT = {
     capacityPercentage: 116.8421052631579,
     remainingPoints: -32,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0},
-  { regionName: 'Division 1',
-    lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 1',
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'Marcin Martin',
     totalCases: 69,
@@ -2990,9 +4326,11 @@ module.exports.REGION_OVERVIEW_RESULT = {
     capacityPercentage: 107.36842105263158,
     remainingPoints: -14,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 1',
-    lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 1',
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'Courtney Larry',
     totalCases: 69,
@@ -3004,9 +4342,11 @@ module.exports.REGION_OVERVIEW_RESULT = {
     capacityPercentage: 117.36842105263159,
     remainingPoints: -33,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 1',
-    lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 1',
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 4',
     offenderManager: 'Courtney Larry',
     totalCases: 69,
@@ -3018,9 +4358,11 @@ module.exports.REGION_OVERVIEW_RESULT = {
     capacityPercentage: 117.89473684210525,
     remainingPoints: -34,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 1',
-    lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 1',
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 4',
     offenderManager: 'Marcin Martin',
     totalCases: 69,
@@ -3032,9 +4374,11 @@ module.exports.REGION_OVERVIEW_RESULT = {
     capacityPercentage: 113.1578947368421,
     remainingPoints: -25,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 1',
-    lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 1',
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 4',
     offenderManager: 'Jane Doe',
     totalCases: 69,
@@ -3046,9 +4390,11 @@ module.exports.REGION_OVERVIEW_RESULT = {
     capacityPercentage: 106.3157894736842,
     remainingPoints: -12,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 1',
-    lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 1',
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 4',
     offenderManager: 'Tony Test',
     totalCases: 69,
@@ -3060,9 +4406,11 @@ module.exports.REGION_OVERVIEW_RESULT = {
     capacityPercentage: 105.78947368421052,
     remainingPoints: -11,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 1',
-    lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 1',
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 4',
     offenderManager: 'John Smith',
     totalCases: 69,
@@ -3074,32 +4422,32 @@ module.exports.REGION_OVERVIEW_RESULT = {
     capacityPercentage: 117.36842105263159,
     remainingPoints: -33,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 } ],
-  title: 'Division 1',
-  subTitle: 'Division'
+    cmsPercentage: 0
+  }],
+  title: 'Region 1',
+  subTitle: 'Region'
 }
 
 module.exports.REGION_OVERVIEW_CSV = {
-  filename: ('Division_1_Overview ' + timestamp + '.csv').replace(replaceSpaces, '_'),
-  csv: '"Region","LDU Cluster","Team Name","Offender Manager","Grade Code","Capacity Percentage","Capacity Points","Total Points Used","Remaining Points","Contracted Hours","Reduction Hours","Total Cases","CMS Points","CMS Percentage"' +
-  '\n"Division 1","LDU Cluster 1","Team 1","John Smith","PO","115.3%",190,219,-29,37.5,6,69,0,"0.0%"' +
-  '\n"Division 1","LDU Cluster 1","Team 1","Tony Test","PSO","113.7%",190,216,-26,37.5,3,69,0,"0.0%"' +
-  '\n"Division 1","LDU Cluster 1","Team 1","Jane Doe","PO","116.8%",190,222,-32,37.5,1,69,0,"0.0%"' +
-  '\n"Division 1","LDU Cluster 1","Team 1","Marcin Martin","PSO","107.4%",190,204,-14,37.5,6,69,0,"0.0%"' +
-  '\n"Division 1","LDU Cluster 1","Team 1","Courtney Larry","PO","117.4%",190,223,-33,37.5,3,69,0,"0.0%"' +
-  '\n"Division 1","LDU Cluster 1","Team 4","Courtney Larry","PO","117.9%",190,224,-34,37.5,6,69,0,"0.0%"' +
-  '\n"Division 1","LDU Cluster 1","Team 4","Marcin Martin","PSO","113.2%",190,215,-25,37.5,6,69,0,"0.0%"' +
-  '\n"Division 1","LDU Cluster 1","Team 4","Jane Doe","PO","106.3%",190,202,-12,37.5,4,69,0,"0.0%"' +
-  '\n"Division 1","LDU Cluster 1","Team 4","Tony Test","PSO","105.8%",190,201,-11,37.5,3,69,0,"0.0%"' +
-  '\n"Division 1","LDU Cluster 1","Team 4","John Smith","PO","117.4%",190,223,-33,37.5,3,69,0,"0.0%"'
+  filename: ('Region_1_Overview ' + timestamp + '.csv').replace(replaceSpaces, '_'),
+  csv: '"Region","Probation Delivery Unit","Team Name","Offender Manager","Grade Code","Capacity Percentage","Capacity Points","Total Points Used","Remaining Points","Contracted Hours","Reduction Hours","Total Cases","CMS Points","CMS Percentage"' +
+  '\n"Region 1","Probation Delivery Unit 1","Team 1","John Smith","PO","115.3%",190,219,-29,37.5,6,69,0,"0.0%"' +
+  '\n"Region 1","Probation Delivery Unit 1","Team 1","Tony Test","PSO","113.7%",190,216,-26,37.5,3,69,0,"0.0%"' +
+  '\n"Region 1","Probation Delivery Unit 1","Team 1","Jane Doe","PO","116.8%",190,222,-32,37.5,1,69,0,"0.0%"' +
+  '\n"Region 1","Probation Delivery Unit 1","Team 1","Marcin Martin","PSO","107.4%",190,204,-14,37.5,6,69,0,"0.0%"' +
+  '\n"Region 1","Probation Delivery Unit 1","Team 1","Courtney Larry","PO","117.4%",190,223,-33,37.5,3,69,0,"0.0%"' +
+  '\n"Region 1","Probation Delivery Unit 1","Team 4","Courtney Larry","PO","117.9%",190,224,-34,37.5,6,69,0,"0.0%"' +
+  '\n"Region 1","Probation Delivery Unit 1","Team 4","Marcin Martin","PSO","113.2%",190,215,-25,37.5,6,69,0,"0.0%"' +
+  '\n"Region 1","Probation Delivery Unit 1","Team 4","Jane Doe","PO","106.3%",190,202,-12,37.5,4,69,0,"0.0%"' +
+  '\n"Region 1","Probation Delivery Unit 1","Team 4","Tony Test","PSO","105.8%",190,201,-11,37.5,3,69,0,"0.0%"' +
+  '\n"Region 1","Probation Delivery Unit 1","Team 4","John Smith","PO","117.4%",190,223,-33,37.5,3,69,0,"0.0%"'
 }
 
 module.exports.NATIONAL_OVERVIEW_RESULT = {
-  breadcrumbs: [{
-    title: 'HMPPS', link: '/probation/hmpps/0', active: undefined } ],
+  breadcrumbs: [{ title: 'HMPPS', link: '/probation/hmpps/0', active: undefined }],
   overviewDetails: [{
-    regionName: 'Division 1',
-    lduCluster: 'LDU Cluster 1',
+    regionName: 'Region 1',
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'John Smith',
     totalCases: 69,
@@ -3111,9 +4459,11 @@ module.exports.NATIONAL_OVERVIEW_RESULT = {
     capacityPercentage: 115.26315789473685,
     remainingPoints: -29,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 1',
-    lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 1',
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'Tony Test',
     totalCases: 69,
@@ -3125,9 +4475,11 @@ module.exports.NATIONAL_OVERVIEW_RESULT = {
     capacityPercentage: 113.68421052631578,
     remainingPoints: -26,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 1',
-    lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 1',
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'Jane Doe',
     totalCases: 69,
@@ -3139,9 +4491,11 @@ module.exports.NATIONAL_OVERVIEW_RESULT = {
     capacityPercentage: 116.8421052631579,
     remainingPoints: -32,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 1',
-    lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 1',
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'Marcin Martin',
     totalCases: 69,
@@ -3153,9 +4507,11 @@ module.exports.NATIONAL_OVERVIEW_RESULT = {
     capacityPercentage: 107.36842105263158,
     remainingPoints: -14,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 1',
-    lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 1',
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'Courtney Larry',
     totalCases: 69,
@@ -3167,9 +4523,11 @@ module.exports.NATIONAL_OVERVIEW_RESULT = {
     capacityPercentage: 117.36842105263159,
     remainingPoints: -33,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 1',
-    lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 1',
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 4',
     offenderManager: 'Courtney Larry',
     totalCases: 69,
@@ -3181,9 +4539,11 @@ module.exports.NATIONAL_OVERVIEW_RESULT = {
     capacityPercentage: 117.89473684210525,
     remainingPoints: -34,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 1',
-    lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 1',
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 4',
     offenderManager: 'Jane Doe',
     totalCases: 69,
@@ -3195,9 +4555,11 @@ module.exports.NATIONAL_OVERVIEW_RESULT = {
     capacityPercentage: 106.3157894736842,
     remainingPoints: -12,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 1',
-    lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 1',
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 4',
     offenderManager: 'Marcin Martin',
     totalCases: 69,
@@ -3209,9 +4571,11 @@ module.exports.NATIONAL_OVERVIEW_RESULT = {
     capacityPercentage: 113.1578947368421,
     remainingPoints: -25,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 1',
-    lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 1',
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 4',
     offenderManager: 'John Smith',
     totalCases: 69,
@@ -3223,9 +4587,11 @@ module.exports.NATIONAL_OVERVIEW_RESULT = {
     capacityPercentage: 117.36842105263159,
     remainingPoints: -33,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 1',
-    lduCluster: 'LDU Cluster 1',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 1',
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 4',
     offenderManager: 'Tony Test',
     totalCases: 69,
@@ -3237,9 +4603,11 @@ module.exports.NATIONAL_OVERVIEW_RESULT = {
     capacityPercentage: 105.78947368421052,
     remainingPoints: -11,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 2',
-    lduCluster: 'LDU Cluster 2',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 2',
+    lduCluster: 'Probation Delivery Unit 2',
     teamName: 'Team 2',
     offenderManager: 'Jane Doe',
     totalCases: 69,
@@ -3251,9 +4619,11 @@ module.exports.NATIONAL_OVERVIEW_RESULT = {
     capacityPercentage: 117.36842105263159,
     remainingPoints: -33,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 2',
-    lduCluster: 'LDU Cluster 2',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 2',
+    lduCluster: 'Probation Delivery Unit 2',
     teamName: 'Team 2',
     offenderManager: 'Tony Test',
     totalCases: 69,
@@ -3265,9 +4635,11 @@ module.exports.NATIONAL_OVERVIEW_RESULT = {
     capacityPercentage: 117.36842105263159,
     remainingPoints: -33,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 2',
-    lduCluster: 'LDU Cluster 2',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 2',
+    lduCluster: 'Probation Delivery Unit 2',
     teamName: 'Team 2',
     offenderManager: 'John Smith',
     totalCases: 69,
@@ -3279,9 +4651,11 @@ module.exports.NATIONAL_OVERVIEW_RESULT = {
     capacityPercentage: 110.00000000000001,
     remainingPoints: -19,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 2',
-    lduCluster: 'LDU Cluster 2',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 2',
+    lduCluster: 'Probation Delivery Unit 2',
     teamName: 'Team 2',
     offenderManager: 'Marcin Martin',
     totalCases: 69,
@@ -3293,9 +4667,11 @@ module.exports.NATIONAL_OVERVIEW_RESULT = {
     capacityPercentage: 105.26315789473684,
     remainingPoints: -10,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 2',
-    lduCluster: 'LDU Cluster 2',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 2',
+    lduCluster: 'Probation Delivery Unit 2',
     teamName: 'Team 2',
     offenderManager: 'Courtney Larry',
     totalCases: 69,
@@ -3307,9 +4683,11 @@ module.exports.NATIONAL_OVERVIEW_RESULT = {
     capacityPercentage: 114.21052631578948,
     remainingPoints: -27,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 3',
-    lduCluster: 'LDU Cluster 3',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 3',
+    lduCluster: 'Probation Delivery Unit 3',
     teamName: 'Team 3',
     offenderManager: 'Courtney Larry',
     totalCases: 69,
@@ -3321,9 +4699,11 @@ module.exports.NATIONAL_OVERVIEW_RESULT = {
     capacityPercentage: 112.63157894736841,
     remainingPoints: -24,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 3',
-    lduCluster: 'LDU Cluster 3',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 3',
+    lduCluster: 'Probation Delivery Unit 3',
     teamName: 'Team 3',
     offenderManager: 'Marcin Martin',
     totalCases: 69,
@@ -3335,9 +4715,11 @@ module.exports.NATIONAL_OVERVIEW_RESULT = {
     capacityPercentage: 117.36842105263159,
     remainingPoints: -33,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 3',
-    lduCluster: 'LDU Cluster 3',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 3',
+    lduCluster: 'Probation Delivery Unit 3',
     teamName: 'Team 3',
     offenderManager: 'John Smith',
     totalCases: 69,
@@ -3349,9 +4731,11 @@ module.exports.NATIONAL_OVERVIEW_RESULT = {
     capacityPercentage: 107.36842105263158,
     remainingPoints: -14,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 3',
-    lduCluster: 'LDU Cluster 3',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 3',
+    lduCluster: 'Probation Delivery Unit 3',
     teamName: 'Team 3',
     offenderManager: 'Tony Test',
     totalCases: 69,
@@ -3363,9 +4747,11 @@ module.exports.NATIONAL_OVERVIEW_RESULT = {
     capacityPercentage: 109.47368421052633,
     remainingPoints: -18,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 },
-  { regionName: 'Division 3',
-    lduCluster: 'LDU Cluster 3',
+    cmsPercentage: 0
+  },
+  {
+    regionName: 'Region 3',
+    lduCluster: 'Probation Delivery Unit 3',
     teamName: 'Team 3',
     offenderManager: 'Jane Doe',
     totalCases: 69,
@@ -3377,42 +4763,42 @@ module.exports.NATIONAL_OVERVIEW_RESULT = {
     capacityPercentage: 105.78947368421052,
     remainingPoints: -11,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 } ],
+    cmsPercentage: 0
+  }],
   title: 'HMPPS',
   subTitle: 'National'
 }
 
 module.exports.NATIONAL_OVERVIEW_CSV = {
   filename: ('HMPPS_Overview ' + timestamp + '.csv').replace(replaceSpaces, '_'),
-  csv: '"Region","LDU Cluster","Team Name","Offender Manager","Grade Code","Capacity Percentage","Capacity Points","Total Points Used","Remaining Points","Contracted Hours","Reduction Hours","Total Cases","CMS Points","CMS Percentage"' +
-  '\n"Division 1","LDU Cluster 1","Team 1","John Smith","PO","115.3%",190,219,-29,37.5,6,69,0,"0.0%"' +
-  '\n"Division 1","LDU Cluster 1","Team 1","Tony Test","PSO","113.7%",190,216,-26,37.5,3,69,0,"0.0%"' +
-  '\n"Division 1","LDU Cluster 1","Team 1","Jane Doe","PO","116.8%",190,222,-32,37.5,1,69,0,"0.0%"' +
-  '\n"Division 1","LDU Cluster 1","Team 1","Marcin Martin","PSO","107.4%",190,204,-14,37.5,6,69,0,"0.0%"' +
-  '\n"Division 1","LDU Cluster 1","Team 1","Courtney Larry","PO","117.4%",190,223,-33,37.5,3,69,0,"0.0%"' +
-  '\n"Division 1","LDU Cluster 1","Team 4","Courtney Larry","PO","117.9%",190,224,-34,37.5,6,69,0,"0.0%"' +
-  '\n"Division 1","LDU Cluster 1","Team 4","Jane Doe","PO","106.3%",190,202,-12,37.5,4,69,0,"0.0%"' +
-  '\n"Division 1","LDU Cluster 1","Team 4","Marcin Martin","PSO","113.2%",190,215,-25,37.5,6,69,0,"0.0%"' +
-  '\n"Division 1","LDU Cluster 1","Team 4","John Smith","PO","117.4%",190,223,-33,37.5,3,69,0,"0.0%"' +
-  '\n"Division 1","LDU Cluster 1","Team 4","Tony Test","PSO","105.8%",190,201,-11,37.5,3,69,0,"0.0%"' +
-  '\n"Division 2","LDU Cluster 2","Team 2","Jane Doe","PO","117.4%",190,223,-33,37.5,3,69,0,"0.0%"' +
-  '\n"Division 2","LDU Cluster 2","Team 2","Tony Test","PSO","117.4%",190,223,-33,37.5,4,69,0,"0.0%"' +
-  '\n"Division 2","LDU Cluster 2","Team 2","John Smith","PO","110.0%",190,209,-19,37.5,4,69,0,"0.0%"' +
-  '\n"Division 2","LDU Cluster 2","Team 2","Marcin Martin","PSO","105.3%",190,200,-10,37.5,2,69,0,"0.0%"' +
-  '\n"Division 2","LDU Cluster 2","Team 2","Courtney Larry","PO","114.2%",190,217,-27,37.5,3,69,0,"0.0%"' +
-  '\n"Division 3","LDU Cluster 3","Team 3","Courtney Larry","PO","112.6%",190,214,-24,37.5,2,69,0,"0.0%"' +
-  '\n"Division 3","LDU Cluster 3","Team 3","Marcin Martin","PSO","117.4%",190,223,-33,37.5,1,69,0,"0.0%"' +
-  '\n"Division 3","LDU Cluster 3","Team 3","John Smith","PO","107.4%",190,204,-14,37.5,6,69,0,"0.0%"' +
-  '\n"Division 3","LDU Cluster 3","Team 3","Tony Test","PSO","109.5%",190,208,-18,37.5,1,69,0,"0.0%"' +
-  '\n"Division 3","LDU Cluster 3","Team 3","Jane Doe","PO","105.8%",190,201,-11,37.5,2,69,0,"0.0%"'
+  csv: '"Region","Probation Delivery Unit","Team Name","Offender Manager","Grade Code","Capacity Percentage","Capacity Points","Total Points Used","Remaining Points","Contracted Hours","Reduction Hours","Total Cases","CMS Points","CMS Percentage"' +
+  '\n"Region 1","Probation Delivery Unit 1","Team 1","John Smith","PO","115.3%",190,219,-29,37.5,6,69,0,"0.0%"' +
+  '\n"Region 1","Probation Delivery Unit 1","Team 1","Tony Test","PSO","113.7%",190,216,-26,37.5,3,69,0,"0.0%"' +
+  '\n"Region 1","Probation Delivery Unit 1","Team 1","Jane Doe","PO","116.8%",190,222,-32,37.5,1,69,0,"0.0%"' +
+  '\n"Region 1","Probation Delivery Unit 1","Team 1","Marcin Martin","PSO","107.4%",190,204,-14,37.5,6,69,0,"0.0%"' +
+  '\n"Region 1","Probation Delivery Unit 1","Team 1","Courtney Larry","PO","117.4%",190,223,-33,37.5,3,69,0,"0.0%"' +
+  '\n"Region 1","Probation Delivery Unit 1","Team 4","Courtney Larry","PO","117.9%",190,224,-34,37.5,6,69,0,"0.0%"' +
+  '\n"Region 1","Probation Delivery Unit 1","Team 4","Jane Doe","PO","106.3%",190,202,-12,37.5,4,69,0,"0.0%"' +
+  '\n"Region 1","Probation Delivery Unit 1","Team 4","Marcin Martin","PSO","113.2%",190,215,-25,37.5,6,69,0,"0.0%"' +
+  '\n"Region 1","Probation Delivery Unit 1","Team 4","John Smith","PO","117.4%",190,223,-33,37.5,3,69,0,"0.0%"' +
+  '\n"Region 1","Probation Delivery Unit 1","Team 4","Tony Test","PSO","105.8%",190,201,-11,37.5,3,69,0,"0.0%"' +
+  '\n"Region 2","Probation Delivery Unit 2","Team 2","Jane Doe","PO","117.4%",190,223,-33,37.5,3,69,0,"0.0%"' +
+  '\n"Region 2","Probation Delivery Unit 2","Team 2","Tony Test","PSO","117.4%",190,223,-33,37.5,4,69,0,"0.0%"' +
+  '\n"Region 2","Probation Delivery Unit 2","Team 2","John Smith","PO","110.0%",190,209,-19,37.5,4,69,0,"0.0%"' +
+  '\n"Region 2","Probation Delivery Unit 2","Team 2","Marcin Martin","PSO","105.3%",190,200,-10,37.5,2,69,0,"0.0%"' +
+  '\n"Region 2","Probation Delivery Unit 2","Team 2","Courtney Larry","PO","114.2%",190,217,-27,37.5,3,69,0,"0.0%"' +
+  '\n"Region 3","Probation Delivery Unit 3","Team 3","Courtney Larry","PO","112.6%",190,214,-24,37.5,2,69,0,"0.0%"' +
+  '\n"Region 3","Probation Delivery Unit 3","Team 3","Marcin Martin","PSO","117.4%",190,223,-33,37.5,1,69,0,"0.0%"' +
+  '\n"Region 3","Probation Delivery Unit 3","Team 3","John Smith","PO","107.4%",190,204,-14,37.5,6,69,0,"0.0%"' +
+  '\n"Region 3","Probation Delivery Unit 3","Team 3","Tony Test","PSO","109.5%",190,208,-18,37.5,1,69,0,"0.0%"' +
+  '\n"Region 3","Probation Delivery Unit 3","Team 3","Jane Doe","PO","105.8%",190,201,-11,37.5,2,69,0,"0.0%"'
 }
 
 module.exports.PERCENTAGE_FORMAT_TEST = {
-  breadcrumbs: [{
-    title: 'HMPPS', link: '/probation/hmpps/0', active: undefined } ],
+  breadcrumbs: [{ title: 'HMPPS', link: '/probation/hmpps/0', active: undefined }],
   overviewDetails: [{
-    regionName: 'Division 1',
-    lduCluster: 'LDU Cluster 1',
+    regionName: 'Region 1',
+    lduCluster: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'John Smith',
     totalCases: 69,
@@ -3424,7 +4810,8 @@ module.exports.PERCENTAGE_FORMAT_TEST = {
     capacityPercentage: 115.26315789473685,
     remainingPoints: -29,
     cmsAdjustmentPoints: 0,
-    cmsPercentage: 0 }]
+    cmsPercentage: 0
+  }]
 
 }
 
@@ -3432,19 +4819,23 @@ module.exports.TEAM_REDUCTIONS_RESULT = {
   breadcrumbs: [{
     title: 'Team 1',
     link: '/probation/team/240',
-    active: undefined },
+    active: undefined
+  },
   {
-    title: 'LDU Cluster 1',
+    title: 'Probation Delivery Unit 1',
     link: '/probation/ldu/218',
-    active: undefined },
+    active: undefined
+  },
   {
-    title: 'Division 1',
+    title: 'Region 1',
     link: '/probation/region/146',
-    active: undefined },
-    { title: 'HMPPS', link: '/probation/hmpps/0', active: undefined } ],
+    active: undefined
+  },
+  { title: 'HMPPS', link: '/probation/hmpps/0', active: undefined }],
   reductionNotes:
-  [ { regionName: 'Division 1',
-    lduName: 'LDU Cluster 1',
+  [{
+    regionName: 'Region 1',
+    lduName: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'John Smith',
     contractedHours: 37,
@@ -3454,9 +4845,11 @@ module.exports.TEAM_REDUCTIONS_RESULT = {
     endDate: '26 11 2027, 16:15',
     status: 'ACTIVE',
     additionalNotes: null,
-    gradeCode: 'PO' },
-  { regionName: 'Division 1',
-    lduName: 'LDU Cluster 1',
+    gradeCode: 'PO'
+  },
+  {
+    regionName: 'Region 1',
+    lduName: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'John Smith',
     contractedHours: 37,
@@ -3466,9 +4859,11 @@ module.exports.TEAM_REDUCTIONS_RESULT = {
     endDate: '26 11 2027, 16:15',
     status: 'SCHEDULED',
     additionalNotes: null,
-    gradeCode: 'SPO' },
-  { regionName: 'Division 1',
-    lduName: 'LDU Cluster 1',
+    gradeCode: 'SPO'
+  },
+  {
+    regionName: 'Region 1',
+    lduName: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'John Smith',
     contractedHours: 37,
@@ -3478,9 +4873,11 @@ module.exports.TEAM_REDUCTIONS_RESULT = {
     endDate: '28 11 2016, 16:15',
     status: 'ARCHIVED',
     additionalNotes: null,
-    gradeCode: 'PSO' },
-  { regionName: 'Division 1',
-    lduName: 'LDU Cluster 1',
+    gradeCode: 'PSO'
+  },
+  {
+    regionName: 'Region 1',
+    lduName: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'John Smith',
     contractedHours: 37,
@@ -3490,23 +4887,26 @@ module.exports.TEAM_REDUCTIONS_RESULT = {
     endDate: '26 11 2027, 16:15',
     status: 'DELETED',
     additionalNotes: null,
-    gradeCode: 'PO' } ],
+    gradeCode: 'PO'
+  }],
   title: 'Team 1',
-  subTitle: 'Team' }
+  subTitle: 'Team'
+}
 
 module.exports.TEAM_REDUCTIONS_CSV = {
   filename: ('Team_1_Reductions_Notes ' + timestamp + '.csv').replace(replaceSpaces, '_'),
-  csv: '"Region","LDU Cluster","Team","Offender Manager","Grade Code","Contracted Hours","Reason","Hours","Start Date","End Date","Status","Additional Notes"\n' +
-  '"Division 1","LDU Cluster 1","Team 1","John Smith","PO",37,"Disability",5,"28 11 2016, 16:15","26 11 2027, 16:15","ACTIVE",\n' +
-  '"Division 1","LDU Cluster 1","Team 1","John Smith","SPO",37,"Long Term Sickness Absence",2,"26 02 2018, 16:15","26 11 2027, 16:15","SCHEDULED",\n' +
-  '"Division 1","LDU Cluster 1","Team 1","John Smith","PSO",37,"Phased Return to Work",1,"03 12 2016, 16:15","28 11 2016, 16:15","ARCHIVED",\n' +
-  '"Division 1","LDU Cluster 1","Team 1","John Smith","PO",37,"Phased Return to Work",2,"28 11 2016, 16:15","26 11 2027, 16:15","DELETED",'
+  csv: '"Region","Probation Delivery Unit","Team","Offender Manager","Grade Code","Contracted Hours","Reason","Hours","Start Date","End Date","Status","Additional Notes"\n' +
+  '"Region 1","Probation Delivery Unit 1","Team 1","John Smith","PO",37,"Disability",5,"28 11 2016, 16:15","26 11 2027, 16:15","ACTIVE",\n' +
+  '"Region 1","Probation Delivery Unit 1","Team 1","John Smith","SPO",37,"Long Term Sickness Absence",2,"26 02 2018, 16:15","26 11 2027, 16:15","SCHEDULED",\n' +
+  '"Region 1","Probation Delivery Unit 1","Team 1","John Smith","PSO",37,"Phased Return to Work",1,"03 12 2016, 16:15","28 11 2016, 16:15","ARCHIVED",\n' +
+  '"Region 1","Probation Delivery Unit 1","Team 1","John Smith","PO",37,"Phased Return to Work",2,"28 11 2016, 16:15","26 11 2027, 16:15","DELETED",'
 }
 
 module.exports.TEAM_EXPIRING_REDUCTIONS_RESULT = {
   reductionNotes:
-  [ { regionName: 'Division 1',
-    lduName: 'LDU Cluster 1',
+  [{
+    regionName: 'Region 1',
+    lduName: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'John Smith',
     contractedHours: 37,
@@ -3517,9 +4917,11 @@ module.exports.TEAM_EXPIRING_REDUCTIONS_RESULT = {
     status: 'ACTIVE',
     additionalNotes: null,
     gradeCode: 'PO',
-    managerResponsible: 'Joe Bloggs' },
-  { regionName: 'Division 1',
-    lduName: 'LDU Cluster 1',
+    managerResponsible: 'Joe Bloggs'
+  },
+  {
+    regionName: 'Region 1',
+    lduName: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'John Smith',
     contractedHours: 37,
@@ -3530,9 +4932,11 @@ module.exports.TEAM_EXPIRING_REDUCTIONS_RESULT = {
     status: 'SCHEDULED',
     additionalNotes: null,
     gradeCode: 'SPO',
-    managerResponsible: 'Frank Jones' },
-  { regionName: 'Division 1',
-    lduName: 'LDU Cluster 1',
+    managerResponsible: 'Frank Jones'
+  },
+  {
+    regionName: 'Region 1',
+    lduName: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'John Smith',
     contractedHours: 37,
@@ -3543,9 +4947,11 @@ module.exports.TEAM_EXPIRING_REDUCTIONS_RESULT = {
     status: 'ARCHIVED',
     additionalNotes: null,
     gradeCode: 'PSO',
-    managerResponsible: 'Mary Brown' },
-  { regionName: 'Division 1',
-    lduName: 'LDU Cluster 1',
+    managerResponsible: 'Mary Brown'
+  },
+  {
+    regionName: 'Region 1',
+    lduName: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'John Smith',
     contractedHours: 37,
@@ -3556,32 +4962,36 @@ module.exports.TEAM_EXPIRING_REDUCTIONS_RESULT = {
     status: 'DELETED',
     additionalNotes: null,
     gradeCode: 'PO',
-    managerResponsible: 'Jane Green' } ]
+    managerResponsible: 'Jane Green'
+  }]
 }
 
 module.exports.TEAM_EXPIRING_REDUCTIONS_CSV = {
   filename: ('Team_1_Reductions_Notes ' + timestamp + '.csv').replace(replaceSpaces, '_'),
-  csv: '"Region","LDU Cluster","Team","Offender Manager","Grade Code","Contracted Hours","Reason","Hours","Start Date","End Date","Status","Additional Notes","Manager Responsible"\n' +
-  '"Division 1","LDU Cluster 1","Team 1","John Smith","PO",37,"Disability",5,"28 11 2016, 16:15","26 11 2027, 16:15","ACTIVE",,"Joe Bloggs"\n' +
-  '"Division 1","LDU Cluster 1","Team 1","John Smith","SPO",37,"Long Term Sickness Absence",2,"26 02 2018, 16:15","26 11 2027, 16:15","SCHEDULED",,"Frank Jones"\n' +
-  '"Division 1","LDU Cluster 1","Team 1","John Smith","PSO",37,"Phased Return to Work",1,"03 12 2016, 16:15","28 11 2016, 16:15","ARCHIVED",,"Mary Brown"\n' +
-  '"Division 1","LDU Cluster 1","Team 1","John Smith","PO",37,"Phased Return to Work",2,"28 11 2016, 16:15","26 11 2027, 16:15","DELETED",,"Jane Green"'
+  csv: '"Region","Probation Delivery Unit","Team","Offender Manager","Grade Code","Contracted Hours","Reason","Hours","Start Date","End Date","Status","Additional Notes","Manager Responsible"\n' +
+  '"Region 1","Probation Delivery Unit 1","Team 1","John Smith","PO",37,"Disability",5,"28 11 2016, 16:15","26 11 2027, 16:15","ACTIVE",,"Joe Bloggs"\n' +
+  '"Region 1","Probation Delivery Unit 1","Team 1","John Smith","SPO",37,"Long Term Sickness Absence",2,"26 02 2018, 16:15","26 11 2027, 16:15","SCHEDULED",,"Frank Jones"\n' +
+  '"Region 1","Probation Delivery Unit 1","Team 1","John Smith","PSO",37,"Phased Return to Work",1,"03 12 2016, 16:15","28 11 2016, 16:15","ARCHIVED",,"Mary Brown"\n' +
+  '"Region 1","Probation Delivery Unit 1","Team 1","John Smith","PO",37,"Phased Return to Work",2,"28 11 2016, 16:15","26 11 2027, 16:15","DELETED",,"Jane Green"'
 }
 
 module.exports.LDU_REDUCTIONS_RESULT = {
   breadcrumbs:
   [{
-    title: 'LDU Cluster 1',
+    title: 'Probation Delivery Unit 1',
     link: '/probation/ldu/218',
-    active: undefined },
+    active: undefined
+  },
   {
-    title: 'Division 1',
+    title: 'Region 1',
     link: '/probation/region/146',
-    active: undefined },
-      { title: 'HMPPS', link: '/probation/hmpps/0', active: undefined } ],
+    active: undefined
+  },
+  { title: 'HMPPS', link: '/probation/hmpps/0', active: undefined }],
   reductionNotes:
-  [ { regionName: 'Division 1',
-    lduName: 'LDU Cluster 1',
+  [{
+    regionName: 'Region 1',
+    lduName: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'John Smith',
     contractedHours: 37,
@@ -3591,9 +5001,11 @@ module.exports.LDU_REDUCTIONS_RESULT = {
     endDate: '26 11 2027, 16:15',
     status: 'ACTIVE',
     additionalNotes: null,
-    gradeCode: 'PO' },
-  { regionName: 'Division 1',
-    lduName: 'LDU Cluster 1',
+    gradeCode: 'PO'
+  },
+  {
+    regionName: 'Region 1',
+    lduName: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'John Smith',
     contractedHours: 37,
@@ -3603,9 +5015,11 @@ module.exports.LDU_REDUCTIONS_RESULT = {
     endDate: '26 11 2027, 16:15',
     status: 'SCHEDULED',
     additionalNotes: null,
-    gradeCode: 'SPO' },
-  { regionName: 'Division 1',
-    lduName: 'LDU Cluster 1',
+    gradeCode: 'SPO'
+  },
+  {
+    regionName: 'Region 1',
+    lduName: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'John Smith',
     contractedHours: 37,
@@ -3615,9 +5029,11 @@ module.exports.LDU_REDUCTIONS_RESULT = {
     endDate: '28 11 2016, 16:15',
     status: 'ARCHIVED',
     additionalNotes: null,
-    gradeCode: 'PSO' },
-  { regionName: 'Division 1',
-    lduName: 'LDU Cluster 1',
+    gradeCode: 'PSO'
+  },
+  {
+    regionName: 'Region 1',
+    lduName: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'John Smith',
     contractedHours: 37,
@@ -3627,29 +5043,33 @@ module.exports.LDU_REDUCTIONS_RESULT = {
     endDate: '26 11 2027, 16:15',
     status: 'DELETED',
     additionalNotes: null,
-    gradeCode: 'PO' } ],
-  title: 'LDU Cluster 1',
-  subTitle: 'LDU Cluster' }
+    gradeCode: 'PO'
+  }],
+  title: 'Probation Delivery Unit 1',
+  subTitle: 'Probation Delivery Unit'
+}
 
 module.exports.LDU_REDUCTIONS_CSV = {
   filename: ('LDU_Cluster_1_Reductions_Notes ' + timestamp + '.csv').replace(replaceSpaces, '_'),
-  csv: '"Region","LDU Cluster","Team","Offender Manager","Grade Code","Contracted Hours","Reason","Hours","Start Date","End Date","Status","Additional Notes"\n' +
-  '"Division 1","LDU Cluster 1","Team 1","John Smith","PO",37,"Disability",5,"28 11 2016, 16:15","26 11 2027, 16:15","ACTIVE",\n' +
-  '"Division 1","LDU Cluster 1","Team 1","John Smith","SPO",37,"Long Term Sickness Absence",2,"26 02 2018, 16:15","26 11 2027, 16:15","SCHEDULED",\n' +
-  '"Division 1","LDU Cluster 1","Team 1","John Smith","PSO",37,"Phased Return to Work",1,"03 12 2016, 16:15","28 11 2016, 16:15","ARCHIVED",\n' +
-  '"Division 1","LDU Cluster 1","Team 1","John Smith","PO",37,"Phased Return to Work",2,"28 11 2016, 16:15","26 11 2027, 16:15","DELETED",'
+  csv: '"Region","Probation Delivery Unit","Team","Offender Manager","Grade Code","Contracted Hours","Reason","Hours","Start Date","End Date","Status","Additional Notes"\n' +
+  '"Region 1","Probation Delivery Unit 1","Team 1","John Smith","PO",37,"Disability",5,"28 11 2016, 16:15","26 11 2027, 16:15","ACTIVE",\n' +
+  '"Region 1","Probation Delivery Unit 1","Team 1","John Smith","SPO",37,"Long Term Sickness Absence",2,"26 02 2018, 16:15","26 11 2027, 16:15","SCHEDULED",\n' +
+  '"Region 1","Probation Delivery Unit 1","Team 1","John Smith","PSO",37,"Phased Return to Work",1,"03 12 2016, 16:15","28 11 2016, 16:15","ARCHIVED",\n' +
+  '"Region 1","Probation Delivery Unit 1","Team 1","John Smith","PO",37,"Phased Return to Work",2,"28 11 2016, 16:15","26 11 2027, 16:15","DELETED",'
 }
 
 module.exports.REGION_REDUCTIONS_RESULT = {
   breadcrumbs:
   [{
-    title: 'Division 1',
+    title: 'Region 1',
     link: '/probation/region/146',
-    active: undefined },
-  { title: 'HMPPS', link: '/probation/hmpps/0', active: undefined } ],
+    active: undefined
+  },
+  { title: 'HMPPS', link: '/probation/hmpps/0', active: undefined }],
   reductionNotes:
-  [ { regionName: 'Division 1',
-    lduName: 'LDU Cluster 1',
+  [{
+    regionName: 'Region 1',
+    lduName: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'John Smith',
     contractedHours: 37,
@@ -3659,9 +5079,11 @@ module.exports.REGION_REDUCTIONS_RESULT = {
     endDate: '26 11 2027, 16:15',
     status: 'ACTIVE',
     additionalNotes: null,
-    gradeCode: 'PO' },
-  { regionName: 'Division 1',
-    lduName: 'LDU Cluster 1',
+    gradeCode: 'PO'
+  },
+  {
+    regionName: 'Region 1',
+    lduName: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'John Smith',
     contractedHours: 37,
@@ -3671,9 +5093,11 @@ module.exports.REGION_REDUCTIONS_RESULT = {
     endDate: '26 11 2027, 16:15',
     status: 'SCHEDULED',
     additionalNotes: null,
-    gradeCode: 'SPO' },
-  { regionName: 'Division 1',
-    lduName: 'LDU Cluster 1',
+    gradeCode: 'SPO'
+  },
+  {
+    regionName: 'Region 1',
+    lduName: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'John Smith',
     contractedHours: 37,
@@ -3683,9 +5107,11 @@ module.exports.REGION_REDUCTIONS_RESULT = {
     endDate: '28 11 2016, 16:15',
     status: 'ARCHIVED',
     additionalNotes: null,
-    gradeCode: 'PSO' },
-  { regionName: 'Division 1',
-    lduName: 'LDU Cluster 1',
+    gradeCode: 'PSO'
+  },
+  {
+    regionName: 'Region 1',
+    lduName: 'Probation Delivery Unit 1',
     teamName: 'Team 1',
     offenderManager: 'John Smith',
     contractedHours: 37,
@@ -3695,15 +5121,17 @@ module.exports.REGION_REDUCTIONS_RESULT = {
     endDate: '26 11 2027, 16:15',
     status: 'DELETED',
     additionalNotes: null,
-    gradeCode: 'PO' } ],
-  title: 'Division 1',
-  subTitle: 'Division' }
+    gradeCode: 'PO'
+  }],
+  title: 'Region 1',
+  subTitle: 'Region'
+}
 
 module.exports.REGION_REDUCTIONS_CSV = {
-  filename: ('Division_1_Reductions_Notes ' + timestamp + '.csv').replace(replaceSpaces, '_'),
-  csv: '"Region","LDU Cluster","Team","Offender Manager","Grade Code","Contracted Hours","Reason","Hours","Start Date","End Date","Status","Additional Notes"\n' +
-  '"Division 1","LDU Cluster 1","Team 1","John Smith","PO",37,"Disability",5,"28 11 2016, 16:15","26 11 2027, 16:15","ACTIVE",\n' +
-  '"Division 1","LDU Cluster 1","Team 1","John Smith","SPO",37,"Long Term Sickness Absence",2,"26 02 2018, 16:15","26 11 2027, 16:15","SCHEDULED",\n' +
-  '"Division 1","LDU Cluster 1","Team 1","John Smith","PSO",37,"Phased Return to Work",1,"03 12 2016, 16:15","28 11 2016, 16:15","ARCHIVED",\n' +
-  '"Division 1","LDU Cluster 1","Team 1","John Smith","PO",37,"Phased Return to Work",2,"28 11 2016, 16:15","26 11 2027, 16:15","DELETED",'
+  filename: ('Region_1_Reductions_Notes ' + timestamp + '.csv').replace(replaceSpaces, '_'),
+  csv: '"Region","Probation Delivery Unit","Team","Offender Manager","Grade Code","Contracted Hours","Reason","Hours","Start Date","End Date","Status","Additional Notes"\n' +
+  '"Region 1","Probation Delivery Unit 1","Team 1","John Smith","PO",37,"Disability",5,"28 11 2016, 16:15","26 11 2027, 16:15","ACTIVE",\n' +
+  '"Region 1","Probation Delivery Unit 1","Team 1","John Smith","SPO",37,"Long Term Sickness Absence",2,"26 02 2018, 16:15","26 11 2027, 16:15","SCHEDULED",\n' +
+  '"Region 1","Probation Delivery Unit 1","Team 1","John Smith","PSO",37,"Phased Return to Work",1,"03 12 2016, 16:15","28 11 2016, 16:15","ARCHIVED",\n' +
+  '"Region 1","Probation Delivery Unit 1","Team 1","John Smith","PO",37,"Phased Return to Work",2,"28 11 2016, 16:15","26 11 2027, 16:15","DELETED",'
 }

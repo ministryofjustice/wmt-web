@@ -1,7 +1,7 @@
 const TierType = require('../../constants/tier-type')
 
 module.exports.getTierType = function (tierNumber) {
-  var tier
+  let tier
   switch (tierNumber) {
     case 1:
       tier = TierType.ONE
@@ -32,6 +32,24 @@ module.exports.getTierType = function (tierNumber) {
       break
     case 10:
       tier = TierType.TEN
+      break
+    case 11:
+      tier = TierType.ELEVEN
+      break
+    case 12:
+      tier = TierType.TWELVE
+      break
+    case 13:
+      tier = TierType.THIRTEEN
+      break
+    case 14:
+      tier = TierType.FOURTEEN
+      break
+    case 15:
+      tier = TierType.FIFTEEN
+      break
+    case 16:
+      tier = TierType.SIXTEEN
       break
   }
   return tier
