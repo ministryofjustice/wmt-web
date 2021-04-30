@@ -109,42 +109,50 @@
             </fieldset>
         </div>
         
-        <div class="grid-row form-group">
-            <fieldset class="column-full inline">
-              <legend>
-                <span class="form-label-bold">
-                  How would you like this data grouped?
-                </span>
-              </legend>
+        <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="fortnightlys-multi-search-field-hint" id="multiSearchDate">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                <h1 class="govuk-fieldset__heading">
+                    How would you like this data grouped?
+                </h1>
+            </legend>
           
-              <div class="column-one-quarter multiple-choice">
-                <input id="radio-inline-1" type="radio" name="radio-inline-group-2" value="Yes" checked>
-                <label for="radio-inline-1">Offender Manager</label>
+            <div class="govuk-grid-column-one-quarter">
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="radio-inline-1" type="radio" name="radio-inline-group-2" value="Yes" checked>
+                    <label class="govuk-label govuk-radios__label" for="radio-inline-1">Offender Manager</label>
+                </div>
               </div>
-              <div class="column-one-quarter multiple-choice">
-                <input id="radio-inline-2" type="radio" name="radio-inline-group-2" value="No">
-                <label for="radio-inline-2">Team</label>
+              <div class="govuk-grid-column-one-quarter">
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="radio-inline-2" type="radio" name="radio-inline-group-2" value="No">
+                    <label class="govuk-label govuk-radios__label" for="radio-inline-2">Team</label>
+                </div>
               </div>
           
             </fieldset>
           </div>
 
-          <div class="grid-row form-group">
-            <fieldset class="column-full inline">
-              <legend>
-                <span class="form-label-bold">
-                  At what intervals would you like this data grouped?
-                </span>
-              </legend>
+          <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset" role="group" aria-describedby="fortnightlys-multi-search-field-hint" id="multiSearchDate">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                    <h1 class="govuk-fieldset__heading">
+                        At what intervals would you like this data grouped?
+                    </h1>
+                </legend>
           
-              <div class="column-one-quarter multiple-choice">
-                <input id="radio-inline-1" type="radio" name="radio-inline-group" value="Yes" checked>
-                <label for="radio-inline-1">Weekly</label>
-              </div>
-              <div class="column-one-quarter multiple-choice">
-                <input id="radio-inline-2" type="radio" name="radio-inline-group" value="No">
-                <label for="radio-inline-2">Monthly</label>
-              </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="radio-inline-1" type="radio" name="radio-inline-group" value="Yes" checked>
+                        <label class="govuk-label govuk-radios__label" for="radio-inline-1">Weekly</label>
+                    </div>
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="radio-inline-2" type="radio" name="radio-inline-group" value="No">
+                        <label class="govuk-label govuk-radios__label" for="radio-inline-2">Monthly</label>
+                    </div>
+                </div>
           
             </fieldset>
           </div>
