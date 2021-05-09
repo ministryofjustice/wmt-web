@@ -14,11 +14,11 @@ const archiveOptions = require('../constants/archive-options')
 const renderResults = require('../helpers/render-results')
 const viewTemplate = 'daily-caseload-data'
 const title = 'Archived Daily Caseload Data'
-const newDataStartDateString = require('../../config').NEW_DATABASE_START_DATE
-const newArchiveDataStartDateString = require('../../config').NEW_ARCHIVE_DATABASE_START_DATE
+const archiveDatabaseStartDateString = require('../../config').ARCHIVE_DATABASE_START_DATE
+const currentDatabaseStartDateString = require('../../config').CURRENT_DATABASE_START_DATE
 const heDecode = require('he')
-const newArchiveDataStartDate = new moment(newArchiveDataStartDateString, 'DD/MM/YYYY')
-const newDataStartDate = new moment(newDataStartDateString, 'DD/MM/YYYY')
+const archiveDatabaseStartDate = new moment(archiveDatabaseStartDateString, 'DD/MM/YYYY')
+const currentDatabaseStartDate = new moment(currentDatabaseStartDateString, 'DD/MM/YYYY')
 
 let archiveDateRange
 
@@ -76,12 +76,15 @@ module.exports = function (router) {
       return renderResults(viewTemplate, title, res, errors, null, authorisedUserRole, archiveDateRange, extraCriteria)
     }
 
-    let thisArchiveOption = archiveOptions.DAILY
-    if (archiveDateRange.archiveFromDate.isSameOrAfter(newArchiveDataStartDate)) {
-      thisArchiveOption = archiveOptions.NEW_DAILY_ARCHIVE
+    // Assume that you need to start with the DB that contains the earliest database
+    let thisArchiveOption = archiveOptions.LEGACY
+    if (archiveDateRange.archiveFromDate.isSameOrAfter(archiveDatabaseStartDate)) {
+      // Archive start date is after the last date for data in the legacy database so don't bother searching the legacy DB
+      thisArchiveOption = archiveOptions.DAILY_ARCHIVE
     }
-    if (archiveDateRange.archiveFromDate.isSameOrAfter(newDataStartDate)) {
-      thisArchiveOption = archiveOptions.NEW_DAILY
+    if (archiveDateRange.archiveFromDate.isSameOrAfter(currentDatabaseStartDate)) {
+      // Archive start date is after the last date for data in the new archive database so don't bother searching this DB either
+      thisArchiveOption = archiveOptions.DAILY
     }
 
     return getArchive(thisArchiveOption, archiveDateRange, extraCriteria).then(function (results) {
@@ -127,12 +130,12 @@ module.exports = function (router) {
       return renderResults(viewTemplate, title, res, errors, null, authorisedUserRole, archiveDateRange, extraCriteria)
     }
 
-    let thisArchiveOption = archiveOptions.DAILY
-    if (archiveDateRange.archiveFromDate.isSameOrAfter(newArchiveDataStartDate)) {
-      thisArchiveOption = archiveOptions.NEW_DAILY_ARCHIVE
+    let thisArchiveOption = archiveOptions.LEGACY
+    if (archiveDateRange.archiveFromDate.isSameOrAfter(archiveDatabaseStartDate)) {
+      thisArchiveOption = archiveOptions.DAILY_ARCHIVE
     }
-    if (archiveDateRange.archiveFromDate.isSameOrAfter(newDataStartDate)) {
-      thisArchiveOption = archiveOptions.NEW_DAILY
+    if (archiveDateRange.archiveFromDate.isSameOrAfter(currentDatabaseStartDate)) {
+      thisArchiveOption = archiveOptions.DAILY
     }
 
     return getArchive(thisArchiveOption, archiveDateRange, extraCriteria).then(function (results) {

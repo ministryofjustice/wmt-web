@@ -12,7 +12,8 @@ const log = require('../logger')
 
 module.exports = function (archiveOption, archiveDateRange, extraCriteria) {
   archiveDataLimit = require('../../config').ARCHIVE_DATA_LIMIT
-  if (archiveOption === archiveOptions.DAILY) {
+  // start with the legacy database and then the archive and current database if result limits allow for this
+  if (archiveOption === archiveOptions.LEGACY) {
     return getDailyArchive(archiveDateRange, extraCriteria).then(function (results) {
       results = calculateCapacity(results)
       results.forEach(function (result) {
@@ -62,8 +63,8 @@ module.exports = function (archiveOption, archiveDateRange, extraCriteria) {
         results.sort(reductionDataArraySort)
         return formatReductionTo1DP(results)
       })
-    })
-  } else if (archiveOption === archiveOptions.NEW_DAILY_ARCHIVE) {
+    }) // start with the archive database and then move onto the current database if result limits allow for this
+  } else if (archiveOption === archiveOptions.DAILY_ARCHIVE) {
     return getDailyArchiveFromNewDB(archiveDateRange, extraCriteria, archiveDataLimit, true).then(function (results) {
       results.sort(caseloadDataArraySort)
       results.forEach(function (result) {
@@ -82,8 +83,8 @@ module.exports = function (archiveOption, archiveDateRange, extraCriteria) {
       } else {
         return results
       }
-    })
-  } else if (archiveOption === archiveOptions.NEW_DAILY) {
+    }) //search the current database only
+  } else if (archiveOption === archiveOptions.DAILY) {
     return getDailyArchiveFromNewDB(archiveDateRange, extraCriteria, archiveDataLimit, false).then(function (results) {
       results.sort(caseloadDataArraySort)
       results.forEach(function (result) {
