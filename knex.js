@@ -1,13 +1,13 @@
 const config = require('./knexfile').web
+const legacy = require('./knexfile').legacy
 const archive = require('./knexfile').archive
-const newArchive = require('./knexfile').newArchive
 
 const knexWebSchema = require('knex')(config)
+const knexLegacy = require('knex')(legacy)
 const knexArchive = require('knex')(archive)
-const knexNewArchive = require('knex')(newArchive)
 
 module.exports = {
   web: knexWebSchema,
-  archive: knexArchive,
-  newArchive: knexNewArchive
+  legacy: knexLegacy,
+  archive: knexArchive
 }

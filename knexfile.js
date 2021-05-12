@@ -20,7 +20,7 @@ module.exports = {
     },
     acquireConnectionTimeout: 120000
   },
-  newArchive: {
+  archive: {
     client: 'mssql',
     connection: {
       host: config.DATABASE_SERVER,
@@ -37,13 +37,13 @@ module.exports = {
       max: 500
     }
   },
-  archive: {
+  legacy: {
     client: 'mssql',
     connection: {
-      host: config.ARCHIVE_DATABASE_SERVER,
-      user: config.ARCHIVE_DATABASE_USERNAME,
-      password: config.ARCHIVE_DATABASE_PASSWORD,
-      database: config.ARCHIVE_DATABASE,
+      host: config.LEGACY_DATABASE_SERVER,
+      user: config.LEGACY_DATABASE_USERNAME,
+      password: config.LEGACY_DATABASE_PASSWORD,
+      database: config.LEGACY_DATABASE,
       options: {
         encrypt: true,
         requestTimeout: 120000,

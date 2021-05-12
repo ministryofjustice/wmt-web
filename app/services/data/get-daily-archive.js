@@ -1,4 +1,4 @@
-const knex = require('../../../knex').archive
+const knex = require('../../../knex').legacy
 const archiveDataLimit = require('../../../config').ARCHIVE_DATA_LIMIT
 
 module.exports = function (archiveDateRange, extraCriteria) {

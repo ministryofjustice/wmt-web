@@ -1,7 +1,7 @@
 module.exports = function (archiveDateRange, extraCriteria, archiveDataLimit, isArchive = false) {
   var knex
   if (isArchive) {
-    knex = require('../../../knex').newArchive
+    knex = require('../../../knex').archive
   } else {
     knex = require('../../../knex').web
   }

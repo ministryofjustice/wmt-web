@@ -1,5 +1,5 @@
 const knex = require('../../../knex').web
-const knexArchive = require('../../../knex').newArchive
+const knexArchive = require('../../../knex').archive
 const orgUnitFinder = require('../helpers/org-unit-finder')
 
 module.exports = function (id, fromDate, toDate, type) {
