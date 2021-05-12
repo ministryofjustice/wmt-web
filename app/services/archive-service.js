@@ -17,7 +17,13 @@ module.exports = function (archiveOption, archiveDateRange, extraCriteria) {
     return getDailyArchive(archiveDateRange, extraCriteria).then(function (results) {
       results = calculateCapacity(results)
       results.forEach(function (result) {
-        result.cmsPoints = 'N/A', result.gsPoints = 'N/A', result.cmsPercentage = 'N/A', result.gsPercentage = 'N/A', result.cmsColumn = 'N/A', result.gsColumn = 'N/A', result.armsTotalCases = 'N/A'
+        result.cmsPoints = 'N/A'
+        result.gsPoints = 'N/A'
+        result.cmsPercentage = 'N/A'
+        result.gsPercentage = 'N/A'
+        result.cmsColumn = 'N/A'
+        result.gsColumn = 'N/A'
+        result.armsTotalCases = 'N/A'
       })
       if (results.length < archiveDataLimit) {
         archiveDataLimit = archiveDataLimit - results.length
@@ -56,7 +62,10 @@ module.exports = function (archiveOption, archiveDateRange, extraCriteria) {
   } else if (archiveOption === archiveOptions.REDUCTIONS) {
     return getReductionArchive(archiveDateRange, extraCriteria).then(function (oldReductions) {
       oldReductions.forEach(function (oldReduction) {
-        oldReduction.reductionReason = 'N/A', oldReduction.startDate = 'N/A', oldReduction.endDate = 'N/A', oldReduction.reductionStatus = 'N/A'
+        oldReduction.reductionReason = 'N/A'
+        oldReduction.startDate = 'N/A'
+        oldReduction.endDate = 'N/A'
+        oldReduction.reductionStatus = 'N/A'
       })
       return getReductionArchiveFromNewDB(archiveDateRange, extraCriteria).then(function (newReductions) {
         const results = oldReductions.concat(newReductions)
@@ -76,14 +85,14 @@ module.exports = function (archiveOption, archiveDateRange, extraCriteria) {
           results2.forEach(function (result) {
             result = calculateCapacityCMSAndGS(result)
           })
-          var concatenatedResults = results.concat(results2)
+          const concatenatedResults = results.concat(results2)
           concatenatedResults.sort(caseloadDataArraySort)
           return concatenatedResults
         })
       } else {
         return results
       }
-    }) //search the current database only
+    }) // search the current database only
   } else if (archiveOption === archiveOptions.DAILY) {
     return getDailyArchiveFromNewDB(archiveDateRange, extraCriteria, archiveDataLimit, false).then(function (results) {
       results.sort(caseloadDataArraySort)

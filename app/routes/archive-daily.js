@@ -17,8 +17,8 @@ const title = 'Archived Daily Caseload Data'
 const archiveDatabaseStartDateString = require('../../config').ARCHIVE_DATABASE_START_DATE
 const currentDatabaseStartDateString = require('../../config').CURRENT_DATABASE_START_DATE
 const heDecode = require('he')
-const archiveDatabaseStartDate = new moment(archiveDatabaseStartDateString, 'DD/MM/YYYY')
-const currentDatabaseStartDate = new moment(currentDatabaseStartDateString, 'DD/MM/YYYY')
+const archiveDatabaseStartDate = new moment(archiveDatabaseStartDateString, 'DD/MM/YYYY') //eslint-disable-line
+const currentDatabaseStartDate = new moment(currentDatabaseStartDateString, 'DD/MM/YYYY') //eslint-disable-line
 
 let archiveDateRange
 

@@ -1,5 +1,5 @@
 module.exports = function (archiveDateRange, extraCriteria, archiveDataLimit, isArchive = false) {
-  var knex
+  let knex
   if (isArchive) {
     knex = require('../../../knex').archive
   } else {
