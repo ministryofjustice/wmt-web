@@ -1,4 +1,5 @@
 const knex = require('../../../knex').web
+const knexArchive = require('../../../knex').archive
 const orgUnitFinder = require('../helpers/org-unit-finder')
 
 module.exports = function (id, fromDate, toDate, type) {
@@ -12,6 +13,7 @@ module.exports = function (id, fromDate, toDate, type) {
     'reduction_hours',
     'contracted_hours'
   ]
+  let workloadReportResults
 
   let whereString = ' WHERE effective_from >= \'' + fromDate + '\''
   whereString += ' AND effective_from <= \'' + toDate + '\''
@@ -23,12 +25,21 @@ module.exports = function (id, fromDate, toDate, type) {
   const noExpandHint = ' WITH (NOEXPAND)'
   const orderBy = ' ORDER BY effective_from'
 
-  return knex.schema.raw('SELECT ' + selectList.join(', ') +
+  return knexArchive.schema.raw('SELECT ' + selectList.join(', ') +
           ' FROM ' + table +
           noExpandHint +
           whereString +
           orderBy)
-    .then(function (results) {
-      return results
+    .then(function (archiveDBResults) {
+      workloadReportResults = archiveDBResults
+      return knex.schema.raw('SELECT ' + selectList.join(', ') +
+          ' FROM ' + table +
+          noExpandHint +
+          whereString +
+          orderBy)
+        .then(function (currentDBResults) {
+          workloadReportResults = workloadReportResults.concat(currentDBResults)
+          return workloadReportResults
+        })
     })
 }

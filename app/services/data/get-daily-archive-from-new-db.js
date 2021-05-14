@@ -1,6 +1,10 @@
-const knex = require('../../../knex').web
-
-module.exports = function (archiveDateRange, extraCriteria, archiveDataLimit) {
+module.exports = function (archiveDateRange, extraCriteria, archiveDataLimit, isArchive = false) {
+  let knex
+  if (isArchive) {
+    knex = require('../../../knex').archive
+  } else {
+    knex = require('../../../knex').web
+  }
   if (extraCriteria !== null && extraCriteria !== undefined) {
     extraCriteria = extraCriteria.trim()
   }
