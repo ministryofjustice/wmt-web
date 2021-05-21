@@ -5,6 +5,7 @@ const tableCreator = require('./helpers/table-creator')
 const getOrganisationUnit = require('./helpers/org-unit-finder')
 const organisationConstant = require('../constants/organisation-unit')
 const percentageCalculator = require('./helpers/percentage-calculator')
+const log = require('../logger')
 
 module.exports = function (id, capacityDateRange, organisationLevel) {
   const organisationalUnitType = getOrganisationUnit('name', organisationLevel)
@@ -17,6 +18,7 @@ module.exports = function (id, capacityDateRange, organisationLevel) {
 
   return getWorkloadReports(id, capacityDateRange.capacityFromDate.toISOString(), capacityDateRange.capacityToDate.toISOString(), organisationLevel)
     .then(function (results) {
+      log.info(results)
       result.capacityBreakdown = []
       result.capacityTable = tableCreator.createCapacityTable(id, organisationalUnitType.displayText, results)
       result.title = result.breadcrumbs[0].title
@@ -25,11 +27,14 @@ module.exports = function (id, capacityDateRange, organisationLevel) {
       if (organisationalUnitType !== organisationConstant.OFFENDER_MANAGER) {
         return getCapacityBreakdown(id, organisationLevel)
           .then(function (memberCapacityBreakdown) {
-            result.capacityBreakdown = parseCapacityBreakdown(memberCapacityBreakdown, organisationLevel)
+            let parsedCapacityBreakdown = parseCapacityBreakdown(memberCapacityBreakdown, organisationLevel)
+            result.capacityBreakdown = parsedCapacityBreakdown.capacityBreakdown
             const temp = Object.assign({}, result.capacityBreakdown[result.capacityBreakdown.length - 1])
             result.capacityBreakdown.pop()
             result.capacityBreakdown.sort(function (a, b) { return a.name.localeCompare(b.name) })
             result.capacityBreakdown.push(temp)
+            result.capacityBreakdownTotals = parsedCapacityBreakdown.totals
+            result.capacityBreakdownCRCTotals = parsedCapacityBreakdown.crcTotals
             return result
           })
       }
@@ -38,9 +43,12 @@ module.exports = function (id, capacityDateRange, organisationLevel) {
 }
 
 const parseCapacityBreakdown = function (workloadReports, organisationLevel) {
+  const returnObject = {}
   const capacityBreakdown = []
   let totals = { name: 'Total / Average', capacity: 0, totalCases: 0, totalARMS: 0, totalGs: 0, totalCMS: 0, totalSDRs: 0, totalParoms: 0, totalSdrConversions: 0, totalTotalT2aCases: 0, totalCMSPoints: 0, totalGSPoints: 0, totalPoints: 0, availablePoints: 0 }
+  let crcTotals = { name: 'CRC Total / Average', capacity: 0, totalCases: 0, totalARMS: 0, totalGs: 0, totalCMS: 0, totalSDRs: 0, totalParoms: 0, totalSdrConversions: 0, totalTotalT2aCases: 0, totalCMSPoints: 0, totalGSPoints: 0, totalPoints: 0, availablePoints: 0 }
   let totalNumberOfGrades = 0
+  let crcTotalNumberOfGrades = 0
 
   if (organisationLevel === organisationConstant.TEAM.name) {
     workloadReports.forEach(function (workloadReport) {
@@ -50,6 +58,9 @@ const parseCapacityBreakdown = function (workloadReports, organisationLevel) {
     })
     totals = averageTotals(totals, capacityBreakdown.length)
     capacityBreakdown.push(totals)
+    returnObject.capacityBreakdown = capacityBreakdown
+    returnObject.totals = totals
+    returnObject.crcTotals = crcTotals
   } else if (organisationLevel !== organisationConstant.OFFENDER_MANAGER.name) {
     const organisationMap = new Map()
 
@@ -66,23 +77,61 @@ const parseCapacityBreakdown = function (workloadReports, organisationLevel) {
     })
 
     organisationMap.forEach(function (reports, orgName) {
-      const newEntry = {
-        name: orgName,
-        linkId: reports[0].linkId,
-        grades: []
+      if (organisationLevel === organisationConstant.NATIONAL.name) {
+        if (orgName.includes('NPS ')) {
+          const newEntry = {
+            name: orgName,
+            linkId: reports[0].linkId,
+            grades: []
+          }
+          reports.forEach(function (report) {
+            const capacityBreakdownRow = buildCapacityBreakdownEntry(report)
+            totals = addTotals(totals, capacityBreakdownRow)
+            newEntry.grades.push(capacityBreakdownRow)
+            totalNumberOfGrades++
+          })
+          capacityBreakdown.push(newEntry)
+        } else {
+          const newEntry = {
+            name: orgName,
+            linkId: reports[0].linkId,
+            grades: []
+          }
+          reports.forEach(function (report) {
+            const capacityBreakdownRow = buildCapacityBreakdownEntry(report)
+            crcTotals = addTotals(crcTotals, capacityBreakdownRow)
+            newEntry.grades.push(capacityBreakdownRow)
+            crcTotalNumberOfGrades++
+          })
+          capacityBreakdown.push(newEntry)
+        }
+      } else {
+        const newEntry = {
+          name: orgName,
+          linkId: reports[0].linkId,
+          grades: []
+        }
+        reports.forEach(function (report) {
+          const capacityBreakdownRow = buildCapacityBreakdownEntry(report)
+          totals = addTotals(totals, capacityBreakdownRow)
+          newEntry.grades.push(capacityBreakdownRow)
+          totalNumberOfGrades++
+        })
+        capacityBreakdown.push(newEntry)
       }
-      reports.forEach(function (report) {
-        const capacityBreakdownRow = buildCapacityBreakdownEntry(report)
-        totals = addTotals(totals, capacityBreakdownRow)
-        newEntry.grades.push(capacityBreakdownRow)
-        totalNumberOfGrades++
-      })
-      capacityBreakdown.push(newEntry)
     })
     totals = averageTotals(totals, totalNumberOfGrades)
     capacityBreakdown.push(totals)
+    returnObject.capacityBreakdown = capacityBreakdown
+    returnObject.totals = totals
+    returnObject.crcTotals = crcTotals
+    if (organisationLevel === organisationConstant.NATIONAL.name) {
+      crcTotals = averageTotals(crcTotals, crcTotalNumberOfGrades)
+      returnObject.totals = totals
+      returnObject.crcTotals = crcTotals
+    }
   }
-  return capacityBreakdown
+  return returnObject
 }
 
 const addTotals = function (totals, capacityBreakdown) {
