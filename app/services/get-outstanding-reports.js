@@ -1,7 +1,6 @@
 const getOutstandingReports = require('./data/get-outstanding-reports-view')
 const getOrganisationUnit = require('./helpers/org-unit-finder')
 const organisationConstant = require('../constants/organisation-unit')
-const log = require('../logger')
 
 module.exports = function (id, organisationLevel) {
   const organisationalUnitType = getOrganisationUnit('name', organisationLevel)

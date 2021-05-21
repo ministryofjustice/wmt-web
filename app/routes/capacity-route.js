@@ -76,7 +76,7 @@ module.exports = function (router) {
               subTitle: capacityBreakdown.subTitle,
               subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
               breadcrumbs: capacityBreakdown.breadcrumbs,
-              // capacity: capacityBreakdown.capacityTable,
+              capacity: capacityBreakdown.capacityTable,
               stringifiedCapacity: stringifyCapacityData(capacityBreakdown.capacityTable),
               errors: errors,
               capacityBreakdown: capacityBreakdown.capacityBreakdown,

@@ -5,7 +5,6 @@ const tableCreator = require('./helpers/table-creator')
 const getOrganisationUnit = require('./helpers/org-unit-finder')
 const organisationConstant = require('../constants/organisation-unit')
 const percentageCalculator = require('./helpers/percentage-calculator')
-const log = require('../logger')
 
 module.exports = function (id, capacityDateRange, organisationLevel) {
   const organisationalUnitType = getOrganisationUnit('name', organisationLevel)
@@ -18,7 +17,6 @@ module.exports = function (id, capacityDateRange, organisationLevel) {
 
   return getWorkloadReports(id, capacityDateRange.capacityFromDate.toISOString(), capacityDateRange.capacityToDate.toISOString(), organisationLevel)
     .then(function (results) {
-      log.info(results)
       result.capacityBreakdown = []
       result.capacityTable = tableCreator.createCapacityTable(id, organisationalUnitType.displayText, results)
       result.title = result.breadcrumbs[0].title
