@@ -34,6 +34,7 @@ module.exports = function (id, organisationalUnitName, currentPath, workloadType
         if (organisationalUnitName !== organisationUnitConstants.NATIONAL.name) {
           navigation.push(new Link('Export', baseLink + '/export'))
         } else {
+          navigation.push(new Link('CRC Caseload', baseLink + '/crc-caseload'))
           if (authorisation === false || userRole === 'Data Admin' || userRole === 'System Admin' || userRole === 'Manager') {
             navigation.push(new Link('Dashboard', baseLink + '/dashboard'))
           }
