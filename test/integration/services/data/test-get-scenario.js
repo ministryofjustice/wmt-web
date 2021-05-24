@@ -35,7 +35,7 @@ describe('services/data/get-scenario ldu', function () {
 
 describe('services/data/get-scenario division', function () {
   before(function () {
-    return getRegion('Division 1').then(function (id) {
+    return getRegion('NPS Region 1').then(function (id) {
       return getScenario(id, 'region').then(function (results) {
         scenarioData = results
       })

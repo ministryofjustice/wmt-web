@@ -1,6 +1,6 @@
 module.exports =
 [{
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -32,7 +32,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -64,7 +64,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -96,7 +96,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -128,7 +128,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -160,7 +160,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -192,7 +192,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -224,7 +224,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -256,7 +256,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -288,7 +288,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -320,7 +320,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -352,7 +352,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -384,7 +384,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -416,7 +416,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -448,7 +448,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -480,7 +480,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -512,7 +512,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -544,7 +544,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -576,7 +576,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -608,7 +608,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -640,7 +640,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -672,7 +672,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -704,7 +704,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -736,7 +736,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -768,7 +768,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -800,7 +800,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -832,7 +832,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -864,7 +864,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -896,7 +896,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -928,7 +928,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -960,7 +960,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -992,7 +992,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -1024,7 +1024,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -1056,7 +1056,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -1088,7 +1088,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -1120,7 +1120,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -1152,7 +1152,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -1184,7 +1184,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -1216,7 +1216,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -1248,7 +1248,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -1280,7 +1280,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -1312,7 +1312,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -1344,7 +1344,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -1376,7 +1376,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -1408,7 +1408,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -1440,7 +1440,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -1472,7 +1472,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -1504,7 +1504,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -1536,7 +1536,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -1568,7 +1568,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -1600,7 +1600,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'John Smith',
@@ -1632,7 +1632,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -1664,7 +1664,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -1696,7 +1696,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -1728,7 +1728,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -1760,7 +1760,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -1792,7 +1792,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -1824,7 +1824,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -1856,7 +1856,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -1888,7 +1888,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -1920,7 +1920,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -1952,7 +1952,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -1984,7 +1984,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2016,7 +2016,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2048,7 +2048,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2080,7 +2080,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2112,7 +2112,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2144,7 +2144,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2176,7 +2176,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2208,7 +2208,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2240,7 +2240,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2272,7 +2272,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2304,7 +2304,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2336,7 +2336,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2368,7 +2368,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2400,7 +2400,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2432,7 +2432,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2464,7 +2464,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2496,7 +2496,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2528,7 +2528,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2560,7 +2560,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2592,7 +2592,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2624,7 +2624,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2656,7 +2656,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2688,7 +2688,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2720,7 +2720,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2752,7 +2752,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2784,7 +2784,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2816,7 +2816,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2848,7 +2848,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2880,7 +2880,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2912,7 +2912,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2944,7 +2944,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -2976,7 +2976,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -3008,7 +3008,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -3040,7 +3040,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -3072,7 +3072,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -3104,7 +3104,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -3136,7 +3136,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -3168,7 +3168,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -3200,7 +3200,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
@@ -3232,7 +3232,7 @@ module.exports =
   paroms_total: 1
 },
 {
-  region_name: 'Division 2',
+  region_name: 'NPS Region 2',
   ldu_name: 'LDU Cluster 2',
   team_name: 'Team 2',
   om_name: 'Courtney Larry',
