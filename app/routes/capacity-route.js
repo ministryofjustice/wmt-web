@@ -19,7 +19,6 @@ const getCaseDetailsView = require('../services/get-case-details-view')
 const getBreadcrumbs = require('../services/get-breadcrumbs')
 const renderWMTUpdatingPage = require('../helpers/render-wmt-updating-page')
 let lastUpdated
-const log = require('../logger')
 
 module.exports = function (router) {
   router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/caseload-capacity', function (req, res, next) {
@@ -78,6 +77,8 @@ module.exports = function (router) {
               breadcrumbs: capacityBreakdown.breadcrumbs,
               capacity: capacityBreakdown.capacityTable,
               stringifiedCapacity: stringifyCapacityData(capacityBreakdown.capacityTable),
+              crcCapacity: capacityBreakdown.crcCapacityTable,
+              crcStringifiedCapacity: stringifyCapacityData(capacityBreakdown.crcCapacityTable),
               errors: errors,
               capacityBreakdown: capacityBreakdown.capacityBreakdown,
               capacityBreakdownTotals: capacityBreakdown.capacityBreakdownTotals,
@@ -163,6 +164,8 @@ module.exports = function (router) {
               breadcrumbs: capacityBreakdown.breadcrumbs,
               capacity: capacityBreakdown.capacityTable,
               stringifiedCapacity: stringifyCapacityData(capacityBreakdown.capacityTable),
+              crcCapacity: capacityBreakdown.crcCapacityTable,
+              crcStringifiedCapacity: stringifyCapacityData(capacityBreakdown.crcCapacityTable),
               errors: errors,
               capacityBreakdown: capacityBreakdown.capacityBreakdown,
               outstandingReports: outstandingReports,

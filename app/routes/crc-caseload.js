@@ -53,7 +53,7 @@ module.exports = function (router) {
               caseloadDetailsData[3].array.totals = defaultTotals
             }
           }
-          return res.render('caseload', {
+          return res.render('crc-caseload', {
             screen: 'caseload',
             linkId: req.params.id,
             title: result.title,

@@ -14,6 +14,7 @@
 <form method="post">
   {% include "includes/csrf-hidden-input.html"%}
     <input id="capacityTable" type="hidden" name="capacityTable" value="{{ stringifiedCapacity }}">
+    <input id="crcCapacityTable" type="hidden" name="crcCapacityTable" value="{{ crcStringifiedCapacity }}">
 
     <div class="govuk-form-group  {% if errors['capacityFromDate'][0] %} govuk-form-group--error {% endif %}">
       <fieldset id="capacityFromDate" class="govuk-fieldset" role="group" aria-describedby="capacity-from-date-hint  {% if errors['capacityFromDate'][0] %} capacity-from-date-error {% endif %}">
@@ -131,8 +132,46 @@
     </tbody>
 </table>
 
+<table class="non-javascript">
+  <thead>
+      <tr>
+          <th scope="col"></th>
+           {% for heading in crcCapacity.headings %}
+              <th scope="col">{{ heading | date("MMM DD, YYYY")}}</th>
+          {% endfor %}
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <th scope="row">Capacity</th>
+          {% for i in range(0, crcCapacity.rows[0].values.length)%}
+              <td> {{crcCapacity.rows[0].values[i]}}% </td>
+          {% endfor %}
+      </tr>
+      <tr>
+          <th scope="row">Reductions</th>
+          {% for i in range(0, crcCapacity.rows[0].values.length)%}
+              <td> {{crcCapacity.rows[1].values[i]}}</td>
+          {% endfor %}
+      </tr>
+  </tbody>
+</table>
+
+{% if organisationLevel === 'hmpps' %}
+  <h3 class="govuk-heading-m">NPS Capacity</h3>
+{% endif %}
+
 <div id="plotly-div-line" aria-hidden="true"></div>
 
+<br/>
+<br/>
+<br/>
+<br/>
+
+{% if organisationLevel === 'hmpps' %}
+  <h3 class="govuk-heading-m">CRC Capacity</h3>
+  <div id="plotly-div-line-crc" aria-hidden="true"></div>
+{% endif %}
 
 
 {% if organisationLevel === 'offender-manager' %}
@@ -489,6 +528,7 @@
     <script src="{{ assetPath }}javascripts/vendor/jquery.min.js"></script>
     <script src="/public/javascripts/plotly-latest.min.js"></script>
     <script src="/public/javascripts/caseload-capacity.js"></script>
+    <script src="/public/javascripts/caseload-capacity-crc.js"></script>
     <script src="{{ assetPath }}javascripts/datatables.min.js"></script>
     <script src="{{ assetPath }}javascripts/case-details.js"></script>
     <script src="/public/javascripts/floatThead.js"></script>
