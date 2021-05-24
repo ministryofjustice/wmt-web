@@ -14,10 +14,10 @@ module.exports = function (id, organisationLevel) {
 
   return getOutstandingReports(id, organisationLevel)
     .then(function (outstandingReports) {
-      let result = {
+      const result = {
         result: [],
         totals: { name: 'Total', totalOW: 0, totalOT: 0, totalUPW: 0, totalSL: 0, totalSSO: 0 },
-        crcTotals : { name: 'CRC Total', totalOW: 0, totalOT: 0, totalUPW: 0, totalSL: 0, totalSSO: 0 }
+        crcTotals: { name: 'CRC Total', totalOW: 0, totalOT: 0, totalUPW: 0, totalSL: 0, totalSSO: 0 }
       }
       if (organisationLevel === organisationConstant.TEAM.name) {
         const totals = { name: 'Total', totalOW: 0, totalOT: 0, totalUPW: 0, totalSL: 0, totalSSO: 0 }
@@ -27,7 +27,7 @@ module.exports = function (id, organisationLevel) {
         })
         result.result.push(totals)
       } else if (organisationalUnitType !== organisationConstant.OFFENDER_MANAGER) {
-        let reportsGroupedByName = groupReportsByOrgName(outstandingReports, organisationLevel)
+        const reportsGroupedByName = groupReportsByOrgName(outstandingReports, organisationLevel)
         result.result = reportsGroupedByName.result
         result.totals = reportsGroupedByName.totals
         result.crcTotals = reportsGroupedByName.crcTotals

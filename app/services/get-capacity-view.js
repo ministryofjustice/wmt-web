@@ -26,7 +26,7 @@ module.exports = function (id, capacityDateRange, organisationLevel) {
       if (organisationalUnitType !== organisationConstant.OFFENDER_MANAGER) {
         return getCapacityBreakdown(id, organisationLevel)
           .then(function (memberCapacityBreakdown) {
-            let parsedCapacityBreakdown = parseCapacityBreakdown(memberCapacityBreakdown, organisationLevel)
+            const parsedCapacityBreakdown = parseCapacityBreakdown(memberCapacityBreakdown, organisationLevel)
             result.capacityBreakdown = parsedCapacityBreakdown.capacityBreakdown
             const temp = Object.assign({}, result.capacityBreakdown[result.capacityBreakdown.length - 1])
             result.capacityBreakdown.pop()

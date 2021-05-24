@@ -43,16 +43,16 @@ module.exports = function (id, fromDate, toDate, type) {
                     crcWorkloadReportResults = crcWorkloadReportResults.concat(crcCurrentDBResults)
                     return Promise.resolve({
                       workloadReportResults: workloadReportResults,
-                      crcWorkloadReportResults: crcWorkloadReportResults,
+                      crcWorkloadReportResults: crcWorkloadReportResults
                     })
                   })
               })
-            } else {
-              return Promise.resolve({
-                workloadReportResults: workloadReportResults,
-                crcWorkloadReportResults: [],
-              })
-            }
+          } else {
+            return Promise.resolve({
+              workloadReportResults: workloadReportResults,
+              crcWorkloadReportResults: []
+            })
+          }
         })
     })
 }
