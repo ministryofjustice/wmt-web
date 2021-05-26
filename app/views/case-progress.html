@@ -69,12 +69,17 @@
     </tbody>
 </table>
 
+{% if organisationLevel === 'hmpps' %}
+    <h3 class="govuk-heading-m">NPS Case Progress</h3>
+{% endif %}
+
 <div id="plotly-div-cases" aria-hidden="true"></div>
 <br/>
 <br/>
 <br/>
 <br/>
 {% if organisationLevel === 'hmpps' %}
+    <h3 class="govuk-heading-m">CRC Case Progress</h3>
     <div id="plotly-div-cases-crc" aria-hidden="true"></div>
 {% endif %}
 

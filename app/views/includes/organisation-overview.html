@@ -84,7 +84,7 @@
         </thead>
         <tbody>
             {% for member in overviewDetails %}
-            {% if member.name !== 'Total / Average' %}
+            {% if member.name !== 'Total / Average' and member.name !== 'CRC Total / Average' %}
             <tr>
               <td headers="name om"><a class="govuk-link" href="/{{ workloadType }}/{{ childOrganisationLevel }}/{{ member.linkId }}">{{ member.name }}</td>
             {% if organisationLevel === 'team' %}  
@@ -113,7 +113,7 @@
         {% for member in overviewDetails %}
         {% if member.name === 'Total / Average' %}
             <tr>
-            <td headers="name om">{{ member.name }}</td>
+            <td headers="name om">NPS {{ member.name }}</td>
             {% if organisationLevel === 'team' %}  
               <td headers="grade om">{{ member.gradeCode }}</td>
             {% endif %}
