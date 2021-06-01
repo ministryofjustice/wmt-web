@@ -77,7 +77,7 @@ before(function () {
 
 describe('services/archive-service', function () {
   it('should return a capacity percentage formatted to two decimal places and appended with a percentage symbol', function () {
-    return archiveService(archiveOptions.DAILY).then(function (result) {
+    return archiveService(archiveOptions.LEGACY).then(function (result) {
       expect(result[0].capacity).to.eql(expectedArchiveRecord.capacity)
     })
   })

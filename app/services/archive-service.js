@@ -12,7 +12,8 @@ const log = require('../logger')
 
 module.exports = function (archiveOption, archiveDateRange, extraCriteria) {
   archiveDataLimit = require('../../config').ARCHIVE_DATA_LIMIT
-  if (archiveOption === archiveOptions.DAILY) {
+  // start with the legacy database and then the archive and current database if result limits allow for this
+  if (archiveOption === archiveOptions.LEGACY) {
     return getDailyArchive(archiveDateRange, extraCriteria).then(function (results) {
       results = calculateCapacity(results)
       results.forEach(function (result) {
@@ -26,13 +27,25 @@ module.exports = function (archiveOption, archiveDateRange, extraCriteria) {
       })
       if (results.length < archiveDataLimit) {
         archiveDataLimit = archiveDataLimit - results.length
-        return getDailyArchiveFromNewDB(archiveDateRange, extraCriteria, archiveDataLimit).then(function (newResults) {
-          newResults.forEach(function (result) {
+        return getDailyArchiveFromNewDB(archiveDateRange, extraCriteria, archiveDataLimit, true).then(function (results2) {
+          results2.forEach(function (result) {
             result = calculateCapacityCMSAndGS(result)
           })
-          const concatenatedResults = results.concat(newResults)
+          let concatenatedResults = results.concat(results2)
           concatenatedResults.sort(caseloadDataArraySort)
-          return concatenatedResults
+          if (concatenatedResults.length < archiveDataLimit) {
+            archiveDataLimit = archiveDataLimit - concatenatedResults.length
+            return getDailyArchiveFromNewDB(archiveDateRange, extraCriteria, archiveDataLimit, false).then(function (results3) {
+              results3.forEach(function (result) {
+                result = calculateCapacityCMSAndGS(result)
+              })
+              concatenatedResults = concatenatedResults.concat(results3)
+              concatenatedResults.sort(caseloadDataArraySort)
+              return concatenatedResults
+            })
+          } else {
+            return concatenatedResults
+          }
         })
       } else {
         return results
@@ -59,9 +72,29 @@ module.exports = function (archiveOption, archiveDateRange, extraCriteria) {
         results.sort(reductionDataArraySort)
         return formatReductionTo1DP(results)
       })
-    })
-  } else {
-    return getDailyArchiveFromNewDB(archiveDateRange, extraCriteria, archiveDataLimit).then(function (results) {
+    }) // start with the archive database and then move onto the current database if result limits allow for this
+  } else if (archiveOption === archiveOptions.DAILY_ARCHIVE) {
+    return getDailyArchiveFromNewDB(archiveDateRange, extraCriteria, archiveDataLimit, true).then(function (results) {
+      results.sort(caseloadDataArraySort)
+      results.forEach(function (result) {
+        result = calculateCapacityCMSAndGS(result)
+      })
+      if (results.length < archiveDataLimit) {
+        archiveDataLimit = archiveDataLimit - results.length
+        return getDailyArchiveFromNewDB(archiveDateRange, extraCriteria, archiveDataLimit, false).then(function (results2) {
+          results2.forEach(function (result) {
+            result = calculateCapacityCMSAndGS(result)
+          })
+          const concatenatedResults = results.concat(results2)
+          concatenatedResults.sort(caseloadDataArraySort)
+          return concatenatedResults
+        })
+      } else {
+        return results
+      }
+    }) // search the current database only
+  } else if (archiveOption === archiveOptions.DAILY) {
+    return getDailyArchiveFromNewDB(archiveDateRange, extraCriteria, archiveDataLimit, false).then(function (results) {
       results.sort(caseloadDataArraySort)
       results.forEach(function (result) {
         result = calculateCapacityCMSAndGS(result)
