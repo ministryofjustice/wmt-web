@@ -168,12 +168,18 @@
         <tr class="headers">
             <th id="workloadID">Start Date</th>
             <th id="workloadDate">End Date</th>
+            <th id="region">Region</th>
             <th id="cluster">Cluster</th>
             <th id="team">Team</th>
             <th id="offenderManager">Offender Manager</th>
+            <th id="grade">Grade</th>
             <th id="totalCases">Average Cases</th>
             <th id="capacity">Average Capacity %</th>
             <th id="reductions">Average Reductions</th>
+            <th id="cms">Average CMS Points</th>
+            <th id="cmsp">Average CMS %</th>
+            <th id="gs">Average GS Points</th>
+            <th id="gsp">Average GS %</th>
         </tr>
     </thead>
     <tbody>
@@ -181,12 +187,18 @@
         <tr>
             <td>{{ result.startDate }}</td>
             <td>{{ result.endDate }}</td>
+            <td>{{ result.regionName }}</td>
             <td>{{ result.lduName }}</td>
             <td>{{ result.teamName }}</td>
             <td>{{ result.omName }}</td>
+            <td>{{ result.grade }}</td>
             <td>{{ result.totalCases }}</td>
             <td>{{ result.capacity }}</td>
             <td>{{ result.hoursReduction }}</td>
+            <td>{{ result.cmsPoints }}</td>
+            <td>{{ result.cmsPercentage }}</td>
+            <td>{{ result.gsPoints }}</td>
+            <td>{{ result.gsPercentage }}</td>
         </tr>
         {% endfor %}
     </tbody>

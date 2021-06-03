@@ -20,9 +20,9 @@ module.exports = function (results, searchStartDate, searchEndDate) {
   var groupedData = []
   // for each 7 days
   archiveArray.forEach(function (offenderManager) {
-    //setup date variables after every new offender manager
-    var startDate = moment('01-08-2016', 'DD-MM-YYYY')
-    var endDate = moment('31-5-2019', 'DD-MM-YYYY')
+    // setup date variables after every new offender manager
+    var startDate = searchStartDate
+    var endDate = searchEndDate
     // var startDate = searchStartDate.clone().startOf('week').add(1, 'days')
     // if (!searchEndDate.isSame(searchStartDate.clone().startOf('week').add(1, 'days'))) {
     //   var endDate = searchEndDate.clone().endOf('week').add(1, 'days').startOf('week').add(1, 'days')
