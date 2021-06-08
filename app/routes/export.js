@@ -176,38 +176,6 @@ module.exports = function (router) {
 const formatResults = function (results, tabType) {
   let newDate, year, month, dt
   results.forEach(function (result) {
-    if (tabType === tabs.EXPORT.ARMS_EXPORT) {
-      newDate = new Date(result.assessmentDate)
-      year = newDate.getFullYear()
-      month = newDate.getMonth() + 1
-      dt = newDate.getDate()
-
-      result.assessmentDate = dt + '-' + month + '-' + year
-
-      newDate = new Date(result.releaseDate)
-      year = newDate.getFullYear()
-      month = newDate.getMonth() + 1
-      dt = newDate.getDate()
-
-      result.releaseDate = dt + '-' + month + '-' + year
-
-      newDate = new Date(result.completedDate)
-      year = newDate.getFullYear()
-      month = newDate.getMonth() + 1
-      dt = newDate.getDate()
-
-      result.completedDate = dt + '-' + month + '-' + year
-    }
-
-    if (tabType === tabs.EXPORT.T2A_EXPORT) {
-      newDate = new Date(result.Allocation_Date)
-      year = newDate.getFullYear()
-      month = newDate.getMonth() + 1
-      dt = newDate.getDate()
-
-      result.Allocation_Date = dt + '-' + month + '-' + year
-    }
-
     if ((tabType === tabs.EXPORT.GROUP_SUPERVISION_EXPORT) || (tabType === tabs.EXPORT.CMS_EXPORT)) {
       newDate = new Date(result.contactDate)
       year = newDate.getFullYear()
