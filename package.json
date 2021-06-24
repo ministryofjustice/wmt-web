@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "description": "The frontend of the workload measurement tool",
   "scripts": {
-    "start": "gulp",
-    "build": "yarn install && gulp generate-assets && gulp sync",
+    "start": "gulp start",
+    "build": "gulp generate-assets && gulp sync",
     "unit-test": "standard && mocha --recursive test/unit/ --exit",
     "integration-test": "gulp generate-assets && mocha --recursive test/integration --timeout=60000 --exit",
     "test": "mocha --recursive test/unit/ --exit --reporter mocha-simple-html-reporter --reporter-options output=test_results/unit-test-reports.html",
