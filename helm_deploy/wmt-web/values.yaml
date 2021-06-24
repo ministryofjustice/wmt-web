@@ -1,6 +1,6 @@
 ---
 generic-service:
-  nameOverride: wmt-worker
+  nameOverride: wmt-web
   replicaCount: 1
 
   image:
