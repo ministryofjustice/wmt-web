@@ -35,6 +35,7 @@ module.exports = function (id, organisationLevel) {
   ]
 
   return knex('scenario_view')
+    .withSchema('app')
     .columns(columns)
     .where(organisationLevel + '_id', id)
 }

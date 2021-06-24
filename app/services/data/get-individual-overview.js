@@ -1,7 +1,7 @@
 const knex = require('../../../knex').web
 
 module.exports = function (id) {
-  const table = 'individual_case_overview'
+  const table = 'app.individual_case_overview'
   let whereClause = ''
 
   if (id !== undefined) {
@@ -24,7 +24,7 @@ module.exports = function (id) {
 
   return knex.raw(
     'SELECT TOP (1) ' + selectColumns.join(', ') +
-    ' FROM ' + table + ' WITH (NOEXPAND)' +
+    ' FROM ' + table + ' ' +
     whereClause
   )
     .then(function (results) {
@@ -32,6 +32,7 @@ module.exports = function (id) {
         return results[0]
       } else {
         return knex('workload_owner')
+          .withSchema('app')
           .join('offender_manager', 'workload_owner.offender_manager_id', 'offender_manager.id')
           .join('offender_manager_type', 'offender_manager.type_id', 'offender_manager_type.id')
           .join('team', 'workload_owner.team_id', 'team.id')

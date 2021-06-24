@@ -6,6 +6,7 @@ module.exports = function (roleName) {
   }
 
   return knex('roles')
+    .withSchema('app')
     .where('role', roleName)
     .select('id',
       'role')

@@ -4,7 +4,7 @@ const orgUnitConstants = require('../../constants/organisation-unit')
 
 module.exports = function (id, type, workloadType) {
   const orgUnit = orgUnitFinder('name', type)
-  const table = 'individual_case_overview'
+  const table = 'app.individual_case_overview'
   let whereClause = ''
   let orderBy = 'lduCluster, teamName'
 
@@ -32,7 +32,7 @@ module.exports = function (id, type, workloadType) {
 
   return knex.raw(
     'SELECT ' + selectColumns.join(', ') +
-        ' FROM ' + table + ' WITH (NOEXPAND)' +
+        ' FROM ' + table + ' ' +
         whereClause + ' ORDER BY ' + orderBy)
     .then(function (results) {
       return results

@@ -1,8 +1,5 @@
 module.exports = {
 
-  LOGGING_PATH: process.env.LOGGING_PATH || 'logs/wmt-web.log',
-  LOGGING_LEVEL: process.env.LOGGING_LEVEL || 'DEBUG',
-
   // Authentication (defaults for development)
   AUTHENTICATION_ENABLED: process.env.WMT_WEB_AUTHENTICATION_ENABLED || false,
   ACTIVE_DIRECTORY_ENTRY_POINT: process.env.WMT_ACTIVE_DIRECTORY_ENTRY_POINT || 'enter here', // SAML-P Sign-On Endpoint
@@ -19,27 +16,12 @@ module.exports = {
 
   // DB
   DATABASE_SERVER: process.env.WMT_DB_SERVER || 'localhost',
-  DATABASE: process.env.WMT_DB_NAME || 'wmt_db',
-  ARCHIVE_DATABASE: process.env.WMT_ARCHIVE_DB_NAME || 'wmt_db',
+  DATABASE: process.env.WMT_DB_NAME || 'master',
   DB_APP_SCHEMA: 'app',
 
-  // ARCHIVE DB
-  LEGACY_DATABASE_SERVER: process.env.WMT_LEGACY_DB_SERVER || 'localhost',
-  LEGACY_DATABASE: process.env.WMT_LEGACY_DB_NAME || 'wmt_db',
-  LEGACY_DATABASE_USERNAME: process.env.WMT_LEGACY_DATABASE_USERNAME || 'wmt',
-  LEGACY_DATABASE_PASSWORD: process.env.WMT_LEGACY_DATABASE_PASSWORD || 'wmt',
-
   // App
-  WEB_APP_DATABASE_USERNAME: process.env.WMT_WEB_APP_DATABASE_USERNAME || 'wmt_web',
-  WEB_APP_DATABASE_PASSWORD: process.env.WMT_WEB_APP_DATABASE_PASSWORD || 'wmt_web',
-
-  // Migration
-  MIGRATION_APP_DATABASE_USERNAME: process.env.WMT_MIGRATION_APP_DATABASE_USERNAME || 'wmt_app',
-  MIGRATION_APP_DATABASE_PASSWORD: process.env.WMT_MIGRATION_APP_DATABASE_PASSWORD || 'wmt_app',
-
-  // Archive Migration
-  MIGRATION_ARCHIVE_DATABASE_USERNAME: process.env.WMT_ARCHIVE_MIGRATION_DATABASE_USERNAME || 'wmt_app',
-  MIGRATION_ARCHIVE_DATABASE_PASSWORD: process.env.WMT_ARCHIVE_MIGRATION_DATABASE_PASSWORD || 'wmt_app',
+  WEB_APP_DATABASE_USERNAME: process.env.WMT_WEB_APP_DATABASE_USERNAME || 'sa',
+  WEB_APP_DATABASE_PASSWORD: process.env.WMT_WEB_APP_DATABASE_PASSWORD || 'yourStrong(!)Password',
 
   ARCHIVE_DATA_LIMIT: '10000',
 

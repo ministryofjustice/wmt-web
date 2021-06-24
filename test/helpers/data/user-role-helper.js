@@ -11,7 +11,7 @@ module.exports.addUserRoleData = function (userId, roleId) {
     last_updated_by: userId
   }
 
-  return knex('user_role').returning('id').insert(userRole)
+  return knex('user_role').withSchema('app').returning('id').insert(userRole)
     .then(function (ids) {
       ids.forEach((id) => {
         insertedData.push({ table: 'user_role', id: id })
@@ -27,7 +27,7 @@ module.exports.addUsers = function () {
     { username: 'testusername', name: 'Test User' }
   ]
 
-  return knex('users').returning(['id', 'username', 'name']).insert(users)
+  return knex('users').withSchema('app').returning(['id', 'username', 'name']).insert(users)
     .then(function (result) {
       result.forEach((user) => {
         inserts.push({ table: 'users', id: user.id, username: user.username, name: user.name })
@@ -44,7 +44,7 @@ module.exports.addRoles = function () {
     { role: 'Test_Role2' }
   ]
 
-  return knex('roles').returning('id').insert(roles)
+  return knex('roles').withSchema('app').returning('id').insert(roles)
     .then(function (ids) {
       ids.forEach((id) => {
         inserts.push({ table: 'roles', id: id })
@@ -55,6 +55,7 @@ module.exports.addRoles = function () {
 
 module.exports.getAnyExistingUsernameWithExistingRole = function () {
   return knex('users')
+    .withSchema('app')
     .join('user_role', 'user_role.user_id', 'users.id')
     .first('users.username')
 }
@@ -62,6 +63,6 @@ module.exports.getAnyExistingUsernameWithExistingRole = function () {
 module.exports.removeInsertedData = function (inserts) {
   inserts = inserts.reverse()
   return Promise.each(inserts, (insert) => {
-    return knex(insert.table).where('id', insert.id).del()
+    return knex(insert.table).withSchema('app').where('id', insert.id).del()
   })
 }

@@ -22,18 +22,18 @@ module.exports = function (id, fromDate, toDate, type) {
     whereString += ' AND id = ' + id
   }
 
-  const noExpandHint = ' WITH (NOEXPAND)'
+  const noExpandHint = ' '
   const orderBy = ' ORDER BY effective_from'
 
   return knexArchive.schema.raw('SELECT ' + selectList.join(', ') +
-          ' FROM ' + table +
+          ' FROM dbo.' + table +
           noExpandHint +
           whereString +
           orderBy)
     .then(function (archiveDBResults) {
       workloadReportResults = archiveDBResults
       return knex.schema.raw('SELECT ' + selectList.join(', ') +
-          ' FROM ' + table +
+          ' FROM app.' + table +
           noExpandHint +
           whereString +
           orderBy)

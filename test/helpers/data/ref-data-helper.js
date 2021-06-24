@@ -8,7 +8,7 @@ module.exports.addReductionsRefData = function (maxId) {
     { category: 'Test Category 2' }
   ]
 
-  return knex('reduction_category').returning('id').insert(reductionCategories)
+  return knex('reduction_category').withSchema('app').returning('id').insert(reductionCategories)
     .then(function (ids) {
       ids.forEach((id) => {
         inserts.push({ table: 'reduction_category', id: id })
@@ -27,12 +27,13 @@ module.exports.addReductionsRefData = function (maxId) {
 module.exports.removeInsertedData = function (inserts) {
   inserts = inserts.reverse()
   return Promise.each(inserts, (insert) => {
-    return knex(insert.table).where('id', insert.id).del()
+    return knex(insert.table).withSchema('app').where('id', insert.id).del()
   })
 }
 
 module.exports.getMaxReductionReasonId = function () {
   return knex('reduction_reason')
+    .withSchema('app')
     .max('id AS maxId')
     .then(function (maxId) {
       return maxId[0].maxId

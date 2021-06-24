@@ -7,6 +7,7 @@ module.exports = function (id) {
   }
 
   return knex('reductions')
+    .withSchema('app')
     .where(whereObject)
     .select('reductions.id AS reductionId',
       'reduction_reason_id AS reductionReasonId',

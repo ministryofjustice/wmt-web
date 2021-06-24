@@ -4,6 +4,7 @@ const createReductionReasonDBObject = require('../helpers/create-reduction-reaso
 module.exports = function (id, reductionReason) {
   const updateObject = createReductionReasonDBObject(reductionReason)
   return knex('reduction_reason')
+    .withSchema('app')
     .update(updateObject)
     .where('id', parseInt(id))
 }

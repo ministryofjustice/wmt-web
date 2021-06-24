@@ -7,11 +7,13 @@
     "build": "yarn install && gulp generate-assets && gulp sync",
     "unit-test": "standard && mocha --recursive test/unit/ --exit",
     "integration-test": "gulp generate-assets && mocha --recursive test/integration --timeout=60000 --exit",
-    "test": "yarn unit-test && yarn integration-test",
+    "test": "mocha --recursive test/unit/ --exit --reporter mocha-simple-html-reporter --reporter-options output=test_results/unit-test-reports.html",
     "test-e2e": "gulp --gulpfile gulpfile-e2e.js",
     "test-e2e-firefox": "wdio test/wdio.conf.sauce.firefox.js",
     "test-e2e-firefox-jenkins": "wdio test/wdio.conf.sauce.firefox.jenkins.js",
-    "accessibility-test": "mocha --recursive test/accessibility --timeout=100000 --exit"
+    "accessibility-test": "mocha --recursive test/accessibility --timeout=100000 --exit",
+    "record-build-info": "node ./bin/record-build-info",
+    "lint": "standard"
   },
   "standard": {
     "ignore": [
@@ -43,6 +45,7 @@
     "gulp-standard": "14.0.x",
     "gulp-webdriver": "^4.0.0",
     "mocha": "8.4.x",
+    "mocha-simple-html-reporter": "^2.0.0",
     "nodemon": "^2.0.7",
     "proxyquire": "2.1.x",
     "selenium-standalone": "6.23.0",

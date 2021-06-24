@@ -26,6 +26,7 @@ module.exports = function (archiveDateRange, extraCriteria) {
 
   if (extraCriteria !== null && extraCriteria !== undefined && extraCriteria !== '') {
     return knex('daily_archive_data')
+      .withSchema('dbo')
       .limit(parseInt(archiveDataLimit))
       .select(selectColumns)
       .whereBetween('workload_date', [archiveDateRange.archiveFromDate.toISOString().substring(0, 10),
@@ -38,6 +39,7 @@ module.exports = function (archiveDateRange, extraCriteria) {
       .orderBy('workload_id', 'ASC')
   } else {
     return knex('daily_archive_data')
+      .withSchema('dbo')
       .limit(parseInt(archiveDataLimit))
       .select(selectColumns)
       .whereBetween('workload_date', [archiveDateRange.archiveFromDate.toISOString().substring(0, 10),

@@ -25,6 +25,7 @@ module.exports = function (fileId) {
   ]
 
   return knex('export_file')
+    .withSchema('app')
     .columns(columns)
     .where(whereString)
     .orderBy('date_created', 'desc')

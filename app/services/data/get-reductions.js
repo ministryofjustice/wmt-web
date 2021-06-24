@@ -7,6 +7,7 @@ module.exports = function (workloadOwnerId) {
   }
 
   return knex('reductions')
+    .withSchema('app')
     .join('reduction_reason', 'reductions.reduction_reason_id', 'reduction_reason.id')
     .join('reduction_category', 'reduction_reason.category_id', 'reduction_category.id')
     .where(whereObject)

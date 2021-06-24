@@ -1,9 +1,9 @@
 module.exports = function (archiveDateRange, extraCriteria, archiveDataLimit, isArchive = false) {
   let knex
   if (isArchive) {
-    knex = require('../../../knex').archive
+    knex = require('../../../knex').archive.withSchema('dbo')
   } else {
-    knex = require('../../../knex').web
+    knex = require('../../../knex').web.withSchema('app')
   }
   if (extraCriteria !== null && extraCriteria !== undefined) {
     extraCriteria = extraCriteria.trim()

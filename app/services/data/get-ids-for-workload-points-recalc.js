@@ -6,6 +6,7 @@ module.exports = function (previousWorkloadPointsId, isT2A) {
     whereColumnName = 'workload_points_calculations.t2a_workload_points_id'
   }
   return knex('workload_report')
+    .withSchema('app')
     .join('workload_points_calculations', 'workload_report.id', 'workload_points_calculations.workload_report_id')
     .join('workload', 'workload.id', 'workload_points_calculations.workload_id')
     .min('workload.staging_id AS minWorkloadStagingId')

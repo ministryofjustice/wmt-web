@@ -1,7 +1,7 @@
 const knex = require('../../../knex').web
 
 module.exports = function (id, type) {
-  const table = 'arms_export_view'
+  const table = 'app.arms_export_view'
   const selectList = [
     'regionName',
     'lduName',

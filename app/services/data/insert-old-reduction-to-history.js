@@ -1,6 +1,7 @@
 const knex = require('../../../knex').web
 module.exports = function (oldReduction) {
   return knex('reductions_history')
+    .withSchema('app')
     .insert({
       reduction_id: oldReduction.reductionId,
       reduction_reason_id: oldReduction.reductionReasonId,

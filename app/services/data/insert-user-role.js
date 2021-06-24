@@ -2,6 +2,7 @@ const knex = require('../../../knex').web
 
 module.exports = function (newUserRole) {
   return knex('user_role')
+    .withSchema('app')
     .insert({
       user_id: newUserRole.userId,
       role_id: newUserRole.roleId,

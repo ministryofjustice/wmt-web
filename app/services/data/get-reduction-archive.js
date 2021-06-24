@@ -16,6 +16,7 @@ module.exports = function (archiveDateRange, extraCriteria) {
 
   if (extraCriteria !== null && extraCriteria !== undefined && extraCriteria !== '') {
     return knex('archive_reduction_data')
+      .withSchema('dbo')
       .limit(parseInt(archiveDataLimit))
       .select(selectColumns)
       .whereBetween('last_updated_date', [archiveDateRange.archiveFromDate.toISOString().substring(0, 10),
@@ -27,6 +28,7 @@ module.exports = function (archiveDateRange, extraCriteria) {
       .orderBy('last_updated_date', 'ASC')
   } else {
     return knex('archive_reduction_data')
+      .withSchema('dbo')
       .limit(parseInt(archiveDataLimit))
       .select(selectColumns)
       .whereBetween('last_updated_date', [archiveDateRange.archiveFromDate.toISOString().substring(0, 10),

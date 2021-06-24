@@ -21,6 +21,7 @@ module.exports = function (archiveDateRange, extraCriteria) {
 
   if (extraCriteria !== null && extraCriteria !== undefined && extraCriteria !== '') {
     return knex('reductions_archive_view')
+      .withSchema('app')
       .limit(parseInt(archiveDataLimit))
       .select(selectColumns)
       .where(function () {
@@ -38,6 +39,7 @@ module.exports = function (archiveDateRange, extraCriteria) {
       .orderBy('last_updated_date', 'ASC')
   } else {
     return knex('reductions_archive_view')
+      .withSchema('app')
       .limit(parseInt(archiveDataLimit))
       .select(selectColumns)
       .where('start_date', '<=', archiveDateRange.archiveFromDate.toISOString().substring(0, 10))

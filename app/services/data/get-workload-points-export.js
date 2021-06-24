@@ -5,6 +5,7 @@ module.exports = function (isT2A = false) {
 
   // WMT0160: add new tiers
   return knex('workload_points')
+    .withSchema('app')
     .first(
       'comm_tier_16 AS commD0',
       'comm_tier_15 AS commD1',

@@ -14,6 +14,7 @@ module.exports = function (id) {
   ]
 
   return knex('case_details_view')
+    .withSchema('app')
     .columns(selectList)
     .where('workloadOwnerId', id)
     .then(function (results) {

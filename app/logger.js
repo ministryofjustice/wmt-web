@@ -1,4 +1,3 @@
-const config = require('../config')
 const bunyan = require('bunyan')
 const PrettyStream = require('bunyan-prettystream')
 
@@ -17,15 +16,6 @@ const logger = bunyan.createLogger({
 logger.addStream({
   level: 'DEBUG',
   stream: prettyStream
-})
-
-// Add file stream.
-logger.addStream({
-  type: 'rotating-file',
-  level: config.LOGGING_LEVEL,
-  path: config.LOGGING_PATH,
-  period: '1d',
-  count: 7
 })
 
 function errorSerializer (error) {
