@@ -168,7 +168,7 @@ const addCourtReportWorkloadPoints = function (inserts) {
 }
 
 const addRegion = function (inserts) {
-  return knex('region').returning('id').insert({ description: 'Test Region' })
+  return knex('region').returning('id').insert({ description: 'NPS Test Region' })
     .then(function (ids) {
       inserts.push({ table: 'region', id: ids[0] })
       return inserts
