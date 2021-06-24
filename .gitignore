@@ -19,3 +19,6 @@ errorShots/*
 
 # Ignore vendor JS files created by gulp
 app/assets/javascripts/vendor
+/.idea/
+/test_results/
+*.iml
