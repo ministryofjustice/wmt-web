@@ -74,8 +74,10 @@ module.exports = function (router) {
 
     const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
     const extraCriteria = heDecode.decode(req.body['fortnightly-multi-search-field-entry'])
+    const groupBy = heDecode.decode(req.body['groupBy'])
+    const interval = heDecode.decode(req.body['interval'])
     if (errors) {
-      return renderResults(viewTemplate, title, res, errors, null, authorisedUserRole, archiveDateRange, extraCriteria)
+      return renderResults(viewTemplate, title, res, errors, null, authorisedUserRole, archiveDateRange, extraCriteria, null, null, groupBy, interval)
     }
 
     // Assume that you need to start with the DB that contains the earliest database
@@ -90,60 +92,23 @@ module.exports = function (router) {
     }
 
     return getArchive(thisArchiveOption, archiveDateRange, extraCriteria).then(function (results) {
-      results = formatResults(results)
-      results = groupArchiveData(results, archiveDateRange.archiveFromDate, archiveDateRange.archiveToDate)
-      log.info(results)
-      log.info(archiveDateRange.archiveFromDate.format('DD-MM-YYYY'), archiveDateRange.archiveToDate.format('DD-MM-YYYY'), typeof archiveDateRange.archiveFromDate, typeof archiveDateRange.archiveToDate)
-      return renderResults(viewTemplate, title, res, errors, results, authorisedUserRole, archiveDateRange, extraCriteria)
+      if (results.length > 0) {
+        results = formatResults(results)
+        results = results.sort((a,b) => new moment(a.workloadDate).format('YYYYMMDD') - new moment(b.workloadDate).format('YYYYMMDD'))
+        let endDate = moment(results[results.length - 1].workloadDate).endOf('week').add(1, 'day').startOf('day')
+        if (endDate.isBefore(archiveDateRange.archiveToDate)) {
+          endDate = endDate.format('YYYY-MM-DD')
+        } else {
+          endDate = archiveDateRange.archiveToDate.format('YYYY-MM-DD')
+        }
+        results = groupArchiveData(results, archiveDateRange.archiveFromDate, endDate, groupBy, interval)
+        log.info(results)
+      }
+      return renderResults(viewTemplate, title, res, errors, results, authorisedUserRole, archiveDateRange, extraCriteria, null, null, groupBy, interval)
     }).catch(function (error) {
       next(error)
     })
   })
-
-  // router.post('/archive-data/average-caseload-data', function (req, res, next) {
-  //   try {
-  //     authorisation.assertUserAuthenticated(req)
-  //     authorisation.hasRole(req, [roles.DATA_ADMIN])
-  //   } catch (error) {
-  //     if (error instanceof Unauthorized) {
-  //       return res.status(error.statusCode).redirect(error.redirect)
-  //     } else if (error instanceof Forbidden) {
-  //       return res.status(error.statusCode).render(error.redirect, {
-  //         heading: messages.ACCESS_DENIED,
-  //         message: messages.ADMIN_ROLES_REQUIRED
-  //       })
-  //     }
-  //   }
-
-  //   let errors
-
-  //   try {
-  //     archiveDateRange = dateRangeHelper.createFortnightlyArchiveDateRange(req.body)
-  //   } catch (error) {
-  //     if (error instanceof ValidationError) {
-  //       errors = error.validationErrors
-  //       archiveDateRange = dateRangeHelper.createFortnightlyArchiveDateRange({})
-  //     } else {
-  //       throw error
-  //     }
-  //   }
-
-  //   const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
-
-  //   const extraCriteria = heDecode.decode(req.body['fortnightly-multi-search-field-entry'])
-  //   // If date range has errors don't search database
-  //   if (errors) {
-  //     return renderResults(viewTemplate, title, res, errors, null, authorisedUserRole, archiveDateRange, extraCriteria)
-  //   }
-
-  //   return getArchive(archiveOptions.FORTNIGHTLY, archiveDateRange, extraCriteria).then(function (results) {
-  //     results = formatResults(results)
-  //     return renderResults(viewTemplate, title, res, errors, results, authorisedUserRole, archiveDateRange, extraCriteria)
-  //   }).catch(function (error) {
-  //     log.error(error)
-  //     next(error)
-  //   })
-  // })
 
   router.post('/archive-data/average-caseload-data/archive-csv', function (req, res, next) {
     try {
@@ -198,10 +163,10 @@ module.exports = function (router) {
 const formatResults = function (results) {
   results.forEach(function (result) {
     if (result.startDate !== null) {
-      result.startDate = dateFormatter.formatDate(result.startDate, 'DD-MM-YYYY')
+      result.startDate = dateFormatter.formatDate(result.startDate, 'DD/MM/YYYY')
     }
     if (result.endDate !== null) {
-      result.endDate = dateFormatter.formatDate(result.endDate, 'DD-MM-YYYY')
+      result.endDate = dateFormatter.formatDate(result.endDate, 'DD/MM/YYYY')
     }
     if (result.hoursReduction !== null) {
       result.hoursReduction = Number(result.hoursReduction.toFixed(1))

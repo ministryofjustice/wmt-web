@@ -1,17 +1,32 @@
 const moment = require('moment')
 const percentageCalculator = require('../helpers/percentage-calculator')
 
-module.exports = function (results, searchStartDate, searchEndDate) {
+module.exports = function (results, searchStartDate, searchEndDate, groupBy, interval) {
   var archiveMap = new Map()
   var archiveArray = []
+  if (interval === 'weekly') {
+    interval = 7
+  } else {
+    interval = 28
+  }
   results.forEach(function (result) {
-    archiveMap.set(result['omName'], [])
+    if (groupBy === 'offenderManager') {
+      archiveMap.set(result['omKey'] + result['teamCode'], [])
+    } else {
+      archiveMap.set(result['teamCode'], [])
+    }
   })
   results.forEach(function (result) {
+    let key
+    if (groupBy === 'offenderManager') {
+      key = result['omKey'] + result['teamCode']
+    } else {
+      key = result['teamCode']
+    }
     var temporaryMappedItems = []
-    temporaryMappedItems = archiveMap.get(result['omName'])
+    temporaryMappedItems = archiveMap.get(key)
     temporaryMappedItems.push(result)
-    archiveMap.set(result['omName'], temporaryMappedItems)
+    archiveMap.set(key, temporaryMappedItems)
   })
   for (var value of archiveMap.values()) {
     archiveArray.push(value)
@@ -28,13 +43,22 @@ module.exports = function (results, searchStartDate, searchEndDate) {
     //   var endDate = searchEndDate.clone().endOf('week').add(1, 'days').startOf('week').add(1, 'days')
     // }
     var currentStartingDate = startDate.clone()
-    var currentEndingDate = startDate.clone().add(7, 'days')
+    var currentEndingDate = startDate.clone().add(interval - 1, 'days')
+    let omName
+    let grade
+    if (groupBy === 'offenderManager') {
+      omName = offenderManager[0].omName
+      grade = offenderManager[0].grade
+    } else {
+      omName = 'N/A'
+      grade = 'N/A'
+    }
     var omDetails = {
       regionName: offenderManager[0].regionName,
       lduName: offenderManager[0].lduName,
       teamName: offenderManager[0].teamName,
-      omName: offenderManager[0].omName,
-      grade: offenderManager[0].grade
+      omName: omName,
+      grade: grade
     }
     // 
     while (currentStartingDate.isSameOrBefore(endDate)) {
@@ -52,7 +76,9 @@ module.exports = function (results, searchStartDate, searchEndDate) {
 
       var average
       if (daysWithData > 0) {
+        const totalsForDebugging = Object.assign({}, totals)
         average = averageTotals(totals, daysWithData)
+        average.totalsForDebugging = totalsForDebugging
       } else {
         average = totals
       }
@@ -60,8 +86,8 @@ module.exports = function (results, searchStartDate, searchEndDate) {
       groupedData.push(average)
 
       // increment current period by 1 week
-      currentStartingDate = currentStartingDate.add(7, 'days')
-      currentEndingDate = currentEndingDate.add(7, 'days')
+      currentStartingDate = currentStartingDate.clone().add(interval, 'days')
+      currentEndingDate = currentEndingDate.clone().add(interval, 'days')
     }
   })
   return groupedData

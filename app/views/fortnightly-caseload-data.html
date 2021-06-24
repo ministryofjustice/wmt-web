@@ -119,14 +119,14 @@
           
             <div class="govuk-grid-column-one-quarter">
                 <div class="govuk-radios__item">
-                    <input class="govuk-radios__input" id="radio-inline-1" type="radio" name="radio-inline-group-2" value="Yes" checked>
-                    <label class="govuk-label govuk-radios__label" for="radio-inline-1">Offender Manager</label>
+                    <input class="govuk-radios__input" id="offenderManager" type="radio" name="groupBy" value="offenderManager" checked>
+                    <label class="govuk-label govuk-radios__label" for="offenderManager">Offender Manager</label>
                 </div>
               </div>
               <div class="govuk-grid-column-one-quarter">
                 <div class="govuk-radios__item">
-                    <input class="govuk-radios__input" id="radio-inline-2" type="radio" name="radio-inline-group-2" value="No">
-                    <label class="govuk-label govuk-radios__label" for="radio-inline-2">Team</label>
+                    <input class="govuk-radios__input" id="team" type="radio" name="groupBy" value="team" {% if groupBy === 'team'%} checked {% endif %}>
+                    <label class="govuk-label govuk-radios__label" for="team">Team</label>
                 </div>
               </div>
           
@@ -143,14 +143,14 @@
           
                 <div class="govuk-grid-column-one-quarter">
                     <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="radio-inline-1" type="radio" name="radio-inline-group" value="Yes" checked>
-                        <label class="govuk-label govuk-radios__label" for="radio-inline-1">Weekly</label>
+                        <input class="govuk-radios__input" id="weekly" type="radio" name="interval" value="weekly" checked>
+                        <label class="govuk-label govuk-radios__label" for="weekly">Weekly</label>
                     </div>
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                     <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="radio-inline-2" type="radio" name="radio-inline-group" value="No">
-                        <label class="govuk-label govuk-radios__label" for="radio-inline-2">Monthly</label>
+                        <input class="govuk-radios__input" id="monthly" type="radio" name="interval" value="monthly" {% if interval === 'monthly'%} checked {% endif %}>
+                        <label class="govuk-label govuk-radios__label" for="monthly">Monthly</label>
                     </div>
                 </div>
           
