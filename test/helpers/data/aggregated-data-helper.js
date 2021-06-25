@@ -641,6 +641,17 @@ module.exports.deleteLastRecordFromTables = function (tables) {
   })
 }
 
+module.exports.deleteReductionsForIds = function (ids) {
+  return knex('reductions_history')
+    .whereIn('reduction_id', ids)
+    .del()
+    .then(() => {
+      return knex('reductions')
+        . whereIn('id', ids)
+        .del()
+    })
+}
+
 module.exports.deleteRecordsFromTableForIds = function (table, ids) {
   return knex(table)
     .whereIn('id', ids)
