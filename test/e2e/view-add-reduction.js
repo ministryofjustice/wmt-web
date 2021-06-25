@@ -7,6 +7,7 @@ const moment = require('moment')
 let offenderManagerId
 let offenderManagerUrl
 let pageTitle
+const ids = []
 
 describe('View adding a new reduction', () => {
   before(async function () {
@@ -56,6 +57,7 @@ describe('View adding a new reduction', () => {
       await browser.pause(3000)
 
       const reduction = await dataHelper.getLastRecordFromTable('reductions')
+      ids.push(reduction.id)
       const reductionURL = '/probation/offender-manager/' + reduction.workload_owner_id + '/edit-reduction?reductionId=' + reduction.id
       const link = await $('[href="' + reductionURL + '"')
       await link.click()
@@ -67,6 +69,6 @@ describe('View adding a new reduction', () => {
   })
 
   after(function () {
-    return dataHelper.deleteLastRecordFromTables(['reductions_history', 'reductions'])
+    return dataHelper.deleteReductionsForIds(ids)
   })
 })
