@@ -14,11 +14,6 @@ executors:
     docker:
       - image: 'cimg/node:14.17-browsers'
     working_directory: ~/app
-  integration-tests:
-    docker:
-      - image: cimg/node:14.17-browsers
-      - image: circleci/redis:buster
-    working_directory: ~/app
 
 jobs:
   build:
@@ -45,7 +40,7 @@ jobs:
             export BUILD_NUMBER=${DATE}.${CIRCLE_BUILD_NUM}
             export GIT_REF="$CIRCLE_SHA1"
             npm run record-build-info
-      - run: # Run linter after build because the integration test code depend on compiled typescript...
+      - run:
           name: Linter check
           command: npm run lint
       - persist_to_workspace:
@@ -120,7 +115,6 @@ workflows:
           requires:
             - helm_lint
             - unit_test
-            - integration_test
             - build_docker
 
   security:
