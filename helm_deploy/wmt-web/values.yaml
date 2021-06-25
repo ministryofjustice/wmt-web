@@ -8,6 +8,12 @@ generic-service:
     tag: app_version    # override at deployment time
     port: 3000
 
+  ingress:
+    enabled: true
+    host: app-hostname.local    # override per environment
+    tlsSecretName: hmpps-template-typescript-cert
+    path: /
+
   livenessProbe:
     httpGet:
       path: /ping
