@@ -3,8 +3,8 @@ generic-service:
   replicaCount: 2
 
   ingress:
-    host: hmpps-workload-web-dev.hmpps.service.justice.gov.uk
+    host: hmpps-workload-dev.hmpps.service.justice.gov.uk
 
   env:
-    INGRESS_URL: "https://hmpps-workload-web-dev.hmpps.service.justice.gov.uk"
+    INGRESS_URL: "https://hmpps-workload-dev.hmpps.service.justice.gov.uk"
 

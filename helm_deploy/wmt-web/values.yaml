@@ -11,7 +11,7 @@ generic-service:
   ingress:
     enabled: true
     host: app-hostname.local    # override per environment
-    tlsSecretName: hmpps-template-typescript-cert
+    tlsSecretName: hmpps-workload-cert
     path: /
 
   livenessProbe:
