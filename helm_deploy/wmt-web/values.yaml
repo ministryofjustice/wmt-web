@@ -35,8 +35,8 @@ generic-service:
     hmpps-workload:
       APPINSIGHTS_INSTRUMENTATIONKEY: "APPINSIGHTS_INSTRUMENTATIONKEY"
     rds-instance-output:
-      WMT_DB_USERNAME: "database_username"
-      WMT_DB_PASSWORD: "database_password"
+      WMT_WEB_APP_DATABASE_USERNAME: "database_username"
+      WMT_WEB_APP_DATABASE_PASSWORD: "database_password"
       WMT_DB_SERVER: "rds_instance_address"
 
   allowlist:
