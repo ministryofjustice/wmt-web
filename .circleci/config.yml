@@ -91,9 +91,9 @@ workflows:
     jobs:
       - build:
           context: hmpps-common-vars
-        filters:
-          tags:
-            ignore: /.*/
+          filters:
+            tags:
+              ignore: /.*/
       - unit_test:
           requires:
             - build
