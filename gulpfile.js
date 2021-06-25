@@ -57,6 +57,4 @@ gulp.task('start', function () {
 
 gulp.task('generate-assets-and-start', gulp.series('generate-assets', 'start'))
 
-
-
 gulp.task('default', gulp.series('generate-assets-and-start'))
