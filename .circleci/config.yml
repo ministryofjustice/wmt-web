@@ -90,6 +90,7 @@ workflows:
   build-test-and-deploy:
     jobs:
       - build:
+          context: hmpps-common-vars
         filters:
           tags:
             ignore: /.*/
