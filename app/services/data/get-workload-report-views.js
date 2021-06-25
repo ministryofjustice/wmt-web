@@ -26,7 +26,7 @@ module.exports = function (id, fromDate, toDate, type) {
   const orderBy = ' ORDER BY effective_from'
 
   return knexArchive.schema.raw('SELECT ' + selectList.join(', ') +
-          ' FROM dbo.' + table +
+          ' FROM app.' + table +
           noExpandHint +
           whereString +
           orderBy)

@@ -17,6 +17,7 @@ module.exports = {
   // DB
   DATABASE_SERVER: process.env.WMT_DB_SERVER || 'localhost',
   DATABASE: process.env.WMT_DB_NAME || 'master',
+  ARCHIVE_DATABASE: process.env.WMT_DB_ARCHIVE_NAME || 'master',
   DB_APP_SCHEMA: 'app',
 
   // App

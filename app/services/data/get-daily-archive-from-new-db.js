@@ -1,7 +1,7 @@
 module.exports = function (archiveDateRange, extraCriteria, archiveDataLimit, isArchive = false) {
   let knex
   if (isArchive) {
-    knex = require('../../../knex').archive.withSchema('dbo')
+    knex = require('../../../knex').archive.withSchema('app')
   } else {
     knex = require('../../../knex').web.withSchema('app')
   }

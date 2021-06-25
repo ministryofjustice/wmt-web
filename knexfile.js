@@ -23,7 +23,9 @@ module.exports = {
   },
   archive: {
     client: 'mssql',
-    connection: defaultConnection,
+    connection: Object.assign({}, defaultConnection, {
+      database: config.ARCHIVE_DATABASE
+    }),
     debug: false,
     pool: {
       max: 500
