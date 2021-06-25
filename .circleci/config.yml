@@ -7,17 +7,13 @@ orbs:
 parameters:
   alerts-slack-channel:
     type: string
-    default: hmpps_typescript_notifications
-
-executors:
-  builder:
-    docker:
-      - image: 'cimg/node:14.17-browsers'
-    working_directory: ~/app
+    default: manage-a-workforce-dev
 
 jobs:
   build:
-    executor: builder
+    executor:
+      name: hmpps/node
+      tag: 14.17-browsers
     steps:
       - checkout
       - run:
@@ -52,7 +48,9 @@ jobs:
             - dist
 
   check_outdated:
-    executor: builder
+    executor:
+      name: hmpps/node
+      tag: 14.17-browsers
     steps:
       - checkout
       - restore_cache:
@@ -72,7 +70,9 @@ jobs:
           template: basic_fail_1
 
   unit_test:
-    executor: builder
+    executor:
+      name: hmpps/node
+      tag: 14.17-browsers
     steps:
       - checkout
       - restore_cache:
