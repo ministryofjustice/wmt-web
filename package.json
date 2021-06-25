@@ -13,6 +13,7 @@
     "test-e2e-firefox-jenkins": "wdio test/wdio.conf.sauce.firefox.jenkins.js",
     "accessibility-test": "mocha --recursive test/accessibility --timeout=100000 --exit",
     "record-build-info": "node ./bin/record-build-info",
+    "security_audit": "npx audit-ci --config audit-ci.json",
     "lint": "standard"
   },
   "standard": {

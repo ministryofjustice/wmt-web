@@ -1,6 +1,4 @@
 ---
-# Per environment values which override defaults in hmpps-template-typescript/values.yaml
-
 generic-service:
   replicaCount: 2
 
@@ -9,7 +7,4 @@ generic-service:
 
   env:
     INGRESS_URL: "https://hmpps-workload-web-dev.hmpps.service.justice.gov.uk"
-
-generic-prometheus-alerts:
-  alertSeverity: hmpps-tier
 
