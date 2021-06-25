@@ -7,7 +7,7 @@ orbs:
 parameters:
   alerts-slack-channel:
     type: string
-    default: manage-a-workforce-dev
+    default: manage_a_workforce_dev
 
 jobs:
   build:
