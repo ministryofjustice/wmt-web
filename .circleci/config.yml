@@ -1,0 +1,141 @@
+version: 2.1
+
+orbs:
+  hmpps: ministryofjustice/hmpps@3.4.0
+  slack: circleci/slack@4.4.2
+
+parameters:
+  alerts-slack-channel:
+    type: string
+    default: manage_a_workforce_dev
+
+jobs:
+  build:
+    executor:
+      name: hmpps/node
+      tag: 14.17-browsers
+    steps:
+      - checkout
+      - run:
+          name: Update npm
+          command: 'sudo npm install -g npm@latest'
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: Install Dependencies
+          command: npm ci --no-audit
+      - save_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+          paths:
+            - node_modules
+            - ~/.cache
+      - run:
+          command: |
+            npm run build
+            DATE=$(date '+%Y-%m-%d')
+            export BUILD_NUMBER=${DATE}.${CIRCLE_BUILD_NUM}
+            export GIT_REF="$CIRCLE_SHA1"
+            npm run record-build-info
+      - run:
+          name: Linter check
+          command: npm run lint
+      - persist_to_workspace:
+          root: .
+          paths:
+            - node_modules
+            - build-info.json
+            - build
+            - dist
+
+  check_outdated:
+    executor:
+      name: hmpps/node
+      tag: 14.17-browsers
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: install-npm
+          command: 'npm ci --no-audit'
+      - run:
+          name: Check version
+          command: 'npm --version'
+      - run:
+          name: Run check
+          command: 'npm outdated govuk-frontend'
+      - slack/notify:
+          event: fail
+          channel: << pipeline.parameters.alerts-slack-channel >>
+          template: basic_fail_1
+
+  unit_test:
+    executor:
+      name: hmpps/node
+      tag: 14.17-browsers
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: unit tests
+          command: npm run test
+      - store_test_results:
+          path: test_results
+      - store_artifacts:
+          path: test-results/unit-test-reports.html
+
+workflows:
+  version: 2
+  build-test-and-deploy:
+    jobs:
+      - build:
+          context: hmpps-common-vars
+          filters:
+            tags:
+              ignore: /.*/
+      - unit_test:
+          requires:
+            - build
+      - hmpps/helm_lint:
+          name: helm_lint
+      - hmpps/build_docker:
+          name: build_docker
+          filters:
+            branches:
+              only:
+                - main
+      - hmpps/deploy_env:
+          name: deploy_dev
+          env: "dev"
+          context: hmpps-common-vars
+          filters:
+            branches:
+              only:
+                - main
+          requires:
+            - helm_lint
+            - unit_test
+            - build_docker
+
+  security:
+    triggers:
+      - schedule:
+          cron: "0 7 * * 1-5"
+          filters:
+            branches:
+              only:
+                - main
+    jobs:
+      - check_outdated:
+          context:
+            - hmpps-common-vars
+      - hmpps/npm_security_audit:
+          slack_channel: << pipeline.parameters.alerts-slack-channel >>
+          context:
+            - hmpps-common-vars
+      - hmpps/veracode_policy_scan:
+          slack_channel: << pipeline.parameters.alerts-slack-channel >>
+          context:
+            - veracode-credentials
+            - hmpps-common-vars

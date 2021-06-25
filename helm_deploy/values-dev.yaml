@@ -1,0 +1,10 @@
+---
+generic-service:
+  replicaCount: 2
+
+  ingress:
+    host: hmpps-workload-web-dev.hmpps.service.justice.gov.uk
+
+  env:
+    INGRESS_URL: "https://hmpps-workload-web-dev.hmpps.service.justice.gov.uk"
+
