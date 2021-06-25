@@ -48,4 +48,5 @@ generic-service:
     cloudplatform-live1-3: "35.177.252.54/32"
 
 generic-prometheus-alerts:
-  targetApplication: hmpps-tier
+  targetApplication: wmt-web
+  alertSeverity: hmpps-tier
