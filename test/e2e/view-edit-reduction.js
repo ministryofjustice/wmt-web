@@ -8,6 +8,7 @@ let offenderManagerId
 let reductionUrl
 let offenderManagerUrl
 let reductionTypeField, hoursField, startDayField, startMonthField, startYearField, endDayField, endMonthField, endYearField, notesField, submit
+const ids = []
 
 describe('View editing a new reduction', () => {
   before(async function () {
@@ -110,6 +111,7 @@ describe('View editing a new reduction', () => {
       await browser.pause(5000)
 
       const reduction = await dataHelper.getLastRecordFromTable('reductions')
+      ids.push(reduction.id)
       const reductionURL = '/probation/offender-manager/' + reduction.workload_owner_id + '/edit-reduction?reductionId=' + reduction.id
       const link = await $('[href="' + reductionURL + '"')
       await link.click()
@@ -137,6 +139,6 @@ describe('View editing a new reduction', () => {
   })
 
   after(function () {
-    return dataHelper.deleteLastRecordFromTables(['reductions_history', 'reductions'])
+    return dataHelper.deleteReductionsForIds(ids)
   })
 })

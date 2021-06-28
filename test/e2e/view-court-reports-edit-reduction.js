@@ -8,6 +8,7 @@ let offenderManagerId
 let reductionUrl
 let offenderManagerUrl
 let reductionTypeField, hoursField, startDayField, startMonthField, startYearField, endDayField, endMonthField, endYearField, notesField, submit
+const ids = []
 
 describe('View editing a new reduction for court-reporters', () => {
   before(async function () {
@@ -116,6 +117,7 @@ describe('View editing a new reduction for court-reporters', () => {
       await browser.pause(5000)
 
       const reduction = await dataHelper.getLastRecordFromTable('reductions')
+      ids.push(reduction.id)
       const reductionURL = '/' + workloadTypes.COURT_REPORTS + '/offender-manager/' + offenderManagerId + '/edit-reduction?reductionId=' + reduction.id
       const link = await $('[href="' + reductionURL + '"')
       await link.click()
@@ -143,6 +145,6 @@ describe('View editing a new reduction for court-reporters', () => {
   })
 
   after(function () {
-    return dataHelper.deleteLastRecordFromTables(['reductions_history', 'reductions'])
+    return dataHelper.deleteReductionsForIds(ids)
   })
 })

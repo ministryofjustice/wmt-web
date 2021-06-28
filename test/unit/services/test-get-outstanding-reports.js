@@ -19,8 +19,8 @@ const TEAM_RESULTS = [
   }
 ]
 
-const EXPECTED_TEAM_RESULT = [
-  {
+const EXPECTED_TEAM_RESULT = {
+  result: [{
     linkId: 1,
     name: 'Test name',
     grade: 'Test grade',
@@ -37,8 +37,24 @@ const EXPECTED_TEAM_RESULT = [
     totalUPW: 38,
     totalSL: 90,
     totalSSO: 100
+  }],
+  totals: {
+    name: 'Total',
+    totalOW: 0,
+    totalOT: 0,
+    totalUPW: 0,
+    totalSL: 0,
+    totalSSO: 0
+  },
+  crcTotals: {
+    name: 'CRC Total',
+    totalOW: 0,
+    totalOT: 0,
+    totalUPW: 0,
+    totalSL: 0,
+    totalSSO: 0
   }
-]
+}
 
 const LDU_RESULTS = [
   {
@@ -69,8 +85,8 @@ const LDU_RESULTS = [
   }
 ]
 
-const EXPECTED_LDU_RESULT = [
-  {
+const EXPECTED_LDU_RESULT = {
+  result: [{
     grades: [
       {
         grade: 'Test grade 1',
@@ -109,8 +125,24 @@ const EXPECTED_LDU_RESULT = [
     totalSL: 181,
     totalUPW: 45,
     totalSSO: 199
+  }],
+  totals: {
+    name: 'Total',
+    totalOW: 85,
+    totalOT: 65,
+    totalUPW: 45,
+    totalSL: 181,
+    totalSSO: 199
+  },
+  crcTotals: {
+    name: 'CRC Total',
+    totalOW: 0,
+    totalOT: 0,
+    totalUPW: 0,
+    totalSL: 0,
+    totalSSO: 0
   }
-]
+}
 
 const REGION_RESULTS = [
   {
@@ -141,8 +173,8 @@ const REGION_RESULTS = [
   }
 ]
 
-const EXPECTED_REGION_RESULT = [
-  {
+const EXPECTED_REGION_RESULT = {
+  result: [{
     grades: [
       {
         grade: 'Test grade 1',
@@ -181,8 +213,24 @@ const EXPECTED_REGION_RESULT = [
     totalSL: 20,
     totalUPW: 60,
     totalSSO: 37
+  }],
+  totals: {
+    name: 'Total',
+    totalOW: 42,
+    totalOT: 78,
+    totalUPW: 60,
+    totalSL: 20,
+    totalSSO: 37
+  },
+  crcTotals: {
+    name: 'CRC Total',
+    totalOW: 0,
+    totalOT: 0,
+    totalUPW: 0,
+    totalSL: 0,
+    totalSSO: 0
   }
-]
+}
 
 const callingId = 5
 

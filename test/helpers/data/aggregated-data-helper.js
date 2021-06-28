@@ -200,7 +200,7 @@ const addWorkloadReports = function (inserts) {
 }
 
 const addRegion = function (inserts) {
-  return knex('region').returning('id').insert({ description: 'Test Region' })
+  return knex('region').returning('id').insert({ description: 'NPS Test Region' })
     .then(function (ids) {
       inserts.push({ table: 'region', id: ids[0] })
       return inserts
@@ -639,6 +639,17 @@ module.exports.deleteLastRecordFromTables = function (tables) {
       .first()
       .del()
   })
+}
+
+module.exports.deleteReductionsForIds = function (ids) {
+  return knex('reductions_history')
+    .whereIn('reduction_id', ids)
+    .del()
+    .then(() => {
+      return knex('reductions')
+        . whereIn('id', ids)
+        .del()
+    })
 }
 
 module.exports.deleteRecordsFromTableForIds = function (table, ids) {

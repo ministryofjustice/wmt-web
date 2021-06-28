@@ -28,7 +28,7 @@ describe('services/data/get-full-overview', function () {
   })
 
   it('should return all offender manager caseload data for region ', function () {
-    expectedResult[0].regionName = 'Test Region'
+    expectedResult[0].regionName = 'NPS Test Region'
     return getOrganisationOverview(inserts.filter((item) => item.table === 'region')[0].id, orgUnitConstants.REGION.name)
       .then(function (results) {
         expect(results[0].regionName).to.eql(expectedResult[0].regionName)
