@@ -26,7 +26,7 @@ generic-service:
     NODE_ENV: "production"
     WMT_DB_NAME: "hmpps_workload"
     WMT_DB_ARCHIVE_NAME: "hmpps_workload_archive"
-    WMT_WEB_AUTHENTICATION_ENABLED: "true"
+#    WMT_WEB_AUTHENTICATION_ENABLED: "true"
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
@@ -40,10 +40,10 @@ generic-service:
       WMT_WEB_APP_DATABASE_USERNAME: "database_username"
       WMT_WEB_APP_DATABASE_PASSWORD: "database_password"
       WMT_DB_SERVER: "rds_instance_address"
-    wmt-web:
-      WMT_ACTIVE_DIRECTORY_ENTRY_POINT: "active-directory-entry-point"
-      WMT_ACTIVE_DIRECTORY_ISSUER: "active-directory-issuer"
-      WMT_ACTIVE_DIRECTORY_DOMAIN: "active-directory-domain"
+#    wmt-web:
+#      WMT_ACTIVE_DIRECTORY_ENTRY_POINT: "active-directory-entry-point"
+#      WMT_ACTIVE_DIRECTORY_ISSUER: "active-directory-issuer"
+#      WMT_ACTIVE_DIRECTORY_DOMAIN: "active-directory-domain"
 
   allowlist:
     office: "217.33.148.210/32"
