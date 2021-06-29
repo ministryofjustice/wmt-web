@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  hmpps: ministryofjustice/hmpps@3.4.0
+  hmpps: ministryofjustice/hmpps@3.6.0
   slack: circleci/slack@4.4.2
 
 parameters:
@@ -9,11 +9,15 @@ parameters:
     type: string
     default: manage_a_workforce_dev
 
+  node-version:
+    type: string
+    default: 14.17-browsers
+
 jobs:
   build:
     executor:
       name: hmpps/node
-      tag: 14.17-browsers
+      tag: << pipeline.parameters.node-version >>
     steps:
       - checkout
       - run:
@@ -50,7 +54,7 @@ jobs:
   check_outdated:
     executor:
       name: hmpps/node
-      tag: 14.17-browsers
+      tag: << pipeline.parameters.node-version >>
     steps:
       - checkout
       - restore_cache:
@@ -72,7 +76,7 @@ jobs:
   unit_test:
     executor:
       name: hmpps/node
-      tag: 14.17-browsers
+      tag: << pipeline.parameters.node-version >>
     steps:
       - checkout
       - restore_cache:
@@ -80,6 +84,10 @@ jobs:
       - run:
           name: unit tests
           command: npm run test
+      - slack/notify:
+          event: fail
+          channel: << pipeline.parameters.alerts-slack-channel >>
+          template: basic_fail_1
       - store_test_results:
           path: test_results
       - store_artifacts:
@@ -95,6 +103,7 @@ workflows:
             tags:
               ignore: /.*/
       - unit_test:
+          context: hmpps-common-vars
           requires:
             - build
       - hmpps/helm_lint:
