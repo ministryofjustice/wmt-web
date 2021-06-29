@@ -14,11 +14,15 @@ const getLastUpdated = require('../services/data/get-last-updated')
 const dateFormatter = require('../services/date-formatter')
 const messages = require('../constants/messages')
 const renderWMTUpdatingPage = require('../helpers/render-wmt-updating-page')
-
+const asyncMiddleware = require('../middleware/asyncMiddleware')
 let lastUpdated
 
 module.exports = function (router) {
-  router.get('/', function (req, res, next) {
+  const get = function (path, handler) {
+    router.get(path, asyncMiddleware(handler))
+  }
+
+  get('/', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
     } catch (error) {
@@ -34,7 +38,7 @@ module.exports = function (router) {
     return renderOverview(req, res, next)
   })
 
-  router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/overview', function (req, res, next) {
+  get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/overview', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
     } catch (error) {
@@ -45,7 +49,7 @@ module.exports = function (router) {
     return renderOverview(req, res, next)
   })
 
-  router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/', function (req, res, next) {
+  get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
     } catch (error) {
@@ -56,7 +60,7 @@ module.exports = function (router) {
     return renderOverview(req, res, next)
   })
 
-  router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/overview/caseload-csv', function (req, res, next) {
+  get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/overview/caseload-csv', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
     } catch (error) {
@@ -80,7 +84,7 @@ module.exports = function (router) {
     })
   })
 
-  router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/overview/reductions-csv', function (req, res, next) {
+  get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/overview/reductions-csv', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
       authorisation.hasRole(req, [roles.MANAGER, roles.DATA_ADMIN, roles.SYSTEM_ADMIN])
