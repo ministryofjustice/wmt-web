@@ -103,6 +103,7 @@ workflows:
             tags:
               ignore: /.*/
       - unit_test:
+          context: hmpps-common-vars
           requires:
             - build
       - hmpps/helm_lint:
@@ -136,9 +137,6 @@ workflows:
                 - main
     jobs:
       - check_outdated:
-          context:
-            - hmpps-common-vars
-      - unit_test:
           context:
             - hmpps-common-vars
       - hmpps/npm_security_audit:
