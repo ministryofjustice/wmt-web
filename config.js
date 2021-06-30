@@ -16,7 +16,7 @@ function get (name, fallback, options = { requireInProduction: false }) {
 module.exports = {
 
   // Authentication (defaults for development)
-  AUTHENTICATION_ENABLED: process.env.WMT_WEB_AUTHENTICATION_ENABLED || true,
+  AUTHENTICATION_ENABLED: process.env.WMT_WEB_AUTHENTICATION_ENABLED || 'true',
   ACTIVE_DIRECTORY_ENTRY_POINT: process.env.WMT_ACTIVE_DIRECTORY_ENTRY_POINT || 'enter here', // SAML-P Sign-On Endpoint
   ACTIVE_DIRECTORY_ISSUER: process.env.WMT_ACTIVE_DIRECTORY_ISSUER || 'app id', // APP-ID
   ACTIVE_DIRECTORY_RETURN_ADDRESS: process.env.WMT_ACTIVE_DIRECTORY_RETURN_ADDRESS || '/login',

@@ -4,7 +4,7 @@ const config = require('../../config')
 const sanitiseError = require('../sanitisedError')
 
 const get = async function ({ path = null, query = '', headers = {}, responseType = '', raw = false, token }) {
-  logger.info(`Get using user credentials: calling ${this.name}: ${path} ${query}`)
+  logger.info(`Get using user credentials: calling: ${path} ${query}`)
   try {
     const result = await superagent
       .get(`${config.apis.hmppsAuth.url}${path}`)
@@ -21,7 +21,7 @@ const get = async function ({ path = null, query = '', headers = {}, responseTyp
     return raw ? result : result.body
   } catch (error) {
     const sanitisedError = sanitiseError(error)
-    logger.warn({ ...sanitisedError, query }, `Error calling ${this.name}, path: '${path}', verb: 'GET'`)
+    logger.warn({ ...sanitisedError, query }, `Error calling, path: '${path}', verb: 'GET'`)
     throw sanitisedError
   }
 }

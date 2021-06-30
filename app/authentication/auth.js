@@ -4,14 +4,37 @@ const { Strategy } = require('passport-oauth2')
 const config = require('../../config')
 const generateOauthClientToken = require('./clientCredentials')
 const verifyToken = require('../data/tokenVerification')
+const userRoleService = require('../services/user-role-service')
 
 passport.serializeUser(function (user, done) {
-  // Not used but required for Passport
-  done(null, user)
+
+  const username = user.username
+  const displayName = user.username
+  const nameID = user.username
+  const nameIDFormat = user.username
+
+
+ return userRoleService.getUserByUsername(username).then(function (result) {
+      const dbUser = {
+        id: 0 // assume its a Staff user
+      }
+      if (result) {
+        dbUser.id = result.id // actual user exists
+      }
+      return userRoleService.getRoleByUsername(username).then(function (role) {
+        done(null, Object.assign(user, {
+          userId: dbUser.id,
+          name: displayName,
+          username: username,
+          user_role: role.role,
+          nameID: nameID,
+          nameIDFormat: nameIDFormat
+        }))
+      })
+    })
 })
 
 passport.deserializeUser(function (user, done) {
-  // Not used but required for Passport
   done(null, user)
 })
 
