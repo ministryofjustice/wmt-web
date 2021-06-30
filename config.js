@@ -17,10 +17,6 @@ module.exports = {
 
   // Authentication (defaults for development)
   AUTHENTICATION_ENABLED: process.env.WMT_WEB_AUTHENTICATION_ENABLED || 'true',
-  ACTIVE_DIRECTORY_ENTRY_POINT: process.env.WMT_ACTIVE_DIRECTORY_ENTRY_POINT || 'enter here', // SAML-P Sign-On Endpoint
-  ACTIVE_DIRECTORY_ISSUER: process.env.WMT_ACTIVE_DIRECTORY_ISSUER || 'app id', // APP-ID
-  ACTIVE_DIRECTORY_RETURN_ADDRESS: process.env.WMT_ACTIVE_DIRECTORY_RETURN_ADDRESS || '/login',
-  ACTIVE_DIRECTORY_DOMAIN: process.env.WMT_ACTIVE_DIRECTORY_DOMAIN || 'wmtnonproduction.onmicrosoft.com', // SAML CERT
 
   // Session and Cookie security (defaults for development)
   APPLICATION_SECRET: process.env.WMT_WEB_APPLICATION_SECRET, // NO DEFAULT FOR SECURITY REASONS, WILL FAIL IF NOT SET

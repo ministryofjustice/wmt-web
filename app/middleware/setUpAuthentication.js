@@ -21,10 +21,10 @@ module.exports = function () {
 
   router.get('/login/callback', function (req, res, next) {
     passport.authenticate('oauth2',
-       {
-      successReturnToOrRedirect: req.session.returnTo || '/',
-      failureRedirect: '/autherror',
-    }
+      {
+        successReturnToOrRedirect: req.session.returnTo || '/',
+        failureRedirect: '/autherror'
+      }
     )(req, res, next)
   }
   )
