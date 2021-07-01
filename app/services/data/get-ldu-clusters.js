@@ -1,9 +1,9 @@
 const knex = require('../../../knex').web
 
 module.exports = function () {
-  var columns = [
+  const columns = [
     'code',
-    'description AS name',
+    'description AS name'
   ]
   return knex('ldu').columns(columns)
 }

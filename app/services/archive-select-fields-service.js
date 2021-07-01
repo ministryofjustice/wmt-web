@@ -3,7 +3,7 @@ const getTeams = require('./data/get-teams')
 const getLDUClusters = require('./data/get-ldu-clusters')
 
 module.exports = function () {
-  var seacrhFieldsData = {}
+  const seacrhFieldsData = {}
   return getOffenderManagers()
     .then(function (omResults) {
       seacrhFieldsData.offenderManagers = omResults

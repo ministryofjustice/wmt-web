@@ -1,72 +1,78 @@
 const moment = require('moment')
-const percentageCalculator = require('./percentage-calculator')
+const percentageCalculator = require('../../services/helpers/percentage-calculator')
 
-module.exports = function (results, searchStartDate, searchEndDate) {
-  var archiveMap = new Map()
-  var archiveArray = []
-  results.forEach(function (result) {
-    archiveMap.set(result['teamName'], [])
-  })
-  results.forEach(function (result) {
-    var temporaryMappedItems = []
-    temporaryMappedItems = archiveMap.get(result['teamName'])
-    temporaryMappedItems.push(result)
-    archiveMap.set(result['teamName'], temporaryMappedItems)
-  })
-  for (var value of archiveMap.values()) {
-    archiveArray.push(value)
-  }
+module.exports = function (archiveArray, searchStartDate, searchEndDate, groupBy, interval) {
+  const groupedData = []
 
-  var groupedData = []
-  // for each 7 days
-  archiveArray.forEach(function (offenderManager) {
-    //setup date variables after every new offender manager
-    var startDate = moment('01-08-2016', 'DD-MM-YYYY')
-    var endDate = moment('31-5-2019', 'DD-MM-YYYY')
-    // var startDate = searchStartDate.clone().startOf('week').add(1, 'days')
-    // if (!searchEndDate.isSame(searchStartDate.clone().startOf('week').add(1, 'days'))) {
-    //   var endDate = searchEndDate.clone().endOf('week').add(1, 'days').startOf('week').add(1, 'days')
-    // }
-    var currentStartingDate = startDate.clone()
-    var currentEndingDate = startDate.clone().add(7, 'days')
-    var omDetails = {
-      regionName: offenderManager[0].regionName,
-      lduName: offenderManager[0].lduName,
-      teamName: offenderManager[0].teamName
+  archiveArray.forEach(function (group) {
+    // setup date variables after every new group
+    const startDate = searchStartDate
+    const endDate = searchEndDate
+    let currentStartingDate = startDate.clone()
+    let currentEndingDate = startDate.clone().add(interval - 1, 'days')
+    let omName
+    let grade
+    if (groupBy === 'offenderManager') {
+      omName = group[0].omName
+      grade = group[0].grade
+    } else {
+      omName = 'N/A'
+      grade = 'N/A'
     }
-    // 
+    const omDetails = {
+      regionName: group[0].regionName,
+      lduName: group[0].lduName,
+      teamName: group[0].teamName,
+      omName: omName,
+      grade: grade
+    }
+    //
     while (currentStartingDate.isSameOrBefore(endDate)) {
-      var totals = initialiseTotals(currentStartingDate, currentEndingDate)
+      let totals = initialiseTotals(currentStartingDate, currentEndingDate)
       totals = Object.assign(totals, omDetails)
-      var activeOffenderManagers = new Set()
-      var activeWorkloadDates = new Set()
-      // for each daily record of an offender manager
-      offenderManager.forEach(function (day) {
-        if (moment(day.workloadDate, 'DD-MM-YYYY').isBetween(currentStartingDate, currentEndingDate, null, '[)')) {
-          activeOffenderManagers.add(day.omName)
-          activeWorkloadDates.add(day.workloadReportId)
+      let daysWithData = 0
+      const workloadReportSet = new Set()
+
+      // for each daily record of a group
+      group.forEach(function (day) {
+        if (moment(day.workloadDate).isBetween(currentStartingDate, currentEndingDate, null, '[)')) {
+          daysWithData = daysWithData + 1
+          workloadReportSet.add(day.workloadReportId)
           totals = addTotals(totals, day)
         }
       })
 
-      var average
-      if (activeWorkloadDates.size > 0) {
-        average = averageTotals(totals, activeWorkloadDates.size)
-      } else {
-        average = totals
+      let average
+
+      switch (groupBy) {
+        case 'offenderManager':
+          if (daysWithData > 0) {
+            average = averageTotals(totals, daysWithData)
+          } else {
+            average = totals
+          }
+          average.daysWithData = daysWithData
+          break
+        case 'team':
+          if (workloadReportSet.size > 0) {
+            average = averageTotals(totals, workloadReportSet.size)
+          } else {
+            average = totals
+          }
+          average.daysWithData = workloadReportSet.size
+          break
       }
-      average.daysWithData = activeWorkloadDates.size
       groupedData.push(average)
 
       // increment current period by 1 week
-      currentStartingDate = currentStartingDate.add(7, 'days')
-      currentEndingDate = currentEndingDate.add(7, 'days')
+      currentStartingDate = currentStartingDate.clone().add(interval, 'days')
+      currentEndingDate = currentEndingDate.clone().add(interval, 'days')
     }
   })
   return groupedData
 }
 
-var addTotals = function (totals, record) {
+const addTotals = function (totals, record) {
   totals.totalCases = addNumber(totals.totalCases, record.totalCases)
   totals.totalPoints = addNumber(totals.totalPoints, record.totalPoints)
   totals.availablePoints = addNumber(totals.availablePoints, record.availablePoints)
@@ -83,7 +89,7 @@ var addTotals = function (totals, record) {
   return totals
 }
 
-var averageTotals = function (totals, daysWithData) {
+const averageTotals = function (totals, daysWithData) {
   totals.totalCases = Math.round(divideNumbers(totals.totalCases, daysWithData))
   totals.totalPoints = Math.round(divideNumbers(totals.totalPoints, daysWithData))
   totals.availablePoints = Math.round(divideNumbers(totals.availablePoints, daysWithData))
@@ -103,7 +109,7 @@ var averageTotals = function (totals, daysWithData) {
   return totals
 }
 
-var initialiseTotals = function (startDate, endDate) {
+const initialiseTotals = function (startDate, endDate) {
   return {
     startDate: startDate.format('DD-MM-YYYY'),
     endDate: endDate.format('DD-MM-YYYY'),
@@ -121,12 +127,12 @@ var initialiseTotals = function (startDate, endDate) {
     nominalTarget: 0,
     capacity: '0.00%',
     cmsPercentage: '0.00%',
-    gsPercentage : '0.00%'
+    gsPercentage: '0.00%'
   }
 }
 
-var divideNumbers = function (dividend, divisor) {
-  var result = 0
+const divideNumbers = function (dividend, divisor) {
+  let result = 0
   if (dividend === undefined || dividend === null) {
     dividend = 0
   }
@@ -139,7 +145,7 @@ var divideNumbers = function (dividend, divisor) {
   return result
 }
 
-var addNumber = function (number1, number2) {
+const addNumber = function (number1, number2) {
   if (number1 === undefined || number1 === null || number1 === 'N/A') {
     number1 = 0
   }

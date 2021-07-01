@@ -36,6 +36,15 @@ class FieldsetValidator {
     return this
   }
 
+  isArray (specificMessage) {
+    const message = (!specificMessage) ? ERROR_MESSAGES.getIsRequiredMessage : specificMessage
+    const self = this
+    if (this.data.length === 0) {
+      self.errors.add(self.fieldName, message)
+    }
+    return this
+  }
+
   isValidDate () {
     if (!validateDate(this.formattedDate)) {
       this.errors.add(this.fieldName, ERROR_MESSAGES.getInvalidDateFormatMessage)

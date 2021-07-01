@@ -1,12 +1,9 @@
-module.exports = function (archiveDateRange, extraCriteria, archiveDataLimit, isArchive = false) {
+module.exports = function (archiveDataForm, archiveDataLimit, isArchive = false) {
   let knex
   if (isArchive) {
     knex = require('../../../knex').archive
   } else {
     knex = require('../../../knex').web
-  }
-  if (extraCriteria !== null && extraCriteria !== undefined) {
-    extraCriteria = extraCriteria.trim()
   }
 
   const selectColumns = [
@@ -35,24 +32,24 @@ module.exports = function (archiveDateRange, extraCriteria, archiveDataLimit, is
     'nominal_target AS nominalTarget'
   ]
 
-  if (extraCriteria !== null && extraCriteria !== undefined && extraCriteria !== '') {
+  if (archiveDataForm.multiSearchField !== null && archiveDataForm.multiSearchField !== undefined && archiveDataForm.multiSearchField !== '') {
     return knex('team_archive_data')
       .limit(parseInt(archiveDataLimit))
       .select(selectColumns)
-      .whereBetween('workload_date', [archiveDateRange.archiveFromDate.toISOString().substring(0, 10),
-        archiveDateRange.archiveToDate.toISOString().substring(0, 10)])
+      .whereBetween('workload_date', [archiveDataForm.archiveFromDate.toISOString().substring(0, 10),
+        archiveDataForm.archiveToDate.toISOString().substring(0, 10)])
       .andWhere(function () {
-        this.where('team_name', 'like', '%' + extraCriteria + '%')
-          .orWhere('ldu_name', 'like', '%' + extraCriteria + '%')
-          .orWhere('om_name', 'like', '%' + extraCriteria + '%')
+        this.whereIn('team_name', archiveDataForm.multiSearchField)
+          .orWhereIn('ldu_name', archiveDataForm.multiSearchField)
+          .orWhereIn('om_name', archiveDataForm.multiSearchField)
       })
       .orderBy('workload_id', 'ASC')
   } else {
     return knex('team_archive_data')
       .limit(parseInt(archiveDataLimit))
       .select(selectColumns)
-      .whereBetween('workload_date', [archiveDateRange.archiveFromDate.toISOString().substring(0, 10),
-        archiveDateRange.archiveToDate.toISOString().substring(0, 10)])
+      .whereBetween('workload_date', [archiveDataForm.archiveFromDate.toISOString().substring(0, 10),
+        archiveDataForm.archiveToDate.toISOString().substring(0, 10)])
       .orderBy('workload_id', 'ASC')
   }
 }

@@ -1,11 +1,7 @@
 const knex = require('../../../knex').legacy
 const archiveDataLimit = require('../../../config').ARCHIVE_DATA_LIMIT
 
-module.exports = function (archiveDateRange, extraCriteria) {
-  if (extraCriteria !== null && extraCriteria !== undefined) {
-    extraCriteria = extraCriteria.trim()
-  }
-
+module.exports = function (archiveDataForm) {
   const selectColumns = [
     'om_name AS omName',
     'hours_reduced AS hoursReduced',
@@ -14,23 +10,24 @@ module.exports = function (archiveDateRange, extraCriteria) {
     'reduction_added_by AS reductionAddedBy'
   ]
 
-  if (extraCriteria !== null && extraCriteria !== undefined && extraCriteria !== '') {
+  if (archiveDataForm.multiSearchField !== null && archiveDataForm.multiSearchField !== undefined && archiveDataForm.multiSearchField !== '') {
+    console.log(archiveDataForm.multiSearchField)
     return knex('archive_reduction_data')
       .limit(parseInt(archiveDataLimit))
       .select(selectColumns)
-      .whereBetween('last_updated_date', [archiveDateRange.archiveFromDate.toISOString().substring(0, 10),
-        archiveDateRange.archiveToDate.toISOString().substring(0, 10)])
+      .whereBetween('last_updated_date', [archiveDataForm.archiveFromDate.toISOString().substring(0, 10),
+        archiveDataForm.archiveToDate.toISOString().substring(0, 10)])
       .andWhere(function () {
-        this.where('om_name', 'like', '%' + extraCriteria + '%')
-          .orWhere('reduction_added_by', 'like', '%' + extraCriteria + '%')
+        this.whereIn('om_name', archiveDataForm.multiSearchField)
+          .orWhereIn('reduction_added_by', archiveDataForm.multiSearchField)
       })
       .orderBy('last_updated_date', 'ASC')
   } else {
     return knex('archive_reduction_data')
       .limit(parseInt(archiveDataLimit))
       .select(selectColumns)
-      .whereBetween('last_updated_date', [archiveDateRange.archiveFromDate.toISOString().substring(0, 10),
-        archiveDateRange.archiveToDate.toISOString().substring(0, 10)])
+      .whereBetween('last_updated_date', [archiveDataForm.archiveFromDate.toISOString().substring(0, 10),
+        archiveDataForm.archiveToDate.toISOString().substring(0, 10)])
       .orderBy('last_updated_date', 'ASC')
   }
 }

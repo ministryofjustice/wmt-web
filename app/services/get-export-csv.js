@@ -15,16 +15,13 @@ const EXPIRING_REDUCTIONS_FIELD_NAMES = ['Region', 'Probation Delivery Unit', 'T
 const EXPIRING_REDUCTIONS_FIELDS = ['regionName', 'lduName', 'teamName', 'offenderManager', 'gradeCode', 'contractedHours', 'reason', 'amount', 'startDate', 'endDate', 'status', 'additionalNotes', 'managerResponsible']
 const INACTIVE_CASES_FIELDS = ['lduName', 'teamName', 'name', 'gradeCode', 'inactiveCaseType', 'crn', 'location', 'tier']
 const INACTIVE_CASES_FIELD_NAMES = ['Probation Delivery Unit', 'Team Name', 'Name', 'Grade Code', 'Inactive Case Type', 'CRN', 'Location', 'Tier']
-const DAILY_ARCHIVE_FIELD_NAMES = ['Workload Date', 'Workload ID', 'Region', 'LDU', 'Team', 'Offender Manager', 'Grade', 'Total Cases', 'Total Points', 'SDR Points', 'SDR Conversion Points', 'PAROMS Points', 'Nominal Target', 'Contracted Hours', 'Reductions', 'Available Points', 'Capacity', 'CMS Points', 'CMS %', 'GS Points', 'GS %', 'ARMS Total Cases']
+const DAILY_ARCHIVE_FIELD_NAMES = ['Workload Date', 'Workload ID', 'Region', 'Probation Delivery Unit', 'Team', 'Offender Manager', 'Grade', 'Total Cases', 'Total Points', 'SDR Points', 'SDR Conversion Points', 'PAROMS Points', 'Nominal Target', 'Contracted Hours', 'Reductions', 'Available Points', 'Capacity', 'CMS Points', 'CMS %', 'GS Points', 'GS %', 'ARMS Total Cases']
 const DAILY_ARCHIVE_FIELDS = ['workloadDate', 'workloadID', 'regionName', 'lduName', 'teamName', 'omName', 'grade', 'totalCases', 'totalPoints', 'sdrPoints', 'sdrConversionPoints', 'paromsPoints', 'nominalTarget', 'contractedHours', 'hoursReduction', 'availablePoints', 'capacity', 'cmsPoints', 'cmsPercentage', 'gsPoints', 'gsPercentage', 'armsTotalCases']
 
-const GROUPED_ARCHIVE_FIELD_NAMES = ['Start Date', 'End Date', 'Division', 'LDU', 'Team', 'Offender Manager', 'Grade', 'Total Cases', 'Total Points', 'SDR Points', 'SDR Conversion Points', 'PAROMS Points', 'Nominal Target', 'Contracted Hours', 'Reductions', 'Available Points', 'Capacity', 'CMS Points', 'CMS %', 'GS Points', 'GS %', 'ARMS Total Cases', 'No of Workloads']
+const GROUPED_ARCHIVE_FIELD_NAMES = ['Start Date', 'End Date', 'Region', 'Probation Delivery Unit', 'Team', 'Offender Manager', 'Grade', 'Total Cases', 'Total Points', 'SDR Points', 'SDR Conversion Points', 'PAROMS Points', 'Nominal Target', 'Contracted Hours', 'Reductions', 'Available Points', 'Capacity', 'CMS Points', 'CMS %', 'GS Points', 'GS %', 'ARMS Total Cases', 'No of Workloads']
 const GROUPED_ARCHIVE_FIELDS = ['startDate', 'endDate', 'regionName', 'lduName', 'teamName', 'omName', 'grade', 'totalCases', 'totalPoints', 'sdrPoints', 'sdrConversionPoints', 'paromsPoints', 'nominalTarget', 'contractedHours', 'hoursReduction', 'availablePoints', 'capacity', 'cmsPoints', 'cmsPercentage', 'gsPoints', 'gsPercentage', 'armsTotalCases', 'daysWithData']
-// const GROUPED_ARCHIVE_FIELD_NAMES_TEAM = ['Start Date', 'End Date', 'Division', 'LDU', 'Team', 'Total Cases', 'Total Points', 'SDR Points', 'SDR Conversion Points', 'PAROMS Points', 'Nominal Target', 'Contracted Hours', 'Reductions', 'Available Points', 'Capacity', 'CMS Points', 'CMS %', 'GS Points', 'GS %', 'ARMS Total Cases']
-// const GROUPED_ARCHIVE_FIELDS_TEAM = ['startDate', 'endDate', 'regionName', 'lduName', 'teamName', 'totalCases', 'totalPoints', 'sdrPoints', 'sdrConversionPoints', 'paromsPoints', 'nominalTarget', 'contractedHours', 'hoursReduction', 'availablePoints', 'capacity', 'cmsPoints', 'cmsPercentage', 'gsPoints', 'gsPercentage', 'armsTotalCases']
-
-const FORTNIGHTLY_ARCHIVE_FIELD_NAMES = ['Start Date', 'End Date', 'Probation Delivery Unit', 'Team Name', 'Offender Manager Name', 'Average Cases', 'Average Capacity', 'Average Reductions']
-const FORTNIGHTLY_ARCHIVE_FIELDS = ['startDate', 'endDate', 'lduName', 'teamName', 'omName', 'totalCases', 'capacity', 'hoursReduction']
+const GROUPED_ARCHIVE_FIELD_NAMES_TEAM = ['Start Date', 'End Date', 'Region', 'Probation Delivery Unit', 'Team', 'Total Cases', 'Total Points', 'SDR Points', 'SDR Conversion Points', 'PAROMS Points', 'Nominal Target', 'Contracted Hours', 'Reductions', 'Available Points', 'Capacity', 'CMS Points', 'CMS %', 'GS Points', 'GS %', 'ARMS Total Cases']
+const GROUPED_ARCHIVE_FIELDS_TEAM = ['startDate', 'endDate', 'regionName', 'lduName', 'teamName', 'totalCases', 'totalPoints', 'sdrPoints', 'sdrConversionPoints', 'paromsPoints', 'nominalTarget', 'contractedHours', 'hoursReduction', 'availablePoints', 'capacity', 'cmsPoints', 'cmsPercentage', 'gsPoints', 'gsPercentage', 'armsTotalCases']
 
 const REDUCTION_ARCHIVE_FIELD_NAMES = ['Offender Manager Name', 'Reduction Hours', 'Reduction Reason', 'Comments', 'Start Date', 'End Date', 'Date Updated', 'Reduction Updated By']
 const REDUCTION_ARCHIVE_FIELDS = ['omName', 'hoursReduced', 'reductionReason', 'comments', 'startDate', 'endDate', 'lastUpdatedDate', 'reductionAddedBy']
@@ -49,7 +46,7 @@ const T2A_EXPORT_FIELDS = ['regionName', 'lduName', 'teamName', 'CRN', 'omName',
 
 module.exports = function (organisationLevel, result, tab) {
   let filename
-  if (tab === tabs.ADMIN.DAILY_ARCHIVE || tab === tabs.ADMIN.FORTNIGHTLY_ARCHIVE || tab === tabs.ADMIN.REDUCTION_ARCHIVE || tab === tabs.ADMIN.GROUPED_ARCHIVE) {
+  if (tab === tabs.ADMIN.DAILY_ARCHIVE || tab === tabs.ADMIN.REDUCTION_ARCHIVE || tab === tabs.ADMIN.GROUPED_ARCHIVE || tab === tabs.ADMIN.GROUPED_ARCHIVE_TEAM) {
     filename = getFilename(organisationLevel, tab)
   } else {
     filename = getFilename(result.title, tab)
@@ -79,11 +76,11 @@ const getFilename = function (orgName, screen) {
     } else {
       return (orgName + ' Grouped_Archive_Data.csv').replace(replaceSpaces, '_')
     }
-  } else if (screen === tabs.ADMIN.FORTNIGHTLY_ARCHIVE) {
+  } else if (screen === tabs.ADMIN.GROUPED_ARCHIVE_TEAM) {
     if (orgName === null) {
-      return 'Fortnightly_Archive_Data.csv'
+      return 'Team_Grouped_Archive_Data.csv'
     } else {
-      return (orgName + ' Fortnightly_Archive_Data.csv').replace(replaceSpaces, '_')
+      return (orgName + ' Team_Grouped_Archive_Data.csv').replace(replaceSpaces, '_')
     }
   } else if (screen === tabs.ADMIN.REDUCTION_ARCHIVE) {
     if (orgName === null) {
@@ -185,9 +182,9 @@ const getFields = function (organisationLevel, tab) {
       fields = GROUPED_ARCHIVE_FIELDS
       fieldNames = GROUPED_ARCHIVE_FIELD_NAMES
       break
-    case tabs.ADMIN.FORTNIGHTLY_ARCHIVE:
-      fields = FORTNIGHTLY_ARCHIVE_FIELDS
-      fieldNames = FORTNIGHTLY_ARCHIVE_FIELD_NAMES
+    case tabs.ADMIN.GROUPED_ARCHIVE_TEAM:
+      fields = GROUPED_ARCHIVE_FIELDS_TEAM
+      fieldNames = GROUPED_ARCHIVE_FIELD_NAMES_TEAM
       break
     case tabs.ADMIN.REDUCTION_ARCHIVE:
       fields = REDUCTION_ARCHIVE_FIELDS
@@ -309,7 +306,7 @@ const getCsv = function (organisationLevel, result, tab, fields, fieldNames) {
       break
     case tabs.ADMIN.DAILY_ARCHIVE:
     case tabs.ADMIN.GROUPED_ARCHIVE:
-    case tabs.ADMIN.FORTNIGHTLY_ARCHIVE:
+    case tabs.ADMIN.GROUPED_ARCHIVE_TEAM:
     case tabs.ADMIN.REDUCTION_ARCHIVE:
     case tabs.EXPORT.ARMS_EXPORT:
     case tabs.EXPORT.CASE_DETAILS_EXPORT:

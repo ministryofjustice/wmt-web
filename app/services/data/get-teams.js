@@ -1,9 +1,9 @@
 const knex = require('../../../knex').web
 
 module.exports = function () {
-  var columns = [
+  const columns = [
     'code',
-    'description as name',
+    'description as name'
   ]
   return knex('team').columns(columns)
 }
