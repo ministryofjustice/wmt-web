@@ -21,7 +21,6 @@ module.exports = function (id, type) {
 
     if (isIndexed) {
       selectList.push('CONCAT(forename, \' \', surname) AS name')
-      noExpandHint = ' '
     } else {
       selectList.push('name')
     }

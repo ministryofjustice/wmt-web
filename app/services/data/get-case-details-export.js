@@ -18,8 +18,6 @@ module.exports = function (id, type) {
   .withSchema('app')
   .select(selectList)
 
-  let whereString
-
   if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
     query = query.where('id',id)
   }
