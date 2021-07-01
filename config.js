@@ -16,13 +16,13 @@ module.exports = {
 
   // DB
   DATABASE_SERVER: process.env.WMT_DB_SERVER || 'localhost',
-  DATABASE: process.env.WMT_DB_NAME || 'master',
-  ARCHIVE_DATABASE: process.env.WMT_DB_ARCHIVE_NAME || 'master',
+  DATABASE: process.env.WMT_DB_NAME || 'postgres',
+  ARCHIVE_DATABASE: process.env.WMT_DB_ARCHIVE_NAME || 'postgres',
   DB_APP_SCHEMA: 'app',
 
   // App
-  WEB_APP_DATABASE_USERNAME: process.env.WMT_WEB_APP_DATABASE_USERNAME || 'sa',
-  WEB_APP_DATABASE_PASSWORD: process.env.WMT_WEB_APP_DATABASE_PASSWORD || 'yourStrong(!)Password',
+  WEB_APP_DATABASE_USERNAME: process.env.WMT_WEB_APP_DATABASE_USERNAME || 'root',
+  WEB_APP_DATABASE_PASSWORD: process.env.WMT_WEB_APP_DATABASE_PASSWORD || 'dev',
 
   ARCHIVE_DATA_LIMIT: '10000',
 

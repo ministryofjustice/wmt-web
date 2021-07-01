@@ -5,7 +5,7 @@ const ORGANISATION_UNIT = require('../../constants/organisation-unit')
 module.exports = function (id, type) {
   const orgUnit = orgUnitFinder('name', type)
 
-  const table = 'app.' + orgUnit.capacityBreakdownView
+  const table = orgUnit.capacityBreakdownView
 
   const selectList = [
     'total_points AS totalPoints',
@@ -32,16 +32,13 @@ module.exports = function (id, type) {
     selectList.push('name')
   }
 
-  let whereString = ''
+  let query = knex(table)
+  .withSchema('app')
+  .select(selectList)
 
   if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
-    whereString += ' WHERE id = ' + id
+    query = query.where('id',id)
   }
 
-  const noExpandHint = ' '
-
-  return knex.schema.raw('SELECT ' + selectList.join(', ') +
-      ' FROM ' + table +
-      noExpandHint +
-      whereString)
+  return query
 }

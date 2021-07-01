@@ -4,13 +4,7 @@ const ORGANISATION_UNIT = require('../../constants/organisation-unit')
 
 module.exports = function (id, type) {
   const orgUnit = orgUnitFinder('name', type)
-  const table = 'app.' + orgUnit.courtReporterOverview
-
-  let whereString = ''
-
-  if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
-    whereString += ' WHERE id = ' + id
-  }
+  const table = orgUnit.courtReporterOverview
 
   const selectList = [
     'link_id AS linkId',
@@ -29,16 +23,19 @@ module.exports = function (id, type) {
     selectList.push('name')
     selectList.push('grade_code AS grade')
   } else if (ORGANISATION_UNIT.TEAM.name === type) {
-    selectList.push('CONCAT(forename, \' \', surname) AS name')
+    selectList.push('surname AS name')
     selectList.push('grade_code AS grade')
   } else {
     selectList.push('name')
   }
 
-  const noExpandHint = ' '
+  let query = knex(table)
+  .withSchema('app')
+  .select(selectList)
 
-  return knex.schema.raw('SELECT ' + selectList.join(', ') +
-      ' FROM ' + table +
-      noExpandHint +
-      whereString)
+  if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
+    query = query.where('id',id)
+  }
+
+  return query
 }

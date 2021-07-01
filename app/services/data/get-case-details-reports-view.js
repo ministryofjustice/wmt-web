@@ -1,7 +1,7 @@
 const knex = require('../../../knex').web
 
 module.exports = function (id) {
-  const table = 'app.team_case_details_view'
+  const table = 'team_case_details_view'
   const selectList = [
     'link_id AS linkId',
     'team_description AS teamDescription',
@@ -15,24 +15,19 @@ module.exports = function (id) {
     'tier_code AS tierNumber'
   ]
 
-  const UNPAID = 'flag = \'U\''
-  const WARRANT = 'flag = \'W\''
-  const OVERDUE = 'flag = \'O\''
-  const SUSPENDED = 'flag = \'S\''
-
-  let whereString = 'WHERE (' + UNPAID + ' OR ' + WARRANT + ' OR ' + OVERDUE + ' OR ' + SUSPENDED + ')'
+  let query = knex(table)
+  .withSchema('app')
+  .select(selectList)
+  .where('flag','U')
+  .orWhere('flag','W')
+  .orWhere('flag','O')
+  .orWhere('flag','S')
 
   if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
-    whereString += ' AND (id = ' + id + ')'
+    query = query.andWhere('id',id)
   }
 
-  const noExpandHint = ' '
-
-  return knex.schema.raw('SELECT ' + selectList.join(', ') +
-        ' FROM ' + table +
-        noExpandHint +
-        whereString)
-    .then(function (results) {
+  return query.then(function (results) {
       return results
     })
 }
