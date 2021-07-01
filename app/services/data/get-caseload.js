@@ -33,7 +33,6 @@ module.exports = function (id, type) {
 
   const requiresWorkloadOwnerName = (type === ORGANISATION_UNIT.TEAM.name)
 
-
   if (requiresWorkloadOwnerName) {
     selectList.push('CONCAT(forename, \' \', surname) AS name')
   } else {
@@ -41,14 +40,14 @@ module.exports = function (id, type) {
   }
 
   let query = knex(table)
-  .withSchema('app')
-  .select(selectList)
+    .withSchema('app')
+    .select(selectList)
 
   const displayAllRecords = (type === ORGANISATION_UNIT.NATIONAL.name)
 
   if (!displayAllRecords) {
     if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
-      query = query.where('id',id)
+      query = query.where('id', id)
     }
   }
 

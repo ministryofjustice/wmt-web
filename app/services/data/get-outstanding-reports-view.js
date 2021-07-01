@@ -28,12 +28,11 @@ module.exports = function (id, type) {
   }
 
   let query = knex(table)
-  .withSchema('app')
-  .select(selectList)
+    .withSchema('app')
+    .select(selectList)
 
   if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
     query = query.where('id', id)
-    
   }
   return query
     .then(function (results) {

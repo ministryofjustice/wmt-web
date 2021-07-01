@@ -15,25 +15,25 @@ module.exports = function (id, fromDate, toDate, type) {
   ]
   let workloadReportResults
 
-  let archiveQuery = knexArchive(table)
-  .withSchema('app')
-  .select(selectList)
-  .where('effective_from','>=', fromDate)
-  .andWhere('effective_from','<=',toDate)
-  .orderBy('effective_from')
+  const archiveQuery = knexArchive(table)
+    .withSchema('app')
+    .select(selectList)
+    .where('effective_from', '>=', fromDate)
+    .andWhere('effective_from', '<=', toDate)
+    .orderBy('effective_from')
 
-  let query = knex(table)
-  .withSchema('app')
-  .select(selectList)
-  .where('effective_from','>=', fromDate)
-  .andWhere('effective_from','<=',toDate)
-  .orderBy('effective_from')
+  const query = knex(table)
+    .withSchema('app')
+    .select(selectList)
+    .where('effective_from', '>=', fromDate)
+    .andWhere('effective_from', '<=', toDate)
+    .orderBy('effective_from')
 
   if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
-    archiveQuery.andWhere('id',id)
-    query.andWhere('id',id)
+    archiveQuery.andWhere('id', id)
+    query.andWhere('id', id)
   }
-  
+
   return archiveQuery
     .then(function (archiveDBResults) {
       workloadReportResults = archiveDBResults.rows

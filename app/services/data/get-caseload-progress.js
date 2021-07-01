@@ -19,20 +19,19 @@ module.exports = function (id, type) {
     (type === ORGANISATION_UNIT.OFFENDER_MANAGER.name ||
     type === ORGANISATION_UNIT.TEAM.name)
 
-    if (isIndexed) {
-      selectList.push('CONCAT(forename, \' \', surname) AS name')
-    } else {
-      selectList.push('name')
-    }
-
-  let query = knex(table)
-  .withSchema('app')
-  .select(selectList)
-
-  if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
-    query = query.where('id',id)
+  if (isIndexed) {
+    selectList.push('CONCAT(forename, \' \', surname) AS name')
+  } else {
+    selectList.push('name')
   }
 
-  
+  let query = knex(table)
+    .withSchema('app')
+    .select(selectList)
+
+  if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
+    query = query.where('id', id)
+  }
+
   return query
 }

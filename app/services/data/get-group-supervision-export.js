@@ -16,15 +16,15 @@ module.exports = function (id, type) {
     'points'
   ]
 
-  let query = knex(table)
-  .withSchema('app')
-  .select(selectList)
+  const query = knex(table)
+    .withSchema('app')
+    .select(selectList)
 
   if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
-    query.where(`${type}id`,id)
+    query.where(`${type}id`, id)
   }
 
   return query.then(function (results) {
-      return results
-    })
+    return results
+  })
 }
