@@ -1,5 +1,6 @@
 const getDailyArchive = require('./data/get-daily-archive')
-const getDailyArchiveFromNewDB = require('./data/get-daily-archive-from-new-db')
+const getDailyArchiveFromNewDBArchive = require('./data/get-daily-archive-from-new-db')
+const getDailyArchiveFromNewDBCurrent = require('./data/get-daily-archive-from-new-db-current')
 const getReductionArchive = require('./data/get-reduction-archive')
 const getReductionArchiveFromNewDB = require('./data/get-reduction-archive-from-new-db')
 const archiveOptions = require('../constants/archive-options')
@@ -22,11 +23,11 @@ module.exports = function (archiveOption, archiveDataForm) {
       results = calculateCapacity(results)
       archiveDataLimit = archiveDataLimit - results.length
       if (archiveDataLimit > 0) {
-        return getDailyArchiveFromNewDB(archiveDataForm, archiveDataLimit, true).then(function (results2) {
+        return getDailyArchiveFromNewDBArchive(archiveDataForm, archiveDataLimit, true).then(function (results2) {
           let concatenatedResults = concatenateResults(results, results2, false)
           archiveDataLimit = archiveDataLimit - concatenatedResults.length
           if (archiveDataLimit > 0) {
-            return getDailyArchiveFromNewDB(archiveDataForm, archiveDataLimit, false).then(function (results3) {
+            return getDailyArchiveFromNewDBCurrent(archiveDataForm, archiveDataLimit, false).then(function (results3) {
               concatenatedResults = concatenateResults(concatenatedResults, results3, true)
               return concatenatedResults.sort(caseloadDataArraySort)
             })
@@ -39,15 +40,15 @@ module.exports = function (archiveOption, archiveDataForm) {
       }
     })
   } else if (archiveOption === archiveOptions.DAILY_ARCHIVE) {
-    return getDailyArchiveFromNewDB(archiveDataForm, archiveDataLimit, true).then(function (results) {
+    return getDailyArchiveFromNewDBArchive(archiveDataForm, archiveDataLimit, true).then(function (results) {
       results.forEach(function (result) {
         result = calculateCapacityCMSAndGS(result)
         result = incrementWorkloadAndWorkloadReportIds(result, false)
       })
       archiveDataLimit = archiveDataLimit - results.length
       if (archiveDataLimit > 0) {
-        return getDailyArchiveFromNewDB(archiveDataForm, archiveDataLimit, false).then(function (results2) {
-          const concatenatedResults = concatenateResults(results, results2, false)
+        return getDailyArchiveFromNewDBCurrent(archiveDataForm, archiveDataLimit, false).then(function (results2) {
+          const concatenatedResults = concatenateResults(results, results2, true)
           return concatenatedResults.sort(caseloadDataArraySort)
         })
       } else {
@@ -55,7 +56,7 @@ module.exports = function (archiveOption, archiveDataForm) {
       }
     })
   } else if (archiveOption === archiveOptions.DAILY) {
-    return getDailyArchiveFromNewDB(archiveDataForm, archiveDataLimit, false).then(function (results) {
+    return getDailyArchiveFromNewDBCurrent(archiveDataForm, archiveDataLimit, false).then(function (results) {
       results.forEach(function (result) {
         result = calculateCapacityCMSAndGS(result)
         result = incrementWorkloadAndWorkloadReportIds(result, true)
@@ -80,8 +81,8 @@ module.exports = function (archiveOption, archiveDataForm) {
 }
 
 const caseloadDataArraySort = function (obj1, obj2) {
-  const obj1Date = moment(obj1.workloadDate, 'DD-MM-YYYY')
-  const obj2Date = moment(obj2.workloadDate, 'DD-MM-YYYY')
+  const obj1Date = moment(obj1.workloadDate)
+  const obj2Date = moment(obj2.workloadDate)
   if (obj1Date.isAfter(obj2Date)) {
     return 1
   }
