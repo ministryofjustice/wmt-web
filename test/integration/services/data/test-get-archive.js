@@ -1,7 +1,7 @@
 const expect = require('chai').expect
 
 const getArchive = require('../../../../app/services/data/get-daily-archive')
-const ArchiveDateRange = require('../../../../app/services/domain/archive-date-range')
+const ArchiveDataForm = require('../../../../app/services/domain/archive-data-form')
 
 const expectedResult = {
   workloadID: 2745,
@@ -21,11 +21,11 @@ const expectedResult = {
 
 let archiveData
 
-const archiveDateRange = new ArchiveDateRange(18, 6, 2014, 26, 8, 2016)
+const archiveDataForm = new ArchiveDataForm(18, 6, 2014, 26, 8, 2016, ['A.N. Offender Manager 1'])
 
 describe('services/data/get-daily-archive', function () {
   before(function () {
-    return getArchive(archiveDateRange).then(function (results) {
+    return getArchive(archiveDataForm).then(function (results) {
       archiveData = results
     })
   })

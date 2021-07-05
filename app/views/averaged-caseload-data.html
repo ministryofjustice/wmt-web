@@ -13,10 +13,9 @@
 <form method="post" class "archive-form">
         {% include "includes/csrf-hidden-input.html"%}
         <input id="rawQuery" type="hidden" name="rawQuery" value="{{ stringifiedBody }}">
-        <input id="startSearching" type="hidden" name="startSearching" value="{{ startSearching }}">
-
-         <div class="govuk-form-group {% if errors['archiveFromDate'][0] %} govuk-form-group--error {% endif %}" id="from">
-            {% if errors %}
+        
+        <div class="govuk-form-group {% if errors['archiveFromDate'][0] %} govuk-form-group--error {% endif %}" id="from">
+            {% if errors['archiveFromDate'][0] %}
                 <span id="archive-from-error" class="govuk-error-message">
                     <span class="govuk-visually-hidden">Error:</span> {{ errors['archiveFromDate'][0] }}
                 </span>
@@ -27,16 +26,15 @@
                         Show archive data from:
                     </h1>
                 </legend>
-                <div class="govuk-hint" id="archive-from-hint">For example, 30 1 2015 - This date must be on or after 24/10/2014</div>
+                <div class="govuk-hint" id="archive-from-hint">For example, 30 1 2015 - This date must be on or after 18/06/2014</div>
                 <div class="govuk-date-input">
                     <div class="govuk-date-input__item">
                         <div class="govuk-form-group">
                             <label class="govuk-label govuk-date-input__label" for="archive-from-day">Day</label>
                             <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if errors['archiveFromDate'][0] %} govuk-input--error {% endif %}" id="archive-from-day" name="archive-from-day" 
-                                value={{body["archive-from-day"] | int}}>
+                            value={{body["archive-from-day"] | int}}>
                         </div>
-                        
-                     </div>
+                    </div>
                      <div class="govuk-date-input__item">
                         <div class="govuk-form-group">
                             <label class="govuk-label govuk-date-input__label" for="archive-from-month">Month</label>
@@ -56,7 +54,7 @@
         </div>
 
         <div class="govuk-form-group {% if errors['archiveToDate'][0] %} govuk-form-group--error {% endif %}" id="to">
-            {% if errors %}
+            {% if errors['archiveToDate'][0] %}
                 <span id="archive-to-error" class="govuk-error-message">
                     <span class="govuk-visually-hidden">Error:</span> {{ errors['archiveToDate'][0] }}
                 </span>
@@ -67,7 +65,7 @@
                         Show archive data to:
                     </h1>
                 </legend>
-                <div class="govuk-hint" id="archive-to-hint">For example, 30 1 2015 - This date must be on or after 24/10/2014</div>
+                <div class="govuk-hint" id="archive-to-hint">For example, 31 3 2015 - Must be between 19/06/2014 and 25/08/2016</div>
                 <div class="govuk-date-input">
                     <div class="govuk-date-input__item">
                         <div class="govuk-form-group">
@@ -104,7 +102,7 @@
             <fieldset class="govuk-fieldset" role="group" aria-describedby="multi-search-hint" id="multiSearchField">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
                     <h1 class="govuk-fieldset__heading">
-                        Search by Offender Manager or Reduction Updater
+                        Search by Offender Manager, Team or Probation Delivery Unit
                     </h1>
                 </legend>
                 <div class="govuk-hint" id="multi-search-hint">For Example, John Smith</div>
@@ -116,34 +114,116 @@
                 </div>
             </fieldset>
         </div>
+        
+        <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="fortnightlys-multi-search-field-hint" id="multiSearchDate">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                <h1 class="govuk-fieldset__heading">
+                    How would you like this data grouped?
+                </h1>
+            </legend>
+          
+            <div class="govuk-grid-column-one-quarter">
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="offenderManager" type="radio" name="groupBy" value="offenderManager" checked>
+                    <label class="govuk-label govuk-radios__label" for="offenderManager">Offender Manager</label>
+                </div>
+              </div>
+              <div class="govuk-grid-column-one-quarter">
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="team" type="radio" name="groupBy" value="team" {% if groupBy === 'team'%} checked {% endif %}>
+                    <label class="govuk-label govuk-radios__label" for="team">Team</label>
+                </div>
+              </div>
+          
+            </fieldset>
+          </div>
 
-        <input id="archive-reductions-filter-submit" type="submit" value="Search" class="govuk-button" data-module="govuk-button"  formaction="/archive-data/reductions-search">
-        <input id="archive-reductions-csv-submit" type="submit" class="govuk-button sln-export floatRightBottom10 marginLeft10" value="Export Archived Reductions" formaction="/archive-data/reductions/archive-csv" data-module="govuk-button">
+          <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset" role="group" aria-describedby="fortnightlys-multi-search-field-hint" id="multiSearchDate">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                    <h1 class="govuk-fieldset__heading">
+                        At what intervals would you like this data grouped?
+                    </h1>
+                </legend>
+          
+                <div class="govuk-grid-column-one-quarter">
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="weekly" type="radio" name="interval" value="weekly" checked>
+                        <label class="govuk-label govuk-radios__label" for="weekly">Weekly</label>
+                    </div>
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="monthly" type="radio" name="interval" value="monthly" {% if interval === 'monthly'%} checked {% endif %}>
+                        <label class="govuk-label govuk-radios__label" for="monthly">Monthly</label>
+                    </div>
+                </div>
+          
+            </fieldset>
+          </div>
+
+        <input id="archive-average-filter-submit" type="submit" value="Search" class="govuk-button" data-module="govuk-button" formaction="/archive-data/average-caseload-data">
+        <input id="archive-average-csv-submit" type="submit" class="govuk-button sln-export floatRightBottom10 marginLeft10" value="Export Archive Data" formaction="/archive-data/average-caseload-data/archive-csv" data-module="govuk-button">
 </form>
 <br/>
-<table id="reduction-archive-table" class="govuk-table js-data-table data-table dataTable width100Percent" cellspacing="0" width="100%" role="grid" hidden>
+
+{% if (results) %}
+<table id="average-caseload-table" class="govuk-table js-data-table data-table dataTable width100Percent" cellspacing="0" width="100%" role="grid" aria-describedby="example_info">
     <thead>
         <tr class="headers">
-            <th></th>
-            <th id="offenderManager">Offender Manager</th>
-            <th id="reductions">Reduction Hours</th>
-            <th id="reductionReason">Reduction Reason</th>
-            <th id="comments">Comments</th>
-            <th id="reductionStartDate">Start Date</th>
-            <th id="reductionExpiryDate">Expiry Date</th>
-            <th id="reductionDate">Date Reduction Updated</th>
-            <th id="reductionAddedBy">Reduction Updated By</th>
+            <th id="workloadID">Start Date</th>
+            <th id="workloadDate">End Date</th>
+            <th id="region">Region</th>
+            <th id="cluster">Cluster</th>
+            <th id="team">Team</th>
+            {% if groupBy === 'offenderManager' %}
+                <th id="offenderManager">Offender Manager</th>
+                <th id="grade">Grade</th>
+            {% endif %}
+            <th id="totalCases">Average Cases</th>
+            <th id="capacity">Average Capacity %</th>
+            <th id="contracted">Average Contracted Hours</th>
+            <th id="reductions">Average Reductions</th>
+            <th id="cms">Average CMS Points</th>
+            <th id="cmsp">Average CMS %</th>
+            <th id="gs">Average GS Points</th>
+            <th id="gsp">Average GS %</th>
         </tr>
     </thead>
+    <tbody>
+      {% for result in results %}
+        <tr>
+            <td>{{ result.startDate }}</td>
+            <td>{{ result.endDate }}</td>
+            <td>{{ result.regionName }}</td>
+            <td>{{ result.lduName }}</td>
+            <td>{{ result.teamName }}</td>
+            {% if groupBy === 'offenderManager' %}
+                <td>{{ result.omName }}</td>
+                <td>{{ result.grade }}</td>
+            {% endif %}
+            <td>{{ result.totalCases }}</td>
+            <td>{{ result.capacity }}</td>
+            <td>{{ result.contractedHours }}</td>
+            <td>{{ result.hoursReduction }}</td>
+            <td>{{ result.cmsPoints }}</td>
+            <td>{{ result.cmsPercentage }}</td>
+            <td>{{ result.gsPoints }}</td>
+            <td>{{ result.gsPercentage }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
 </table>
+{% endif %}
 <br/>
 </main>
 
 <script src="{{ assetPath }}javascripts/vendor/jquery.min.js"></script>
 <script src="{{ assetPath }}javascripts/moment.min.js"></script>
 <script src="{{ assetPath }}javascripts/datatables.min.js"></script>
-<script src="{{ assetPath }}javascripts/archive-reductions-new.js"></script>
+<script src="{{ assetPath }}javascripts/archive-data-fortnightly.js"></script>
 <script src="{{ assetPath }}javascripts/select2.min.js"></script>
-<script src="{{ assetPath }}javascripts/reductions-data.js"></script>
+<script src="{{ assetPath }}javascripts/daily-and-averaged-caseload-data.js"></script>
 
 {% endblock %}
