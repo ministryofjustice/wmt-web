@@ -7,7 +7,7 @@
     "build": "gulp generate-assets && gulp sync",
     "unit-test": "standard && mocha --recursive test/unit/ --exit",
     "integration-test": "gulp generate-assets && mocha --recursive test/integration --timeout=60000 --exit",
-    "test": "mocha --recursive test/unit/ --exit --reporter mocha-simple-html-reporter --reporter-options output=test_results/unit-test-reports.html",
+    "test": "nyc mocha --recursive test/unit/ --exit --reporter mocha-simple-html-reporter --reporter-options output=test_results/unit-test-reports.html",
     "test-e2e": "gulp --gulpfile gulpfile-e2e.js",
     "test-e2e-firefox": "wdio test/wdio.conf.sauce.firefox.js",
     "test-e2e-firefox-jenkins": "wdio test/wdio.conf.sauce.firefox.jenkins.js",
@@ -15,6 +15,16 @@
     "record-build-info": "node ./bin/record-build-info",
     "security_audit": "npx audit-ci --config audit-ci.json",
     "lint": "standard"
+  },
+  "nyc" : {
+    "exclude": [
+       "app/assets/**",
+       "app/public/**",
+       "test/**",
+       "gulp*.js"
+
+    ],
+    "all": true
   },
   "standard": {
     "ignore": [
@@ -48,6 +58,7 @@
     "mocha": "8.4.x",
     "mocha-simple-html-reporter": "^2.0.0",
     "nodemon": "^2.0.7",
+    "nyc": "^15.1.0",
     "proxyquire": "2.1.x",
     "selenium-standalone": "6.23.0",
     "sinon": "^10.0.0",

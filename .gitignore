@@ -22,3 +22,5 @@ app/assets/javascripts/vendor
 /.idea/
 
 *.iml
+
+.nyc_output
