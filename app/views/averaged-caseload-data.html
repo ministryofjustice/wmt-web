@@ -177,8 +177,10 @@
             <th id="region">Region</th>
             <th id="cluster">Cluster</th>
             <th id="team">Team</th>
-            <th id="offenderManager">Offender Manager</th>
-            <th id="grade">Grade</th>
+            {% if groupBy === 'offenderManager' %}
+                <th id="offenderManager">Offender Manager</th>
+                <th id="grade">Grade</th>
+            {% endif %}
             <th id="totalCases">Average Cases</th>
             <th id="capacity">Average Capacity %</th>
             <th id="contracted">Average Contracted Hours</th>
@@ -197,8 +199,10 @@
             <td>{{ result.regionName }}</td>
             <td>{{ result.lduName }}</td>
             <td>{{ result.teamName }}</td>
-            <td>{{ result.omName }}</td>
-            <td>{{ result.grade }}</td>
+            {% if groupBy === 'offenderManager' %}
+                <td>{{ result.omName }}</td>
+                <td>{{ result.grade }}</td>
+            {% endif %}
             <td>{{ result.totalCases }}</td>
             <td>{{ result.capacity }}</td>
             <td>{{ result.contractedHours }}</td>
