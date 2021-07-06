@@ -16,13 +16,12 @@
     "security_audit": "npx audit-ci --config audit-ci.json",
     "lint": "standard"
   },
-  "nyc" : {
+  "nyc": {
     "exclude": [
-       "app/assets/**",
-       "app/public/**",
-       "test/**",
-       "gulp*.js"
-
+      "app/assets/**",
+      "app/public/**",
+      "test/**",
+      "gulp*.js"
     ],
     "all": true
   },
@@ -58,8 +57,10 @@
     "mocha-simple-html-reporter": "^2.0.0",
     "nodemon": "^2.0.7",
     "nyc": "^15.1.0",
+    "pa11y": "^6.0.1",
     "proxyquire": "2.1.x",
     "selenium-standalone": "6.23.0",
+    "shelljs": "^0.8.4",
     "sinon": "^10.0.0",
     "standard": "^16.0.3",
     "supertest": "6.1.x",
