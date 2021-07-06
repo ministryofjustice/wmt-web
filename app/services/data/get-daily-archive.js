@@ -1,11 +1,7 @@
 const knex = require('../../../knex').legacy
 const archiveDataLimit = require('../../../config').ARCHIVE_DATA_LIMIT
 
-module.exports = function (archiveDateRange, extraCriteria) {
-  if (extraCriteria !== null && extraCriteria !== undefined) {
-    extraCriteria = extraCriteria.trim()
-  }
-
+module.exports = function (archiveDataForm) {
   const selectColumns = [
     'workload_id AS workloadID',
     'workload_date AS workloadDate',
@@ -21,29 +17,51 @@ module.exports = function (archiveDateRange, extraCriteria) {
     'paroms_points AS paromsPoints',
     'nominal_target AS nominalTarget',
     'contracted_hours AS contractedHours',
-    'hours_reduction AS hoursReduction'
+    'hours_reduction AS hoursReduction',
+    'workload_report_id AS workloadReportId',
+    'unique_identifier AS omKey',
+    'team_unique_identifier AS teamCode'
   ]
 
-  if (extraCriteria !== null && extraCriteria !== undefined && extraCriteria !== '') {
+  if (archiveDataForm.multiSearchField !== null && archiveDataForm.multiSearchField !== undefined && archiveDataForm.multiSearchField !== '') {
     return knex('daily_archive_data')
       .withSchema('dbo')
       .limit(parseInt(archiveDataLimit))
       .select(selectColumns)
-      .whereBetween('workload_date', [archiveDateRange.archiveFromDate.toISOString().substring(0, 10),
-        archiveDateRange.archiveToDate.toISOString().substring(0, 10)])
+      .whereBetween('workload_date', [archiveDataForm.archiveFromDate.toISOString().substring(0, 10),
+        archiveDataForm.archiveToDate.toISOString().substring(0, 10)])
       .andWhere(function () {
-        this.where('team_name', 'like', '%' + extraCriteria + '%')
-          .orWhere('ldu_name', 'like', '%' + extraCriteria + '%')
-          .orWhere('om_name', 'like', '%' + extraCriteria + '%')
+        this.whereIn('team_name', archiveDataForm.multiSearchField)
+          .orWhereIn('ldu_name', archiveDataForm.multiSearchField)
+          .orWhereIn('om_name', archiveDataForm.multiSearchField)
       })
       .orderBy('workload_id', 'ASC')
+      .then(function (results) {
+        return addAbsentFields(results)
+      })
   } else {
     return knex('daily_archive_data')
       .withSchema('dbo')
       .limit(parseInt(archiveDataLimit))
       .select(selectColumns)
-      .whereBetween('workload_date', [archiveDateRange.archiveFromDate.toISOString().substring(0, 10),
-        archiveDateRange.archiveToDate.toISOString().substring(0, 10)])
+      .whereBetween('workload_date', [archiveDataForm.archiveFromDate.toISOString().substring(0, 10),
+        archiveDataForm.archiveToDate.toISOString().substring(0, 10)])
       .orderBy('workload_id', 'ASC')
+      .then(function (results) {
+        return addAbsentFields(results)
+      })
   }
+}
+
+const addAbsentFields = function (results) {
+  results.forEach(function (result) {
+    result.cmsPoints = 'N/A'
+    result.gsPoints = 'N/A'
+    result.cmsPercentage = 'N/A'
+    result.gsPercentage = 'N/A'
+    result.cmsColumn = 'N/A'
+    result.gsColumn = 'N/A'
+    result.armsTotalCases = 'N/A'
+  })
+  return results
 }

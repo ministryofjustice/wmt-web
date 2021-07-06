@@ -9,7 +9,7 @@ const overview = {
   grade: 'PO',
   teamName: 'Test Team',
   lduCluster: 'Test LDU',
-  regionName: 'Test Region',
+  regionName: 'NPS Test Region',
   cmsAdjustmentPoints: 0,
   availablePoints: 25,
   totalPoints: 50,

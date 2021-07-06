@@ -71,7 +71,7 @@ describe('services/data/get-capacity-breakdown', function () {
         const expectedEntry = Object.assign(capacityBreakdown,
           {
             linkId: inserts.filter((item) => item.table === 'region')[0].id,
-            name: 'Test Region'
+            name: 'NPS Test Region'
           })
         expect(results).to.deep.contain(expectedEntry)
       })

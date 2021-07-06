@@ -1,153 +1,88 @@
 const getDailyArchive = require('./data/get-daily-archive')
-const getDailyArchiveFromNewDB = require('./data/get-daily-archive-from-new-db')
-const getFortnightlyArchive = require('./data/get-fortnightly-archive')
+const getDailyArchiveFromNewDBArchive = require('./data/get-daily-archive-from-new-db')
+const getDailyArchiveFromNewDBCurrent = require('./data/get-daily-archive-from-new-db-current')
 const getReductionArchive = require('./data/get-reduction-archive')
 const getReductionArchiveFromNewDB = require('./data/get-reduction-archive-from-new-db')
-const calculateAvailablePoints = require('wmt-probation-rules').calculateAvailablePoints
-const DefaultContractedHours = require('wmt-probation-rules').DefaultContractedHours
 const archiveOptions = require('../constants/archive-options')
 const moment = require('moment')
-let archiveDataLimit
-const log = require('../logger')
+const incrementWorkloadAndWorkloadReportIds = require('../helpers/archive-helpers/increment-workload-and-workload-report-ids')
+const concatenateResults = require('../helpers/archive-helpers/concatenate-results')
+const calculateCapacityCMSAndGS = require('../helpers/archive-helpers/calculate-capacity-cms-and-gs')
+const calculateCapacity = require('../helpers/archive-helpers/calculate-capacity')
+const formatReductionTo1DP = require('../helpers/archive-helpers/format-reduction-to-1-dp')
 
-module.exports = function (archiveOption, archiveDateRange, extraCriteria) {
+let archiveDataLimit
+
+// const log = require('../logger')
+
+module.exports = function (archiveOption, archiveDataForm) {
   archiveDataLimit = require('../../config').ARCHIVE_DATA_LIMIT
-  // start with the legacy database and then the archive and current database if result limits allow for this
+
   if (archiveOption === archiveOptions.LEGACY) {
-    return getDailyArchive(archiveDateRange, extraCriteria).then(function (results) {
+    return getDailyArchive(archiveDataForm).then(function (results) {
       results = calculateCapacity(results)
-      results.forEach(function (result) {
-        result.cmsPoints = 'N/A'
-        result.gsPoints = 'N/A'
-        result.cmsPercentage = 'N/A'
-        result.gsPercentage = 'N/A'
-        result.cmsColumn = 'N/A'
-        result.gsColumn = 'N/A'
-        result.armsTotalCases = 'N/A'
-      })
-      if (results.length < archiveDataLimit) {
-        archiveDataLimit = archiveDataLimit - results.length
-        return getDailyArchiveFromNewDB(archiveDateRange, extraCriteria, archiveDataLimit, true).then(function (results2) {
-          results2.forEach(function (result) {
-            result = calculateCapacityCMSAndGS(result)
-          })
-          let concatenatedResults = results.concat(results2)
-          concatenatedResults.sort(caseloadDataArraySort)
-          if (concatenatedResults.length < archiveDataLimit) {
-            archiveDataLimit = archiveDataLimit - concatenatedResults.length
-            return getDailyArchiveFromNewDB(archiveDateRange, extraCriteria, archiveDataLimit, false).then(function (results3) {
-              results3.forEach(function (result) {
-                result = calculateCapacityCMSAndGS(result)
-              })
-              concatenatedResults = concatenatedResults.concat(results3)
-              concatenatedResults.sort(caseloadDataArraySort)
-              return concatenatedResults
+      archiveDataLimit = archiveDataLimit - results.length
+      if (archiveDataLimit > 0) {
+        return getDailyArchiveFromNewDBArchive(archiveDataForm, archiveDataLimit, true).then(function (results2) {
+          let concatenatedResults = concatenateResults(results, results2, false)
+          archiveDataLimit = archiveDataLimit - concatenatedResults.length
+          if (archiveDataLimit > 0) {
+            return getDailyArchiveFromNewDBCurrent(archiveDataForm, archiveDataLimit, false).then(function (results3) {
+              concatenatedResults = concatenateResults(concatenatedResults, results3, true)
+              return concatenatedResults.sort(caseloadDataArraySort)
             })
           } else {
-            return concatenatedResults
+            return concatenatedResults.sort(caseloadDataArraySort)
           }
         })
       } else {
-        return results
+        return results.sort(caseloadDataArraySort)
       }
     })
-  } else if (archiveOption === archiveOptions.FORTNIGHTLY) {
-    return getFortnightlyArchive(archiveDateRange, extraCriteria).then(function (results) {
-      return calculateCapacity(results)
-    })
-      .catch(function (error) {
-        log.error(error)
-        throw error
+  } else if (archiveOption === archiveOptions.DAILY_ARCHIVE) {
+    return getDailyArchiveFromNewDBArchive(archiveDataForm, archiveDataLimit, true).then(function (results) {
+      results.forEach(function (result) {
+        result = calculateCapacityCMSAndGS(result)
+        result = incrementWorkloadAndWorkloadReportIds(result, false)
       })
+      archiveDataLimit = archiveDataLimit - results.length
+      if (archiveDataLimit > 0) {
+        return getDailyArchiveFromNewDBCurrent(archiveDataForm, archiveDataLimit, false).then(function (results2) {
+          const concatenatedResults = concatenateResults(results, results2, true)
+          return concatenatedResults.sort(caseloadDataArraySort)
+        })
+      } else {
+        return results.sort(caseloadDataArraySort)
+      }
+    })
+  } else if (archiveOption === archiveOptions.DAILY) {
+    return getDailyArchiveFromNewDBCurrent(archiveDataForm, archiveDataLimit, false).then(function (results) {
+      results.forEach(function (result) {
+        result = calculateCapacityCMSAndGS(result)
+        result = incrementWorkloadAndWorkloadReportIds(result, true)
+      })
+      return results.sort(caseloadDataArraySort)
+    })
   } else if (archiveOption === archiveOptions.REDUCTIONS) {
-    return getReductionArchive(archiveDateRange, extraCriteria).then(function (oldReductions) {
+    return getReductionArchive(archiveDataForm).then(function (oldReductions) {
       oldReductions.forEach(function (oldReduction) {
         oldReduction.reductionReason = 'N/A'
         oldReduction.startDate = 'N/A'
         oldReduction.endDate = 'N/A'
         oldReduction.reductionStatus = 'N/A'
       })
-      return getReductionArchiveFromNewDB(archiveDateRange, extraCriteria).then(function (newReductions) {
+      return getReductionArchiveFromNewDB(archiveDataForm).then(function (newReductions) {
         const results = oldReductions.concat(newReductions)
         results.sort(reductionDataArraySort)
         return formatReductionTo1DP(results)
       })
-    }) // start with the archive database and then move onto the current database if result limits allow for this
-  } else if (archiveOption === archiveOptions.DAILY_ARCHIVE) {
-    return getDailyArchiveFromNewDB(archiveDateRange, extraCriteria, archiveDataLimit, true).then(function (results) {
-      results.sort(caseloadDataArraySort)
-      results.forEach(function (result) {
-        result = calculateCapacityCMSAndGS(result)
-      })
-      if (results.length < archiveDataLimit) {
-        archiveDataLimit = archiveDataLimit - results.length
-        return getDailyArchiveFromNewDB(archiveDateRange, extraCriteria, archiveDataLimit, false).then(function (results2) {
-          results2.forEach(function (result) {
-            result = calculateCapacityCMSAndGS(result)
-          })
-          const concatenatedResults = results.concat(results2)
-          concatenatedResults.sort(caseloadDataArraySort)
-          return concatenatedResults
-        })
-      } else {
-        return results
-      }
-    }) // search the current database only
-  } else if (archiveOption === archiveOptions.DAILY) {
-    return getDailyArchiveFromNewDB(archiveDateRange, extraCriteria, archiveDataLimit, false).then(function (results) {
-      results.sort(caseloadDataArraySort)
-      results.forEach(function (result) {
-        result = calculateCapacityCMSAndGS(result)
-      })
-      return results
     })
   }
 }
 
-const calculateCapacity = function (results) {
-  results.forEach(function (result) {
-    if (result.contractedHours === 0 || result.contractedHours === null) {
-      result.capacity = '0%'
-      const defaultContractedHours = new DefaultContractedHours(37.5, 37.5, 37.5)
-      const availablePoints = calculateAvailablePoints(result.nominalTarget, result.omTypeId, result.contractedHours, result.hoursReduction, defaultContractedHours)
-      const acquiredPoints = calculateAcquiredPoints(result.totalPoints, result.sdrPoints, result.sdrConversionPoints, result.paromsPoints)
-      result.totalPoints = acquiredPoints
-      result.availablePoints = availablePoints
-    } else {
-      const defaultContractedHours = new DefaultContractedHours(37.5, 37.5, 37.5)
-      const availablePoints = calculateAvailablePoints(result.nominalTarget, result.omTypeId, result.contractedHours, result.hoursReduction, defaultContractedHours)
-      const acquiredPoints = calculateAcquiredPoints(result.totalPoints, result.sdrPoints, result.sdrConversionPoints, result.paromsPoints)
-      result.totalPoints = acquiredPoints
-      result.availablePoints = availablePoints
-      if (availablePoints !== 0) {
-        result.capacity = capacityCalculation(acquiredPoints, availablePoints)
-      } else {
-        result.capacity = '0%'
-      }
-      result.hoursReduction = Number(parseFloat(result.hoursReduction).toFixed(1))
-    }
-  })
-  return results
-}
-
-const calculateAcquiredPoints = function (totalPoints, sdrPoints, sdrConversionPoints, paromsPoints) {
-  return totalPoints + sdrPoints + sdrConversionPoints + paromsPoints
-}
-
-const formatReductionTo1DP = function (results) {
-  results.forEach(function (result) {
-    result.hoursReduced = Number(parseFloat(result.hoursReduced).toFixed(1))
-  })
-  return results
-}
-
-const capacityCalculation = function (thisTotalPoints, thisAvailablePoints) {
-  return Number(parseFloat((thisTotalPoints / thisAvailablePoints) * 100).toFixed(1)) + '%'
-}
-
 const caseloadDataArraySort = function (obj1, obj2) {
-  const obj1Date = moment(obj1.workloadDate, 'DD-MM-YYYY')
-  const obj2Date = moment(obj2.workloadDate, 'DD-MM-YYYY')
+  const obj1Date = moment(obj1.workloadDate)
+  const obj2Date = moment(obj2.workloadDate)
   if (obj1Date.isAfter(obj2Date)) {
     return 1
   }
@@ -167,40 +102,4 @@ const reductionDataArraySort = function (obj1, obj2) {
     return -1
   }
   return 0
-}
-
-const calculateCapacityCMSAndGS = function (result) {
-  result.capacity = '0%'
-  result.cmsColumn = '0 - 0%'
-  result.cmsPercentage = '0%'
-  result.gsColumn = '0 - 0%'
-  result.gsPercentage = '0%'
-
-  if (result.availablePoints) {
-    if (result.availablePoints !== 0) {
-      result.capacity = capacityCalculation(result.totalPoints, result.availablePoints)
-      if (result.cmsPoints) {
-        result.cmsPercentage = capacityCalculation(result.cmsPoints, result.availablePoints)
-        result.cmsColumn = result.cmsPoints + ' - ' + result.cmsPercentage
-      } else {
-        result.cmsPoints = 0
-      }
-    }
-  } else {
-    result.availablePoints = 0
-  }
-
-  if (result.totalPoints) {
-    if (result.totalPoints !== 0) {
-      if (result.gsPoints) {
-        result.gsPercentage = capacityCalculation(result.gsPoints, result.totalPoints)
-        result.gsColumn = result.gsPoints + ' - ' + result.gsPercentage
-      } else {
-        result.gsPoints = 0
-      }
-    }
-  } else {
-    result.totalPoints = 0
-  }
-  return result
 }

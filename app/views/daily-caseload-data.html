@@ -12,6 +12,7 @@
 
 <form method="post" class="archive-form">
         {% include "includes/csrf-hidden-input.html"%}
+        <input id="rawQuery" type="hidden" name="rawQuery" value="{{ stringifiedBody }}">
 
         <div class="govuk-form-group {% if errors['archiveFromDate'][0] %} govuk-form-group--error {% endif %}" id="from">
             {% if errors %}
@@ -19,34 +20,34 @@
                     <span class="govuk-visually-hidden">Error:</span> {{ errors['archiveFromDate'][0] }}
                 </span>
             {% endif %}
-            <fieldset class="govuk-fieldset" role="group" aria-describedby="daily-archive-from-hint" id="archiveFromDate">
+            <fieldset class="govuk-fieldset" role="group" aria-describedby="archive-from-hint" id="archiveFromDate">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
                     <h1 class="govuk-fieldset__heading">
                         Show archive data from:
                     </h1>
                 </legend>
-                <div class="govuk-hint" id="daily-archive-from-hint">For example, 30 1 2015 - This date must be on or after 18/06/2014</div>
+                <div class="govuk-hint" id="archive-from-hint">For example, 30 1 2015 - This date must be on or after 18/06/2014</div>
                 <div class="govuk-date-input">
                     <div class="govuk-date-input__item">
                         <div class="govuk-form-group">
-                            <label class="govuk-label govuk-date-input__label" for="daily-archive-from-day">Day</label>
-                            <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if errors['archiveFromDate'][0] %} govuk-input--error {% endif %}" id="daily-archive-from-day" name="daily-archive-from-day" 
-                                value={{dateRange.fromFields[0] | int}}>
+                            <label class="govuk-label govuk-date-input__label" for="archive-from-day">Day</label>
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if errors['archiveFromDate'][0] %} govuk-input--error {% endif %}" id="archive-from-day" name="archive-from-day" 
+                                value={{body["archive-from-day"] | int}}>
                         </div>
                         
                      </div>
                      <div class="govuk-date-input__item">
                         <div class="govuk-form-group">
-                            <label class="govuk-label govuk-date-input__label" for="daily-archive-from-month">Month</label>
-                            <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if errors['archiveFromDate'][0] %} govuk-input--error {% endif %}" id="daily-archive-from-month" name="daily-archive-from-month" 
-                                value={{dateRange.fromFields[1] | int}}>
+                            <label class="govuk-label govuk-date-input__label" for="archive-from-month">Month</label>
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if errors['archiveFromDate'][0] %} govuk-input--error {% endif %}" id="archive-from-month" name="archive-from-month" 
+                                value={{body["archive-from-month"] | int}}>
                         </div>
                     </div>
                     <div class="govuk-date-input__item">
                         <div class="govuk-form-group">
-                            <label class="govuk-label govuk-date-input__label" for="daily-archive-from-year">Year</label>
-                            <input class="govuk-input govuk-date-input__input govuk-input--width-4 {% if errors['archiveFromDate'][0] %} govuk-input--error {% endif %}" id="daily-archive-from-year" name="daily-archive-from-year" 
-                            value={{dateRange.fromFields[2] | int}}>
+                            <label class="govuk-label govuk-date-input__label" for="archive-from-year">Year</label>
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-4 {% if errors['archiveFromDate'][0] %} govuk-input--error {% endif %}" id="archive-from-year" name="archive-from-year" 
+                            value={{body["archive-from-year"] | int}}>
                         </div>        
                     </div>
                 </div>
@@ -59,64 +60,69 @@
                     <span class="govuk-visually-hidden">Error:</span> {{ errors['archiveToDate'][0] }}
                 </span>
             {% endif %}
-            <fieldset class="govuk-fieldset" role="group" aria-describedby="daily-archive-to-hint" id="archiveToDate">
+            <fieldset class="govuk-fieldset" role="group" aria-describedby="archive-to-hint" id="archiveToDate">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
                     <h1 class="govuk-fieldset__heading">
                         Show archive data to:
                     </h1>
                 </legend>
-                <div class="govuk-hint" id="daily-archive-to-hint"> For example, 31 3 2015 - This date must be on or after 19/06/2014</div>
+                <div class="govuk-hint" id="archive-to-hint"> For example, 31 3 2015 - This date must be on or after 19/06/2014</div>
                 <div class="govuk-date-input">
                     <div class="govuk-date-input__item">
                         <div class="govuk-form-group">
-                            <label class="govuk-label govuk-date-input__label" for="daily-archive-to-day">Day</label>
-                            <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if errors['archiveToDate'][0] %} govuk-input--error {% endif %}" id="daily-archive-to-day" name="daily-archive-to-day" 
-                                value={{dateRange.toFields[0] | int}}>
+                            <label class="govuk-label govuk-date-input__label" for="archive-to-day">Day</label>
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if errors['archiveToDate'][0] %} govuk-input--error {% endif %}" id="archive-to-day" name="archive-to-day" 
+                                value={{body["archive-to-day"] | int}}>
                         </div>
                         
                      </div>
                      <div class="govuk-date-input__item">
                         <div class="govuk-form-group">
-                            <label class="govuk-label govuk-date-input__label" for="daily-archive-to-month">Month</label>
-                            <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if errors['archiveToDate'][0] %} govuk-input--error {% endif %}" id="daily-archive-to-month" name="daily-archive-to-month" 
-                                value={{dateRange.toFields[1] | int}}>
+                            <label class="govuk-label govuk-date-input__label" for="archive-to-month">Month</label>
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if errors['archiveToDate'][0] %} govuk-input--error {% endif %}" id="archive-to-month" name="archive-to-month" 
+                                value={{body["archive-to-month"] | int}}>
                         </div>
                     </div>
                     <div class="govuk-date-input__item">
                         <div class="govuk-form-group">
-                            <label class="govuk-label govuk-date-input__label" for="daily-archive-to-year">Year</label>
-                            <input class="govuk-input govuk-date-input__input govuk-input--width-4 {% if errors['archiveToDate'][0] %} govuk-input--error {% endif %}" id="daily-archive-to-year" name="daily-archive-to-year" 
-                            value={{dateRange.toFields[2] | int}}>
+                            <label class="govuk-label govuk-date-input__label" for="archive-to-year">Year</label>
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-4 {% if errors['archiveToDate'][0] %} govuk-input--error {% endif %}" id="archive-to-year" name="archive-to-year" 
+                            value={{body["archive-to-year"] | int}}>
                         </div>        
                     </div>
                 </div>
             </fieldset>
         </div>
 
-        <div class="govuk-form-group" id="daily-multi-search-field">
-            <fieldset class="govuk-fieldset" role="group" aria-describedby="dailys-multi-search-field-hint" id="multiSearchDate">
+        <div class="govuk-form-group {% if errors['multiSearchField'][0] %} govuk-form-group--error {% endif %}" id="multi-search-form-group">
+            {% if errors['multiSearchField'][0] %}
+                <span id="archive-to-error" class="govuk-error-message">
+                    <span class="govuk-visually-hidden">Error:</span> {{ errors['multiSearchField'][0] }}
+                </span>
+            {% endif %}
+            <fieldset class="govuk-fieldset" role="group" aria-describedby="multi-search-hint" id="multiSearchField">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
                     <h1 class="govuk-fieldset__heading">
                         Search by Offender Manager, Team or Probation Delivery Unit
                     </h1>
                 </legend>
-                <div class="govuk-hint" id="daily-multi-search-field-hint">For Example, John Smith</div>
-                <div aria-describedby="daily-multi-search-field-hint">
+                <div class="govuk-hint" id="multi-search-hint">For Example, John Smith</div>
+                <div aria-describedby="multi-search-hint">
                     <div class="form-group">
-                        <label class="govuk-label govuk-date-input__label" for="daily-multi-search-field-entry">Extra Search Criteria</label>
-                        <input class="govuk-input" id="daily-multi-search-field-entry" name="daily-multi-search-field-entry" value="{{ extraSearchCriteria | safe }}">
+                        <label class="govuk-label govuk-date-input__label" for="multi-search-field">Extra Search Criteria</label>
+                        <select class="js-example govuk-input" multiple="multiple" id="multi-search-field" name="multi-search-field"></select>
                     </div>
                 </div>
             </fieldset>
         </div>
 
         <input id="archive-filter-submit" type="submit" value="Search" class="govuk-button" data-module="govuk-button"  formaction="/archive-data/daily-caseload-data">
-        <input id="archive-daily-csv-submit" type="submit" class="govuk-button sln-export floatRightBottom10 marginLeft10" value="Export Archive Data" formaction="/archive-data/daily-caseload-data/archive-csv" data-module="govuk-button">
+        <input id="archive-csv-submit" type="submit" class="govuk-button sln-export floatRightBottom10 marginLeft10" value="Export Archive Data" formaction="/archive-data/daily-caseload-data/archive-csv" data-module="govuk-button">
 </form>
 <br/>
 
 {% if (results) %}  
-<table id="daily-caseload-table" class="govuk-table display nowrap data-table dataTable" cellspacing="0" role="grid" aria-describedby="daily-caseload-table_info">
+<table id="daily-caseload-table" class="govuk-table display nowrap data-table dataTable" cellspacing="0" role="grid" aria-describedby="caseload-table_info">
     <thead>
         <tr class="headers">
             <th id="workloadDate">Workload Date</th>
@@ -125,8 +131,11 @@
             <th id="team">Team</th>
             <th id="offenderM">Offender Manager</th>
             <th id="grade">Grade</th>
+            <th id="availablePoints">Available Points</th>
+            <th id="totalPoints">Total Points</th>
             <th id="totalCases">Total Cases</th>
             <th id="capacity">Capacity %</th>
+            <th id="contractedHours">Contracted Hours</th>
             <th id="reductions">Reductions</th>
             <th id="cms">CMS</th>
             <th id="gs">GS</th>
@@ -141,8 +150,11 @@
             <td>{{ result.teamName }}</td>
             <td>{{ result.omName }}</td>
             <td>{{ result.grade }}</td>
+            <td>{{ result.availablePoints}}</td>
+            <td>{{ result.totalPoints }}</td>
             <td>{{ result.totalCases }}</td>
             <td>{{ result.capacity }}</td>
+            <td>{{ result.contractedHours }}</td>
             <td>{{ result.hoursReduction }}</td>
             <td>{{ result.cmsColumn }}</td>
             <td>{{ result.gsColumn }}</td>
@@ -158,5 +170,7 @@
 <script src="{{ assetPath }}javascripts/moment.min.js"></script>
 <script src="{{ assetPath }}javascripts/datatables.min.js"></script>
 <script src="{{ assetPath }}javascripts/archive-data.js"></script>
+<script src="{{ assetPath }}javascripts/select2.min.js"></script>
+<script src="{{ assetPath }}javascripts/daily-and-averaged-caseload-data.js"></script>
 
 {% endblock %}
