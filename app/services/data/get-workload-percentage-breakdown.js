@@ -24,6 +24,7 @@ module.exports = function (id, organisationLevel) {
   ]
 
   return knex('workload_percentage_breakdown_view')
+    .withSchema('app')
     .columns(columns)
     .where(organisationLevel + '_id', id)
     .then(function (results) {

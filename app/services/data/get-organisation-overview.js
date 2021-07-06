@@ -31,6 +31,8 @@ module.exports = function (id, type, workloadType = workloadTypes.PROBATION) {
     ]
   }
 
+  table = 'app.' + table
+
   if (id !== undefined) {
     whereClause = ' WHERE id = ' + id
   }
@@ -41,7 +43,7 @@ module.exports = function (id, type, workloadType = workloadTypes.PROBATION) {
 
   return knex.raw(
     'SELECT ' + selectColumns.join(', ') +
-      ' FROM ' + table + ' WITH (NOEXPAND)' +
+      ' FROM ' + table + ' ' +
       whereClause)
     .then(function (results) {
       return results

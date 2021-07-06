@@ -10,6 +10,7 @@ module.exports = function (userId, roleId, updatedBy) {
   }
 
   return knex('user_role')
+    .withSchema('app')
     .where('user_id', userId)
     .update({
       role_id: roleId,

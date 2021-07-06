@@ -13,6 +13,7 @@ module.exports = function (userId) {
   ]
 
   return knex('expiring_reductions_view')
+    .withSchema('app')
     .columns(columns)
     .whereIn('user_id', userId)
 }

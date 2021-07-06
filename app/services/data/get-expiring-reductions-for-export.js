@@ -23,6 +23,7 @@ module.exports = function (id, organisationLevel) {
   ]
 
   return knex('expiring_reductions_export_view')
+    .withSchema('app')
     .columns(columns)
     .where(organisationLevel + '_id', id)
     .then(function (records) {

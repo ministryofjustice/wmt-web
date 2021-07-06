@@ -8,6 +8,7 @@ module.exports = function (enabledOnly = true) {
     isEnabledValues = [true, false]
   }
   return knex('reduction_reason')
+    .withSchema('app')
     .join('reduction_category', 'reduction_reason.category_id', 'reduction_category.id')
     .select('reduction_reason.id',
       'category',

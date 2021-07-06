@@ -1,9 +1,9 @@
 module.exports = function (archiveDataForm, archiveDataLimit, isArchive = false) {
   let knex
   if (isArchive) {
-    knex = require('../../../knex').archive
+    knex = require('../../../knex').archive.withSchema('app')
   } else {
-    knex = require('../../../knex').web
+    knex = require('../../../knex').web.withSchema('app')
   }
 
   const selectColumns = [

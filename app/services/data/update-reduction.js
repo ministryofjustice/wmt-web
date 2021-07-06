@@ -2,6 +2,7 @@ const knex = require('../../../knex').web
 
 module.exports = function (reductionId, workloadOwnerId, newReduction) {
   return knex('reductions')
+    .withSchema('app')
     .update({
       reduction_reason_id: newReduction.reasonForReductionId,
       workload_owner_id: workloadOwnerId,

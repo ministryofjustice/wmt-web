@@ -9,6 +9,7 @@ module.exports = function (adjustmentType) {
     'points'
   ]
   return knex('adjustment_reason')
+    .withSchema('app')
     .columns(columns)
     .where('category_id', adjustmentType)
     .orderBy('contact_code', 'asc')

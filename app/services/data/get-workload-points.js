@@ -6,6 +6,7 @@ module.exports = function (isT2A = false) {
   // WMT0160: add new tiers
   // WMT0229 Change needed here when extract column names are known
   return knex('workload_points')
+    .withSchema('app')
     .first('id AS workloadPointsId',
       'comm_tier_1 AS commA3',
       'comm_tier_2 AS commA2',

@@ -1,19 +1,20 @@
 const config = require('./config')
+const defaultConnection = {
+  host: config.DATABASE_SERVER,
+  user: config.WEB_APP_DATABASE_USERNAME,
+  password: config.WEB_APP_DATABASE_PASSWORD,
+  database: config.DATABASE,
+  options: {
+    encrypt: false,
+    requestTimeout: 120000,
+    enableArithAbort: true
+  }
+}
 
 module.exports = {
   web: {
     client: 'mssql',
-    connection: {
-      host: config.DATABASE_SERVER,
-      user: config.WEB_APP_DATABASE_USERNAME,
-      password: config.WEB_APP_DATABASE_PASSWORD,
-      database: config.DATABASE,
-      options: {
-        encrypt: true,
-        requestTimeout: 120000,
-        enableArithAbort: true
-      }
-    },
+    connection: defaultConnection,
     debug: false,
     pool: {
       max: 500
@@ -22,16 +23,9 @@ module.exports = {
   },
   archive: {
     client: 'mssql',
-    connection: {
-      host: config.DATABASE_SERVER,
-      user: config.WEB_APP_DATABASE_USERNAME,
-      password: config.WEB_APP_DATABASE_PASSWORD,
-      database: config.ARCHIVE_DATABASE,
-      options: {
-        encrypt: true,
-        requestTimeout: 120000
-      }
-    },
+    connection: Object.assign({}, defaultConnection, {
+      database: config.ARCHIVE_DATABASE
+    }),
     debug: false,
     pool: {
       max: 500
@@ -39,17 +33,7 @@ module.exports = {
   },
   legacy: {
     client: 'mssql',
-    connection: {
-      host: config.LEGACY_DATABASE_SERVER,
-      user: config.LEGACY_DATABASE_USERNAME,
-      password: config.LEGACY_DATABASE_PASSWORD,
-      database: config.LEGACY_DATABASE,
-      options: {
-        encrypt: true,
-        requestTimeout: 120000,
-        enableArithAbort: true
-      }
-    },
+    connection: defaultConnection,
     debug: false,
     pool: {
       max: 500
@@ -58,17 +42,7 @@ module.exports = {
   },
   integrationTests: {
     client: 'mssql',
-    connection: {
-      host: config.DATABASE_SERVER,
-      user: config.MIGRATION_APP_DATABASE_USERNAME,
-      password: config.MIGRATION_APP_DATABASE_PASSWORD,
-      database: config.DATABASE,
-      options: {
-        encrypt: true,
-        requestTimeout: 120000,
-        enableArithAbort: true
-      }
-    },
+    connection: defaultConnection,
     debug: false,
     pool: {
       max: 500

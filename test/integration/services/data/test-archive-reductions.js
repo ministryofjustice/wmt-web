@@ -1,30 +1,39 @@
 const expect = require('chai').expect
-
+const moment = require('moment')
 const getArchivedReductions = require('../../../../app/services/data/get-reduction-archive')
 const ArchiveDateRange = require('../../../../app/services/domain/archive-date-range')
+const { createArchiveReductions, deleteArchiveReductionsByIds } = require('../../../helpers/data/archive-reduction-data-helper')
+
+const toDate = moment()
+const fromDate = moment().subtract(7, 'day')
 
 const expectedResult = {
   omName: 'A.N. Offender Manager KNTK042PSO',
-  hoursReduced: 18.8,
+  hoursReduced: parseFloat(18.8).toPrecision(3),
   comments: '67A1623',
-  lastUpdatedDate: new Date('2014-10-24T10:14:14.093Z'),
+  lastUpdatedDate: moment().subtract(3, 'day').toDate(),
   reductionAddedBy: 'Reduction Submitter 5'
 }
 
-let archiveReductionData
+let idsSaved
 
-const archiveDateRange = new ArchiveDateRange(24, 10, 2014, 20, 1, 2017)
+const archiveDateRange = new ArchiveDateRange(fromDate.date(), fromDate.month() + 1, fromDate.year(), toDate.date(), toDate.month() + 1, toDate.year())
 
 describe('services/data/get-archived-reductions', function () {
   before(function () {
-    return getArchivedReductions(archiveDateRange).then(function (results) {
-      archiveReductionData = results
+    return createArchiveReductions(expectedResult).then(function (results) {
+      idsSaved = results
     })
   })
   it('should retrieve all 5 columns for archive data', function () {
-    expect(archiveReductionData[0].omName).to.eql(expectedResult.omName)
-    expect(archiveReductionData[0].reductionAddedBy).to.eql(expectedResult.reductionAddedBy)
-    expect(archiveReductionData[0].comments).to.eql(expectedResult.comments)
-    expect(archiveReductionData[0].reductionAddedBy).to.eql(expectedResult.reductionAddedBy)
+    return getArchivedReductions(archiveDateRange).then(function (results) {
+      expect(results[0].omName).to.eql(expectedResult.omName)
+      expect(parseFloat(results[0].hoursReduced).toPrecision(3)).to.eql(expectedResult.hoursReduced)
+      expect(results[0].comments).to.eql(expectedResult.comments)
+      expect(results[0].reductionAddedBy).to.eql(expectedResult.reductionAddedBy)
+    })
+  })
+  after(function () {
+    return deleteArchiveReductionsByIds(idsSaved)
   })
 })

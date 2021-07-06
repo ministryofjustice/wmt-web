@@ -25,13 +25,21 @@ module.exports = function (id, fromDate, toDate, type) {
     whereString += ' AND id = ' + id
   }
 
-  const noExpandHint = ' WITH (NOEXPAND)'
+  const noExpandHint = ' '
   const orderBy = ' ORDER BY effective_from'
 
-  return knexArchive.schema.raw('SELECT ' + selectList.join(', ') + ' FROM ' + table + noExpandHint + whereString + orderBy)
+  return knexArchive.schema.raw('SELECT ' + selectList.join(', ') +
+          ' FROM app.' + table +
+          noExpandHint +
+          whereString +
+          orderBy)
     .then(function (archiveDBResults) {
       workloadReportResults = archiveDBResults
-      return knex.schema.raw('SELECT ' + selectList.join(', ') + ' FROM ' + table + noExpandHint + whereString + orderBy)
+      return knex.schema.raw('SELECT ' + selectList.join(', ') +
+          ' FROM app.' + table +
+          noExpandHint +
+          whereString +
+          orderBy)
         .then(function (currentDBResults) {
           workloadReportResults = workloadReportResults.concat(currentDBResults)
           if (type === organisationConstant.NATIONAL.name) {

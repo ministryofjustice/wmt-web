@@ -4,7 +4,7 @@ const ORGANISATION_UNIT = require('../../constants/organisation-unit')
 
 module.exports = function (id, type) {
   const orgUnit = orgUnitFinder('name', type)
-  const table = orgUnit.caseProgressView
+  const table = 'app.' + orgUnit.caseProgressView
   let whereString = ''
 
   if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
@@ -28,7 +28,7 @@ module.exports = function (id, type) {
 
   if (isIndexed) {
     selectList.push('CONCAT(forename, \' \', surname) AS name')
-    noExpandHint = ' WITH (NOEXPAND)'
+    noExpandHint = ' '
   } else {
     selectList.push('name')
   }

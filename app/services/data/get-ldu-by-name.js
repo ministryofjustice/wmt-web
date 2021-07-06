@@ -6,6 +6,7 @@ module.exports = function (name) {
   }
 
   return knex('ldu')
+    .withSchema('app')
     .where('description', name)
     .first('id')
     .then(function (ldu) {

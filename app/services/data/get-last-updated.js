@@ -2,6 +2,7 @@ const knex = require('../../../knex').web
 
 module.exports = function () {
   return knex('tasks')
+    .withSchema('app')
     .first('date_processed')
     .where('type', 'PROCESS-IMPORT')
     .andWhere('status', 'COMPLETE')

@@ -7,6 +7,7 @@ module.exports = function (username) {
   }
 
   return knex('user_role')
+    .withSchema('app')
     .join('roles', 'roles.id', 'user_role.role_id')
     .join('users', 'users.id', 'user_role.user_id')
     .where('users.username', username)

@@ -142,7 +142,7 @@ module.exports.addWorkloadCapacitiesForOffenderManager = function () {
         { grade_code: 'PO' },
         { grade_code: 'PSO' }
       ]
-      return knex('offender_manager_type').returning('id').insert(offenderManagerTypes)
+      return knex('offender_manager_type').withSchema('app').returning('id').insert(offenderManagerTypes)
     })
     .then(function (ids) {
       ids.forEach((id) => {
@@ -175,7 +175,7 @@ module.exports.addWorkloadPoints = function (inserts, isT2A = false) {
     })
   ]
 
-  return knex('workload_points').returning('id').insert(workloadPoints)
+  return knex('workload_points').withSchema('app').returning('id').insert(workloadPoints)
     .then(function (ids) {
       ids.forEach((id) => {
         inserts.push({ table: 'workload_points', id: id })
@@ -190,7 +190,7 @@ const addWorkloadReports = function (inserts) {
     { effective_from: '2017-02-01' }
   ]
 
-  return knex('workload_report').returning('id').insert(workloadReports)
+  return knex('workload_report').withSchema('app').returning('id').insert(workloadReports)
     .then(function (ids) {
       ids.forEach((id) => {
         inserts.push({ table: 'workload_report', id: id })
@@ -200,7 +200,7 @@ const addWorkloadReports = function (inserts) {
 }
 
 const addRegion = function (inserts) {
-  return knex('region').returning('id').insert({ description: 'NPS Test Region' })
+  return knex('region').withSchema('app').returning('id').insert({ description: 'NPS Test Region' })
     .then(function (ids) {
       inserts.push({ table: 'region', id: ids[0] })
       return inserts
@@ -212,7 +212,7 @@ const addRegion = function (inserts) {
 
 const addTeam = function (inserts) {
   const ldus = inserts.filter((item) => item.table === 'ldu')
-  return knex('team').returning('id').insert({ ldu_id: ldus[ldus.length - 1].id, description: 'Test Team' })
+  return knex('team').withSchema('app').returning('id').insert({ ldu_id: ldus[ldus.length - 1].id, description: 'Test Team' })
     .then(function (ids) {
       inserts.push({ table: 'team', id: ids[0] })
       return inserts
@@ -224,7 +224,7 @@ const addTeam = function (inserts) {
 
 const addLdu = function (inserts) {
   const regions = inserts.filter((item) => item.table === 'region')
-  return knex('ldu').returning('id').insert({ region_id: regions[regions.length - 1].id, description: 'Test LDU' })
+  return knex('ldu').withSchema('app').returning('id').insert({ region_id: regions[regions.length - 1].id, description: 'Test LDU' })
     .then(function (ids) {
       inserts.push({ table: 'ldu', id: ids[0] })
       return inserts
@@ -236,7 +236,7 @@ const addLdu = function (inserts) {
 
 module.exports.addPoOffenderManager = function (inserts) {
   const poOmType = inserts.filter((item) => item.table === 'offender_manager_type')[0]
-  return knex('offender_manager').returning('id').insert(
+  return knex('offender_manager').withSchema('app').returning('id').insert(
     {
       type_id: poOmType.id,
       forename: 'Test_Forename',
@@ -253,7 +253,7 @@ module.exports.addPoOffenderManager = function (inserts) {
 
 const addPsoOffenderManager = function (inserts) {
   const psoOmType = inserts.filter((item) => item.table === 'offender_manager_type')[1]
-  return knex('offender_manager').returning('id').insert(
+  return knex('offender_manager').withSchema('app').returning('id').insert(
     {
       type_id: psoOmType.id,
       forename: 'Test_Forename',
@@ -272,7 +272,7 @@ const addWorkloadOwner = function (inserts) {
   const teams = inserts.filter((item) => item.table === 'team')
   const offenderManagers = inserts.filter((item) => item.table === 'offender_manager')
 
-  return knex('workload_owner').returning('id').insert(
+  return knex('workload_owner').withSchema('app').returning('id').insert(
     {
       team_id: teams[teams.length - 1].id,
       offender_manager_id: offenderManagers[offenderManagers.length - 1].id,
@@ -307,7 +307,7 @@ const addWorkloads = function (inserts) {
           total_filtered_cases: 5
         }))
       })
-      return knex('workload').returning('id').insert(workloads)
+      return knex('workload').withSchema('app').returning('id').insert(workloads)
     })
     .then(function (ids) {
       ids.forEach((id) => {
@@ -347,7 +347,7 @@ const addWorkloads = function (inserts) {
         available_points: 25
       }))
 
-      return knex('workload_points_calculations').returning('id').insert(calculations)
+      return knex('workload_points_calculations').withSchema('app').returning('id').insert(calculations)
     })
     .then(function (ids) {
       ids.forEach((id) => {
@@ -377,7 +377,7 @@ const addWorkloads = function (inserts) {
           tiers.push(Object.assign({}, defaultTier, { tier_number: tierNumber, location: location, total_cases: totalCases, total_filtered_cases: totalCases }))
         }
       })
-      return knex.batchInsert('tiers', tiers, 149).returning('id')
+      return knex.batchInsert('app.tiers', tiers, 149).returning('id')
     })
     .then(function (ids) {
       ids.forEach((id) => {
@@ -388,13 +388,14 @@ const addWorkloads = function (inserts) {
 }
 
 module.exports.addCaseDetails = function (caseDetails) {
-  return knex('case_details').returning('id').insert(caseDetails)
+  return knex('case_details').withSchema('app').returning('id').insert(caseDetails)
 }
 
 module.exports.selectIdsForWorkloadOwner = function () {
   const results = []
 
   const promise = knex('workload_owner')
+    .withSchema('app')
     .join('workload', 'workload.workload_owner_id', 'workload_owner.id')
     .join('workload_points_calculations', 'workload_points_calculations.workload_id', 'workload.id')
     .join('workload_report', 'workload_points_calculations.workload_report_id', 'workload_report.id')
@@ -403,11 +404,11 @@ module.exports.selectIdsForWorkloadOwner = function () {
     .first('workload_owner.id', 'team_id')
     .then(function (result) {
       results.push({ table: 'workload_owner', id: result.id }, { table: 'team', id: result.team_id })
-      return knex('team').select('ldu_id').where('id', '=', result.team_id)
+      return knex('team').withSchema('app').select('ldu_id').where('id', '=', result.team_id)
     })
     .then(function (result) {
       results.push({ table: 'ldu', id: result[0].ldu_id })
-      return knex('ldu').select('region_id').where('id', '=', result[0].ldu_id)
+      return knex('ldu').withSchema('app').select('region_id').where('id', '=', result[0].ldu_id)
     })
     .then(function (result) {
       results.push({ table: 'region', id: result[0].region_id })
@@ -418,6 +419,7 @@ module.exports.selectIdsForWorkloadOwner = function () {
 
 module.exports.getAnyExistingWorkloadId = function () {
   const promise = knex('workload')
+    .withSchema('app')
     .first('id')
     .then(function (result) {
       return result.id
@@ -427,6 +429,7 @@ module.exports.getAnyExistingWorkloadId = function () {
 
 module.exports.getAnyExistingWorkloadOwnerId = function () {
   const promise = knex('individual_case_overview')
+    .withSchema('app')
     .where('contracted_hours', '>', 0)
     .first('workload_owner_id AS id')
     .then(function (result) {
@@ -437,6 +440,7 @@ module.exports.getAnyExistingWorkloadOwnerId = function () {
 
 module.exports.getAnyExistingWorkloadReportId = function () {
   return knex('workload_report')
+    .withSchema('app')
     .first('id')
     .then(function (result) {
       return result.id
@@ -445,6 +449,7 @@ module.exports.getAnyExistingWorkloadReportId = function () {
 
 module.exports.getAnyExistingReductionReasonId = function () {
   const promise = knex('reduction_reason')
+    .withSchema('app')
     .first('id')
     .then(function (result) {
       return result.id
@@ -454,6 +459,7 @@ module.exports.getAnyExistingReductionReasonId = function () {
 
 module.exports.getAnyExistingRegionId = function () {
   const promise = knex('region')
+    .withSchema('app')
     .first('id')
     .then(function (result) {
       return result.id
@@ -463,6 +469,7 @@ module.exports.getAnyExistingRegionId = function () {
 
 module.exports.getAllExistingReductions = function () {
   const promise = knex('reductions')
+    .withSchema('app')
     .count('id')
     .then(function (result) {
       return result
@@ -472,6 +479,7 @@ module.exports.getAllExistingReductions = function () {
 
 module.exports.selectGradeForWorkloadOwner = function (workloadOwnerId) {
   const promise = knex('workload_owner')
+    .withSchema('app')
     .join('offender_manager', 'offender_manager.id', 'offender_manager_id')
     .join('offender_manager_type', 'offender_manager.type_id', 'offender_manager_type.id')
     .first('offender_manager_type.grade_code')
@@ -492,7 +500,7 @@ module.exports.removeInsertedData = function (inserts) {
     deleteMap[insert.table].push(insert.id)
   })
   return Promise.each(Object.keys(deleteMap), (tableName) => {
-    return knex(tableName).whereIn('id', deleteMap[tableName]).del()
+    return knex(tableName).withSchema('app').whereIn('id', deleteMap[tableName]).del()
   })
 }
 
@@ -508,6 +516,7 @@ module.exports.rowGenerator = function (name, baseRow, multiplier) {
 
 module.exports.getWorkloadReportEffectiveFromDate = function () {
   return knex('workload_report')
+    .withSchema('app')
     .first('effective_from')
     .whereNull('effective_to')
     .orderBy('id', 'desc')
@@ -515,6 +524,7 @@ module.exports.getWorkloadReportEffectiveFromDate = function () {
 
 module.exports.getAnyExistingWorkloadOwnerIdWithActiveReduction = function () {
   return knex('workload_owner')
+    .withSchema('app')
     .join('reductions', 'workload_owner.id', 'workload_owner_id')
     .where('effective_to', '>', knex.raw('GETDATE()'))
     .andWhereNot('status', 'DELETED')
@@ -524,6 +534,7 @@ module.exports.getAnyExistingWorkloadOwnerIdWithActiveReduction = function () {
 
 module.exports.generateNonExistantWorkloadOwnerId = function () {
   return knex('workload_owner')
+    .withSchema('app')
     .max('id AS maxId')
     .then(function (maxId) {
       return maxId[0].maxId + 1
@@ -532,6 +543,7 @@ module.exports.generateNonExistantWorkloadOwnerId = function () {
 
 module.exports.generateNonExistantTeamId = function () {
   return knex('team')
+    .withSchema('app')
     .max('id AS maxId')
     .then(function (maxId) {
       return maxId[0].maxId + 1
@@ -540,6 +552,7 @@ module.exports.generateNonExistantTeamId = function () {
 
 module.exports.generateNonExistantLduId = function () {
   return knex('ldu')
+    .withSchema('app')
     .max('id AS maxId')
     .then(function (maxId) {
       return maxId[0].maxId + 1
@@ -548,6 +561,7 @@ module.exports.generateNonExistantLduId = function () {
 
 module.exports.generateNonExistantRegionId = function () {
   return knex('region')
+    .withSchema('app')
     .max('id AS maxId')
     .then(function (maxId) {
       return maxId[0].maxId + 1
@@ -556,6 +570,7 @@ module.exports.generateNonExistantRegionId = function () {
 
 module.exports.getAllTasks = function () {
   return knex('tasks')
+    .withSchema('app')
     .select('submitting_agent',
       'type',
       'additional_data',
@@ -566,6 +581,7 @@ module.exports.getAllTasks = function () {
 
 module.exports.getAllWorkloadPointsForTest = function () {
   return knex('workload_points')
+    .withSchema('app')
     .select(
       'comm_tier_1 AS commA3',
       'comm_tier_2 AS commA2',
@@ -635,6 +651,7 @@ module.exports.getAllWorkloadPointsForTest = function () {
 module.exports.deleteLastRecordFromTables = function (tables) {
   return Promise.each(tables, function (table) {
     return knex(table)
+      .withSchema('app')
       .orderBy('id', 'desc')
       .first()
       .del()
@@ -654,12 +671,14 @@ module.exports.deleteReductionsForIds = function (ids) {
 
 module.exports.deleteRecordsFromTableForIds = function (table, ids) {
   return knex(table)
+    .withSchema('app')
     .whereIn('id', ids)
     .del()
 }
 
 module.exports.getLastRecordFromTable = function (table) {
   return knex(table)
+    .withSchema('app')
     .orderBy('id', 'desc')
     .first()
     .then((results) => {
@@ -669,6 +688,7 @@ module.exports.getLastRecordFromTable = function (table) {
 
 const getMaxStagingId = function () {
   return knex('workload')
+    .withSchema('app')
     .max('staging_id AS maxStagingId')
     .then(function (results) {
       return results[0].maxStagingId

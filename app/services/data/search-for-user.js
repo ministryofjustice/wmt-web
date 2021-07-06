@@ -7,8 +7,8 @@ module.exports = function (name) {
     'name'
   ]
   if (name) {
-    return knex('users').columns(columns).where('name', 'like', '%' + name + '%')
+    return knex('users').withSchema('app').columns(columns).where('name', 'like', '%' + name + '%')
   } else {
-    return knex('users').columns(columns)
+    return knex('users').withSchema('app').columns(columns)
   }
 }

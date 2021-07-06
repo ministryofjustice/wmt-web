@@ -4,7 +4,7 @@ const ORGANISATION_UNIT = require('../../constants/organisation-unit')
 
 module.exports = function (id, type) {
   const orgUnit = orgUnitFinder('name', type)
-  const table = orgUnit.caseloadView
+  const table = 'app.' + orgUnit.caseloadView
 
   // WMT0160: add new tiers to selectList
   const selectList = [
@@ -49,7 +49,7 @@ module.exports = function (id, type) {
     }
   }
 
-  const noExpandHint = ' WITH (NOEXPAND)'
+  const noExpandHint = ' '
 
   return knex.schema.raw('SELECT ' + selectList.join(', ') +
       ' FROM ' + table +

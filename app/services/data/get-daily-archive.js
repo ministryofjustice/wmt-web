@@ -25,6 +25,7 @@ module.exports = function (archiveDataForm) {
 
   if (archiveDataForm.multiSearchField !== null && archiveDataForm.multiSearchField !== undefined && archiveDataForm.multiSearchField !== '') {
     return knex('daily_archive_data')
+      .withSchema('dbo')
       .limit(parseInt(archiveDataLimit))
       .select(selectColumns)
       .whereBetween('workload_date', [archiveDataForm.archiveFromDate.toISOString().substring(0, 10),
@@ -40,6 +41,7 @@ module.exports = function (archiveDataForm) {
       })
   } else {
     return knex('daily_archive_data')
+      .withSchema('dbo')
       .limit(parseInt(archiveDataLimit))
       .select(selectColumns)
       .whereBetween('workload_date', [archiveDataForm.archiveFromDate.toISOString().substring(0, 10),

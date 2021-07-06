@@ -21,7 +21,7 @@ const expectedResult = {
 
 let archiveData
 
-const archiveDateRange = new ArchiveDateRange(5, 6, 2014, 25, 8, 2016)
+const archiveDateRange = new ArchiveDateRange(5, 6, 2018, 25, 8, 2020)
 const extraCriteria = 'A.N. Offender Manager 1511'
 
 describe('services/data/get-fortnightly-archive', function () {

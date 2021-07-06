@@ -17,6 +17,7 @@ module.exports = function (archiveDataForm) {
 
   if (archiveDataForm.multiSearchField !== null && archiveDataForm.multiSearchField !== undefined && archiveDataForm.multiSearchField !== '') {
     return knex('reductions_archive_view')
+      .withSchema('app')
       .limit(parseInt(archiveDataLimit))
       .select(selectColumns)
       .where(function () {
@@ -34,6 +35,7 @@ module.exports = function (archiveDataForm) {
       .orderBy('last_updated_date', 'ASC')
   } else {
     return knex('reductions_archive_view')
+      .withSchema('app')
       .limit(parseInt(archiveDataLimit))
       .select(selectColumns)
       .where('start_date', '<=', archiveDataForm.archiveFromDate.toISOString().substring(0, 10))

@@ -1,7 +1,7 @@
 const knex = require('../../../knex').web
 
 module.exports = function (id, type) {
-  const table = 'contact_cms_export_view AS contactCMS'
+  const table = 'app.contact_cms_export_view AS contactCMS'
   const selectList = [
     'contactRegionName',
     'contactLduName',
@@ -26,7 +26,7 @@ module.exports = function (id, type) {
     'omCMS.contactCode AS omContactCode'
   ]
 
-  const table2 = 'om_cms_export_view AS omCMS'
+  const table2 = 'app.om_cms_export_view AS omCMS'
 
   let whereString
 

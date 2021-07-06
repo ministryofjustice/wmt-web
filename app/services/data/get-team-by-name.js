@@ -6,6 +6,7 @@ module.exports = function (name) {
   }
 
   return knex('team')
+    .withSchema('app')
     .where('description', name)
     .first('id')
     .then(function (team) {

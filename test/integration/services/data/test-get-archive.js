@@ -1,14 +1,16 @@
 const expect = require('chai').expect
-
+const moment = require('moment')
 const getArchive = require('../../../../app/services/data/get-daily-archive')
 const ArchiveDataForm = require('../../../../app/services/domain/archive-data-form')
 
 const expectedResult = {
   workloadID: 2745,
-  workloadDate: new Date('2014-06-18T14:18:46.000Z'),
+  workloadDate: moment().subtract(3, 'day').toDate(),
   lduName: 'All NPS North West',
+  regionName: 'Tyne',
   teamName: 'Chesh & Gt Manch CRC - CRC Transfers',
   omName: 'A.N. Offender Manager 1',
+  grade: 'SPO',
   totalCases: 1,
   totalPoints: 6,
   sdrPoints: 0,
@@ -19,7 +21,7 @@ const expectedResult = {
   hoursReduction: 0
 }
 
-let archiveData
+let idsSaved
 
 const archiveDataForm = new ArchiveDataForm(18, 6, 2014, 26, 8, 2016, ['A.N. Offender Manager 1'])
 
@@ -30,17 +32,22 @@ describe('services/data/get-daily-archive', function () {
     })
   })
   it('should retrieve all twelve columns for archive data', function () {
-    expect(archiveData[0].workloadID).to.eql(expectedResult.workloadID)
-    expect(archiveData[0].lduName).to.eql(expectedResult.lduName)
-    expect(archiveData[0].teamName).to.eql(expectedResult.teamName)
-    expect(archiveData[0].omName).to.eql(expectedResult.omName)
-    expect(archiveData[0].totalCases).to.eql(expectedResult.totalCases)
-    expect(archiveData[0].totalPoints).to.eql(expectedResult.totalPoints)
-    expect(archiveData[0].sdrPoints).to.eql(expectedResult.sdrPoints)
-    expect(archiveData[0].sdrConversionPoints).to.eql(expectedResult.sdrConversionPoints)
-    expect(archiveData[0].paromsPoints).to.eql(expectedResult.paromsPoints)
-    expect(archiveData[0].nominalTarget).to.eql(expectedResult.nominalTarget)
-    expect(archiveData[0].contractedHours).to.eql(expectedResult.contractedHours)
-    expect(archiveData[0].hoursReduction).to.eql(expectedResult.hoursReduction)
+    return getArchive(archiveDateRange).then(function (results) {
+      expect(results[0].workloadID).to.eql(expectedResult.workloadID)
+      expect(results[0].lduName).to.eql(expectedResult.lduName)
+      expect(results[0].teamName).to.eql(expectedResult.teamName)
+      expect(results[0].omName).to.eql(expectedResult.omName)
+      expect(results[0].totalCases).to.eql(expectedResult.totalCases)
+      expect(results[0].totalPoints).to.eql(expectedResult.totalPoints)
+      expect(results[0].sdrPoints).to.eql(expectedResult.sdrPoints)
+      expect(results[0].sdrConversionPoints).to.eql(expectedResult.sdrConversionPoints)
+      expect(results[0].paromsPoints).to.eql(expectedResult.paromsPoints)
+      expect(results[0].nominalTarget).to.eql(expectedResult.nominalTarget)
+      expect(results[0].contractedHours).to.eql(expectedResult.contractedHours)
+      expect(results[0].hoursReduction).to.eql(expectedResult.hoursReduction)
+    })
+  })
+  after(function () {
+    return deleteDailyArchiveByIds(idsSaved)
   })
 })

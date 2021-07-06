@@ -2,6 +2,7 @@ const knex = require('../../../knex').web
 
 module.exports = function (id) {
   return knex('reduction_reason')
+    .withSchema('app')
     .join('reduction_category', 'reduction_reason.category_id', 'reduction_category.id')
     .first('reduction_reason.id',
       'category',

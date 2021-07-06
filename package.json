@@ -3,15 +3,18 @@
   "version": "0.1.0",
   "description": "The frontend of the workload measurement tool",
   "scripts": {
-    "start": "gulp",
-    "build": "yarn install && gulp generate-assets && gulp sync",
+    "start": "gulp start",
+    "build": "gulp generate-assets && gulp sync",
     "unit-test": "standard && mocha --recursive test/unit/ --exit",
     "integration-test": "gulp generate-assets && mocha --recursive test/integration --timeout=60000 --exit",
-    "test": "yarn unit-test && yarn integration-test",
+    "test": "mocha --recursive test/unit/ --exit --reporter mocha-simple-html-reporter --reporter-options output=test_results/unit-test-reports.html",
     "test-e2e": "gulp --gulpfile gulpfile-e2e.js",
     "test-e2e-firefox": "wdio test/wdio.conf.sauce.firefox.js",
     "test-e2e-firefox-jenkins": "wdio test/wdio.conf.sauce.firefox.jenkins.js",
-    "accessibility-test": "mocha --recursive test/accessibility --timeout=100000 --exit"
+    "accessibility-test": "mocha --recursive test/accessibility --timeout=100000 --exit",
+    "record-build-info": "node ./bin/record-build-info",
+    "security_audit": "npx audit-ci --config audit-ci.json",
+    "lint": "standard"
   },
   "standard": {
     "ignore": [
@@ -42,7 +45,8 @@
     "gulp-mocha": "8.0.x",
     "gulp-standard": "14.0.x",
     "gulp-webdriver": "^4.0.0",
-    "mocha": "9.0.x",
+    "mocha": "8.4.x",
+    "mocha-simple-html-reporter": "^2.0.0",
     "nodemon": "^2.0.7",
     "proxyquire": "2.1.x",
     "selenium-standalone": "7.1.0",
@@ -89,6 +93,6 @@
     "underscore": "^1.13.1",
     "util": "^0.12.4",
     "validator": "^13.6.0",
-    "wmt-probation-rules": "ministryofjustice/wmt-probation-rules.git#v1.0.8"
+    "wmt-probation-rules": "github:ministryofjustice/wmt-probation-rules#v1.0.8"
   }
 }

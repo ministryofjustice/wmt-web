@@ -6,6 +6,7 @@ module.exports = function (userId) {
   }
 
   return knex('user_role')
+    .withSchema('app')
     .where('user_id', userId)
     .del()
     .then(function (count) {

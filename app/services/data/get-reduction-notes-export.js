@@ -3,7 +3,7 @@ const orgUnitFinder = require('../helpers/org-unit-finder')
 
 module.exports = function (id, type) {
   const orgUnit = orgUnitFinder('name', type)
-  const table = 'reductions_notes_export_view'
+  const table = 'app.reductions_notes_export_view'
   let whereClause = ''
 
   if (id !== undefined) {

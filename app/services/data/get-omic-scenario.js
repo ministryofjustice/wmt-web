@@ -32,6 +32,7 @@ module.exports = function (id, organisationLevel) {
   ]
 
   return knex('omic_scenario_view')
+    .withSchema('app')
     .columns(columns)
     .where(organisationLevel + '_id', id)
 }

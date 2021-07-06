@@ -4,6 +4,7 @@ const createReductionReasonDBObject = require('../helpers/create-reduction-reaso
 module.exports = function (reductionReason) {
   const insertObject = createReductionReasonDBObject(reductionReason)
   return knex('reduction_reason')
+    .withSchema('app')
     .insert(insertObject)
     .returning('id')
 }

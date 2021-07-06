@@ -1,7 +1,7 @@
 const knex = require('../../../knex').web
 
 module.exports = function (id) {
-  const table = 'team_case_details_view'
+  const table = 'app.team_case_details_view'
   const selectList = [
     'link_id AS linkId',
     'team_description AS teamDescription',
@@ -26,7 +26,7 @@ module.exports = function (id) {
     whereString += ' AND (id = ' + id + ')'
   }
 
-  const noExpandHint = ' WITH (NOEXPAND)'
+  const noExpandHint = ' '
 
   return knex.schema.raw('SELECT ' + selectList.join(', ') +
         ' FROM ' + table +

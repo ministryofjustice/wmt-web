@@ -5,7 +5,7 @@ const ORGANISATION_UNIT = require('../../constants/organisation-unit')
 module.exports = function (id, type) {
   const orgUnit = orgUnitFinder('name', type)
 
-  const table = orgUnit.capacityBreakdownView
+  const table = 'app.' + orgUnit.capacityBreakdownView
 
   const selectList = [
     'total_points AS totalPoints',
@@ -38,7 +38,7 @@ module.exports = function (id, type) {
     whereString += ' WHERE id = ' + id
   }
 
-  const noExpandHint = ' WITH (NOEXPAND)'
+  const noExpandHint = ' '
 
   return knex.schema.raw('SELECT ' + selectList.join(', ') +
       ' FROM ' + table +
