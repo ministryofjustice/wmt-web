@@ -40,7 +40,6 @@
       "afterEach",
       "after",
       "it",
-      "xit",
       "browser",
       "$"
     ]
