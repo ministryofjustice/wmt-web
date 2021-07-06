@@ -2,7 +2,7 @@ const knex = require('../../../knex').web
 const ORGANISATION_UNIT = require('../../constants/organisation-unit')
 
 module.exports = function (id, type) {
-  const table = 'crc_caseload_view'
+  const table = 'app.crc_caseload_view'
 
   // WMT0160: add new tiers to selectList
   const selectList = [
@@ -47,7 +47,7 @@ module.exports = function (id, type) {
     }
   }
 
-  const noExpandHint = ' WITH (NOEXPAND)'
+  const noExpandHint = ' '
 
   return knex.schema.raw('SELECT ' + selectList.join(', ') +
       ' FROM ' + table +

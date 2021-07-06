@@ -7,14 +7,14 @@ module.exports = function (term) {
     'description'
   ]
   let results
-  return knex('ldu').columns(columns).whereRaw('description LIKE ?', ['%' + term + '%'])
+  return knex('ldu').withSchema('app').columns(columns).whereRaw('description LIKE ?', ['%' + term + '%'])
     .then(function (currentDBResults) {
       results = currentDBResults
-      return knexArchive('ldu').columns(columns).whereRaw('description LIKE ?', ['%' + term + '%'])
+      return knexArchive('ldu').withSchema('app').columns(columns).whereRaw('description LIKE ?', ['%' + term + '%'])
     })
     .then(function (archiveDBResults) {
       results = results.concat(archiveDBResults)
-      return knexLegacy('ldu').columns(columns).whereRaw('description LIKE ?', ['%' + term + '%'])
+      return knexLegacy('ldu').withSchema('app').columns(columns).whereRaw('description LIKE ?', ['%' + term + '%'])
     })
     .then(function (legacyDBResults) {
       results = results.concat(legacyDBResults)

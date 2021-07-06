@@ -6,7 +6,7 @@ module.exports = function () {
     'surname',
     'key'
   ]
-  return knex('offender_manager').columns(columns)
+  return knex('offender_manager').withSchema('app').columns(columns)
     .then(function (results) {
       results.forEach(function (result) {
         result.name = result.forename + result.surname

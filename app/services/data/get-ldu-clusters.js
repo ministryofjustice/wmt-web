@@ -5,5 +5,5 @@ module.exports = function () {
     'code',
     'description AS name'
   ]
-  return knex('ldu').columns(columns)
+  return knex('ldu').withSchema('app').columns(columns)
 }

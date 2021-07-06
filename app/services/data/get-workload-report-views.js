@@ -43,10 +43,10 @@ module.exports = function (id, fromDate, toDate, type) {
         .then(function (currentDBResults) {
           workloadReportResults = workloadReportResults.concat(currentDBResults)
           if (type === organisationConstant.NATIONAL.name) {
-            return knexArchive.schema.raw('SELECT ' + selectList.join(', ') + ' FROM ' + table2 + noExpandHint + whereString + orderBy)
+            return knexArchive.schema.raw('SELECT ' + selectList.join(', ') + ' FROM app.' + table2 + noExpandHint + whereString + orderBy)
               .then(function (crcArchiveDBResults) {
                 crcWorkloadReportResults = crcArchiveDBResults
-                return knex.schema.raw('SELECT ' + selectList.join(', ') + ' FROM ' + table2 + noExpandHint + whereString + orderBy)
+                return knex.schema.raw('SELECT ' + selectList.join(', ') + ' FROM app.' + table2 + noExpandHint + whereString + orderBy)
                   .then(function (crcCurrentDBResults) {
                     crcWorkloadReportResults = crcWorkloadReportResults.concat(crcCurrentDBResults)
                     return Promise.resolve({

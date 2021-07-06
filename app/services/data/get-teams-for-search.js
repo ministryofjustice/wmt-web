@@ -7,14 +7,14 @@ module.exports = function (term) {
     'description'
   ]
   let results
-  return knex('team').columns(columns).whereRaw('description LIKE ?', ['%' + term + '%'])
+  return knex('team').withSchema('app').columns(columns).whereRaw('description LIKE ?', ['%' + term + '%'])
     .then(function (currentDBResults) {
       results = currentDBResults
-      return knexArchive('team').columns(columns).whereRaw('description LIKE ?', ['%' + term + '%'])
+      return knexArchive('team').withSchema('app').columns(columns).whereRaw('description LIKE ?', ['%' + term + '%'])
     })
     .then(function (archiveDBResults) {
       results = results.concat(archiveDBResults)
-      return knexLegacy('team').columns(columns).whereRaw('description LIKE ?', ['%' + term + '%'])
+      return knexLegacy('team').withSchema('dbo').columns(columns).whereRaw('description LIKE ?', ['%' + term + '%'])
     })
     .then(function (legacyDBResults) {
       results = results.concat(legacyDBResults)

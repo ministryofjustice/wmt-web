@@ -5,5 +5,5 @@ module.exports = function () {
     'code',
     'description as name'
   ]
-  return knex('team').columns(columns)
+  return knex('team').withSchema('app').columns(columns)
 }
