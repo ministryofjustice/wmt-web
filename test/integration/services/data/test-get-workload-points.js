@@ -83,6 +83,7 @@ const getExistingActiveWorkloadPoints = function (isT2A = false) {
     is_t2a: (isT2A === true)
   }
   return knex('workload_points')
+    .withSchema('app')
     .first('id AS workloadPointsId',
       'comm_tier_1 AS commA3',
       'comm_tier_2 AS commA2',

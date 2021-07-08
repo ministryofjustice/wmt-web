@@ -14,6 +14,7 @@ let inserts = []
 
 const getExpectedNationalCapacity = function (fromDate, toDate) {
   return knex('national_capacity_view')
+    .withSchema('app')
     .where('effective_from', '>=', fromDate)
     .where('effective_from', '<=', toDate)
     .select('total_points',
@@ -37,15 +38,13 @@ describe('services/data/get-workload-report-views', function () {
           .then(function (result) {
             startDate = result.effective_from.toISOString()
             endDate = new Date((result.effective_from.getTime() + 360 * ONE_DAY_IN_MS)).toISOString()
-            expectedResults = [
-              {
+            expectedResults = {
                 effective_from: new Date(startDate),
                 total_points: 50,
                 available_points: 25,
                 reduction_hours: 3,
                 contracted_hours: 37.5
               }
-            ]
           })
       })
   })
@@ -64,29 +63,29 @@ describe('services/data/get-workload-report-views', function () {
   it('should retrieve all the workloads within the date range for a given Region', function () {
     return getWorkloadReportsViews(inserts.filter((item) => item.table === 'region')[0].id, startDate, endDate, 'region')
       .then(function (results) {
-        expect(results).to.eql(expectedResults)
+        expect(results).to.deep.include(expectedResults)
       })
   })
 
   it('should retrieve all the workloads within the date range for a given LDU', function () {
     return getWorkloadReportsViews(inserts.filter((item) => item.table === 'ldu')[0].id, startDate, endDate, 'ldu')
       .then(function (results) {
-        expect(results).to.eql(expectedResults)
+        expect(results).to.deep.include(expectedResults)
       })
   })
 
   it('should retrieve all the workloads within the date range for a given Team', function () {
     return getWorkloadReportsViews(inserts.filter((item) => item.table === 'team')[0].id, startDate, endDate, 'team')
       .then(function (results) {
-        expect(results).to.eql(expectedResults)
+        expect(results).to.deep.include(expectedResults)
       })
   })
 
   it('should retrieve all the workloads within the date range for an OM', function () {
     return getWorkloadReportsViews(inserts.filter((item) => item.table === 'workload_owner')[0].id, startDate, endDate, 'offender-manager')
       .then(function (results) {
-        expect(results.length).to.equal(1)
-        expect(results).to.eql(expectedResults)
+        expect(results.length).to.equal(2)
+        expect(results).to.deep.include(expectedResults)
       })
   })
 
