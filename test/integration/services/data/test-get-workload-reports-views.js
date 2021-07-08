@@ -39,12 +39,12 @@ describe('services/data/get-workload-report-views', function () {
             startDate = result.effective_from.toISOString()
             endDate = new Date((result.effective_from.getTime() + 360 * ONE_DAY_IN_MS)).toISOString()
             expectedResults = {
-                effective_from: new Date(startDate),
-                total_points: 50,
-                available_points: 25,
-                reduction_hours: 3,
-                contracted_hours: 37.5
-              }
+              effective_from: new Date(startDate),
+              total_points: 50,
+              available_points: 25,
+              reduction_hours: 3,
+              contracted_hours: 37.5
+            }
           })
       })
   })

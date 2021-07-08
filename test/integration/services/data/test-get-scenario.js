@@ -5,12 +5,10 @@ const getTeam = require('../../../../app/services/data/get-team-by-name')
 const getLDU = require('../../../../app/services/data/get-ldu-by-name')
 const getRegion = require('../../../../app/services/data/get-region-by-name')
 
-let scenarioData
-
 let inserts
 describe('services/data/get-scenario team', function () {
   before(function () {
-    return aggregatedDataHelper.addWorkloadCapacitiesForOffenderManager().then(function(result) {
+    return aggregatedDataHelper.addWorkloadCapacitiesForOffenderManager().then(function (result) {
       inserts = result
     })
   })
@@ -20,16 +18,15 @@ describe('services/data/get-scenario team', function () {
         expect(results.length).to.eql(51)
       })
     })
-    
   })
-  after(function() {
+  after(function () {
     return aggregatedDataHelper.removeInsertedData(inserts)
   })
 })
 
 describe('services/data/get-scenario ldu', function () {
   before(function () {
-    return aggregatedDataHelper.addWorkloadCapacitiesForOffenderManager().then(function(result) {
+    return aggregatedDataHelper.addWorkloadCapacitiesForOffenderManager().then(function (result) {
       inserts = result
     })
   })
@@ -40,14 +37,14 @@ describe('services/data/get-scenario ldu', function () {
       })
     })
   })
-  after(function() {
+  after(function () {
     return aggregatedDataHelper.removeInsertedData(inserts)
   })
 })
 
 describe('services/data/get-scenario division', function () {
   before(function () {
-    return aggregatedDataHelper.addWorkloadCapacitiesForOffenderManager().then(function(result) {
+    return aggregatedDataHelper.addWorkloadCapacitiesForOffenderManager().then(function (result) {
       inserts = result
     })
   })
@@ -57,9 +54,8 @@ describe('services/data/get-scenario division', function () {
         expect(results.length).to.eql(51)
       })
     })
-    
   })
-  after(function() {
+  after(function () {
     return aggregatedDataHelper.removeInsertedData(inserts)
   })
 })
