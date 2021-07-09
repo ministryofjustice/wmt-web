@@ -47,7 +47,7 @@
       <div id="{{caseType.displayName.toLowerCase()}}">
         <h3 class="govuk-heading-m">{{ caseType.displayName | title }} caseload by tier</h3>
 
-        <table id="caseload-data-table" class="govuk-table sln-table-caseload-{{caseType.displayName.toLowerCase()}} data-table">
+        <table id="team-caseload-data-table" class="govuk-table sln-table-caseload-{{caseType.displayName.toLowerCase()}} data-table">
           <thead>
             <tr>
               <th colspan="2" id="{{caseType.displayName}}_om">{{ childOrganisationLevelDisplayText }}</th>
@@ -145,7 +145,7 @@
     {% if caseType.displayName === 'Overall' %}
       <div id="{{caseType.displayName.toLowerCase()}}">
         <h3 class="govuk-heading-m">{{ caseType.displayName | title }} caseload</h3>        
-        <table id="caseload-data-table" class="govuk-table sln-table-caseload-overall-summary data-table">
+        <table id="overall-caseload-data-table" class="govuk-table sln-table-caseload-overall-summary data-table">
           <thead>
             <tr>
               <th colspan="1" id="org">{{ childOrganisationLevelDisplayText }}</th>
@@ -186,7 +186,7 @@
         </table>
 <br/>
         <h3 class="govuk-heading-m">{{ caseType.displayName | title }} caseload by grade</h3>
-        <table id="caseload-data-table" class="govuk-table sln-table-caseload-by-grade data-table">
+        <table id="overall-grade-caseload-data-table" class="govuk-table sln-table-caseload-by-grade data-table">
           <thead>
             <tr>
               <th colspan="2" id="{{caseType.displayName}}_om">{{ childOrganisationLevelDisplayText }}</th>
@@ -255,7 +255,7 @@
         </tbody>
         <tfoot>
           <tr>
-            <td rowspan="{{caseType.array.totals | length}}" headers="{{caseType.displayName}}_om">Average</td>
+            <td rowspan="{{caseType.array.totals | length}}" headers="{{caseType.displayName}}_name {{caseType.displayName}}_om">Average</td>
             {% for grade, total in caseType.array.percentageTotals %}
             <td class="align-centre" headers="{{caseType.displayName}}_om {{caseType.displayName}}_grade">{{ grade }}</td> 
             <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_a3">{{ total.a3  | round(1) }}%</td>
@@ -279,7 +279,7 @@
             <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d0">{{ total.d0 | round(1) }}%</td>
 
             <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_untiered">{{ total.untiered | round(1) }}%</td>   
-            <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_total" >{{ total.totalCases | round(1) }}%</td>   
+            <td headers="{{caseType.displayName}}_overall {{caseType.displayName}}_tiers" >{{ total.totalCases | round(1) }}%</td>   
           </tr>
           <tr>
           {% endfor %}
@@ -289,7 +289,7 @@
     {% else %}
       <div id="{{caseType.displayName.toLowerCase()}}">
         <h3 class="govuk-heading-m">{{ caseType.displayName | title }} caseload by tier</h3>
-        <table id="caseload-data-table" class="govuk-table sln-table-caseload-{{caseType.displayName.toLowerCase()}} data-table">
+        <table id="tier-caseload-data-table" class="govuk-table sln-table-caseload-{{caseType.displayName.toLowerCase()}} data-table">
           <thead>
             <tr>
               <th colspan="2" id="{{caseType.displayName}}_om">{{ childOrganisationLevelDisplayText }}</th>
@@ -391,7 +391,7 @@
         </table>
 <br/>
         <h3 class="govuk-heading-m">{{ caseType.displayName | title }} caseload by grade</h3>
-        <table id="caseload-data-table" class="govuk-table sln-table-caseload-by-grade data-table">
+        <table id="tier-grade-caseload-data-table" class="govuk-table sln-table-caseload-by-grade data-table">
           <thead>
             <tr>
               <th colspan="2" id="{{caseType.displayName}}_om">{{ childOrganisationLevelDisplayText }}</th>
@@ -509,8 +509,6 @@
 {% block bodyEnd %}
   <script src="/public/javascripts/vendor/jquery.min.js"></script>
   <script src="/public/javascripts/jquery.tabs.js"></script>
-  <script src="/public/javascripts/floatThead.js"></script>
-  <script src="/public/javascripts/jquery.floatThead.js"></script>
   <script src="/public/javascripts/caseload.js"></script>
 
 {% endblock %}

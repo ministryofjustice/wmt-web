@@ -122,10 +122,25 @@ jobs:
       - run:
          name: Run integration tests
          command: npm run integration-test
+      - run:
+          name: install pa11y
+          command: 'sudo npm install -g pa11y'
+      - run:
+          name: Run the node app
+          command: npm run start
+          background: true
+      - run:
+          name: Wait for node app to start
+          command: sleep 5
+      - run:
+          name: run accessibility tests
+          command: npm run accessibility-test
       - store_test_results:
           path: test_results
       - store_artifacts:
           path: test_results/integration-test-reports.html
+      - store_artifacts:
+          path: test_results/accessibility-test-reports.html
 
 workflows:
   version: 2
