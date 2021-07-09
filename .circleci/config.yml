@@ -29,6 +29,9 @@ jobs:
       - run:
           name: Update npm
           command: 'sudo npm install -g npm@latest'
+      - run:
+          name: install pa11y
+          command: 'sudo npm install -g pa11y'
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
@@ -125,9 +128,6 @@ jobs:
       - run:
          name: Run integration tests
          command: npm run integration-test
-      - run:
-          name: install pa11y
-          command: 'sudo npm install -g pa11y'
       - run:
           name: Run the node app
           command: npm run start
