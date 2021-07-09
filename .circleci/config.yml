@@ -116,9 +116,8 @@ jobs:
       - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
-      # - run:
-      #    name: Install Dependencies
-      #    command: npm ci --no-audit
+      - attach_workspace:
+          at: ~/app
       - run:
          name: Run integration tests
          command: npm run integration-test
