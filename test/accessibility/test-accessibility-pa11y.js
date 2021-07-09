@@ -19,7 +19,7 @@ describe('accessibility/pa11y', function () {
     const cmd = pathToScript + ' ' + regionId + ' ' + lduId + ' ' + teamId + ' ' + offenderManagerId + ' ' + courtReporterId
     expect(shelljs.exec(cmd).code).to.eql(0)
   })
-  after(function() {
+  after(function () {
     return aggregatedDataHelper.removeInsertedData(inserts)
   })
 })
