@@ -12,7 +12,13 @@ parameters:
   node-version:
     type: string
     default: 14.17-browsers
-
+  mssql_tag:
+    default: "2019-CU11-ubuntu-20.04"
+    type: string
+  sa_password:
+    default: "yourStrong(!)Password"
+    type: string
+    
 jobs:
   build:
     executor:
@@ -92,6 +98,34 @@ jobs:
           path: test_results
       - store_artifacts:
           path: test_results/unit-test-reports.html
+  integration_test:
+    docker:
+      - image: cimg/node:<< pipeline.parameters.node-version >>
+      - image: mcr.microsoft.com/mssql/server:<< pipeline.parameters.mssql_tag >>
+        environment:
+          - SA_PASSWORD=<< pipeline.parameters.sa_password >>
+          - ACCEPT_EULA=y
+          - DOCKER_HOST=unix:///var/run/docker.sock
+          - TMPDIR=/private
+      - image: quay.io/hmpps/hmpps-workload:latest
+        environment:
+          - DATABASE_USERNAME=sa
+          - DATABASE_PASSWORD=<< pipeline.parameters.sa_password >>
+        entrypoint: ["/bin/sh", "-c" , "sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar"]
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+         name: Install Dependencies
+         command: npm ci --no-audit
+      - run:
+         name: Run integration tests
+         command: npm run integration-test
+      - store_test_results:
+          path: test_results
+      - store_artifacts:
+          path: test_results/integration-test-reports.html
 
 workflows:
   version: 2
@@ -103,6 +137,10 @@ workflows:
             tags:
               ignore: /.*/
       - unit_test:
+          context: hmpps-common-vars
+          requires:
+            - build
+      - integration_test:
           context: hmpps-common-vars
           requires:
             - build
