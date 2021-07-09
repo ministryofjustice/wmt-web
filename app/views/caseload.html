@@ -37,7 +37,7 @@
   <div class="js-tabs">
     <ul class="js-tabs-links">
       {% for caseType in caseloadDetails %}
-	      <li><a class="govuk-link" href="#{{ caseType.displayName.toLowerCase() }}" role="dynamic">{{caseType.displayName | title}}</a></li>
+	      <li><a class="govuk-link" name="{{ caseType.displayName.toLowerCase() }}" href="#{{ caseType.displayName.toLowerCase() }}" role="dynamic">{{caseType.displayName | title}}</a></li>
       {% endfor %}
     </ul>
 
@@ -109,7 +109,7 @@
           </tbody>
           <tfoot>
             <tr>
-              <td colspan="2" headers="{{caseType.displayName}}_om">Total</td>
+              <td colspan="2" headers="{{caseType.displayName}}_grade {{caseType.displayName}}_name {{caseType.displayName}}_om">Total</td>
               <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_a3">{{ caseType.array.totals.a3 | round(1) }}</td>
               <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_a2">{{ caseType.array.totals.a2 | round(1) }}</td>
               <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_a1">{{ caseType.array.totals.a1 | round(1) }}</td>

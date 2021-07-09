@@ -101,7 +101,6 @@ jobs:
   integration_test:
     docker:
       - image: cimg/node:<< pipeline.parameters.node-version >>
-      - image: buildkite/puppeteer:latest
       - image: mcr.microsoft.com/mssql/server:<< pipeline.parameters.mssql_tag >>
         environment:
           - SA_PASSWORD=<< pipeline.parameters.sa_password >>
@@ -135,13 +134,11 @@ jobs:
           command: sleep 5
       - run:
           name: run accessibility tests
-          command: npm run accessibility-test
+          command: npm run accessibility-test-ci
       - store_test_results:
           path: test_results
       - store_artifacts:
           path: test_results/integration-test-reports.html
-      - store_artifacts:
-          path: test_results/accessibility-test-reports.html
 
 workflows:
   version: 2

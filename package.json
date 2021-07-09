@@ -17,7 +17,8 @@
     "accessibility-test": "mocha --recursive test/accessibility --timeout=100000 --exit --reporter mocha-simple-html-reporter --reporter-options output=test_results/accessibility-test-reports.html",
     "record-build-info": "node ./bin/record-build-info",
     "security_audit": "npx audit-ci --config audit-ci.json",
-    "lint": "standard"
+    "lint": "standard",
+    "accessibility-test-ci": "node ./test/accessibility/setup-pa11y-file.js && ./node_modules/.bin/pa11y-ci && node ./test/accessibility/delete-pally-data.js"
   },
   "standard": {
     "ignore": [
@@ -51,10 +52,11 @@
     "mocha": "8.4.x",
     "mocha-simple-html-reporter": "^2.0.0",
     "nodemon": "^2.0.7",
+    "pa11y-ci": "^2.4.2",
     "proxyquire": "2.1.x",
     "selenium-standalone": "6.23.0",
-    "sinon": "^10.0.0",
     "shelljs": "^0.8.4",
+    "sinon": "^10.0.0",
     "standard": "^16.0.3",
     "supertest": "6.1.x",
     "webdriverio": "^7.7.4"
