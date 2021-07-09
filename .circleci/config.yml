@@ -101,6 +101,7 @@ jobs:
   integration_test:
     docker:
       - image: cimg/node:<< pipeline.parameters.node-version >>
+      - image: buildkite/puppeteer:latest
       - image: mcr.microsoft.com/mssql/server:<< pipeline.parameters.mssql_tag >>
         environment:
           - SA_PASSWORD=<< pipeline.parameters.sa_password >>
@@ -115,9 +116,6 @@ jobs:
     working_directory: ~/app
     steps:
       - checkout
-      - run:
-          name: install pa11y
-          command: 'sudo npm install -g pa11y'
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - attach_workspace:
