@@ -120,6 +120,9 @@ jobs:
       - attach_workspace:
           at: ~/app
       - run:
+          name: Wait for db to initialise
+          command: sleep 20
+      - run:
          name: Run integration tests
          command: npm run integration-test
       - run:
