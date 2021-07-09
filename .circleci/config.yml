@@ -112,6 +112,7 @@ jobs:
           - DATABASE_USERNAME=sa
           - DATABASE_PASSWORD=<< pipeline.parameters.sa_password >>
         entrypoint: ["/bin/sh", "-c" , "sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar"]
+    working_directory: ~/app
     steps:
       - checkout
       - restore_cache:
