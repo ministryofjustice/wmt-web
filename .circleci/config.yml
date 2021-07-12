@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   hmpps: ministryofjustice/hmpps@3.8
   slack: circleci/slack@4.4.2
+  browser-tools: circleci/browser-tools@1.1.0
 
 parameters:
   alerts-slack-channel:
@@ -159,6 +160,7 @@ jobs:
   e2e_test:
     executor: docker-env
     steps:
+      - browser-tools/install-browser-tools
       - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
