@@ -9,7 +9,7 @@ let workloadOwnerDefaultUrl
 
 describe('View contracted hours for court reporter', async function () {
   before(async function () {
-    await authenticationHelper.login(authenticationHelper.users.Manager)
+    // await authenticationHelper.login(authenticationHelper.users.Manager)
     const results = await crDataHelper.selectIdsForCourtReporterWorkloadOwner()
     workloadOwnerIds = results
     workloadOwnerId = workloadOwnerIds.filter((item) => item.table === 'workload_owner')[0].id
@@ -52,7 +52,7 @@ describe('View contracted hours for court reporter', async function () {
     expect(exists).to.be.equal(true)
   })
 
-  after(function () {
-    authenticationHelper.logout()
-  })
+  // after(function () {
+  //   authenticationHelper.logout()
+  // })
 })

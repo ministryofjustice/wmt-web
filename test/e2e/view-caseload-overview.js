@@ -15,7 +15,7 @@ let nationalDefaultUrl
 
 describe('View overview', function () {
   before(async function () {
-    await authenticationHelper.login(authenticationHelper.users.Staff)
+    // await authenticationHelper.login(authenticationHelper.users.Staff)
     const results = await dataHelper.selectIdsForWorkloadOwner()
     workloadOwnerIds = results
     workloadOwnerId = workloadOwnerIds.filter((item) => item.table === 'workload_owner')[0].id
@@ -241,7 +241,7 @@ describe('View overview', function () {
     }
   })
 
-  after(function () {
-    authenticationHelper.logout()
-  })
+  // after(function () {
+  //   authenticationHelper.logout()
+  // })
 })

@@ -5,7 +5,7 @@ let adminArchiveURL, pageTitle, pageSubtitle
 
 describe('View archive data', () => {
   before(async function () {
-    await authenticationHelper.login(authenticationHelper.users.DataAdmin)
+    // await authenticationHelper.login(authenticationHelper.users.DataAdmin)
     adminArchiveURL = '/archive-data/daily-caseload-data'
     await browser.url(adminArchiveURL)
   })
@@ -22,7 +22,7 @@ describe('View archive data', () => {
     })
   })
 
-  after(function () {
-    authenticationHelper.logout()
-  })
+  // after(function () {
+  //   authenticationHelper.logout()
+  // })
 })

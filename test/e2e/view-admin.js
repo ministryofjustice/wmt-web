@@ -7,7 +7,7 @@ let pageTitle
 
 describe('View admin role', () => {
   before(async function () {
-    await authenticationHelper.login(authenticationHelper.users.DataAdmin)
+    // await authenticationHelper.login(authenticationHelper.users.DataAdmin)
     adminURL = '/admin'
     workloadPointsURL = '/admin/workload-points'
     await browser.url(adminURL)
@@ -31,7 +31,7 @@ describe('View admin role', () => {
     })
   })
 
-  after(async function () {
-    authenticationHelper.logout()
-  })
+  // after(async function () {
+  //   authenticationHelper.logout()
+  // })
 })

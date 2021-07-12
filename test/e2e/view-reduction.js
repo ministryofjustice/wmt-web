@@ -8,7 +8,7 @@ let offenderManagerUrl
 
 describe('View adding a new reduction', () => {
   before(async function () {
-    await authenticationHerlp.login(authenticationHerlp.users.Manager)
+    // await authenticationHerlp.login(authenticationHerlp.users.Manager)
     const results = await dataHelper.getAnyExistingWorkloadOwnerId()
     offenderManagerId = results
     offenderManagerUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + offenderManagerId + '/reductions'
@@ -103,7 +103,7 @@ describe('View adding a new reduction', () => {
     })
   })
 
-  after(function () {
-    authenticationHerlp.logout()
-  })
+  // after(function () {
+  //   authenticationHerlp.logout()
+  // })
 })

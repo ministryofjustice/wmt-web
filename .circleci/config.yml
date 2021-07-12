@@ -156,6 +156,27 @@ jobs:
       - run:
           name: run accessibility tests
           command: npm run accessibility-test-ci
+  e2e_test:
+    executor: docker-env
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - attach_workspace:
+          at: ~/app
+      - run:
+          name: Wait for db to initialise
+          command: sleep 20
+      - run:
+          name: Run the node app
+          command: npm run start
+          background: true
+      - run:
+          name: Wait for node app to start
+          command: sleep 10
+      - run:
+          name: run end to end tests
+          command: npm run test-e2e
 
 workflows:
   version: 2
@@ -175,6 +196,10 @@ workflows:
           requires:
             - build
       - accessibility_test:
+          context: hmpps-common-vars
+          requires:
+            - build
+      - e2e_test:
           context: hmpps-common-vars
           requires:
             - build

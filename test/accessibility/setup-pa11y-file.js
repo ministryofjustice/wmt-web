@@ -1,12 +1,10 @@
-const aggregatedDataHelper = require('../helpers/data/aggregated-data-helper')
-const courtReportsDataHelper = require('../helpers/data/court-reports-aggregated-data-helper')
 const path = require('path')
 const fs = require('fs')
 const http = require('http')
 
+const setupAllDataFs = require('../helpers/data/setup-all-data-fs')
+
 const pallyCiFile = path.resolve(__dirname, '../../.pa11yci')
-const pallyCourtInserts = path.resolve(__dirname, '../../pallyCourtInserts.json')
-const pallyWorkloadInserts = path.resolve(__dirname, '../../pallyWorkloadInserts.json')
 
 const extractInserts = function (inserts) {
   return {
@@ -33,82 +31,78 @@ try {
   const national = 'hmpps/0'
 
   const urls = [host]
-  courtReportsDataHelper.addCourtReportWorkloadsForOffenderManager()
-    .then(function (courtReportInserts) {
-      const extractedCourtReports = extractInserts(courtReportInserts)
-      return aggregatedDataHelper.addWorkloadCapacitiesForOffenderManager().then(function (workloadInserts) {
-        const extractedWorkload = extractInserts(workloadInserts)
 
-        const capacityUrl = 'caseload-capacity'
-        urls.push(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${capacityUrl}`)
-        urls.push(`${probationBase}/${team}/${extractedWorkload.teamId}/${capacityUrl}`)
-        urls.push(`${probationBase}/${ldu}/${extractedWorkload.lduId}/${capacityUrl}`)
-        urls.push(`${probationBase}/${region}/${extractedWorkload.regionId}/${capacityUrl}`)
+  setupAllDataFs().then(function(result) {
+    const extractedCourtReports = extractInserts(result.courtReportInserts)
+    const extractedWorkload = extractInserts(result.workloadInserts)
+    const capacityUrl = 'caseload-capacity'
+    urls.push(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${capacityUrl}`)
+    urls.push(`${probationBase}/${team}/${extractedWorkload.teamId}/${capacityUrl}`)
+    urls.push(`${probationBase}/${ldu}/${extractedWorkload.lduId}/${capacityUrl}`)
+    urls.push(`${probationBase}/${region}/${extractedWorkload.regionId}/${capacityUrl}`)
 
-        const caseProgressUrl = 'case-progress'
-        urls.push(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${caseProgressUrl}`)
-        urls.push(`${probationBase}/${team}/${extractedWorkload.teamId}/${caseProgressUrl}`)
-        urls.push(`${probationBase}/${ldu}/${extractedWorkload.lduId}/${caseProgressUrl}`)
-        urls.push(`${probationBase}/${region}/${extractedWorkload.regionId}/${caseProgressUrl}`)
+    const caseProgressUrl = 'case-progress'
+    urls.push(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${caseProgressUrl}`)
+    urls.push(`${probationBase}/${team}/${extractedWorkload.teamId}/${caseProgressUrl}`)
+    urls.push(`${probationBase}/${ldu}/${extractedWorkload.lduId}/${caseProgressUrl}`)
+    urls.push(`${probationBase}/${region}/${extractedWorkload.regionId}/${caseProgressUrl}`)
 
-        const overviewUrl = 'overview'
-        urls.push(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${overviewUrl}`)
-        urls.push(`${probationBase}/${team}/${extractedWorkload.teamId}/${overviewUrl}`)
-        urls.push(`${probationBase}/${ldu}/${extractedWorkload.lduId}/${overviewUrl}`)
-        urls.push(`${probationBase}/${region}/${extractedWorkload.regionId}/${overviewUrl}`)
-        urls.push(`${probationBase}/${national}/${overviewUrl}`)
+    const overviewUrl = 'overview'
+    urls.push(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${overviewUrl}`)
+    urls.push(`${probationBase}/${team}/${extractedWorkload.teamId}/${overviewUrl}`)
+    urls.push(`${probationBase}/${ldu}/${extractedWorkload.lduId}/${overviewUrl}`)
+    urls.push(`${probationBase}/${region}/${extractedWorkload.regionId}/${overviewUrl}`)
+    urls.push(`${probationBase}/${national}/${overviewUrl}`)
 
-        urls.push(`${courtReportsBase}/${offenderManager}/${extractedCourtReports.offenderManagerId}/${overviewUrl}`)
-        urls.push(`${courtReportsBase}/${team}/${extractedCourtReports.teamId}/${overviewUrl}`)
-        urls.push(`${courtReportsBase}/${ldu}/${extractedCourtReports.lduId}/${overviewUrl}`)
-        urls.push(`${courtReportsBase}/${region}/${extractedCourtReports.regionId}/${overviewUrl}`)
-        urls.push(`${courtReportsBase}/${national}/${overviewUrl}`)
+    urls.push(`${courtReportsBase}/${offenderManager}/${extractedCourtReports.offenderManagerId}/${overviewUrl}`)
+    urls.push(`${courtReportsBase}/${team}/${extractedCourtReports.teamId}/${overviewUrl}`)
+    urls.push(`${courtReportsBase}/${ldu}/${extractedCourtReports.lduId}/${overviewUrl}`)
+    urls.push(`${courtReportsBase}/${region}/${extractedCourtReports.regionId}/${overviewUrl}`)
+    urls.push(`${courtReportsBase}/${national}/${overviewUrl}`)
 
-        const caseloadUrl = 'caseload'
-        urls.push(`${probationBase}/${team}/${extractedWorkload.teamId}/${caseloadUrl}`)
-        urls.push(`${probationBase}/${ldu}/${extractedWorkload.lduId}/${caseloadUrl}`)
-        urls.push(`${probationBase}/${region}/${extractedWorkload.regionId}/${caseloadUrl}`)
-        urls.push(`${probationBase}/${national}/${caseloadUrl}`)
+    const caseloadUrl = 'caseload'
+    urls.push(`${probationBase}/${team}/${extractedWorkload.teamId}/${caseloadUrl}`)
+    urls.push(`${probationBase}/${ldu}/${extractedWorkload.lduId}/${caseloadUrl}`)
+    urls.push(`${probationBase}/${region}/${extractedWorkload.regionId}/${caseloadUrl}`)
+    urls.push(`${probationBase}/${national}/${caseloadUrl}`)
 
-        const contractedHoursUrl = 'contracted-hours'
-        urls.push(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${contractedHoursUrl}`)
+    const contractedHoursUrl = 'contracted-hours'
+    urls.push(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${contractedHoursUrl}`)
 
-        const reductionsUrl = 'reductions'
-        const addReductionsUrl = 'add-reduction'
-        urls.push(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${reductionsUrl}`)
-        urls.push(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${addReductionsUrl}`)
-        urls.push(`${courtReportsBase}/${offenderManager}/${extractedCourtReports.offenderManagerId}/${reductionsUrl}`)
-        urls.push(`${courtReportsBase}/${offenderManager}/${extractedCourtReports.offenderManagerId}/${addReductionsUrl}`)
+    const reductionsUrl = 'reductions'
+    const addReductionsUrl = 'add-reduction'
+    urls.push(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${reductionsUrl}`)
+    urls.push(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${addReductionsUrl}`)
+    urls.push(`${courtReportsBase}/${offenderManager}/${extractedCourtReports.offenderManagerId}/${reductionsUrl}`)
+    urls.push(`${courtReportsBase}/${offenderManager}/${extractedCourtReports.offenderManagerId}/${addReductionsUrl}`)
 
-        const admin = 'admin'
-        urls.push(`${host}/${admin}/workload-points`)
-        urls.push(`${host}/${admin}/user`)
-        urls.push(`${host}/${admin}/user-rights`)
-        pa11yJson.urls = urls
+    const admin = 'admin'
+    urls.push(`${host}/${admin}/workload-points`)
+    urls.push(`${host}/${admin}/user`)
+    urls.push(`${host}/${admin}/user-rights`)
+    pa11yJson.urls = urls
 
-        try {
-          fs.writeFileSync(pallyCiFile, JSON.stringify(pa11yJson))
-          fs.writeFileSync(pallyCourtInserts, JSON.stringify(courtReportInserts))
-          fs.writeFileSync(pallyWorkloadInserts, JSON.stringify(workloadInserts))
-        } catch (err) {
-          console.error(err)
-        }
+    try {
+      fs.writeFileSync(pallyCiFile, JSON.stringify(pa11yJson))
+    } catch (err) {
+      console.error(err)
+    }
 
-        console.log('pa11y ci file updated')
+    console.log('pa11y ci file updated')
 
-        const req = http.request(`${host}/refresh`, res => {
-          console.log(`statusCode: ${res.statusCode}`)
-          process.exit(0)
-        })
-
-        req.on('error', (err) => {
-          console.error(err)
-          process.exit(1)
-        })
-
-        req.end()
-      })
+    const req = http.request(`${host}/refresh`, res => {
+      console.log(`statusCode: ${res.statusCode}`)
+      process.exit(0)
     })
+
+    req.on('error', (err) => {
+      console.error(err)
+      process.exit(1)
+    })
+
+    req.end()
+  })
+
 } catch (err) {
   console.error(err)
 }

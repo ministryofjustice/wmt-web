@@ -14,7 +14,7 @@ let nationalDefaultUrl
 
 describe('View court-reports overview', function () {
   before(async function () {
-    await authenticationHelper.login(authenticationHelper.users.Manager)
+    // await authenticationHelper.login(authenticationHelper.users.Manager)
     const results = await crDataHelper.selectIdsForCourtReporterWorkloadOwner()
     workloadOwnerId = results.filter((item) => item.table === 'workload_owner')[0].id
     workloadOwnerDefaultUrl = '/' + workloadTypes.COURT_REPORTS + '/offender-manager/' + workloadOwnerId
@@ -253,7 +253,7 @@ describe('View court-reports overview', function () {
     expect(text).to.equal('National')
   })
 
-  after(function () {
-    authenticationHelper.logout()
-  })
+  // after(function () {
+  //   authenticationHelper.logout()
+  // })
 })

@@ -7,7 +7,7 @@ const username = 'John.Doe@' + config.ACTIVE_DIRECTORY_DOMAIN
 
 describe('View adding a new user role', () => {
   before(async function () {
-    await authenticationHerlp.login(authenticationHerlp.users.SystemAdmin)
+    // await authenticationHerlp.login(authenticationHerlp.users.SystemAdmin)
     adminUserURL = '/admin/user'
     await browser.url(adminUserURL)
   })
@@ -58,7 +58,7 @@ describe('View adding a new user role', () => {
     })
   })
 
-  after(function () {
-    authenticationHerlp.logout()
-  })
+  // after(function () {
+  //   authenticationHerlp.logout()
+  // })
 })

@@ -13,7 +13,7 @@ let regionDefaultUrl
 
 describe('View reductions export for a Manager', function () {
   before(async function () {
-    await authenticationHelper.login(authenticationHelper.users.Manager)
+    // await authenticationHelper.login(authenticationHelper.users.Manager)
     const results = await dataHelper.selectIdsForWorkloadOwner()
     workloadOwnerIds = results
     workloadOwnerId = workloadOwnerIds.filter((item) => item.table === 'workload_owner')[0].id
@@ -64,7 +64,7 @@ describe('View reductions export for a Manager', function () {
     }
   })
 
-  after(function () {
-    authenticationHelper.logout()
-  })
+  // after(function () {
+  //   authenticationHelper.logout()
+  // })
 })
