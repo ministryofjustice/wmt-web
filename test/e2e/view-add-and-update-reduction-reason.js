@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const authenticationHelper = require('../helpers/routes/authentication-helper')
+// const authenticationHelper = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 
 let adminURL

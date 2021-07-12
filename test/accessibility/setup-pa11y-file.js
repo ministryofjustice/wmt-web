@@ -32,7 +32,7 @@ try {
 
   const urls = [host]
 
-  setupAllDataFs().then(function(result) {
+  setupAllDataFs().then(function (result) {
     const extractedCourtReports = extractInserts(result.courtReportInserts)
     const extractedWorkload = extractInserts(result.workloadInserts)
     const capacityUrl = 'caseload-capacity'
@@ -102,7 +102,6 @@ try {
 
     req.end()
   })
-
 } catch (err) {
   console.error(err)
 }

@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const authenticationHelper = require('../helpers/routes/authentication-helper')
+// const authenticationHelper = require('../helpers/routes/authentication-helper')
 const getWorloadPoints = require('../../app/services/data/get-workload-points')
 
 const workloadPointsUrl = '/admin/workload-points'
