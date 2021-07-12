@@ -127,11 +127,11 @@ jobs:
          command: npm run integration-test
       - run:
           name: Run the node app
-          command: npm run start
+          command: npm run build && npm run start
           background: true
       - run:
           name: Wait for node app to start
-          command: sleep 5
+          command: sleep 10
       - run:
           name: run accessibility tests
           command: npm run accessibility-test-ci
