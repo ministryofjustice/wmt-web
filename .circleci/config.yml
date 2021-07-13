@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   hmpps: ministryofjustice/hmpps@3.8
   slack: circleci/slack@4.4.2
+  browser-tools: circleci/browser-tools@1.1.3
 
 parameters:
   alerts-slack-channel:
@@ -12,6 +13,29 @@ parameters:
   node-version:
     type: string
     default: 14.17-browsers
+  mssql_tag:
+    default: "2019-CU11-ubuntu-20.04"
+    type: string
+  sa_password:
+    default: "yourStrong(!)Password"
+    type: string
+
+executors:
+  docker-env:
+    docker:
+      - image: cimg/node:<< pipeline.parameters.node-version >>
+      - image: mcr.microsoft.com/mssql/server:<< pipeline.parameters.mssql_tag >>
+        environment:
+          - SA_PASSWORD=<< pipeline.parameters.sa_password >>
+          - ACCEPT_EULA=y
+          - DOCKER_HOST=unix:///var/run/docker.sock
+          - TMPDIR=/private
+      - image: quay.io/hmpps/hmpps-workload:latest
+        environment:
+          - DATABASE_USERNAME=sa
+          - DATABASE_PASSWORD=<< pipeline.parameters.sa_password >>
+        entrypoint: ["/bin/sh", "-c" , "sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar"]
+    working_directory: ~/app
 
 jobs:
   build:
@@ -50,6 +74,7 @@ jobs:
             - build-info.json
             - build
             - dist
+            - app/public
 
   check_outdated:
     executor:
@@ -92,6 +117,69 @@ jobs:
           path: test_results
       - store_artifacts:
           path: test_results/unit-test-reports.html
+  integration_test:
+    executor: docker-env
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - attach_workspace:
+          at: ~/app
+      - run:
+          name: Wait for db to initialise
+          command: sleep 20
+      - run:
+         name: Run integration tests
+         command: npm run integration-test
+      
+      - store_test_results:
+          path: test_results
+      - store_artifacts:
+          path: test_results/integration-test-reports.html
+  accessibility_test:
+    executor: docker-env
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - attach_workspace:
+          at: ~/app
+      - run:
+          name: Wait for db to initialise
+          command: sleep 20
+      - run:
+          name: Run the node app
+          command: npm run start
+          background: true
+      - run:
+          name: Wait for node app to start
+          command: sleep 10
+      - run:
+          name: run accessibility tests
+          command: npm run accessibility-test-ci
+  e2e_test:
+    executor: docker-env
+    steps:
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - attach_workspace:
+          at: ~/app
+      - run:
+          name: Wait for db to initialise
+          command: sleep 20
+      - run:
+          name: Run the node app
+          command: npm run start
+          background: true
+      - run:
+          name: Wait for node app to start
+          command: sleep 10
+      - run:
+          name: run end to end tests
+          command: npm run test-e2e
 
 workflows:
   version: 2
@@ -103,6 +191,18 @@ workflows:
             tags:
               ignore: /.*/
       - unit_test:
+          context: hmpps-common-vars
+          requires:
+            - build
+      - integration_test:
+          context: hmpps-common-vars
+          requires:
+            - build
+      - accessibility_test:
+          context: hmpps-common-vars
+          requires:
+            - build
+      - e2e_test:
           context: hmpps-common-vars
           requires:
             - build

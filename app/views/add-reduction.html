@@ -206,7 +206,7 @@
             <thead>
                 <tr>
                     <th id="type">Reason</th>
-                    <th id="hours">Hours</th>
+                    <th id="reduction_reason_hours">Hours</th>
                     <th id="comments">Comments</th>
                     <th id="start_date">Start Date</th>
                     <th id="end_date">End Date</th>
@@ -219,7 +219,7 @@
                 {% for reduction in reductionsHistory %}
                 <tr>
                     <td headers="type">{{ reduction.reasonShortName }}</td>
-                    <td headers="hours">{{ reduction.hours }}</td>
+                    <td headers="reduction_reason_hours">{{ reduction.hours }}</td>
                     <td headers="comments">{{ reduction.notes }}</td>
                     <td headers="start_date">{{ reduction.reductionStartDate }}</td>
                     <td headers="end_date">{{ reduction.reductionEndDate }}</td>     

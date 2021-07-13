@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const authenticationHelper = require('../helpers/routes/authentication-helper')
+// const authenticationHelper = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 
 let adminURL
@@ -8,7 +8,7 @@ const ids = []
 
 describe('View admin role', () => {
   before(async function () {
-    await authenticationHelper.login(authenticationHelper.users.DataAdmin)
+    // await authenticationHelper.login(authenticationHelper.users.DataAdmin)
     adminURL = '/admin'
     await browser.url(adminURL)
   })
@@ -183,6 +183,6 @@ describe('View admin role', () => {
 
   after(async function () {
     await dataHelper.deleteRecordsFromTableForIds('reduction_reason', ids)
-    authenticationHelper.logout()
+    // authenticationHelper.logout()
   })
 })

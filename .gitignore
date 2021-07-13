@@ -22,3 +22,6 @@ app/assets/javascripts/vendor
 /.idea/
 
 *.iml
+
+pallyCourtInserts.json
+pallyWorkloadInserts.json

@@ -100,8 +100,10 @@ module.exports = function (router) {
     }
     let adjustmentsFromInput, updatedWorkloadPoints
     try {
-      if (req.user) {
+      if (req.user && req.user.userId) {
         req.body.userId = req.user.userId.toString()
+      } else {
+        req.body.userId = '0'
       }
       adjustmentsFromInput = filterAdjustments('adjustment', req)
       updatedWorkloadPoints = new WorkloadPoints(req.body, adjustmentsFromInput)
