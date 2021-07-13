@@ -10,10 +10,11 @@ module.exports = function () {
   try {
     const courtReportInserts = JSON.parse(readFileSync(pallyCourtInserts, 'utf8'))
     const workloadInserts = JSON.parse(readFileSync(pallyWorkloadInserts, 'utf8'))
-
-    return aggregatedDataHelper.removeInsertedData(workloadInserts).then(function () {
-      return courtReportsDataHelper.removeInsertedData(courtReportInserts).then(function () {
-        console.log('all data cleaned up')
+    return aggregatedDataHelper.deleteAllTasks().then(function() {
+      return aggregatedDataHelper.removeInsertedData(workloadInserts).then(function () {
+        return courtReportsDataHelper.removeInsertedData(courtReportInserts).then(function () {
+          console.log('all data cleaned up')
+        })
       })
     })
   } catch (err) {
