@@ -24,7 +24,7 @@ generic-service:
   # Environment variables to load into the deployment
   env:
     NODE_ENV: "production"
-    WMT_DB_NAME: "hmpps_workload"
+    PGSSLMODE: "no-verify"
     WMT_DB_ARCHIVE_NAME: "hmpps_workload_archive"
 #    WMT_WEB_AUTHENTICATION_ENABLED: "true"
 
