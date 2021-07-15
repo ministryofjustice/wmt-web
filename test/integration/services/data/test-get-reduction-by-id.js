@@ -33,7 +33,7 @@ describe('/services/data/get-reduction-by-id', function () {
                 testReduction.reasonForReductionId = id
                 return insertReduction(workloadOwnerId, testReduction)
                   .then(function (reductionId) {
-                    addedReductionId = reductionId
+                    addedReductionId = reductionId[0]
                   })
               })
           })

@@ -36,10 +36,10 @@ module.exports = function (id, fromDate, toDate, type) {
 
   return archiveQuery
     .then(function (archiveDBResults) {
-      workloadReportResults = archiveDBResults.rows
+      workloadReportResults = archiveDBResults
       return query
         .then(function (currentDBResults) {
-          workloadReportResults = workloadReportResults.concat(currentDBResults.rows)
+          workloadReportResults = workloadReportResults.concat(currentDBResults)
           return workloadReportResults
         })
     })

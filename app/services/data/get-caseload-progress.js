@@ -20,7 +20,7 @@ module.exports = function (id, type) {
     type === ORGANISATION_UNIT.TEAM.name)
 
   if (isIndexed) {
-    selectList.push('CONCAT(forename, \' \', surname) AS name')
+    selectList.push(knex.raw('CONCAT(forename, \' \', surname) AS name'))
   } else {
     selectList.push('name')
   }

@@ -12,8 +12,8 @@ describe('/services/data/insert-reduction-reason', function () {
     const testReductionReason = new ReductionReason('Test Reduction Reason', 'TRR1', '1', '', '', '', 'true')
     return insertReductionReason(testReductionReason)
       .then(function (id) {
-        ids.push(id)
-        return getReductionReasonById(id)
+        ids.push(id[0])
+        return getReductionReasonById(id[0])
           .then(function (reductionReason) {
             expect(reductionReason.category).to.equal('Personal Circumstances')
             expect(reductionReason.reason).to.equal('Test Reduction Reason')
@@ -30,8 +30,8 @@ describe('/services/data/insert-reduction-reason', function () {
     const testReductionReason = new ReductionReason('Test Reduction Reason', 'TRR1', '1', '20', '20', '6', 'true')
     return insertReductionReason(testReductionReason)
       .then(function (id) {
-        ids.push(id)
-        return getReductionReasonById(id)
+        ids.push(id[0])
+        return getReductionReasonById(id[0])
           .then(function (reductionReason) {
             expect(reductionReason.category).to.equal('Personal Circumstances')
             expect(reductionReason.reason).to.equal('Test Reduction Reason')

@@ -23,7 +23,7 @@ module.exports = function (id, type) {
     selectList.push('name')
     selectList.push('grade_code AS grade')
   } else if (ORGANISATION_UNIT.TEAM.name === type) {
-    selectList.push('surname AS name')
+    selectList.push(knex.raw('CONCAT(forename, \' \', surname) AS name'))
     selectList.push('grade_code AS grade')
   } else {
     selectList.push('name')

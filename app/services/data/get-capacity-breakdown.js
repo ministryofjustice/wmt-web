@@ -27,7 +27,7 @@ module.exports = function (id, type) {
   const requiresWorkloadOwnerName = (type === ORGANISATION_UNIT.TEAM.name)
 
   if (requiresWorkloadOwnerName) {
-    selectList.push('CONCAT(forename, \' \', surname) AS name')
+    selectList.push(knex.raw('CONCAT(forename, \' \', surname) AS name'))
   } else {
     selectList.push('name')
   }
