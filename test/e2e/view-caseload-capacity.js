@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const authenticationHelper = require('../helpers/routes/authentication-helper')
+// const authenticationHelper = require('../helpers/routes/authentication-helper')
 const workloadCapacityHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 
@@ -13,7 +13,7 @@ let pageSubtitle
 
 describe('View your caseload capacity flow', () => {
   before(async function () {
-    await authenticationHelper.login(authenticationHelper.users.Staff)
+    // await authenticationHelper.login(authenticationHelper.users.Staff)
     const results = await workloadCapacityHelper.selectIdsForWorkloadOwner()
     workloadOwnerIds = results
     workloadOwnerDefaultUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + workloadOwnerIds.filter((item) => item.table === 'workload_owner')[0].id
@@ -204,7 +204,7 @@ describe('View your caseload capacity flow', () => {
     }
   })
 
-  after(function () {
-    authenticationHelper.logout()
-  })
+  // after(function () {
+  //   authenticationHelper.logout()
+  // })
 })

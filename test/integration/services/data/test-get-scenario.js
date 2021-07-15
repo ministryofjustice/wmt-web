@@ -1,47 +1,61 @@
 const expect = require('chai').expect
-
+const aggregatedDataHelper = require('../../../helpers/data/aggregated-data-helper')
 const getScenario = require('../../../../app/services/data/get-scenario')
 const getTeam = require('../../../../app/services/data/get-team-by-name')
 const getLDU = require('../../../../app/services/data/get-ldu-by-name')
 const getRegion = require('../../../../app/services/data/get-region-by-name')
 
-let scenarioData
-
+let inserts
 describe('services/data/get-scenario team', function () {
   before(function () {
-    return getTeam('Team 1').then(function (id) {
+    return aggregatedDataHelper.addWorkloadCapacitiesForOffenderManager().then(function (result) {
+      inserts = result
+    })
+  })
+  it('should retrieve all 51 raw scenario records for HMPPS > Region 1 > Probation Delivery Unit 1 > Team 1', function () {
+    return getTeam('Test Team').then(function (id) {
       return getScenario(id, 'team').then(function (results) {
-        scenarioData = results
+        expect(results.length).to.eql(51)
       })
     })
   })
-  it('should retrieve all 255 raw scenario records for HMPPS > Region 1 > Probation Delivery Unit 1 > Team 1', function () {
-    expect(scenarioData.length).to.eql(255)
+  after(function () {
+    return aggregatedDataHelper.removeInsertedData(inserts)
   })
 })
 
 describe('services/data/get-scenario ldu', function () {
   before(function () {
-    return getLDU('LDU Cluster 1').then(function (id) {
+    return aggregatedDataHelper.addWorkloadCapacitiesForOffenderManager().then(function (result) {
+      inserts = result
+    })
+  })
+  it('should retrieve all 51 raw scenario records for HMPPS > Region 1 > Probation Delivery Unit 1', function () {
+    return getLDU('Test LDU').then(function (id) {
       return getScenario(id, 'ldu').then(function (results) {
-        scenarioData = results
+        expect(results.length).to.eql(51)
       })
     })
   })
-  it('should retrieve all 510 raw scenario records for HMPPS > Region 1 > Probation Delivery Unit 1', function () {
-    expect(scenarioData.length).to.eql(510)
+  after(function () {
+    return aggregatedDataHelper.removeInsertedData(inserts)
   })
 })
 
 describe('services/data/get-scenario division', function () {
   before(function () {
-    return getRegion('NPS Region 1').then(function (id) {
-      return getScenario(id, 'region').then(function (results) {
-        scenarioData = results
-      })
+    return aggregatedDataHelper.addWorkloadCapacitiesForOffenderManager().then(function (result) {
+      inserts = result
     })
   })
   it('should retrieve all 510 raw scenario records for HMPPS > Region 1', function () {
-    expect(scenarioData.length).to.eql(510)
+    return getRegion('Test Region').then(function (id) {
+      return getScenario(id, 'region').then(function (results) {
+        expect(results.length).to.eql(51)
+      })
+    })
+  })
+  after(function () {
+    return aggregatedDataHelper.removeInsertedData(inserts)
   })
 })

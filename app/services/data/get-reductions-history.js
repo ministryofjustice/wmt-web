@@ -20,7 +20,7 @@ module.exports = function (reductionId) {
     .columns(columns.concat(['reductions_history.reduction_id AS reductionId']))
     .unionAll(function () {
       this.columns(columns.concat(['reductions.id AS reductionId']))
-        .from('reductions').leftJoin('users', 'reductions.user_id', 'users.id')
+        .from('reductions').withSchema('app').leftJoin('users', 'reductions.user_id', 'users.id')
         .join('reduction_reason', 'reductions.reduction_reason_id', 'reduction_reason.id')
         .whereIn('reductions.id', [reductionId])
     })
