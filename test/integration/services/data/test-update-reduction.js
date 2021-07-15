@@ -33,7 +33,7 @@ describe('/services/data/update-reduction', function () {
                 testReduction.reasonForReductionId = id
                 return insertReduction(workloadOwnerId, testReduction)
                   .then(function (reductionId) {
-                    addedReductionId = reductionId
+                    addedReductionId = reductionId[0]
                   })
               })
           })
@@ -49,7 +49,7 @@ describe('/services/data/update-reduction', function () {
         // Store the id so that we can delete it after the test is complete
         reductionResult.id = result
         expect(result[0]).to.be.a('number')
-        expect(result).to.eql(addedReductionId)
+        expect(result[0]).to.eql(addedReductionId)
       })
   })
 

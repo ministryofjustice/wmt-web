@@ -1,7 +1,7 @@
 const knex = require('../../../knex').web
 
 module.exports = function (id, type) {
-  const table = 'app.t2a_detail_export_view'
+  const table = 't2a_detail_export_view'
   const selectList = [
     'regionName',
     'regionId',
@@ -19,16 +19,15 @@ module.exports = function (id, type) {
     'NSI_Outcome_Desc'
   ]
 
-  let whereString
+  let query = knex(table)
+    .withSchema('app')
+    .select(selectList)
 
   if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
-    whereString = ' WHERE ' + type + 'id = ' + id
+    query = query.where(`${type}id`, id)
   }
 
-  return knex.schema.raw('SELECT ' + selectList.join(', ') +
-        ' FROM ' + table +
-        whereString)
-    .then(function (results) {
-      return results
-    })
+  return query.then(function (results) {
+    return results
+  })
 }

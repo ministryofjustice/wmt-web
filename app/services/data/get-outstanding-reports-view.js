@@ -4,7 +4,7 @@ const ORGANISATION_UNIT = require('../../constants/organisation-unit')
 
 module.exports = function (id, type) {
   const orgUnit = orgUnitFinder('name', type)
-  const table = 'app.' + orgUnit.outstandingReportsView
+  const table = orgUnit.outstandingReportsView
 
   const selectList = [
     'link_id AS linkId',
@@ -22,23 +22,19 @@ module.exports = function (id, type) {
   const requiresWorkloadOwnerName = (type === ORGANISATION_UNIT.TEAM.name)
 
   if (requiresWorkloadOwnerName) {
-    selectList.push('CONCAT(forename, \' \', surname) AS name')
+    selectList.push(knex.raw('CONCAT(forename, \' \', surname) AS name'))
   } else {
     selectList.push('name')
   }
 
-  let whereString = ''
+  let query = knex(table)
+    .withSchema('app')
+    .select(selectList)
 
   if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
-    whereString = ' WHERE id = ' + id
+    query = query.where('id', id)
   }
-
-  const noExpandHint = ' '
-
-  return knex.schema.raw('SELECT ' + selectList.join(', ') +
-        ' FROM ' + table +
-        noExpandHint +
-        whereString)
+  return query
     .then(function (results) {
       return results
     })

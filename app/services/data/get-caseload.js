@@ -4,7 +4,7 @@ const ORGANISATION_UNIT = require('../../constants/organisation-unit')
 
 module.exports = function (id, type) {
   const orgUnit = orgUnitFinder('name', type)
-  const table = 'app.' + orgUnit.caseloadView
+  const table = orgUnit.caseloadView
 
   // WMT0160: add new tiers to selectList
   const selectList = [
@@ -33,26 +33,23 @@ module.exports = function (id, type) {
 
   const requiresWorkloadOwnerName = (type === ORGANISATION_UNIT.TEAM.name)
 
-  let whereString = ''
-
   if (requiresWorkloadOwnerName) {
-    selectList.push('CONCAT(forename, \' \', surname) AS name')
+    selectList.push(knex.raw('CONCAT(forename, \' \', surname) AS name'))
   } else {
     selectList.push('name')
   }
+
+  let query = knex(table)
+    .withSchema('app')
+    .select(selectList)
 
   const displayAllRecords = (type === ORGANISATION_UNIT.NATIONAL.name)
 
   if (!displayAllRecords) {
     if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
-      whereString += ' WHERE id = ' + id
+      query = query.where('id', id)
     }
   }
 
-  const noExpandHint = ' '
-
-  return knex.schema.raw('SELECT ' + selectList.join(', ') +
-      ' FROM ' + table +
-      noExpandHint +
-      whereString)
+  return query
 }

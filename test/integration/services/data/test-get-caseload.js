@@ -42,9 +42,9 @@ describe('services/data/get-caseload', function () {
     return getCaseload(inserts.filter((item) => item.table === 'team')[1].id, 'team')
       .then(function (results) {
         expect(results.length).to.eql(3)
-        expect(results[0].caseType).to.eql('COMMUNITY')
-        expect(results[1].caseType).to.eql('CUSTODY')
-        expect(results[2].caseType).to.eql('LICENSE')
+        expect(results.map(e => (e.caseType))).to.include('COMMUNITY')
+        expect(results.map(e => (e.caseType))).to.include('LICENSE')
+        expect(results.map(e => (e.caseType))).to.include('CUSTODY')
       })
   })
 

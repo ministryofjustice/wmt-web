@@ -21,7 +21,7 @@ module.exports.createFortnightlyArchive = function (archivefortnightlyData) {
 
   return knex('fortnightly_archive_data').withSchema('dbo').returning('id').insert(insert)
     .then(function (ids) {
-      return ids
+      return ids[0]
     })
 }
 

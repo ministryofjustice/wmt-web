@@ -34,8 +34,8 @@ describe('/services/data/update-reduction-status', function () {
                 testReduction.reasonForReductionId = id
                 return insertReduction(workloadOwnerId, testReduction)
                   .then(function (reductionId) {
-                    addedReductionId = reductionId
-                    reductionResult.id = addedReductionId[0]
+                    addedReductionId = reductionId[0]
+                    reductionResult.id = addedReductionId
                   })
               })
           })
@@ -46,14 +46,14 @@ describe('/services/data/update-reduction-status', function () {
     return updateReductionStatus(addedReductionId, reductionStatusType.ARCHIVED)
       .then(function (result) {
         expect(result[0]).to.be.a('number')
-        expect(result).to.eql(addedReductionId)
+        expect(result[0]).to.eql(addedReductionId)
       })
   })
 
   it('should get the updated reduction status', function () {
     return getReductionById(addedReductionId)
       .then(function (result) {
-        expect(result.id).to.eql(addedReductionId[0])
+        expect(result.id).to.eql(addedReductionId)
         expect(result.status).to.be.equal(reductionStatusType.ARCHIVED)
       })
   })

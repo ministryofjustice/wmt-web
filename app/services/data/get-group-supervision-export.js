@@ -1,7 +1,7 @@
 const knex = require('../../../knex').web
 
 module.exports = function (id, type) {
-  const table = 'app.gs_export_view'
+  const table = 'gs_export_view'
   const selectList = [
     'regionName',
     'lduName',
@@ -16,16 +16,15 @@ module.exports = function (id, type) {
     'points'
   ]
 
-  let whereString
+  const query = knex(table)
+    .withSchema('app')
+    .select(selectList)
 
   if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
-    whereString = ' WHERE ' + type + 'id = ' + id
+    query.where(`${type}id`, id)
   }
 
-  return knex.schema.raw('SELECT ' + selectList.join(', ') +
-        ' FROM ' + table +
-        whereString)
-    .then(function (results) {
-      return results
-    })
+  return query.then(function (results) {
+    return results
+  })
 }

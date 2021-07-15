@@ -1,7 +1,7 @@
 const knex = require('../../../knex').web
 
 module.exports = function (id, type) {
-  const table = 'app.contact_cms_export_view AS contactCMS'
+  const table = 'contact_cms_export_view AS contactCMS'
   const selectList = [
     'contactRegionName',
     'contactLduName',
@@ -26,34 +26,32 @@ module.exports = function (id, type) {
     'omCMS.contactCode AS omContactCode'
   ]
 
-  const table2 = 'app.om_cms_export_view AS omCMS'
+  const table2 = 'om_cms_export_view AS omCMS'
 
-  let whereString
+  let query = knex(table)
+    .withSchema('app')
+    .select(selectList)
+    .fullOuterJoin(table2, 'contactCMS.contactId', 'omCMS.contactId')
 
   if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
-    whereString = ' WHERE ' + 'om' + type + 'id = ' + id +
-          ' OR ' + 'contact' + type + 'id = ' + id
+    query = query.where(`om${type}`, id).orWhere(`contact${type}`, id)
   }
 
-  return knex.schema.raw('SELECT ' + selectList.join(', ') +
-      ' FROM ' + table +
-      ' FULL OUTER JOIN ' + table2 + ' ON contactCMS.contactId = omCMS.contactId' +
-        whereString)
-    .then(function (results) {
-      results.forEach(function (result) {
-        if (!result.caseRefNo) {
-          result.caseRefNo = result.omCaseRefNo
-        }
-        if (!result.contactDescription) {
-          result.contactDescription = result.omContactDescription
-        }
-        if (!result.contactCode) {
-          result.contactCode = result.omContactCode
-        }
-        if (!result.contactDate) {
-          result.contactDate = result.omContactDate
-        }
-      })
-      return results
+  return query.then(function (results) {
+    results.forEach(function (result) {
+      if (!result.caseRefNo) {
+        result.caseRefNo = result.omCaseRefNo
+      }
+      if (!result.contactDescription) {
+        result.contactDescription = result.omContactDescription
+      }
+      if (!result.contactCode) {
+        result.contactCode = result.omContactCode
+      }
+      if (!result.contactDate) {
+        result.contactDate = result.omContactDate
+      }
     })
+    return results
+  })
 }
