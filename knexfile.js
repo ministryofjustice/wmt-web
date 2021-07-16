@@ -25,9 +25,7 @@ module.exports = {
   },
   archive: {
     client: 'pg',
-    connection: Object.assign({}, defaultConnection, {
-      database: config.ARCHIVE_DATABASE
-    }),
+    connection: defaultConnection,
     debug: false,
     pool: {
       min: 0,
