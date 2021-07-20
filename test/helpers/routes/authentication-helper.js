@@ -1,10 +1,10 @@
 const config = require('../../../config')
 
 const USERS = {
-  DataAdmin: 'AUTH_RO_USER_TEST3',
-  SystemAdmin: 'AUTH_RO_USER_TEST2',
-  Manager: 'AUTH_RO_USER_TEST',
-  Staff: 'AUTH_USER'
+  DataAdmin: {username: 'AUTH_RO_USER_TEST3', roleId:3},
+  SystemAdmin: {username: 'AUTH_RO_USER_TEST2', roleId:2},
+  Manager: {username: 'AUTH_RO_USER_TEST', roleId:1},
+  Staff: {username: 'AUTH_USER'}
 }
 
 const login = async function (username) {

@@ -53,6 +53,23 @@ module.exports.addRoles = function () {
     })
 }
 
+module.exports.addUserAndRole = function(testUser, role) {
+  const inserts = []
+
+  return knex('users').withSchema('app').returning(['id', 'username', 'name']).insert({ username: testUser, name: testUser })
+  .then(function (result) {
+    result.forEach((user) => {
+      inserts.push({ table: 'users', id: user.id, username: user.username, name: user.name })
+    })
+   if(!role) {
+     return inserts
+   }
+   return addUserRoleData(user.id, role).then(function(insertedRole){
+    return inserts.concat(insertedRole)
+   } )
+  })
+}
+
 module.exports.getAnyExistingUsernameWithExistingRole = function () {
   return knex('users')
     .withSchema('app')
