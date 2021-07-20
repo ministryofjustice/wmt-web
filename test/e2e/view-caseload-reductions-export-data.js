@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-// const authenticationHelper = require('../helpers/routes/authentication-helper')
+const authenticationHelper = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 
@@ -13,7 +13,7 @@ let regionDefaultUrl
 
 describe('View reductions export for a Data Admin', function () {
   before(async function () {
-    // await authenticationHelper.login(authenticationHelper.users.DataAdmin)
+    await authenticationHelper.login(authenticationHelper.users.DataAdmin)
     const results = await dataHelper.selectIdsForWorkloadOwner()
     workloadOwnerIds = results
     workloadOwnerId = workloadOwnerIds.filter((item) => item.table === 'workload_owner')[0].id
@@ -64,7 +64,7 @@ describe('View reductions export for a Data Admin', function () {
     }
   })
 
-  // after(function () {
-  //   authenticationHelper.logout()
-  // })
+after(function () {
+   authenticationHelper.logout()
+})
 })

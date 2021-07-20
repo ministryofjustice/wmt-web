@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-// const authenticationHerlp = require('../helpers/routes/authentication-helper')
+const authenticationHelp = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 
@@ -15,7 +15,7 @@ let national, region, ldu, team
 
 describe('View your caseload flow', () => {
   before(async function () {
-    // await authenticationHerlp.login(authenticationHerlp.users.Staff)
+   await authenticationHelp.login(authenticationHelp.users.Staff)
     results = await dataHelper.selectIdsForWorkloadOwner()
     workloadOwnerIds = results
     teamDefaultUrl = '/' + workloadTypes.PROBATION + '/team/' + workloadOwnerIds.filter((item) => item.table === 'team')[0].id
@@ -268,7 +268,7 @@ describe('View your caseload flow', () => {
     })
   })
 
-  // after(function () {
-  //   authenticationHerlp.logout()
-  // })
+ after(function () {
+   authenticationHelp.logout()
+ })
 })

@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-// const authenticationHelper = require('../helpers/routes/authentication-helper')
+const authenticationHelper = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/court-reports-aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 let offenderManagerId
@@ -7,7 +7,7 @@ let offenderManagerUrl
 
 describe('View reductions page for court-reporter', () => {
   before(async function () {
-    // await authenticationHelper.login(authenticationHelper.users.Manager)
+    await authenticationHelper.login(authenticationHelper.users.Manager)
     const results = await dataHelper.getAnyExistingCourtReporterId()
     offenderManagerId = results
     offenderManagerUrl = '/' + workloadTypes.COURT_REPORTS + '/offender-manager/' + offenderManagerId + '/reductions'
@@ -119,7 +119,7 @@ describe('View reductions page for court-reporter', () => {
     // })
   })
 
-  // after(function () {
-  //   authenticationHelper.logout()
-  // })
+after(function () {
+   authenticationHelper.logout()
+})
 })

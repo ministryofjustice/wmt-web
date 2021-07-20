@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-// const authenticationHelper = require('../helpers/routes/authentication-helper')
+const authenticationHelper = require('../helpers/routes/authentication-helper')
 const getWorloadPoints = require('../../app/services/data/get-workload-points')
 
 const workloadPointsUrl = '/admin/workload-points'
@@ -12,7 +12,7 @@ let editButton, saveButton, saveNotice, successMessage
 describe('View / edit Workload Points', () => {
   before(async function () {
     workloadPoints = await getWorloadPoints(false)
-    // await authenticationHelper.login(authenticationHelper.users.DataAdmin)
+    await authenticationHelper.login(authenticationHelper.users.DataAdmin)
     await browser.url(workloadPointsUrl)
   })
 
@@ -269,7 +269,7 @@ describe('View / edit Workload Points', () => {
     })
   })
 
-  // after(function () {
-  //   authenticationHelper.logout()
-  // })
+after(function () {
+   authenticationHelper.logout()
+})
 })

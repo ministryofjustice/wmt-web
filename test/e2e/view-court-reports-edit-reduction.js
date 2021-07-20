@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-// const authenticationHelper = require('../helpers/routes/authentication-helper')
+const authenticationHelper = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/court-reports-aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 const moment = require('moment')
@@ -11,7 +11,7 @@ let reductionTypeField, hoursField, startDayField, startMonthField, startYearFie
 
 describe('View editing a new reduction for court-reporters', () => {
   before(async function () {
-    // await authenticationHelper.login(authenticationHelper.users.Manager)
+    await authenticationHelper.login(authenticationHelper.users.Manager)
     const results = await dataHelper.getAnyExistingCourtReporterId()
     offenderManagerId = results
     offenderManagerUrl = '/' + workloadTypes.COURT_REPORTS + '/offender-manager/' + offenderManagerId + '/add-reduction'
@@ -142,7 +142,8 @@ describe('View editing a new reduction for court-reporters', () => {
     })
   })
 
-  after(function () {
+  after(async function () {
+    await authenticationHelp.logout()
     return dataHelper.deleteLastRecordFromTables(['reductions_history', 'reductions'])
   })
 })

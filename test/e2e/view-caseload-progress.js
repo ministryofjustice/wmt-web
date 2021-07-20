@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-// const authenticationHerlp = require('../helpers/routes/authentication-helper')
+const authenticationHelp = require('../helpers/routes/authentication-helper')
 const caseProgressDataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 
@@ -12,7 +12,7 @@ let nationalDefaultUrl
 
 describe('View caseload progress flow', () => {
   before(async function () {
-    // await authenticationHerlp.login(authenticationHerlp.users.Staff)
+   await authenticationHelp.login(authenticationHelp.users.Staff)
     const results = await caseProgressDataHelper.selectIdsForWorkloadOwner()
     workloadOwnerIds = results
     workloadOwnerDefaultUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + workloadOwnerIds.filter((item) => item.table === 'workload_owner')[0].id
@@ -280,7 +280,7 @@ describe('View caseload progress flow', () => {
     expect(exists).to.be.equal(true)
   })
 
-  // after(function () {
-  //   authenticationHerlp.logout()
-  // })
+ after(function () {
+   authenticationHelp.logout()
+ })
 })
