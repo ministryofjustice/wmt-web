@@ -41,6 +41,9 @@ function authenticationMiddleware () {
     if (req.isAuthenticated() && (await verifyToken(req))) {
       return next()
     }
+    if(req.url === '/refresh') {
+      return next()
+    }
     req.session.returnTo = req.originalUrl
     return res.redirect('/login')
   }

@@ -3,7 +3,7 @@ const authenticationHelp = require('../helpers/routes/authentication-helper')
 const config = require('../../config')
 
 let adminUserURL
-const username = 'John.Doe@' + config.ACTIVE_DIRECTORY_DOMAIN
+const username = 'John.Doe@email.com'
 
 describe('View adding a new user role', () => {
   before(async function () {

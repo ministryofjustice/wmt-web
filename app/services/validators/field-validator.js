@@ -62,8 +62,7 @@ class FieldValidator {
   }
 
   isValidUsername (username) {
-    if (!username || !validator.isEmail(username) ||
-      !username.endsWith('@' + config.ACTIVE_DIRECTORY_DOMAIN)) {
+    if (!username || !validator.isEmail(username)) {
       this.errors.add(this.fieldName, ERROR_MESSAGES.getIsValidUsernameMessage)
     }
     return this

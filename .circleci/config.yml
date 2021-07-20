@@ -27,6 +27,14 @@ executors:
   docker-env:
     docker:
       - image: cimg/node:<< pipeline.parameters.node-version >>
+      - image: bitnami/redis:5.0
+        environment:
+          - ALLOW_EMPTY_PASSWORD=yes
+      - image: quay.io/hmpps/hmpps-auth:latest
+        environment:
+          - SPRING_PROFILES_ACTIVE=dev
+          - DELIUS_ENABLED=false
+          - SERVER_PORT=9090
       - image: postgres:<< pipeline.parameters.postgres_tag >>
         environment:
           - POSTGRES_PASSWORD=<< pipeline.parameters.database_password >>
