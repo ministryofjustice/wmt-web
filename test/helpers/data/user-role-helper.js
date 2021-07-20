@@ -60,14 +60,12 @@ module.exports.addUserAndRole = function (testUser, role) {
 
   return knex('users').withSchema('app').returning(['id', 'username', 'name']).insert({ username: testUser, name: testUser })
     .then(function (result) {
-      return result.forEach((user) => {
-        inserts.push({ table: 'users', id: user.id, username: user.username, name: user.name })
-        if (!role) {
-          return inserts
-        }
-        return addUserRoleData(user.id, role).then(function (insertedRole) {
-          return inserts.concat(insertedRole)
-        })
+      inserts.push({ table: 'users', id: result[0].id, username: result[0].username, name: result[0].name })
+      if (!role) {
+        return inserts
+      }
+      return addUserRoleData(result[0].id, role).then(function (insertedRole) {
+        return inserts.concat(insertedRole)
       })
     })
 }

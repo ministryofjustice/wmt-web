@@ -12,10 +12,11 @@ module.exports = function () {
   try {
     const courtReportInserts = JSON.parse(readFileSync(pallyCourtInserts, 'utf8'))
     const workloadInserts = JSON.parse(readFileSync(pallyWorkloadInserts, 'utf8'))
+    const userInserts = JSON.parse(readFileSync(pallyUserInserts, 'utf8'))
     return aggregatedDataHelper.deleteAllTasks().then(function () {
       return aggregatedDataHelper.removeInsertedData(workloadInserts).then(function () {
         return courtReportsDataHelper.removeInsertedData(courtReportInserts).then(function () {
-          return userRoleHelper.removeInsertedData(pallyUserInserts).then(function () {
+          return userRoleHelper.removeInsertedData(userInserts).then(function () {
             console.log('all data cleaned up')
           })
         })

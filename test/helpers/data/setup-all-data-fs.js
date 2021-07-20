@@ -20,7 +20,7 @@ module.exports = function () {
           try {
             fs.writeFileSync(pallyCourtInserts, JSON.stringify(courtReportInserts))
             fs.writeFileSync(pallyWorkloadInserts, JSON.stringify(workloadInserts))
-            fs.writeFileSync(pallyUserInserts, JSON.stringify(userInserts))
+            fs.writeFileSync(pallyUserInserts, JSON.stringify(userInserts.reduce((acc, x) => acc.concat(x), [])))
           } catch (err) {
             console.error(err)
           }

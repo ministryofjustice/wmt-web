@@ -1,6 +1,5 @@
 const expect = require('chai').expect
 const authenticationHelp = require('../helpers/routes/authentication-helper')
-const config = require('../../config')
 
 let adminUserURL
 const username = 'John.Doe@email.com'

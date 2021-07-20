@@ -1,7 +1,6 @@
 const validator = require('validator')
 const _ = require('lodash')
 const ERROR_MESSAGES = require('./validation-error-messages')
-const config = require('../../../config')
 
 class FieldValidator {
   /**
