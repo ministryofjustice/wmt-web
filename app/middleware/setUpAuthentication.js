@@ -34,9 +34,6 @@ module.exports = function () {
   router.use('/logout', function (req, res) {
     if (req.user) {
       req.logout()
-      req.session.destroy(function () {
-        res.redirect(authLogoutUrl)
-      })
     }
     res.redirect(authLogoutUrl)
   })
