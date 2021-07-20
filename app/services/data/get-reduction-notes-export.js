@@ -3,13 +3,7 @@ const orgUnitFinder = require('../helpers/org-unit-finder')
 
 module.exports = function (id, type) {
   const orgUnit = orgUnitFinder('name', type)
-  const table = 'app.reductions_notes_export_view'
-  let whereClause = ''
-
-  if (id !== undefined) {
-    whereClause = ' WHERE ' + orgUnit.name + '_id = ' + id
-  }
-
+  const table = 'reductions_notes_export_view'
   const selectColumns = [
     'region_name AS regionName',
     'ldu_name AS lduName',
@@ -25,8 +19,11 @@ module.exports = function (id, type) {
     'grade_code AS gradeCode'
   ]
 
-  return knex.raw(
-    'SELECT ' + selectColumns.join(', ') +
-        ' FROM ' + table +
-        whereClause)
+  let query = knex(table).withSchema('app').select(selectColumns)
+
+  if (id !== undefined) {
+    query = query.where(`${orgUnit.name}_id`, id)
+  }
+
+  return query
 }

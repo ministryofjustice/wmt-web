@@ -4,12 +4,13 @@ const orgUnitConstants = require('../../constants/organisation-unit')
 
 module.exports = function (id, type, workloadType) {
   const orgUnit = orgUnitFinder('name', type)
-  const table = 'app.individual_case_overview'
-  let whereClause = ''
-  let orderBy = 'lduCluster, teamName'
+  const table = 'individual_case_overview'
+  const orderBy = ['lduCluster', 'teamName']
+
+  let query = knex(table).withSchema('app')
 
   if (id !== undefined) {
-    whereClause = 'WHERE ' + orgUnit.name + '_id = ' + id
+    query = query.where(`${orgUnit.name}_id`, id)
   }
 
   const selectColumns = [
@@ -27,14 +28,8 @@ module.exports = function (id, type, workloadType) {
 
   if (orgUnit.name === orgUnitConstants.REGION.name || orgUnit.name === orgUnitConstants.NATIONAL.name) {
     selectColumns.unshift('region_name AS regionName')
-    orderBy = 'regionName,' + orderBy
+    orderBy.unshift('regionName')
   }
 
-  return knex.raw(
-    'SELECT ' + selectColumns.join(', ') +
-        ' FROM ' + table + ' ' +
-        whereClause + ' ORDER BY ' + orderBy)
-    .then(function (results) {
-      return results
-    })
+  return query.select(selectColumns).orderBy(orderBy)
 }

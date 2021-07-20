@@ -234,7 +234,8 @@ const addCrWorkload = function (inserts) {
   const numberOfOffenderManagers = inserts.filter((item) => item.table === 'offender_manager').length
   const workloadOwner = {
     team_id: inserts.filter((item) => item.table === 'team')[0].id,
-    offender_manager_id: inserts.filter((item) => item.table === 'offender_manager')[numberOfOffenderManagers - 1].id
+    offender_manager_id: inserts.filter((item) => item.table === 'offender_manager')[numberOfOffenderManagers - 1].id,
+    contracted_hours: 37.5
   }
 
   return knex('workload_owner').withSchema('app').returning('id').insert(workloadOwner)

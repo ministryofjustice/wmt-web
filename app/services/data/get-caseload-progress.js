@@ -4,12 +4,7 @@ const ORGANISATION_UNIT = require('../../constants/organisation-unit')
 
 module.exports = function (id, type) {
   const orgUnit = orgUnitFinder('name', type)
-  const table = 'app.' + orgUnit.caseProgressView
-  let whereString = ''
-
-  if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
-    whereString = ' WHERE id = ' + id
-  }
+  const table = orgUnit.caseProgressView
 
   const selectList = [
     'community_last_16_weeks AS communityLast16Weeks',
@@ -24,17 +19,19 @@ module.exports = function (id, type) {
     (type === ORGANISATION_UNIT.OFFENDER_MANAGER.name ||
     type === ORGANISATION_UNIT.TEAM.name)
 
-  let noExpandHint = ''
-
   if (isIndexed) {
-    selectList.push('CONCAT(forename, \' \', surname) AS name')
-    noExpandHint = ' '
+    selectList.push(knex.raw('CONCAT(forename, \' \', surname) AS name'))
   } else {
     selectList.push('name')
   }
 
-  return knex.schema.raw('SELECT ' + selectList.join(', ') +
-      ' FROM ' + table +
-      noExpandHint +
-      whereString)
+  let query = knex(table)
+    .withSchema('app')
+    .select(selectList)
+
+  if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
+    query = query.where('id', id)
+  }
+
+  return query
 }

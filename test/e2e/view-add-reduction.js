@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const authenticationHerlp = require('../helpers/routes/authentication-helper')
+// const authenticationHerlp = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 const moment = require('moment')
@@ -10,7 +10,7 @@ let pageTitle
 
 describe('View adding a new reduction', () => {
   before(async function () {
-    await authenticationHerlp.login(authenticationHerlp.users.Manager)
+    // await authenticationHerlp.login(authenticationHerlp.users.Manager)
     return dataHelper.getAnyExistingWorkloadOwnerId()
       .then(function (results) {
         offenderManagerId = results

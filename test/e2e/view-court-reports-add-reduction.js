@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const authenticationHelper = require('../helpers/routes/authentication-helper')
+// const authenticationHelper = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/court-reports-aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 const moment = require('moment')
@@ -9,7 +9,7 @@ let offenderManagerUrl
 
 describe('View adding a new reduction for court-reporter', () => {
   before(async function () {
-    await authenticationHelper.login(authenticationHelper.users.Manager)
+    // await authenticationHelper.login(authenticationHelper.users.Manager)
     const results = await dataHelper.getAnyExistingCourtReporterId()
     offenderManagerId = results
     offenderManagerUrl = '/' + workloadTypes.COURT_REPORTS + '/offender-manager/' + offenderManagerId + '/add-reduction'

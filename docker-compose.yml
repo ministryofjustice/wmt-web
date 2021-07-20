@@ -1,6 +1,5 @@
-version: '3.1'
+version: "3"
 services:
-
   redis:
     image: 'bitnami/redis:5.0'
     networks:
@@ -23,21 +22,55 @@ services:
       - SPRING_PROFILES_ACTIVE=dev
       - DELIUS_ENABLED=false
 
-  app:
-    build: .
+  wmt-web:
+    build:
+        context: .
+    networks:
+        - hmpps
+    container_name: wmt-web
+    ports:
+        - "3001:3000"
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:3000/ping"]
+    environment:
+        - WMT_DB_SERVER=postgres
+        - REDIS_HOST=redis
+        - HMPPS_AUTH_EXTERNAL_URL=http://localhost:9090/auth
+        - HMPPS_AUTH_URL=http://hmpps-auth:8080/auth
+        # These will need to match new creds in the seed auth service auth
+        - API_CLIENT_ID=client-id
+        - API_CLIENT_SECRET=client-secret
+        - SYSTEM_CLIENT_ID=system-client-id
+        - SYSTEM_CLIENT_SECRET=system-client-secret
+    depends_on:
+        - "hmpps-workload"
+  hmpps-workload:
+    image: quay.io/hmpps/hmpps-workload:latest
     networks:
       - hmpps
+    container_name: hmpps-workload
     ports:
-      - "3000:3000"
+      - "8081:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ping"]
     environment:
-      - REDIS_HOST=redis
-      - HMPPS_AUTH_EXTERNAL_URL=http://localhost:9090/auth
-      - HMPPS_AUTH_URL=http://hmpps-auth:8080/auth
-      # These will need to match new creds in the seed auth service auth
-      - API_CLIENT_ID=client-id
-      - API_CLIENT_SECRET=client-secret
-      - SYSTEM_CLIENT_ID=system-client-id
-      - SYSTEM_CLIENT_SECRET=system-client-secret
+      - SERVER_PORT=8080
+      - SPRING_PROFILES_ACTIVE=dev
+      - DATABASE_ENDPOINT=postgres:5432
+    entrypoint: ["/bin/sh", "-c" , "sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar"]
+    depends_on:
+        - "postgres"
+  postgres:
+    image: postgres:11
+    networks:
+      - hmpps
+    container_name: hmpps-workload-postgres
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_PASSWORD=dev
+      - POSTGRES_USER=root
 
 networks:
   hmpps:

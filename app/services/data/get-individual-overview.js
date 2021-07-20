@@ -2,11 +2,6 @@ const knex = require('../../../knex').web
 
 module.exports = function (id) {
   const table = 'app.individual_case_overview'
-  let whereClause = ''
-
-  if (id !== undefined) {
-    whereClause = ' WHERE workload_owner_id = ' + id
-  }
 
   const selectColumns = [
     'grade_code AS grade',
@@ -22,11 +17,13 @@ module.exports = function (id) {
     'reduction_hours AS reduction'
   ]
 
-  return knex.raw(
-    'SELECT TOP (1) ' + selectColumns.join(', ') +
-    ' FROM ' + table + ' ' +
-    whereClause
-  )
+  let query = knex(table).select(selectColumns)
+
+  if (id !== undefined) {
+    query = query.where('workload_owner_id', id)
+  }
+
+  return query
     .then(function (results) {
       if (results.length > 0) {
         return results[0]
