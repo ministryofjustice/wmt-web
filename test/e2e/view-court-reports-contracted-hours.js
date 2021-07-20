@@ -52,7 +52,7 @@ describe('View contracted hours for court reporter', async function () {
     expect(exists).to.be.equal(true)
   })
 
-after(function () {
-   authenticationHelper.logout()
-})
+  after(function () {
+    authenticationHelper.logout()
+  })
 })

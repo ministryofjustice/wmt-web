@@ -22,7 +22,7 @@ describe('View archive data', () => {
     })
   })
 
-after(function () {
-   authenticationHelper.logout()
-})
+  after(function () {
+    authenticationHelper.logout()
+  })
 })

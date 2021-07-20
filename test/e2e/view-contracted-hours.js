@@ -9,7 +9,7 @@ let workloadOwnerDefaultUrl
 
 describe('View contracted hours', function () {
   before(async function () {
-   await authenticationHelp.login(authenticationHelp.users.Manager)
+    await authenticationHelp.login(authenticationHelp.users.Manager)
     const results = await dataHelper.selectIdsForWorkloadOwner()
     workloadOwnerIds = results
     workloadOwnerId = workloadOwnerIds.filter((item) => item.table === 'workload_owner')[0].id
@@ -77,7 +77,7 @@ describe('View contracted hours', function () {
     expect(exists).to.be.equal(true)
   })
 
- after(function () {
-   authenticationHelp.logout()
- })
+  after(function () {
+    authenticationHelp.logout()
+  })
 })

@@ -143,7 +143,7 @@ describe('View editing a new reduction for court-reporters', () => {
   })
 
   after(async function () {
-    await authenticationHelp.logout()
+    await authenticationHelper.logout()
     return dataHelper.deleteLastRecordFromTables(['reductions_history', 'reductions'])
   })
 })

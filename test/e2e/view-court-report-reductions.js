@@ -119,7 +119,7 @@ describe('View reductions page for court-reporter', () => {
     // })
   })
 
-after(function () {
-   authenticationHelper.logout()
-})
+  after(function () {
+    authenticationHelper.logout()
+  })
 })

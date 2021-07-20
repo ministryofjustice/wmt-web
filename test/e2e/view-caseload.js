@@ -15,7 +15,7 @@ let national, region, ldu, team
 
 describe('View your caseload flow', () => {
   before(async function () {
-   await authenticationHelp.login(authenticationHelp.users.Staff)
+    await authenticationHelp.login(authenticationHelp.users.Staff)
     results = await dataHelper.selectIdsForWorkloadOwner()
     workloadOwnerIds = results
     teamDefaultUrl = '/' + workloadTypes.PROBATION + '/team/' + workloadOwnerIds.filter((item) => item.table === 'team')[0].id
@@ -268,7 +268,7 @@ describe('View your caseload flow', () => {
     })
   })
 
- after(function () {
-   authenticationHelp.logout()
- })
+  after(function () {
+    authenticationHelp.logout()
+  })
 })

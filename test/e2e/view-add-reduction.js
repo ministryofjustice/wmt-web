@@ -10,7 +10,7 @@ let pageTitle
 
 describe('View adding a new reduction', () => {
   before(async function () {
-   await authenticationHelp.login(authenticationHelp.users.Manager)
+    await authenticationHelp.login(authenticationHelp.users.Manager)
     return dataHelper.getAnyExistingWorkloadOwnerId()
       .then(function (results) {
         offenderManagerId = results

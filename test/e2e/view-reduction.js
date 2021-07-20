@@ -8,7 +8,7 @@ let offenderManagerUrl
 
 describe('View adding a new reduction', () => {
   before(async function () {
-   await authenticationHelp.login(authenticationHelp.users.Manager)
+    await authenticationHelp.login(authenticationHelp.users.Manager)
     const results = await dataHelper.getAnyExistingWorkloadOwnerId()
     offenderManagerId = results
     offenderManagerUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + offenderManagerId + '/reductions'
@@ -103,7 +103,7 @@ describe('View adding a new reduction', () => {
     })
   })
 
- after(function () {
-   authenticationHelp.logout()
- })
+  after(function () {
+    authenticationHelp.logout()
+  })
 })

@@ -1,7 +1,7 @@
 const knex = require('../../knex').integrationTests
 const Promise = require('bluebird').Promise
 
-module.exports.addUserRoleData = function (userId, roleId) {
+const addUserRoleData = function (userId, roleId) {
   const insertedData = []
 
   const userRole = {
@@ -19,6 +19,8 @@ module.exports.addUserRoleData = function (userId, roleId) {
       return insertedData
     })
 }
+
+module.exports.addUserRoleData = addUserRoleData
 
 module.exports.addUsers = function () {
   const inserts = []
@@ -53,21 +55,21 @@ module.exports.addRoles = function () {
     })
 }
 
-module.exports.addUserAndRole = function(testUser, role) {
+module.exports.addUserAndRole = function (testUser, role) {
   const inserts = []
 
   return knex('users').withSchema('app').returning(['id', 'username', 'name']).insert({ username: testUser, name: testUser })
-  .then(function (result) {
-    result.forEach((user) => {
-      inserts.push({ table: 'users', id: user.id, username: user.username, name: user.name })
+    .then(function (result) {
+      return result.forEach((user) => {
+        inserts.push({ table: 'users', id: user.id, username: user.username, name: user.name })
+        if (!role) {
+          return inserts
+        }
+        return addUserRoleData(user.id, role).then(function (insertedRole) {
+          return inserts.concat(insertedRole)
+        })
+      })
     })
-   if(!role) {
-     return inserts
-   }
-   return addUserRoleData(user.id, role).then(function(insertedRole){
-    return inserts.concat(insertedRole)
-   } )
-  })
 }
 
 module.exports.getAnyExistingUsernameWithExistingRole = function () {

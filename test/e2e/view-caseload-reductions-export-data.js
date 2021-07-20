@@ -64,7 +64,7 @@ describe('View reductions export for a Data Admin', function () {
     }
   })
 
-after(function () {
-   authenticationHelper.logout()
-})
+  after(function () {
+    authenticationHelper.logout()
+  })
 })

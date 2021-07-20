@@ -12,7 +12,7 @@ let nationalDefaultUrl
 
 describe('View caseload progress flow', () => {
   before(async function () {
-   await authenticationHelp.login(authenticationHelp.users.Staff)
+    await authenticationHelp.login(authenticationHelp.users.Staff)
     const results = await caseProgressDataHelper.selectIdsForWorkloadOwner()
     workloadOwnerIds = results
     workloadOwnerDefaultUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + workloadOwnerIds.filter((item) => item.table === 'workload_owner')[0].id
@@ -280,7 +280,7 @@ describe('View caseload progress flow', () => {
     expect(exists).to.be.equal(true)
   })
 
- after(function () {
-   authenticationHelp.logout()
- })
+  after(function () {
+    authenticationHelp.logout()
+  })
 })

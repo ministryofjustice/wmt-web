@@ -11,7 +11,7 @@ let reductionTypeField, hoursField, startDayField, startMonthField, startYearFie
 
 describe('View editing a new reduction', () => {
   before(async function () {
-   await authenticationHelp.login(authenticationHelp.users.Manager)
+    await authenticationHelp.login(authenticationHelp.users.Manager)
     const results = await dataHelper.getAnyExistingWorkloadOwnerId()
     offenderManagerId = results
     offenderManagerUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + offenderManagerId + '/add-reduction'

@@ -23,5 +23,4 @@ app/assets/javascripts/vendor
 
 *.iml
 
-pallyCourtInserts.json
-pallyWorkloadInserts.json
+pally*.json

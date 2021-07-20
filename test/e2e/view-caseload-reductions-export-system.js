@@ -64,7 +64,7 @@ describe('View reductions export for a System Admin', function () {
     }
   })
 
-after(function () {
-   authenticationHelper.logout()
-})
+  after(function () {
+    authenticationHelper.logout()
+  })
 })

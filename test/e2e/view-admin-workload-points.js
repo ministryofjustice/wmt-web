@@ -269,7 +269,7 @@ describe('View / edit Workload Points', () => {
     })
   })
 
-after(function () {
-   authenticationHelper.logout()
-})
+  after(function () {
+    authenticationHelper.logout()
+  })
 })

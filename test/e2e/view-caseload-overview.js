@@ -241,7 +241,7 @@ describe('View overview', function () {
     }
   })
 
-after(function () {
-   authenticationHelper.logout()
-})
+  after(function () {
+    authenticationHelper.logout()
+  })
 })

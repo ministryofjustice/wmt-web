@@ -5,7 +5,7 @@ let adminUserURL
 
 describe('View adding a new user role', () => {
   before(async function () {
-   await authenticationHelp.login(authenticationHelp.users.SystemAdmin)
+    await authenticationHelp.login(authenticationHelp.users.SystemAdmin)
     adminUserURL = '/admin/user'
     await browser.url(adminUserURL)
   })
@@ -32,7 +32,7 @@ describe('View adding a new user role', () => {
     })
   })
 
- after(function () {
-   authenticationHelp.logout()
- })
+  after(function () {
+    authenticationHelp.logout()
+  })
 })
