@@ -5,6 +5,7 @@ const http = require('http')
 const setupAllDataFs = require('../helpers/data/setup-all-data-fs')
 
 const pallyCiFile = path.resolve(__dirname, '../../.pa11yci')
+const host = 'http://localhost:3000'
 
 const extractInserts = function (inserts) {
   return {
@@ -15,11 +16,20 @@ const extractInserts = function (inserts) {
   }
 }
 
-try {
-  const data = fs.readFileSync(pallyCiFile, 'utf8')
+const generateLoginUrlConfig = function() {
+  return {
+    url : host,
+    actions: [
+      'set field #username to AUTH_RO_USER_TEST3',
+      'set field #password to password123456',
+      'click element #submit'
+  ]
+  }
+}
 
-  const pa11yJson = JSON.parse(data)
-  const host = 'http://localhost:3000'
+
+  const pa11yJson = {defaults:{timeout:5000, concurrency: 1}}
+  
 
   const courtReportsBase = `${host}/court-reports`
   const probationBase = `${host}/probation`
@@ -30,9 +40,23 @@ try {
   const region = 'region'
   const national = 'hmpps/0'
 
-  const urls = [host]
+  const urls = [generateLoginUrlConfig()]
 
   setupAllDataFs().then(function (result) {
+
+    const req = http.request(`${host}/refresh`, res => {
+      console.log(`statusCode: ${res.statusCode}`)
+      process.exit(0)
+    })
+
+    req.on('error', (err) => {
+      console.error(err)
+      process.exit(1)
+    })
+
+    req.end()
+
+
     const extractedCourtReports = extractInserts(result.courtReportInserts)
     const extractedWorkload = extractInserts(result.workloadInserts)
     const capacityUrl = 'caseload-capacity'
@@ -82,6 +106,7 @@ try {
     urls.push(`${host}/${admin}/user-rights`)
     pa11yJson.urls = urls
 
+    
     try {
       fs.writeFileSync(pallyCiFile, JSON.stringify(pa11yJson))
     } catch (err) {
@@ -90,18 +115,4 @@ try {
 
     console.log('pa11y ci file updated')
 
-    const req = http.request(`${host}/refresh`, res => {
-      console.log(`statusCode: ${res.statusCode}`)
-      process.exit(0)
-    })
-
-    req.on('error', (err) => {
-      console.error(err)
-      process.exit(1)
-    })
-
-    req.end()
   })
-} catch (err) {
-  console.error(err)
-}

@@ -14,7 +14,6 @@
     "test-e2e": "node ./test/helpers/data/setup-e2e-data-helper.js && gulp --gulpfile gulpfile-e2e.js && node ./test/helpers/data/delete-e2e-data-helper.js",
     "test-e2e-firefox": "wdio test/wdio.conf.sauce.firefox.js",
     "test-e2e-firefox-jenkins": "wdio test/wdio.conf.sauce.firefox.jenkins.js",
-    "accessibility-test": "mocha --recursive test/accessibility --timeout=100000 --exit --reporter mocha-simple-html-reporter --reporter-options output=test_results/accessibility-test-reports.html",
     "record-build-info": "node ./bin/record-build-info",
     "security_audit": "npx audit-ci --config audit-ci.json",
     "lint": "standard",
