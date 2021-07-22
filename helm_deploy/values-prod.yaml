@@ -1,0 +1,9 @@
+---
+generic-service:
+
+  ingress:
+    host: hmpps-workload-prod.hmpps.service.justice.gov.uk
+
+  env:
+    INGRESS_URL: "https://hmpps-workload-prod.hmpps.service.justice.gov.uk"
+
