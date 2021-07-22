@@ -14,7 +14,7 @@ describe('View adding a new reduction', () => {
     return dataHelper.getAnyExistingWorkloadOwnerId()
       .then(function (results) {
         offenderManagerId = results
-        offenderManagerUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + offenderManagerId 
+        offenderManagerUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + offenderManagerId
       })
   })
 
@@ -56,7 +56,7 @@ describe('View adding a new reduction', () => {
       await notesField.setValue(currentTime)
 
       await submit.click()
-      const insertedReduction = await $("#archived-reduction-table td")
+      await $('#archived-reduction-table td')
       const reduction = await dataHelper.getLastRecordFromTable('reductions')
       const reductionURL = '/probation/offender-manager/' + reduction.workload_owner_id + '/edit-reduction?reductionId=' + reduction.id
       const link = await $('[href="' + reductionURL + '"]')

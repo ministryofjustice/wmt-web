@@ -2,7 +2,7 @@ const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 const getWorloadPoints = require('../../app/services/data/get-workload-points')
 
-let workloadPoints, pageTitle, pageSubtitle, link, prefix, tierA3, tierA2, tierA1, tierA0, tierB3, tierB2, tierB1, tierB0, tierC3, tierC2, tierC1, tierC0, tierD3, tierD2, tierD1, tierD0
+let workloadPoints, pageTitle, pageSubtitle, prefix, tierA3, tierA2, tierA1, tierA0, tierB3, tierB2, tierB1, tierB0, tierC3, tierC2, tierC1, tierC0, tierD3, tierD2, tierD1, tierD0
 let sdr, fdr, parom, overdue, warrants, upw, armsComm, armsLic
 let nominalTargetPO, nominalTargetPSO
 let contractedHoursPO, contractedHoursPSO, contractedHoursSPO
@@ -254,7 +254,7 @@ describe('View / edit Workload Points', () => {
       await link.click()
       const workloadPointsLink = await $('[href="/admin/workload-points"]')
       await workloadPointsLink.click()
-    
+
       editButton = await $('#edit-button')
       await editButton.click()
 

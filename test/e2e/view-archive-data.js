@@ -1,13 +1,11 @@
 const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 
-let adminArchiveURL, pageTitle, pageSubtitle
+let pageTitle, pageSubtitle
 
 describe('View archive data', () => {
   before(async function () {
     await authenticationHelper.login(authenticationHelper.users.DataAdmin)
-    adminArchiveURL = '/archive-data/daily-caseload-data'
-    
   })
   describe('should navigate to the archive page', () => {
     it('with the correct breadcrumbs and heading title', async () => {

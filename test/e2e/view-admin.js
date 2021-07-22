@@ -1,14 +1,12 @@
 const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 
-let adminURL
 let workloadPointsURL
 let pageTitle
 
 describe('View admin role', () => {
   before(async function () {
     await authenticationHelper.login(authenticationHelper.users.DataAdmin)
-    adminURL = '/admin'
     workloadPointsURL = '/admin/workload-points'
   })
 
