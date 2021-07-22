@@ -1,3 +1,6 @@
+const { ReportAggregator } = require('wdio-html-nice-reporter')
+let reportAggregator
+
 exports.config = {
   specs: ['./test/e2e/**/*.js'],
   exclude: [],
@@ -31,5 +34,20 @@ exports.config = {
       useOnAfterCommandForScreenshot: false
     }
     ]
-  ]
+  ],
+  onPrepare: function (config, capabilities) {
+    reportAggregator = new ReportAggregator({
+      outputDir: './test_results/e2e/',
+      filename: 'master-report.html',
+      reportTitle: 'Master Report',
+      browserName: capabilities.browserName,
+      collapseTests: true
+    })
+    reportAggregator.clean()
+  },
+  onComplete: function (exitCode, config, capabilities, results) {
+    (async () => {
+      await reportAggregator.createReport()
+    })()
+  }
 }
