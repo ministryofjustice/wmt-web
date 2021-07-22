@@ -8,13 +8,13 @@ const ids = []
 describe('View admin role', () => {
   before(async function () {
     await authenticationHelper.login(authenticationHelper.users.DataAdmin)
-    const link = await $('[href="/admin"')
+    const link = await $('[href="/admin"]')
     await link.click()
   })
 
   describe('should navigate to the manage reduction reasons page', () => {
     it('with the correct breadcrumbs and heading title', async () => {
-      const link = await $('[href="/manage-reduction-reasons"')
+      const link = await $('[href="/manage-reduction-reasons"]')
       await link.click()
       pageTitle = await $('.govuk-heading-xl')
       pageTitle = await pageTitle.getText()
@@ -22,7 +22,7 @@ describe('View admin role', () => {
     })
 
     it('and then navigate to the add reduction reason page with the correct heading title', async () => {
-      const link = await $('[href="/add-reduction-reason"')
+      const link = await $('[href="/add-reduction-reason"]')
       await link.click()
       pageTitle = await $('.govuk-heading-xl')
       pageTitle = await pageTitle.getText()
@@ -57,7 +57,7 @@ describe('View admin role', () => {
       const lastReductionReason = await dataHelper.getLastRecordFromTable('reduction_reason')
       ids.push(lastReductionReason.id)
       const reductionLink = '/edit-reduction-reason?id=' + lastReductionReason.id
-      const link = await $('[href="' + reductionLink + '"')
+      const link = await $('[href="' + reductionLink + '"]')
       await link.click()
 
       reductionName = await $('#reductionName')
@@ -108,7 +108,7 @@ describe('View admin role', () => {
       const lastReductionReason = await dataHelper.getLastRecordFromTable('reduction_reason')
       ids.push(lastReductionReason.id)
       const reductionLink = '/edit-reduction-reason?id=' + lastReductionReason.id
-      const link = await $('[href="' + reductionLink + '"')
+      const link = await $('[href="' + reductionLink + '"]')
       await link.click()
 
       reductionName = await $('#reductionName')
@@ -156,7 +156,7 @@ describe('View admin role', () => {
       const lastReductionReason = await dataHelper.getLastRecordFromTable('reduction_reason')
       ids.push(lastReductionReason.id)
       const reductionLink = '/edit-reduction-reason?id=' + lastReductionReason.id
-      const link = await $('[href="' + reductionLink + '"')
+      const link = await $('[href="' + reductionLink + '"]')
       await link.click()
 
       reductionName = await $('#reductionName')

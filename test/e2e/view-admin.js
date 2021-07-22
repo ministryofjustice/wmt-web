@@ -10,28 +10,29 @@ describe('View admin role', () => {
     await authenticationHelper.login(authenticationHelper.users.DataAdmin)
     adminURL = '/admin'
     workloadPointsURL = '/admin/workload-points'
-    await browser.url(adminURL)
   })
 
   describe('should navigate to the admin page', () => {
     it('with the correct breadcrumbs and heading title', async () => {
-      await browser.url(adminURL)
+      const link = await $('[href="/admin"]')
+      await link.click()
       pageTitle = await $('.govuk-heading-xl')
       pageTitle = await pageTitle.getText()
       expect(pageTitle, 'Admin Page title should be "Admin"').to.equal('Admin')
     })
 
     it('with the correct breadcrumbs and heading title', async () => {
-      await browser.url(adminURL)
-      const link = await $('[href="' + workloadPointsURL + '"')
+      const link = await $('[href="/admin"]')
       await link.click()
+      const pointsLink = await $('[href="' + workloadPointsURL + '"]')
+      await pointsLink.click()
       pageTitle = await $('.govuk-heading-xl')
       pageTitle = await pageTitle.getText()
       expect(pageTitle, 'Workload Points Page title should be "Workload Points"').to.equal('Workload Points')
     })
   })
 
-  // after(async function () {
-  //   authenticationHelper.logout()
-  // })
+  after(async function () {
+    authenticationHelper.logout()
+  })
 })
