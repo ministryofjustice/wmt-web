@@ -2,20 +2,18 @@ const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 
-let adminURL
 let pageTitle
 const ids = []
 
 describe('View admin role', () => {
   before(async function () {
     await authenticationHelper.login(authenticationHelper.users.DataAdmin)
-    adminURL = '/admin'
-    await browser.url(adminURL)
+    const link = await $('[href="/admin"')
+    await link.click()
   })
 
   describe('should navigate to the manage reduction reasons page', () => {
     it('with the correct breadcrumbs and heading title', async () => {
-      await browser.url(adminURL)
       const link = await $('[href="/manage-reduction-reasons"')
       await link.click()
       pageTitle = await $('.govuk-heading-xl')
@@ -49,7 +47,9 @@ describe('View admin role', () => {
       await monthsToExpiry.setValue(6)
       await isEnabled.selectByVisibleText('Enabled')
       await submit.click()
-      await browser.pause(3000)
+      const successMessage = await $('.govuk-notification-banner__heading')
+      const successMessageText = await successMessage.getText()
+      expect(successMessageText, 'Success message should be displayed').to.equal('The Reduction Reason was saved successfully!')
     })
 
     it('and open the newly created reduction with optional fields filled in', async () => {
@@ -98,7 +98,9 @@ describe('View admin role', () => {
       await category.selectByVisibleText('Work Circumstances')
       await isEnabled.selectByVisibleText('Enabled')
       await submit.click()
-      await browser.pause(3000)
+      const successMessage = await $('.govuk-notification-banner__heading')
+      const successMessageText = await successMessage.getText()
+      expect(successMessageText, 'Success message should be displayed').to.equal('The Reduction Reason was saved successfully!')
     })
 
     it('and open the newly created reduction reason with blank optional fields', async () => {
@@ -144,7 +146,9 @@ describe('View admin role', () => {
       await maxAllowancePercentage.setValue(80)
       await monthsToExpiry.setValue(12)
       await submit.click()
-      await browser.pause(3000)
+      const successMessage = await $('.govuk-notification-banner__heading')
+      const successMessageText = await successMessage.getText()
+      expect(successMessageText, 'Success message should be displayed').to.equal('The Reduction Reason was saved successfully!')
     })
 
     it('and open the edited reduction reason', async () => {
@@ -183,6 +187,6 @@ describe('View admin role', () => {
 
   after(async function () {
     await dataHelper.deleteRecordsFromTableForIds('reduction_reason', ids)
-    // authenticationHelper.logout()
+    authenticationHelper.logout()
   })
 })

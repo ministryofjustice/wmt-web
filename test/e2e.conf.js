@@ -18,5 +18,18 @@ exports.config = {
   mochaOpts: {
     ui: 'bdd',
     timeout: 50000
-  }
+  },
+  reporters: ['spec',
+    ['html-nice', {
+      outputDir: './test_results/e2e/',
+      filename: 'report.html',
+      reportTitle: 'Test Report Title',
+
+      // to show the report in a browser when done
+      collapseTests: false,
+      // to turn on screenshots after every test
+      useOnAfterCommandForScreenshot: false
+    }
+    ]
+  ]
 }

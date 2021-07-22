@@ -43,6 +43,7 @@
     "@wdio/local-runner": "^7.7.4",
     "@wdio/mocha-framework": "^7.7.4",
     "@wdio/sauce-service": "^7.7.4",
+    "@wdio/spec-reporter": "^7.7.7",
     "chai": "4.3.x",
     "cheerio": "^1.0.0-rc.10",
     "gulp-mocha": "8.0.x",
@@ -57,6 +58,7 @@
     "sinon": "^10.0.0",
     "standard": "^16.0.3",
     "supertest": "6.1.x",
+    "wdio-html-nice-reporter": "^7.7.14",
     "webdriverio": "^7.7.4"
   },
   "dependencies": {
@@ -95,8 +97,8 @@
     "passport": "^0.4.1",
     "passport-oauth2": "^1.5.0",
     "passport-saml": "^2.2.0",
-    "redis": "^3.1.2",
     "pg": "^8.6.0",
+    "redis": "^3.1.2",
     "sass": "^1.35.1",
     "superagent": "^6.1.0",
     "underscore": "^1.13.1",
