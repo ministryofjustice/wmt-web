@@ -25,7 +25,6 @@ generic-service:
   env:
     NODE_ENV: "production"
     PGSSLMODE: "no-verify"
-    WMT_DB_ARCHIVE_NAME: "hmpps_workload_archive"
 #    WMT_WEB_AUTHENTICATION_ENABLED: "true"
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
@@ -36,11 +35,16 @@ generic-service:
   namespace_secrets:
     hmpps-workload:
       APPINSIGHTS_INSTRUMENTATIONKEY: "APPINSIGHTS_INSTRUMENTATIONKEY"
-    rds-instance-output:
-      WMT_WEB_APP_DATABASE_USERNAME: "database_username"
-      WMT_WEB_APP_DATABASE_PASSWORD: "database_password"
-      WMT_DB_SERVER: "rds_instance_address"
-      WMT_DB_NAME: "database_name"
+    rds-live-instance-output:
+      WMT_LIVE_DB_USERNAME: "database_username"
+      WMT_LIVE_DB_PASSWORD: "database_password"
+      WMT_LIVE_DB_SERVER: "rds_instance_address"
+      WMT_LIVE_DB_NAME: "database_name"
+    rds-archive-instance-output:
+      WMT_HISTORY_DB_USERNAME: "database_username"
+      WMT_HISTORY_DB_PASSWORD: "database_password"
+      WMT_HISTORY_DB_SERVER: "rds_instance_address"
+      WMT_HISTORY_DB_NAME: "database_name"
 
   allowlist:
     office: "217.33.148.210/32"

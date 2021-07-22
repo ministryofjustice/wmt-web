@@ -1,20 +1,22 @@
 const config = require('./config')
-const defaultConnection = {
-  host: config.DATABASE_SERVER,
-  user: config.WEB_APP_DATABASE_USERNAME,
-  password: config.WEB_APP_DATABASE_PASSWORD,
-  database: config.DATABASE
-  // options: {
-  //   encrypt: false,
-  //   requestTimeout: 120000,
-  //   enableArithAbort: true
-  // }
+const liveConnection = {
+  host: config.LIVE_DATABASE_SERVER,
+  user: config.LIVE_DATABASE_USERNAME,
+  password: config.LIVE_DATABASE_PASSWORD,
+  database: config.LIVE_DATABASE
+}
+
+const historyConnection = {
+  host: config.HISTORY_DATABASE_SERVER,
+  user: config.HISTORY_DATABASE_USERNAME,
+  password: config.HISTORY_DATABASE_PASSWORD,
+  database: config.HISTORY_DATABASE
 }
 
 module.exports = {
   web: {
     client: 'pg',
-    connection: defaultConnection,
+    connection: liveConnection,
     debug: false,
     pool: {
       min: 0,
@@ -25,7 +27,7 @@ module.exports = {
   },
   archive: {
     client: 'pg',
-    connection: defaultConnection,
+    connection: historyConnection,
     debug: false,
     pool: {
       min: 0,
@@ -35,7 +37,7 @@ module.exports = {
   },
   legacy: {
     client: 'pg',
-    connection: defaultConnection,
+    connection: historyConnection,
     debug: false,
     pool: {
       min: 0,
@@ -46,7 +48,7 @@ module.exports = {
   },
   integrationTests: {
     client: 'pg',
-    connection: defaultConnection,
+    connection: liveConnection,
     debug: false,
     pool: {
       min: 0,
