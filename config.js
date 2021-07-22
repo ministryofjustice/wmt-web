@@ -18,7 +18,7 @@ module.exports = {
   LIVE_DATABASE_SERVER: process.env.WMT_LIVE_DB_SERVER || 'localhost',
   LIVE_DATABASE: process.env.WMT_LIVE_DB_NAME || 'postgres',
   LIVE_DATABASE_USERNAME: process.env.WMT_LIVE_DB_USERNAME || 'root',
-  LIVE_DATABASE_PASSWORD: process.env.WMT_WEB_APP_DB_PASSWORD || 'dev',
+  LIVE_DATABASE_PASSWORD: process.env.WMT_LIVE_DB_PASSWORD || 'dev',
 
   HISTORY_DATABASE_SERVER: process.env.WMT_HISTORY_DB_SERVER || 'localhost',
   HISTORY_DATABASE: process.env.WMT_HISTORY_DB_NAME || 'postgres',
