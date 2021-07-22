@@ -40,7 +40,7 @@ generic-service:
       WMT_LIVE_DB_PASSWORD: "database_password"
       WMT_LIVE_DB_SERVER: "rds_instance_address"
       WMT_LIVE_DB_NAME: "database_name"
-    rds-archive-instance-output:
+    rds-history-instance-output:
       WMT_HISTORY_DB_USERNAME: "database_username"
       WMT_HISTORY_DB_PASSWORD: "database_password"
       WMT_HISTORY_DB_SERVER: "rds_instance_address"
