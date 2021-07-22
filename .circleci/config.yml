@@ -161,7 +161,8 @@ jobs:
   e2e_test:
     executor: docker-env
     steps:
-      - browser-tools/install-chrome
+      - browser-tools/install-chrome:
+          chrome-version: 91.0.4472.101
       - browser-tools/install-chromedriver
       - checkout
       - restore_cache:
@@ -227,6 +228,9 @@ workflows:
             - helm_lint
             - unit_test
             - build_docker
+            - e2e_test
+            - accessibility_test
+            - integration_test
       - request-preprod-approval:
           type: approval
           requires:
