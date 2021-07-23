@@ -5,12 +5,33 @@ const webdriver = require('gulp-webdriver')
 let seleniumServer
 
 gulp.task('selenium', (done) => {
-  selenium.install({ logger: console.log }, () => {
-    selenium.start((err, child) => {
-      if (err) { return done(err) }
-      seleniumServer = child
-      done()
+  selenium.install({
+     logger: console.log,
+     drivers: {
+      chrome: {
+        version: 'latest',
+        fallbackVersion: '91.0.4472.101',
+        arch: process.arch,
+        baseURL: 'https://chromedriver.storage.googleapis.com',
+      }
+    }
     })
+  .then(function () {
+    selenium.start({
+      drivers: {
+        chrome: {
+          version: 'latest',
+        },
+      }
+    }).then(function(childProcess) {
+      seleniumServer = childProcess
+      done()
+    }).catch(function(err) {
+      done(err)
+    })
+    
+  }).catch(function(err) {
+    done(err)
   })
 })
 

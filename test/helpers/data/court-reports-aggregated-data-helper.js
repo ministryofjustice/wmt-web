@@ -126,11 +126,13 @@ module.exports.deleteLastRecordFromTables = function (tables) {
 
 module.exports.deleteReductionsForIds = function (ids) {
   return knex('reductions_history')
+    .withSchema('app')
     .whereIn('reduction_id', ids)
     .del()
     .then(() => {
       return knex('reductions')
-        . whereIn('id', ids)
+      .withSchema('app')
+        .whereIn('id', ids)
         .del()
     })
 }
