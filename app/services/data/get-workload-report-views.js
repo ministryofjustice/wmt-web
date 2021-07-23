@@ -25,7 +25,21 @@ module.exports = function (id, fromDate, toDate, type) {
     .andWhere('effective_from', '<=', toDate)
     .orderBy('effective_from')
 
+  const capacityArchiveQuery = knexArchive(table2)
+    .withSchema('app')
+    .select(selectList)
+    .where('effective_from', '>=', fromDate)
+    .andWhere('effective_from', '<=', toDate)
+    .orderBy('effective_from')
+
   const query = knex(table)
+    .withSchema('app')
+    .select(selectList)
+    .where('effective_from', '>=', fromDate)
+    .andWhere('effective_from', '<=', toDate)
+    .orderBy('effective_from')
+
+  const capacityQuery = knex(table2)
     .withSchema('app')
     .select(selectList)
     .where('effective_from', '>=', fromDate)
@@ -34,7 +48,9 @@ module.exports = function (id, fromDate, toDate, type) {
 
   if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
     archiveQuery.andWhere('id', id)
+    capacityArchiveQuery.andWhere('id', id)
     query.andWhere('id', id)
+    capacityQuery.andWhere('id', id)
   }
 
   return archiveQuery
@@ -44,10 +60,10 @@ module.exports = function (id, fromDate, toDate, type) {
         .then(function (currentDBResults) {
           workloadReportResults = workloadReportResults.concat(currentDBResults)
           if (type === organisationConstant.NATIONAL.name) {
-            return knexArchive.schema.raw('SELECT ' + selectList.join(', ') + ' FROM app.' + table2 + noExpandHint + whereString + orderBy)
+            return capacityArchiveQuery
               .then(function (crcArchiveDBResults) {
                 crcWorkloadReportResults = crcArchiveDBResults
-                return knex.schema.raw('SELECT ' + selectList.join(', ') + ' FROM app.' + table2 + noExpandHint + whereString + orderBy)
+                return capacityQuery
                   .then(function (crcCurrentDBResults) {
                     crcWorkloadReportResults = crcWorkloadReportResults.concat(crcCurrentDBResults)
                     return Promise.resolve({
