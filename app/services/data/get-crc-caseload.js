@@ -2,7 +2,6 @@ const knex = require('../../../knex').web
 const ORGANISATION_UNIT = require('../../constants/organisation-unit')
 
 module.exports = function (id, type) {
-  
   const table = 'crc_caseload_view'
 
   // WMT0160: add new tiers to selectList
@@ -44,7 +43,7 @@ module.exports = function (id, type) {
 
   if (!displayAllRecords) {
     if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
-      query = query.where('id',id)
+      query = query.where('id', id)
     }
   }
 
