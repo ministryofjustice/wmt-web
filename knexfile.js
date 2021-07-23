@@ -1,51 +1,59 @@
 const config = require('./config')
-const defaultConnection = {
-  host: config.DATABASE_SERVER,
-  user: config.WEB_APP_DATABASE_USERNAME,
-  password: config.WEB_APP_DATABASE_PASSWORD,
-  database: config.DATABASE,
-  options: {
-    encrypt: false,
-    requestTimeout: 120000,
-    enableArithAbort: true
-  }
+const liveConnection = {
+  host: config.LIVE_DATABASE_SERVER,
+  user: config.LIVE_DATABASE_USERNAME,
+  password: config.LIVE_DATABASE_PASSWORD,
+  database: config.LIVE_DATABASE
+}
+
+const historyConnection = {
+  host: config.HISTORY_DATABASE_SERVER,
+  user: config.HISTORY_DATABASE_USERNAME,
+  password: config.HISTORY_DATABASE_PASSWORD,
+  database: config.HISTORY_DATABASE
 }
 
 module.exports = {
   web: {
-    client: 'mssql',
-    connection: defaultConnection,
+    client: 'pg',
+    connection: liveConnection,
     debug: false,
     pool: {
-      max: 500
+      min: 0,
+      max: 50,
+      idleTimeoutMillis: 5000
     },
     acquireConnectionTimeout: 120000
   },
   archive: {
-    client: 'mssql',
-    connection: Object.assign({}, defaultConnection, {
-      database: config.ARCHIVE_DATABASE
-    }),
+    client: 'pg',
+    connection: historyConnection,
     debug: false,
     pool: {
-      max: 500
+      min: 0,
+      max: 50,
+      idleTimeoutMillis: 5000
     }
   },
   legacy: {
-    client: 'mssql',
-    connection: defaultConnection,
+    client: 'pg',
+    connection: historyConnection,
     debug: false,
     pool: {
-      max: 500
+      min: 0,
+      max: 50,
+      idleTimeoutMillis: 5000
     },
     acquireConnectionTimeout: 120000
   },
   integrationTests: {
-    client: 'mssql',
-    connection: defaultConnection,
+    client: 'pg',
+    connection: liveConnection,
     debug: false,
     pool: {
-      max: 500
+      min: 0,
+      max: 50,
+      idleTimeoutMillis: 5000
     },
     acquireConnectionTimeout: 120000
   }

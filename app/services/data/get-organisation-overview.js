@@ -6,7 +6,6 @@ const workloadTypes = require('../../constants/workload-type')
 module.exports = function (id, type, workloadType = workloadTypes.PROBATION) {
   const orgUnit = orgUnitFinder('name', type)
   let table = orgUnit.overviewView
-  let whereClause = ''
   let selectColumns = []
 
   if (workloadType === workloadTypes.OMIC) {
@@ -31,20 +30,17 @@ module.exports = function (id, type, workloadType = workloadTypes.PROBATION) {
     ]
   }
 
-  table = 'app.' + table
+  const query = knex('app.' + table)
 
   if (id !== undefined) {
-    whereClause = ' WHERE id = ' + id
+    query.where('id', id)
   }
 
   if (orgUnit.name === orgUnitConstants.TEAM.name || orgUnit.name === orgUnitConstants.OFFENDER_MANAGER.name) {
     selectColumns.push('grade_code AS gradeCode')
   }
 
-  return knex.raw(
-    'SELECT ' + selectColumns.join(', ') +
-      ' FROM ' + table + ' ' +
-      whereClause)
+  return query.select(selectColumns)
     .then(function (results) {
       return results
     })

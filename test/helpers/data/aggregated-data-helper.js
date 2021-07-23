@@ -579,6 +579,12 @@ module.exports.getAllTasks = function () {
     )
 }
 
+module.exports.deleteAllTasks = function () {
+  return knex('tasks')
+    .withSchema('app')
+    .del()
+}
+
 module.exports.getAllWorkloadPointsForTest = function () {
   return knex('workload_points')
     .withSchema('app')

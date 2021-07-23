@@ -2,21 +2,21 @@ const knex = require('../../../knex').web
 
 module.exports = function (id) {
   const selectList = [
-    'tierCode',
-    'rowType',
-    'caseReferenceNo',
-    'caseType',
-    'inCustody',
-    'registerLevel',
-    'registerCategory',
-    'registerCategoryDescription',
-    'registrationDate'
+    'tiercode as tierCode',
+    'rowtype as rowType',
+    'casereferenceno as caseReferenceNo',
+    'casetype as caseType',
+    'incustody as inCustody',
+    'registerlevel as registerLevel',
+    'registercategory as registerCategory',
+    'registercategorydescription as registerCategoryDescription',
+    'registrationdate as registrationDate'
   ]
 
   return knex('case_details_view')
     .withSchema('app')
     .columns(selectList)
-    .where('workloadOwnerId', id)
+    .where('workloadownerid', id)
     .then(function (results) {
       if (results.length > 0) {
         results.forEach(function (result) {

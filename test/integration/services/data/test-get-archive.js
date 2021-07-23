@@ -21,14 +21,14 @@ const expectedResult = {
   hoursReduction: 0
 }
 
-let archiveData
+let idsSaved
 
-const archiveDataForm = new ArchiveDataForm(18, 6, 2014, 26, 8, 2016, ['A.N. Offender Manager 1'])
+const archiveDataForm = new ArchiveDataForm(fromDate.date(), fromDate.month() + 1, fromDate.year(), toDate.date(), toDate.month() + 1, toDate.year(), [expectedResult.omName])
 
 describe('services/data/get-daily-archive', function () {
   before(function () {
-    return getArchive(archiveDataForm).then(function (results) {
-      archiveData = results
+    return createDailyArchive(expectedResult).then(function (results) {
+      idsSaved = results[0]
     })
   })
   it('should retrieve all twelve columns for archive data', function () {

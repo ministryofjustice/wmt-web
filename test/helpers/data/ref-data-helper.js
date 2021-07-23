@@ -1,7 +1,7 @@
 const knex = require('../../knex').integrationTests
 const Promise = require('bluebird').Promise
 
-module.exports.addReductionsRefData = function (maxId) {
+module.exports.addReductionsRefData = function () {
   const inserts = []
   const reductionCategories = [
     { category: 'Test Category 1' },
@@ -13,14 +13,18 @@ module.exports.addReductionsRefData = function (maxId) {
       ids.forEach((id) => {
         inserts.push({ table: 'reduction_category', id: id })
       })
-      const tableName = 'reduction_reason'
-      const insertStatement = 'INSERT INTO app.' + tableName + ' (id, reason, reason_short_name, category_id, allowance_percentage, max_allowance_percentage, months_to_expiry) VALUES '
-      const sql = 'SET IDENTITY_INSERT app.' + tableName + ' ON;' +
-      insertStatement + '(' + (maxId + 1) + ',\'Test Reason 1\',1,' + ids[0] + ',20,null,6)'
-      return knex.raw(sql).then(function () {
-        inserts.push({ table: 'reduction_reason', id: (maxId + 1) })
-        return inserts
-      })
+      const reductionReason = {
+        reason: 'Test Reason 1',
+        reason_short_name: 1,
+        category_id: ids[0],
+        allowance_percentage: 20,
+        months_to_expiry: 6
+      }
+      return knex('reduction_reason').withSchema('app').returning('id').insert(reductionReason)
+        .then(function (id) {
+          inserts.push({ table: 'reduction_reason', id: id[0] })
+          return inserts
+        })
     })
 }
 

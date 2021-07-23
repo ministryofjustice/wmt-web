@@ -225,8 +225,8 @@
         <th colspan="11" id="breakdown">Workload breakdown</th>
       </tr>
       <tr>
-        <th id="name">Name</th>
-        <th id="grade">Grade</th>
+        <th id="capacityName">Name</th>
+        <th id="capacityGrade">Grade</th>
         <th id="capacity">Capacity (%)</th>
         <th id="cases">Cases</th>
         <th id="t2aCases"><abbr title="Transition To Adulthood">T2A</abbr></th>
@@ -248,7 +248,7 @@
         </tbody>
         <tfoot>
             <tr>
-          <td colspan="2" headers="name org">{{ member.name }}</td>
+          <td colspan="2" headers="capacityGrade capacityName org">{{ member.name }}</td>
           <td headers="capacity breakdown">{{ member.capacity | round(1) }}%</td>
           <td headers="cases breakdown">{{ member.totalCases | round(1) }}</td>
           <td headers="t2aCases breakdown">{{ member.totalTotalT2aCases | round(1) }}</td>
@@ -257,15 +257,15 @@
           <td headers="fdrs breakdown">{{ member.totalSdrConversions }}</td>
           <td headers="sdrs breakdown">{{ member.totalSDRs }}</td>
           <td headers="gs breakdown">{{ member.totalGs | round(1) }}%</td>
-          <td headers="gs points breakdown">{{ member.totalGSPoints }}</td>
+          <td headers="breakdown gsPoints">{{ member.totalGSPoints }}</td>
           <td headers="cms breakdown">{{ member.totalCMS | round(1) }}%</td>
-          <td headers="cms points breakdown">{{ member.totalCMSPoints }}</td>
+          <td headers="breakdown cmsPoints">{{ member.totalCMSPoints }}</td>
         </tr>
         </tfoot>
           {% else %}
           <tr>
-          <td headers="name org"><a class="govuk-link" href="/{{ workloadType }}/offender-manager/{{ member.linkId }}">{{ member.name }}</a></td>
-          <td headers="grade org">{{ member.grade }}</td>
+          <td headers="capacityName org"><a class="govuk-link" href="/{{ workloadType }}/offender-manager/{{ member.linkId }}">{{ member.name }}</a></td>
+          <td headers="capacityGrade org">{{ member.grade }}</td>
           {% if member.capacityPercentage > 110 %}
             <td class="capacity-red" headers="capacity breakdown">{{ member.capacityPercentage | round(1) }}%</td>
           {% else %}
@@ -278,9 +278,9 @@
           <td headers="fdrs breakdown">{{ member.sdrConversions }}</td>
           <td headers="sdrs breakdown">{{ member.sdrs }}</td>
           <td headers="gs breakdown">{{ member.gsPercentage | round(1) }}%</td>
-          <td headers="gs points breakdown">{{ member.gsPoints }}</td>
+          <td headers="breakdown gsPoints">{{ member.gsPoints }}</td>
           <td headers="cms breakdown">{{ member.cmsPercentage | round(1) }}%</td>
-          <td headers="cms points breakdown">{{ member.cmsPoints }}</td>
+          <td headers="breakdown cmsPoints">{{ member.cmsPoints }}</td>
         </tr>
           {% endif %}
         
@@ -355,9 +355,9 @@
         {% for i in range(0, member.grades.length) %}
           <tr>
             {% if i === 0 %}
-              <td rowspan="{{ member.grades.length }}" headers="name org"><a class="govuk-link" href="/{{ workloadType }}/{{ childOrganisationLevel }}/{{ member.linkId }}">{{ member.name }}</a></td>
+              <td rowspan="{{ member.grades.length }}" headers="capacityName org"><a class="govuk-link" href="/{{ workloadType }}/{{ childOrganisationLevel }}/{{ member.linkId }}">{{ member.name }}</a></td>
             {% endif %}
-          <td class="align-centre" headers="grade org">{{ member.grades[i].grade }}</td>
+          <td class="align-centre" headers="capacityGrade org">{{ member.grades[i].grade }}</td>
           {% if member.grades[i].capacityPercentage > 110 %}
             <td class="capacity-red" headers="capacity breakdown">{{ member.grades[i].capacityPercentage | round(1) }}%</td>
           {% else %}
@@ -370,16 +370,16 @@
           <td headers="fdrs breakdown">{{ member.grades[i].sdrConversions }}</td>
           <td headers="sdrs breakdown">{{ member.grades[i].sdrs }}</td>
           <td headers="gs breakdown">{{ member.grades[i].gsPercentage | round(1) }}%</td>
-          <td headers="gs points breakdown">{{ member.grades[i].gsPoints }}</td>
-          <td headers="cms breakdown">{{ member.grades[i].cmsPercentage | round(1) }}%</td>
-          <td headers="cms points breakdown">{{ member.grades[i].cmsPoints }}</td>
+          <td headers="breakdown gsPoints">{{ member.grades[i].gsPoints }}</td>
+          <td headers="breakdown cms">{{ member.grades[i].cmsPercentage | round(1) }}%</td>
+          <td headers="breakdown cmsPoints">{{ member.grades[i].cmsPoints }}</td>
         </tr>
         {% endfor %}
         {% if loop.last %}
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="2" headers="name org">{{ member.name }}</td>
+            <td colspan="2" headers="capacityGrade capacityName org">{{ member.name }}</td>
             <td headers="capacity breakdown">{{ member.capacity | round(1) }}%</td>
             <td headers="cases breakdown">{{ member.totalCases | round(1) }}</td>
             <td headers="t2aCases breakdown">{{ member.totalTotalT2aCases | round(1) }}</td>
@@ -388,9 +388,9 @@
             <td headers="fdrs breakdown">{{ member.totalSdrConversions }}</td>
             <td headers="sdrs breakdown">{{ member.totalSDRs }}</td>
             <td headers="gs breakdown">{{ member.totalGs | round(1) }}%</td>
-            <td headers="gs points breakdown">{{ member.totalGSPoints }}</td>
+            <td headers="breakdown gsPoints">{{ member.totalGSPoints }}</td>
             <td headers="cms breakdown">{{ member.totalCMS | round(1) }}%</td>
-            <td headers="cms points breakdown">{{ member.totalCMSPoints }}</td>
+            <td headers="breakdown cmsPoints">{{ member.totalCMSPoints }}</td>
         </tr>
     </tfoot>
         {% endif %}
@@ -407,8 +407,8 @@
   <table id="outstandingReports" class="govuk-table data-table dataTable">
     <thead>
       <tr>
-        <th colspan="2">{{ childOrganisationLevelDisplayText }}</th>
-        <th class="" colspan="5">Inactive & UPW cases</th>
+        <th colspan="2" id='organisationLevel'>{{ childOrganisationLevelDisplayText }}</th>
+        <th class="" colspan="5" id='inactiveHeader' >Inactive & UPW cases</th>
       </tr>
       <tr>
         <th id='name'>Name</th>
@@ -427,23 +427,23 @@
     </tbody>
     <tfoot>
       <tr>
-            <td colspan="2" headers="name org">{{ member.name }}</td>
-            <td headers="outstanding warrants">{{ member.totalOW }}</td>
-            <td headers="unpaid work">{{ member.totalUPW }}</td>
-            <td headers="overdue terminations">{{ member.totalOT }}</td>
-            <td headers="suspended lifers">{{ member.totalSL }}</td>
-            <td headers="suspended sentence orders">{{ member.totalSSO }}</td>
+            <td colspan="2" headers="grade name organisationLevel">{{ member.name }}</td>
+            <td headers="inactiveHeader outstandingWarrants">{{ member.totalOW }}</td>
+            <td headers="inactiveHeader unpaidWork">{{ member.totalUPW }}</td>
+            <td headers="inactiveHeader overdueTermination">{{ member.totalOT }}</td>
+            <td headers="inactiveHeader suspendedLifers">{{ member.totalSL }}</td>
+            <td headers="inactiveHeader suspendedSentenceOrders">{{ member.totalSSO }}</td>
       </tr>
     </tfoot>
       {% else %}
       <tr>
-          <td headers="name org"><a class="govuk-link" href="/{{ workloadType }}/offender-manager/{{ member.linkId }}">{{ member.name }}</a></td>
-          <td headers="grade org">{{ member.grade }}</td>
-          <td headers="outstanding warrants">{{ member.ow }}</td>
-          <td headers="unpaid work">{{ member.upw }}</td>
-          <td headers="overdue terminations">{{ member.ot }}</td>
-          <td headers="suspended lifers">{{ member.sl }}</td>
-          <td headers="suspended sentence orders">{{ member.sso }}</td>
+          <td headers="name organisationLevel"><a class="govuk-link" href="/{{ workloadType }}/offender-manager/{{ member.linkId }}">{{ member.name }}</a></td>
+          <td headers="grade organisationLevel">{{ member.grade }}</td>
+          <td headers="inactiveHeader outstandingWarrants">{{ member.ow }}</td>
+          <td headers="inactiveHeader unpaidWork">{{ member.upw }}</td>
+          <td headers="inactiveHeader overdueTermination">{{ member.ot }}</td>
+          <td headers="inactiveHeader suspendedLifers">{{ member.sl }}</td>
+          <td headers="inactiveHeader suspendedSentenceOrders">{{ member.sso }}</td>
       </tr>
       {% endif %}
       {% endfor %}
@@ -490,26 +490,26 @@
         {% for i in range(0, member.grades.length) %}
         <tr>
           {% if i === 0 %}
-            <td rowspan="{{ member.grades.length }}" headers="name org"><a class="govuk-link" href="/{{ workloadType }}/{{ childOrganisationLevel }}/{{ member.linkId }}">{{ member.name }}</a></td>
+            <td rowspan="{{ member.grades.length }}" headers="name organisationLevel"><a class="govuk-link" href="/{{ workloadType }}/{{ childOrganisationLevel }}/{{ member.linkId }}">{{ member.name }}</a></td>
           {% endif %}
-          <td class="align-centre" headers="grade org">{{ member.grades[i].grade }}</td>
-          <td headers="outstanding warrants">{{ member.grades[i].ow }}</td>
-          <td headers="unpaid work">{{ member.grades[i].upw }}</td>
-          <td headers="overdue terminations">{{ member.grades[i].ot }}</td>
-          <td headers="suspended lifers">{{ member.grades[i].sl }}</td>
-          <td headers="suspended sentence orders">{{ member.grades[i].sso }}</td>
+          <td class="align-centre" headers="grade organisationLevel">{{ member.grades[i].grade }}</td>
+          <td headers="inactiveHeader outstandingWarrants">{{ member.grades[i].ow }}</td>
+          <td headers="inactiveHeader unpaidWork">{{ member.grades[i].upw }}</td>
+          <td headers="inactiveHeader overdueTermination">{{ member.grades[i].ot }}</td>
+          <td headers="inactiveHeader suspendedLifers">{{ member.grades[i].sl }}</td>
+          <td headers="inactiveHeader suspendedSentenceOrders">{{ member.grades[i].sso }}</td>
         </tr>
         {% endfor %}
         {% if loop.last %}
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="2" headers="name org">{{ member.name }}</td>
-            <td headers="outstanding warrants">{{ member.totalOW }}</td>
-            <td headers="unpaid work">{{ member.totalUPW }}</td>
-            <td headers="overdue terminations">{{ member.totalOT }}</td>
-            <td headers="suspended lifers">{{ member.totalSL }}</td>
-            <td headers="suspended sentence orders">{{ member.totalSSO }}</td>
+            <td colspan="2" headers="grade name organisationLevel">{{ member.name }}</td>
+            <td headers="inactiveHeader outstandingWarrants">{{ member.totalOW }}</td>
+            <td headers="inactiveHeader unpaidWork">{{ member.totalUPW }}</td>
+            <td headers="inactiveHeader overdueTermination">{{ member.totalOT }}</td>
+            <td headers="inactiveHeader suspendedLifers">{{ member.totalSL }}</td>
+            <td headers="inactiveHeader suspendedSentenceOrders">{{ member.totalSSO }}</td>
         </tr>
     </tfoot>
         {% endif %}
@@ -531,6 +531,4 @@
     <script src="/public/javascripts/caseload-capacity-crc.js"></script>
     <script src="{{ assetPath }}javascripts/datatables.min.js"></script>
     <script src="{{ assetPath }}javascripts/case-details.js"></script>
-    <script src="/public/javascripts/floatThead.js"></script>
-    <script src="/public/javascripts/jquery.floatThead.js"></script>
 {% endblock %}

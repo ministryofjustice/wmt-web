@@ -15,28 +15,19 @@ const reductionReasonsRow = {
   isEnabled: true
 }
 
-let insertedId
-
 describe('services/data/get-reduction-reasons', function () {
   before(function () {
-    return helper.getMaxReductionReasonId()
-      .then(function (maxId) {
-        insertedId = (maxId + 1)
-        return helper.addReductionsRefData(maxId)
-          .then(function (builtInserts) {
-            inserts = builtInserts
-          })
+    return helper.addReductionsRefData()
+      .then(function (builtInserts) {
+        inserts = builtInserts
       })
   })
 
   it('should return an array of reductions reasons ref data', function () {
     return getReductionReasons()
       .then(function (results) {
-        const reasonIds = []
-        results.forEach(function (reason) {
-          reasonIds.push(reason.id)
-        })
-        expect(results).to.deep.contain(Object.assign({}, reductionReasonsRow, { id: insertedId }))
+        const expectedId = inserts.find((insert) => insert.table === 'reduction_reason').id
+        expect(results).to.deep.contain(Object.assign({}, reductionReasonsRow, { id: expectedId }))
       })
   })
 

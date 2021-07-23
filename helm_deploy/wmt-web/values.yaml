@@ -1,7 +1,7 @@
 ---
 generic-service:
   nameOverride: wmt-web
-  replicaCount: 1
+  replicaCount: 2
 
   image:
     repository: quay.io/hmpps/wmt-web
@@ -24,8 +24,7 @@ generic-service:
   # Environment variables to load into the deployment
   env:
     NODE_ENV: "production"
-    WMT_DB_NAME: "hmpps_workload"
-    WMT_DB_ARCHIVE_NAME: "hmpps_workload_archive"
+    PGSSLMODE: "no-verify"
 #    WMT_WEB_AUTHENTICATION_ENABLED: "true"
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
@@ -36,14 +35,16 @@ generic-service:
   namespace_secrets:
     hmpps-workload:
       APPINSIGHTS_INSTRUMENTATIONKEY: "APPINSIGHTS_INSTRUMENTATIONKEY"
-    rds-instance-output:
-      WMT_WEB_APP_DATABASE_USERNAME: "database_username"
-      WMT_WEB_APP_DATABASE_PASSWORD: "database_password"
-      WMT_DB_SERVER: "rds_instance_address"
-#    wmt-web:
-#      WMT_ACTIVE_DIRECTORY_ENTRY_POINT: "active-directory-entry-point"
-#      WMT_ACTIVE_DIRECTORY_ISSUER: "active-directory-issuer"
-#      WMT_ACTIVE_DIRECTORY_DOMAIN: "active-directory-domain"
+    rds-live-instance-output:
+      WMT_LIVE_DB_USERNAME: "database_username"
+      WMT_LIVE_DB_PASSWORD: "database_password"
+      WMT_LIVE_DB_SERVER: "rds_instance_address"
+      WMT_LIVE_DB_NAME: "database_name"
+    rds-history-instance-output:
+      WMT_HISTORY_DB_USERNAME: "database_username"
+      WMT_HISTORY_DB_PASSWORD: "database_password"
+      WMT_HISTORY_DB_SERVER: "rds_instance_address"
+      WMT_HISTORY_DB_NAME: "database_name"
 
   allowlist:
     office: "217.33.148.210/32"

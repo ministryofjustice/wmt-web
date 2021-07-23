@@ -1,0 +1,46 @@
+version: "3"
+services:
+  wmt-web:
+    build:
+        context: .
+    networks:
+        - hmpps
+    container_name: wmt-web
+    ports:
+        - "3001:3000"
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:3000/ping"]
+    environment:
+        - WMT_DB_SERVER=postgres
+    depends_on:
+        - "hmpps-workload"
+  hmpps-workload:
+    image: quay.io/hmpps/hmpps-workload:latest
+    networks:
+      - hmpps
+    container_name: hmpps-workload
+    ports:
+      - "8081:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ping"]
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_PROFILES_ACTIVE=dev
+      - DATABASE_ENDPOINT=postgres:5432
+    entrypoint: ["/bin/sh", "-c" , "sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar"]
+    depends_on:
+        - "postgres"
+  postgres:
+    image: postgres:11
+    networks:
+      - hmpps
+    container_name: hmpps-workload-postgres
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_PASSWORD=dev
+      - POSTGRES_USER=root
+
+networks:
+  hmpps:

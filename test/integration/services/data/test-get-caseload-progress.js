@@ -63,7 +63,8 @@ describe('services/data/get-org-unit-caseload-progress', function () {
     return getCaseProgress(inserts.filter((item) => item.table === 'ldu')[0].id, 'ldu')
       .then(function (results) {
         expect(results.length).to.eql(2)
-        expect(results).to.eql(lduWithMultipleTeams)
+        expect(results).to.deep.contain(lduWithMultipleTeams[0])
+        expect(results).to.deep.contain(lduWithMultipleTeams[1])
       })
   })
 
@@ -86,7 +87,8 @@ describe('services/data/get-org-unit-caseload-progress', function () {
     return getCaseProgress(inserts.filter((item) => item.table === 'region')[0].id, 'region')
       .then(function (results) {
         expect(results.length).to.eql(2)
-        expect(results).to.eql(regionWithTwoLdus)
+        expect(results).to.deep.contain(regionWithTwoLdus[0])
+        expect(results).to.deep.contain(regionWithTwoLdus[1])
       })
   })
 

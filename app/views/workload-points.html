@@ -46,14 +46,14 @@
 
   <div class="js-tabs">
     <ul class="js-tabs-links">
-      <li><a class="govuk-link" href="#custody" role="anchor-div">Custody</a></li>
-      <li><a class="govuk-link" href="#license" role="anchor-div">License</a></li>
-      <li><a class="govuk-link" href="#community" role="anchor-div">Community</a></li>
+      <li><a class="govuk-link" name="custody" href="#custody" role="anchor-div">Custody</a></li>
+      <li><a class="govuk-link" name="license" href="#license" role="anchor-div">License</a></li>
+      <li><a class="govuk-link" name="community" href="#community" role="anchor-div">Community</a></li>
       {% if not wp.isT2A or wp.isT2A === false or wp.isT2A === 'false' %}
-        <li><a class="govuk-link" href="#cms" role="anchor-div">CMS</a></li>
-        <li><a class="govuk-link" href="#gs" role="anchor-div">GS</a></li>
+        <li><a class="govuk-link" name="cms" href="#cms" role="anchor-div">CMS</a></li>
+        <li><a class="govuk-link" name="gs" href="#gs" role="anchor-div">GS</a></li>
       {% endif %}
-      <li><a class="govuk-link" href="#other" role="anchor-div">Other</a></li>
+      <li><a class="govuk-link" name="other" href="#other" role="anchor-div">Other</a></li>
     </ul>
 
     <div class="js-tabs-content">
