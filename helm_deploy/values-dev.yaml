@@ -1,6 +1,5 @@
 ---
 generic-service:
-  replicaCount: 2
 
   ingress:
     host: workload-measurement-dev.hmpps.service.justice.gov.uk
