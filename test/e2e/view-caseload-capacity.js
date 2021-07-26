@@ -25,7 +25,8 @@ describe('View your caseload capacity flow', () => {
   })
 
   it('should navigate to the workload owner caseload capacity screen', async () => {
-    await browser.url(workloadOwnerDefaultUrl + '/caseload-capacity')
+    const link = await $('[href="'+ workloadOwnerDefaultUrl + '/caseload-capacity"]')
+    await link.click()
     pageSubtitle = await $('.govuk-caption-xl')
     pageSubtitle = await pageSubtitle.getText()
     expect(pageSubtitle).to.equal('Offender Manager')
@@ -46,7 +47,6 @@ describe('View your caseload capacity flow', () => {
     await toYearField.setValue('2018')
 
     await submit.click()
-    await browser.pause(3000)
 
     try {
       const errorSummary = await $('.govuk-error-summary')
@@ -61,7 +61,15 @@ describe('View your caseload capacity flow', () => {
   })
 
   it('should navigate to the team caseload capacity screen', async () => {
-    await browser.url(teamDefaultUrl + '/caseload-capacity')
+    await browser.url(workloadOwnerDefaultUrl)
+    const overviewLink = await $('[href="'+ workloadOwnerDefaultUrl + '/overview"]')
+    await overviewLink.click()
+    const lduUrl =  await $('[href="'+ lduDefaultUrl + '"]')
+    await lduUrl.click()
+    const teamLink =  await $('[href="'+ teamDefaultUrl + '"]')
+    await teamLink.click()
+    const teamCapacityLink = await $('[href="'+ teamDefaultUrl + '/caseload-capacity"]')
+    await teamCapacityLink.click()
     pageSubtitle = await $('.govuk-caption-xl')
     pageSubtitle = await pageSubtitle.getText()
     expect(pageSubtitle).to.equal('Team')
@@ -82,7 +90,6 @@ describe('View your caseload capacity flow', () => {
     await toYearField.setValue('2018')
 
     await submit.click()
-    await browser.pause(3000)
 
     try {
       const errorSummary = await $('.govuk-error-summary')
@@ -97,7 +104,14 @@ describe('View your caseload capacity flow', () => {
   })
 
   it('should navigate to the ldu caseload capacity screen', async () => {
-    await browser.url(lduDefaultUrl + '/caseload-capacity')
+    await browser.url(workloadOwnerDefaultUrl)
+    await browser.url(workloadOwnerDefaultUrl)
+    const overviewLink = await $('[href="'+ workloadOwnerDefaultUrl + '/overview"]')
+    await overviewLink.click()
+    const lduUrl =  await $('[href="'+ lduDefaultUrl + '"]')
+    await lduUrl.click()
+    const caseloadCapacityUrl =  await $('[href="'+lduDefaultUrl + '/caseload-capacity"]')
+    await caseloadCapacityUrl.click()
     pageSubtitle = await $('.govuk-caption-xl')
     pageSubtitle = await pageSubtitle.getText()
     expect(pageSubtitle).to.equal('Probation Delivery Unit')
