@@ -63,8 +63,12 @@ describe('View overview', function () {
     expect(text).to.equal('Team')
   })
 
-  it('should naviagte to the region overview page', async function () {
-    await browser.url(regionDefaultUrl + '/overview')
+  it('should navigate to the region overview page', async function () {
+    await browser.url(workloadOwnerDefaultUrl + '/overview')
+    const regionLink = await $('[href="' + regionDefaultUrl + '"]')
+    await regionLink.click()
+    const regionOverviewLink = await $('[href="' + regionDefaultUrl + '/overview"]')
+    await regionOverviewLink.click()
     const element = await $('.sln-table-org-level')
     const text = await element.getText()
     expect(text).to.equal('Probation Delivery Unit')
