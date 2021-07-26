@@ -131,7 +131,7 @@ module.exports.deleteReductionsForIds = function (ids) {
     .del()
     .then(() => {
       return knex('reductions')
-      .withSchema('app')
+        .withSchema('app')
         .whereIn('id', ids)
         .del()
     })
