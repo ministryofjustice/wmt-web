@@ -25,7 +25,7 @@ describe('View your caseload capacity flow', () => {
   })
 
   it('should navigate to the workload owner caseload capacity screen', async () => {
-    const link = await $('[href="'+ workloadOwnerDefaultUrl + '/caseload-capacity"]')
+    const link = await $('[href="' + workloadOwnerDefaultUrl + '/caseload-capacity"]')
     await link.click()
     pageSubtitle = await $('.govuk-caption-xl')
     pageSubtitle = await pageSubtitle.getText()
@@ -49,6 +49,9 @@ describe('View your caseload capacity flow', () => {
     await submit.click()
 
     try {
+      const errorMessage = await $('.govuk-error-message')
+      const errorText = await errorMessage.getText()
+      expect(errorText).to.equal('There is no data for this period (// - //)')
       const errorSummary = await $('.govuk-error-summary')
       const exists = await errorSummary.isExisting()
       expect(exists).to.be.equal(false)
@@ -62,13 +65,13 @@ describe('View your caseload capacity flow', () => {
 
   it('should navigate to the team caseload capacity screen', async () => {
     await browser.url(workloadOwnerDefaultUrl)
-    const overviewLink = await $('[href="'+ workloadOwnerDefaultUrl + '/overview"]')
+    const overviewLink = await $('[href="' + workloadOwnerDefaultUrl + '/overview"]')
     await overviewLink.click()
-    const lduUrl =  await $('[href="'+ lduDefaultUrl + '"]')
+    const lduUrl = await $('[href="' + lduDefaultUrl + '"]')
     await lduUrl.click()
-    const teamLink =  await $('[href="'+ teamDefaultUrl + '"]')
+    const teamLink = await $('[href="' + teamDefaultUrl + '"]')
     await teamLink.click()
-    const teamCapacityLink = await $('[href="'+ teamDefaultUrl + '/caseload-capacity"]')
+    const teamCapacityLink = await $('[href="' + teamDefaultUrl + '/caseload-capacity"]')
     await teamCapacityLink.click()
     pageSubtitle = await $('.govuk-caption-xl')
     pageSubtitle = await pageSubtitle.getText()
@@ -92,6 +95,9 @@ describe('View your caseload capacity flow', () => {
     await submit.click()
 
     try {
+      const errorMessage = await $('.govuk-error-message')
+      const errorText = await errorMessage.getText()
+      expect(errorText).to.equal('There is no data for this period (// - //)')
       const errorSummary = await $('.govuk-error-summary')
       const exists = await errorSummary.isExisting()
       expect(exists).to.be.equal(false)
@@ -105,12 +111,11 @@ describe('View your caseload capacity flow', () => {
 
   it('should navigate to the ldu caseload capacity screen', async () => {
     await browser.url(workloadOwnerDefaultUrl)
-    await browser.url(workloadOwnerDefaultUrl)
-    const overviewLink = await $('[href="'+ workloadOwnerDefaultUrl + '/overview"]')
+    const overviewLink = await $('[href="' + workloadOwnerDefaultUrl + '/overview"]')
     await overviewLink.click()
-    const lduUrl =  await $('[href="'+ lduDefaultUrl + '"]')
+    const lduUrl = await $('[href="' + lduDefaultUrl + '"]')
     await lduUrl.click()
-    const caseloadCapacityUrl =  await $('[href="'+lduDefaultUrl + '/caseload-capacity"]')
+    const caseloadCapacityUrl = await $('[href="' + lduDefaultUrl + '/caseload-capacity"]')
     await caseloadCapacityUrl.click()
     pageSubtitle = await $('.govuk-caption-xl')
     pageSubtitle = await pageSubtitle.getText()
@@ -132,9 +137,11 @@ describe('View your caseload capacity flow', () => {
     await toYearField.setValue('2018')
 
     await submit.click()
-    await browser.pause(3000)
 
     try {
+      const errorMessage = await $('.govuk-error-message')
+      const errorText = await errorMessage.getText()
+      expect(errorText).to.equal('There is no data for this period (// - //)')
       const errorSummary = await $('.govuk-error-summary')
       const exists = await errorSummary.isExisting()
       expect(exists).to.be.equal(false)
@@ -147,7 +154,11 @@ describe('View your caseload capacity flow', () => {
   })
 
   it('should navigate to the region caseload capacity screen', async () => {
-    await browser.url(regionDefaultUrl + '/caseload-capacity')
+    await browser.url('/')
+    const regionLink = await $('[href="' + regionDefaultUrl + '"]')
+    await regionLink.click()
+    const regionCasloadLink = await $('[href="' + regionDefaultUrl + '/caseload-capacity"]')
+    await regionCasloadLink.click()
     pageSubtitle = await $('.govuk-caption-xl')
     pageSubtitle = await pageSubtitle.getText()
     expect(pageSubtitle).to.equal('Region')
@@ -168,9 +179,11 @@ describe('View your caseload capacity flow', () => {
     await toYearField.setValue('2018')
 
     await submit.click()
-    await browser.pause(3000)
 
     try {
+      const errorMessage = await $('.govuk-error-message')
+      const errorText = await errorMessage.getText()
+      expect(errorText).to.equal('There is no data for this period (// - //)')
       const errorSummary = await $('.govuk-error-summary')
       const exists = await errorSummary.isExisting()
       expect(exists).to.be.equal(false)
@@ -183,7 +196,9 @@ describe('View your caseload capacity flow', () => {
   })
 
   it('should navigate to the national caseload capacity screen', async () => {
-    await browser.url(nationalDefaultUrl + '/caseload-capacity')
+    await browser.url('/')
+    const nationalCaseloadLink = await $('[href="' + nationalDefaultUrl + '/caseload-capacity"]')
+    await nationalCaseloadLink.click()
     pageSubtitle = await $('.govuk-caption-xl')
     pageSubtitle = await pageSubtitle.getText()
     expect(pageSubtitle).to.equal('National')
@@ -204,9 +219,11 @@ describe('View your caseload capacity flow', () => {
     await toYearField.setValue('2018')
 
     await submit.click()
-    await browser.pause(3000)
 
     try {
+      const errorMessage = await $('.govuk-error-message')
+      const errorText = await errorMessage.getText()
+      expect(errorText).to.equal('There is no data for this period (// - //)')
       const errorSummary = await $('.govuk-error-summary')
       const exists = await errorSummary.isExisting()
       expect(exists).to.be.equal(false)
