@@ -25,7 +25,6 @@ describe('View overview', function () {
     regionDefaultUrl = '/' + workloadTypes.PROBATION + '/region/' + workloadOwnerIds.filter((item) => item.table === 'region')[0].id
     nationalDefaultUrl = '/' + workloadTypes.PROBATION + '/hmpps/0'
     workloadOwnerGrade = await dataHelper.selectGradeForWorkloadOwner(workloadOwnerId)
-    await browser.url(workloadOwnerDefaultUrl + '/overview')
   })
 
   it('should navigate to the workload owner overview page', async function () {
@@ -37,24 +36,28 @@ describe('View overview', function () {
 
   it('should not include the reductions export at workload owner level', async function () {
     await browser.url(workloadOwnerDefaultUrl + '/overview')
-    try {
-      const reductionExport = await $('.reduction-export')
-      const exists = await reductionExport.isExisting()
-      expect(exists).to.be.false //eslint-disable-line
-    } catch (error) {
-      log.error(error)
-    }
+    const reductionExport = await $('.reduction-export')
+    const exists = await reductionExport.isExisting()
+    expect(exists).to.be.false 
   })
 
   it('should navigate to the team overview page', async function () {
-    await browser.url(teamDefaultUrl + '/overview')
+    await browser.url(workloadOwnerDefaultUrl + '/overview')
+    const teamLink = await $('[href="' + teamDefaultUrl + '"]')
+    await teamLink.click()
+    const teamOverviewLink = await $('[href="' + teamDefaultUrl + '/overview"]')
+    await teamOverviewLink.click()
     const element = await $('.sln-table-org-level')
     const text = await element.getText()
     expect(text).to.equal('Offender Manager')
   })
 
-  it('should naviagte to the ldu overview page', async function () {
-    await browser.url(lduDefaultUrl + '/overview')
+  it('should navigate to the ldu overview page', async function () {
+    await browser.url(workloadOwnerDefaultUrl + '/overview')
+    const lduLink = await $('[href="' + lduDefaultUrl + '"]')
+    await lduLink.click()
+    const lduOverviewLink = await $('[href="' + lduDefaultUrl + '/overview"]')
+    await lduOverviewLink.click()    
     const element = await $('.sln-table-org-level')
     const text = await element.getText()
     expect(text).to.equal('Team')
