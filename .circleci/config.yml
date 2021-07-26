@@ -236,6 +236,33 @@ workflows:
             - helm_lint
             - unit_test
             - build_docker
+            - e2e_test
+            - accessibility_test
+            - integration_test
+      - request-preprod-approval:
+          type: approval
+          requires:
+            - deploy_dev
+      - hmpps/deploy_env:
+          name: deploy_preprod
+          env: "preprod"
+          context: 
+            - hmpps-common-vars
+            - hmpps-workload-preprod
+          requires:
+            - request-preprod-approval
+      - request-prod-approval:
+          type: approval
+          requires:
+            - deploy_preprod
+      - hmpps/deploy_env:
+          name: deploy_prod
+          env: "prod"
+          context: 
+            - hmpps-common-vars
+            - hmpps-workload-prod
+          requires:
+            - request-prod-approval
 
   security:
     triggers:
