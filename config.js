@@ -51,8 +51,7 @@ module.exports = {
   ARCHIVE_MAX_WORKLOAD_REPORT_ID: process.env.WMT_ARCHIVE_MAX_WORKLOAD_REPORT_ID || '1284',
 
   LEGACY_MAX_WORKLOAD_ID: process.env.WMT_LEGACY_MAX_WORKLOAD_ID || '2540621',
-  ARCHIVE_MAX_WORKLOAD_ID: process.env.WMT_ARCHIVE_MAX_WORKLOAD_ID || '5313915'
-  ARMS_LICENCE_MULTIPLIER: 1,
+  ARCHIVE_MAX_WORKLOAD_ID: process.env.WMT_ARCHIVE_MAX_WORKLOAD_ID || '5313915',
   apis: {
     hmppsAuth: {
       url: get('HMPPS_AUTH_URL', 'http://localhost:9090/auth', requiredInProduction),

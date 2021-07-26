@@ -38,7 +38,7 @@ describe('View overview', function () {
     await browser.url(workloadOwnerDefaultUrl + '/overview')
     const reductionExport = await $('.reduction-export')
     const exists = await reductionExport.isExisting()
-    expect(exists).to.be.false 
+    return expect(exists).to.be.false
   })
 
   it('should navigate to the team overview page', async function () {
@@ -57,7 +57,7 @@ describe('View overview', function () {
     const lduLink = await $('[href="' + lduDefaultUrl + '"]')
     await lduLink.click()
     const lduOverviewLink = await $('[href="' + lduDefaultUrl + '/overview"]')
-    await lduOverviewLink.click()    
+    await lduOverviewLink.click()
     const element = await $('.sln-table-org-level')
     const text = await element.getText()
     expect(text).to.equal('Team')
