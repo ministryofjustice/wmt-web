@@ -8,6 +8,8 @@ module.exports = function (id, organisationalUnitName, currentPath, workloadType
   const navigation = []
 
   const isOffenderManager = organisationalUnitName === organisationUnitConstants.OFFENDER_MANAGER.name
+  const isNational = organisationalUnitName === organisationUnitConstants.NATIONAL.name
+
   switch (workloadType) {
     case workloadConstants.COURT_REPORTS:
       if (isOffenderManager) {
@@ -26,18 +28,21 @@ module.exports = function (id, organisationalUnitName, currentPath, workloadType
         navigation.push(new Link('Contracted Hours', baseLink + '/contracted-hours'))
         navigation.push(new Link('Case Progress', baseLink + '/case-progress'))
         navigation.push(new Link('Reductions', baseLink + '/reductions'))
+      } else if (isNational) {
+        navigation.push(new Link('Overview', baseLink + '/overview'))
+        navigation.push(new Link('Capacity', baseLink + '/caseload-capacity'))
+        navigation.push(new Link('NPS Caseload', baseLink + '/caseload'))
+        navigation.push(new Link('CRC Caseload', baseLink + '/crc-caseload'))
+        navigation.push(new Link('Case Progress', baseLink + '/case-progress'))
+        if (authorisation === false || userRole === 'Data Admin' || userRole === 'System Admin' || userRole === 'Manager') {
+          navigation.push(new Link('Dashboard', baseLink + '/dashboard'))
+        }
       } else {
         navigation.push(new Link('Overview', baseLink + '/overview'))
         navigation.push(new Link('Capacity', baseLink + '/caseload-capacity'))
         navigation.push(new Link('Caseload', baseLink + '/caseload'))
         navigation.push(new Link('Case Progress', baseLink + '/case-progress'))
-        if (organisationalUnitName !== organisationUnitConstants.NATIONAL.name) {
-          navigation.push(new Link('Export', baseLink + '/export'))
-        } else {
-          if (authorisation === false || userRole === 'Data Admin' || userRole === 'System Admin' || userRole === 'Manager') {
-            navigation.push(new Link('Dashboard', baseLink + '/dashboard'))
-          }
-        }
+        navigation.push(new Link('Export', baseLink + '/export'))
       }
       break
     case workloadConstants.OMIC:

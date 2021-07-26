@@ -28,7 +28,7 @@ describe('/caseload-capacity', function () {
   let getOutstandingReportsStub
   let getSubNavStub
   let getLastUpdated
-  const capacityStubResult = { title: 'Test', capacityTable: {}, subNav: [{}] }
+  const capacityStubResult = { breadcrumbs: [{}], capacityBreakdown: [{}], title: 'Test', subTitle: 'Test', capacityTable: {}, crcCapacityTable: {}, subNav: [{}], capacityBreakdownTotals: {}, capacityBreakdownCRCTotals: {} }
   let getCaseDetailsStub
   const authorisationService = {
     assertUserAuthenticated: sinon.stub()
@@ -36,7 +36,7 @@ describe('/caseload-capacity', function () {
   beforeEach(function () {
     getCapacityStub = sinon.stub()
     getCaseDetailsStub = sinon.stub().resolves()
-    getOutstandingReportsStub = sinon.stub().resolves()
+    getOutstandingReportsStub = sinon.stub().resolves({ result: [{}], totals: {}, crcTotals: {} })
     getSubNavStub = sinon.stub()
     getLastUpdated = sinon.stub().resolves(new Date(2017, 11, 1))
     const route = proxyquire(

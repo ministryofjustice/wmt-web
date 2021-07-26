@@ -20,7 +20,9 @@ module.exports.createDailyArchive = function (dailyArchiveData) {
     paroms_points: dailyArchiveData.paromsPoints,
     nominal_target: dailyArchiveData.nominalTarget,
     contracted_hours: dailyArchiveData.contractedHours,
-    hours_reduction: dailyArchiveData.hoursReduction
+    hours_reduction: dailyArchiveData.hoursReduction,
+    workload_report_id: 1,
+    team_unique_identifier: '456'
   }
 
   return knex('daily_archive_data').withSchema('dbo').returning('id').insert(insert)

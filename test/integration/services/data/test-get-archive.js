@@ -1,7 +1,7 @@
 const expect = require('chai').expect
 const moment = require('moment')
 const getArchive = require('../../../../app/services/data/get-daily-archive')
-const ArchiveDateRange = require('../../../../app/services/domain/archive-date-range')
+const ArchiveDataForm = require('../../../../app/services/domain/archive-data-form')
 const { createDailyArchive, deleteDailyArchiveByIds } = require('../../../helpers/data/daily-archive-data-helper')
 
 const toDate = moment()
@@ -27,7 +27,7 @@ const expectedResult = {
 
 let idsSaved
 
-const archiveDateRange = new ArchiveDateRange(fromDate.date(), fromDate.month() + 1, fromDate.year(), toDate.date(), toDate.month() + 1, toDate.year())
+const archiveDataForm = new ArchiveDataForm(fromDate.date(), fromDate.month() + 1, fromDate.year(), toDate.date(), toDate.month() + 1, toDate.year(), [expectedResult.omName])
 
 describe('services/data/get-daily-archive', function () {
   before(function () {
@@ -36,7 +36,7 @@ describe('services/data/get-daily-archive', function () {
     })
   })
   it('should retrieve all twelve columns for archive data', function () {
-    return getArchive(archiveDateRange).then(function (results) {
+    return getArchive(archiveDataForm).then(function (results) {
       expect(results[0].workloadID).to.eql(expectedResult.workloadID)
       expect(results[0].lduName).to.eql(expectedResult.lduName)
       expect(results[0].teamName).to.eql(expectedResult.teamName)
