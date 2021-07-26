@@ -2,7 +2,6 @@ const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
-const log = require('../../app/logger')
 
 let workloadOwnerIds = []
 let workloadOwnerId
@@ -75,7 +74,9 @@ describe('View overview', function () {
   })
 
   it('should navigate to the national overview page', async function () {
-    await browser.url(nationalDefaultUrl + '/overview')
+    await browser.url(nationalDefaultUrl)
+    const overviewLink = await $('[href="' + nationalDefaultUrl + '/overview"]')
+    await overviewLink.click()
     const element = await $('.sln-table-org-level')
     const text = await element.getText()
     expect(text).to.equal('Region')
@@ -83,57 +84,39 @@ describe('View overview', function () {
 
   it('should not include the reductions export for staff at team level', async function () {
     await browser.url(teamDefaultUrl + '/overview')
-    try {
-      const reductionExport = await $('.reduction-export')
-      const exists = await reductionExport.isExisting()
-      expect(exists).to.be.false //eslint-disable-line
-    } catch (error) {
-      log.error(error)
-    }
+
+    const reductionExport = await $('.reduction-export')
+    const exists = await reductionExport.isExisting()
+    return expect(exists).to.be.false
   })
 
   it('should not include the reductions export for staff at region level', async function () {
     await browser.url(regionDefaultUrl + '/overview')
-    try {
-      const reductionExport = await $('.reduction-export')
-      const exists = await reductionExport.isExisting()
-      expect(exists).to.be.false //eslint-disable-line
-    } catch (error) {
-      log.error(error)
-    }
+    const reductionExport = await $('.reduction-export')
+    const exists = await reductionExport.isExisting()
+    return expect(exists).to.be.false
   })
 
   it('should not include the reductions export for staff at ldu level', async function () {
     await browser.url(lduDefaultUrl + '/overview')
-    try {
-      const reductionExport = await $('.reduction-export')
-      const exists = await reductionExport.isExisting()
-      expect(exists).to.be.false //eslint-disable-line
-    } catch (error) {
-      log.error(error)
-    }
+    const reductionExport = await $('.reduction-export')
+    const exists = await reductionExport.isExisting()
+    return expect(exists).to.be.false
   })
 
   it('should not include the reductions export for staff at national level', async function () {
     await browser.url(nationalDefaultUrl + '/overview')
-    try {
-      const reductionExport = await $('.reduction-export')
-      const exists = await reductionExport.isExisting()
-      expect(exists).to.be.false //eslint-disable-line
-    } catch (error) {
-      log.error(error)
-    }
+    const reductionExport = await $('.reduction-export')
+    const exists = await reductionExport.isExisting()
+    return expect(exists).to.be.false
   })
 
   it('should not include the reductions export for staff at workload owner level', async function () {
     await browser.url(workloadOwnerDefaultUrl + '/overview')
-    try {
-      const reductionExport = await $('.reduction-export')
-      const exists = await reductionExport.isExisting()
-      expect(exists).to.be.false //eslint-disable-line
-    } catch (error) {
-      log.error(error)
-    }
+
+    const reductionExport = await $('.reduction-export')
+    const exists = await reductionExport.isExisting()
+    return expect(exists).to.be.false
   })
 
   it('should allow the user to navigate down the org hierarchy from the national page', async function () {
@@ -228,24 +211,17 @@ describe('View overview', function () {
 
   it('should not include the reductions export for managers at workload owner level', async function () {
     await browser.url(workloadOwnerDefaultUrl + '/overview')
-    try {
-      const reductionExport = await $('.reduction-export')
-      const exists = await reductionExport.isExisting()
-      expect(exists).to.be.false //eslint-disable-line
-    } catch (error) {
-      log.error(error)
-    }
+
+    const reductionExport = await $('.reduction-export')
+    const exists = await reductionExport.isExisting()
+    return expect(exists).to.be.false
   })
 
   it('should not include the reductions export for managers at national level', async function () {
     await browser.url(nationalDefaultUrl + '/overview')
-    try {
-      const reductionExport = await $('.reduction-export')
-      const exists = await reductionExport.isExisting()
-      expect(exists).to.be.false //eslint-disable-line
-    } catch (error) {
-      log.error(error)
-    }
+    const reductionExport = await $('.reduction-export')
+    const exists = await reductionExport.isExisting()
+    return expect(exists).to.be.false
   })
 
   after(function () {
