@@ -4,7 +4,7 @@ const roles = require('../constants/user-roles')
 const Unauthorized = require('../services/errors/authentication-error').Unauthorized
 const Forbidden = require('../services/errors/authentication-error').Forbidden
 const getArchive = require('../services/archive-service')
-const dateRangeHelper = require('../services/helpers/date-range-helper')
+const ArchiveDataForm = require('../services/domain/archive-data-form')
 const ValidationError = require('../services/errors/validation-error')
 const getExportCsv = require('../services/get-export-csv')
 const tabs = require('../constants/wmt-tabs')
@@ -15,8 +15,10 @@ const viewTemplate = 'reduction-archive-data'
 const title = 'Archived Reductions'
 const heDecode = require('he')
 const getReductionsHistory = require('../services/data/get-reductions-history')
+const getStringifiedBody = require('../helpers/archive-helpers/get-stringified-body')
+const createSearchListArray = require('../helpers/archive-helpers/create-search-list-array')
 
-let archiveDateRange
+let archiveDataForm
 
 module.exports = function (router) {
   router.get('/archive-data/reductions', function (req, res, next) {
@@ -54,27 +56,30 @@ module.exports = function (router) {
       }
     }
 
-    let errors
+    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
+    const multiSearchField = createSearchListArray(req.body['multi-search-field'])
+    const stringifiedBody = getStringifiedBody(req.body, multiSearchField)
 
     try {
-      archiveDateRange = dateRangeHelper.createReductionArchiveDateRange(req.body)
+      archiveDataForm = new ArchiveDataForm(
+        req.body['archive-from-day'],
+        req.body['archive-from-month'],
+        req.body['archive-from-year'],
+        req.body['archive-to-day'],
+        req.body['archive-to-month'],
+        req.body['archive-to-year'],
+        multiSearchField,
+        true
+      )
     } catch (error) {
       if (error instanceof ValidationError) {
-        errors = error.validationErrors
-        archiveDateRange = dateRangeHelper.createReductionArchiveDateRange({})
+        return renderResults(viewTemplate, title, res, error.validationErrors, null, authorisedUserRole, archiveDataForm, req.body, null, stringifiedBody)
       } else {
         throw error
       }
     }
 
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
-    const extraCriteria = heDecode.decode(req.body['reductions-multi-search-field-entry'])
-
-    // If date range has errors don't search database
-    if (errors) {
-      return renderResults(viewTemplate, title, res, errors, null, authorisedUserRole, archiveDateRange, extraCriteria)
-    }
-    return getArchive(archiveOptions.REDUCTIONS, archiveDateRange, extraCriteria, parseInt(req.body.start), parseInt(req.body.length)).then(function (results) {
+    return getArchive(archiveOptions.REDUCTIONS, archiveDataForm).then(function (results) {
       results = formatResults(results)
       if (results.length === 0) {
         return res.json({
@@ -133,30 +138,29 @@ module.exports = function (router) {
       }
     }
 
-    let errors
+    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
+    const multiSearchField = createSearchListArray(req.body['multi-search-field'])
+    const stringifiedBody = getStringifiedBody(req.body, multiSearchField)
 
     try {
-      archiveDateRange = dateRangeHelper.createReductionArchiveDateRange(req.body)
+      archiveDataForm = new ArchiveDataForm(
+        req.body['archive-from-day'],
+        req.body['archive-from-month'],
+        req.body['archive-from-year'],
+        req.body['archive-to-day'],
+        req.body['archive-to-month'],
+        req.body['archive-to-year'],
+        multiSearchField,
+        true
+      )
     } catch (error) {
       if (error instanceof ValidationError) {
-        errors = error.validationErrors
-        archiveDateRange = dateRangeHelper.createReductionArchiveDateRange({})
+        return renderResults(viewTemplate, title, res, error.validationErrors, null, authorisedUserRole, archiveDataForm, req.body, null, stringifiedBody)
       } else {
         throw error
       }
     }
-
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
-    const extraCriteria = heDecode.decode(req.body['reductions-multi-search-field-entry'])
-
-    // If date range has errors don't search database
-    if (errors) {
-      return renderResults(viewTemplate, title, res, errors, null, authorisedUserRole, archiveDateRange, extraCriteria)
-    }
-    let stringifiedBody = Object.assign({}, req.body)
-    stringifiedBody['reductions-multi-search-field-entry'] = heDecode.decode(stringifiedBody['reductions-multi-search-field-entry'])
-    stringifiedBody = JSON.stringify(stringifiedBody)
-    return renderResults(viewTemplate, title, res, errors, null, authorisedUserRole, archiveDateRange, extraCriteria, true, stringifiedBody)
+    return renderResults(viewTemplate, title, res, null, null, authorisedUserRole, archiveDataForm, req.body, true, stringifiedBody)
   })
 
   router.post('/archive-data/reductions/archive-csv', function (req, res, next) {
@@ -174,31 +178,34 @@ module.exports = function (router) {
       }
     }
 
-    let errors
+    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
+    const multiSearchField = createSearchListArray(req.body['multi-search-field'])
+    const stringifiedBody = getStringifiedBody(req.body, multiSearchField)
 
     try {
-      archiveDateRange = dateRangeHelper.createReductionArchiveDateRange(req.body)
+      archiveDataForm = new ArchiveDataForm(
+        req.body['archive-from-day'],
+        req.body['archive-from-month'],
+        req.body['archive-from-year'],
+        req.body['archive-to-day'],
+        req.body['archive-to-month'],
+        req.body['archive-to-year'],
+        multiSearchField,
+        true
+      )
     } catch (error) {
       if (error instanceof ValidationError) {
-        errors = error.validationErrors
-        archiveDateRange = dateRangeHelper.createReductionArchiveDateRange({})
+        return renderResults(viewTemplate, title, res, error.validationErrors, null, authorisedUserRole, archiveDataForm, req.body, null, stringifiedBody)
       } else {
         throw error
       }
     }
 
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
-    const extraCriteria = heDecode.decode(req.body['reductions-multi-search-field-entry'])
-
-    // If date range has errors don't search database
-    if (errors) {
-      return renderResults(viewTemplate, title, res, errors, null, authorisedUserRole, archiveDateRange, extraCriteria)
-    }
-    return getArchive(archiveOptions.REDUCTIONS, archiveDateRange, extraCriteria).then(function (results) {
+    return getArchive(archiveOptions.REDUCTIONS, archiveDataForm).then(function (results) {
       results = formatResults(results)
       let dateFileName = null
-      if (archiveDateRange !== null) {
-        dateFileName = archiveDateRange.archiveFromDate.toISOString().substring(0, 10) + ' ' + archiveDateRange.archiveToDate.toISOString().substring(0, 10)
+      if (archiveDataForm !== null) {
+        dateFileName = archiveDataForm.archiveFromDate.toISOString().substring(0, 10) + ' ' + archiveDataForm.archiveToDate.toISOString().substring(0, 10)
       }
       const exportCsv = getExportCsv(dateFileName, results, tabs.ADMIN.REDUCTION_ARCHIVE)
       res.attachment(exportCsv.filename)

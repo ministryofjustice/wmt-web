@@ -3,6 +3,9 @@ const getExportCsv = require('../../../app/services/get-export-csv')
 const orgUnit = require('../../../app/constants/organisation-unit')
 const tabs = require('../../../app/constants/wmt-tabs')
 const helper = require('../../helpers/export-csv-helper')
+const groupedDataOmWeekly = require('../../helpers/data/archive-test-data/grouped-data-om-weekly')
+const groupedDataTeamWeekly = require('../../helpers/data/archive-test-data/grouped-data-team-weekly')
+// const log = require('../../../app/logger')
 
 describe('services/get-export-csv', function () {
   describe('should return the correct csv object', function () {
@@ -84,6 +87,14 @@ describe('services/get-export-csv', function () {
 
     it('for Expiring Reductions Export', function () {
       expect(getExportCsv(orgUnit.TEAM.name, helper.TEAM_EXPIRING_REDUCTIONS_RESULT.reductionNotes, tabs.EXPORT.EXPIRING_REDUCTIONS).csv).to.eql(helper.TEAM_EXPIRING_REDUCTIONS_CSV.csv)
+    })
+
+    it('for Averaged Archive Data Export', function () {
+      expect(getExportCsv('Filename', groupedDataOmWeekly, tabs.ADMIN.GROUPED_ARCHIVE).csv).to.eql(helper.GROUPED_ARCHIVE_CSV.csv)
+    })
+
+    it('for Averaged Archive Data Export - Team', function () {
+      expect(getExportCsv('Filename', groupedDataTeamWeekly, tabs.ADMIN.GROUPED_ARCHIVE_TEAM).csv).to.eql(helper.GROUPED_ARCHIVE_CSV_TEAM.csv)
     })
   })
   describe('should format the capacity percentage when exporting overviews', function () {

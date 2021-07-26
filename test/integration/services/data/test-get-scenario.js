@@ -49,7 +49,7 @@ describe('services/data/get-scenario division', function () {
     })
   })
   it('should retrieve all 510 raw scenario records for HMPPS > Region 1', function () {
-    return getRegion('Test Region').then(function (id) {
+    return getRegion('NPS Test Region').then(function (id) {
       return getScenario(id, 'region').then(function (results) {
         expect(results.length).to.eql(51)
       })

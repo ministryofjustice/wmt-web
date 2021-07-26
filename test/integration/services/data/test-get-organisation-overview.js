@@ -48,7 +48,7 @@ describe('services/data/get-organisation-overview', function () {
       .then(function (results) {
         expect(results.map(function (entry) {
           return entry.name
-        })).to.contain('Test Region')
+        })).to.contain('NPS Test Region')
       })
   })
 

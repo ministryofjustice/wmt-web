@@ -8,6 +8,7 @@ let offenderManagerId
 let reductionUrl
 let offenderManagerUrl
 let reductionTypeField, hoursField, startDayField, startMonthField, startYearField, endDayField, endMonthField, endYearField, notesField, submit
+const ids = []
 
 describe('View editing a new reduction', () => {
   before(async function () {
@@ -85,24 +86,10 @@ describe('View editing a new reduction', () => {
     it('with the correct breadcrumbs and heading title', async () => {
       await browser.url(reductionUrl)
       const currentTime = moment().format('YYYY-MM-DD HH:mm:ss.SSS')
-      reductionTypeField = await $('#select-box')
-      hoursField = await $('#hours')
-      startDayField = await $('#start-day')
-      startMonthField = await $('#start-month')
-      startYearField = await $('#start-year')
-      endDayField = await $('#end-day')
-      endMonthField = await $('#end-month')
       endYearField = await $('#end-year')
       notesField = await $('#textarea')
       submit = await $('#submit-button')
 
-      await reductionTypeField.selectByVisibleText('Other')
-      await hoursField.setValue('10')
-      await startDayField.setValue('1')
-      await startMonthField.setValue('2')
-      await startYearField.setValue('2017')
-      await endDayField.setValue('1')
-      await endMonthField.setValue('2')
       await endYearField.setValue('2027')
       await notesField.setValue(currentTime)
 
@@ -110,6 +97,7 @@ describe('View editing a new reduction', () => {
       await browser.pause(5000)
 
       const reduction = await dataHelper.getLastRecordFromTable('reductions')
+      ids.push(reduction.id)
       const reductionURL = '/probation/offender-manager/' + reduction.workload_owner_id + '/edit-reduction?reductionId=' + reduction.id
       const link = await $('[href="' + reductionURL + '"')
       await link.click()
@@ -137,6 +125,6 @@ describe('View editing a new reduction', () => {
   })
 
   after(function () {
-    return dataHelper.deleteLastRecordFromTables(['reductions_history', 'reductions'])
+    return dataHelper.deleteReductionsForIds(ids)
   })
 })
