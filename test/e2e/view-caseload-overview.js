@@ -83,15 +83,22 @@ describe('View overview', function () {
   })
 
   it('should not include the reductions export for staff at team level', async function () {
-    await browser.url(teamDefaultUrl + '/overview')
-
+    await browser.url(workloadOwnerDefaultUrl + '/overview')
+    const teamLink = await $('[href="' + teamDefaultUrl + '"]')
+    await teamLink.click()
+    const teamOverviewLink = await $('[href="' + teamDefaultUrl + '/overview"]')
+    await teamOverviewLink.click()
     const reductionExport = await $('.reduction-export')
     const exists = await reductionExport.isExisting()
     return expect(exists).to.be.false
   })
 
   it('should not include the reductions export for staff at region level', async function () {
-    await browser.url(regionDefaultUrl + '/overview')
+    await browser.url(workloadOwnerDefaultUrl + '/overview')
+    const regionLink = await $('[href="' + regionDefaultUrl + '"]')
+    await regionLink.click()
+    const regionOverviewLink = await $('[href="' + regionDefaultUrl + '/overview"]')
+    await regionOverviewLink.click()
     const reductionExport = await $('.reduction-export')
     const exists = await reductionExport.isExisting()
     return expect(exists).to.be.false
