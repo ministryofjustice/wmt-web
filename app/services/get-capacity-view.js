@@ -77,7 +77,7 @@ const parseCapacityBreakdown = function (workloadReports, organisationLevel) {
 
     organisationMap.forEach(function (reports, orgName) {
       if (organisationLevel === organisationConstant.NATIONAL.name) {
-        if (orgName.includes('NPS ')) {
+        if (!orgName.includes('CPA ')) {
           const newEntry = {
             name: orgName,
             linkId: reports[0].linkId,

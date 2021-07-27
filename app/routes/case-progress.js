@@ -37,8 +37,8 @@ module.exports = function (router) {
         let crcCaseProgressList = Object.assign([], result.caseProgressList)
         let stringifiedCRCCaseProgressList = ''
         if (organisationLevel === organisationUnit.NATIONAL.name) {
-          crcCaseProgressList = crcCaseProgressList.filter(c => !c.name.includes('NPS '))
-          result.caseProgressList = result.caseProgressList.filter(c => c.name.includes('NPS '))
+          crcCaseProgressList = crcCaseProgressList.filter(c => c.name.includes('CPA '))
+          result.caseProgressList = result.caseProgressList.filter(c => !c.name.includes('CPA '))
           stringifiedCRCCaseProgressList = Object.assign([], crcCaseProgressList)
           stringifiedCRCCaseProgressList = JSON.stringify(stringifiedCRCCaseProgressList)
         } else {
