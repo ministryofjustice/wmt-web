@@ -1,9 +1,9 @@
 
 const USERS = {
-  DataAdmin: { username: 'AUTH_RO_USER_TEST3', roleId: 3 },
-  SystemAdmin: { username: 'AUTH_RO_USER_TEST2', roleId: 2 },
-  Manager: { username: 'AUTH_RO_USER_TEST', roleId: 1 },
-  Staff: { username: 'AUTH_USER' }
+  DataAdmin: { username: 'WMT_DATA_ADMIN', roleId: 3 },
+  SystemAdmin: { username: 'WMT_SYSTEM_ADMIN', roleId: 2 },
+  Manager: { username: 'WMT_MANAGER', roleId: 1 },
+  Staff: { username: 'WMT_STAFF' }
 }
 
 const login = async function ({ username }) {

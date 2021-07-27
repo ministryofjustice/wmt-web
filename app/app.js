@@ -14,6 +14,7 @@ const populateCurrentUser = require('./middleware/populateCurrentUser')
 const setUpWebRequestParsing = require('./middleware/setUpRequestParsing')
 const setUpWebSecurity = require('./middleware/setUpWebSecurity')
 const setUpWebSession = require('./middleware/setUpWebSession')
+const authorisationMiddleware = require('./middleware/authorisationMiddleware')
 
 const auth = require('./authentication/auth')
 const userService = require('./services/userService')
@@ -29,6 +30,7 @@ app.use(setUpWebSecurity())
 app.use(setUpWebSession())
 app.use(setUpWebRequestParsing())
 app.use(setUpAuthentication())
+app.use(authorisationMiddleware(['ROLE_WORKLOAD_MEASUREMENT']))
 
 const developmentMode = app.get('env') === 'development'
 
