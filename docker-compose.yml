@@ -74,6 +74,8 @@ services:
       - POSTGRES_USER=root
   wiremock:
     image: rodolpheche/wiremock
+    networks:
+      - hmpps
     container_name: wiremock
     restart: always
     ports:
