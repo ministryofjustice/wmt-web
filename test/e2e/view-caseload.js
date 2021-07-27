@@ -22,7 +22,6 @@ describe('View your caseload flow', () => {
     lduDefaultUrl = '/' + workloadTypes.PROBATION + '/ldu/' + workloadOwnerIds.filter((item) => item.table === 'ldu')[0].id
     regionDefaultUrl = '/' + workloadTypes.PROBATION + '/region/' + workloadOwnerIds.filter((item) => item.table === 'region')[0].id
     nationalDefaultUrl = '/' + workloadTypes.PROBATION + '/hmpps/0'
-    await browser.url(teamDefaultUrl + '/caseload')
   })
 
   describe('should navigate to the team caseload screen', () => {
@@ -127,6 +126,9 @@ describe('View your caseload flow', () => {
       licence = await $('[href="#license"]')
       await licence.click()
       licence = await $('.sln-table-caseload-license')
+      const heading = await $('#license-enhanced .govuk-heading-m')
+      const headingIsDisplayed = await heading.isDisplayed()
+      return expect(headingIsDisplayed).to.be.true
     })
 
     it('should be accessible via the Caseload tab on Team and LDUs default view', async () => {
@@ -145,11 +147,18 @@ describe('View your caseload flow', () => {
       ldu = await $('[href="' + lduDefaultUrl + '/overview"]')
       await ldu.click()
 
+      const heading2 = await $('#caseloadSummary')
+      const headingIsDisplayed2 = await heading2.isDisplayed()
+     expect(headingIsDisplayed2).to.be.true
+
       team = await $('[href="' + teamDefaultUrl + '"]')
       await team.click()
 
       team = await $('[href="' + teamDefaultUrl + '/caseload"]')
       await team.click()
+      const heading = await $('#caseloadSummary')
+      const headingIsDisplayed = await heading.isDisplayed()
+      return expect(headingIsDisplayed).to.be.true
     })
 
     it('should be accessible via the Case Progress tab when on any other tab', async () => {
