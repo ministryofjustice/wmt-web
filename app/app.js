@@ -17,7 +17,7 @@ const setUpWebSession = require('./middleware/setUpWebSession')
 const authorisationMiddleware = require('./middleware/authorisationMiddleware')
 
 const auth = require('./authentication/auth')
-const userService = require('./services/userService')
+const userService = require('./services/user-service')
 
 const app = express()
 

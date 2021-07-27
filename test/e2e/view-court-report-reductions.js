@@ -99,7 +99,6 @@ describe('View reductions page for court-reporter', () => {
       text = await element.getText()
       expect(text).to.equal('End date')
     })
-
   })
 
   after(function () {
