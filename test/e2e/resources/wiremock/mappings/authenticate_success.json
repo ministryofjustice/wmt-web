@@ -1,0 +1,15 @@
+{
+    "request": {
+      "method": "POST",
+      "urlPattern": "/secure/authenticate",
+      "bodyPatterns": [
+        {
+          "matchesJsonPath": "$[?(@.username =~ /WMT.*/i)]"
+        }
+      ]
+    },
+    "response": {
+      "status": 200
+    }
+  }
+  

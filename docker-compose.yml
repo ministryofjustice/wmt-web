@@ -20,7 +20,8 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:8080/auth/health"]
     environment:
       - SPRING_PROFILES_ACTIVE=dev
-      - DELIUS_ENABLED=false
+      - DELIUS_ENABLED=true
+      - DELIUS_ENDPOINT_URL=http://wiremock:8099
 
   wmt-web:
     build:
@@ -71,6 +72,14 @@ services:
     environment:
       - POSTGRES_PASSWORD=dev
       - POSTGRES_USER=root
-
+  wiremock:
+    image: rodolpheche/wiremock
+    container_name: wiremock
+    restart: always
+    ports:
+      - "8099:8099"
+    command: ["--port","8099","--global-response-templating"]
+    volumes: 
+      - $PWD/test/e2e/resources/wiremock:/home/wiremock:rw
 networks:
   hmpps:

@@ -1,0 +1,29 @@
+{
+    "priority": 2,
+    "request": {
+      "method": "GET",
+      "urlPattern": "(?i)/secure/users/WMT.*/details"
+    },
+    "response": {
+      "transformers": ["response-template"],
+      "status": 200,
+      "jsonBody": {
+        "userId": 2500077027,
+        "username": "{{request.path.[2]}}",
+        "firstName": "WMT",
+        "surname": "Doe",
+        "email": "{{request.path.[2]}}@digital.justice.gov.uk",
+        "enabled": true,
+        "roles": [
+          {
+            "name": "TEST_WORKLOAD_MEASUREMENT_ROLE",
+            "description": "A WMT Test Role"
+          }
+        ]
+      },
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    }
+  }
+  
