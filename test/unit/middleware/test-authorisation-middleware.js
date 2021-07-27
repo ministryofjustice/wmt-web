@@ -2,10 +2,9 @@ const authorisationMiddleware = require('../../../app/middleware/authorisationMi
 const jwt = require('jsonwebtoken')
 const sinon = require('sinon')
 const chai = require('chai')
-const sinonChai = require("sinon-chai")
+const sinonChai = require('sinon-chai')
 chai.should()
 chai.use(sinonChai)
-
 
 function createToken (authorities) {
   const payload = {
@@ -20,7 +19,7 @@ function createToken (authorities) {
   return jwt.sign(payload, 'secret', { expiresIn: '1h' })
 }
 
-let req = {}
+const req = {}
 let next
 
 function createResWithToken ({ authorities }) {
@@ -44,39 +43,41 @@ describe('authorisation middleware', function () {
   it('should return next when no required roles', function () {
     const res = createResWithToken({ authorities: [] })
 
-    const authorisationResponse = authorisationMiddleware()(req, res, next)
+    authorisationMiddleware()(req, res, next)
 
     return next.should.have.been.calledOnce
   })
 
-  it('should redirect when user has no authorised roles', function() {
-    const res = createResWithToken({ authorities: []})
+  it('should redirect when user has no authorised roles', function () {
+    const res = createResWithToken({ authorities: [] })
 
     const authorisationResponse = authorisationMiddleware(['SOME_REQUIRED_ROLE'])(req, res, next)
 
     chai.expect(authorisationResponse).to.equal('/authError')
   })
 
-  it('should return next when user has authorised role', function() {
+  it('should return next when user has authorised role', function () {
     const res = createResWithToken({ authorities: ['SOME_REQUIRED_ROLE'] })
 
-    const authorisationResponse = authorisationMiddleware(['SOME_REQUIRED_ROLE'])(req, res, next)
+    authorisationMiddleware(['SOME_REQUIRED_ROLE'])(req, res, next)
 
     return next.should.have.been.calledOnce
   })
 
-  it('should return next when url is refresh', function() {
+  it('should return next when url is refresh', function () {
     req.url = '/refresh'
     const res = {}
     authorisationMiddleware(['SOME_REQUIRED_ROLE'])(req, res, next)
     return next.should.have.been.calledOnce
   })
 
-  it('should redirect when user has no token', function() {
-    const res = {redirect: (redirectUrl) => {
-      return redirectUrl
-    }}
-    const req = { session: {}, originalUrl: '/original'}
+  it('should redirect when user has no token', function () {
+    const res = {
+      redirect: (redirectUrl) => {
+        return redirectUrl
+      }
+    }
+    const req = { session: {}, originalUrl: '/original' }
     const authorisationResponse = authorisationMiddleware()(req, res, next)
 
     chai.expect(authorisationResponse).to.equal('/login')
