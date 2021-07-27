@@ -57,6 +57,7 @@ describe('View your caseload flow', () => {
 
     it('with the correct tabs and tables', async () => {
       await browser.url(teamDefaultUrl + '/caseload')
+
       overall = await $('[href="#overall"]')
       overall = await $('#overall-enhanced')
       custody = await $('#custody-enhanced')
@@ -74,6 +75,9 @@ describe('View your caseload flow', () => {
       licence = await $('[href="#license"]')
       await licence.click()
       licence = await $('.sln-table-caseload-license')
+      const heading = await $('#license-enhanced .govuk-heading-m')
+      const headingIsDisplayed = await heading.isDisplayed()
+      return expect(headingIsDisplayed).to.be.true
     })
   })
 
