@@ -5,25 +5,28 @@ const config = require('../../config')
 const generateOauthClientToken = require('./clientCredentials')
 const verifyToken = require('../data/tokenVerification')
 const userRoleService = require('../services/user-role-service')
+const userService = require('../services/user-service')
 
-passport.serializeUser(function (user, done) {
+passport.serializeUser(async function (user, done) {
   const username = user.username
+  const {email} = await userService.getUser(user.token)
   const displayName = user.username
   const nameID = user.username
   const nameIDFormat = user.username
+  const wmtUserName = userRoleService.removeDomainFromUsername(email)
 
-  return userRoleService.getUserByUsername(username).then(function (result) {
+  return userRoleService.getUserByUsername(wmtUserName).then(function (result) {
     const dbUser = {
       id: 0 // assume its a Staff user
     }
     if (result) {
       dbUser.id = result.id // actual user exists
     }
-    return userRoleService.getRoleByUsername(username).then(function (role) {
+    return userRoleService.getRoleByUsername(wmtUserName).then(function (role) {
       done(null, Object.assign(user, {
         userId: dbUser.id,
         name: displayName,
-        username: username,
+        username: wmtUserName,
         user_role: role.role,
         nameID: nameID,
         nameIDFormat: nameIDFormat
