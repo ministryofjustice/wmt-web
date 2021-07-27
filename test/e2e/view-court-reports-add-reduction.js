@@ -69,6 +69,7 @@ describe('View adding a new reduction for court-reporter', () => {
   })
 
   after(function () {
+    authenticationHelper.logout()
     return dataHelper.deleteReductionsForIds(ids)
   })
 })

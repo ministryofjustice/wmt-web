@@ -55,7 +55,8 @@ describe('View editing a new reduction for court-reporters', () => {
       await notesField.setValue(currentTime)
 
       await submit.click()
-      await browser.pause(5000)
+
+      await $('#active-reduction-table td')
 
       const reduction = await dataHelper.getLastRecordFromTable('reductions')
       reductionUrl = '/' + workloadTypes.COURT_REPORTS + '/offender-manager/' + offenderManagerId + '/edit-reduction?reductionId=' + reduction.id
@@ -100,7 +101,7 @@ describe('View editing a new reduction for court-reporters', () => {
       await notesField.setValue(currentTime)
 
       await submit.click()
-      await browser.pause(5000)
+      await $('#active-reduction-table td')
 
       const reduction = await dataHelper.getLastRecordFromTable('reductions')
       ids.push(reduction.id)
