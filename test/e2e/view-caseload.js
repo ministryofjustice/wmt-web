@@ -147,10 +147,6 @@ describe('View your caseload flow', () => {
       ldu = await $('[href="' + lduDefaultUrl + '/overview"]')
       await ldu.click()
 
-      const heading2 = await $('#caseloadSummary')
-      const headingIsDisplayed2 = await heading2.isDisplayed()
-     expect(headingIsDisplayed2).to.be.true
-
       team = await $('[href="' + teamDefaultUrl + '"]')
       await team.click()
 
