@@ -100,23 +100,6 @@ describe('View reductions page for court-reporter', () => {
       expect(text).to.equal('End date')
     })
 
-    // it('should be able to navigate to existing reduction screen', async () => {
-    //   await browser.url(offenderManagerUrl)
-    //   let breadcrumbs = await $('.govuk-breadcrumbs')
-    //   let exists = await breadcrumbs.isExisting()
-    //   expect(exists).to.be.equal(true)
-
-    //   let subnav = await $('.wmt-sub-nav')
-    //   exists = await subnav.isExisting()
-    //   expect(exists).to.be.equal(true)
-
-    //   let reductionLink = await $('[href="' + reductionUrl + '"]')
-    //   await reductionLink.click()
-
-    //   let pageTitle = await $('.govuk-heading-xl')
-    //   let text = await pageTitle.getText()
-    //   expect(text).to.equal('Reduction')
-    // })
   })
 
   after(function () {
