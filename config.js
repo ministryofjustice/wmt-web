@@ -54,8 +54,8 @@ module.exports = {
   ARCHIVE_MAX_WORKLOAD_ID: process.env.WMT_ARCHIVE_MAX_WORKLOAD_ID || '5313915',
   apis: {
     hmppsAuth: {
-      url: get('HMPPS_AUTH_URL', 'http://localhost:8080/auth', requiredInProduction),
-      externalUrl: get('HMPPS_AUTH_EXTERNAL_URL', get('HMPPS_AUTH_URL', 'http://localhost:8080/auth')),
+      url: get('HMPPS_AUTH_URL', 'http://localhost:9090/auth', requiredInProduction),
+      externalUrl: get('HMPPS_AUTH_EXTERNAL_URL', get('HMPPS_AUTH_URL', 'http://localhost:9090/auth')),
       timeout: {
         response: get('HMPPS_AUTH_TIMEOUT_RESPONSE', 10000),
         deadline: get('HMPPS_AUTH_TIMEOUT_DEADLINE', 10000)
