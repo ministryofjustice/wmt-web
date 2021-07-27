@@ -8,8 +8,7 @@ const userRoleService = require('../services/user-role-service')
 const userService = require('../services/user-service')
 
 passport.serializeUser(async function (user, done) {
-  const username = user.username
-  const {email} = await userService.getUser(user.token)
+  const { email } = await userService.getUser(user.token)
   const displayName = user.username
   const nameID = user.username
   const nameIDFormat = user.username

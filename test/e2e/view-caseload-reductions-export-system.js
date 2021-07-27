@@ -44,24 +44,16 @@ describe('View reductions export for a System Admin', function () {
     expect(exists).to.be.equal(true)
   })
   it('should not include the reductions export for system admin users at workload owner level', async function () {
-    try {
-      await browser.url(workloadOwnerDefaultUrl + '/overview')
-      const reductionExport = await $('.reduction-export')
-      const exists = await reductionExport.isExisting()
-      expect(exists).to.be.equal(false)
-    } catch (error) {
-      console.error(error)
-    }
+    await browser.url(workloadOwnerDefaultUrl + '/overview')
+    const reductionExport = await $('.reduction-export')
+    const exists = await reductionExport.isExisting()
+    expect(exists).to.be.equal(false)
   })
   it('should not include the reductions export for system admin users at national level', async function () {
-    try {
-      await browser.url(nationalDefaultUrl + '/overview')
-      const reductionExport = await $('.reduction-export')
-      const exists = await reductionExport.isExisting()
-      expect(exists).to.be.equal(false)
-    } catch (error) {
-      console.error(error)
-    }
+    await browser.url(nationalDefaultUrl + '/overview')
+    const reductionExport = await $('.reduction-export')
+    const exists = await reductionExport.isExisting()
+    expect(exists).to.be.equal(false)
   })
 
   after(function () {
