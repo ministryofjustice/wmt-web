@@ -22,7 +22,7 @@ module.exports = function (results, isCSV, workloadType = workloadTypes.PROBATIO
         if (!isCSV) {
           totalsToReturn.forEach(function (val, key) {
             if (orgLevel === orgUnit.NATIONAL.name) {
-              if (val.name.includes('NPS ')) {
+              if (!val.name.includes('CPA ')) {
                 totals.totalPoints += val.totalPoints
                 totals.totalAvailablePoints += val.availablePoints
                 totals.totalContractedHours += val.contractedHours

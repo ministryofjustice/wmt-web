@@ -72,7 +72,7 @@ const groupReportsByOrgName = function (outstandingReports, organisationLevel) {
   })
   organisationMap.forEach(function (outstandingReport, orgName) {
     if (organisationLevel === organisationConstant.NATIONAL.name) {
-      if (orgName.includes('NPS ')) {
+      if (!orgName.includes('CPA ')) {
         const newEntry = {
           name: orgName,
           linkId: outstandingReport[0].linkId,
