@@ -1,7 +1,7 @@
 const knex = require('../../knex').integrationTests
 const Promise = require('bluebird').Promise
 
-module.exports.addUserRoleData = function (userId, roleId) {
+const addUserRoleData = function (userId, roleId) {
   const insertedData = []
 
   const userRole = {
@@ -19,6 +19,8 @@ module.exports.addUserRoleData = function (userId, roleId) {
       return insertedData
     })
 }
+
+module.exports.addUserRoleData = addUserRoleData
 
 module.exports.addUsers = function () {
   const inserts = []
@@ -50,6 +52,21 @@ module.exports.addRoles = function () {
         inserts.push({ table: 'roles', id: id })
       })
       return inserts
+    })
+}
+
+module.exports.addUserAndRole = function (testUser, role) {
+  const inserts = []
+
+  return knex('users').withSchema('app').returning(['id', 'username', 'name']).insert({ username: testUser, name: testUser })
+    .then(function (result) {
+      inserts.push({ table: 'users', id: result[0].id, username: result[0].username, name: result[0].name })
+      if (!role) {
+        return inserts
+      }
+      return addUserRoleData(result[0].id, role).then(function (insertedRole) {
+        return inserts.concat(insertedRole)
+      })
     })
 }
 

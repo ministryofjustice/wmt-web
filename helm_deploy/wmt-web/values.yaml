@@ -9,7 +9,7 @@ generic-service:
     port: 3000
 
   ingress:
-    enabled: false
+    enabled: true
     host: app-hostname.local    # override per environment
     tlsSecretName: hmpps-workload-cert
     path: /
@@ -25,7 +25,8 @@ generic-service:
   env:
     NODE_ENV: "production"
     PGSSLMODE: "no-verify"
-#    WMT_WEB_AUTHENTICATION_ENABLED: "true"
+    REDIS_TLS_ENABLED: "true"
+    TOKEN_VERIFICATION_ENABLED: "true"
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
@@ -45,6 +46,9 @@ generic-service:
       WMT_HISTORY_DB_PASSWORD: "database_password"
       WMT_HISTORY_DB_SERVER: "rds_instance_address"
       WMT_HISTORY_DB_NAME: "database_name"
+    elasticache-redis:
+      REDIS_HOST: "primary_endpoint_address"
+      REDIS_AUTH_TOKEN: "auth_token"
 
   allowlist:
     office: "217.33.148.210/32"

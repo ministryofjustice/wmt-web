@@ -1,3 +1,6 @@
+const { ReportAggregator } = require('wdio-html-nice-reporter')
+let reportAggregator
+
 exports.config = {
   specs: ['./test/e2e/**/*.js'],
   exclude: [],
@@ -11,12 +14,40 @@ exports.config = {
   logLevel: 'info',
   coloredLogs: true,
   screenshotPath: './errorShots/',
-  waitforTimeout: 10000,
+  waitforTimeout: 2000,
   connectionRetryTimeout: 90000,
   connectionRetryCount: 3,
   framework: 'mocha',
   mochaOpts: {
     ui: 'bdd',
-    timeout: 300000
+    timeout: 50000
+  },
+  reporters: ['spec',
+    ['html-nice', {
+      outputDir: './test_results/e2e/',
+      filename: 'report.html',
+      reportTitle: 'Test Report Title',
+
+      // to show the report in a browser when done
+      collapseTests: false,
+      // to turn on screenshots after every test
+      useOnAfterCommandForScreenshot: false
+    }
+    ]
+  ],
+  onPrepare: function (config, capabilities) {
+    reportAggregator = new ReportAggregator({
+      outputDir: './test_results/e2e/',
+      filename: 'master-report.html',
+      reportTitle: 'Master Report',
+      browserName: capabilities.browserName,
+      collapseTests: true
+    })
+    reportAggregator.clean()
+  },
+  onComplete: function (exitCode, config, capabilities, results) {
+    (async () => {
+      await reportAggregator.createReport()
+    })()
   }
 }

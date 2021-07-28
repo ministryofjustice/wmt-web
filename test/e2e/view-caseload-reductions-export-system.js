@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-// const authenticationHelper = require('../helpers/routes/authentication-helper')
+const authenticationHelper = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 
@@ -13,7 +13,7 @@ let regionDefaultUrl
 
 describe('View reductions export for a System Admin', function () {
   before(async function () {
-    // await authenticationHelper.login(authenticationHelper.users.SystemAdmin)
+    await authenticationHelper.login(authenticationHelper.users.SystemAdmin)
     const results = await dataHelper.selectIdsForWorkloadOwner()
     workloadOwnerIds = results
     workloadOwnerId = workloadOwnerIds.filter((item) => item.table === 'workload_owner')[0].id
@@ -44,27 +44,19 @@ describe('View reductions export for a System Admin', function () {
     expect(exists).to.be.equal(true)
   })
   it('should not include the reductions export for system admin users at workload owner level', async function () {
-    try {
-      await browser.url(workloadOwnerDefaultUrl + '/overview')
-      const reductionExport = await $('.reduction-export')
-      const exists = await reductionExport.isExisting()
-      expect(exists).to.be.equal(false)
-    } catch (error) {
-      console.error(error)
-    }
+    await browser.url(workloadOwnerDefaultUrl + '/overview')
+    const reductionExport = await $('.reduction-export')
+    const exists = await reductionExport.isExisting()
+    expect(exists).to.be.equal(false)
   })
   it('should not include the reductions export for system admin users at national level', async function () {
-    try {
-      await browser.url(nationalDefaultUrl + '/overview')
-      const reductionExport = await $('.reduction-export')
-      const exists = await reductionExport.isExisting()
-      expect(exists).to.be.equal(false)
-    } catch (error) {
-      console.error(error)
-    }
+    await browser.url(nationalDefaultUrl + '/overview')
+    const reductionExport = await $('.reduction-export')
+    const exists = await reductionExport.isExisting()
+    expect(exists).to.be.equal(false)
   })
 
-  // after(function () {
-  //   authenticationHelper.logout()
-  // })
+  after(function () {
+    authenticationHelper.logout()
+  })
 })

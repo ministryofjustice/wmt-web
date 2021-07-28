@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-// const authenticationHelper = require('../helpers/routes/authentication-helper')
+const authenticationHelper = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/court-reports-aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 let offenderManagerId
@@ -7,7 +7,7 @@ let offenderManagerUrl
 
 describe('View reductions page for court-reporter', () => {
   before(async function () {
-    // await authenticationHelper.login(authenticationHelper.users.Manager)
+    await authenticationHelper.login(authenticationHelper.users.Manager)
     const results = await dataHelper.getAnyExistingCourtReporterId()
     offenderManagerId = results
     offenderManagerUrl = '/' + workloadTypes.COURT_REPORTS + '/offender-manager/' + offenderManagerId + '/reductions'
@@ -99,27 +99,9 @@ describe('View reductions page for court-reporter', () => {
       text = await element.getText()
       expect(text).to.equal('End date')
     })
-
-    // it('should be able to navigate to existing reduction screen', async () => {
-    //   await browser.url(offenderManagerUrl)
-    //   let breadcrumbs = await $('.govuk-breadcrumbs')
-    //   let exists = await breadcrumbs.isExisting()
-    //   expect(exists).to.be.equal(true)
-
-    //   let subnav = await $('.wmt-sub-nav')
-    //   exists = await subnav.isExisting()
-    //   expect(exists).to.be.equal(true)
-
-    //   let reductionLink = await $('[href="' + reductionUrl + '"]')
-    //   await reductionLink.click()
-
-    //   let pageTitle = await $('.govuk-heading-xl')
-    //   let text = await pageTitle.getText()
-    //   expect(text).to.equal('Reduction')
-    // })
   })
 
-  // after(function () {
-  //   authenticationHelper.logout()
-  // })
+  after(function () {
+    authenticationHelper.logout()
+  })
 })

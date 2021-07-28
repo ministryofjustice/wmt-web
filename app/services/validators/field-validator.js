@@ -1,7 +1,6 @@
 const validator = require('validator')
 const _ = require('lodash')
 const ERROR_MESSAGES = require('./validation-error-messages')
-const config = require('../../../config')
 
 class FieldValidator {
   /**
@@ -62,8 +61,7 @@ class FieldValidator {
   }
 
   isValidUsername (username) {
-    if (!username || !validator.isEmail(username) ||
-      !username.endsWith('@' + config.ACTIVE_DIRECTORY_DOMAIN)) {
+    if (!username || !validator.isEmail(username)) {
       this.errors.add(this.fieldName, ERROR_MESSAGES.getIsValidUsernameMessage)
     }
     return this

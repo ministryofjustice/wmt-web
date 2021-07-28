@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-// const authenticationHerlp = require('../helpers/routes/authentication-helper')
+const authenticationHelp = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 const moment = require('moment')
@@ -11,20 +11,23 @@ const ids = []
 
 describe('View adding a new reduction', () => {
   before(async function () {
-    // await authenticationHerlp.login(authenticationHerlp.users.Manager)
+    await authenticationHelp.login(authenticationHelp.users.Manager)
     return dataHelper.getAnyExistingWorkloadOwnerId()
       .then(function (results) {
         offenderManagerId = results
-        offenderManagerUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + offenderManagerId + '/add-reduction'
+        offenderManagerUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + offenderManagerId
       })
-      // .then(function () {
-      //   return browser.url(offenderManagerUrl).waitForExist('.breadcrumbs')
-      // })
   })
 
   describe('should navigate to the add reduction screen and submit a new reduction form', () => {
     it('with the correct breadcrumbs and heading title', async () => {
-      await browser.url(offenderManagerUrl)
+      await browser.url(offenderManagerUrl) // a shame , better to click through to an existing user
+      const reductionURL = offenderManagerUrl + '/reductions'
+      const link = await $('[href="' + reductionURL + '"]')
+      await link.click()
+      const addReductionURL = offenderManagerUrl + '/add-reduction'
+      const addLink = await $('[href="' + addReductionURL + '"]')
+      await addLink.click()
       pageTitle = await $('.govuk-heading-xl')
       pageTitle = await pageTitle.getText()
       expect(pageTitle, 'New reduction Page title should be "New reduction"').to.equal('New reduction')
@@ -54,12 +57,11 @@ describe('View adding a new reduction', () => {
       await notesField.setValue(currentTime)
 
       await submit.click()
-      await browser.pause(3000)
-
+      await $('#archived-reduction-table td')
       const reduction = await dataHelper.getLastRecordFromTable('reductions')
       ids.push(reduction.id)
       const reductionURL = '/probation/offender-manager/' + reduction.workload_owner_id + '/edit-reduction?reductionId=' + reduction.id
-      const link = await $('[href="' + reductionURL + '"')
+      const link = await $('[href="' + reductionURL + '"]')
       await link.click()
       notesField = await $('#textarea')
       notesField = await notesField.getValue()
@@ -69,6 +71,7 @@ describe('View adding a new reduction', () => {
   })
 
   after(function () {
+    authenticationHelp.logout()
     return dataHelper.deleteReductionsForIds(ids)
   })
 })

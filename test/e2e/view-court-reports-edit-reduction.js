@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-// const authenticationHelper = require('../helpers/routes/authentication-helper')
+const authenticationHelper = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/court-reports-aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 const moment = require('moment')
@@ -12,7 +12,7 @@ const ids = []
 
 describe('View editing a new reduction for court-reporters', () => {
   before(async function () {
-    // await authenticationHelper.login(authenticationHelper.users.Manager)
+    await authenticationHelper.login(authenticationHelper.users.Manager)
     const results = await dataHelper.getAnyExistingCourtReporterId()
     offenderManagerId = results
     offenderManagerUrl = '/' + workloadTypes.COURT_REPORTS + '/offender-manager/' + offenderManagerId + '/add-reduction'
@@ -55,7 +55,8 @@ describe('View editing a new reduction for court-reporters', () => {
       await notesField.setValue(currentTime)
 
       await submit.click()
-      await browser.pause(5000)
+
+      await $('#active-reduction-table td')
 
       const reduction = await dataHelper.getLastRecordFromTable('reductions')
       reductionUrl = '/' + workloadTypes.COURT_REPORTS + '/offender-manager/' + offenderManagerId + '/edit-reduction?reductionId=' + reduction.id
@@ -100,7 +101,7 @@ describe('View editing a new reduction for court-reporters', () => {
       await notesField.setValue(currentTime)
 
       await submit.click()
-      await browser.pause(5000)
+      await $('#active-reduction-table td')
 
       const reduction = await dataHelper.getLastRecordFromTable('reductions')
       ids.push(reduction.id)
@@ -130,7 +131,8 @@ describe('View editing a new reduction for court-reporters', () => {
     })
   })
 
-  after(function () {
+  after(async function () {
+    await authenticationHelper.logout()
     return dataHelper.deleteReductionsForIds(ids)
   })
 })

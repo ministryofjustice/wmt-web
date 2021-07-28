@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-// const authenticationHelper = require('../helpers/routes/authentication-helper')
+const authenticationHelper = require('../helpers/routes/authentication-helper')
 const crDataHelper = require('../helpers/data/court-reports-aggregated-data-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
@@ -14,7 +14,7 @@ let nationalDefaultUrl
 
 describe('View court-reports overview', function () {
   before(async function () {
-    // await authenticationHelper.login(authenticationHelper.users.Manager)
+    await authenticationHelper.login(authenticationHelper.users.Manager)
     const results = await crDataHelper.selectIdsForCourtReporterWorkloadOwner()
     workloadOwnerId = results.filter((item) => item.table === 'workload_owner')[0].id
     workloadOwnerDefaultUrl = '/' + workloadTypes.COURT_REPORTS + '/offender-manager/' + workloadOwnerId
@@ -253,7 +253,7 @@ describe('View court-reports overview', function () {
     expect(text).to.equal('National')
   })
 
-  // after(function () {
-  //   authenticationHelper.logout()
-  // })
+  after(function () {
+    authenticationHelper.logout()
+  })
 })

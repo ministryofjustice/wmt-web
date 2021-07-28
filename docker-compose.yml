@@ -1,5 +1,28 @@
 version: "3"
 services:
+  redis:
+    image: 'bitnami/redis:5.0'
+    networks:
+      - hmpps
+    container_name: redis 
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - '6379:6379'
+  hmpps-auth:
+    image: quay.io/hmpps/hmpps-auth:latest
+    networks:
+      - hmpps
+    container_name: hmpps-auth 
+    ports:
+      - "9090:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/auth/health"]
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - DELIUS_ENABLED=true
+      - DELIUS_ENDPOINT_URL=http://wiremock:8099
+
   wmt-web:
     build:
         context: .
@@ -7,11 +30,22 @@ services:
         - hmpps
     container_name: wmt-web
     ports:
-        - "3001:3000"
+        - "3000:3000"
     healthcheck:
         test: ["CMD", "curl", "-f", "http://localhost:3000/ping"]
     environment:
-        - WMT_DB_SERVER=postgres
+        - WMT_LIVE_DB_SERVER=postgres
+        - WMT_HISTORY_DB_SERVER=postgres
+        - REDIS_HOST=redis
+        - HMPPS_AUTH_URL=http://localhost:9090/auth
+        - API_CLIENT_ID=workload-measurement-ui
+        - API_CLIENT_SECRET=clientsecret
+        - SYSTEM_CLIENT_ID=workload-measurement-ui
+        - SYSTEM_CLIENT_SECRET=system-client-secret
+        - TOKEN_VERIFICATION_API_URL=http://localhost:8100
+        - INGRESS_URL=http://localhost:3000
+        - SESSION_SECRET=app-insecure-default-session
+    command: ["/bin/sh", "-c" ,"sleep 20 && npm start"]
     depends_on:
         - "hmpps-workload"
   hmpps-workload:
@@ -41,6 +75,16 @@ services:
     environment:
       - POSTGRES_PASSWORD=dev
       - POSTGRES_USER=root
-
+  wiremock:
+    image: rodolpheche/wiremock
+    networks:
+      - hmpps
+    container_name: wiremock
+    restart: always
+    ports:
+      - "8099:8099"
+    command: ["--port","8099","--global-response-templating"]
+    volumes: 
+      - $PWD/test/e2e/resources/wiremock:/home/wiremock:rw
 networks:
   hmpps:

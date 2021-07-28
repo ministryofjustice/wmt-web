@@ -1,17 +1,21 @@
 const expect = require('chai').expect
-// const authenticationHelper = require('../helpers/routes/authentication-helper')
+const authenticationHelper = require('../helpers/routes/authentication-helper')
 
-let adminArchiveURL, pageTitle, pageSubtitle
+let pageTitle, pageSubtitle
 
 describe('View archive data', () => {
   before(async function () {
-    // await authenticationHelper.login(authenticationHelper.users.DataAdmin)
-    adminArchiveURL = '/archive-data/daily-caseload-data'
-    await browser.url(adminArchiveURL)
+    await authenticationHelper.login(authenticationHelper.users.DataAdmin)
   })
   describe('should navigate to the archive page', () => {
     it('with the correct breadcrumbs and heading title', async () => {
-      await browser.url(adminArchiveURL)
+      const link = await $('[href="/admin"]')
+      await link.click()
+      const archiveDataLink = await $('[href="/archive-options"]')
+      await archiveDataLink.click()
+
+      const dailyCaseloadLink = await $('[href="/archive-data/daily-caseload-data"]')
+      await dailyCaseloadLink.click()
       pageTitle = await $('.govuk-heading-xl')
       pageTitle = await pageTitle.getText()
       pageSubtitle = await $('.govuk-caption-xl')
@@ -22,7 +26,7 @@ describe('View archive data', () => {
     })
   })
 
-  // after(function () {
-  //   authenticationHelper.logout()
-  // })
+  after(function () {
+    authenticationHelper.logout()
+  })
 })

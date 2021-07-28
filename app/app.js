@@ -1,38 +1,36 @@
-const authentication = require('./authentication')
-const config = require('../config')
+
 const express = require('express')
-const bodyParser = require('body-parser')
 const expressSanitized = require('express-sanitized')
-const helmet = require('helmet')
-const cookieParser = require('cookie-parser')
 const csurf = require('csurf')
 const nunjucks = require('express-nunjucks')
 const dateFilter = require('nunjucks-date-filter')
 const path = require('path')
 const routes = require('./routes')
-const routesNoCsrf = require('./routes-no-csrf')
-const cookieSession = require('cookie-session')
 const getOrganisationalHierarchyTree = require('./services/organisational-hierarchy-tree')
 const logger = require('./logger')
+const setUpHealthChecks = require('./middleware/setUpHealthChecks')
+const setUpAuthentication = require('./middleware/setUpAuthentication')
+const populateCurrentUser = require('./middleware/populateCurrentUser')
+const setUpWebRequestParsing = require('./middleware/setUpRequestParsing')
+const setUpWebSecurity = require('./middleware/setUpWebSecurity')
+const setUpWebSession = require('./middleware/setUpWebSession')
+const authorisationMiddleware = require('./middleware/authorisationMiddleware')
+
+const auth = require('./authentication/auth')
+const userService = require('./services/user-service')
 
 const app = express()
 
-// Set security headers.
-app.use(helmet())
-app.use(helmet.hsts({ maxAge: 31536000 }))
+app.set('json spaces', 2)
+app.set('trust proxy', true)
+app.set('port', process.env.PORT || 3000)
 
-// Configure Content Security Policy
-// Hashes for inline Gov Template script entries
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'self'"],
-    scriptSrc: ["'self'",
-      "'unsafe-inline'", "'unsafe-eval'"],
-    styleSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-    fontSrc: ["'self'", 'data:'],
-    imgSrc: ["'self'", 'data:']
-  }
-}))
+app.use(setUpHealthChecks())
+app.use(setUpWebSecurity())
+app.use(setUpWebSession())
+app.use(setUpWebRequestParsing())
+app.use(setUpAuthentication())
+app.use(authorisationMiddleware(['ROLE_WORKLOAD_MEASUREMENT']))
 
 const developmentMode = app.get('env') === 'development'
 
@@ -51,16 +49,6 @@ nunjucksObj.env.addFilter('isObject', function (obj) {
 
 app.use('/public', express.static(path.join(__dirname, 'public')))
 
-// Cookie session
-app.set('trust proxy', 1) // trust first proxy
-app.use(cookieSession({
-  name: 'wmt-start-application',
-  keys: [config.APPLICATION_SECRET],
-  maxAge: parseInt(config.SESSION_COOKIE_MAXAGE)
-}))
-
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
 app.use(expressSanitized())
 
 // Send assetPath to all views.
@@ -76,19 +64,8 @@ app.use(function (req, res, next) {
   next()
 })
 
-// Use cookie parser middleware (required for csurf)
-app.use(cookieParser(config.APPLICATION_SECRET, { httpOnly: true, secure: config.SECURE_COOKIE === 'true' }))
-
-authentication(app)
-
-// Add routes that are allowed to be accessed from outside the application
-// i.e. authentication-saml
-const routerNoCsrf = new express.Router()
-routesNoCsrf(routerNoCsrf)
-app.use('/', routerNoCsrf)
-
 // Check for valid CSRF tokens on state-changing methods.
-app.use(csurf({ cookie: { httpOnly: true, secure: config.SECURE_COOKIE === 'true' } }))
+app.use(csurf())
 
 // Generate CSRF tokens to be sent in POST requests
 app.use(function (req, res, next) {
@@ -99,8 +76,11 @@ app.use(function (req, res, next) {
 })
 
 // Build the router to route all HTTP requests and pass to the routes file for route configuration.
-const router = express.Router()
+const router = express.Router({ mergeParams: true })
+router.use(auth.authenticationMiddleware())
+router.use(populateCurrentUser(userService))
 routes(router)
+
 app.use('/', router)
 
 // catch 404 and forward to error handler.

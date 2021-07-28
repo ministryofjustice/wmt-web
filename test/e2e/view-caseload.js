@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-// const authenticationHerlp = require('../helpers/routes/authentication-helper')
+const authenticationHelp = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 
@@ -15,14 +15,13 @@ let national, region, ldu, team
 
 describe('View your caseload flow', () => {
   before(async function () {
-    // await authenticationHerlp.login(authenticationHerlp.users.Staff)
+    await authenticationHelp.login(authenticationHelp.users.Staff)
     results = await dataHelper.selectIdsForWorkloadOwner()
     workloadOwnerIds = results
     teamDefaultUrl = '/' + workloadTypes.PROBATION + '/team/' + workloadOwnerIds.filter((item) => item.table === 'team')[0].id
     lduDefaultUrl = '/' + workloadTypes.PROBATION + '/ldu/' + workloadOwnerIds.filter((item) => item.table === 'ldu')[0].id
     regionDefaultUrl = '/' + workloadTypes.PROBATION + '/region/' + workloadOwnerIds.filter((item) => item.table === 'region')[0].id
     nationalDefaultUrl = '/' + workloadTypes.PROBATION + '/hmpps/0'
-    await browser.url(teamDefaultUrl + '/caseload')
   })
 
   describe('should navigate to the team caseload screen', () => {
@@ -57,6 +56,7 @@ describe('View your caseload flow', () => {
 
     it('with the correct tabs and tables', async () => {
       await browser.url(teamDefaultUrl + '/caseload')
+
       overall = await $('[href="#overall"]')
       overall = await $('#overall-enhanced')
       custody = await $('#custody-enhanced')
@@ -74,6 +74,9 @@ describe('View your caseload flow', () => {
       licence = await $('[href="#license"]')
       await licence.click()
       licence = await $('.sln-table-caseload-license')
+      const heading = await $('#license-enhanced .govuk-heading-m')
+      const headingIsDisplayed = await heading.isDisplayed()
+      return expect(headingIsDisplayed).to.be.true
     })
   })
 
@@ -123,6 +126,9 @@ describe('View your caseload flow', () => {
       licence = await $('[href="#license"]')
       await licence.click()
       licence = await $('.sln-table-caseload-license')
+      const heading = await $('#license-enhanced .govuk-heading-m')
+      const headingIsDisplayed = await heading.isDisplayed()
+      return expect(headingIsDisplayed).to.be.true
     })
 
     it('should be accessible via the Caseload tab on Team and LDUs default view', async () => {
@@ -146,6 +152,9 @@ describe('View your caseload flow', () => {
 
       team = await $('[href="' + teamDefaultUrl + '/caseload"]')
       await team.click()
+      const heading = await $('#caseloadSummary')
+      const headingIsDisplayed = await heading.isDisplayed()
+      return expect(headingIsDisplayed).to.be.true
     })
 
     it('should be accessible via the Case Progress tab when on any other tab', async () => {
@@ -164,6 +173,9 @@ describe('View your caseload flow', () => {
 
       team = await $('[href="' + teamDefaultUrl + '/caseload"]')
       await team.click()
+      const heading = await $('#caseloadSummary')
+      const headingIsDisplayed = await heading.isDisplayed()
+      return expect(headingIsDisplayed).to.be.true
     })
   })
 
@@ -268,7 +280,7 @@ describe('View your caseload flow', () => {
     })
   })
 
-  // after(function () {
-  //   authenticationHerlp.logout()
-  // })
+  after(function () {
+    authenticationHelp.logout()
+  })
 })

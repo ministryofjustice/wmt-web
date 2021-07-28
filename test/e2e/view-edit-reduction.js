@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-// const authenticationHerlp = require('../helpers/routes/authentication-helper')
+const authenticationHelp = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 const moment = require('moment')
@@ -12,7 +12,7 @@ const ids = []
 
 describe('View editing a new reduction', () => {
   before(async function () {
-    // await authenticationHerlp.login(authenticationHerlp.users.Manager)
+    await authenticationHelp.login(authenticationHelp.users.Manager)
     const results = await dataHelper.getAnyExistingWorkloadOwnerId()
     offenderManagerId = results
     offenderManagerUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + offenderManagerId + '/add-reduction'
@@ -124,7 +124,8 @@ describe('View editing a new reduction', () => {
     })
   })
 
-  after(function () {
+  after(async function () {
+    await authenticationHelp.logout()
     return dataHelper.deleteReductionsForIds(ids)
   })
 })

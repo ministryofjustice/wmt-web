@@ -1,9 +1,8 @@
 const expect = require('chai').expect
-// const authenticationHelper = require('../helpers/routes/authentication-helper')
+const authenticationHelper = require('../helpers/routes/authentication-helper')
 const getWorloadPoints = require('../../app/services/data/get-workload-points')
 
-const workloadPointsUrl = '/admin/workload-points'
-let workloadPoints, pageTitle, pageSubtitle, link, prefix, tierA3, tierA2, tierA1, tierA0, tierB3, tierB2, tierB1, tierB0, tierC3, tierC2, tierC1, tierC0, tierD3, tierD2, tierD1, tierD0
+let workloadPoints, pageTitle, pageSubtitle, prefix, tierA3, tierA2, tierA1, tierA0, tierB3, tierB2, tierB1, tierB0, tierC3, tierC2, tierC1, tierC0, tierD3, tierD2, tierD1, tierD0
 let sdr, fdr, parom, overdue, warrants, upw, armsComm, armsLic
 let nominalTargetPO, nominalTargetPSO
 let contractedHoursPO, contractedHoursPSO, contractedHoursSPO
@@ -12,27 +11,31 @@ let editButton, saveButton, saveNotice, successMessage
 describe('View / edit Workload Points', () => {
   before(async function () {
     workloadPoints = await getWorloadPoints(false)
-    // await authenticationHelper.login(authenticationHelper.users.DataAdmin)
-    await browser.url(workloadPointsUrl)
+    await authenticationHelper.login(authenticationHelper.users.DataAdmin)
+    const link = await $('[href="/admin"]')
+    await link.click()
+    const workloadPointsLink = await $('[href="/admin/workload-points"]')
+    await workloadPointsLink.click()
   })
 
   describe('should navigate to the admin workload points screen', () => {
     it('with the correct breadcrumbs and headings', async () => {
-      await browser.url(workloadPointsUrl)
       pageTitle = await $('.govuk-heading-xl')
       pageTitle = await pageTitle.getText()
       pageSubtitle = await $('.govuk-caption-xl')
       pageSubtitle = await pageSubtitle.getText()
       expect(pageTitle, 'Workload Points page title should be "Workload Points"').to.equal('Workload Points')
       expect(pageSubtitle, 'Workload Points page subtitle should be "Admin"').to.equal('Admin')
-      await browser.pause(5000)
     })
 
     it('with the correct tabs which become selected correctly', async () => {
-      await browser.url(workloadPointsUrl)
-      link = await $('[href="#custody"]')
+      const link = await $('[href="/admin"]')
       await link.click()
-      await browser.pause(5000)
+      const workloadPointsLink = await $('[href="/admin/workload-points"]')
+      await workloadPointsLink.click()
+
+      const custodyLink = await $('[href="#custody"]')
+      await custodyLink.click()
       prefix = '#cus-'
       tierA3 = await $(prefix + 'a3')
       tierA2 = await $(prefix + 'a2')
@@ -86,9 +89,8 @@ describe('View / edit Workload Points', () => {
       expect(parseInt(tierD0), 'Custody Tier D0 Weighting should be ' + workloadPoints.cusD0).to.be.equal(workloadPoints.cusD0)
 
       // Licence
-      link = await $('[href="#license"]')
-      await link.click()
-      await browser.pause(5000)
+      const licenseLink = await $('[href="#license"]')
+      await licenseLink.click()
       prefix = '#lic-'
       tierA3 = await $(prefix + 'a3')
       tierA2 = await $(prefix + 'a2')
@@ -142,9 +144,8 @@ describe('View / edit Workload Points', () => {
       expect(parseInt(tierD0), 'Licence Tier D0 Weighting should be ' + workloadPoints.licD0).to.be.equal(workloadPoints.licD0)
 
       // Community
-      link = await $('[href="#community"]')
-      await link.click()
-      await browser.pause(5000)
+      const communityLink = await $('[href="#community"]')
+      await communityLink.click()
       prefix = '#comm-'
       tierA3 = await $(prefix + 'a3')
       tierA2 = await $(prefix + 'a2')
@@ -198,9 +199,8 @@ describe('View / edit Workload Points', () => {
       expect(parseInt(tierD0), 'Community Tier D0 Weighting should be ' + workloadPoints.commD0).to.be.equal(workloadPoints.commD0)
 
       // Other
-      link = await $('[href="#other"]')
-      await link.click()
-      await browser.pause(5000)
+      const otherLink = await $('[href="#other"]')
+      await otherLink.click()
       sdr = await $('#sdr')
       fdr = await $('#sdrConversion')
       parom = await $('#parom')
@@ -250,7 +250,10 @@ describe('View / edit Workload Points', () => {
     })
 
     it('with the correct behaviour for the edit and save buttons', async () => {
-      await browser.url(workloadPointsUrl)
+      const link = await $('[href="/admin"]')
+      await link.click()
+      const workloadPointsLink = await $('[href="/admin/workload-points"]')
+      await workloadPointsLink.click()
 
       editButton = await $('#edit-button')
       await editButton.click()
@@ -269,7 +272,7 @@ describe('View / edit Workload Points', () => {
     })
   })
 
-  // after(function () {
-  //   authenticationHelper.logout()
-  // })
+  after(function () {
+    authenticationHelper.logout()
+  })
 })
