@@ -14,7 +14,7 @@ module.exports = function () {
     .then(function (courtReportInserts) {
       return aggregatedDataHelper.addWorkloadCapacitiesForOffenderManager().then(function (workloadInserts) {
         const promises = Object.entries(users).map(function ([, u]) {
-          return userRoleHelper.addUserAndRole(u.username, u.roleId)
+          return userRoleHelper.addUserAndRole(u.username.toLowerCase(), u.roleId)
         })
         return Promise.all(promises).then(function (userInserts) {
           try {
