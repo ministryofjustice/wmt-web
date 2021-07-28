@@ -86,7 +86,7 @@ module.exports = {
   https: production,
   session: {
     secret: get('SESSION_SECRET', 'app-insecure-default-session', requiredInProduction),
-    expiryMinutes: Number(get('WEB_SESSION_TIMEOUT_IN_MINUTES', 120))
+    expiryMinutes: Number(get('WEB_SESSION_TIMEOUT_IN_MINUTES', 720))
   },
   redis: {
     host: process.env.REDIS_HOST,
