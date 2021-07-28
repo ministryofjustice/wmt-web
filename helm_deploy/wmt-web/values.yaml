@@ -36,6 +36,11 @@ generic-service:
   namespace_secrets:
     hmpps-workload:
       APPINSIGHTS_INSTRUMENTATIONKEY: "APPINSIGHTS_INSTRUMENTATIONKEY"
+      API_CLIENT_ID: "AUTH_API_CLIENT_ID"
+      API_CLIENT_SECRET: "AUTH_API_CLIENT_SECRET"
+      SYSTEM_CLIENT_ID: "AUTH_API_CLIENT_ID"
+      SYSTEM_CLIENT_SECRET: "AUTH_API_CLIENT_SECRET"
+
     rds-live-instance-output:
       WMT_LIVE_DB_USERNAME: "database_username"
       WMT_LIVE_DB_PASSWORD: "database_password"
