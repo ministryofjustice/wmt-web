@@ -8,7 +8,6 @@
   "scripts": {
     "start": "gulp start",
     "build": "gulp generate-assets && gulp sync",
-    "unit-test": "standard && mocha --recursive test/unit/ --exit",
     "integration-test": "gulp generate-assets && mocha --recursive test/integration --timeout=60000 --exit --reporter mocha-simple-html-reporter --reporter-options output=test_results/integration-test-reports.html",
     "test": "mocha --recursive test/unit/ --exit --reporter mocha-simple-html-reporter --reporter-options output=test_results/unit-test-reports.html",
     "test-e2e": "node ./test/helpers/data/setup-e2e-data-helper.js && gulp --gulpfile gulpfile-e2e.js && node ./test/helpers/data/delete-e2e-data-helper.js",

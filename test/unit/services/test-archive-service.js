@@ -3,7 +3,6 @@ const sinon = require('sinon')
 
 const proxyquire = require('proxyquire')
 const archiveOptions = require('../../../app/constants/archive-options')
-const log = require('../../../app/logger')
 const LEGACY_MAX_WORKLOAD_REPORT_ID = require('../../../config').LEGACY_MAX_WORKLOAD_REPORT_ID
 const ARCHIVE_MAX_WORKLOAD_REPORT_ID = require('../../../config').ARCHIVE_MAX_WORKLOAD_REPORT_ID
 const LEGACY_MAX_WORKLOAD_ID = require('../../../config').LEGACY_MAX_WORKLOAD_ID
