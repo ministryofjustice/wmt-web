@@ -117,7 +117,6 @@ describe('services/archive-service', function () {
     getDailyArchiveFromNewDBArchive.resolves(JSON.parse(JSON.stringify(archiveRawData)))
     getDailyArchiveFromNewDBCurrent.resolves(JSON.parse(JSON.stringify(currentArchiveRawData)))
     return archiveService(archiveOptions.LEGACY).then(function (results) {
-      log.info(results)
       expect(results.length).to.eql(legacyRawData.length + archiveRawData.length + currentArchiveRawData.length)
       expect(results[0].capacity).to.eql(expectedLegacyCapacity)
       expect(results[0].workloadReportId).to.eql(legacyRawData[0].workloadReportId)
