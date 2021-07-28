@@ -11,7 +11,7 @@ generic-service:
   ingress:
     enabled: true
     host: app-hostname.local    # override per environment
-    tlsSecretName: hmpps-workload-cert
+    tlsSecretName: workload-measurement-cert
     path: /
 
   livenessProbe:
@@ -38,8 +38,6 @@ generic-service:
       APPINSIGHTS_INSTRUMENTATIONKEY: "APPINSIGHTS_INSTRUMENTATIONKEY"
       API_CLIENT_ID: "AUTH_API_CLIENT_ID"
       API_CLIENT_SECRET: "AUTH_API_CLIENT_SECRET"
-      SYSTEM_CLIENT_ID: "AUTH_API_CLIENT_ID"
-      SYSTEM_CLIENT_SECRET: "AUTH_API_CLIENT_SECRET"
       SESSION_SECRET: "SESSION_SECRET"
 
     rds-live-instance-output:
