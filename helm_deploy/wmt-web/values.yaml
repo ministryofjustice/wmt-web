@@ -40,6 +40,7 @@ generic-service:
       API_CLIENT_SECRET: "AUTH_API_CLIENT_SECRET"
       SYSTEM_CLIENT_ID: "AUTH_API_CLIENT_ID"
       SYSTEM_CLIENT_SECRET: "AUTH_API_CLIENT_SECRET"
+      SESSION_SECRET: "SESSION_SECRET"
 
     rds-live-instance-output:
       WMT_LIVE_DB_USERNAME: "database_username"
