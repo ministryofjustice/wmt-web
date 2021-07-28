@@ -204,6 +204,10 @@ jobs:
       - run:
           name: run end to end tests
           command: npm run test-e2e
+      - store_test_results:
+          path: test_results/e2e
+      - store_artifacts:
+          path: test_results/e2e/*
 
 workflows:
   version: 2
