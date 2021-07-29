@@ -6,6 +6,7 @@
     "npm": "7"
   },
   "scripts": {
+    "prepare": "husky install",
     "start": "gulp start",
     "build": "gulp generate-assets && gulp sync",
     "integration-test": "gulp generate-assets && mocha --recursive test/integration --timeout=60000 --exit --reporter mocha-simple-html-reporter --reporter-options output=test_results/integration-test-reports.html",
@@ -49,6 +50,7 @@
     "gulp-mocha": "8.0.x",
     "gulp-standard": "14.0.x",
     "gulp-webdriver": "^4.0.0",
+    "husky": "^7.0.0",
     "jsonwebtoken": "^8.5.1",
     "mocha": "8.4.x",
     "mocha-simple-html-reporter": "^2.0.0",
