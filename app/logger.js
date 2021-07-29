@@ -6,7 +6,7 @@ const prettyStream = new PrettyStream()
 prettyStream.pipe(process.stdout)
 
 const logger = bunyan.createLogger({
-  name: 'wmt-web',
+          name: 'wmt-web',
   streams: [],
   serializers: {
     error: errorSerializer
