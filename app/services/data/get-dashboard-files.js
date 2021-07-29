@@ -1,43 +1,15 @@
 const config = require('../../../config')
-const knexConfig = require('../../../knexfile').web
-const knex = require('knex')(knexConfig)
+const s3Client = require('../s3/get-s3-client')(config.dashboard)
+const listObjects = require('../s3/list-s3-objects')
 const dateFormatter = require('../date-formatter')
+module.exports = async function () {
+  const files = await listObjects(s3Client, config.dashboard.bucketName)
 
-module.exports = function (fileId) {
-  const NUMBER_OF_DASHBOARD_FILES = parseInt(config.NUMBER_OF_DASHBOARD_FILES)
-  const DASHBOARD = 'DASHBOARD'
-
-  const whereString = {
-    file_type: DASHBOARD,
-    is_enabled: true
-  }
-
-  if (fileId) {
-    whereString.id = fileId
-  }
-
-  const columns = [
-    'id',
-    'file_type',
-    'date_created',
-    'filepath',
-    'is_enabled'
-  ]
-
-  return knex('export_file')
-    .withSchema('app')
-    .columns(columns)
-    .where(whereString)
-    .orderBy('date_created', 'desc')
-    .limit(NUMBER_OF_DASHBOARD_FILES)
-    .then(function (results) {
-      if (results) {
-        if (results.length > 0) {
-          results.forEach(function (result) {
-            result.date_created = dateFormatter.formatDate(result.date_created, 'DD-MM-YYYY HH:mm')
-          })
-        }
-      }
-      return results
-    })
+  return files.map(function (f) {
+    return {
+      file_type: 'DASHBOARD',
+      date_created: dateFormatter.formatDate(f.LastModified, 'DD-MM-YYYY HH:mm'),
+      id: f.Key
+    }
+  })
 }

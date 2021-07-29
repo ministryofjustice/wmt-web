@@ -91,7 +91,7 @@ services:
     image: localstack/localstack:0.12.15
     networks:
       - hmpps
-    container_name: hmpps-workload-localstack
+    container_name: wmt-web-localstack
     ports:
       - "4566:4566"
       - "4571:4571"

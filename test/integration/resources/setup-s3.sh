@@ -11,9 +11,9 @@ export AWS_DEFAULT_REGION=eu-west-2
 export PAGER=
 
 aws --endpoint-url=http://localhost:4566 s3api create-bucket --bucket wmt-web
-aws --endpoint-url=http://localhost:4566 s3api put-object --bucket wmt-web --key dashboard/dashboard1.txt --body $excelPath/dashboard-file.txt
-aws --endpoint-url=http://localhost:4566 s3api put-object --bucket wmt-web --key dashboard/dashboard2.txt --body $excelPath/dashboard-file.txt
-aws --endpoint-url=http://localhost:4566 s3api put-object --bucket wmt-web --key dashboard/dashboard3.txt --body $excelPath/dashboard-file.txt
-aws --endpoint-url=http://localhost:4566 s3api put-object --bucket wmt-web --key dashboard/dashboard4.txt --body $excelPath/dashboard-file.txt
-aws --endpoint-url=http://localhost:4566 s3api put-object --bucket wmt-web --key dashboard/dashboard5.txt --body $excelPath/dashboard-file.txt
+aws --endpoint-url=http://localhost:4566 s3api put-object --bucket wmt-web --key generated-dashboards/dashboard_20210729062147.txt --body $excelPath/dashboard-file.txt
+aws --endpoint-url=http://localhost:4566 s3api put-object --bucket wmt-web --key generated-dashboards/dashboard_20210730062147.txt --body $excelPath/dashboard-file.txt
+aws --endpoint-url=http://localhost:4566 s3api put-object --bucket wmt-web --key generated-dashboards/dashboard_20210731062147.txt --body $excelPath/dashboard-file.txt
+aws --endpoint-url=http://localhost:4566 s3api put-object --bucket wmt-web --key generated-dashboards/dashboard_20210801062147.txt --body $excelPath/dashboard-file.txt
+aws --endpoint-url=http://localhost:4566 s3api put-object --bucket wmt-web --key generated-dashboards/dashboard_20210802062147.txt --body $excelPath/dashboard-file.txt
 echo "S3 created bucket"

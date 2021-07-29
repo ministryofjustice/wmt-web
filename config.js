@@ -93,5 +93,12 @@ module.exports = {
     port: parseInt(process.env.REDIS_PORT, 10) || 6379,
     password: process.env.REDIS_AUTH_TOKEN,
     tls_enabled: get('REDIS_TLS_ENABLED', 'false')
+  },
+  dashboard: {
+    region: process.env.DASHBOARD_S3_REGION || 'eu-west-2',
+    accessKeyId: process.env.DASHBOARD_AWS_ACCESS_KEY_ID || 'foobar',
+    secretAccessKey: process.env.DASHBOARD_AWS_SECRET_ACCESS_KEY || 'foobar',
+    endpoint: production ? null : 'http://localhost:4566',
+    bucketName: process.env.DASHBOARD_AWS_BUCKET || 'wmt-web'
   }
 }
