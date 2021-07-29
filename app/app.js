@@ -14,6 +14,7 @@ const populateCurrentUser = require('./middleware/populateCurrentUser')
 const setUpWebRequestParsing = require('./middleware/setUpRequestParsing')
 const setUpWebSecurity = require('./middleware/setUpWebSecurity')
 const setUpWebSession = require('./middleware/setUpWebSession')
+const setUpStaticResources = require('./middleware/setUpStaticResources')
 const authorisationMiddleware = require('./middleware/authorisationMiddleware')
 
 const auth = require('./authentication/auth')
@@ -29,6 +30,7 @@ app.use(setUpHealthChecks())
 app.use(setUpWebSecurity())
 app.use(setUpWebSession())
 app.use(setUpWebRequestParsing())
+app.use(setUpStaticResources())
 app.use(setUpAuthentication())
 app.use(authorisationMiddleware(['ROLE_WORKLOAD_MEASUREMENT']))
 
@@ -46,8 +48,6 @@ nunjucksObj.env.addFilter('date', dateFilter)
 nunjucksObj.env.addFilter('isObject', function (obj) {
   return typeof obj === 'object'
 })
-
-app.use('/public', express.static(path.join(__dirname, 'public')))
 
 app.use(expressSanitized())
 
