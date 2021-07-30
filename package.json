@@ -17,7 +17,9 @@
     "record-build-info": "node ./bin/record-build-info",
     "security_audit": "npx audit-ci --config audit-ci.json",
     "lint": "standard",
-    "accessibility-test-ci": "node ./test/accessibility/setup-pa11y-file.js && ./node_modules/.bin/pa11y-ci && node ./test/accessibility/delete-pally-data.js"
+    "accessibility-test-ci": "node ./test/accessibility/setup-pa11y-file.js && ./node_modules/.bin/pa11y-ci && node ./test/accessibility/delete-pally-data.js",
+    "seed-dev-data": "node ./test/helpers/data/setup-e2e-data-helper.js",
+    "clean-dev-data": "node ./test/helpers/data/delete-e2e-data-helper.js"
   },
   "standard": {
     "ignore": [
