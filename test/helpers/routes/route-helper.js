@@ -1,6 +1,5 @@
 const mockViewEngine = require('../../unit/routes/mock-view-engine')
 const express = require('express')
-const bodyParser = require('body-parser')
 const cookieSession = require('cookie-session')
 const csurf = require('csurf')
 
@@ -8,8 +7,8 @@ const VIEWS_DIRECTORY = '../../../app/views'
 
 module.exports.buildApp = function (route, middleware) {
   const app = express()
-  app.use(bodyParser.json())
-  app.use(bodyParser.urlencoded({ extended: false }))
+  app.use(express.json())
+  app.use(express.urlencoded({ extended: false }))
 
   app.use(cookieSession({
     name: 'session',
