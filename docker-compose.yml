@@ -31,8 +31,6 @@ services:
     container_name: wmt-web
     ports:
         - "3000:3000"
-    healthcheck:
-        test: ["CMD", "curl", "-f", "http://localhost:3000/ping"]
     environment:
         - WMT_LIVE_DB_SERVER=postgres
         - WMT_HISTORY_DB_SERVER=postgres
@@ -41,11 +39,10 @@ services:
         - HMPPS_AUTH_URL=http://hmpps-auth:8080/auth
         - API_CLIENT_ID=workload-measurement-ui
         - API_CLIENT_SECRET=clientsecret
-        - SYSTEM_CLIENT_ID=workload-measurement-ui
-        - SYSTEM_CLIENT_SECRET=system-client-secret
         - TOKEN_VERIFICATION_API_URL=http://localhost:8100
         - INGRESS_URL=http://localhost:3000
         - SESSION_SECRET=app-insecure-default-session
+        - NODE_ENV=local
     command: ["/bin/sh", "-c" ,"sleep 20 && npm start"]
     depends_on:
         - "hmpps-workload"
