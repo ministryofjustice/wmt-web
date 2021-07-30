@@ -12,8 +12,12 @@ export PAGER=
 
 aws --endpoint-url=http://localhost:4566 s3api create-bucket --bucket wmt-web
 aws --endpoint-url=http://localhost:4566 s3api put-object --bucket wmt-web --key generated-dashboards/dashboard_20210729062147.txt --body $excelPath/dashboard-file.txt
+sleep 1
 aws --endpoint-url=http://localhost:4566 s3api put-object --bucket wmt-web --key generated-dashboards/dashboard_20210730062147.txt --body $excelPath/dashboard-file.txt
+sleep 1
 aws --endpoint-url=http://localhost:4566 s3api put-object --bucket wmt-web --key generated-dashboards/dashboard_20210731062147.txt --body $excelPath/dashboard-file.txt
+sleep 1
 aws --endpoint-url=http://localhost:4566 s3api put-object --bucket wmt-web --key generated-dashboards/dashboard_20210801062147.txt --body $excelPath/dashboard-file.txt
+sleep 1
 aws --endpoint-url=http://localhost:4566 s3api put-object --bucket wmt-web --key generated-dashboards/dashboard_20210802062147.txt --body $excelPath/dashboard-file.txt
 echo "S3 created bucket"
