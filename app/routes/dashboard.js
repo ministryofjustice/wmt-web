@@ -85,6 +85,8 @@ module.exports = function (router) {
       res.set('Content-disposition', 'attachment; filename=' + fileId)
       res.set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
       dataStream.pipe(res)
+    }).catch(function (error) {
+      next(error)
     })
   })
 }
