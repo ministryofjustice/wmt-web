@@ -7,6 +7,7 @@ const workloadTypes = require('../constants/workload-type')
 const getLastUpdated = require('../services/data/get-last-updated')
 const dateFormatter = require('../services/date-formatter')
 const getDashboardFiles = require('../services/data/get-dashboard-files')
+const getDashboardFile = require('../services/data/get-dashboard-file')
 const roles = require('../constants/user-roles')
 const Forbidden = require('../services/errors/authentication-error').Forbidden
 const messages = require('../constants/messages')
@@ -80,19 +81,12 @@ module.exports = function (router) {
     if (organisationLevel !== organisationUnit.NATIONAL.name) {
       throw new Error('Only available for National Level')
     }
-    return getDashboardFiles(fileId).then(function (dashboardFile) {
-      if (dashboardFile) {
-        if (dashboardFile.length > 0) {
-          return res.download(dashboardFile[0].filepath)
-        } else {
-          throw new Error('Unable to find file')
-        }
-      } else {
-        throw new Error('Unable to find file')
-      }
+    return getDashboardFile(fileId).then(function (dataStream) {
+      res.set('Content-disposition', 'attachment; filename=' + fileId)
+      res.set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+      dataStream.pipe(res)
+    }).catch(function (error) {
+      next(error)
     })
-      .catch(function (error) {
-        next(error)
-      })
   })
 }
