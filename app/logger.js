@@ -30,7 +30,11 @@ function errorSerializer (error) {
 module.exports = {
   info: logger.info.bind(logger),
   error: function (e) {
-    appInsightsClient.trackException({ exception: e })
+    if (appInsightsClient) {
+      appInsightsClient.trackException({ exception: e })
+    } else {
+      logger.error(e)
+    }
   }
 
 }
