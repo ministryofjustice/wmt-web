@@ -21,7 +21,7 @@ const get = async function ({ path = null, query = '', headers = {}, responseTyp
     return raw ? result : result.body
   } catch (error) {
     const sanitisedError = sanitiseError(error)
-    logger.warn({ ...sanitisedError, query }, `Error calling, path: '${path}', verb: 'GET'`)
+    logger.error({ ...sanitisedError, query }, `Error calling, path: '${path}', verb: 'GET'`)
     throw sanitisedError
   }
 }

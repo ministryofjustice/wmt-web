@@ -1,3 +1,4 @@
+const { defaultClient: appInsightsClient } = require('applicationinsights')
 const bunyan = require('bunyan')
 const PrettyStream = require('bunyan-prettystream')
 
@@ -26,4 +27,10 @@ function errorSerializer (error) {
   }
 }
 
-module.exports = logger
+module.exports = {
+  info: logger.info.bind(logger),
+  error: function (e) {
+    appInsightsClient.trackException({ exception: e })
+  }
+
+}
