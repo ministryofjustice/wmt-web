@@ -1,7 +1,3 @@
-
-const appInsights = require('applicationinsights')
-appInsights.setup()
-
 const express = require('express')
 const expressSanitized = require('express-sanitized')
 const csurf = require('csurf')
