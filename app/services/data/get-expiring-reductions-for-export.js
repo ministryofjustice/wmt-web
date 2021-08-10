@@ -1,6 +1,5 @@
 const knex = require('../../../knex').web
 const dateFormatter = require('../date-formatter')
-// const log = require('../../logger')
 
 module.exports = function (id, organisationLevel) {
   const columns = [

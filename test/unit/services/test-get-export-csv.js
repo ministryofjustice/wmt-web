@@ -5,7 +5,6 @@ const tabs = require('../../../app/constants/wmt-tabs')
 const helper = require('../../helpers/export-csv-helper')
 const groupedDataOmWeekly = require('../../helpers/data/archive-test-data/grouped-data-om-weekly')
 const groupedDataTeamWeekly = require('../../helpers/data/archive-test-data/grouped-data-team-weekly')
-// const log = require('../../../app/logger')
 
 describe('services/get-export-csv', function () {
   describe('should return the correct csv object', function () {

@@ -1,6 +1,5 @@
 const knex = require('../../../knex').web
 const percentageCalculator = require('../helpers/percentage-calculator')
-// const log = require('../../logger')
 
 module.exports = function (id, organisationLevel) {
   const columns = [

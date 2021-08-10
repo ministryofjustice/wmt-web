@@ -13,8 +13,6 @@ const formatReductionTo1DP = require('../helpers/archive-helpers/format-reductio
 
 let archiveDataLimit
 
-// const log = require('../logger')
-
 module.exports = function (archiveOption, archiveDataForm) {
   archiveDataLimit = require('../../config').ARCHIVE_DATA_LIMIT
 

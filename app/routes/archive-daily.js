@@ -17,7 +17,6 @@ const archiveDatabaseStartDateString = require('../../config').ARCHIVE_DATABASE_
 const currentDatabaseStartDateString = require('../../config').CURRENT_DATABASE_START_DATE
 const archiveDatabaseStartDate = new moment(archiveDatabaseStartDateString, 'DD/MM/YYYY') //eslint-disable-line
 const currentDatabaseStartDate = new moment(currentDatabaseStartDateString, 'DD/MM/YYYY') //eslint-disable-line
-// const log = require('../logger')
 const getArchiveOption = require('../helpers/archive-helpers/get-archive-option')
 const getStringifiedBody = require('../helpers/archive-helpers/get-stringified-body')
 const createSearchListArray = require('../helpers/archive-helpers/create-search-list-array')

@@ -12,7 +12,6 @@ const tabs = require('../constants/wmt-tabs')
 const renderResults = require('../helpers/render-results')
 const viewTemplate = 'averaged-caseload-data'
 const title = 'Averaged Caseload Data'
-// const log = require('../logger')
 const archiveDatabaseStartDateString = require('../../config').ARCHIVE_DATABASE_START_DATE
 const currentDatabaseStartDateString = require('../../config').CURRENT_DATABASE_START_DATE
 const heDecode = require('he')
