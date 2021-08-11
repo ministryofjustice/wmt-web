@@ -14,11 +14,11 @@ const dailyArchiveInserts = path.resolve(__dirname, '../../../dailyArchiveInsert
 const dailyArchiveData = {
   workloadID: 2745,
   workloadDate: '01 Jan 2015 00:00:00 GMT',
-  lduName: 'All NPS North West',
-  regionName: 'Tyne',
-  teamName: 'Chesh & Gt Manch CRC - CRC Transfers',
+  lduName: 'Test LDU',
+  regionName: 'NPS Test Region',
+  teamName: 'Test Team',
   omName: 'Test_forename Test_surname',
-  grade: 'SPO',
+  grade: 'PO',
   totalCases: 1,
   totalPoints: 6,
   sdrPoints: 0,
@@ -31,7 +31,7 @@ const dailyArchiveData = {
 
 module.exports = function () {
   return dailyArchiveDataHelper.createDailyArchive(dailyArchiveData).then(function (dailyArchiveId) {
-    const dailyArchiveIdInsert = [{ table: 'daily_archive_data', id: dailyArchiveId }]
+    const dailyArchiveIdInsert = [{ table: 'daily_archive_data', id: dailyArchiveId[0] }]
     return courtReportsDataHelper.addCourtReportWorkloadsForOffenderManager()
       .then(function (courtReportInserts) {
         return aggregatedDataHelper.addWorkloadCapacitiesForOffenderManager().then(function (workloadInserts) {
