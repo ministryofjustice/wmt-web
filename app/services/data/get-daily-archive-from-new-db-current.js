@@ -33,7 +33,7 @@ module.exports = function (archiveDataForm, archiveDataLimit, isArchive = false)
   ]
 
   if (archiveDataForm.multiSearchField !== null && archiveDataForm.multiSearchField !== undefined && archiveDataForm.multiSearchField !== '') {
-    return knex('team_archive_data')
+    return knex.from('team_archive_data')
       .limit(parseInt(archiveDataLimit))
       .select(selectColumns)
       .whereBetween('workload_date', [archiveDataForm.archiveFromDate.toISOString().substring(0, 10),
@@ -45,7 +45,7 @@ module.exports = function (archiveDataForm, archiveDataLimit, isArchive = false)
       })
       .orderBy('workload_id', 'ASC')
   } else {
-    return knex('team_archive_data')
+    return knex.from('team_archive_data')
       .limit(parseInt(archiveDataLimit))
       .select(selectColumns)
       .whereBetween('workload_date', [archiveDataForm.archiveFromDate.toISOString().substring(0, 10),
