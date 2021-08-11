@@ -15,7 +15,7 @@ module.exports = function (term) {
     })
     .then(function (archiveDBResults) {
       results = results.concat(archiveDBResults)
-      return knexLegacy('OffenderManager').withSchema('dbo').columns(columns).whereRaw('CONCAT(forename, \' \', surname) LIKE ?', ['%' + term + '%'])
+      return knexLegacy('offendermanager').withSchema('dbo').columns(columns).whereRaw('CONCAT(forename, \' \', surname) LIKE ?', ['%' + term + '%'])
     })
     .then(function (legacyDBResults) {
       results = results.concat(legacyDBResults)
