@@ -1,5 +1,7 @@
 {% extends "includes/layout.html" %}
-
+{% block pageTitle %}
+  Page not found
+{% endblock %}
 {% block content %}
 
   <main class="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
@@ -7,14 +9,17 @@
       <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">Page not found</h1>
         <p class="govuk-body">
-          If you typed the web address, check it is correct.
+          If you entered a web address, check it is correct.
         </p>
         <p class="govuk-body">
-          If you pasted the web address, check you copied the entire address.
+          If you pasted a web address, check you copied the entire address.
         </p>
         <p class="govuk-body">
-          If the web address is correct or you selected a link or button, contact the Technology Service Desk
+          If the web address is correct or you selected a link or button, contact the Technology Service Desk.
         </p>
+
+        <p class="govuk-body">You can <a class="govuk-link govuk-link--no-visited-state" href="/probation/hmpps/0">return to the homepage</a> or use the links in the header to find the information you need.</p>
+        <pre class="govuk-!-margin-top-8">Status code: 404</pre>
       </div>
     </div>
   </main>
