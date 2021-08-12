@@ -10,17 +10,18 @@ module.exports = function (id, organisationLevel, isCSV = false) {
 
   return getCaseload(id, organisationLevel)
     .then(function (results) {
-      const breadcrumbs = getBreadcrumbs(id, organisationLevel)
-      const title = breadcrumbs[0].title
-      const subTitle = organisationUnitType.displayText
+      return getBreadcrumbs(id, organisationLevel).then(function (breadcrumbs) {
+        const title = breadcrumbs[0].title
+        const subTitle = organisationUnitType.displayText
 
-      const caseloadResults = parseCaseloadResults(organisationLevel, results, isCSV)
-      return {
-        breadcrumbs: breadcrumbs,
-        title: title,
-        subTitle: subTitle,
-        caseloadDetails: caseloadResults
-      }
+        const caseloadResults = parseCaseloadResults(organisationLevel, results, isCSV)
+        return {
+          breadcrumbs: breadcrumbs,
+          title: title,
+          subTitle: subTitle,
+          caseloadDetails: caseloadResults
+        }
+      })
     })
 }
 

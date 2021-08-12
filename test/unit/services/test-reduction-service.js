@@ -101,7 +101,7 @@ beforeEach(function () {
   createCalculateWorkloadTaskStub = sinon.stub()
   getContractedHoursForWorkloadOwnerStub = sinon.stub().resolves(5)
   getReferenceDataStub = sinon.stub().resolves(referenceData)
-  getBreadcrumbsStub = sinon.stub().returns(breadcrumbs)
+  getBreadcrumbsStub = sinon.stub().resolves(breadcrumbs)
   getReductionById = sinon.stub()
   getReductions = sinon.stub()
   reductionHelper = {

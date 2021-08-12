@@ -113,19 +113,19 @@ module.exports = function (router) {
       throw new Error('Only available for a team')
     }
 
-    const breadcrumbs = getBreadcrumbs(id, organisationLevel)
-
-    return getCaseDetailsReports(id, organisationLevel).then(function (caseDetails) {
-      const formatedCaseDetails = formatCaseDetailsForExport(caseDetails)
-      const result = {
-        title: breadcrumbs[0].title,
-        inactiveCaseDetails: formatedCaseDetails
-      }
-      const exportCsv = getExportCsv(organisationLevel, result, tabs.CAPACITY.INACTIVE)
-      res.attachment(exportCsv.filename)
-      return res.send(exportCsv.csv)
-    }).catch(function (error) {
-      next(error)
+    return getBreadcrumbs(id, organisationLevel).then(function (breadcrumbs) {
+      return getCaseDetailsReports(id, organisationLevel).then(function (caseDetails) {
+        const formatedCaseDetails = formatCaseDetailsForExport(caseDetails)
+        const result = {
+          title: breadcrumbs[0].title,
+          inactiveCaseDetails: formatedCaseDetails
+        }
+        const exportCsv = getExportCsv(organisationLevel, result, tabs.CAPACITY.INACTIVE)
+        res.attachment(exportCsv.filename)
+        return res.send(exportCsv.csv)
+      }).catch(function (error) {
+        next(error)
+      })
     })
   })
 }

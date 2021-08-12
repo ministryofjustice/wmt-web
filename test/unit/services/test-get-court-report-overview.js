@@ -48,7 +48,7 @@ describe('services/get-court-report-overview', function () {
     const expectedTitle = breadcrumbs[0].title
 
     getCourtReportOverviewData.withArgs(id, omName).resolves(OVERVIEW)
-    getBreadcrumbs.returns(breadcrumbs)
+    getBreadcrumbs.resolves(breadcrumbs)
 
     return getCourtReportOverview(id, omName)
       .then(function (result) {
@@ -67,7 +67,7 @@ describe('services/get-court-report-overview', function () {
     const expectedTitle = breadcrumbs[0].title
 
     getCourtReportOverviewData.withArgs(id, orgName).resolves(ORGANISATION_OVERVIEW)
-    getBreadcrumbs.returns(breadcrumbs)
+    getBreadcrumbs.resolves(breadcrumbs)
 
     return getCourtReportOverview(id, orgName).then(function (result) {
       const teamSubtitle = orgUnitFinder('name', orgName).displayText
@@ -85,7 +85,7 @@ describe('services/get-court-report-overview', function () {
     const expectedTitle = breadcrumbs[0].title
 
     getCourtReportOverviewData.withArgs(id, orgName).resolves(ORGANISATION_OVERVIEW)
-    getBreadcrumbs.returns(breadcrumbs)
+    getBreadcrumbs.resolves(breadcrumbs)
 
     return getCourtReportOverview(id, orgName).then(function (result) {
       const orgSubtitle = orgUnitFinder('name', orgName).displayText
@@ -103,7 +103,7 @@ describe('services/get-court-report-overview', function () {
     const expectedTitle = breadcrumbs[0].title
 
     getCourtReportOverviewData.withArgs(id, orgName).resolves(ORGANISATION_OVERVIEW)
-    getBreadcrumbs.returns(breadcrumbs)
+    getBreadcrumbs.resolves(breadcrumbs)
 
     return getCourtReportOverview(id, orgName).then(function (result) {
       const orgSubtitle = orgUnitFinder('name', orgName).displayText
@@ -121,7 +121,7 @@ describe('services/get-court-report-overview', function () {
     const expectedTitle = breadcrumbs[0].title
 
     getCourtReportOverviewData.withArgs(id, orgName).resolves(ORGANISATION_OVERVIEW)
-    getBreadcrumbs.returns(breadcrumbs)
+    getBreadcrumbs.resolves(breadcrumbs)
 
     return getCourtReportOverview(id, orgName).then(function (result) {
       const orgSubtitle = orgUnitFinder('name', orgName).displayText

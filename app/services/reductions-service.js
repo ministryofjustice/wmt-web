@@ -22,16 +22,18 @@ module.exports.getReductions = function (id, organisationLevel, workloadType) {
   const result = {}
   const organisationalUnitType = getOrganisationUnit('name', organisationLevel)
 
-  result.breadcrumbs = getBreadcrumbs(id, organisationLevel, workloadType)
-  result.title = result.breadcrumbs[0].title
-  result.subTitle = organisationalUnitType.displayText
+  return getBreadcrumbs(id, organisationLevel, workloadType).then(function (breadcrumbs) {
+    result.breadcrumbs = breadcrumbs
+    result.title = result.breadcrumbs[0].title
+    result.subTitle = organisationalUnitType.displayText
 
-  return getReductions(id).then(function (results) {
-    const reductionsByStatus = reductionHelper.getReductionsByStatus(results)
-    result.activeReductions = reductionsByStatus.activeReductions
-    result.scheduledReductions = reductionsByStatus.scheduledReductions
-    result.archivedReductions = reductionsByStatus.archivedReductions
-    return result
+    return getReductions(id).then(function (results) {
+      const reductionsByStatus = reductionHelper.getReductionsByStatus(results)
+      result.activeReductions = reductionsByStatus.activeReductions
+      result.scheduledReductions = reductionsByStatus.scheduledReductions
+      result.archivedReductions = reductionsByStatus.archivedReductions
+      return result
+    })
   })
 }
 
@@ -41,15 +43,17 @@ module.exports.getAddReductionsRefData = function (id, organisationLevel, worklo
   const getContractedHoursPromise = getContractedHoursForWorkloadOwner(id)
   const organisationalUnitType = getOrganisationUnit('name', organisationLevel)
 
-  result.breadcrumbs = getBreadcrumbs(id, organisationLevel, workloadType)
-  result.title = result.breadcrumbs[0].title
-  result.subTitle = organisationalUnitType.displayText
+  return getBreadcrumbs(id, organisationLevel, workloadType).then(function (breadcrumbs) {
+    result.breadcrumbs = breadcrumbs
+    result.title = result.breadcrumbs[0].title
+    result.subTitle = organisationalUnitType.displayText
 
-  return getContractedHoursPromise.then(function (hours) {
-    return getReductionReasonsPromise.then(function (results) {
-      result.contractedHours = hours
-      result.referenceData = reductionsCalculator(results, hours)
-      return result
+    return getContractedHoursPromise.then(function (hours) {
+      return getReductionReasonsPromise.then(function (results) {
+        result.contractedHours = hours
+        result.referenceData = reductionsCalculator(results, hours)
+        return result
+      })
     })
   })
 }

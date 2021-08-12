@@ -43,7 +43,7 @@ let getOrganisationOverview
 beforeEach(function () {
   getIndividualOverview = sinon.stub()
   getOrganisationOverview = sinon.stub()
-  getBreadcrumbs = sinon.stub().returns(breadcrumbs)
+  getBreadcrumbs = sinon.stub().resolves(breadcrumbs)
   getOverview =
       proxyquire('../../../app/services/get-overview',
         {

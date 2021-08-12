@@ -32,7 +32,7 @@ beforeEach(function () {
   getContractedHoursForWorkloadOwner = sinon.stub()
   updateContractedHoursForWorkloadOwner = sinon.stub()
   createWorkloadPointsRecalculationTask = sinon.stub()
-  getBreadcrumbs = sinon.stub().returns(breadcrumbs)
+  getBreadcrumbs = sinon.stub().resolves(breadcrumbs)
   getLatestIdsForWpRecalc = sinon.stub().resolves(recalcIds)
   createCourtReportsCalculationTask = sinon.stub()
   getLatestIdsForCourtReportsCalc = sinon.stub().resolves(crReCalcIds)
