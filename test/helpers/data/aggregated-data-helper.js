@@ -199,6 +199,20 @@ const addWorkloadReports = function (inserts) {
     })
 }
 
+module.exports.addInProgressWorkloadReport = function (inserts) {
+  const workloadReports = [
+    { effective_from: '2017-02-01', status: 'IN-PROGRESS' }
+  ]
+
+  return knex('workload_report').withSchema('app').returning('id').insert(workloadReports)
+    .then(function (ids) {
+      ids.forEach((id) => {
+        inserts.push({ table: 'workload_report', id: id })
+      })
+      return inserts
+    })
+}
+
 const addRegion = function (inserts) {
   return knex('region').withSchema('app').returning('id').insert({ description: 'NPS Test Region' })
     .then(function (ids) {

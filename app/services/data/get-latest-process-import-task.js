@@ -1,9 +1,9 @@
 const knex = require('../../../knex').web
 
 module.exports = function () {
-  return knex('tasks')
+  return knex('workload_report')
     .withSchema('app')
-    .where('type', 'PROCESS-IMPORT')
-    .first(['date_created', 'date_processed', 'date_started'])
-    .orderBy('date_created', 'desc')
+    .where('status', 'IN-PROGRESS')
+    .first(['effective_from'])
+    .select('effective_from')
 }

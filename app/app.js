@@ -14,6 +14,7 @@ const setUpWebSecurity = require('./middleware/setUpWebSecurity')
 const setUpWebSession = require('./middleware/setUpWebSession')
 const setUpStaticResources = require('./middleware/setUpStaticResources')
 const authorisationMiddleware = require('./middleware/authorisationMiddleware')
+const checkEtlInProgress = require('./middleware/check-etl-in-progress')
 
 const auth = require('./authentication/auth')
 const userService = require('./services/user-service')
@@ -77,6 +78,9 @@ app.use(function (req, res, next) {
 const router = express.Router({ mergeParams: true })
 router.use(auth.authenticationMiddleware())
 router.use(populateCurrentUser(userService))
+
+app.use(checkEtlInProgress)
+
 routes(router)
 
 app.use('/', router)

@@ -23,29 +23,6 @@ services:
       - DELIUS_ENABLED=true
       - DELIUS_ENDPOINT_URL=http://wiremock:8099
 
-  wmt-web:
-    build:
-        context: .
-    networks:
-        - hmpps
-    container_name: wmt-web
-    ports:
-        - "3000:3000"
-    environment:
-        - WMT_LIVE_DB_SERVER=postgres
-        - WMT_HISTORY_DB_SERVER=postgres
-        - REDIS_HOST=redis
-        - HMPPS_AUTH_EXTERNAL_URL=http://localhost:9090/auth
-        - HMPPS_AUTH_URL=http://hmpps-auth:8080/auth
-        - API_CLIENT_ID=workload-measurement-ui
-        - API_CLIENT_SECRET=clientsecret
-        - TOKEN_VERIFICATION_API_URL=http://localhost:8100
-        - INGRESS_URL=http://localhost:3000
-        - SESSION_SECRET=app-insecure-default-session
-        - NODE_ENV=local
-    command: ["/bin/sh", "-c" ,"sleep 20 && npm start"]
-    depends_on:
-        - "hmpps-workload"
   hmpps-workload:
     image: quay.io/hmpps/hmpps-workload:latest
     networks:

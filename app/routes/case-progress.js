@@ -6,7 +6,6 @@ const Unauthorized = require('../services/errors/authentication-error').Unauthor
 const workloadTypes = require('../../app/constants/workload-type')
 const getLastUpdated = require('../services/data/get-last-updated')
 const dateFormatter = require('../services/date-formatter')
-const renderWMTUpdatingPage = require('../helpers/render-wmt-updating-page')
 
 let lastUpdated
 
@@ -63,12 +62,7 @@ module.exports = function (router) {
         })
       })
     }).catch(function (error) {
-      if ((error.message.includes("Hint 'noexpand'") && error.message.includes('is invalid')) || (error.message.includes('Could not use view or function') && error.message.includes('because of binding errors'))) {
-        const subNav = getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole)
-        renderWMTUpdatingPage(res, authorisedUserRole.userRole, authorisedUserRole.authorisation, subNav)
-      } else {
-        next(error)
-      }
+      next(error)
     })
   })
 }
