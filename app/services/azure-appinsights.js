@@ -18,7 +18,6 @@ function version () {
 function initialiseAppInsights () {
   if (APPINSIGHTS_INSTRUMENTATIONKEY) {
     appInsights.setup(APPINSIGHTS_INSTRUMENTATIONKEY).setDistributedTracingMode(appInsights.DistributedTracingModes.AI_AND_W3C).start()
-    console.log('azure application insights has been enabled')
   }
 }
 

@@ -1,7 +1,3 @@
-
-const appInsights = require('applicationinsights')
-appInsights.setup()
-
 const express = require('express')
 const expressSanitized = require('express-sanitized')
 const csurf = require('csurf')
@@ -105,7 +101,7 @@ app.use(function (err, req, res, next) {
 })
 
 // Development error handler.
-app.use(function (err, req, res) {
+app.use(function (err, req, res, next) {
   logger.error({ error: err })
   res.status(err.status || 500)
   if (err.status === 404) {

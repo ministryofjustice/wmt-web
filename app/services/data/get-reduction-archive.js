@@ -11,7 +11,6 @@ module.exports = function (archiveDataForm) {
   ]
 
   if (archiveDataForm.multiSearchField !== null && archiveDataForm.multiSearchField !== undefined && archiveDataForm.multiSearchField !== '') {
-    console.log(archiveDataForm.multiSearchField)
     return knex('archive_reduction_data')
       .withSchema('dbo')
       .limit(parseInt(archiveDataLimit))

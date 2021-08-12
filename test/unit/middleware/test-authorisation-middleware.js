@@ -1,5 +1,6 @@
-const authorisationMiddleware = require('../../../app/middleware/authorisationMiddleware')
+
 const jwt = require('jsonwebtoken')
+const proxyquire = require('proxyquire')
 const sinon = require('sinon')
 const chai = require('chai')
 const sinonChai = require('sinon-chai')
@@ -34,6 +35,14 @@ function createResWithToken ({ authorities }) {
     }
   }
 }
+
+const logger = {
+  error: sinon.stub()
+}
+
+const authorisationMiddleware = proxyquire('../../../app/middleware/authorisationMiddleware', {
+  '../logger': logger
+})
 
 describe('authorisation middleware', function () {
   beforeEach(function () {

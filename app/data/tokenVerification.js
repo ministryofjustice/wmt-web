@@ -20,15 +20,12 @@ async function tokenVerifier (request) {
   const { user, verified } = request
 
   if (!config.apis.tokenVerification.enabled) {
-    logger.debug('Token verification disabled, returning token is valid')
     return true
   }
 
   if (verified) {
     return true
   }
-
-  logger.debug(`token request for user "${user.username}'`)
 
   const result = await getApiClientToken(user.token)
   if (result) {
