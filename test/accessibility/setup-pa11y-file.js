@@ -40,7 +40,6 @@ const national = 'hmpps/0'
 const urls = [generateLoginUrlConfig()]
 
 setupAllDataFs().then(function (result) {
-
   const extractedCourtReports = extractInserts(result.courtReportInserts)
   const extractedWorkload = extractInserts(result.workloadInserts)
   const capacityUrl = 'caseload-capacity'
