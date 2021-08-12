@@ -1,6 +1,5 @@
 const path = require('path')
 const fs = require('fs')
-const http = require('http')
 
 const setupAllDataFs = require('../helpers/data/setup-all-data-fs')
 
@@ -41,18 +40,6 @@ const national = 'hmpps/0'
 const urls = [generateLoginUrlConfig()]
 
 setupAllDataFs().then(function (result) {
-  const req = http.request(`${host}/refresh`, res => {
-    console.log(`statusCode: ${res.statusCode}`)
-    process.exit(0)
-  })
-
-  req.on('error', (err) => {
-    console.error(err)
-    process.exit(1)
-  })
-
-  req.end()
-
   const extractedCourtReports = extractInserts(result.courtReportInserts)
   const extractedWorkload = extractInserts(result.workloadInserts)
   const capacityUrl = 'caseload-capacity'

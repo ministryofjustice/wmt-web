@@ -106,7 +106,7 @@ let lduName
 
 beforeEach(function () {
   getCaseloadDetail = sinon.stub()
-  getBreadcrumbs = sinon.stub().returns(breadcrumbs)
+  getBreadcrumbs = sinon.stub().resolves(breadcrumbs)
   caseloadHelper = {
     getCaseloadTierTotalsByTeamByGrade: sinon.stub(),
     getCaseloadSummaryTotalsByTeam: sinon.stub(),

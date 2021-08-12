@@ -28,7 +28,7 @@ let getBreadcrumbsStub
 
 beforeEach(function () {
   getReductionsData = sinon.stub()
-  getBreadcrumbsStub = sinon.stub().returns(breadcrumbs)
+  getBreadcrumbsStub = sinon.stub().resolves(breadcrumbs)
   exportReductionService =
     proxyquire('../../../app/services/get-reductions-export',
       {

@@ -189,7 +189,7 @@ const capacityDateRange = new CapacityDateRange(1, 1, 2017, 31, 3, 2017)
 beforeEach(function () {
   getWorkloadReports = sinon.stub()
   getCapacityBreakdown = sinon.stub()
-  getBreadcrumbs = sinon.stub().returns(breadcrumbHelper.LDU_BREADCRUMBS)
+  getBreadcrumbs = sinon.stub().resolves(breadcrumbHelper.LDU_BREADCRUMBS)
   getSubNav = sinon.stub()
   getCapacityView = proxyquire('../../../app/services/get-capacity-view',
     {

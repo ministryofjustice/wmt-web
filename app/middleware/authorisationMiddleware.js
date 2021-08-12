@@ -3,9 +3,6 @@ const logger = require('../logger')
 
 module.exports = function (authorisedRoles = []) {
   return function (req, res, next) {
-    if (req.url === '/refresh') {
-      return next()
-    }
     if (res.locals && res.locals.user && res.locals.user.token) {
       const { authorities: roles = [] } = jwtDecode(res.locals.user.token)
 

@@ -13,32 +13,33 @@ module.exports = function (id, capacityDateRange, organisationLevel) {
   }
 
   const result = {}
-  result.breadcrumbs = getBreadcrumbs(id, organisationLevel)
+  return getBreadcrumbs(id, organisationLevel).then(function (breadcrumbs) {
+    result.breadcrumbs = breadcrumbs
+    return getWorkloadReports(id, capacityDateRange.capacityFromDate.toISOString(), capacityDateRange.capacityToDate.toISOString(), organisationLevel)
+      .then(function (results) {
+        result.capacityBreakdown = []
+        result.capacityTable = tableCreator.createCapacityTable(id, organisationalUnitType.displayText, results.workloadReportResults)
+        result.crcCapacityTable = tableCreator.createCapacityTable(id, organisationalUnitType.displayText, results.crcWorkloadReportResults)
+        result.title = result.breadcrumbs[0].title
+        result.subTitle = organisationalUnitType.displayText
 
-  return getWorkloadReports(id, capacityDateRange.capacityFromDate.toISOString(), capacityDateRange.capacityToDate.toISOString(), organisationLevel)
-    .then(function (results) {
-      result.capacityBreakdown = []
-      result.capacityTable = tableCreator.createCapacityTable(id, organisationalUnitType.displayText, results.workloadReportResults)
-      result.crcCapacityTable = tableCreator.createCapacityTable(id, organisationalUnitType.displayText, results.crcWorkloadReportResults)
-      result.title = result.breadcrumbs[0].title
-      result.subTitle = organisationalUnitType.displayText
-
-      if (organisationalUnitType !== organisationConstant.OFFENDER_MANAGER) {
-        return getCapacityBreakdown(id, organisationLevel)
-          .then(function (memberCapacityBreakdown) {
-            const parsedCapacityBreakdown = parseCapacityBreakdown(memberCapacityBreakdown, organisationLevel)
-            result.capacityBreakdown = parsedCapacityBreakdown.capacityBreakdown
-            const temp = Object.assign({}, result.capacityBreakdown[result.capacityBreakdown.length - 1])
-            result.capacityBreakdown.pop()
-            result.capacityBreakdown.sort(function (a, b) { return a.name.localeCompare(b.name) })
-            result.capacityBreakdown.push(temp)
-            result.capacityBreakdownTotals = parsedCapacityBreakdown.totals
-            result.capacityBreakdownCRCTotals = parsedCapacityBreakdown.crcTotals
-            return result
-          })
-      }
-      return result
-    })
+        if (organisationalUnitType !== organisationConstant.OFFENDER_MANAGER) {
+          return getCapacityBreakdown(id, organisationLevel)
+            .then(function (memberCapacityBreakdown) {
+              const parsedCapacityBreakdown = parseCapacityBreakdown(memberCapacityBreakdown, organisationLevel)
+              result.capacityBreakdown = parsedCapacityBreakdown.capacityBreakdown
+              const temp = Object.assign({}, result.capacityBreakdown[result.capacityBreakdown.length - 1])
+              result.capacityBreakdown.pop()
+              result.capacityBreakdown.sort(function (a, b) { return a.name.localeCompare(b.name) })
+              result.capacityBreakdown.push(temp)
+              result.capacityBreakdownTotals = parsedCapacityBreakdown.totals
+              result.capacityBreakdownCRCTotals = parsedCapacityBreakdown.crcTotals
+              return result
+            })
+        }
+        return result
+      })
+  })
 }
 
 const parseCapacityBreakdown = function (workloadReports, organisationLevel) {

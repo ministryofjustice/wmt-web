@@ -9,10 +9,12 @@ module.exports = function (id, organisationLevel) {
 
   return getCourtReportOverview(id, organisationLevel)
     .then(function (courtReportOverview) {
-      result.breadcrumbs = getBreadcrumbs(id, organisationLevel, workloadTypeConst.COURT_REPORTS)
-      result.overviewDetails = courtReportOverview
-      result.title = result.breadcrumbs[0].title
-      result.subTitle = organisationalUnitType.displayText
-      return result
+      return getBreadcrumbs(id, organisationLevel, workloadTypeConst.COURT_REPORTS).then(function (breadcrumbs) {
+        result.breadcrumbs = breadcrumbs
+        result.overviewDetails = courtReportOverview
+        result.title = result.breadcrumbs[0].title
+        result.subTitle = organisationalUnitType.displayText
+        return result
+      })
     })
 }

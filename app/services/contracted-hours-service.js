@@ -14,18 +14,18 @@ module.exports.getContractedHours = function (id, organisationLevel, workloadTyp
     throw new Error('Can only get contracted hours for an offender manager')
   }
 
-  const breadcrumbs = getBreadcrumbs(id, organisationLevel, workloadType)
   const organisationalUnitType = getOrganisationUnit('name', organisationLevel)
-
-  return getContractedHoursForWorkloadOwner(id)
-    .then(function (result) {
-      return {
-        breadcrumbs: breadcrumbs,
-        title: breadcrumbs[0].title,
-        subTitle: organisationalUnitType.displayText,
-        contractedHours: result
-      }
-    })
+  return getBreadcrumbs(id, organisationLevel, workloadType).then(function (breadcrumbs) {
+    return getContractedHoursForWorkloadOwner(id)
+      .then(function (result) {
+        return {
+          breadcrumbs: breadcrumbs,
+          title: breadcrumbs[0].title,
+          subTitle: organisationalUnitType.displayText,
+          contractedHours: result
+        }
+      })
+  })
 }
 
 module.exports.updateContractedHours = function (id, organisationLevel, hours, workloadType) {
