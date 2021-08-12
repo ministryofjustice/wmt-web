@@ -8,7 +8,6 @@ const authorisation = require('../authorisation')
 const Unauthorized = require('../services/errors/authentication-error').Unauthorized
 const getLastUpdated = require('../services/data/get-last-updated')
 const dateFormatter = require('../services/date-formatter')
-const renderWMTUpdatingPage = require('../helpers/render-wmt-updating-page')
 
 let lastUpdated
 
@@ -75,12 +74,7 @@ const renderOverview = function (req, res, next) {
           authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
         })
       }).catch(function (error) {
-        if (error.message.includes("Hint 'noexpand'") && error.message.includes('is invalid')) {
-          const subNav = getSubNav(id, organisationLevel, req.path, workloadTypeConstants.COURT_REPORTS, authorisedUserRole.authorisation, authorisedUserRole.userRole)
-          renderWMTUpdatingPage(res, authorisedUserRole.userRole, authorisedUserRole.authorisation, subNav)
-        } else {
-          next(error)
-        }
+        next(error)
       })
   })
 }

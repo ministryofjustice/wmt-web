@@ -7,7 +7,6 @@ const Unauthorized = require('../services/errors/authentication-error').Unauthor
 const workloadTypes = require('../constants/workload-type')
 const getLastUpdated = require('../services/data/get-last-updated')
 const dateFormatter = require('../services/date-formatter')
-const renderWMTUpdatingPage = require('../helpers/render-wmt-updating-page')
 
 let lastUpdated
 
@@ -84,11 +83,6 @@ const renderOverview = function (req, res, next) {
       })
     })
   }).catch(function (error) {
-    if (error.message.includes("Hint 'noexpand'") && error.message.includes('is invalid')) {
-      const subNav = getSubNav(id, organisationLevel, req.path, workloadTypes.OMIC, authorisedUserRole.authorisation, authorisedUserRole.userRole)
-      return renderWMTUpdatingPage(res, authorisedUserRole.userRole, authorisedUserRole.authorisation, subNav)
-    } else {
-      next(error)
-    }
+    next(error)
   })
 }
