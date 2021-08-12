@@ -73,13 +73,6 @@ describe('authorisation middleware', function () {
     return next.should.have.been.calledOnce
   })
 
-  it('should return next when url is refresh', function () {
-    req.url = '/refresh'
-    const res = {}
-    authorisationMiddleware(['SOME_REQUIRED_ROLE'])(req, res, next)
-    return next.should.have.been.calledOnce
-  })
-
   it('should redirect when user has no token', function () {
     const res = {
       redirect: (redirectUrl) => {
