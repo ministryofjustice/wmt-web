@@ -3,7 +3,7 @@ const moment = require('moment')
 const minutesToRoundTo = 15 // Rounding up to next 1/4 hour
 const log = require('../logger')
 
-module.exports = function (res, userRole, authorisation, subNav) {
+module.exports = function (res) {
   return getLatestProcessImportTask().then(function (result) {
     const ETAMinutes = moment(result.date_created).format('mm')
     const minutesToAdd = minutesToRoundTo - (parseInt(ETAMinutes) % minutesToRoundTo)
@@ -13,9 +13,6 @@ module.exports = function (res, userRole, authorisation, subNav) {
       log.error('ERROR: The ETL Process has Exceeded the Estimated Completion Time. Expected completion time was ' + ETA + ' but it is now ' + moment().format('h:mm a'))
     }
     return res.render('etl_in_progress', {
-      userRole: userRole, // used by proposition-link for the admin role
-      authorisation: authorisation, // used by proposition-link for the admin role
-      subNav: subNav,
       title: 'WMT Updating',
       subTitle: 'WMT Updating',
       ETA: ETA
