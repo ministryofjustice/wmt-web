@@ -5,10 +5,10 @@ const log = require('../logger')
 
 module.exports = function (res) {
   return getLatestProcessImportTask().then(function (result) {
-    const ETAMinutes = moment(result.date_created).format('mm')
+    const ETAMinutes = moment(result.effective_from).format('mm')
     const minutesToAdd = minutesToRoundTo - (parseInt(ETAMinutes) % minutesToRoundTo)
-    const ETA = moment(result.date_created).add(90, 'minutes').add(minutesToAdd, 'minutes').format('h:mm a')
-    const ETAPassed = moment().isAfter(moment(result.date_created).add(1, 'hours').add(minutesToAdd, 'minutes'))
+    const ETA = moment(result.effective_from).add(90, 'minutes').add(minutesToAdd, 'minutes').format('h:mm a')
+    const ETAPassed = moment().isAfter(moment(result.effective_from).add(1, 'hours').add(minutesToAdd, 'minutes'))
     if (ETAPassed) {
       log.error('ERROR: The ETL Process has Exceeded the Estimated Completion Time. Expected completion time was ' + ETA + ' but it is now ' + moment().format('h:mm a'))
     }

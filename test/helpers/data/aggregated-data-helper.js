@@ -204,11 +204,9 @@ module.exports.addInProgressWorkloadReport = function (inserts) {
     { effective_from: '2017-02-01', status: 'IN-PROGRESS' }
   ]
 
-  return knex('workload_report').withSchema('app').returning('id').insert(workloadReports)
-    .then(function (ids) {
-      ids.forEach((id) => {
-        inserts.push({ table: 'workload_report', id: id })
-      })
+  return knex('workload_report').withSchema('app').returning(['id', 'effective_from']).insert(workloadReports)
+    .then(function ([result]) {
+      inserts.push({ table: 'workload_report', id: result.id, effective_from: result.effective_from })
       return inserts
     })
 }
