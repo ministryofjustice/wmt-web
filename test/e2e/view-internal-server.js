@@ -12,7 +12,7 @@ describe('View internal server error page', () => {
 
       const pageTitle = await $('.govuk-heading-xl')
       const text = await pageTitle.getText('.govuk-heading-xl')
-      expect(text).to.equal('An Error has occurred')
+      expect(text).to.equal('An error has occurred')
     })
   })
 
