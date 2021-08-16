@@ -1,0 +1,46 @@
+{% extends "includes/layout.njk" %}
+
+{% block content %}
+<main id="content" role="main">
+    {% include "includes/breadcrumbs.njk" %}
+    
+    {% include "includes/validation-error-messages.njk" %}
+    
+    {% include "includes/title-subtitle.njk" %}
+    
+    {% include "includes/sub-nav.njk" %}
+  
+  {% if failureText %}
+  <p class="message message--failure">{{ failureText }}</p>
+  {% endif %}
+
+  <p class="govuk-body-l">Enter the username you would like to add or amend user rights for</p>
+
+  {% if userRights %}
+    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+          Success
+        </h2>
+      </div>
+      <div class="govuk-notification-banner__content">
+        <p class="govuk-notification-banner__heading">
+          You have successfully assigned <strong>{{userRights.rights}}</strong> user rights to <strong class="bold">{{userRights.username}}</strong>
+        </p>
+      </div>
+    </div>
+    {% endif %}
+
+  <form action="/admin/user-rights" method="post" id="userForm">
+    <div class="govuk-form-group">
+      <h1 class="govuk-label-wrapper">  
+        <label class="govuk-label govuk-label--m" for="username">Username</label>
+      </h1>
+      <input class="govuk-input" id="username" type="text" name="username">
+    </div>
+    <input class="govuk-button" data-module="govuk-button"  type="submit" value="Continue">
+    {% include "includes/csrf-hidden-input.njk"%}
+  </form>
+  
+  </main>
+  {% endblock %}

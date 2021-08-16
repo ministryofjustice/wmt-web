@@ -1,0 +1,84 @@
+{% extends "includes/layout.njk" %} 
+
+{% block content %}
+<main id="content" role="main">
+
+    {% include "includes/breadcrumbs.njk" %}
+    
+    {% include "includes/validation-error-messages.njk" %} 
+    
+    {% include "includes/title-subtitle.njk"%}
+    
+    {% include "includes/sub-nav.njk" %} 
+    
+    {% if successText %}
+    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Success
+          </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+          <p class="govuk-notification-banner__heading">
+            {{successText}}
+          </p>
+        </div>
+      </div>
+    {% endif %}
+
+    {% set columnNameType='Type' %}
+    {% set columnNameHours='Hours' %}
+    {% set columnNameStartDate='Start date' %}
+    {% set columnNameEndDate='End date' %}
+
+    <a href="/add-reduction-reason" class="govuk-button" data-module="govuk-button">Add a reduction reason</a>
+    
+    <h2 id="headingActive" class="govuk-heading-l">Enabled Reduction Reasons</h2>
+
+    <table class="govuk-table" id="override-govuk-table">
+        <thead>
+            <tr>
+                <th id="name_abb">Name</th>
+                <th id="category">Reduction Category</th>
+                <th id="months_to_expiry">Months to Expiry</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody class="">
+            {% for reduction in enabledReductionReasons %}
+            <tr>
+                <td headers="name_abb">{{ reduction.reasonShortName }}</td>
+                <td headers="category">{{ reduction.category }}</td>
+                <td headers="months_to_expiry">{{ reduction.monthsToExpiry }}</td>
+                <td><a class="govuk-link" href="/edit-reduction-reason?id={{ reduction.id }}">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2 id="headingActive" class="govuk-heading-l">Disabled Reduction Reasons</h2>
+
+    <table class="govuk-table" id="override-govuk-table">
+        <thead>
+            <tr>
+                <th id="name_abb">Name</th>
+                <th id="category">Reduction Category</th>
+                <th id="months_to_expiry">Months to Expiry</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody class="">
+            {% for disabledReduction in disabledReductionReasons %}
+            <tr>
+                <td headers="name_abb">{{ disabledReduction.reasonShortName }}</td>
+                <td headers="category">{{ disabledReduction.category }}</td>
+                <td headers="months_to_expiry">{{ disabledReduction.monthsToExpiry }}</td>
+                <td><a class="govuk-link" href="/edit-reduction-reason?id={{ disabledReduction.id }}">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</main>
+
+{% endblock %}

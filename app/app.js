@@ -15,6 +15,7 @@ const setUpWebSession = require('./middleware/setUpWebSession')
 const setUpStaticResources = require('./middleware/setUpStaticResources')
 const authorisationMiddleware = require('./middleware/authorisationMiddleware')
 const checkEtlInProgress = require('./middleware/check-etl-in-progress')
+const nunjucksSetup = require('./utils/nunjucksSetup')
 
 const auth = require('./authentication/auth')
 const userService = require('./services/user-service')
@@ -30,31 +31,13 @@ app.use(setUpWebSecurity())
 app.use(setUpWebSession())
 app.use(setUpWebRequestParsing())
 app.use(setUpStaticResources())
+nunjucksSetup(app, path)
 app.use(setUpAuthentication())
 app.use(authorisationMiddleware(['ROLE_WORKLOAD_MEASUREMENT']))
 
-const developmentMode = app.get('env') === 'development'
-
-app.set('view engine', 'html')
-app.set('views', [path.join(__dirname, 'views'), 'node_modules/govuk-frontend/'])
-
-const nunjucksObj = nunjucks(app, {
-  watch: developmentMode,
-  noCache: developmentMode
-})
-
-nunjucksObj.env.addFilter('date', dateFilter)
-nunjucksObj.env.addFilter('isObject', function (obj) {
-  return typeof obj === 'object'
-})
 
 app.use(expressSanitized())
 
-// Send assetPath to all views.
-app.use(function (req, res, next) {
-  res.locals.assetPath = '/public/'
-  next()
-})
 
 // Log each HTML request and it's response.
 app.use(function (req, res, next) {
@@ -110,9 +93,7 @@ app.use(function (err, req, res, next) {
   if (err.status === 404) {
     res.render('includes/error-404')
   } else {
-    res.render('includes/error', {
-      error: developmentMode ? err : null
-    })
+    res.render('includes/error')
   }
 })
 
