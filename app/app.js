@@ -1,8 +1,6 @@
 const express = require('express')
 const expressSanitized = require('express-sanitized')
 const csurf = require('csurf')
-const nunjucks = require('express-nunjucks')
-const dateFilter = require('nunjucks-date-filter')
 const path = require('path')
 const routes = require('./routes')
 const logger = require('./logger')
@@ -35,9 +33,7 @@ nunjucksSetup(app, path)
 app.use(setUpAuthentication())
 app.use(authorisationMiddleware(['ROLE_WORKLOAD_MEASUREMENT']))
 
-
 app.use(expressSanitized())
-
 
 // Log each HTML request and it's response.
 app.use(function (req, res, next) {
