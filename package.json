@@ -8,7 +8,8 @@
   "scripts": {
     "prepare": "husky install",
     "start": "gulp start",
-    "copy-assets": "mkdir -p app/public/javascripts/vendor/ && cp node_modules/jquery/dist/jquery.min.js app/public/javascripts/vendor/ && cp node_modules/govuk-frontend/govuk/all.js app/public/javascripts/gov-uk.js",
+    "clean": "rm -rf app/public",
+    "copy-assets": "mkdir -p app/public/javascripts/vendor/ && cp node_modules/jquery/dist/jquery.min.js app/public/javascripts/vendor/ && cp node_modules/govuk-frontend/govuk/all.js app/public/javascripts/gov-uk.js && cp -r app/assets/javascripts/ app/public/javascripts/",
     "build": "gulp generate-assets && gulp sync",
     "integration-test": "gulp generate-assets && mocha --recursive test/integration --timeout=60000 --exit --reporter mocha-simple-html-reporter --reporter-options output=test_results/integration-test-reports.html",
     "test": "mocha --recursive test/unit/ --exit --reporter mocha-simple-html-reporter --reporter-options output=test_results/unit-test-reports.html",
