@@ -4,7 +4,7 @@ const getLatestProcessImportTask = require('../services/data/get-latest-process-
 module.exports = function (req, res, next) {
   return getLatestProcessImportTask().then(function (importInProgress) {
     if (importInProgress) {
-      return renderWMTUpdatingPage(res)
+      return renderWMTUpdatingPage(res, importInProgress)
     }
     next()
   })
