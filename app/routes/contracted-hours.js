@@ -120,7 +120,7 @@ module.exports = function (router) {
       })
   })
 
-  function isValid (updatedHours, next) {
+  function isValid (updatedHours) {
     const errors = ErrorHandler()
     FieldValidator(updatedHours, 'hours', errors)
       .isRequired(ERROR_MESSAGES.getIsRequiredMessage)
