@@ -1,5 +1,4 @@
 const express = require('express')
-const expressSanitized = require('express-sanitized')
 const csurf = require('csurf')
 const path = require('path')
 const routes = require('./routes')
@@ -32,8 +31,6 @@ app.use(setUpStaticResources())
 nunjucksSetup(app, path)
 app.use(setUpAuthentication())
 app.use(authorisationMiddleware(['ROLE_WORKLOAD_MEASUREMENT']))
-
-app.use(expressSanitized())
 
 // Log each HTML request and it's response.
 app.use(function (req, res, next) {
