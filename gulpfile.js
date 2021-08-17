@@ -5,8 +5,7 @@ const rename = require('gulp-rename')
 
 gulp.task('sync', function (done) {
   const vendorJSFiles = [
-    'node_modules/jquery/dist/jquery.min.js',
-    'node_modules/plotly.js/dist/plotly.min.js'
+    'node_modules/jquery/dist/jquery.min.js'
   ]
   gulp.src(vendorJSFiles, { allowEmpty: true })
     .pipe(gulp.dest('app/assets/javascripts/vendor/'))
@@ -15,17 +14,17 @@ gulp.task('sync', function (done) {
     .pipe(rename('gov-uk.js'))
     .pipe(gulp.dest('app/assets/javascripts/', { overwrite: true }))
 
-  gulp.src('node_modules/govuk-frontend/govuk/assets/images/**/*')
-    .pipe(gulp.dest('app/assets/images/', { overwrite: true }))
-
-  gulp.src('node_modules/govuk-frontend/govuk/assets/fonts/**/*')
-    .pipe(gulp.dest('app/assets/fonts/', { overwrite: true }))
-
   gulp.src('app/assets/javascripts/**/*.js')
     .pipe(gulp.dest('app/public/javascripts/', { overwrite: true }))
 
+  gulp.src('node_modules/govuk-frontend/govuk/assets/images/**/*')
+    .pipe(gulp.dest('app/assets/images/', { overwrite: true }))
+
   gulp.src('app/assets/images/**/*')
     .pipe(gulp.dest('app/public/images/', { overwrite: true }))
+
+  gulp.src('node_modules/govuk-frontend/govuk/assets/fonts/**/*')
+    .pipe(gulp.dest('app/assets/fonts/', { overwrite: true }))
 
   gulp.src('app/assets/fonts/**/*')
     .pipe(gulp.dest('app/public/fonts/', { overwrite: true }))
