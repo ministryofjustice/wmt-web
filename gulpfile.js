@@ -1,22 +1,8 @@
 const gulp = require('gulp')
 const sass = require('gulp-sass')
 const spawn = require('child_process').spawn
-const rename = require('gulp-rename')
 
 gulp.task('sync', function (done) {
-  const vendorJSFiles = [
-    'node_modules/jquery/dist/jquery.min.js'
-  ]
-  gulp.src(vendorJSFiles, { allowEmpty: true })
-    .pipe(gulp.dest('app/assets/javascripts/vendor/'))
-
-  gulp.src('node_modules/govuk-frontend/govuk/all.js')
-    .pipe(rename('gov-uk.js'))
-    .pipe(gulp.dest('app/assets/javascripts/', { overwrite: true }))
-
-  gulp.src('app/assets/javascripts/**/*.js')
-    .pipe(gulp.dest('app/public/javascripts/', { overwrite: true }))
-
   gulp.src('node_modules/govuk-frontend/govuk/assets/images/**/*')
     .pipe(gulp.dest('app/assets/images/', { overwrite: true }))
 
