@@ -7,10 +7,10 @@ module.exports = function (res) {
   return getLatestProcessImportTask().then(function (result) {
     const ETAMinutes = moment(result.effective_from).format('mm')
     const minutesToAdd = minutesToRoundTo - (parseInt(ETAMinutes) % minutesToRoundTo)
-    const ETA = moment(result.effective_from).add(90, 'minutes').add(minutesToAdd, 'minutes').format('h:mm a')
-    const ETAPassed = moment().isAfter(moment(result.effective_from).add(1, 'hours').add(minutesToAdd, 'minutes'))
+    const ETA = moment(result.effective_from).add(90, 'minutes').add(minutesToAdd, 'minutes')
+    const ETAPassed = moment().isAfter(ETA)
     if (ETAPassed) {
-      log.error('ERROR: The ETL Process has Exceeded the Estimated Completion Time. Expected completion time was ' + ETA + ' but it is now ' + moment().format('h:mm a'))
+      log.error('ERROR: The ETL Process has Exceeded the Estimated Completion Time. Expected completion time was ' + ETA.format('h:mm a') + ' but it is now ' + moment().format('h:mm a'))
     }
     return res.render('etl_in_progress', {
       title: 'WMT Updating',
