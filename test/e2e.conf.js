@@ -2,6 +2,14 @@ const { ReportAggregator } = require('wdio-html-nice-reporter')
 let reportAggregator
 
 exports.config = {
+  services: [
+    [
+      'selenium-standalone',
+      {
+        logs: 'logs'
+      }
+    ]
+  ],
   specs: ['./test/e2e/**/*.js'],
   exclude: [],
   maxInstances: 1,
