@@ -19,7 +19,7 @@ exports.config = {
     browserName: 'chrome'
   }],
   sync: false,
-  logLevel: 'info',
+  logLevel: 'debug',
   coloredLogs: true,
   screenshotPath: './errorShots/',
   waitforTimeout: 2000,
