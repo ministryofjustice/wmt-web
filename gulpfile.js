@@ -2,21 +2,6 @@ const gulp = require('gulp')
 const sass = require('gulp-sass')
 const spawn = require('child_process').spawn
 
-gulp.task('sync', function (done) {
-  gulp.src('node_modules/govuk-frontend/govuk/assets/images/**/*')
-    .pipe(gulp.dest('app/assets/images/', { overwrite: true }))
-
-  gulp.src('app/assets/images/**/*')
-    .pipe(gulp.dest('app/public/images/', { overwrite: true }))
-
-  gulp.src('node_modules/govuk-frontend/govuk/assets/fonts/**/*')
-    .pipe(gulp.dest('app/assets/fonts/', { overwrite: true }))
-
-  gulp.src('app/assets/fonts/**/*')
-    .pipe(gulp.dest('app/public/fonts/', { overwrite: true }))
-  done()
-})
-
 gulp.task('sass', function (done) {
   gulp.src('app/assets/sass/**/*.scss')
     .pipe(sass({
@@ -28,7 +13,7 @@ gulp.task('sass', function (done) {
   done()
 })
 
-gulp.task('generate-assets', gulp.series(gulp.parallel('sync', 'sass')))
+gulp.task('generate-assets', gulp.series(gulp.parallel('sass')))
 
 gulp.task('start', function () {
   spawn('node', ['app/bin/www'], { stdio: 'inherit' })
