@@ -1,6 +1,7 @@
 const knex = require('../../knex').integrationTests
 const Promise = require('bluebird').Promise
 const _ = require('lodash')
+const expect = require('chai').expect
 
 module.exports.maxStagingId = null
 
@@ -518,11 +519,16 @@ module.exports.removeInsertedData = function (inserts) {
 
 module.exports.rowGenerator = function (name, baseRow, multiplier) {
   const row = Object.assign({}, baseRow)
+  const oldRow = Object.assign({}, baseRow)
   if (multiplier !== undefined) {
-    _.forOwn(baseRow, function (value, key) {
+    for (const [key, value] of Object.entries(baseRow)) {
       row[key] = value * multiplier
+    }
+    _.forOwn(baseRow, function (value, key) {
+      oldRow[key] = value * multiplier
     })
   }
+  expect(oldRow).to.deep.equal(row)
   return Object.assign({}, row, { name: name })
 }
 
