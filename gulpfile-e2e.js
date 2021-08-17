@@ -6,15 +6,7 @@ let seleniumServer
 
 gulp.task('selenium', (done) => {
   selenium.install({
-    logger: console.log,
-    drivers: {
-      chrome: {
-        version: 'latest',
-        fallbackVersion: '91.0.4472.101',
-        arch: process.arch,
-        baseURL: 'https://chromedriver.storage.googleapis.com'
-      }
-    }
+    logger: console.log
   })
     .then(function () {
       selenium.start({

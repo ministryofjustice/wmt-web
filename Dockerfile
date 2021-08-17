@@ -50,7 +50,6 @@ COPY --from=build --chown=appuser:appgroup \
         /app/package.json \
         /app/knex.js \
         /app/knexfile.js \
-        /app/gulpfile.js \
         /app/config.js \
         ./
 
