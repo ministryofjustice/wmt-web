@@ -1,6 +1,4 @@
 const gulp = require('gulp')
-const path = require('path')
-const gulpNSP = require('gulp-nsp')
 const sass = require('gulp-sass')
 const spawn = require('child_process').spawn
 const rename = require('gulp-rename')
@@ -43,10 +41,6 @@ gulp.task('sass', function (done) {
     }).on('error', sass.logError))
     .pipe(gulp.dest('app/public/stylesheets'))
   done()
-})
-
-gulp.task('nsp', function (cb) {
-  gulpNSP({ package: path.join(__dirname, '/package.json') }, cb)
 })
 
 gulp.task('generate-assets', gulp.series(gulp.parallel('sync', 'sass')))
