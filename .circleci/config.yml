@@ -194,8 +194,7 @@ jobs:
     executor: docker-env
     steps:
       
-      - browser-tools/install-chrome:
-          chrome-version: 91.0.4472.101
+      - browser-tools/install-chrome
       - browser-tools/install-chromedriver
       - checkout
       - restore_cache:
