@@ -1,6 +1,9 @@
-const _ = require('lodash')
 const orgUnit = require('../../constants/organisation-unit')
 
 module.exports = function (property, value) {
-  return _.find(orgUnit, [property, value])
+  const newObj = Object.entries(orgUnit).find(function ([, v]) {
+    return v[property] === value
+  })
+
+  return newObj ? newObj[1] : undefined
 }
