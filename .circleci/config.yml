@@ -199,8 +199,8 @@ jobs:
       - attach_workspace:
           at: ~/app
       - hmpps/install_aws_cli
-      - browser-tools/install-chrome
-        chrome-version: 91.0.4472.101
+      - browser-tools/install-chrome:
+          chrome-version: 91.0.4472.101
       - browser-tools/install-chromedriver
       - run:
           name: Wait for s3 to be ready
