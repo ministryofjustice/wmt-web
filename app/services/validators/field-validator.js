@@ -1,5 +1,4 @@
 const validator = require('validator')
-const _ = require('lodash')
 const ERROR_MESSAGES = require('./validation-error-messages')
 
 class FieldValidator {
@@ -17,7 +16,7 @@ class FieldValidator {
 
   isRequired (specificMessage) {
     const message = (!specificMessage) ? ERROR_MESSAGES.getIsRequiredMessage : specificMessage
-    if (!this.data || _.isEmpty(this.data)) {
+    if (!this.data) {
       this.errors.add(this.fieldName, message)
     }
 

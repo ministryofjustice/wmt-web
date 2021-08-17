@@ -29,14 +29,6 @@ describe('services/validators/field-validator', function () {
       expect(errors).to.have.property(FIELD_NAME)
     })
 
-    it('should throw error if data is an object', function () {
-      const errorHandler = ErrorHandler()
-      FieldValidator({}, FIELD_NAME, errorHandler)
-        .isRequired()
-      const errors = errorHandler.get()
-      expect(errors).to.have.property(FIELD_NAME)
-    })
-
     it('should return false if passed valid data', function () {
       const errorHandler = ErrorHandler()
       FieldValidator(VALID_ALPHA, FIELD_NAME, errorHandler)
