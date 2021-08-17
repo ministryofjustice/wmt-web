@@ -1,0 +1,534 @@
+{% extends "includes/layout.njk" %}
+
+{% block content %}
+
+<main id="content" role="main">
+
+{% include "includes/breadcrumbs.njk" %}
+
+{% include "includes/title-subtitle.njk" %}
+{% include "includes/sub-nav.njk" %}
+
+{% include "includes/validation-error-messages.njk" %}
+
+<form method="post">
+  {% include "includes/csrf-hidden-input.njk"%}
+    <input id="capacityTable" type="hidden" name="capacityTable" value="{{ stringifiedCapacity }}">
+    <input id="crcCapacityTable" type="hidden" name="crcCapacityTable" value="{{ crcStringifiedCapacity }}">
+
+    <div class="govuk-form-group  {% if errors['capacityFromDate'][0] %} govuk-form-group--error {% endif %}">
+      <fieldset id="capacityFromDate" class="govuk-fieldset" role="group" aria-describedby="capacity-from-date-hint  {% if errors['capacityFromDate'][0] %} capacity-from-date-error {% endif %}">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+          <h6 class="govuk-fieldset__heading">
+            Show capacity from: 
+          </h6>
+        </legend>
+        <div id="capacity-from-date-hint" class="govuk-hint">
+          For example, 30 1 2017
+        </div>
+        {% if errors['capacityFromDate'][0] %}
+          <span id="capacity-from-date-error" class="govuk-error-message">
+            <span class="govuk-visually-hidden">Error:</span> {{ errors['capacityFromDate'][0] }}
+          </span>
+        {% endif %}
+        <div class="govuk-date-input" id="capacity-from-date">
+          <div class="govuk-date-input__item">
+            <div class="govuk-form-group">
+              <label class="govuk-label govuk-date-input__label" for="capacity-from-day">
+                Day
+              </label>
+              <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if errors['capacityFromDate'][0] %} govuk-input--error {% endif %}" id="capacity-from-day" name="capacity-from-day" type="text" pattern="[0-9]*" inputmode="numeric" value={{query['capacity-from-day'] | int}}></div>
+          </div>
+          <div class="govuk-date-input__item">
+            <div class="govuk-form-group">
+              <label class="govuk-label govuk-date-input__label" for="capacity-from-month">
+                Month
+              </label>
+              <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if errors['capacityFromDate'][0] %} govuk-input--error {% endif %}"  id="capacity-from-month" name="capacity-from-month" type="text" pattern="[0-9]*" inputmode="numeric"  value={{query['capacity-from-month'] | int}}></div>
+          </div>
+          <div class="govuk-date-input__item">
+            <div class="govuk-form-group">
+              <label class="govuk-label govuk-date-input__label" for="capacity-from-year">
+                Year
+              </label>
+              <input class="govuk-input govuk-date-input__input govuk-input--width-4 {% if errors['capacityFromDate'][0] %} govuk-input--error {% endif %}" id="capacity-from-year" name="capacity-from-year" type="text" pattern="[0-9]*" inputmode="numeric"  value={{query['capacity-from-year'] | int}}></div>
+          </div>
+        </div>
+    
+      </fieldset>
+    </div>
+
+    <div class="govuk-form-group  {% if errors['capacityToDate'][0] %} govuk-form-group--error {% endif %}">
+      <fieldset id="capacityToDate" class="govuk-fieldset" role="group" aria-describedby="capacity-to-date-hint  {% if errors['capacityToDate'][0] %} capacity-to-date-error {% endif %}">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+          <h6 class="govuk-fieldset__heading">
+            Show capacity to: 
+          </h6>
+        </legend>
+        <div id="capacity-to-date-hint" class="govuk-hint">
+          For example, 30 1 2017
+        </div>
+        {% if errors['capacityToDate'][0] %}
+          <span id="capacity-to-date-error" class="govuk-error-message">
+            <span class="govuk-visually-hidden">Error:</span> {{ errors['capacityToDate'][0] }}
+          </span>
+        {% endif %}
+        <div class="govuk-date-input" id="capacity-to-date">
+          <div class="govuk-date-input__item">
+            <div class="govuk-form-group">
+              <label class="govuk-label govuk-date-input__label" for="capacity-to-day">
+                Day
+              </label>
+              <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if errors['capacityToDate'][0] %} govuk-input--error {% endif %}" id="capacity-to-day" name="capacity-to-day" type="text" pattern="[0-9]*" inputmode="numeric" value={{query['capacity-to-day'] | int}}></div>
+          </div>
+          <div class="govuk-date-input__item">
+            <div class="govuk-form-group">
+              <label class="govuk-label govuk-date-input__label" for="capacity-to-month">
+                Month
+              </label>
+              <input class="govuk-input govuk-date-input__input govuk-input--width-2 {% if errors['capacityToDate'][0] %} govuk-input--error {% endif %}"  id="capacity-to-month" name="capacity-to-month" type="text" pattern="[0-9]*" inputmode="numeric"  value={{query['capacity-to-month'] | int}}></div>
+          </div>
+          <div class="govuk-date-input__item">
+            <div class="govuk-form-group">
+              <label class="govuk-label govuk-date-input__label" for="capacity-to-year">
+                Year
+              </label>
+              <input class="govuk-input govuk-date-input__input govuk-input--width-4 {% if errors['capacityToDate'][0] %} govuk-input--error {% endif %}" id="capacity-to-year" name="capacity-to-year" type="text" pattern="[0-9]*" inputmode="numeric"  value={{query['capacity-to-year'] | int}}></div>
+          </div>
+        </div>
+    
+      </fieldset>
+    </div>
+
+    <input id="caseload-filter-submit" type="submit" value="Filter" class="govuk-button" data-module="govuk-button" >
+</form>
+<br>
+{% if capacity.headings.length === 0 %}
+  <span class="govuk-error-message">There is no data for this period ({{query['capacity-from-day'] | int}}/{{query['capacity-from-month'] | int}}/{{query['capacity-from-year'] | int}} - {{query['capacity-to-day'] | int}}/{{query['capacity-to-month'] | int}}/{{query['capacity-to-year'] | int}})</span>
+{% endif %}
+
+<table class="non-javascript">
+    <thead>
+        <tr>
+            <th scope="col"></th>
+             {% for heading in capacity.headings %}
+                <th scope="col">{{ heading | date("MMM DD, YYYY")}}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th scope="row">Capacity</th>
+            {% for i in range(0, capacity.rows[0].values.length)%}
+                <td> {{capacity.rows[0].values[i]}}% </td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <th scope="row">Reductions</th>
+            {% for i in range(0, capacity.rows[0].values.length)%}
+                <td> {{capacity.rows[1].values[i]}}</td>
+            {% endfor %}
+        </tr>
+    </tbody>
+</table>
+
+<table class="non-javascript">
+  <thead>
+      <tr>
+          <th scope="col"></th>
+           {% for heading in crcCapacity.headings %}
+              <th scope="col">{{ heading | date("MMM DD, YYYY")}}</th>
+          {% endfor %}
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <th scope="row">Capacity</th>
+          {% for i in range(0, crcCapacity.rows[0].values.length)%}
+              <td> {{crcCapacity.rows[0].values[i]}}% </td>
+          {% endfor %}
+      </tr>
+      <tr>
+          <th scope="row">Reductions</th>
+          {% for i in range(0, crcCapacity.rows[0].values.length)%}
+              <td> {{crcCapacity.rows[1].values[i]}}</td>
+          {% endfor %}
+      </tr>
+  </tbody>
+</table>
+
+{% if organisationLevel === 'hmpps' %}
+  <h3 class="govuk-heading-m">NPS Capacity</h3>
+{% endif %}
+
+<div id="plotly-div-line" aria-hidden="true"></div>
+
+<br/>
+<br/>
+<br/>
+<br/>
+
+{% if organisationLevel === 'hmpps' %}
+  <h3 class="govuk-heading-m">CRC Capacity</h3>
+  <div id="plotly-div-line-crc" aria-hidden="true"></div>
+{% endif %}
+
+
+{% if organisationLevel === 'offender-manager' %}
+
+    <h3 class="govuk-heading-m">Case Details</h3>
+
+    <table id="case-details" class="govuk-table js-data-table data-table dataTable">
+        <thead>
+        <tr>
+            <th id="tierCode">Tier Code</th>
+            <th id="rowType">Case Type</th>
+            <th id="crn">Case Reference No</th>
+            <th id="CaseType">Case Category</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% if caseDetails %}
+                {% for row in caseDetails %}
+                    <tr>
+                        <td>
+                            {{ row.tierCode }}
+                        </td>
+                        <td>
+                            {{ row.rowType }}
+                        </td>
+                        <td>
+                            {{ row.caseReferenceNo }}
+                        </td>
+                        <td>
+                            {{ row.caseType | capitalize }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="9">
+                        This Offender Manager has no Cases
+                    </td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+{% endif %}
+{% if organisationLevel !== 'offender-manager' %}
+  <h3 class="govuk-heading-m">Capacity breakdown</h3>
+
+  <table id="capacity-breakdown" class="govuk-table data-table dataTable">
+    <thead>
+      <tr>
+        <th colspan="2" id="org">{{ childOrganisationLevelDisplayText }}</th>
+        <th colspan="11" id="breakdown">Workload breakdown</th>
+      </tr>
+      <tr>
+        <th id="capacityName">Name</th>
+        <th id="capacityGrade">Grade</th>
+        <th id="capacity">Capacity (%)</th>
+        <th id="cases">Cases</th>
+        <th id="t2aCases"><abbr title="Transition To Adulthood">T2A</abbr></th>
+        <th id="arms"><abbr title="Active Risk Management System">ARMS</abbr></th>
+        <th id="paroms"><abbr title="Parole Assessment Reports by the Offender Manager">PAROMs</abbr></th>
+        <th id="fdrs"><abbr title="Fast Delivery Reports">FDRs</abbr></th>
+        <th id="sdrs"><abbr title="Standard Delivery Reports">SDRs</abbr></th>
+        <th id="gs"><abbr title="Group Supervision Percentage">GS %</abbr></th>
+        <th id="gsPoints"><abbr title="Group Supervision Points">GS Points</abbr></th>
+        <th id="cms"><abbr title="Case Management Support Percentage">CMS %</abbr></th>
+        <th id="cmsPoints"><abbr title="Case Management Support Points">CMS Points</abbr></th>
+      </tr>
+    </thead>
+    {% if organisationLevel === 'team' %}
+      <tbody>
+        {% for member in capacityBreakdown %}
+        
+          {% if loop.last %}
+        </tbody>
+        <tfoot>
+            <tr>
+          <td colspan="2" headers="capacityGrade capacityName org">{{ member.name }}</td>
+          <td headers="capacity breakdown">{{ member.capacity | round(1) }}%</td>
+          <td headers="cases breakdown">{{ member.totalCases | round(1) }}</td>
+          <td headers="t2aCases breakdown">{{ member.totalTotalT2aCases | round(1) }}</td>
+          <td headers="arms breakdown">{{ member.totalARMS }}</td>
+          <td headers="paroms breakdown">{{ member.totalParoms }}</td>
+          <td headers="fdrs breakdown">{{ member.totalSdrConversions }}</td>
+          <td headers="sdrs breakdown">{{ member.totalSDRs }}</td>
+          <td headers="gs breakdown">{{ member.totalGs | round(1) }}%</td>
+          <td headers="breakdown gsPoints">{{ member.totalGSPoints }}</td>
+          <td headers="cms breakdown">{{ member.totalCMS | round(1) }}%</td>
+          <td headers="breakdown cmsPoints">{{ member.totalCMSPoints }}</td>
+        </tr>
+        </tfoot>
+          {% else %}
+          <tr>
+          <td headers="capacityName org"><a class="govuk-link" href="/{{ workloadType }}/offender-manager/{{ member.linkId }}">{{ member.name }}</a></td>
+          <td headers="capacityGrade org">{{ member.grade }}</td>
+          {% if member.capacityPercentage > 110 %}
+            <td class="capacity-red" headers="capacity breakdown">{{ member.capacityPercentage | round(1) }}%</td>
+          {% else %}
+            <td headers="capacity breakdown">{{ member.capacityPercentage | round(1) }}%</td>
+          {% endif %}
+          <td headers="cases breakdown">{{ member.totalCases | round(1) }}</td>
+          <td headers="t2aCases breakdown">{{ member.totalT2aCases | round(1) }}</td>
+          <td headers="arms breakdown">{{ member.armsTotalCases }}</td>
+          <td headers="paroms breakdown">{{ member.paroms }}</td>
+          <td headers="fdrs breakdown">{{ member.sdrConversions }}</td>
+          <td headers="sdrs breakdown">{{ member.sdrs }}</td>
+          <td headers="gs breakdown">{{ member.gsPercentage | round(1) }}%</td>
+          <td headers="breakdown gsPoints">{{ member.gsPoints }}</td>
+          <td headers="cms breakdown">{{ member.cmsPercentage | round(1) }}%</td>
+          <td headers="breakdown cmsPoints">{{ member.cmsPoints }}</td>
+        </tr>
+          {% endif %}
+        
+        {% endfor %}
+      
+    </table>
+
+  {% elseif organisationLevel === 'hmpps' %}
+      <tbody>
+      {% for member in capacityBreakdown %}
+        {% for i in range(0, member.grades.length) %}
+          <tr>
+            {% if i === 0 %}
+              <td rowspan="{{ member.grades.length }}" headers="name org"><a class="govuk-link" href="/{{ workloadType }}/{{ childOrganisationLevel }}/{{ member.linkId }}">{{ member.name }}</a></td>
+            {% endif %}
+          <td class="align-centre" headers="grade org">{{ member.grades[i].grade }}</td>
+          {% if member.grades[i].capacityPercentage > 110 %}
+            <td class="capacity-red" headers="capacity breakdown">{{ member.grades[i].capacityPercentage | round(1) }}%</td>
+          {% else %}
+            <td headers="capacity breakdown">{{ member.grades[i].capacityPercentage | round(1) }}%</td>
+          {% endif %}
+          <td headers="cases breakdown">{{ member.grades[i].totalCases | round(1) }}</td>
+          <td headers="t2aCases breakdown">{{ member.grades[i].totalT2aCases | round(1) }}</td>
+          <td headers="arms breakdown">{{ member.grades[i].armsTotalCases }}</td>
+          <td headers="paroms breakdown">{{ member.grades[i].paroms }}</td>
+          <td headers="fdrs breakdown">{{ member.grades[i].sdrConversions }}</td>
+          <td headers="sdrs breakdown">{{ member.grades[i].sdrs }}</td>
+          <td headers="gs breakdown">{{ member.grades[i].gsPercentage | round(1) }}%</td>
+          <td headers="gs points breakdown">{{ member.grades[i].gsPoints }}</td>
+          <td headers="cms breakdown">{{ member.grades[i].cmsPercentage | round(1) }}%</td>
+          <td headers="cms points breakdown">{{ member.grades[i].cmsPoints }}</td>
+        </tr>
+        {% endfor %}
+
+      {% endfor %}
+    </tbody>
+
+      <tfoot>
+        <tr>
+            <td colspan="2" headers="name org">NPS {{ capacityBreakdownTotals.name }}</td>
+            <td headers="capacity breakdown">{{ capacityBreakdownTotals.capacity | round(1) }}%</td>
+            <td headers="cases breakdown">{{ capacityBreakdownTotals.totalCases | round(1) }}</td>
+            <td headers="t2aCases breakdown">{{ capacityBreakdownTotals.totalTotalT2aCases | round(1) }}</td>
+            <td headers="arms breakdown">{{ capacityBreakdownTotals.totalARMS }}</td>
+            <td headers="paroms breakdown">{{ capacityBreakdownTotals.totalParoms }}</td>
+            <td headers="fdrs breakdown">{{ capacityBreakdownTotals.totalSdrConversions }}</td>
+            <td headers="sdrs breakdown">{{ capacityBreakdownTotals.totalSDRs }}</td>
+            <td headers="gs breakdown">{{ capacityBreakdownTotals.totalGs | round(1) }}%</td>
+            <td headers="gs points breakdown">{{ capacityBreakdownTotals.totalGSPoints }}</td>
+            <td headers="cms breakdown">{{ capacityBreakdownTotals.totalCMS | round(1) }}%</td>
+            <td headers="cms points breakdown">{{ capacityBreakdownTotals.totalCMSPoints }}</td>
+        </tr>
+        <tr>
+          <td colspan="2" headers="name org">{{ capacityBreakdownCRCTotals.name }}</td>
+          <td headers="capacity breakdown">{{ capacityBreakdownCRCTotals.capacity | round(1) }}%</td>
+          <td headers="cases breakdown">{{ capacityBreakdownCRCTotals.totalCases | round(1) }}</td>
+          <td headers="t2aCases breakdown">{{ capacityBreakdownCRCTotals.totalTotalT2aCases | round(1) }}</td>
+          <td headers="arms breakdown">{{ capacityBreakdownCRCTotals.totalARMS }}</td>
+          <td headers="paroms breakdown">{{ capacityBreakdownCRCTotals.totalParoms }}</td>
+          <td headers="fdrs breakdown">{{ capacityBreakdownCRCTotals.totalSdrConversions }}</td>
+          <td headers="sdrs breakdown">{{ capacityBreakdownCRCTotals.totalSDRs }}</td>
+          <td headers="gs breakdown">{{ capacityBreakdownCRCTotals.totalGs | round(1) }}%</td>
+          <td headers="gs points breakdown">{{ capacityBreakdownCRCTotals.totalGSPoints }}</td>
+          <td headers="cms breakdown">{{ capacityBreakdownCRCTotals.totalCMS | round(1) }}%</td>
+          <td headers="cms points breakdown">{{ capacityBreakdownCRCTotals.totalCMSPoints }}</td>
+      </tr>
+    </tfoot>
+    </table>
+    {% else %}
+      <tbody>
+      {% for member in capacityBreakdown %}
+        {% for i in range(0, member.grades.length) %}
+          <tr>
+            {% if i === 0 %}
+              <td rowspan="{{ member.grades.length }}" headers="capacityName org"><a class="govuk-link" href="/{{ workloadType }}/{{ childOrganisationLevel }}/{{ member.linkId }}">{{ member.name }}</a></td>
+            {% endif %}
+          <td class="align-centre" headers="capacityGrade org">{{ member.grades[i].grade }}</td>
+          {% if member.grades[i].capacityPercentage > 110 %}
+            <td class="capacity-red" headers="capacity breakdown">{{ member.grades[i].capacityPercentage | round(1) }}%</td>
+          {% else %}
+            <td headers="capacity breakdown">{{ member.grades[i].capacityPercentage | round(1) }}%</td>
+          {% endif %}
+          <td headers="cases breakdown">{{ member.grades[i].totalCases | round(1) }}</td>
+          <td headers="t2aCases breakdown">{{ member.grades[i].totalT2aCases | round(1) }}</td>
+          <td headers="arms breakdown">{{ member.grades[i].armsTotalCases }}</td>
+          <td headers="paroms breakdown">{{ member.grades[i].paroms }}</td>
+          <td headers="fdrs breakdown">{{ member.grades[i].sdrConversions }}</td>
+          <td headers="sdrs breakdown">{{ member.grades[i].sdrs }}</td>
+          <td headers="gs breakdown">{{ member.grades[i].gsPercentage | round(1) }}%</td>
+          <td headers="breakdown gsPoints">{{ member.grades[i].gsPoints }}</td>
+          <td headers="breakdown cms">{{ member.grades[i].cmsPercentage | round(1) }}%</td>
+          <td headers="breakdown cmsPoints">{{ member.grades[i].cmsPoints }}</td>
+        </tr>
+        {% endfor %}
+        {% if loop.last %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="2" headers="capacityGrade capacityName org">{{ member.name }}</td>
+            <td headers="capacity breakdown">{{ member.capacity | round(1) }}%</td>
+            <td headers="cases breakdown">{{ member.totalCases | round(1) }}</td>
+            <td headers="t2aCases breakdown">{{ member.totalTotalT2aCases | round(1) }}</td>
+            <td headers="arms breakdown">{{ member.totalARMS }}</td>
+            <td headers="paroms breakdown">{{ member.totalParoms }}</td>
+            <td headers="fdrs breakdown">{{ member.totalSdrConversions }}</td>
+            <td headers="sdrs breakdown">{{ member.totalSDRs }}</td>
+            <td headers="gs breakdown">{{ member.totalGs | round(1) }}%</td>
+            <td headers="breakdown gsPoints">{{ member.totalGSPoints }}</td>
+            <td headers="cms breakdown">{{ member.totalCMS | round(1) }}%</td>
+            <td headers="breakdown cmsPoints">{{ member.totalCMSPoints }}</td>
+        </tr>
+    </tfoot>
+        {% endif %}
+      {% endfor %}
+    </table>
+  {% endif %}
+  {% endif %}
+  <br>
+  {% if organisationLevel != 'offender-manager' %}
+  <h3 class="govuk-heading-m">Inactive & UPW cases</h3>
+  {% if organisationLevel === 'team' %}
+  <a class="govuk-link" href="/{{ workloadType }}/{{ organisationLevel }}/{{ linkId }}/{{ screen }}/outstanding-csv" class="govuk-button sln-export floatRightBottom10" data-module="govuk-button">Export</a>
+  {% endif %}
+  <table id="outstandingReports" class="govuk-table data-table dataTable">
+    <thead>
+      <tr>
+        <th colspan="2" id='organisationLevel'>{{ childOrganisationLevelDisplayText }}</th>
+        <th class="" colspan="5" id='inactiveHeader' >Inactive & UPW cases</th>
+      </tr>
+      <tr>
+        <th id='name'>Name</th>
+        <th id="grade">Grade</th>
+        <th id='outstandingWarrants'>Outstanding Warrants</th>
+        <th id='unpaidWork'>UPW</th>
+        <th id='overdueTermination'>Overdue Terminations</th>
+        <th id='suspendedLifers'>Suspended Lifers</th>
+        <th id='suspendedSentenceOrders'>Suspended Sentence Orders</th>
+      </tr>
+    </thead>
+    {% if organisationLevel === 'team' %}
+    <tbody>
+      {% for member in outstandingReports %}
+      {% if loop.last %}
+    </tbody>
+    <tfoot>
+      <tr>
+            <td colspan="2" headers="grade name organisationLevel">{{ member.name }}</td>
+            <td headers="inactiveHeader outstandingWarrants">{{ member.totalOW }}</td>
+            <td headers="inactiveHeader unpaidWork">{{ member.totalUPW }}</td>
+            <td headers="inactiveHeader overdueTermination">{{ member.totalOT }}</td>
+            <td headers="inactiveHeader suspendedLifers">{{ member.totalSL }}</td>
+            <td headers="inactiveHeader suspendedSentenceOrders">{{ member.totalSSO }}</td>
+      </tr>
+    </tfoot>
+      {% else %}
+      <tr>
+          <td headers="name organisationLevel"><a class="govuk-link" href="/{{ workloadType }}/offender-manager/{{ member.linkId }}">{{ member.name }}</a></td>
+          <td headers="grade organisationLevel">{{ member.grade }}</td>
+          <td headers="inactiveHeader outstandingWarrants">{{ member.ow }}</td>
+          <td headers="inactiveHeader unpaidWork">{{ member.upw }}</td>
+          <td headers="inactiveHeader overdueTermination">{{ member.ot }}</td>
+          <td headers="inactiveHeader suspendedLifers">{{ member.sl }}</td>
+          <td headers="inactiveHeader suspendedSentenceOrders">{{ member.sso }}</td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+    {% elseif organisationLevel === 'hmpps'%}
+    <tbody>
+      {% for member in outstandingReports %}
+        {% for i in range(0, member.grades.length) %}
+        <tr>
+          {% if i === 0 %}
+            <td rowspan="{{ member.grades.length }}" headers="name org"><a class="govuk-link" href="/{{ workloadType }}/{{ childOrganisationLevel }}/{{ member.linkId }}">{{ member.name }}</a></td>
+          {% endif %}
+          <td class="align-centre" headers="grade org">{{ member.grades[i].grade }}</td>
+          <td headers="outstanding warrants">{{ member.grades[i].ow }}</td>
+          <td headers="unpaid work">{{ member.grades[i].upw }}</td>
+          <td headers="overdue terminations">{{ member.grades[i].ot }}</td>
+          <td headers="suspended lifers">{{ member.grades[i].sl }}</td>
+          <td headers="suspended sentence orders">{{ member.grades[i].sso }}</td>
+        </tr>
+        {% endfor %}
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="2" headers="name org">NPS {{ outstandingReportsTotals.name }}</td>
+        <td headers="outstanding warrants">{{ outstandingReportsTotals.totalOW }}</td>
+        <td headers="unpaid work">{{ outstandingReportsTotals.totalUPW }}</td>
+        <td headers="overdue terminations">{{ outstandingReportsTotals.totalOT }}</td>
+        <td headers="suspended lifers">{{ outstandingReportsTotals.totalSL }}</td>
+        <td headers="suspended sentence orders">{{ outstandingReportsTotals.totalSSO }}</td>
+      </tr>
+      <tr>
+        <td colspan="2" headers="name org">{{ outstandingReportsCRCTotals.name }}</td>
+        <td headers="outstanding warrants">{{ outstandingReportsCRCTotals.totalOW }}</td>
+        <td headers="unpaid work">{{ outstandingReportsCRCTotals.totalUPW }}</td>
+        <td headers="overdue terminations">{{ outstandingReportsCRCTotals.totalOT }}</td>
+        <td headers="suspended lifers">{{ outstandingReportsCRCTotals.totalSL }}</td>
+        <td headers="suspended sentence orders">{{ outstandingReportsTotals.totalSSO }}</td>
+      </tr>
+    </tfoot>
+
+    {% else %}
+    <tbody>
+      {% for member in outstandingReports %}
+        {% for i in range(0, member.grades.length) %}
+        <tr>
+          {% if i === 0 %}
+            <td rowspan="{{ member.grades.length }}" headers="name organisationLevel"><a class="govuk-link" href="/{{ workloadType }}/{{ childOrganisationLevel }}/{{ member.linkId }}">{{ member.name }}</a></td>
+          {% endif %}
+          <td class="align-centre" headers="grade organisationLevel">{{ member.grades[i].grade }}</td>
+          <td headers="inactiveHeader outstandingWarrants">{{ member.grades[i].ow }}</td>
+          <td headers="inactiveHeader unpaidWork">{{ member.grades[i].upw }}</td>
+          <td headers="inactiveHeader overdueTermination">{{ member.grades[i].ot }}</td>
+          <td headers="inactiveHeader suspendedLifers">{{ member.grades[i].sl }}</td>
+          <td headers="inactiveHeader suspendedSentenceOrders">{{ member.grades[i].sso }}</td>
+        </tr>
+        {% endfor %}
+        {% if loop.last %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="2" headers="grade name organisationLevel">{{ member.name }}</td>
+            <td headers="inactiveHeader outstandingWarrants">{{ member.totalOW }}</td>
+            <td headers="inactiveHeader unpaidWork">{{ member.totalUPW }}</td>
+            <td headers="inactiveHeader overdueTermination">{{ member.totalOT }}</td>
+            <td headers="inactiveHeader suspendedLifers">{{ member.totalSL }}</td>
+            <td headers="inactiveHeader suspendedSentenceOrders">{{ member.totalSSO }}</td>
+        </tr>
+    </tfoot>
+        {% endif %}
+      {% endfor %}
+    
+    {% endif %}
+  </table>
+  {% endif %}
+</main>
+
+{% include "includes/last-updated.njk" %}
+
+{% endblock %}
+
+{% block bodyEnd %}
+    <script src="/public/javascripts/vendor/jquery.min.js"></script>
+    <script src="/public/javascripts/plotly-latest.min.js"></script>
+    <script src="/public/javascripts/caseload-capacity.js"></script>
+    <script src="/public/javascripts/caseload-capacity-crc.js"></script>
+    <script src="/public/javascripts/datatables.min.js"></script>
+    <script src="/public/javascripts/case-details.js"></script>
+{% endblock %}
