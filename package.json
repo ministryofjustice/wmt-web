@@ -7,7 +7,7 @@
   },
   "scripts": {
     "prepare": "husky install",
-    "start": "gulp start",
+    "start": "node app/bin/www",
     "clean": "rm -rf app/public",
     "copy-assets": "mkdir -p app/public/javascripts/vendor/ && cp node_modules/jquery/dist/jquery.min.js app/public/javascripts/vendor/ && cp node_modules/govuk-frontend/govuk/all.js app/public/javascripts/gov-uk.js && cp -r app/assets/javascripts/ app/public/javascripts/ && cp -r node_modules/govuk-frontend/govuk/assets/ app/public/ && cp -r app/assets/images/ app/public/images/",
     "build": "gulp generate-assets && npm run copy-assets",

@@ -3,6 +3,8 @@ const dateFilter = require('nunjucks-date-filter')
 module.exports = function (app, path) {
   app.set('view engine', 'njk')
 
+  app.locals.assetPath = '/public'
+
   const njkEnv = nunjucks.configure(
     [
       path.join(__dirname, '../views'),
