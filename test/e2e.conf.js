@@ -10,7 +10,7 @@ exports.config = {
       }
     ]
   ],
-  specs: ['./test/e2e/**/*.js'],
+  specs: ['./test/e2e/view-average-archive-data.js'],
   exclude: [],
   maxInstances: 1,
   baseUrl: process.env.WMT_BASE_URL || 'http://localhost:3000',
@@ -57,15 +57,5 @@ exports.config = {
     (async () => {
       await reportAggregator.createReport()
     })()
-  },
-  afterTest: function (
-    test,
-    context,
-    { error, result, duration, passed, retries }
-  ) {
-    // take a screenshot anytime a test fails and throws an error
-    if (error) {
-      browser.takeScreenshot()
-    }
   }
 }

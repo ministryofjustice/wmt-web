@@ -220,7 +220,7 @@ jobs:
           command: sleep 20
       - run:
           name: Run the node app
-          command: npm run start
+          command: npm run build && npm run start
           background: true
       - run:
           name: Wait for node app to start
