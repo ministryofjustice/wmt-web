@@ -30,8 +30,9 @@ describe('View archive data', () => {
       const archiveToDay = await $('#archive-to-day')
       const archiveToMonth = await $('#archive-to-month')
       const archiveToYear = await $('#archive-to-year')
-      const extraSearchCritera = await $('#multiSearchField').getHTML()
-      console.log(extraSearchCritera)
+      const extraSearchCritera = await $('#multiSearchField')
+      const html = await extraSearchCritera.getHTML()
+      console.log(html)
 
       await archiveFromDay.setValue('31')
       await archiveFromMonth.setValue('12')
