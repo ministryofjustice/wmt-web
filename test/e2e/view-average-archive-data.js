@@ -39,6 +39,7 @@ describe('View archive data', () => {
       await archiveToMonth.setValue('1')
       await archiveToYear.setValue('2015')
       await extraSearchCritera.waitForExist({ timeout: 5000 })
+      await browser.takeScreenshot()
       await extraSearchCritera.setValue('t')
 
       const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="5"]')
