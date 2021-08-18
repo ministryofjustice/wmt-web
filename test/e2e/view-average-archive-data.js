@@ -30,9 +30,7 @@ describe('View archive data', () => {
       const archiveToDay = await $('#archive-to-day')
       const archiveToMonth = await $('#archive-to-month')
       const archiveToYear = await $('#archive-to-year')
-      const extraSearchCritera = await $('#multiSearchField')
-      const html = await extraSearchCritera.getHTML()
-      console.log(html)
+      const extraSearchCritera = await $('.select2-search__field')
 
       await archiveFromDay.setValue('31')
       await archiveFromMonth.setValue('12')
@@ -40,7 +38,6 @@ describe('View archive data', () => {
       await archiveToDay.setValue('6')
       await archiveToMonth.setValue('1')
       await archiveToYear.setValue('2015')
-      await browser.saveScreenshot('./test_results/e2e/screenshots/averageArchiveData.png')
       await extraSearchCritera.waitForExist({ timeout: 5000 })
       await extraSearchCritera.setValue('t')
 
