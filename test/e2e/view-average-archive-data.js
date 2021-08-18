@@ -38,10 +38,11 @@ describe('View archive data', () => {
       await archiveToDay.setValue('6')
       await archiveToMonth.setValue('1')
       await archiveToYear.setValue('2015')
+      await extraSearchCritera.waitForExist({ timeout: 5000 })
       await extraSearchCritera.setValue('t')
 
       const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="5"]')
-
+      await criteriaName.waitForExist({ timeout: 5000 })
       await criteriaName.click()
 
       const searchButton = await $('#archive-average-filter-submit')
