@@ -19,11 +19,11 @@ exports.config = {
     browserName: 'chrome'
   }],
   sync: false,
-  logLevel: 'debug',
+  logLevel: 'info',
   coloredLogs: true,
   screenshotPath: './errorShots/',
   waitforTimeout: 2000,
-  connectionRetryTimeout: 90000,
+  connectionRetryTimeout: 5000,
   connectionRetryCount: 3,
   framework: 'mocha',
   mochaOpts: {
@@ -57,5 +57,15 @@ exports.config = {
     (async () => {
       await reportAggregator.createReport()
     })()
+  },
+  afterTest: function (
+    test,
+    context,
+    { error, result, duration, passed, retries }
+  ) {
+    // take a screenshot anytime a test fails and throws an error
+    if (error) {
+      browser.takeScreenshot()
+    }
   }
 }
