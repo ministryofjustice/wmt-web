@@ -10,7 +10,7 @@ exports.config = {
       }
     ]
   ],
-  specs: ['./test/e2e/view-average-archive-data.js'],
+  specs: ['./test/e2e/**/*.js'],
   exclude: [],
   maxInstances: 1,
   baseUrl: process.env.WMT_BASE_URL || 'http://localhost:3000',

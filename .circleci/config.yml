@@ -220,7 +220,7 @@ jobs:
           command: sleep 20
       - run:
           name: Run the node app
-          command: npm run build && npm run start
+          command: npm run start
           background: true
       - run:
           name: Wait for node app to start
@@ -232,8 +232,6 @@ jobs:
           path: test_results
       - store_artifacts:
           path: test_results/e2e
-      - store_artifacts:
-          path: errorShots
 
 workflows:
   version: 2
