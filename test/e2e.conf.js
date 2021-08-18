@@ -2,6 +2,14 @@ const { ReportAggregator } = require('wdio-html-nice-reporter')
 let reportAggregator
 
 exports.config = {
+  services: [
+    [
+      ['selenium-standalone', { drivers: { chrome: '91.0.4472.101' } }],
+      {
+        logs: 'logs'
+      }
+    ]
+  ],
   specs: ['./test/e2e/**/*.js'],
   exclude: [],
   maxInstances: 1,
@@ -15,7 +23,7 @@ exports.config = {
   coloredLogs: true,
   screenshotPath: './errorShots/',
   waitforTimeout: 2000,
-  connectionRetryTimeout: 90000,
+  connectionRetryTimeout: 5000,
   connectionRetryCount: 3,
   framework: 'mocha',
   mochaOpts: {

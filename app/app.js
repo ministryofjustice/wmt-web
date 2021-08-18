@@ -61,14 +61,6 @@ routes(router)
 
 app.use('/', router)
 
-// catch 404 and forward to error handler.
-app.use(function (req, res, next) {
-  const err = new Error('Not Found')
-  err.status = 404
-  res.status(404)
-  next(err)
-})
-
 // catch CSRF token errors
 app.use(function (err, req, res, next) {
   const CSURF_ERROR_CODE = 'EBADCSRFTOKEN'
@@ -77,6 +69,14 @@ app.use(function (err, req, res, next) {
   res.render('includes/error', {
     error: 'Invalid CSRF token'
   })
+})
+
+// catch 404 and forward to error handler.
+app.use(function (req, res, next) {
+  const err = new Error('Not Found')
+  err.status = 404
+  res.status(404)
+  next(err)
 })
 
 // Development error handler.

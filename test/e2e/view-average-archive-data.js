@@ -41,7 +41,6 @@ describe('View archive data', () => {
       await extraSearchCritera.setValue('t')
 
       const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="5"]')
-
       await criteriaName.click()
 
       const searchButton = await $('#archive-average-filter-submit')
