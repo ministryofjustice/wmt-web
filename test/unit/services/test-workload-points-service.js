@@ -29,7 +29,7 @@ let getWorkloadPointsData
 let updatePreviousWorkloadPointsEffectiveTo
 let insertNewWorkloadPoints
 let getWorkloadIdsForWpRecalc
-let createCalculateWorkloadPointsTask
+let createRecalculateWorkloadPointsTask
 const mockUserRoleService = {
   getUserById: sinon.stub().resolves(mockUserObject)
 }
@@ -39,7 +39,7 @@ before(function () {
   updatePreviousWorkloadPointsEffectiveTo = sinon.stub().resolves()
   insertNewWorkloadPoints = sinon.stub().resolves()
   getWorkloadIdsForWpRecalc = sinon.stub().resolves(recalcIds)
-  createCalculateWorkloadPointsTask = sinon.stub().resolves()
+  createRecalculateWorkloadPointsTask = sinon.stub().resolves()
 
   workloadPointsService = proxyquire('../../../app/services/workload-points-service',
     {
@@ -47,7 +47,7 @@ before(function () {
       './data/update-workload-points-effective-to': updatePreviousWorkloadPointsEffectiveTo,
       './data/insert-workload-points': insertNewWorkloadPoints,
       './data/get-ids-for-workload-points-recalc': getWorkloadIdsForWpRecalc,
-      './data/create-calculate-workload-points-task': createCalculateWorkloadPointsTask,
+      './data/create-recalculate-workload-points-task': createRecalculateWorkloadPointsTask,
       '../services/user-role-service': mockUserRoleService
     }
   )
@@ -83,7 +83,7 @@ describe('services/workload-points-service', function () {
         expect(updatePreviousWorkloadPointsEffectiveTo.calledWith(123)).to.be.true //eslint-disable-line  
         expect(insertNewWorkloadPoints.calledWith(returnedWorkloadPoints)).to.be.true //eslint-disable-line  
         expect(getWorkloadIdsForWpRecalc.calledWith(123, false)).to.be.true //eslint-disable-line  
-        expect(createCalculateWorkloadPointsTask.calledWith(recalcIds.minWorkloadStagingId, recalcIds.workloadReportId, 10)).to.be.true //eslint-disable-line        
+        expect(createRecalculateWorkloadPointsTask.calledWith(recalcIds.workloadReportId)).to.be.true //eslint-disable-line        
       })
     })
     it('should call the necesssary functions for t2a updated with the correct parameters', function () {
@@ -92,7 +92,7 @@ describe('services/workload-points-service', function () {
         expect(updatePreviousWorkloadPointsEffectiveTo.calledWith(124)).to.be.true //eslint-disable-line  
         expect(insertNewWorkloadPoints.calledWith(returnedT2aWorkloadPoints)).to.be.true //eslint-disable-line  
         expect(getWorkloadIdsForWpRecalc.calledWith(124, true)).to.be.true //eslint-disable-line  
-        expect(createCalculateWorkloadPointsTask.calledWith(recalcIds.minWorkloadStagingId, recalcIds.workloadReportId, 10)).to.be.true //eslint-disable-line        
+        expect(createRecalculateWorkloadPointsTask.calledWith(recalcIds.workloadReportId)).to.be.true //eslint-disable-line        
       })
     })
   })

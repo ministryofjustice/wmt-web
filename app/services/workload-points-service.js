@@ -2,7 +2,7 @@ const getWorkloadPoints = require('./data/get-workload-points')
 const updatePreviousWorkloadPointsEffectiveTo = require('./data/update-workload-points-effective-to')
 const insertNewWorkloadPoints = require('./data/insert-workload-points')
 const getWorkloadIdsForWpRecalc = require('./data/get-ids-for-workload-points-recalc')
-const createCalculateWorkloadPointsTask = require('./data/create-calculate-workload-points-task')
+const createRecalculateWorkloadPointsTask = require('./data/create-recalculate-workload-points-task')
 const Link = require('./domain/link')
 const dateFormatter = require('./date-formatter')
 const userRoleService = require('../services/user-role-service')
@@ -49,7 +49,7 @@ module.exports.updateWorkloadPoints = function (workloadPoints, isT2A = false) {
   return updatePreviousWorkloadPointsEffectiveTo(workloadPoints.previousWpId).then(function (updateResults) {
     return insertNewWorkloadPoints(workloadPoints).then(function (insertResults) {
       return getWorkloadIdsForWpRecalc(workloadPoints.previousWpId, isT2A).then(function (ids) {
-        return createCalculateWorkloadPointsTask(ids.minWorkloadStagingId, ids.workloadReportId, (ids.maxWorkloadStagingId - ids.minWorkloadStagingId + 1))
+        return createRecalculateWorkloadPointsTask(ids.workloadReportId)
           .then(function (taskResults) {
             return taskResults
           })
