@@ -574,6 +574,10 @@
     "@wdio/logger" "7.7.0"
     "@wdio/types" "7.7.3"
 
+"@xmldom/xmldom@^0.7.0":
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/@xmldom/xmldom/-/xmldom-0.7.3.tgz#55de695f77afd3cc0e5bee0aa900040bc63c0f63"
+
 a-sync-waterfall@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/a-sync-waterfall/-/a-sync-waterfall-1.0.1.tgz#75b6b6aa72598b497a125e7a2770f14f4c8a1fa7"
@@ -6108,19 +6112,19 @@ pascalcase@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/pascalcase/-/pascalcase-0.1.1.tgz#b363e55e8006ca6fe21784d2db22bd15d7917f14"
 
-passport-saml@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/passport-saml/-/passport-saml-2.2.0.tgz#dbea6743cf06644cfb3f0d486e43d3c8812b150a"
+passport-saml@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/passport-saml/-/passport-saml-3.1.0.tgz#32f79316c617d223ad03f71f23d2ee3813e34516"
   dependencies:
     debug "^4.3.1"
-    passport-strategy "*"
-    xml-crypto "^2.1.1"
-    xml-encryption "^1.2.3"
+    passport-strategy "^1.0.0"
+    xml-crypto "^2.1.2"
+    xml-encryption "^1.2.4"
     xml2js "^0.4.23"
     xmlbuilder "^15.1.1"
-    xmldom "0.5.x"
+    xmldom "^0.6.0"
 
-passport-strategy@*, passport-strategy@1.x.x:
+passport-strategy@1.x.x, passport-strategy@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/passport-strategy/-/passport-strategy-1.0.0.tgz#b5539aa8fc225a3d1ad179476ddf236b440f52e4"
 
@@ -8383,20 +8387,20 @@ xdg-basedir@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/xdg-basedir/-/xdg-basedir-4.0.0.tgz#4bc8d9984403696225ef83a1573cbbcb4e79db13"
 
-xml-crypto@^2.1.1:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/xml-crypto/-/xml-crypto-2.1.2.tgz#501506d42e466f6cd908c5a03182217231b4e4b8"
+xml-crypto@^2.1.2:
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/xml-crypto/-/xml-crypto-2.1.3.tgz#6a7272b610ea3e4ea7f13e9e4876f1b20cbc32c8"
   dependencies:
-    xmldom "^0.6.0"
+    "@xmldom/xmldom" "^0.7.0"
     xpath "0.0.32"
 
-xml-encryption@^1.2.3:
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/xml-encryption/-/xml-encryption-1.2.4.tgz#767d13f9ff2f979ff5657b93bd72aa729d34b66c"
+xml-encryption@^1.2.4:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/xml-encryption/-/xml-encryption-1.3.0.tgz#4cad44a59bf8bdec76d7865ce0b89e13c09962f4"
   dependencies:
+    "@xmldom/xmldom" "^0.7.0"
     escape-html "^1.0.3"
     node-forge "^0.10.0"
-    xmldom "~0.6.0"
     xpath "0.0.32"
 
 xml2js@^0.4.19, xml2js@^0.4.23:
@@ -8414,11 +8418,7 @@ xmlbuilder@^15.1.1:
   version "15.1.1"
   resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-15.1.1.tgz#9dcdce49eea66d8d10b42cae94a79c3c8d0c2ec5"
 
-xmldom@0.5.x, "xmldom@>= 0.1.x":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.5.0.tgz#193cb96b84aa3486127ea6272c4596354cb4962e"
-
-xmldom@^0.6.0, xmldom@~0.6.0:
+"xmldom@>= 0.1.x", xmldom@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.6.0.tgz#43a96ecb8beece991cef382c08397d82d4d0c46f"
 
