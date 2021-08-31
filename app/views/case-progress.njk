@@ -92,5 +92,7 @@
 {% block bodyEnd %}
     <script src="/public/javascripts/plotly-latest.min.js"></script>
     <script src="/public/javascripts/case-progress.js"></script>
-    <script src="/public/javascripts/case-progress-crc.js"></script>
+    {% if organisationLevel === 'hmpps' %}
+        <script src="/public/javascripts/case-progress-crc.js"></script>
+    {% endif %}
 {% endblock %}

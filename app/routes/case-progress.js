@@ -34,7 +34,7 @@ module.exports = function (router) {
       return caseProgressPromise.then(function (result) {
         result.date = lastUpdated
         let crcCaseProgressList = Object.assign([], result.caseProgressList)
-        let stringifiedCRCCaseProgressList = ''
+        let stringifiedCRCCaseProgressList = '[]'
         if (organisationLevel === organisationUnit.NATIONAL.name) {
           crcCaseProgressList = crcCaseProgressList.filter(c => c.name.includes('CPA '))
           result.caseProgressList = result.caseProgressList.filter(c => !c.name.includes('CPA '))

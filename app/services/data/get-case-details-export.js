@@ -3,15 +3,15 @@ const knex = require('../../../knex').web
 module.exports = function (id, type) {
   const table = 'case_details_export_view'
   const selectList = [
-    'regionName',
-    'lduName',
-    'teamName',
-    'tierCode',
-    'rowType',
-    'caseReferenceNo',
-    'caseType',
-    'offenderManagerName',
-    'gradeCode'
+    'regionname',
+    'lduname',
+    'teamname',
+    'tiercode',
+    'rowtype',
+    'casereferenceno',
+    'casetype',
+    'offendermanagername',
+    'gradecode'
   ]
 
   let query = knex(table)

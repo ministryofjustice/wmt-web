@@ -78,16 +78,6 @@ module.exports = function (router) {
     }
 
     const radioButton = req.body.radioInlineGroup
-
-    const armsPromise = getArmsExport(id, organisationLevel)
-    const caseDetailsPromise = getCaseDetailsExport(id, organisationLevel)
-    const groupSupervisionPromise = getGroupSupervisionExport(id, organisationLevel)
-    const cmsPromise = getCMSExport(id, organisationLevel)
-    const scenarioPromise = getScenarioExport(id, organisationLevel)
-    const getWorkloadPercentageBreakdownPromise = getWorkloadPercentageBreakdown(id, organisationLevel)
-    const suspendedLifersPromise = getSuspendedLifersExport(id, organisationLevel)
-    const t2aPromise = getT2aDetailExport(id, organisationLevel)
-
     let tabType
 
     if (radioButton === '9') {
@@ -108,42 +98,40 @@ module.exports = function (router) {
       }
     }
 
-    const expiringReductionsPromise = getExpiringReductions(id, organisationLevel)
-
     switch (radioButton) {
       case '1':
-        exportPromise = armsPromise
+        exportPromise = getArmsExport(id, organisationLevel)
         tabType = tabs.EXPORT.ARMS_EXPORT
         break
       case '2':
-        exportPromise = caseDetailsPromise
+        exportPromise = getCaseDetailsExport(id, organisationLevel)
         tabType = tabs.EXPORT.CASE_DETAILS_EXPORT
         break
       case '3':
-        exportPromise = cmsPromise
+        exportPromise = getCMSExport(id, organisationLevel)
         tabType = tabs.EXPORT.CMS_EXPORT
         break
       case '4':
-        exportPromise = groupSupervisionPromise
+        exportPromise = getGroupSupervisionExport(id, organisationLevel)
         tabType = tabs.EXPORT.GROUP_SUPERVISION_EXPORT
         break
       case '5':
-        exportPromise = scenarioPromise
+        exportPromise = getScenarioExport(id, organisationLevel)
         break
       case '6':
-        exportPromise = suspendedLifersPromise
+        exportPromise = getSuspendedLifersExport(id, organisationLevel)
         tabType = tabs.EXPORT.SUSPENDED_LIFERS_EXPORT
         break
       case '7':
-        exportPromise = getWorkloadPercentageBreakdownPromise
+        exportPromise = getWorkloadPercentageBreakdown(id, organisationLevel)
         tabType = tabs.EXPORT.WORKLOAD_PERCENTAGE_EXPORT
         break
       case '8':
-        exportPromise = t2aPromise
+        exportPromise = getT2aDetailExport(id, organisationLevel)
         tabType = tabs.EXPORT.T2A_EXPORT
         break
       case '9':
-        exportPromise = expiringReductionsPromise
+        exportPromise = getExpiringReductions(id, organisationLevel)
         tabType = tabs.EXPORT.EXPIRING_REDUCTIONS
         break
       default:
