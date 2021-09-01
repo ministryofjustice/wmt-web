@@ -30,7 +30,7 @@ executors:
       - image: bitnami/redis:5.0
         environment:
           - ALLOW_EMPTY_PASSWORD=yes
-      - image: quay.io/hmpps/hmpps-auth:latest
+      - image: quay.io/hmpps/hmpps-auth:2021-09-01.10697.047b0e0
         environment:
           - SPRING_PROFILES_ACTIVE=dev,delius
           - DELIUS_ENABLED=true
