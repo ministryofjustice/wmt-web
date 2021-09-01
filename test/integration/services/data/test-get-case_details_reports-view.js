@@ -22,8 +22,8 @@ describe('services/data/get-case-details-reports-view', function () {
         inserts = builtInserts
         CASE_DETAILS_TO_INSERT[0].workload_id = inserts.filter((item) => item.table === 'workload')[1].id
         return dataHelper.addCaseDetails(CASE_DETAILS_TO_INSERT)
-          .then(function (ids) {
-            inserts.push({ table: 'case_details', id: ids[0] })
+          .then(function (caseDetailInserts) {
+            inserts.concat(caseDetailInserts)
           })
       })
   })

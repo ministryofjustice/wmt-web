@@ -3,16 +3,16 @@ const knex = require('../../../knex').web
 module.exports = function (id, type) {
   const table = 'gs_export_view'
   const selectList = [
-    'regionName',
-    'lduName',
-    'teamName',
-    'contactDate',
-    'contactId',
-    'caseRefNo',
-    'omName',
-    'omGradeCode',
-    'contact_description AS contactDescription',
-    'contactCode',
+    'regionname',
+    'lduname',
+    'teamname',
+    'contactdate',
+    'contactid',
+    'caserefno',
+    'omname',
+    'omgradecode',
+    'contact_description AS contactdescription',
+    'contactcode',
     'points'
   ]
 

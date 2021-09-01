@@ -3,20 +3,20 @@ const knex = require('../../../knex').web
 module.exports = function (id, type) {
   const table = 'suspended_lifers_export_view'
   const selectList = [
-    'regionName',
-    'lduName',
-    'teamName',
-    'tierCode',
-    'rowType',
-    'caseReferenceNo',
-    'caseType',
-    'offenderManagerName',
-    'gradeCode',
-    'inCustody',
-    'registerLevel',
-    'registerCategory',
-    'registerCategoryDescription',
-    'registrationDate'
+    'regionname',
+    'lduname',
+    'teamname',
+    'tiercode',
+    'rowtype',
+    'casereferenceno',
+    'casetype',
+    'offendermanagername',
+    'gradecode',
+    'incustody',
+    'registerlevel',
+    'registercategory',
+    'registercategorydescription',
+    'registrationdate'
   ]
 
   let query = knex(table)
@@ -24,7 +24,7 @@ module.exports = function (id, type) {
     .select(selectList)
 
   if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
-    query = query.where('id', id)
+    query = query.where(`${type}id`, id)
   }
 
   return query.then(function (results) {
