@@ -29,28 +29,45 @@ const dailyArchiveData = {
   hoursReduction: 0
 }
 
+const caseDetailsData =
+  {
+    workload_id: 0,
+    row_type: 'U', // U = Unpaid work
+    case_ref_no: 'X555555',
+    tier_code: 3,
+    team_code: 'WMT',
+    grade_code: 'C',
+    location: 'COMMUNITY'
+  }
+
 module.exports = function () {
   return dailyArchiveDataHelper.createDailyArchive(dailyArchiveData).then(function (dailyArchiveId) {
     const dailyArchiveIdInsert = [{ table: 'daily_archive_data', id: dailyArchiveId[0] }]
     return courtReportsDataHelper.addCourtReportWorkloadsForOffenderManager()
       .then(function (courtReportInserts) {
         return aggregatedDataHelper.addWorkloadCapacitiesForOffenderManager().then(function (workloadInserts) {
-          const promises = Object.entries(users).map(function ([, u]) {
-            return userRoleHelper.addUserAndRole(u.username.toLowerCase(), u.roleId)
-          })
-          return Promise.all(promises).then(function (userInserts) {
-            try {
-              fs.writeFileSync(dailyArchiveInserts, JSON.stringify(dailyArchiveIdInsert))
-              fs.writeFileSync(pallyCourtInserts, JSON.stringify(courtReportInserts))
-              fs.writeFileSync(pallyWorkloadInserts, JSON.stringify(workloadInserts))
-              fs.writeFileSync(pallyUserInserts, JSON.stringify(userInserts.reduce((acc, x) => acc.concat(x), [])))
-            } catch (err) {
-              console.error(err)
-            }
-            return {
-              courtReportInserts,
-              workloadInserts
-            }
+          caseDetailsData.workload_id = workloadInserts.filter((item) => item.table === 'workload')[1].id
+          return aggregatedDataHelper.addCaseDetails(caseDetailsData).then(function (caseDetailInserts) {
+            workloadInserts = workloadInserts.concat(caseDetailInserts)
+            const promises = Object.entries(users).map(function ([, u]) {
+              return userRoleHelper.addUserAndRole(u.username.toLowerCase(), u.roleId)
+            })
+            return Promise.all(promises).then(function (userInserts) {
+              try {
+                fs.writeFileSync(dailyArchiveInserts, JSON.stringify(dailyArchiveIdInsert))
+                fs.writeFileSync(pallyCourtInserts, JSON.stringify(courtReportInserts))
+                fs.writeFileSync(pallyWorkloadInserts, JSON.stringify(workloadInserts))
+                fs.writeFileSync(pallyUserInserts, JSON.stringify(userInserts.reduce((acc, x) => acc.concat(x), [])))
+              } catch (err) {
+                console.error(err)
+              }
+              return {
+                courtReportInserts,
+                workloadInserts,
+                dailyArchiveIdInsert,
+                userInserts
+              }
+            })
           })
         })
       })

@@ -40,7 +40,7 @@ describe('/services/data/create-calculate-workload-points-task', function () {
   it('should create a task and insert it in the task table', function () {
     return createCalculateWorkloadPointsTask(workloadId, workloadReportId, batchSize)
       .then(function (result) {
-        insertedTask.id = result
+        insertedTask.id = result[0]
         expect(result[0]).to.be.a('number')
         return dataHelper.getAllTasks().then(function (allTasks) {
           expect(allTasks).to.deep.contain(task)

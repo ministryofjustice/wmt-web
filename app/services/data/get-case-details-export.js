@@ -19,7 +19,7 @@ module.exports = function (id, type) {
     .select(selectList)
 
   if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
-    query = query.where('id', id)
+    query = query.where(`${type}id`, id)
   }
 
   return query.then(function (results) {

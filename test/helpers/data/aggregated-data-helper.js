@@ -1,5 +1,6 @@
 const knex = require('../../knex').integrationTests
 const Promise = require('bluebird').Promise
+const { arrayToPromise } = require('../promise-helper')
 
 module.exports.maxStagingId = null
 
@@ -399,7 +400,28 @@ const addWorkloads = function (inserts) {
 }
 
 module.exports.addCaseDetails = function (caseDetails) {
-  return knex('case_details').withSchema('app').returning('id').insert(caseDetails)
+  const inserts = []
+  return knex('case_details')
+    .withSchema('app')
+    .returning('id')
+    .insert(caseDetails).then(function (ids) {
+      inserts.push({ table: 'case_details', id: ids[0] })
+      return knex('row_type_definitions')
+        .withSchema('app')
+        .returning('id')
+        .insert({ row_type: caseDetails.row_type, row_type_full_name: 'Row Type Full Name' })
+        .then(function (ids) {
+          inserts.push({ table: 'row_type_definitions', id: ids[0] })
+          return knex('case_category')
+            .withSchema('app')
+            .returning('id')
+            .insert({ category_id: caseDetails.tier_code, category_name: 'Category Name' })
+            .then(function (ids) {
+              inserts.push({ table: 'case_category', id: ids[0] })
+              return inserts
+            })
+        })
+    })
 }
 
 module.exports.selectIdsForWorkloadOwner = function () {
@@ -503,15 +525,8 @@ module.exports.selectGradeForWorkloadOwner = function (workloadOwnerId) {
 
 module.exports.removeInsertedData = function (inserts) {
   inserts = inserts.reverse()
-  const deleteMap = {}
-  inserts.forEach(function (insert) {
-    if (deleteMap[insert.table] === undefined) {
-      deleteMap[insert.table] = []
-    }
-    deleteMap[insert.table].push(insert.id)
-  })
-  return Promise.each(Object.keys(deleteMap), (tableName) => {
-    return knex(tableName).withSchema('app').whereIn('id', deleteMap[tableName]).del()
+  return arrayToPromise(inserts, function (insert) {
+    return knex(insert.table).withSchema('app').where('id', insert.id).del()
   })
 }
 

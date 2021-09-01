@@ -4,16 +4,16 @@ module.exports = function (id, type) {
   const table = 'arms_export_view'
 
   const selectList = [
-    'regionName',
-    'lduName',
-    'teamName',
-    'assessmentDate',
-    'CRN',
-    'omName',
-    'grade_code AS omGrade',
+    'regionname',
+    'lduname',
+    'teamname',
+    'assessmentdate',
+    'crn',
+    'omname',
+    'grade_code AS omgrade',
     'sentencetype',
-    'releaseDate',
-    'completedDate'
+    'releasedate',
+    'completeddate'
   ]
 
   let query = knex(table)

@@ -10,7 +10,7 @@ services:
     ports:
       - '6379:6379'
   hmpps-auth:
-    image: quay.io/hmpps/hmpps-auth:latest
+    image: quay.io/hmpps/hmpps-auth:2021-09-01.10697.047b0e0
     networks:
       - hmpps
     container_name: hmpps-auth 
@@ -20,6 +20,7 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:8080/auth/health"]
     environment:
       - SPRING_PROFILES_ACTIVE=dev
+      - APPLICATION_AUTHENTICATION_UI_ALLOWLIST=0.0.0.0/0
       - DELIUS_ENABLED=true
       - DELIUS_ENDPOINT_URL=http://wiremock:8099
 

@@ -1,9 +1,9 @@
 version: 2.1
 
 orbs:
-  hmpps: ministryofjustice/hmpps@3.8
+  hmpps: ministryofjustice/hmpps@3.11
   slack: circleci/slack@4.4.2
-  browser-tools: circleci/browser-tools@1.1.3
+  browser-tools: circleci/browser-tools@1.2.1
 
 parameters:
   alerts-slack-channel:
@@ -30,7 +30,7 @@ executors:
       - image: bitnami/redis:5.0
         environment:
           - ALLOW_EMPTY_PASSWORD=yes
-      - image: quay.io/hmpps/hmpps-auth:latest
+      - image: quay.io/hmpps/hmpps-auth:2021-09-01.10697.047b0e0
         environment:
           - SPRING_PROFILES_ACTIVE=dev,delius
           - DELIUS_ENABLED=true

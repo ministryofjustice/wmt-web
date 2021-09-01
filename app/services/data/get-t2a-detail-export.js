@@ -3,20 +3,20 @@ const knex = require('../../../knex').web
 module.exports = function (id, type) {
   const table = 't2a_detail_export_view'
   const selectList = [
-    'regionName',
-    'regionId',
-    'lduName',
-    'lduId',
-    'teamName',
-    'teamId',
-    'CRN',
+    'regionname',
+    'regionid',
+    'lduname',
+    'lduid',
+    'teamname',
+    'teamid',
+    'crn',
     'workload_owner_id',
-    'omName',
-    'omCode',
-    'Event_No',
-    'Allocation_Date',
-    'NSI_Outcome_Cd',
-    'NSI_Outcome_Desc'
+    'omname',
+    'omcode',
+    'event_no',
+    'allocation_date',
+    'nsi_outcome_cd',
+    'nsi_outcome_desc'
   ]
 
   let query = knex(table)
