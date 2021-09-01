@@ -34,7 +34,7 @@ describe('services/data/get-reductions', function () {
                 reductionToInsert.reasonForReductionId = reductionReasonId
                 return insertReduction(workloadOwnerId, reductionToInsert)
                   .then(function (result) {
-                    insertedReduction.id = result
+                    insertedReduction.id = result[0]
                   })
               })
           })
@@ -44,7 +44,7 @@ describe('services/data/get-reductions', function () {
   it('should return a reduction record for a given workload id', function () {
     return getReductions(workloadOwnerId)
       .then(function (results) {
-        expect(results[results.length - 1].id).to.eql(insertedReduction.id[0])
+        expect(results[results.length - 1].id).to.eql(insertedReduction.id)
         expect(results[results.length - 1].workloadOwnerId).to.eql(workloadOwnerId)
       })
   })

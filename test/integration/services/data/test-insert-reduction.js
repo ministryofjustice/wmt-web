@@ -37,7 +37,7 @@ describe('/services/data/insert-reduction', function () {
     return insertReduction(workloadOwnerId, testReduction)
       .then(function (result) {
         // Store the id so that we can delete it after the test is complete
-        reductionResult.id = result
+        reductionResult.id = result[0]
         expect(result[0]).to.be.a('number')
       })
   })
