@@ -73,17 +73,6 @@ module.exports.selectIdsForCourtReporterWorkloadOwner = function (inserts) {
   return promise
 }
 
-module.exports.getAnyExistingWorkloadOwnerIdWithActiveReduction = function () {
-  return knex('workload_owner')
-    .withSchema('app')
-    .join('reductions', 'workload_owner.id', 'workload_owner_id')
-    .join('court_reports', 'court_reports.workload_owner_id', 'workload_owner.id')
-    .where('reductions.effective_to', '>', knex.raw('GETDATE()'))
-    .andWhereNot('status', 'DELETED')
-    .first('workload_owner.id AS workloadOwnerId',
-      'reductions.id AS reductionId')
-}
-
 module.exports.getAnyExistingWorkloadOwnerId = function () {
   return knex('workload_owner')
     .withSchema('app')

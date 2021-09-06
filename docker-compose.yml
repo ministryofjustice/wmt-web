@@ -10,7 +10,7 @@ services:
     ports:
       - '6379:6379'
   hmpps-auth:
-    image: quay.io/hmpps/hmpps-auth:2021-09-01.10697.047b0e0
+    image: quay.io/hmpps/hmpps-auth:latest
     networks:
       - hmpps
     container_name: hmpps-auth 
