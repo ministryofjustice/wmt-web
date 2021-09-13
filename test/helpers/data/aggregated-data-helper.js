@@ -1,5 +1,4 @@
 const knex = require('../../knex').integrationTests
-const Promise = require('bluebird').Promise
 const { arrayToPromise } = require('../promise-helper')
 
 module.exports.maxStagingId = null
@@ -668,16 +667,6 @@ module.exports.getAllWorkloadPointsForTest = function () {
       'effective_to AS effectiveTo',
       'is_t2a AS isT2A'
     )
-}
-
-module.exports.deleteLastRecordFromTables = function (tables) {
-  return Promise.each(tables, function (table) {
-    return knex(table)
-      .withSchema('app')
-      .orderBy('id', 'desc')
-      .first()
-      .del()
-  })
 }
 
 module.exports.deleteReductionsForIds = function (ids) {
