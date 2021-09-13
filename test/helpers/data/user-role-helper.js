@@ -1,5 +1,5 @@
 const knex = require('../../knex').integrationTests
-const Promise = require('bluebird').Promise
+const { arrayToPromise } = require('../promise-helper')
 
 const addUserRoleData = function (userId, roleId) {
   const insertedData = []
@@ -79,7 +79,7 @@ module.exports.getAnyExistingUsernameWithExistingRole = function () {
 
 module.exports.removeInsertedData = function (inserts) {
   inserts = inserts.reverse()
-  return Promise.each(inserts, (insert) => {
+  return arrayToPromise(inserts, function (insert) {
     return knex(insert.table).withSchema('app').where('id', insert.id).del()
   })
 }
