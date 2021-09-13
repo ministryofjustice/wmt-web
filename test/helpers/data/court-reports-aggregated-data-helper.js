@@ -1,6 +1,7 @@
 const config = require('../../../knexfile').integrationTests
 const knex = require('knex')(config)
-const Promise = require('bluebird').Promise
+const { arrayToPromise } = require('../promise-helper')
+
 const helper = require('./aggregated-data-helper')
 
 module.exports.addCourtReportWorkloadsForOffenderManager = function () {
@@ -42,7 +43,7 @@ module.exports.addCourtReportWorkloadsForOffenderManager = function () {
 
 module.exports.removeInsertedData = function (inserts) {
   inserts = inserts.reverse()
-  return Promise.each(inserts, (insert) => {
+  return arrayToPromise(inserts, function (insert) {
     return knex(insert.table).withSchema('app').where('id', insert.id).del()
   })
 }
@@ -101,16 +102,6 @@ module.exports.getLastRecordFromTable = function (table) {
     .then((results) => {
       return results
     })
-}
-
-module.exports.deleteLastRecordFromTables = function (tables) {
-  return Promise.each(tables, function (table) {
-    return knex(table)
-      .withSchema('app')
-      .orderBy('id', 'desc')
-      .first()
-      .del()
-  })
 }
 
 module.exports.deleteReductionsForIds = function (ids) {
