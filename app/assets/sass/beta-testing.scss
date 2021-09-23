@@ -1,0 +1,13 @@
+.govuk-template__body,
+.wmt-sub-nav,
+table.data-table tr th {
+  background-color: #f0ffff;
+}
+
+table td.capacity-red {
+  color: #d4351c !important;
+}
+
+.govuk-notification-banner__content>* {
+  max-width: none;
+}
