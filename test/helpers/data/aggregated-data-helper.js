@@ -405,21 +405,7 @@ module.exports.addCaseDetails = function (caseDetails) {
     .returning('id')
     .insert(caseDetails).then(function (ids) {
       inserts.push({ table: 'case_details', id: ids[0] })
-      return knex('row_type_definitions')
-        .withSchema('app')
-        .returning('id')
-        .insert({ row_type: caseDetails.row_type, row_type_full_name: 'Row Type Full Name' })
-        .then(function (ids) {
-          inserts.push({ table: 'row_type_definitions', id: ids[0] })
-          return knex('case_category')
-            .withSchema('app')
-            .returning('id')
-            .insert({ category_id: caseDetails.tier_code, category_name: 'Category Name' })
-            .then(function (ids) {
-              inserts.push({ table: 'case_category', id: ids[0] })
-              return inserts
-            })
-        })
+      return inserts
     })
 }
 
