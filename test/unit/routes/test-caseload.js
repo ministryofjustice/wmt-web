@@ -106,7 +106,7 @@ const LDU_CASELOAD = {
   }
 }
 
-const EXPORT_CSV_FILENAME = 'Test CSV File.csv'
+const EXPORT_CSV_FILENAME = 'BETA-Test CSV File.csv'
 
 const EXPORT_CSV = '"TeamName","Grade","Overall","Untiered","D2","D1","C2","C1","B2","B1","A"\n' +
       '"Test Team 1","PO",50,0,50,25,10,0,50,50,50\n' +
@@ -239,7 +239,7 @@ describe('Caseload csv export route', function () {
         .get(TEAM_CASELOAD_CSV_URL)
         .then(function (response) {
           expect(response.header['content-type']).to.contain('text/csv')
-          expect(response.header['content-disposition']).to.contain('attachment; filename="BETA-' + EXPORT_CSV_FILENAME + '"')
+          expect(response.header['content-disposition']).to.contain('attachment; filename="' + EXPORT_CSV_FILENAME + '"')
           expect(response.text).to.contain(EXPORT_CSV)
         })
     })
@@ -267,7 +267,7 @@ describe('Caseload csv export route', function () {
         .get(LDU_CASELOAD_CSV_URL)
         .then(function (response) {
           expect(response.header['content-type']).to.contain('text/csv')
-          expect(response.header['content-disposition']).to.contain('attachment; filename="BETA-' + EXPORT_CSV_FILENAME + '"')
+          expect(response.header['content-disposition']).to.contain('attachment; filename="' + EXPORT_CSV_FILENAME + '"')
           expect(response.text).to.contain(EXPORT_CSV)
         })
     })
