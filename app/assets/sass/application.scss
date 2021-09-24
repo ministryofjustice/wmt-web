@@ -213,7 +213,4 @@ tr.shown td.details-control {
   font-size: 15px;
 }
 
-.govuk-template__body {
-  margin: 0;
-  background-color: #f0ffff;
-}
+@import 'beta-testing.scss';
