@@ -76,7 +76,7 @@ module.exports = function (router) {
     const isCSV = true
     return getOverview(id, organisationLevel, isCSV).then(function (result) {
       const exportCsv = getExportCsv(organisationLevel, result, tabs.OVERVIEW)
-      res.attachment('BETA-' + exportCsv.filename)
+      res.attachment(exportCsv.filename)
       res.send(exportCsv.csv)
     }).catch(function (error) {
       next(error)
@@ -108,7 +108,7 @@ module.exports = function (router) {
 
     return getReductionsExport(id, organisationLevel).then(function (result) {
       const reductionsExportCsv = getExportCsv(organisationLevel, result, tabs.REDUCTIONS_EXPORT)
-      res.attachment('BETA-' + reductionsExportCsv.filename)
+      res.attachment(reductionsExportCsv.filename)
       res.send(reductionsExportCsv.csv)
     }).catch(function (error) {
       next(error)

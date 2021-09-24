@@ -79,7 +79,7 @@ module.exports = function (router) {
     const isCSV = true
     return getCaseload(id, organisationLevel, isCSV).then(function (result) {
       const exportCsv = getExportCsv(organisationLevel, result, tabs.CASELOAD)
-      res.attachment('BETA-' + exportCsv.filename)
+      res.attachment(exportCsv.filename)
       return res.send(exportCsv.csv)
     }).catch(function (error) {
       next(error)
