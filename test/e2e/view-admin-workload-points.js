@@ -265,7 +265,7 @@ describe('View / edit Workload Points', () => {
       saveButton = await $('#save-button')
       await saveButton.click()
 
-      successMessage = await $('.govuk-notification-banner__heading')
+      successMessage = await $('.govuk-notification-banner--success .govuk-notification-banner__heading')
       successMessage = await successMessage.getText()
 
       expect(successMessage, 'Success message should equal "You have successfully updated the workload points!"').to.equal('You have successfully updated the workload points!')
