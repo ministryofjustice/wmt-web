@@ -45,7 +45,7 @@ const REDUCTIONS = {
   reductionNotes: [{}]
 }
 
-const EXPORT_CSV_FILENAME = 'Test CSV File.csv'
+const EXPORT_CSV_FILENAME = 'BETA-Test CSV File.csv'
 
 const EXPORT_CSV = '"TeamName","Grade","Overall","Untiered","D2","D1","C2","C1","B2","B1","A"\n' +
       '"Test Team 1","PO",50,0,50,25,10,0,50,50,50\n' +
