@@ -136,7 +136,7 @@ module.exports = function (router) {
         dateFileName = archiveDataForm.archiveFromDate.toISOString().substring(0, 10) + ' ' + archiveDataForm.archiveToDate.toISOString().substring(0, 10)
       }
       const exportCsv = getExportCsv(dateFileName, results, tabs.ADMIN.DAILY_ARCHIVE)
-      res.attachment(exportCsv.filename)
+      res.attachment('BETA-' + exportCsv.filename)
       res.send(exportCsv.csv)
     }).catch(function (error) {
       next(error)

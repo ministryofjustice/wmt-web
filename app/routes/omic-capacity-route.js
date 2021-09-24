@@ -121,7 +121,7 @@ module.exports = function (router) {
           inactiveCaseDetails: formatedCaseDetails
         }
         const exportCsv = getExportCsv(organisationLevel, result, tabs.CAPACITY.INACTIVE)
-        res.attachment(exportCsv.filename)
+        res.attachment('BETA-' + exportCsv.filename)
         return res.send(exportCsv.csv)
       }).catch(function (error) {
         next(error)

@@ -145,7 +145,7 @@ module.exports = function (router) {
         tab = tabs.ADMIN.GROUPED_ARCHIVE_TEAM
       }
       const exportCsv = getExportCsv(dateFileName, results, tab)
-      res.attachment(exportCsv.filename)
+      res.attachment('BETA-' + exportCsv.filename)
       res.send(exportCsv.csv)
     }).catch(function (error) {
       next(error)

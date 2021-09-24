@@ -239,7 +239,7 @@ describe('Caseload csv export route', function () {
         .get(TEAM_CASELOAD_CSV_URL)
         .then(function (response) {
           expect(response.header['content-type']).to.contain('text/csv')
-          expect(response.header['content-disposition']).to.contain('attachment; filename="' + EXPORT_CSV_FILENAME + '"')
+          expect(response.header['content-disposition']).to.contain('attachment; filename="BETA-' + EXPORT_CSV_FILENAME + '"')
           expect(response.text).to.contain(EXPORT_CSV)
         })
     })
@@ -267,7 +267,7 @@ describe('Caseload csv export route', function () {
         .get(LDU_CASELOAD_CSV_URL)
         .then(function (response) {
           expect(response.header['content-type']).to.contain('text/csv')
-          expect(response.header['content-disposition']).to.contain('attachment; filename="' + EXPORT_CSV_FILENAME + '"')
+          expect(response.header['content-disposition']).to.contain('attachment; filename="BETA-' + EXPORT_CSV_FILENAME + '"')
           expect(response.text).to.contain(EXPORT_CSV)
         })
     })

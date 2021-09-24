@@ -151,7 +151,7 @@ module.exports = function (router) {
           let dateFileName = null
           dateFileName = result.title
           const exportCsv = getExportCsv(dateFileName, results, tabType)
-          res.attachment(exportCsv.filename)
+          res.attachment('BETA-' + exportCsv.filename)
           res.send(exportCsv.csv)
         }
       })
