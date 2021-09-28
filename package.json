@@ -56,7 +56,6 @@
     "jsonwebtoken": "^8.5.1",
     "mocha": "9.1.x",
     "mocha-simple-html-reporter": "^2.0.0",
-    "nodemon": "^2.0.12",
     "pa11y-ci": "^2.4.2",
     "proxyquire": "2.1.x",
     "sass": "^1.38.2",
