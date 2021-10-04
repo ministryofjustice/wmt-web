@@ -31,6 +31,25 @@ describe('/services/data/get-user-by-username', function () {
       })
   })
 
+  it('should get user by the username when username is different case', function () {
+    return getUserByUsername(username.toUpperCase())
+      .then(function (result) {
+        expect(result.id).to.be.a('number')
+        expect(result.id).to.be.equal(userId)
+        expect(result.username).to.be.a('string')
+        expect(result.username).to.be.equal(username)
+        expect(result.name).to.be.a('string')
+        expect(result.name).to.be.equal(name)
+      })
+  })
+
+  it('should only get user when whole username matches', function () {
+    return getUserByUsername(username.slice(0, username.length - 2))
+      .then(function (result) {
+        return expect(result).to.be.undefined
+      })
+  })
+
   after(function () {
     return userRoleHelper.removeInsertedData(insertedData)
   })

@@ -26,7 +26,7 @@ module.exports.addUsers = function () {
   const inserts = []
 
   const users = [
-    { username: 'testusername', name: 'Test User' }
+    { username: 'testusername1', name: 'Test User' }
   ]
 
   return knex('users').withSchema('app').returning(['id', 'username', 'name']).insert(users)
