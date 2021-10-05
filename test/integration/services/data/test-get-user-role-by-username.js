@@ -37,6 +37,20 @@ describe('/services/data/get-user-role-by-username', function () {
       })
   })
 
+  it('should get staff user if no user found', function () {
+    return getUserRoleByUsername('idonotexist')
+      .then(function (result) {
+        expect(result.role).to.equal('Staff')
+      })
+  })
+
+  it('should get user role by username case insensitive', function () {
+    return getUserRoleByUsername(username.toUpperCase())
+      .then(function (result) {
+        expect(result.role).to.be.oneOf(existingRoles)
+      })
+  })
+
   after(function () {
     return userRoleHelper.removeInsertedData(insertedData)
   })
