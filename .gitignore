@@ -25,3 +25,4 @@ app/assets/javascripts/vendor
 
 pally*.json
 dailyArchiveInserts.json
+exportCompare/*.csv

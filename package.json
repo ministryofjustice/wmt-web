@@ -20,7 +20,8 @@
     "lint": "standard",
     "accessibility-test-ci": "node ./test/accessibility/setup-pa11y-file.js && ./node_modules/.bin/pa11y-ci && node ./test/accessibility/delete-pally-data.js",
     "seed-dev-data": "node ./test/helpers/data/setup-e2e-data-helper.js",
-    "clean-dev-data": "node ./test/helpers/data/delete-e2e-data-helper.js"
+    "clean-dev-data": "node ./test/helpers/data/delete-e2e-data-helper.js",
+    "compare-exports": "node ./exportCompare/compareExports.js"
   },
   "standard": {
     "ignore": [
@@ -52,6 +53,7 @@
     "chai": "4.3.x",
     "cheerio": "^1.0.0-rc.10",
     "cookie-session": "^2.0.0-beta.2",
+    "csv-parser": "^3.0.0",
     "husky": "^7.0.2",
     "jsonwebtoken": "^8.5.1",
     "mocha": "9.1.x",
