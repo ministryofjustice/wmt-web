@@ -5,7 +5,7 @@ const orgUnitConstants = require('../../constants/organisation-unit')
 module.exports = function (id, type, workloadType) {
   const orgUnit = orgUnitFinder('name', type)
   const table = 'individual_case_overview'
-  const orderBy = ['lduCluster', 'teamName']
+  const orderBy = ['lduCluster', 'teamName', 'workload_owner_id']
 
   let query = knex(table).withSchema('app')
 
