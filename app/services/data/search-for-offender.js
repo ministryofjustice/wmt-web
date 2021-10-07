@@ -9,5 +9,5 @@ module.exports = function (surname) {
     'region',
     'workload_owner_id AS workloadOwnerId'
   ]
-  return knex('offender_manager_search_view').withSchema('app').columns(columns).where('surname', surname)
+  return knex('offender_manager_search_view').withSchema('app').columns(columns).where('surname', 'ilike', surname)
 }
