@@ -8,14 +8,14 @@ module.exports = function (term) {
     'surname'
   ]
   let results
-  return knex('offender_manager').withSchema('app').columns(columns).whereRaw('CONCAT(forename, \' \', surname) LIKE ?', ['%' + term + '%'])
+  return knex('offender_manager').withSchema('app').columns(columns).whereRaw('CONCAT(forename, \' \', surname) ILIKE ?', ['%' + term + '%'])
     .then(function (currentDBResults) {
       results = currentDBResults
-      return knexArchive('offender_manager').withSchema('app').columns(columns).whereRaw('CONCAT(forename, \' \', surname) LIKE ?', ['%' + term + '%'])
+      return knexArchive('offender_manager').withSchema('app').columns(columns).whereRaw('CONCAT(forename, \' \', surname) ILIKE ?', ['%' + term + '%'])
     })
     .then(function (archiveDBResults) {
       results = results.concat(archiveDBResults)
-      return knexLegacy('offendermanager').withSchema('dbo').columns(columns).whereRaw('CONCAT(forename, \' \', surname) LIKE ?', ['%' + term + '%'])
+      return knexLegacy('offendermanager').withSchema('dbo').columns(columns).whereRaw('CONCAT(forename, \' \', surname) ILIKE ?', ['%' + term + '%'])
     })
     .then(function (legacyDBResults) {
       results = results.concat(legacyDBResults)

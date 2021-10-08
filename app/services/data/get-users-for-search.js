@@ -4,14 +4,14 @@ const knexLegacy = require('../../../knex').legacy
 
 module.exports = function (term) {
   let results
-  return knex('users').withSchema('app').columns(['name']).whereRaw('name LIKE ?', ['%' + term + '%'])
+  return knex('users').withSchema('app').columns(['name']).where('name', 'ilike', `%${term}%`)
     .then(function (currentDBResults) {
       results = currentDBResults
-      return knexArchive('users').withSchema('app').columns(['name']).whereRaw('name LIKE ?', ['%' + term + '%'])
+      return knexArchive('users').withSchema('app').columns(['name']).where('name', 'ilike', `%${term}%`)
     })
     .then(function (archiveDBResults) {
       results = results.concat(archiveDBResults)
-      return knexLegacy('archive_reduction_data').withSchema('dbo').distinct(['reduction_added_by AS name']).whereRaw('reduction_added_by LIKE ?', ['%' + term + '%'])
+      return knexLegacy('archive_reduction_data').withSchema('dbo').distinct(['reduction_added_by AS name']).where('reduction_added_by', 'ilike', `%${term}%`)
     })
     .then(function (legacyDBResults) {
       results = results.concat(legacyDBResults)
