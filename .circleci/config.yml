@@ -12,7 +12,7 @@ parameters:
 
   node-version:
     type: string
-    default: 16.6-browsers
+    default: 14.17-browsers
   postgres_tag:
     default: "11"
     type: string

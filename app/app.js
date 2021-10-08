@@ -79,7 +79,6 @@ app.use(function (req, res, next) {
   next(err)
 })
 
-// Development error handler.
 app.use(function (err, req, res, next) {
   logger.error({ error: err })
   res.status(err.status || 500)
