@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "The frontend of the workload measurement tool",
   "engines": {
-    "npm": "7"
+    "npm": "8"
   },
   "scripts": {
     "prepare": "husky install",
