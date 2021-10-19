@@ -50,6 +50,38 @@ describe('System admin', () => {
     })
   })
 
+  describe('should navigate to the user rights page', () => {
+    it('and cannot remove a data admin access', async () => {
+      await browser.url(adminUserURL)
+
+      const breadcrumbs = await $('.govuk-breadcrumbs')
+      const exists = await breadcrumbs.isExisting()
+      expect(exists).to.be.equal(true)
+
+      const usernameField = await $('#username')
+      await usernameField.setValue(`${authenticationHelp.users.DataAdmin.username}@email.com`)
+
+      const submit = await $('.govuk-button')
+      await submit.click()
+
+      const pageTitle = await $('.govuk-heading-xl')
+      const text = await pageTitle.getText('.govuk-heading-xl')
+      expect(text).to.equal('User rights')
+
+      const radioButton = await $('#managerRadio')
+      await radioButton.click()
+      const isSelected = await radioButton.isSelected()
+      expect(isSelected).to.be.equal(true)
+
+      const submitRole = await $('.govuk-button')
+      await submitRole.click()
+
+      const header = await $('.govuk-heading-xl')
+      const headerText = await header.getText('.govuk-heading-xl')
+      expect(headerText).to.equal('Access is denied')
+    })
+  })
+
   after(function () {
     authenticationHelp.logout()
   })
