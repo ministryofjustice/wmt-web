@@ -27,10 +27,12 @@
         </legend>
 
         <div class="govuk-radios">
-          <div class="govuk-radios__item">
-            <input class="govuk-radios__input" id="dataAdminRadio" type="radio" name="rights" value="Data Admin" {% if DataAdmin %} checked {% endif %}>
-            <label class="govuk-label govuk-radios__label" for="dataAdminRadio">Data admin</label>
-          </div>
+          {% if userRole ==='Data Admin' %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="dataAdminRadio" type="radio" name="rights" value="Data Admin" {% if DataAdmin %} checked {% endif %}>
+              <label class="govuk-label govuk-radios__label" for="dataAdminRadio">Data admin</label>
+            </div>
+          {% endif %}
           <div class="govuk-radios__item">
             <input class="govuk-radios__input" id="systemAdminRadio" type="radio" name="rights" value="System Admin" {% if SystemAdmin %} checked {% endif %}>
             <label class="govuk-label govuk-radios__label" for="systemAdminRadio">System admin</label>
