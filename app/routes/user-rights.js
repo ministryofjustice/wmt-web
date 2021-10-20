@@ -131,13 +131,7 @@ module.exports = function (router) {
       }
     }
 
-    let userPromise
-    if (rights === roles.STAFF) {
-      userPromise = removeUserRole(username, next)
-    } else {
-      userPromise = addUpdateUserRole(username, rights, loggedInUsername, thisUser.name)
-    }
-    return userPromise.then(function (result) {
+    return addUpdateUserRole(username, rights, loggedInUsername, thisUser.name).then(function (result) {
       return res.render('user', {
         title: 'User rights',
         userRights: { username: username, rights: rights },
@@ -171,7 +165,17 @@ const addUpdateUserRole = function (username, rights, loggedInUsername, fullname
     return userRoleService.getUserByUsername(loggedInUsername).then(function (loggedInUser) {
       return userRoleService.getRole(rights).then(function (role) {
         if (existingUser) {
-          return updateUserAndRole(existingUser, role, fullname, loggedInUser)
+          return userRoleService.getRoleByUsername(loggedInUser.username).then(function (loggedInUserRole) {
+            return userRoleService.getRoleByUsername(existingUser.username).then(function (existingRole) {
+              if (!authorisation.canDemoteRole(loggedInUserRole.role, existingRole.role)) {
+                throw new Forbidden('Unauthorized', 'includes/message')
+              }
+              if (rights === roles.STAFF) {
+                return removeUserRole(username)
+              }
+              return updateUserAndRole(existingUser, role, fullname, loggedInUser)
+            })
+          })
         } else {
           return createUserAndRole(role, username, fullname, loggedInUser)
         }
@@ -188,15 +192,8 @@ const createUserAndRole = function (toAssignRole, email, fullName, loggedInUser)
 }
 
 const updateUserAndRole = function (existingUser, toAssignRole, fullName, loggedInUser) {
-  return userRoleService.getRoleByUsername(loggedInUser.username).then(function (loggedInUserRole) {
-    return userRoleService.getRoleByUsername(existingUser.username).then(function (existingRole) {
-      if (!authorisation.canDemoteRole(loggedInUserRole.role, existingRole.role)) {
-        throw new Forbidden('Unauthorized', 'includes/message')
-      }
-      return userRoleService.updateUser(existingUser.id, fullName).then(function () {
-        return userRoleService.updateUserRole(existingUser.id, toAssignRole.id, loggedInUser.id)
-      })
-    })
+  return userRoleService.updateUser(existingUser.id, fullName).then(function () {
+    return userRoleService.updateUserRole(existingUser.id, toAssignRole.id, loggedInUser.id)
   })
 }
 
