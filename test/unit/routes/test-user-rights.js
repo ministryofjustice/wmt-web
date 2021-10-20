@@ -3,7 +3,7 @@ const supertest = require('supertest')
 const proxyquire = require('proxyquire')
 const sinon = require('sinon')
 const { removeDomainFromUsername } = require('../../../app/services/user-role-service')
-
+const userRoles = require('../../../app/constants/user-roles')
 const USERNAME = {
   username: 'john.smith@email.com'
 }
@@ -83,16 +83,16 @@ describe('user rights route', function () {
       username: loggedInUser
     })
     getRoleByUsernameStub.withArgs(loggedInUser).resolves({
-      role: 'System Admin'
+      role: userRoles.SYSTEM_ADMIN
     })
     getUserByUsernameStub.resolves()
     getRoleStub.resolves({
-      role: 'Data Admin'
+      role: userRoles.DATA_ADMIN
     })
     return supertest(app)
       .post(EDIT_USER_RIGHTS_URL)
       .send({
-        rights: 'Data Admin',
+        rights: userRoles.DATA_ADMIN,
         fullname: 'Full Name'
       }).expect(403)
   })
@@ -102,18 +102,18 @@ describe('user rights route', function () {
       username: loggedInUser
     })
     getRoleByUsernameStub.withArgs(loggedInUser).resolves({
-      role: 'System Admin'
+      role: userRoles.SYSTEM_ADMIN
     })
     getUserByUsernameStub.withArgs(removeDomainFromUsername(USERNAME.username)).resolves({
       username: 'john.smith'
     })
     getRoleStub.resolves({
-      role: 'Data Admin'
+      role: userRoles.DATA_ADMIN
     })
     return supertest(app)
       .post(EDIT_USER_RIGHTS_URL)
       .send({
-        rights: 'Data Admin',
+        rights: userRoles.DATA_ADMIN,
         fullname: 'Full Name'
       }).expect(403)
   })
