@@ -2,12 +2,11 @@ const expect = require('chai').expect
 const sinon = require('sinon')
 
 const proxyquire = require('proxyquire')
-const config = require('../../../config')
-const userRole = require('../../../app/constants/user-roles.js')
+const userRole = require('../../../app/constants/user-roles')
 const UserRole = require('../../../app/services/domain/user-role')
 const removeDomainFromUsername = require('../../../app/services/user-role-service').removeDomainFromUsername
 
-const DOMAIN_USERNAME = 'Staff.Test@' + config.ACTIVE_DIRECTORY_DOMAIN
+const DOMAIN_USERNAME = 'Staff.Test@test.com'
 const STAFF_USER = { id: 0, username: 'Staff.Test', name: 'Staff Test' }
 
 const STAFF_ROLE = { roleId: 0, role: userRole.STAFF }
@@ -62,6 +61,14 @@ describe('services/user-role-service', function () {
     return userRoleService.getRole(userRole.STAFF)
       .then(function (result) {
         expect(result).to.equal(STAFF_ROLE)
+      })
+  })
+
+  it('should return staff role if no role returned from database', function () {
+    getRole.resolves()
+    return userRoleService.getRole('Random Role')
+      .then(function (result) {
+        expect(result).to.deep.equal({ role: userRole.STAFF })
       })
   })
 
