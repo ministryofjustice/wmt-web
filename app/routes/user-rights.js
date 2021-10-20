@@ -164,10 +164,13 @@ const addUpdateUserRole = function (username, rights, loggedInUsername, fullname
   return userRoleService.getUserByUsername(userRoleService.removeDomainFromUsername(username)).then(function (existingUser) {
     return userRoleService.getUserByUsername(loggedInUsername).then(function (loggedInUser) {
       return userRoleService.getRole(rights).then(function (role) {
-        if (existingUser) {
-          return userRoleService.getRoleByUsername(loggedInUser.username).then(function (loggedInUserRole) {
+        return userRoleService.getRoleByUsername(loggedInUser.username).then(function (loggedInUserRole) {
+          if (!authorisation.hasAccessToRole(loggedInUserRole.role, role.role)) {
+            throw new Forbidden('Unauthorized', 'includes/message')
+          }
+          if (existingUser) {
             return userRoleService.getRoleByUsername(existingUser.username).then(function (existingRole) {
-              if (!authorisation.canDemoteRole(loggedInUserRole.role, existingRole.role)) {
+              if (!authorisation.hasAccessToRole(loggedInUserRole.role, existingRole.role)) {
                 throw new Forbidden('Unauthorized', 'includes/message')
               }
               if (rights === roles.STAFF) {
@@ -175,16 +178,16 @@ const addUpdateUserRole = function (username, rights, loggedInUsername, fullname
               }
               return updateUserAndRole(existingUser, role, fullname, loggedInUser)
             })
-          })
-        } else {
-          return createUserAndRole(role, username, fullname, loggedInUser)
-        }
+          } else {
+            return createUserAndRole(role, username, fullname, loggedInUser, loggedInUserRole)
+          }
+        })
       })
     })
   })
 }
 
-const createUserAndRole = function (toAssignRole, email, fullName, loggedInUser) {
+const createUserAndRole = function (toAssignRole, email, fullName, loggedInUser, loggedInUserRole) {
   return userRoleService.addUser(userRoleService.removeDomainFromUsername(email), fullName).then(function (userId) {
     const newUserRole = new UserRole(userId, toAssignRole.id, new Date(), loggedInUser.id)
     return userRoleService.addUserRole(newUserRole)
