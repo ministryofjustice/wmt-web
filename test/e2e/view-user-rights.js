@@ -51,7 +51,7 @@ describe('System admin', () => {
   })
 
   describe('should navigate to the user rights page', () => {
-    it('and cannot remove a data admin access', async () => {
+    it('and cannot demote a data admin to System admin', async () => {
       await browser.url(adminUserURL)
 
       const breadcrumbs = await $('.govuk-breadcrumbs')
@@ -69,6 +69,70 @@ describe('System admin', () => {
       expect(text).to.equal('User rights')
 
       const radioButton = await $('#managerRadio')
+      await radioButton.click()
+      const isSelected = await radioButton.isSelected()
+      expect(isSelected).to.be.equal(true)
+
+      const submitRole = await $('.govuk-button')
+      await submitRole.click()
+
+      const header = await $('.govuk-heading-xl')
+      const headerText = await header.getText('.govuk-heading-xl')
+      expect(headerText).to.equal('Access is denied')
+    })
+  })
+
+  describe('should navigate to the user rights page', () => {
+    it('and cannot demote a data admin to manager', async () => {
+      await browser.url(adminUserURL)
+
+      const breadcrumbs = await $('.govuk-breadcrumbs')
+      const exists = await breadcrumbs.isExisting()
+      expect(exists).to.be.equal(true)
+
+      const usernameField = await $('#username')
+      await usernameField.setValue(`${authenticationHelp.users.DataAdmin.username}@email.com`)
+
+      const submit = await $('.govuk-button')
+      await submit.click()
+
+      const pageTitle = await $('.govuk-heading-xl')
+      const text = await pageTitle.getText('.govuk-heading-xl')
+      expect(text).to.equal('User rights')
+
+      const radioButton = await $('#systemAdminRadio')
+      await radioButton.click()
+      const isSelected = await radioButton.isSelected()
+      expect(isSelected).to.be.equal(true)
+
+      const submitRole = await $('.govuk-button')
+      await submitRole.click()
+
+      const header = await $('.govuk-heading-xl')
+      const headerText = await header.getText('.govuk-heading-xl')
+      expect(headerText).to.equal('Access is denied')
+    })
+  })
+
+  describe('should navigate to the user rights page', () => {
+    it('and cannot demote a data admin to staff', async () => {
+      await browser.url(adminUserURL)
+
+      const breadcrumbs = await $('.govuk-breadcrumbs')
+      const exists = await breadcrumbs.isExisting()
+      expect(exists).to.be.equal(true)
+
+      const usernameField = await $('#username')
+      await usernameField.setValue(`${authenticationHelp.users.DataAdmin.username}@email.com`)
+
+      const submit = await $('.govuk-button')
+      await submit.click()
+
+      const pageTitle = await $('.govuk-heading-xl')
+      const text = await pageTitle.getText('.govuk-heading-xl')
+      expect(text).to.equal('User rights')
+
+      const radioButton = await $('#staffRadio')
       await radioButton.click()
       const isSelected = await radioButton.isSelected()
       expect(isSelected).to.be.equal(true)
