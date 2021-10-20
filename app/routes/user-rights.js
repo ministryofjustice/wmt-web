@@ -161,24 +161,26 @@ const removeUserRole = function (username) {
 }
 
 const addUpdateUserRole = function (username, rights, loggedInUsername, fullname) {
-  return userRoleService.getUserByUsername(userRoleService.removeDomainFromUsername(username)).then(function (existingUser) {
+  const assignUserToRole = userRoleService.removeDomainFromUsername(username)
+  return userRoleService.getUserByUsername(assignUserToRole).then(function (existingUser) {
     return userRoleService.getUserByUsername(loggedInUsername).then(function (loggedInUser) {
       return userRoleService.getRole(rights).then(function (role) {
-        if (existingUser) {
-          return userRoleService.getRoleByUsername(loggedInUser.username).then(function (loggedInUserRole) {
-            return userRoleService.getRoleByUsername(existingUser.username).then(function (existingRole) {
-              if (!authorisation.canDemoteRole(loggedInUserRole.role, existingRole.role)) {
-                throw new Forbidden('Unauthorized', 'includes/message')
+        return userRoleService.getRoleByUsername(loggedInUser.username).then(function (loggedInUserRole) {
+          return userRoleService.getRoleByUsername(assignUserToRole).then(function (existingRole) {
+            if (authorisation.hasAccessToRole(loggedInUserRole.role, role.role) && authorisation.hasAccessToRole(loggedInUserRole.role, existingRole.role)) {
+              if (existingUser) {
+                if (rights === roles.STAFF) {
+                  return removeUserRole(username)
+                }
+                return updateUserAndRole(existingUser, role, fullname, loggedInUser)
+              } else {
+                return createUserAndRole(role, username, fullname, loggedInUser)
               }
-              if (rights === roles.STAFF) {
-                return removeUserRole(username)
-              }
-              return updateUserAndRole(existingUser, role, fullname, loggedInUser)
-            })
+            } else {
+              throw new Forbidden('Unauthorized', 'includes/message')
+            }
           })
-        } else {
-          return createUserAndRole(role, username, fullname, loggedInUser)
-        }
+        })
       })
     })
   })

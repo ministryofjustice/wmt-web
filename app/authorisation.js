@@ -34,7 +34,7 @@ const hasRole = function (req, roles) {
   }
 }
 
-const canDemoteRole = function (userRole, toAssignRole) {
+const hasAccessToRole = function (userRole, toAssignRole) {
   return roleHierarchy[userRole] >= roleHierarchy[toAssignRole]
 }
 
@@ -57,4 +57,4 @@ module.exports.hasRole = hasRole
 module.exports.assertUserAuthenticated = assertUserAuthenticated
 module.exports.isAuthenticationEnabled = isAuthenticationEnabled
 module.exports.getAuthorisedUserRole = getAuthorisedUserRole
-module.exports.canDemoteRole = canDemoteRole
+module.exports.hasAccessToRole = hasAccessToRole

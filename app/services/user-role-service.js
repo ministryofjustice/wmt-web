@@ -8,6 +8,7 @@ const getUserById = require('./data/get-user-by-id')
 const addUser = require('./data/insert-user')
 const getRole = require('./data/get-role')
 const updateUser = require('./data/update-user')
+const userRoles = require('../constants/user-roles')
 
 module.exports.getRoleByUsername = function (username) {
   return getRoleByUsername(username).then(function (result) {
@@ -29,7 +30,7 @@ module.exports.addUserRole = function (userRole) {
 
 module.exports.getRole = function (role) {
   return getRole(role).then(function (result) {
-    return result
+    return result ?? { role: userRoles.STAFF }
   })
 }
 
