@@ -179,7 +179,7 @@ const addUpdateUserRole = function (username, rights, loggedInUsername, fullname
               return updateUserAndRole(existingUser, role, fullname, loggedInUser)
             })
           } else {
-            return createUserAndRole(role, username, fullname, loggedInUser, loggedInUserRole)
+            return createUserAndRole(role, username, fullname, loggedInUser)
           }
         })
       })
@@ -187,7 +187,7 @@ const addUpdateUserRole = function (username, rights, loggedInUsername, fullname
   })
 }
 
-const createUserAndRole = function (toAssignRole, email, fullName, loggedInUser, loggedInUserRole) {
+const createUserAndRole = function (toAssignRole, email, fullName, loggedInUser) {
   return userRoleService.addUser(userRoleService.removeDomainFromUsername(email), fullName).then(function (userId) {
     const newUserRole = new UserRole(userId, toAssignRole.id, new Date(), loggedInUser.id)
     return userRoleService.addUserRole(newUserRole)
