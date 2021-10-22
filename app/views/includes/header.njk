@@ -30,7 +30,7 @@
           <li class="govuk-header__navigation-item"><a class="govuk-header__link" href="/expiring-reductions">Expiring Reductions</a></li>
           {% endif %}
           <li class="govuk-header__navigation-item"><a class="govuk-header__link" href="/officer-search">Search</a></li>
-          {% if authorisation===true%}
+          {% if user %}
           <li class="govuk-header__navigation-item"><a class="govuk-header__link" href="/logout">Sign out</a></li>
           {% endif %}
         </ul>

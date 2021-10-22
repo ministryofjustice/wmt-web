@@ -14,6 +14,7 @@ module.exports = function () {
 
   router.get('/autherror', function (req, res) {
     res.status(401)
+    res.locals.user = req.user
     return res.render('autherror')
   })
 
