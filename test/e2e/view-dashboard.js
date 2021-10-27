@@ -14,7 +14,7 @@ describe('view dashboard reports', function () {
   })
 
   it('shows five dashboard links in date order', async function () {
-    const rows = await browser.findElements('xpath', '//*[@id="override-govuk-table"]/tbody/tr')
+    const rows = await browser.findElements('xpath', '//*[@id="dashboard-table"]/tbody/tr')
 
     expect(rows.length).to.equal(5)
 
