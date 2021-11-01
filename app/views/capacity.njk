@@ -13,8 +13,8 @@
 
 <form method="post">
   {% include "includes/csrf-hidden-input.njk"%}
-    <input id="capacityTable" type="hidden" name="capacityTable" value="{{ stringifiedCapacity }}">
-    <input id="crcCapacityTable" type="hidden" name="crcCapacityTable" value="{{ crcStringifiedCapacity }}">
+    <input id="capacityTable" type="hidden" disabled name="capacityTable" value="{{ stringifiedCapacity }}">
+    <input id="crcCapacityTable" type="hidden" disabled name="crcCapacityTable" value="{{ crcStringifiedCapacity }}">
 
     <div class="govuk-form-group  {% if errors['capacityFromDate'][0] %} govuk-form-group--error {% endif %}">
       <fieldset id="capacityFromDate" class="govuk-fieldset" role="group" aria-describedby="capacity-from-date-hint  {% if errors['capacityFromDate'][0] %} capacity-from-date-error {% endif %}">
