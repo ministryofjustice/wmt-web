@@ -40,7 +40,7 @@
   {% set first = true %}
   <form action="{{ formAction }}" method="{{formMethod}}" id="reductionForm">
     <input type="hidden" name="reductionId" value="{{reduction.id}}"/>
-    <input type="hidden" id="refData" name="refData" value="{{stringifiedReferenceData}}"/>
+    <input type="hidden" disabled id="refData" name="refData" value="{{stringifiedReferenceData}}"/>
     <input type="hidden" id="reductionToPopulate" name="reductionToPopulate" value="{{reductionToPopulate}}"/>
     <input type="hidden" id="reductionEnabled" name="reductionEnabled" value="{{reductionEnabled}}"/>
     <input type="hidden" id="reductionStatus" name="reductionStatus" value="{{reductionStatus}}"/>
