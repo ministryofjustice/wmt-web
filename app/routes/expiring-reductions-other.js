@@ -59,11 +59,11 @@ module.exports = function (router) {
       }
     }
 
-    const userId = req.body['expiring-reductions-search-field-entry']
+    const userIds = Array.from(req.body['expiring-reductions-search-field-entry'])
     const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
     return userSearchService()
       .then(function (users) {
-        return expiringReductionsService(userId)
+        return expiringReductionsService(userIds)
           .then(function (reductions) {
             return res.render('expiring-reductions-other', {
               title: title,
