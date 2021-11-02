@@ -20,9 +20,17 @@ On OSX (using [homebrew](https://brew.sh/)):
 Install Node version 14
 - `nvm install 14`
 
-## Getting Started
-```
+## Getting Started Locally
+
+Run installation for local code 
+```shell
+npm install 
+
 docker-compose up -d
+
+npm run build
+
+npm start
 ```
 
 Navigate to `http://localhost:3000` to see the running application.
