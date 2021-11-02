@@ -12,7 +12,7 @@
 
 <form method="post" class="archive-form">
         {% include "includes/csrf-hidden-input.njk"%}
-        <input id="rawQuery" type="hidden" name="rawQuery" value="{{ stringifiedBody }}">
+        <input id="rawQuery" type="hidden" disabled name="rawQuery" value="{{ stringifiedBody }}">
 
         <div class="govuk-form-group {% if errors['archiveFromDate'][0] %} govuk-form-group--error {% endif %}" id="from">
             {% if errors %}
