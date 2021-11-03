@@ -88,7 +88,7 @@
     "tedious": "^11.0.9",
     "underscore": "^1.13.1",
     "util": "^0.12.4",
-    "validator": "^13.6.0",
+    "validator": "^13.7.0",
     "wmt-probation-rules": "ministryofjustice/wmt-probation-rules.git#v1.0.8"
   }
 }
