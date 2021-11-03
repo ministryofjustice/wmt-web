@@ -1,4 +1,3 @@
-
 const production = process.env.NODE_ENV === 'production'
 
 const requiredInProduction = { requireInProduction: true }
@@ -101,5 +100,6 @@ module.exports = {
     secretAccessKey: process.env.DASHBOARD_AWS_SECRET_ACCESS_KEY || 'foobar',
     endpoint: production ? null : 'http://localhost:4566',
     bucketName: process.env.DASHBOARD_AWS_BUCKET || 'wmt-web'
-  }
+  },
+  googleAnalyticsKey: get('GOOGLE_ANALYTICS_KEY', null)
 }
