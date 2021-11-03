@@ -40,6 +40,7 @@ generic-service:
       API_CLIENT_ID: "AUTH_API_CLIENT_ID"
       API_CLIENT_SECRET: "AUTH_API_CLIENT_SECRET"
       SESSION_SECRET: "SESSION_SECRET"
+      GOOGLE_ANALYTICS_KEY: "GOOGLE_ANALYTICS_KEY"
 
     rds-live-instance-output:
       WMT_LIVE_DB_USERNAME: "database_username"
@@ -58,7 +59,7 @@ generic-service:
       DASHBOARD_AWS_ACCESS_KEY_ID: "access_key_id"
       DASHBOARD_AWS_SECRET_ACCESS_KEY: "secret_access_key"
     s3-dashboard-bucket-output:
-      DASHBOARD_AWS_BUCKET: "bucket_name"  
+      DASHBOARD_AWS_BUCKET: "bucket_name"
 
   allowlist:
     office: "217.33.148.210/32"
