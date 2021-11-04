@@ -1,5 +1,7 @@
 const nunjucks = require('nunjucks')
 const dateFilter = require('nunjucks-date-filter')
+const { googleAnalyticsKey } = require('../../config')
+
 module.exports = function (app, path) {
   app.set('view engine', 'njk')
 
@@ -23,4 +25,6 @@ module.exports = function (app, path) {
   njkEnv.addFilter('isObject', function (obj) {
     return typeof obj === 'object'
   })
+
+  njkEnv.addGlobal('googleAnalyticsKey', googleAnalyticsKey)
 }
