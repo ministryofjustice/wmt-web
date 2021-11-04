@@ -79,7 +79,6 @@
     "connect-redis": "^6.0.0",
     "csurf": "^1.11.0",
     "datatables.net": "^1.10.25",
-    "dotenv": "^10.0.0",
     "excel4node": "^1.7.2",
     "express": "4.17.x",
     "express-nunjucks": "2.2.x",

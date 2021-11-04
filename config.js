@@ -1,5 +1,3 @@
-require('dotenv').config()
-
 const production = process.env.NODE_ENV === 'production'
 
 const requiredInProduction = { requireInProduction: true }
