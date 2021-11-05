@@ -12,7 +12,6 @@ module.exports = function () {
   router.use(
     helmet({
       contentSecurityPolicy: {
-        useDefaults: true,
         directives: {
           defaultSrc: ["'self'"],
           // Hash allows inline script pulled in from https://github.com/alphagov/govuk-frontend/blob/master/src/govuk/template.njk
