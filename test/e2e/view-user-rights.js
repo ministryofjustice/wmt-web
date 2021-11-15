@@ -12,7 +12,7 @@ describe('System admin', () => {
   })
 
   describe('should navigate to the user rights page', () => {
-    it('and cannot see data admin role', async () => {
+    it('and cannot see Super User role', async () => {
       await browser.url(adminUserURL)
 
       const breadcrumbs = await $('.govuk-breadcrumbs')
@@ -51,7 +51,7 @@ describe('System admin', () => {
   })
 
   describe('should navigate to the user rights page', () => {
-    it('and cannot demote a data admin to System admin', async () => {
+    it('and cannot demote a Super User to System admin', async () => {
       await browser.url(adminUserURL)
 
       const breadcrumbs = await $('.govuk-breadcrumbs')
@@ -83,7 +83,7 @@ describe('System admin', () => {
   })
 
   describe('should navigate to the user rights page', () => {
-    it('and cannot demote a data admin to manager', async () => {
+    it('and cannot demote a Super User to manager', async () => {
       await browser.url(adminUserURL)
 
       const breadcrumbs = await $('.govuk-breadcrumbs')
@@ -115,7 +115,7 @@ describe('System admin', () => {
   })
 
   describe('should navigate to the user rights page', () => {
-    it('and cannot demote a data admin to staff', async () => {
+    it('and cannot demote a Super User to staff', async () => {
       await browser.url(adminUserURL)
 
       const breadcrumbs = await $('.govuk-breadcrumbs')
@@ -151,7 +151,7 @@ describe('System admin', () => {
   })
 })
 
-describe('Data admin', () => {
+describe('Super User', () => {
   before(async function () {
     await authenticationHelp.login(authenticationHelp.users.DataAdmin)
     adminUserURL = '/admin/user'

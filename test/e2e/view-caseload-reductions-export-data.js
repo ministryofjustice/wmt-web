@@ -11,7 +11,7 @@ let lduDefaultUrl
 let nationalDefaultUrl
 let regionDefaultUrl
 
-describe('View reductions export for a Data Admin', function () {
+describe('View reductions export for a Super User', function () {
   before(async function () {
     await authenticationHelper.login(authenticationHelper.users.DataAdmin)
     const results = await dataHelper.selectIdsForWorkloadOwner()
@@ -25,31 +25,31 @@ describe('View reductions export for a Data Admin', function () {
     await browser.url(workloadOwnerDefaultUrl + '/overview')
   })
 
-  it('should include the reductions export for data admin users at team level', async function () {
+  it('should include the reductions export for Super User users at team level', async function () {
     await browser.url(teamDefaultUrl + '/overview')
     const reductionExport = await $('.reduction-export')
     const exists = await reductionExport.isExisting()
     expect(exists).to.be.equal(true)
   })
-  it('should include the reductions export for data admin users at ldu level', async function () {
+  it('should include the reductions export for Super User users at ldu level', async function () {
     await browser.url(lduDefaultUrl + '/overview')
     const reductionExport = await $('.reduction-export')
     const exists = await reductionExport.isExisting()
     expect(exists).to.be.equal(true)
   })
-  it('should include the reductions export for data admin users at region level', async function () {
+  it('should include the reductions export for Super User users at region level', async function () {
     await browser.url(regionDefaultUrl + '/overview')
     const reductionExport = await $('.reduction-export')
     const exists = await reductionExport.isExisting()
     expect(exists).to.be.equal(true)
   })
-  it('should not include the reductions export for data admin users at workload owner level', async function () {
+  it('should not include the reductions export for Super User users at workload owner level', async function () {
     await browser.url(workloadOwnerDefaultUrl + '/overview')
     const reductionExport = await $('.reduction-export')
     const exists = await reductionExport.isExisting()
     expect(exists).to.be.equal(false)
   })
-  it('should not include the reductions export for data admin users at national level', async function () {
+  it('should not include the reductions export for Super User users at national level', async function () {
     await browser.url(nationalDefaultUrl + '/overview')
     const reductionExport = await $('.reduction-export')
     const exists = await reductionExport.isExisting()

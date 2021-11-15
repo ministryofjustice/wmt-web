@@ -16,7 +16,7 @@ module.exports = function (router) {
   router.get('/manage-reduction-reasons', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.SYSTEM_ADMIN, roles.DATA_ADMIN])
+      authorisation.hasRole(req, [roles.SYSTEM_ADMIN, roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -55,7 +55,7 @@ module.exports = function (router) {
   router.get('/add-reduction-reason', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.DATA_ADMIN, roles.SYSTEM_ADMIN])
+      authorisation.hasRole(req, [roles.SUPER_USER, roles.SYSTEM_ADMIN])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -86,7 +86,7 @@ module.exports = function (router) {
   router.get('/edit-reduction-reason', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.DATA_ADMIN, roles.SYSTEM_ADMIN])
+      authorisation.hasRole(req, [roles.SUPER_USER, roles.SYSTEM_ADMIN])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -124,7 +124,7 @@ module.exports = function (router) {
   router.post('/add-reduction-reason', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.DATA_ADMIN, roles.SYSTEM_ADMIN])
+      authorisation.hasRole(req, [roles.SUPER_USER, roles.SYSTEM_ADMIN])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -185,7 +185,7 @@ module.exports = function (router) {
   router.post('/edit-reduction-reason', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.DATA_ADMIN, roles.SYSTEM_ADMIN])
+      authorisation.hasRole(req, [roles.SUPER_USER, roles.SYSTEM_ADMIN])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)

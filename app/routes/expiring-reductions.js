@@ -16,7 +16,7 @@ module.exports = function (router) {
   router.get('/expiring-reductions', function (req, res) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.DATA_ADMIN, roles.MANAGER])
+      authorisation.hasRole(req, [roles.SUPER_USER, roles.MANAGER])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)

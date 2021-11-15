@@ -4,7 +4,7 @@ const Forbidden = require('./services/errors/authentication-error').Forbidden
 const roles = require('./constants/user-roles')
 
 const roleHierarchy = {
-  [roles.DATA_ADMIN]: 4,
+  [roles.SUPER_USER]: 4,
   [roles.SYSTEM_ADMIN]: 3,
   [roles.MANAGER]: 2,
   [roles.STAFF]: 1

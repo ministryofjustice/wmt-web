@@ -16,7 +16,7 @@ module.exports = function (router) {
   router.get('/admin/user', function (req, res) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.SYSTEM_ADMIN, roles.DATA_ADMIN])
+      authorisation.hasRole(req, [roles.SYSTEM_ADMIN, roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -49,7 +49,7 @@ module.exports = function (router) {
   router.post('/admin/user-rights', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.SYSTEM_ADMIN, roles.DATA_ADMIN])
+      authorisation.hasRole(req, [roles.SYSTEM_ADMIN, roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -91,7 +91,7 @@ module.exports = function (router) {
   router.post('/admin/user-rights/:username', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.SYSTEM_ADMIN, roles.DATA_ADMIN])
+      authorisation.hasRole(req, [roles.SYSTEM_ADMIN, roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)

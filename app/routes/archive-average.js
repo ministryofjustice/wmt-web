@@ -27,7 +27,7 @@ module.exports = function (router) {
   router.get('/archive-data/average-caseload-data', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.DATA_ADMIN])
+      authorisation.hasRole(req, [roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -46,7 +46,7 @@ module.exports = function (router) {
   router.post('/archive-data/average-caseload-data', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.DATA_ADMIN])
+      authorisation.hasRole(req, [roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -94,7 +94,7 @@ module.exports = function (router) {
   router.post('/archive-data/average-caseload-data/archive-csv', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.DATA_ADMIN])
+      authorisation.hasRole(req, [roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)

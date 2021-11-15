@@ -4,7 +4,7 @@
     <div class="govuk-grid-column-full">
 
             {% ifAsync ((organisationLevel === 'region') or (organisationLevel === 'ldu') or (organisationLevel === 'team')) %}
-                {% if authorisation===false or userRole==='System Admin' or userRole==='Data Admin' or userRole==='Manager'%}
+                {% if authorisation===false or userRole==='System Admin' or userRole==='Super User' or userRole==='Manager'%}
                     <a href="/{{ workloadType }}/{{ organisationLevel }}/{{ linkId }}/{{ screen }}/reductions-csv" class="govuk-button reduction-export floatRightBottom10 marginLeft10" data-module="govuk-button">Export Reductions</a>
                 {% endif %}
             {% endif %}

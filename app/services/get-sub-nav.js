@@ -34,7 +34,7 @@ module.exports = function (id, organisationalUnitName, currentPath, workloadType
         navigation.push(new Link('NPS Caseload', baseLink + '/caseload'))
         navigation.push(new Link('CRC Caseload', baseLink + '/crc-caseload'))
         navigation.push(new Link('Case Progress', baseLink + '/case-progress'))
-        if (authorisation === false || userRole === 'Data Admin' || userRole === 'System Admin' || userRole === 'Manager') {
+        if (authorisation === false || userRole === 'Super User' || userRole === 'System Admin' || userRole === 'Manager') {
           navigation.push(new Link('Dashboard', baseLink + '/dashboard'))
         }
       } else {

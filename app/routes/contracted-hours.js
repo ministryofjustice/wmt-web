@@ -16,7 +16,7 @@ module.exports = function (router) {
   router.get('/:workloadType/:organisationLevel/:id/contracted-hours', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.MANAGER, roles.DATA_ADMIN, roles.SYSTEM_ADMIN])
+      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.SYSTEM_ADMIN])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -62,7 +62,7 @@ module.exports = function (router) {
   router.post('/:workloadType/:organisationLevel/:id/contracted-hours', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.MANAGER, roles.DATA_ADMIN, roles.SYSTEM_ADMIN])
+      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.SYSTEM_ADMIN])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)

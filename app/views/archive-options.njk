@@ -7,7 +7,7 @@
   {% include "includes/title-subtitle.njk" %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half">
-    {% if authorisation===false or userRole==='Data Admin'%}
+    {% if authorisation===false or userRole==='Super User'%}
       <h2 class="govuk-heading-m">
         <a class="blue-link govuk-link" href="/archive-data/reductions">Archived Reductions</a>
       </h2>
