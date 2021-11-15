@@ -29,9 +29,9 @@ describe('System admin', () => {
       const text = await pageTitle.getText('.govuk-heading-xl')
       expect(text).to.equal('User rights')
 
-      let radioButton = await $('#dataAdminRadio')
-      const dataAdminVisible = await radioButton.isExisting()
-      expect(dataAdminVisible).to.be.equal(false)
+      let radioButton = await $('#superAdminRadio')
+      const SuperUserVisible = await radioButton.isExisting()
+      expect(SuperUserVisible).to.be.equal(false)
 
       radioButton = await $('#systemAdminRadio')
       await radioButton.click()
@@ -59,7 +59,7 @@ describe('System admin', () => {
       expect(exists).to.be.equal(true)
 
       const usernameField = await $('#username')
-      await usernameField.setValue(`${authenticationHelp.users.DataAdmin.username}@email.com`)
+      await usernameField.setValue(`${authenticationHelp.users.SuperUser.username}@email.com`)
 
       const submit = await $('.govuk-button')
       await submit.click()
@@ -91,7 +91,7 @@ describe('System admin', () => {
       expect(exists).to.be.equal(true)
 
       const usernameField = await $('#username')
-      await usernameField.setValue(`${authenticationHelp.users.DataAdmin.username}@email.com`)
+      await usernameField.setValue(`${authenticationHelp.users.SuperUser.username}@email.com`)
 
       const submit = await $('.govuk-button')
       await submit.click()
@@ -123,7 +123,7 @@ describe('System admin', () => {
       expect(exists).to.be.equal(true)
 
       const usernameField = await $('#username')
-      await usernameField.setValue(`${authenticationHelp.users.DataAdmin.username}@email.com`)
+      await usernameField.setValue(`${authenticationHelp.users.SuperUser.username}@email.com`)
 
       const submit = await $('.govuk-button')
       await submit.click()
@@ -153,7 +153,7 @@ describe('System admin', () => {
 
 describe('Super User', () => {
   before(async function () {
-    await authenticationHelp.login(authenticationHelp.users.DataAdmin)
+    await authenticationHelp.login(authenticationHelp.users.SuperUser)
     adminUserURL = '/admin/user'
     await browser.url(adminUserURL)
   })
@@ -176,7 +176,7 @@ describe('Super User', () => {
       const text = await pageTitle.getText('.govuk-heading-xl')
       expect(text).to.equal('User rights')
 
-      let radioButton = await $('#dataAdminRadio')
+      let radioButton = await $('#superAdminRadio')
       await radioButton.click()
       let isSelected = await radioButton.isSelected()
       expect(isSelected).to.be.equal(true)

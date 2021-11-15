@@ -12,7 +12,7 @@
   {% elseif rights === 'System Admin' %}
     {% set SystemAdmin=true %}
   {% elseif rights === 'Super User' %}
-    {% set DataAdmin=true %}
+    {% set SuperUser=true %}
   {% else %}
     {% set Staff=true %}
   {% endif %}
@@ -29,8 +29,8 @@
         <div class="govuk-radios">
           {% if userRole ==='Super User' %}
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="dataAdminRadio" type="radio" name="rights" value="Super User" {% if DataAdmin %} checked {% endif %}>
-              <label class="govuk-label govuk-radios__label" for="dataAdminRadio">Super User</label>
+              <input class="govuk-radios__input" id="superAdminRadio" type="radio" name="rights" value="Super User" {% if SuperUser %} checked {% endif %}>
+              <label class="govuk-label govuk-radios__label" for="superAdminRadio">Super User</label>
             </div>
           {% endif %}
           <div class="govuk-radios__item">

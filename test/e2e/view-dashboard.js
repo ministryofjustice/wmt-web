@@ -8,7 +8,7 @@ describe('view dashboard reports', function () {
   }
 
   before(async function () {
-    await authenticationHelper.login(authenticationHelper.users.DataAdmin)
+    await authenticationHelper.login(authenticationHelper.users.SuperUser)
     const link = await $('[href="/probation/hmpps/0/dashboard"]')
     await link.click()
   })

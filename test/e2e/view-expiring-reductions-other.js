@@ -3,7 +3,7 @@ const authenticationHelper = require('../helpers/routes/authentication-helper')
 
 describe('View expiring reductions', () => {
   before(async function () {
-    await authenticationHelper.login(authenticationHelper.users.DataAdmin)
+    await authenticationHelper.login(authenticationHelper.users.SuperUser)
   })
   describe('should navigate to the other managers expiring reductions and search for a single manager', () => {
     it('with the correct breadcrumbs and heading title', async () => {
