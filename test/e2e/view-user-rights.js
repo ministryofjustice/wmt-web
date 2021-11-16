@@ -33,7 +33,7 @@ describe('Application Support', () => {
       const SuperUserVisible = await radioButton.isExisting()
       expect(SuperUserVisible).to.be.equal(false)
 
-      radioButton = await $('#ApplicationSupportRadio')
+      radioButton = await $('#applicationSupportRadio')
       await radioButton.click()
       let isSelected = await radioButton.isSelected()
       expect(isSelected).to.be.equal(true)
@@ -100,7 +100,7 @@ describe('Application Support', () => {
       const text = await pageTitle.getText('.govuk-heading-xl')
       expect(text).to.equal('User rights')
 
-      const radioButton = await $('#ApplicationSupportRadio')
+      const radioButton = await $('#applicationSupportRadio')
       await radioButton.click()
       const isSelected = await radioButton.isSelected()
       expect(isSelected).to.be.equal(true)
@@ -181,7 +181,7 @@ describe('Super User', () => {
       let isSelected = await radioButton.isSelected()
       expect(isSelected).to.be.equal(true)
 
-      radioButton = await $('#ApplicationSupportRadio')
+      radioButton = await $('#applicationSupportRadio')
       await radioButton.click()
       isSelected = await radioButton.isSelected()
       expect(isSelected).to.be.equal(true)
