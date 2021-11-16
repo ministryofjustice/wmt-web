@@ -51,9 +51,8 @@ module.exports = function (router) {
           subTitle: result.subTitle,
           breadcrumbs: result.breadcrumbs,
           subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
-          date: result.date,
-          userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-          authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+          date: result.date
+
         })
       })
     }).catch(function (error) {

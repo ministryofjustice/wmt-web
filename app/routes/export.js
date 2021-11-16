@@ -53,9 +53,8 @@ module.exports = function (router) {
         breadcrumbs: result.breadcrumbs,
         subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
         date: result.date,
-        canExportReductions: [roles.SYSTEM_ADMIN, roles.SUPER_USER, roles.MANAGER].includes(authorisedUserRole.userRole),
-        userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-        authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+        canExportReductions: [roles.SYSTEM_ADMIN, roles.SUPER_USER, roles.MANAGER].includes(authorisedUserRole.userRole)
+
       })
     }).catch(function (error) {
       next(error)

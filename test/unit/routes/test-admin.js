@@ -4,12 +4,22 @@ const proxyquire = require('proxyquire')
 const sinon = require('sinon')
 
 const ADMIN_URL = '/admin/'
+const loggedInUser = 'loggedInUser'
 
 let app
 let route
 let userRoleService
 let authorisationService
 const hasRoleStub = sinon.stub()
+
+const setupLoggedInUserMiddleware = function () {
+  return function (req, res, next) {
+    req.user = {
+      username: loggedInUser
+    }
+    next()
+  }
+}
 
 const initaliseApp = function () {
   userRoleService = sinon.stub()
@@ -21,7 +31,7 @@ const initaliseApp = function () {
     '../services/user-role-service': userRoleService,
     '../authorisation': authorisationService
   })
-  app = routeHelper.buildApp(route)
+  app = routeHelper.buildApp(route, setupLoggedInUserMiddleware())
 }
 
 before(function () {

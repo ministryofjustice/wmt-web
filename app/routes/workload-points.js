@@ -28,7 +28,6 @@ module.exports = function (router) {
     }
     const success = req.query.success
     const successText = success ? 'You have successfully updated the workload points!' : null
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
     return workloadPointsService.getWorkloadPoints(false)
       .then(function (result) {
         return getAdjustmentPointsConfig(adjustmentTypes.CMS)
@@ -43,9 +42,8 @@ module.exports = function (router) {
                   gs: gs,
                   cms: cms,
                   updatedBy: result.updatedBy,
-                  successText: successText,
-                  userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-                  authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+                  successText: successText
+
                 })
               })
           })
@@ -68,7 +66,7 @@ module.exports = function (router) {
     }
     const success = req.query.success
     const successText = success ? 'You have successfully updated the workload points for transition to adulthood cases!' : null
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
+
     return workloadPointsService.getWorkloadPoints(true)
       .then(function (result) {
         return res.render('workload-points', {
@@ -77,9 +75,8 @@ module.exports = function (router) {
           breadcrumbs: result.breadcrumbs,
           wp: result.workloadPoints,
           updatedBy: result.updatedBy,
-          successText: successText,
-          userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-          authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+          successText: successText
+
         })
       })
   })
@@ -132,7 +129,6 @@ module.exports = function (router) {
     } catch (error) {
       logger.error(error)
       if (error instanceof ValidationError) {
-        const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
         return workloadPointsService.getWorkloadPoints(false)
           .then(function (result) {
             return getAdjustmentPointsConfig(adjustmentTypes.CMS)
@@ -149,9 +145,8 @@ module.exports = function (router) {
                       cms: cmsUpdated,
                       gs: gsUpdated,
                       updatedBy: result.updatedBy,
-                      errors: error.validationErrors,
-                      userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-                      authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+                      errors: error.validationErrors
+
                     })
                   })
               })
@@ -187,7 +182,6 @@ module.exports = function (router) {
     } catch (error) {
       logger.error(error)
       if (error instanceof ValidationError) {
-        const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
         return workloadPointsService.getWorkloadPoints(true)
           .then(function (result) {
             return res.status(400).render('workload-points', {
@@ -196,9 +190,8 @@ module.exports = function (router) {
               breadcrumbs: result.breadcrumbs,
               wp: req.body,
               updatedBy: result.updatedBy,
-              errors: error.validationErrors,
-              userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-              authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+              errors: error.validationErrors
+
             })
           })
       }

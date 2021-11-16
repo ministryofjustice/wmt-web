@@ -155,8 +155,7 @@ const renderOverview = function (req, res, next) {
         subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
         overviewDetails: result.overviewDetails,
         date: result.date,
-        userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-        authorisation: authorisedUserRole.authorisation, // used by proposition-link for the admin role
+
         workloadType: workloadTypes.PROBATION
       })
     })

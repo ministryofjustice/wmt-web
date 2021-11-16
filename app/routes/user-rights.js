@@ -36,13 +36,11 @@ module.exports = function (router) {
     const fail = req.query.fail
 
     const failureText = fail ? 'Invalid username specified' : null
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
     return res.render('user', {
       title: 'User rights',
       breadcrumbs: breadcrumbs,
-      failureText: failureText,
-      userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-      authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+      failureText: failureText
+
     })
   })
 
@@ -78,10 +76,13 @@ module.exports = function (router) {
         title: 'User rights',
         username: username,
         fullname: role.fullname,
-        rights: role.role,
+        userIsSuperUser: roles.SUPER_USER === role.role,
+        userIsSystemAdmin: roles.SYSTEM_ADMIN === role.role,
+        userIsManager: roles.MANAGER === role.role,
+        userIsStaff: roles.STAFF === role.role,
         breadcrumbs: breadcrumbs,
-        userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-        authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+        canAssignSuperAdmin: roles.SUPER_USER === authorisedUserRole.userRole
+
       })
     }).catch(function (error) {
       next(error)
@@ -120,11 +121,13 @@ module.exports = function (router) {
           title: 'User rights',
           username: username,
           fullname: req.body.fullname,
-          rights: req.body.rights,
+          userIsSuperUser: roles.SUPER_USER === req.body.rights,
+          userIsSystemAdmin: roles.SYSTEM_ADMIN === req.body.rights,
+          userIsManager: roles.MANAGER === req.body.rights,
+          userIsStaff: roles.STAFF === req.body.rights,
           errors: error.validationErrors,
           breadcrumbs: breadcrumbs,
-          userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-          authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+          canAssignSuperAdmin: roles.SUPER_USER === authorisedUserRole.userRole
         })
       } else {
         next(error)
@@ -134,9 +137,8 @@ module.exports = function (router) {
     return addUpdateUserRole(username, rights, loggedInUsername, thisUser.name).then(function (result) {
       return res.render('user', {
         title: 'User rights',
-        userRights: { username: username, rights: rights },
-        userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-        authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+        userRights: { username: username, rights: rights }
+
       })
     }).catch(function (error) {
       log.error(error)

@@ -50,9 +50,8 @@ module.exports = function (router) {
           contractedHours: result.contractedHours,
           woId: id,
           hoursUpdatedSuccess: req.query.hoursUpdatedSuccess,
-          workloadType: workloadType,
-          userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-          authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+          workloadType: workloadType
+
         })
       }).catch(function (error) {
         next(error)
@@ -100,9 +99,8 @@ module.exports = function (router) {
               subNav: getSubNav(id, organisationLevel, req.path, workloadType, authorisedUserRole.authorisation, authorisedUserRole.userRole),
               contractedHours: updatedHours,
               workloadType: workloadType,
-              woId: id,
-              userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-              authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+              woId: id
+
             })
           }).catch(function (error) {
             next(error)

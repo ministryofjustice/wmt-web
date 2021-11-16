@@ -20,13 +20,10 @@ module.exports = function (router) {
       }
     }
 
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
-
     return res.render('admin', {
       title: 'Admin',
-      isSuperUser: req.user.user_role === roles.SUPER_USER,
-      userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-      authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+      isSuperUser: req.user.user_role === roles.SUPER_USER
+
     })
   })
 }

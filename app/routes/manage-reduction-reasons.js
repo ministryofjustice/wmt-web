@@ -28,8 +28,6 @@ module.exports = function (router) {
       }
     }
 
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
-
     const breadcrumbs = getBreadcrumbs('/manage-reduction-reasons')
 
     const success = req.query.success
@@ -45,9 +43,8 @@ module.exports = function (router) {
         breadcrumbs: breadcrumbs,
         title: 'Manage Reduction Reasons',
         successText: successText,
-        subTitle: getSubtitle(true),
-        userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-        authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+        subTitle: getSubtitle(true)
+
       })
     })
   })
@@ -69,16 +66,13 @@ module.exports = function (router) {
 
     const breadcrumbs = getBreadcrumbs('/add-reduction-reason')
 
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
-
     return getReductionCategories().then(function (categories) {
       return res.render('add-reduction-reason', {
         categories: categories,
         breadcrumbs: breadcrumbs,
         title: 'Add Reduction Reason',
-        subTitle: getSubtitle(false),
-        userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-        authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+        subTitle: getSubtitle(false)
+
       })
     })
   })
@@ -100,7 +94,6 @@ module.exports = function (router) {
 
     const breadcrumbs = getBreadcrumbs('/edit-reduction-reason')
 
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
     const id = req.query.id
     if (!id) {
       return res.redirect('/manage-reduction-reasons')
@@ -113,9 +106,8 @@ module.exports = function (router) {
           breadcrumbs: breadcrumbs,
           categories: categories,
           title: 'Edit Reduction Reason',
-          subTitle: getSubtitle(false),
-          userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-          authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+          subTitle: getSubtitle(false)
+
         })
       })
     })
@@ -137,7 +129,6 @@ module.exports = function (router) {
     }
 
     const breadcrumbs = getBreadcrumbs('/add-reduction-reason')
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
     let reductionReason
 
     return getReductionCategories().then(function (categories) {
@@ -167,9 +158,8 @@ module.exports = function (router) {
             subTitle: getSubtitle(false),
             breadcrumbs: breadcrumbs,
             errors: error.validationErrors,
-            categories: categories,
-            userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-            authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+            categories: categories
+
           })
         } else {
           next(error)
@@ -198,7 +188,6 @@ module.exports = function (router) {
     }
 
     const breadcrumbs = getBreadcrumbs('/edit-reduction-reason')
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
     // var id = req.query.id
     let reductionReason
 
@@ -230,9 +219,8 @@ module.exports = function (router) {
             subTitle: getSubtitle(false),
             title: 'Edit Reduction Reason',
             errors: error.validationErrors,
-            categories: categories,
-            userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-            authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+            categories: categories
+
           })
         } else {
           next(error)

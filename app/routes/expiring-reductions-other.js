@@ -28,8 +28,6 @@ module.exports = function (router) {
         })
       }
     }
-
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
     return userSearchService()
       .then(function (users) {
         return res.render('expiring-reductions-other', {
@@ -37,8 +35,7 @@ module.exports = function (router) {
           users: users,
           subTitle: title,
           breadcrumbs: breadcrumbs,
-          userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-          authorisation: authorisedUserRole.authorisation, // used by proposition-link for the admin role
+
           subNav: getSubNav(req.path)
         })
       })
@@ -60,7 +57,6 @@ module.exports = function (router) {
     }
 
     const userIds = Array.from(req.body['expiring-reductions-search-field-entry'])
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
     return userSearchService()
       .then(function (users) {
         return expiringReductionsService(userIds)
@@ -71,8 +67,7 @@ module.exports = function (router) {
               breadcrumbs: breadcrumbs,
               reductions: reductions,
               users: users,
-              userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-              authorisation: authorisedUserRole.authorisation, // used by proposition-link for the admin role
+
               userId: req.body['expiring-reductions-search-field-entry'],
               subNav: getSubNav(req.path)
             })
