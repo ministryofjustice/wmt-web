@@ -40,7 +40,7 @@ This application uses [HMPPS Auth](https://github.com/ministryofjustice/hmpps-au
 To seed data run `npm run seed-dev-data`, this will add users with elevated roles. To login to a user which has a specific role please use the following usernames:
 
 - WMT_SUPER_USER
-- WMT_SYSTEM_ADMIN
+- WMT_APPLICATION_SUPPORT
 - WMT_MANAGER
 - WMT_STAFF
 

@@ -6,16 +6,6 @@
   {% include "includes/breadcrumbs.njk" %}
 
   {% include "includes/title-subtitle.njk" %}
-  
-  {% if rights === 'Manager' %}
-    {% set Manager=true %}
-  {% elseif rights === 'System Admin' %}
-    {% set SystemAdmin=true %}
-  {% elseif rights === 'Super User' %}
-    {% set SuperUser=true %}
-  {% else %}
-    {% set Staff=true %}
-  {% endif %}
 
   {% include "includes/validation-error-messages.njk" %}
 
@@ -34,8 +24,8 @@
             </div>
           {% endif %}
           <div class="govuk-radios__item">
-            <input class="govuk-radios__input" id="systemAdminRadio" type="radio" name="rights" value="System Admin" {% if userIsSystemAdmin %} checked {% endif %}>
-            <label class="govuk-label govuk-radios__label" for="systemAdminRadio">System admin</label>
+            <input class="govuk-radios__input" id="applicationSupportRadio" type="radio" name="rights" value="Application Support" {% if userIsApplicationSupport %} checked {% endif %}>
+            <label class="govuk-label govuk-radios__label" for="applicationSupportRadio">Application Support</label>
           </div>
           <div class="govuk-radios__item">
             <input class="govuk-radios__input" id="managerRadio" type="radio" name="rights" value="Manager" {% if userIsManager %} checked {% endif %}>

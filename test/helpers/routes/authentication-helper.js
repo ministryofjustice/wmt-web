@@ -1,7 +1,7 @@
 
 const USERS = {
   SuperUser: { username: 'WMT_SUPER_USER', roleId: 3 },
-  SystemAdmin: { username: 'WMT_SYSTEM_ADMIN', roleId: 2 },
+  ApplicationSupport: { username: 'WMT_APPLICATION_SUPPORT', roleId: 2 },
   Manager: { username: 'WMT_MANAGER', roleId: 1 },
   Staff: { username: 'WMT_STAFF' },
   unautheticatedUser: { username: 'UNAUTHN_USER' }

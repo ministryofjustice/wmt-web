@@ -16,7 +16,7 @@ module.exports = function (router) {
   router.get('/admin/user', function (req, res) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.SYSTEM_ADMIN, roles.SUPER_USER])
+      authorisation.hasRole(req, [roles.APPLICATION_SUPPORT, roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -47,7 +47,7 @@ module.exports = function (router) {
   router.post('/admin/user-rights', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.SYSTEM_ADMIN, roles.SUPER_USER])
+      authorisation.hasRole(req, [roles.APPLICATION_SUPPORT, roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -77,7 +77,7 @@ module.exports = function (router) {
         username: username,
         fullname: role.fullname,
         userIsSuperUser: roles.SUPER_USER === role.role,
-        userIsSystemAdmin: roles.SYSTEM_ADMIN === role.role,
+        userIsApplicationSupport: roles.APPLICATION_SUPPORT === role.role,
         userIsManager: roles.MANAGER === role.role,
         userIsStaff: roles.STAFF === role.role,
         breadcrumbs: breadcrumbs,
@@ -92,7 +92,7 @@ module.exports = function (router) {
   router.post('/admin/user-rights/:username', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.SYSTEM_ADMIN, roles.SUPER_USER])
+      authorisation.hasRole(req, [roles.APPLICATION_SUPPORT, roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -122,7 +122,7 @@ module.exports = function (router) {
           username: username,
           fullname: req.body.fullname,
           userIsSuperUser: roles.SUPER_USER === req.body.rights,
-          userIsSystemAdmin: roles.SYSTEM_ADMIN === req.body.rights,
+          userIsApplicationSupport: roles.APPLICATION_SUPPORT === req.body.rights,
           userIsManager: roles.MANAGER === req.body.rights,
           userIsStaff: roles.STAFF === req.body.rights,
           errors: error.validationErrors,

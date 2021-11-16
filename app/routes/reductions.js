@@ -20,7 +20,7 @@ module.exports = function (router) {
   router.get('/:workloadType/:organisationLevel/:id/reductions', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.SYSTEM_ADMIN])
+      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -74,7 +74,7 @@ module.exports = function (router) {
   router.get('/:workloadType/:organisationLevel/:id/add-reduction', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.SYSTEM_ADMIN])
+      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -131,7 +131,7 @@ module.exports = function (router) {
   router.get('/:workloadType/:organisationLevel/:id/edit-reduction', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.SYSTEM_ADMIN])
+      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -196,7 +196,7 @@ module.exports = function (router) {
   router.post('/:workloadType/:organisationLevel/:id/add-reduction', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.SYSTEM_ADMIN])
+      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -280,7 +280,7 @@ module.exports = function (router) {
   router.post('/:workloadType/:organisationLevel/:id/edit-reduction', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.SYSTEM_ADMIN])
+      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -372,7 +372,7 @@ module.exports = function (router) {
   router.post('/:workloadType/:organisationLevel/:id/update-reduction-status', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.SYSTEM_ADMIN])
+      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)

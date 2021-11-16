@@ -53,7 +53,7 @@ module.exports = function (router) {
         breadcrumbs: result.breadcrumbs,
         subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
         date: result.date,
-        canExportReductions: [roles.SYSTEM_ADMIN, roles.SUPER_USER, roles.MANAGER].includes(authorisedUserRole.userRole)
+        canExportReductions: [roles.APPLICATION_SUPPORT, roles.SUPER_USER, roles.MANAGER].includes(authorisedUserRole.userRole)
 
       })
     }).catch(function (error) {

@@ -5,7 +5,7 @@ const roles = require('./constants/user-roles')
 
 const roleHierarchy = {
   [roles.SUPER_USER]: 4,
-  [roles.SYSTEM_ADMIN]: 3,
+  [roles.APPLICATION_SUPPORT]: 3,
   [roles.MANAGER]: 2,
   [roles.STAFF]: 1
 }
