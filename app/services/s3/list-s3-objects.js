@@ -5,7 +5,7 @@ module.exports = function (s3Client, bucketName) {
     Bucket: bucketName
   }))
     .then(function (data) {
-      return data.Contents
+      return data.Contents ?? []
     })
     .catch(function (error) {
       console.error(error)
