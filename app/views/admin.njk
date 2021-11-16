@@ -7,7 +7,7 @@
   {% include "includes/title-subtitle.njk" %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half">
-    {% if authorisation===false or userRole==='Super User'%}
+    {% if isSuperUser %}
       <h2 class="govuk-heading-m">
         <a class="blue-link govuk-link" href="/admin/workload-points">Workload points</a>
       </h2>
@@ -23,13 +23,11 @@
     {% endif %}
     </div>
     <div class="govuk-grid-column-one-half">
-      {% if authorisation===false or userRole==='System Admin' or userRole==='Super User'%}
       <h2 class="govuk-heading-m">
         <a class="blue-link govuk-link" href="/admin/user">User rights</a>
       </h2>
       <p class="govuk-body">Manage user rights</p>
-      {% endif %}
-      {% if authorisation===false or userRole==='Super User'%}
+      {% if isSuperUser %}
       <h2 class="govuk-heading-m">
         <a class="blue-link govuk-link" href="/manage-reduction-reasons">Manage Reduction Reasons</a>
       </h2>

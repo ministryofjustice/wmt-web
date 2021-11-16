@@ -2,6 +2,7 @@ const Link = require('./domain/link')
 const linkGenerator = require('./helpers/link-generator')
 const organisationUnitConstants = require('../constants/organisation-unit')
 const workloadConstants = require('../constants/workload-type')
+const userRoles = require('../constants/user-roles')
 
 module.exports = function (id, organisationalUnitName, currentPath, workloadType = workloadConstants.PROBATION, authorisation, userRole) {
   const baseLink = linkGenerator.fromIdAndNameAndWorkloadType(id, organisationalUnitName, workloadType)
@@ -34,7 +35,7 @@ module.exports = function (id, organisationalUnitName, currentPath, workloadType
         navigation.push(new Link('NPS Caseload', baseLink + '/caseload'))
         navigation.push(new Link('CRC Caseload', baseLink + '/crc-caseload'))
         navigation.push(new Link('Case Progress', baseLink + '/case-progress'))
-        if (authorisation === false || userRole === 'Super User' || userRole === 'System Admin' || userRole === 'Manager') {
+        if (authorisation === false || userRole === userRoles.SUPER_USER || userRole === userRoles.SYSTEM_ADMIN || userRole === userRoles.MANAGER) {
           navigation.push(new Link('Dashboard', baseLink + '/dashboard'))
         }
       } else {
