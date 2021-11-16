@@ -82,7 +82,7 @@ app.use(function (req, res, next) {
 })
 
 app.use(function (err, req, res, next) {
-  logger.error({ error: err })
+  logger.error(err)
   res.status(err.status || 500)
   if (err.status === 404) {
     res.render('includes/error-404')
