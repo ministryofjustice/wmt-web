@@ -1,6 +1,6 @@
 module.exports = {
   STAFF: 'Staff',
   MANAGER: 'Manager',
-  DATA_ADMIN: 'Data Admin',
+  SUPER_USER: 'Super User',
   SYSTEM_ADMIN: 'System Admin'
 }

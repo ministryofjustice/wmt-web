@@ -11,8 +11,8 @@
     {% set Manager=true %}
   {% elseif rights === 'System Admin' %}
     {% set SystemAdmin=true %}
-  {% elseif rights === 'Data Admin' %}
-    {% set DataAdmin=true %}
+  {% elseif rights === 'Super User' %}
+    {% set SuperUser=true %}
   {% else %}
     {% set Staff=true %}
   {% endif %}
@@ -27,23 +27,23 @@
         </legend>
 
         <div class="govuk-radios">
-          {% if userRole ==='Data Admin' %}
+          {% if canAssignSuperAdmin %}
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="dataAdminRadio" type="radio" name="rights" value="Data Admin" {% if DataAdmin %} checked {% endif %}>
-              <label class="govuk-label govuk-radios__label" for="dataAdminRadio">Data admin</label>
+              <input class="govuk-radios__input" id="superAdminRadio" type="radio" name="rights" value="Super User" {% if userIsSuperUser %} checked {% endif %}>
+              <label class="govuk-label govuk-radios__label" for="superAdminRadio">Super User</label>
             </div>
           {% endif %}
           <div class="govuk-radios__item">
-            <input class="govuk-radios__input" id="systemAdminRadio" type="radio" name="rights" value="System Admin" {% if SystemAdmin %} checked {% endif %}>
+            <input class="govuk-radios__input" id="systemAdminRadio" type="radio" name="rights" value="System Admin" {% if userIsSystemAdmin %} checked {% endif %}>
             <label class="govuk-label govuk-radios__label" for="systemAdminRadio">System admin</label>
           </div>
           <div class="govuk-radios__item">
-            <input class="govuk-radios__input" id="managerRadio" type="radio" name="rights" value="Manager" {% if Manager %} checked {% endif %}>
+            <input class="govuk-radios__input" id="managerRadio" type="radio" name="rights" value="Manager" {% if userIsManager %} checked {% endif %}>
             <label class="govuk-label govuk-radios__label" for="managerRadio">Manager</label>
           </div>
           <div class="govuk-radios__divider">or</div>
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="staffRadio" type="radio" name="rights" value="Staff" {% if Staff %} checked {% endif %}>
+              <input class="govuk-radios__input" id="staffRadio" type="radio" name="rights" value="Staff" {% if userIsStaff %} checked {% endif %}>
               <label class="govuk-label govuk-radios__label" for="staffRadio">Staff</label>
             </div>
         </div>

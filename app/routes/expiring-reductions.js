@@ -16,7 +16,7 @@ module.exports = function (router) {
   router.get('/expiring-reductions', function (req, res) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.DATA_ADMIN, roles.MANAGER])
+      authorisation.hasRole(req, [roles.SUPER_USER, roles.MANAGER])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -32,7 +32,6 @@ module.exports = function (router) {
     if (req.user !== undefined && req.user !== null) {
       userId = [req.user.userId]
     }
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
     return expiringReductionsService(userId)
       .then(function (reductions) {
         return res.render('expiring-reductions', {
@@ -40,8 +39,7 @@ module.exports = function (router) {
           subTitle: title,
           breadcrumbs: breadcrumbs,
           reductions: reductions,
-          userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-          authorisation: authorisedUserRole.authorisation, // used by proposition-link for the admin role
+
           subNav: getSubNav(req.path)
         })
       })

@@ -78,7 +78,7 @@ describe('user rights route', function () {
       .send(USERNAME).expect(200)
   })
 
-  it('should not be able to create a data admin when loggedin user is system admin', function () {
+  it('should not be able to create a Super User when loggedin user is system admin', function () {
     getUserByUsernameStub.withArgs(loggedInUser).resolves({
       username: loggedInUser
     })
@@ -87,17 +87,17 @@ describe('user rights route', function () {
     })
     getUserByUsernameStub.resolves()
     getRoleStub.resolves({
-      role: userRoles.DATA_ADMIN
+      role: userRoles.SUPER_USER
     })
     return supertest(app)
       .post(EDIT_USER_RIGHTS_URL)
       .send({
-        rights: userRoles.DATA_ADMIN,
+        rights: userRoles.SUPER_USER,
         fullname: 'Full Name'
       }).expect(403)
   })
 
-  it('should not be able to update to a data admin when loggedin user is system admin', function () {
+  it('should not be able to update to a Super User when loggedin user is system admin', function () {
     getUserByUsernameStub.withArgs(loggedInUser).resolves({
       username: loggedInUser
     })
@@ -108,12 +108,12 @@ describe('user rights route', function () {
       username: 'john.smith'
     })
     getRoleStub.resolves({
-      role: userRoles.DATA_ADMIN
+      role: userRoles.SUPER_USER
     })
     return supertest(app)
       .post(EDIT_USER_RIGHTS_URL)
       .send({
-        rights: userRoles.DATA_ADMIN,
+        rights: userRoles.SUPER_USER,
         fullname: 'Full Name'
       }).expect(403)
   })

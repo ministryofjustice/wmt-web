@@ -24,7 +24,7 @@ module.exports = function (router) {
   router.get('/archive-data/reductions', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.DATA_ADMIN])
+      authorisation.hasRole(req, [roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -44,7 +44,7 @@ module.exports = function (router) {
   router.post('/archive-data/reductions', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.DATA_ADMIN])
+      authorisation.hasRole(req, [roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -108,7 +108,7 @@ module.exports = function (router) {
   router.get('/archive-data/reductions-search', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.DATA_ADMIN])
+      authorisation.hasRole(req, [roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -126,7 +126,7 @@ module.exports = function (router) {
   router.post('/archive-data/reductions-search', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.DATA_ADMIN])
+      authorisation.hasRole(req, [roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -166,7 +166,7 @@ module.exports = function (router) {
   router.post('/archive-data/reductions/archive-csv', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.DATA_ADMIN])
+      authorisation.hasRole(req, [roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -218,7 +218,7 @@ module.exports = function (router) {
   router.post('/archive-data/reductions-history', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.DATA_ADMIN])
+      authorisation.hasRole(req, [roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)

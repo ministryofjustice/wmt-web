@@ -18,7 +18,7 @@ module.exports = function (router) {
   router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/dashboard', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.DATA_ADMIN, roles.SYSTEM_ADMIN, roles.MANAGER])
+      authorisation.hasRole(req, [roles.SUPER_USER, roles.SYSTEM_ADMIN, roles.MANAGER])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -51,9 +51,8 @@ module.exports = function (router) {
           subTitle: result.subTitle,
           breadcrumbs: result.breadcrumbs,
           subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
-          date: result.date,
-          userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-          authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+          date: result.date
+
         })
       })
     }).catch(function (error) {
@@ -64,7 +63,7 @@ module.exports = function (router) {
   router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/dashboard/download', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.DATA_ADMIN, roles.SYSTEM_ADMIN, roles.MANAGER])
+      authorisation.hasRole(req, [roles.SUPER_USER, roles.SYSTEM_ADMIN, roles.MANAGER])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)

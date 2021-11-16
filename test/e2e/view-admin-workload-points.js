@@ -11,7 +11,7 @@ let editButton, saveButton, saveNotice, successMessage
 describe('View / edit Workload Points', () => {
   before(async function () {
     workloadPoints = await getWorloadPoints(false)
-    await authenticationHelper.login(authenticationHelper.users.DataAdmin)
+    await authenticationHelper.login(authenticationHelper.users.SuperUser)
     const link = await $('[href="/admin"]')
     await link.click()
     const workloadPointsLink = await $('[href="/admin/workload-points"]')

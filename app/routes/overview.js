@@ -86,7 +86,7 @@ module.exports = function (router) {
   get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/overview/reductions-csv', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.MANAGER, roles.DATA_ADMIN, roles.SYSTEM_ADMIN])
+      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.SYSTEM_ADMIN])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -155,8 +155,7 @@ const renderOverview = function (req, res, next) {
         subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
         overviewDetails: result.overviewDetails,
         date: result.date,
-        userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-        authorisation: authorisedUserRole.authorisation, // used by proposition-link for the admin role
+
         workloadType: workloadTypes.PROBATION
       })
     })

@@ -20,7 +20,7 @@ module.exports = function (router) {
   router.get('/:workloadType/:organisationLevel/:id/reductions', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.MANAGER, roles.DATA_ADMIN, roles.SYSTEM_ADMIN])
+      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.SYSTEM_ADMIN])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -74,7 +74,7 @@ module.exports = function (router) {
   router.get('/:workloadType/:organisationLevel/:id/add-reduction', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.MANAGER, roles.DATA_ADMIN, roles.SYSTEM_ADMIN])
+      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.SYSTEM_ADMIN])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -119,9 +119,8 @@ module.exports = function (router) {
             errors: errors,
             workloadType: workloadType,
             reductionToPopulate: false,
-            reductionEnabled: false,
-            userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-            authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+            reductionEnabled: false
+
           })
         }
       }).catch(function (error) {
@@ -132,7 +131,7 @@ module.exports = function (router) {
   router.get('/:workloadType/:organisationLevel/:id/edit-reduction', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.MANAGER, roles.DATA_ADMIN, roles.SYSTEM_ADMIN])
+      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.SYSTEM_ADMIN])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -154,8 +153,6 @@ module.exports = function (router) {
     const workloadType = req.params.workloadType
 
     workloadTypeValidator.validate(workloadType)
-
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
 
     reductionsService.getAddReductionsRefData(id, organisationLevel, workloadType)
       .then(function (result) {
@@ -186,8 +183,7 @@ module.exports = function (router) {
                 reductionEnabled: reductionEnabled,
                 reductionStatus: reductionStatus,
                 workloadType: workloadType,
-                userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-                authorisation: authorisedUserRole.authorisation, // used by proposition-link for the admin role
+
                 reductionsHistory: reductionsHistory
               })
             })
@@ -200,7 +196,7 @@ module.exports = function (router) {
   router.post('/:workloadType/:organisationLevel/:id/add-reduction', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.MANAGER, roles.DATA_ADMIN, roles.SYSTEM_ADMIN])
+      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.SYSTEM_ADMIN])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -238,7 +234,6 @@ module.exports = function (router) {
           reduction = generateNewReductionFromRequest(req.body, reductionReason, userId)
         } catch (error) {
           if (error instanceof ValidationError) {
-            const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
             return res.status(400).render('add-reduction', {
               breadcrumbs: result.breadcrumbs,
               linkId: id,
@@ -263,9 +258,8 @@ module.exports = function (router) {
               reductionToPopulate: true,
               reductionEnabled: reductionReason.isEnabled,
               errors: error.validationErrors,
-              workloadType: workloadType,
-              userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-              authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+              workloadType: workloadType
+
             })
           } else {
             next(error)
@@ -286,7 +280,7 @@ module.exports = function (router) {
   router.post('/:workloadType/:organisationLevel/:id/edit-reduction', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.MANAGER, roles.DATA_ADMIN, roles.SYSTEM_ADMIN])
+      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.SYSTEM_ADMIN])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -325,7 +319,6 @@ module.exports = function (router) {
             reduction = generateNewReductionFromRequest(req.body, reductionReason, userId)
           } catch (error) {
             if (error instanceof ValidationError) {
-              const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
               return res.status(400).render('add-reduction', {
                 breadcrumbs: result.breadcrumbs,
                 linkId: id,
@@ -351,8 +344,7 @@ module.exports = function (router) {
                 reductionEnabled: reductionReason.isEnabled,
                 errors: error.validationErrors,
                 workloadType: workloadType,
-                userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-                authorisation: authorisedUserRole.authorisation, // used by proposition-link for the admin role
+
                 reductionsHistory: reductionsHistory
               })
             } else {
@@ -380,7 +372,7 @@ module.exports = function (router) {
   router.post('/:workloadType/:organisationLevel/:id/update-reduction-status', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.MANAGER, roles.DATA_ADMIN, roles.SYSTEM_ADMIN])
+      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.SYSTEM_ADMIN])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -498,9 +490,8 @@ module.exports = function (router) {
       archivedReductions: results.archivedReductions,
       successText: successText,
       workloadType: workloadType,
-      date: results.date,
-      userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-      authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+      date: results.date
+
     }
     if (error) {
       displayJson.errors = error.validationErrors

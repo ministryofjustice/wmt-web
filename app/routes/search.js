@@ -12,11 +12,8 @@ module.exports = function (router) {
       }
     }
 
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
-
     return res.render('search-for-officer', {
-      userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-      authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+
     })
   })
 
@@ -29,12 +26,9 @@ module.exports = function (router) {
       }
     }
 
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
-
     return offenderSearch(req.body.surnameBox).then(function (result) {
       res.render('search-for-officer', {
-        userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-        authorisation: authorisedUserRole.authorisation, // used by proposition-link for the admin role
+
         results: result,
         surname: req.body.surnameBox
       })

@@ -55,8 +55,6 @@ module.exports = function (router) {
           crcCaseProgressList: crcCaseProgressList,
           stringifiedCRCCaseProgressList: stringifiedCRCCaseProgressList,
           date: result.date,
-          userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-          authorisation: authorisedUserRole.authorisation, // used by proposition-link for the admin role
           workloadType: workloadTypes.PROBATION,
           organisationLevel: organisationLevel
         })

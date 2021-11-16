@@ -69,9 +69,8 @@ const renderOverview = function (req, res, next) {
           childOrganisationLevelDisplayText: childOrganisationLevelDisplayText,
           subNav: getSubNav(id, organisationLevel, req.path, workloadTypeConstants.COURT_REPORTS, authorisedUserRole.authorisation, authorisedUserRole.userRole),
           overviewDetails: result.overviewDetails,
-          date: result.date,
-          userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-          authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+          date: result.date
+
         })
       }).catch(function (error) {
         next(error)

@@ -16,7 +16,7 @@ module.exports = function (router) {
   router.get('/manage-reduction-reasons', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.SYSTEM_ADMIN, roles.DATA_ADMIN])
+      authorisation.hasRole(req, [roles.SYSTEM_ADMIN, roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -27,8 +27,6 @@ module.exports = function (router) {
         })
       }
     }
-
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
 
     const breadcrumbs = getBreadcrumbs('/manage-reduction-reasons')
 
@@ -45,9 +43,8 @@ module.exports = function (router) {
         breadcrumbs: breadcrumbs,
         title: 'Manage Reduction Reasons',
         successText: successText,
-        subTitle: getSubtitle(true),
-        userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-        authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+        subTitle: getSubtitle(true)
+
       })
     })
   })
@@ -55,7 +52,7 @@ module.exports = function (router) {
   router.get('/add-reduction-reason', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.DATA_ADMIN, roles.SYSTEM_ADMIN])
+      authorisation.hasRole(req, [roles.SUPER_USER, roles.SYSTEM_ADMIN])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -69,16 +66,13 @@ module.exports = function (router) {
 
     const breadcrumbs = getBreadcrumbs('/add-reduction-reason')
 
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
-
     return getReductionCategories().then(function (categories) {
       return res.render('add-reduction-reason', {
         categories: categories,
         breadcrumbs: breadcrumbs,
         title: 'Add Reduction Reason',
-        subTitle: getSubtitle(false),
-        userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-        authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+        subTitle: getSubtitle(false)
+
       })
     })
   })
@@ -86,7 +80,7 @@ module.exports = function (router) {
   router.get('/edit-reduction-reason', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.DATA_ADMIN, roles.SYSTEM_ADMIN])
+      authorisation.hasRole(req, [roles.SUPER_USER, roles.SYSTEM_ADMIN])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -100,7 +94,6 @@ module.exports = function (router) {
 
     const breadcrumbs = getBreadcrumbs('/edit-reduction-reason')
 
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
     const id = req.query.id
     if (!id) {
       return res.redirect('/manage-reduction-reasons')
@@ -113,9 +106,8 @@ module.exports = function (router) {
           breadcrumbs: breadcrumbs,
           categories: categories,
           title: 'Edit Reduction Reason',
-          subTitle: getSubtitle(false),
-          userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-          authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+          subTitle: getSubtitle(false)
+
         })
       })
     })
@@ -124,7 +116,7 @@ module.exports = function (router) {
   router.post('/add-reduction-reason', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.DATA_ADMIN, roles.SYSTEM_ADMIN])
+      authorisation.hasRole(req, [roles.SUPER_USER, roles.SYSTEM_ADMIN])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -137,7 +129,6 @@ module.exports = function (router) {
     }
 
     const breadcrumbs = getBreadcrumbs('/add-reduction-reason')
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
     let reductionReason
 
     return getReductionCategories().then(function (categories) {
@@ -167,9 +158,8 @@ module.exports = function (router) {
             subTitle: getSubtitle(false),
             breadcrumbs: breadcrumbs,
             errors: error.validationErrors,
-            categories: categories,
-            userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-            authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+            categories: categories
+
           })
         } else {
           next(error)
@@ -185,7 +175,7 @@ module.exports = function (router) {
   router.post('/edit-reduction-reason', function (req, res, next) {
     try {
       authorisation.assertUserAuthenticated(req)
-      authorisation.hasRole(req, [roles.DATA_ADMIN, roles.SYSTEM_ADMIN])
+      authorisation.hasRole(req, [roles.SUPER_USER, roles.SYSTEM_ADMIN])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -198,7 +188,6 @@ module.exports = function (router) {
     }
 
     const breadcrumbs = getBreadcrumbs('/edit-reduction-reason')
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
     // var id = req.query.id
     let reductionReason
 
@@ -230,9 +219,8 @@ module.exports = function (router) {
             subTitle: getSubtitle(false),
             title: 'Edit Reduction Reason',
             errors: error.validationErrors,
-            categories: categories,
-            userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-            authorisation: authorisedUserRole.authorisation // used by proposition-link for the admin role
+            categories: categories
+
           })
         } else {
           next(error)

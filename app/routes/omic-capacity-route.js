@@ -85,8 +85,7 @@ module.exports = function (router) {
               childOrganisationLevelDisplayText: childOrgUnitDisplayText,
               organisationLevel: organisationLevel,
               date: result.date,
-              userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
-              authorisation: authorisedUserRole.authorisation, // used by proposition-link for the admin role
+
               workloadType: workloadTypes.OMIC
             })
           })

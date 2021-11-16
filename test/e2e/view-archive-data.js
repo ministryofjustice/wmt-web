@@ -5,7 +5,7 @@ let pageTitle, pageSubtitle
 
 describe('View archive data', () => {
   before(async function () {
-    await authenticationHelper.login(authenticationHelper.users.DataAdmin)
+    await authenticationHelper.login(authenticationHelper.users.SuperUser)
   })
   describe('should navigate to the archive page', () => {
     it('with the correct breadcrumbs and heading title', async () => {

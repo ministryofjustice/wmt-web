@@ -6,7 +6,7 @@ let pageTitle
 
 describe('View admin role', () => {
   before(async function () {
-    await authenticationHelper.login(authenticationHelper.users.DataAdmin)
+    await authenticationHelper.login(authenticationHelper.users.SuperUser)
     workloadPointsURL = '/admin/workload-points'
   })
 

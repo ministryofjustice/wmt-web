@@ -1,6 +1,6 @@
 
 const USERS = {
-  DataAdmin: { username: 'WMT_DATA_ADMIN', roleId: 3 },
+  SuperUser: { username: 'WMT_SUPER_USER', roleId: 3 },
   SystemAdmin: { username: 'WMT_SYSTEM_ADMIN', roleId: 2 },
   Manager: { username: 'WMT_MANAGER', roleId: 1 },
   Staff: { username: 'WMT_STAFF' },
