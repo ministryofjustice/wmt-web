@@ -3,7 +3,7 @@ const authenticationHelp = require('../helpers/routes/authentication-helper')
 
 describe('View not found page', () => {
   before(async function () {
-    await authenticationHelp.login(authenticationHelp.users.SystemAdmin)
+    await authenticationHelp.login(authenticationHelp.users.ApplicationSupport)
   })
 
   describe('should navigate to the not found page', () => {

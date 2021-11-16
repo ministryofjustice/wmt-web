@@ -8,7 +8,7 @@ describe('View updating page when ETL is running', () => {
   let inserts
   before(async function () {
     inserts = await addInProgressWorkloadReport([])
-    await authenticationHelp.login(authenticationHelp.users.SystemAdmin)
+    await authenticationHelp.login(authenticationHelp.users.ApplicationSupport)
   })
 
   it('should show the update in progress page', async () => {

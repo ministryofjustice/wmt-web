@@ -78,12 +78,12 @@ describe('user rights route', function () {
       .send(USERNAME).expect(200)
   })
 
-  it('should not be able to create a Super User when loggedin user is system admin', function () {
+  it('should not be able to create a Super User when loggedin user is Application Support', function () {
     getUserByUsernameStub.withArgs(loggedInUser).resolves({
       username: loggedInUser
     })
     getRoleByUsernameStub.withArgs(loggedInUser).resolves({
-      role: userRoles.SYSTEM_ADMIN
+      role: userRoles.APPLICATION_SUPPORT
     })
     getUserByUsernameStub.resolves()
     getRoleStub.resolves({
@@ -97,12 +97,12 @@ describe('user rights route', function () {
       }).expect(403)
   })
 
-  it('should not be able to update to a Super User when loggedin user is system admin', function () {
+  it('should not be able to update to a Super User when loggedin user is Application Support', function () {
     getUserByUsernameStub.withArgs(loggedInUser).resolves({
       username: loggedInUser
     })
     getRoleByUsernameStub.withArgs(loggedInUser).resolves({
-      role: userRoles.SYSTEM_ADMIN
+      role: userRoles.APPLICATION_SUPPORT
     })
     getUserByUsernameStub.withArgs(removeDomainFromUsername(USERNAME.username)).resolves({
       username: 'john.smith'

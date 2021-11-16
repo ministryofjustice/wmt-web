@@ -4,9 +4,9 @@ const authenticationHelp = require('../helpers/routes/authentication-helper')
 let adminUserURL
 const username = 'John.Doe@email.com'
 
-describe('System admin', () => {
+describe('Application Support', () => {
   before(async function () {
-    await authenticationHelp.login(authenticationHelp.users.SystemAdmin)
+    await authenticationHelp.login(authenticationHelp.users.ApplicationSupport)
     adminUserURL = '/admin/user'
     await browser.url(adminUserURL)
   })
@@ -33,7 +33,7 @@ describe('System admin', () => {
       const SuperUserVisible = await radioButton.isExisting()
       expect(SuperUserVisible).to.be.equal(false)
 
-      radioButton = await $('#systemAdminRadio')
+      radioButton = await $('#applicationSupportRadio')
       await radioButton.click()
       let isSelected = await radioButton.isSelected()
       expect(isSelected).to.be.equal(true)
@@ -51,7 +51,7 @@ describe('System admin', () => {
   })
 
   describe('should navigate to the user rights page', () => {
-    it('and cannot demote a Super User to System admin', async () => {
+    it('and cannot demote a Super User to Application Support', async () => {
       await browser.url(adminUserURL)
 
       const breadcrumbs = await $('.govuk-breadcrumbs')
@@ -100,7 +100,7 @@ describe('System admin', () => {
       const text = await pageTitle.getText('.govuk-heading-xl')
       expect(text).to.equal('User rights')
 
-      const radioButton = await $('#systemAdminRadio')
+      const radioButton = await $('#applicationSupportRadio')
       await radioButton.click()
       const isSelected = await radioButton.isSelected()
       expect(isSelected).to.be.equal(true)
@@ -181,7 +181,7 @@ describe('Super User', () => {
       let isSelected = await radioButton.isSelected()
       expect(isSelected).to.be.equal(true)
 
-      radioButton = await $('#systemAdminRadio')
+      radioButton = await $('#applicationSupportRadio')
       await radioButton.click()
       isSelected = await radioButton.isSelected()
       expect(isSelected).to.be.equal(true)
