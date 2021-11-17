@@ -9,7 +9,7 @@ const roleHierarchy = {
 }
 
 const hasRole = function (req, roles) {
-  if (!Array.from(roles).includes(req.user.user_role)) {
+  if (!roles.includes(req.user.user_role)) {
     throw new Forbidden('Unauthorized', 'includes/message')
   }
 }
