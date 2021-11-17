@@ -446,14 +446,13 @@ module.exports.getAnyExistingWorkloadId = function () {
 }
 
 module.exports.getAnyExistingWorkloadOwnerId = function () {
-  const promise = knex('individual_case_overview')
+  return knex('individual_case_overview')
     .withSchema('app')
     .where('contracted_hours', '>', 0)
     .first('workload_owner_id AS id')
     .then(function (result) {
       return result.id
     })
-  return promise
 }
 
 module.exports.getAnyExistingWorkloadReportId = function () {
@@ -663,8 +662,26 @@ module.exports.deleteReductionsForIds = function (ids) {
     .then(() => {
       return knex('reductions')
         .withSchema('app')
-        . whereIn('id', ids)
+        .whereIn('id', ids)
         .del()
+    })
+}
+
+module.exports.deleteReductionsForWorkloadOwner = function (workloadOwnerId) {
+  return knex('reductions')
+    .withSchema('app')
+    .where('workload_owner_id', '=', workloadOwnerId)
+    .select('id').then((reductionIds) => {
+      return knex('reductions_history')
+        .withSchema('app')
+        .whereIn('reduction_id', reductionIds.map(r => r.id))
+        .del()
+        .then(() => {
+          return knex('reductions')
+            .withSchema('app')
+            .where('workload_owner_id', '=', workloadOwnerId)
+            .del()
+        })
     })
 }
 
