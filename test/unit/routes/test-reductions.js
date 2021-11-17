@@ -78,7 +78,7 @@ const createMiddleWare = function () {
 
 const initaliseApp = function (middleware) {
   authorisationService = {
-    assertUserAuthenticated: sinon.stub(),
+
     hasRole: hasRoleFunction
   }
   getSubNavStub = sinon.stub()

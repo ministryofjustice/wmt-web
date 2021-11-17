@@ -5,7 +5,6 @@ const getCaseload = require('../services/get-caseload')
 const getExportCsv = require('../services/get-export-csv')
 const tabs = require('../constants/wmt-tabs')
 const authorisation = require('../authorisation')
-const Unauthorized = require('../services/errors/authentication-error').Unauthorized
 const workloadTypes = require('../constants/workload-type')
 const getLastUpdated = require('../services/data/get-last-updated')
 const dateFormatter = require('../services/date-formatter')
@@ -14,14 +13,6 @@ let lastUpdated
 
 module.exports = function (router) {
   router.get('/' + workloadTypes.OMIC + '/:organisationLevel/:id/caseload', function (req, res, next) {
-    try {
-      authorisation.assertUserAuthenticated(req)
-    } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      }
-    }
-
     const organisationLevel = req.params.organisationLevel
     const id = req.params.id
 
@@ -61,13 +52,6 @@ module.exports = function (router) {
   })
 
   router.get('/' + workloadTypes.OMIC + '/:organisationLevel/:id/caseload/caseload-csv', function (req, res, next) {
-    try {
-      authorisation.assertUserAuthenticated(req)
-    } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      }
-    }
     const organisationLevel = req.params.organisationLevel
     const id = req.params.id
 

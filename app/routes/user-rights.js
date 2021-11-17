@@ -15,7 +15,6 @@ const log = require('../logger')
 module.exports = function (router) {
   router.get('/admin/user', function (req, res) {
     try {
-      authorisation.assertUserAuthenticated(req)
       authorisation.hasRole(req, [roles.APPLICATION_SUPPORT, roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
@@ -46,7 +45,6 @@ module.exports = function (router) {
 
   router.post('/admin/user-rights', function (req, res, next) {
     try {
-      authorisation.assertUserAuthenticated(req)
       authorisation.hasRole(req, [roles.APPLICATION_SUPPORT, roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
@@ -91,7 +89,6 @@ module.exports = function (router) {
 
   router.post('/admin/user-rights/:username', function (req, res, next) {
     try {
-      authorisation.assertUserAuthenticated(req)
       authorisation.hasRole(req, [roles.APPLICATION_SUPPORT, roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {

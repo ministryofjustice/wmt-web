@@ -8,7 +8,6 @@ const Link = require('../services/domain/link')
 module.exports = function (router) {
   router.get('/archive-options', function (req, res, next) {
     try {
-      authorisation.assertUserAuthenticated(req)
       authorisation.hasRole(req, [roles.APPLICATION_SUPPORT, roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
