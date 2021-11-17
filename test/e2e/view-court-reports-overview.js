@@ -27,7 +27,6 @@ describe('View court-reports overview', function () {
 
   it('should navigate to the court-reporter overview page', async function () {
     await browser.url(workloadOwnerDefaultUrl + '/overview')
-    await browser.pause(5000)
     const breadcrumbs = await $('.govuk-breadcrumbs')
     let exists = await breadcrumbs.isExisting()
     expect(exists).to.be.equal(true)
