@@ -36,14 +36,14 @@ describe('LDU', function () {
 
     it('should not be able to download overview', async function () {
       await browser.url(lduDefaultUrl + '/overview/caseload-csv')
-      const header = await $('govuk-heading-xl')
+      const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
 
     it('should not be able to download reductions', async function () {
       await browser.url(lduDefaultUrl + '/overview/reductions-csv')
-      const header = await $('govuk-heading-xl')
+      const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -108,14 +108,14 @@ describe('LDU', function () {
 
     it('should not be able to download overview', async function () {
       await browser.url(lduDefaultUrl + '/overview/caseload-csv')
-      const header = await $('govuk-heading-xl')
+      const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
 
     it('should not be able to download reductions', async function () {
       await browser.url(lduDefaultUrl + '/overview/reductions-csv')
-      const header = await $('govuk-heading-xl')
+      const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })

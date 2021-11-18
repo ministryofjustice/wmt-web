@@ -3,12 +3,10 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
 
-            {% ifAsync ((organisationLevel === 'region') or (organisationLevel === 'ldu') or (organisationLevel === 'team')) %}
-                {% if canExportReductions %}
+            {% ifAsync ((organisationLevel === 'region') or (organisationLevel === 'ldu') or (organisationLevel === 'team')) and canExportReductions %}
                     <a href="/{{ workloadType }}/{{ organisationLevel }}/{{ linkId }}/{{ screen }}/reductions-csv" class="govuk-button reduction-export floatRightBottom10 marginLeft10" data-module="govuk-button">Export Reductions</a>
-                {% endif %}
             {% endif %}
-            {% ifAsync ((organisationLevel === 'hmpps') or (organisationLevel === 'region') or (organisationLevel === 'ldu') or (organisationLevel === 'team')) %}
+            {% ifAsync ((organisationLevel === 'hmpps') or (organisationLevel === 'region') or (organisationLevel === 'ldu') or (organisationLevel === 'team')) and canExportOverview %}
                 <a href="/{{ workloadType }}/{{ organisationLevel }}/{{ linkId }}/{{ screen }}/caseload-csv" class="govuk-button sln-export floatRightBottom10" data-module="govuk-button">Export Overview</a>
             {% endif %}
         </div>

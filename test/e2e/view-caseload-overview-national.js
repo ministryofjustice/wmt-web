@@ -48,7 +48,7 @@ describe('National', function () {
 
     it('should not be able to download overview', async function () {
       await browser.url(nationalDefaultUrl + '/overview/caseload-csv')
-      const header = await $('govuk-heading-xl')
+      const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -194,7 +194,7 @@ describe('National', function () {
 
     it('should not be able to download overview', async function () {
       await browser.url(nationalDefaultUrl + '/overview/caseload-csv')
-      const header = await $('govuk-heading-xl')
+      const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
