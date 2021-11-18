@@ -4,6 +4,7 @@ const proxyquire = require('proxyquire')
 const sinon = require('sinon')
 const { removeDomainFromUsername } = require('../../../app/services/user-role-service')
 const userRoles = require('../../../app/constants/user-roles')
+const setupLoggedInUserMiddleware = require('../helpers/setupLoggedInUserMiddleware')
 const USERNAME = {
   username: 'john.smith@email.com'
 }
@@ -44,18 +45,9 @@ const initaliseApp = function (middleware) {
   app = routeHelper.buildApp(route, middleware)
 }
 
-const setupLoggedInUserMiddleware = function () {
-  return function (req, res, next) {
-    req.user = {
-      username: loggedInUser
-    }
-    next()
-  }
-}
-
 describe('user rights route', function () {
   before(function () {
-    initaliseApp(setupLoggedInUserMiddleware())
+    initaliseApp(setupLoggedInUserMiddleware(loggedInUser))
   })
 
   it('should respond with 200 when user right is called', function () {

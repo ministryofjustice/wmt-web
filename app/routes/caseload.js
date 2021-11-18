@@ -9,6 +9,10 @@ const workloadTypes = require('../../app/constants/workload-type')
 const getLastUpdated = require('../services/data/get-last-updated')
 const dateFormatter = require('../services/date-formatter')
 const caseloadTotaller = require('../helpers/caseload-totaller')
+const { Forbidden } = require('../services/errors/authentication-error')
+const messages = require('../constants/messages')
+const { SUPER_USER, MANAGER } = require('../constants/user-roles')
+const canExportCaseloadRoles = [SUPER_USER, MANAGER]
 let lastUpdated
 
 module.exports = function (router) {
@@ -55,7 +59,7 @@ module.exports = function (router) {
             childOrganisationLevelDisplayText: childOrgUnit.displayText,
             caseloadDetails: caseloadDetailsData,
             date: lastUpdated,
-
+            canExportCaseload: canExportCaseloadRoles.includes(req.user.user_role),
             workloadType: workloadTypes.PROBATION
           })
         })
@@ -65,6 +69,16 @@ module.exports = function (router) {
   })
 
   router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/caseload/caseload-csv', function (req, res, next) {
+    try {
+      authorisation.hasRole(req, canExportCaseloadRoles)
+    } catch (error) {
+      if (error instanceof Forbidden) {
+        return res.status(error.statusCode).render(error.redirect, {
+          heading: messages.ACCESS_DENIED
+        })
+      }
+    }
+
     const organisationLevel = req.params.organisationLevel
     const id = req.params.id
 
