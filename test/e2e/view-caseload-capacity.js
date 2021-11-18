@@ -31,36 +31,9 @@ describe('View your caseload capacity flow', () => {
     pageSubtitle = await pageSubtitle.getText()
     expect(pageSubtitle).to.equal('Offender Manager')
 
-    const fromDayField = await $('#capacity-from-day')
-    const fromMonthField = await $('#capacity-from-month')
-    const fromYearField = await $('#capacity-from-year')
-    const toDayField = await $('#capacity-to-day')
-    const toMonthField = await $('#capacity-to-month')
-    const toYearField = await $('#capacity-to-year')
-    const submit = await $('#caseload-filter-submit')
-
-    await fromDayField.setValue('1')
-    await fromMonthField.setValue('2')
-    await fromYearField.setValue('2017')
-    await toDayField.setValue('1')
-    await toMonthField.setValue('2')
-    await toYearField.setValue('2018')
-
-    await submit.click()
-
-    try {
-      const errorMessage = await $('.govuk-error-message')
-      const errorText = await errorMessage.getText()
-      expect(errorText).to.equal('There is no data for this period (// - //)')
-      const errorSummary = await $('.govuk-error-summary')
-      const exists = await errorSummary.isExisting()
-      expect(exists).to.be.equal(false)
-    } catch (error) {
-      console.error(error)
-      if (error.message === 'expected true to equal false') {
-        throw error
-      }
-    }
+    const errorMessage = await $('.govuk-error-message')
+    const errorText = await errorMessage.getText()
+    expect(errorText).to.equal('There is no data for this period (// - //)')
   })
 
   it('should navigate to the team caseload capacity screen', async () => {
@@ -94,19 +67,12 @@ describe('View your caseload capacity flow', () => {
 
     await submit.click()
 
-    try {
-      const errorMessage = await $('.govuk-error-message')
-      const errorText = await errorMessage.getText()
-      expect(errorText).to.equal('There is no data for this period (// - //)')
-      const errorSummary = await $('.govuk-error-summary')
-      const exists = await errorSummary.isExisting()
-      expect(exists).to.be.equal(false)
-    } catch (error) {
-      console.error(error)
-      if (error.message === 'expected true to equal false') {
-        throw error
-      }
-    }
+    const errorMessage = await $('.govuk-error-message')
+    const errorText = await errorMessage.getText()
+    expect(errorText).to.equal('There is no data for this period (// - //)')
+    const errorSummary = await $('.govuk-error-summary')
+    const exists = await errorSummary.isExisting()
+    expect(exists).to.be.equal(false)
   })
 
   it('should navigate to the ldu caseload capacity screen', async () => {
@@ -138,19 +104,12 @@ describe('View your caseload capacity flow', () => {
 
     await submit.click()
 
-    try {
-      const errorMessage = await $('.govuk-error-message')
-      const errorText = await errorMessage.getText()
-      expect(errorText).to.equal('There is no data for this period (// - //)')
-      const errorSummary = await $('.govuk-error-summary')
-      const exists = await errorSummary.isExisting()
-      expect(exists).to.be.equal(false)
-    } catch (error) {
-      console.error(error)
-      if (error.message === 'expected true to equal false') {
-        throw error
-      }
-    }
+    const errorMessage = await $('.govuk-error-message')
+    const errorText = await errorMessage.getText()
+    expect(errorText).to.equal('There is no data for this period (// - //)')
+    const errorSummary = await $('.govuk-error-summary')
+    const exists = await errorSummary.isExisting()
+    expect(exists).to.be.equal(false)
   })
 
   it('should navigate to the region caseload capacity screen', async () => {
@@ -180,19 +139,12 @@ describe('View your caseload capacity flow', () => {
 
     await submit.click()
 
-    try {
-      const errorMessage = await $('.govuk-error-message')
-      const errorText = await errorMessage.getText()
-      expect(errorText).to.equal('There is no data for this period (// - //)')
-      const errorSummary = await $('.govuk-error-summary')
-      const exists = await errorSummary.isExisting()
-      expect(exists).to.be.equal(false)
-    } catch (error) {
-      console.error(error)
-      if (error.message === 'expected true to equal false') {
-        throw error
-      }
-    }
+    const errorMessage = await $('.govuk-error-message')
+    const errorText = await errorMessage.getText()
+    expect(errorText).to.equal('There is no data for this period (// - //)')
+    const errorSummary = await $('.govuk-error-summary')
+    const exists = await errorSummary.isExisting()
+    expect(exists).to.be.equal(false)
   })
 
   it('should navigate to the national caseload capacity screen', async () => {
@@ -220,19 +172,12 @@ describe('View your caseload capacity flow', () => {
 
     await submit.click()
 
-    try {
-      const errorMessage = await $('.govuk-error-message')
-      const errorText = await errorMessage.getText()
-      expect(errorText).to.equal('There is no data for this period (// - //)')
-      const errorSummary = await $('.govuk-error-summary')
-      const exists = await errorSummary.isExisting()
-      expect(exists).to.be.equal(false)
-    } catch (error) {
-      console.error(error)
-      if (error.message === 'expected true to equal false') {
-        throw error
-      }
-    }
+    const errorMessage = await $('.govuk-error-message')
+    const errorText = await errorMessage.getText()
+    expect(errorText).to.equal('There is no data for this period (// - //)')
+    const errorSummary = await $('.govuk-error-summary')
+    const exists = await errorSummary.isExisting()
+    expect(exists).to.be.equal(false)
   })
 
   after(function () {
