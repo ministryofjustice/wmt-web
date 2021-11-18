@@ -27,12 +27,6 @@ describe('Offender Manager', function () {
       expect(grade).to.equal(workloadOwnerGrade)
     })
 
-    it('should not include the reductions export for staff at workload owner level', async function () {
-      const reductionExport = await $('.reduction-export')
-      const exists = await reductionExport.isExisting()
-      return expect(exists).to.be.false
-    })
-
     after(function () {
       authenticationHelper.logout()
     })
