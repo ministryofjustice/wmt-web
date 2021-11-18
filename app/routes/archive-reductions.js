@@ -29,8 +29,8 @@ module.exports = function (router) {
         return res.status(error.statusCode).redirect(error.redirect)
       } else if (error instanceof Forbidden) {
         return res.status(error.statusCode).render(error.redirect, {
-          heading: messages.ACCESS_DENIED,
-          message: messages.ADMIN_ROLES_REQUIRED
+          heading: messages.ACCESS_DENIED
+
         })
       }
     }
@@ -48,8 +48,8 @@ module.exports = function (router) {
         return res.status(error.statusCode).redirect(error.redirect)
       } else if (error instanceof Forbidden) {
         return res.status(error.statusCode).render(error.redirect, {
-          heading: messages.ACCESS_DENIED,
-          message: messages.ADMIN_ROLES_REQUIRED
+          heading: messages.ACCESS_DENIED
+
         })
       }
     }
@@ -111,8 +111,8 @@ module.exports = function (router) {
         return res.status(error.statusCode).redirect(error.redirect)
       } else if (error instanceof Forbidden) {
         return res.status(error.statusCode).render(error.redirect, {
-          heading: messages.ACCESS_DENIED,
-          message: messages.ADMIN_ROLES_REQUIRED
+          heading: messages.ACCESS_DENIED
+
         })
       }
     }
@@ -128,8 +128,8 @@ module.exports = function (router) {
         return res.status(error.statusCode).redirect(error.redirect)
       } else if (error instanceof Forbidden) {
         return res.status(error.statusCode).render(error.redirect, {
-          heading: messages.ACCESS_DENIED,
-          message: messages.ADMIN_ROLES_REQUIRED
+          heading: messages.ACCESS_DENIED
+
         })
       }
     }
@@ -167,8 +167,8 @@ module.exports = function (router) {
         return res.status(error.statusCode).redirect(error.redirect)
       } else if (error instanceof Forbidden) {
         return res.status(error.statusCode).render(error.redirect, {
-          heading: messages.ACCESS_DENIED,
-          message: messages.ADMIN_ROLES_REQUIRED
+          heading: messages.ACCESS_DENIED
+
         })
       }
     }
@@ -218,8 +218,8 @@ module.exports = function (router) {
         return res.status(error.statusCode).redirect(error.redirect)
       } else if (error instanceof Forbidden) {
         return res.status(error.statusCode).render(error.redirect, {
-          heading: messages.ACCESS_DENIED,
-          message: messages.ADMIN_ROLES_REQUIRED
+          heading: messages.ACCESS_DENIED
+
         })
       }
     }

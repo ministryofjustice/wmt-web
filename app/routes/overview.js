@@ -7,7 +7,6 @@ const roles = require('../constants/user-roles')
 const getExportCsv = require('../services/get-export-csv')
 const tabs = require('../constants/wmt-tabs')
 const authorisation = require('../authorisation')
-const Unauthorized = require('../services/errors/authentication-error').Unauthorized
 const Forbidden = require('../services/errors/authentication-error').Forbidden
 const workloadTypes = require('../../app/constants/workload-type')
 const getLastUpdated = require('../services/data/get-last-updated')
@@ -39,6 +38,16 @@ module.exports = function (router) {
   })
 
   get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/overview/caseload-csv', function (req, res, next) {
+    try {
+      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER])
+    } catch (error) {
+      if (error instanceof Forbidden) {
+        return res.status(error.statusCode).render(error.redirect, {
+          heading: messages.ACCESS_DENIED
+
+        })
+      }
+    }
     const organisationLevel = req.params.organisationLevel
     let id
     if (organisationLevel !== organisationUnitConstants.NATIONAL.name) {
@@ -57,14 +66,12 @@ module.exports = function (router) {
 
   get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/overview/reductions-csv', function (req, res, next) {
     try {
-      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.APPLICATION_SUPPORT])
+      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER])
     } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      } else if (error instanceof Forbidden) {
+      if (error instanceof Forbidden) {
         return res.status(error.statusCode).render(error.redirect, {
-          heading: messages.ACCESS_DENIED,
-          message: messages.MANAGER_ROLES_REQUIRED
+          heading: messages.ACCESS_DENIED
+
         })
       }
     }
