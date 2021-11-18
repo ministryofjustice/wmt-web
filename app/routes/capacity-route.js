@@ -5,6 +5,8 @@ const dateRangeHelper = require('../services/helpers/date-range-helper')
 const getSubNav = require('../services/get-sub-nav')
 const organisationUnit = require('../constants/organisation-unit')
 const ValidationError = require('../services/errors/validation-error')
+const { Forbidden } = require('../services/errors/authentication-error')
+const messages = require('../constants/messages')
 const getOrganisationUnit = require('../services/helpers/org-unit-finder')
 const organisationUnitConstants = require('../constants/organisation-unit')
 const authorisation = require('../authorisation')
@@ -16,7 +18,9 @@ const getLastUpdated = require('../services/data/get-last-updated')
 const dateFormatter = require('../services/date-formatter')
 const getCaseDetailsView = require('../services/get-case-details-view')
 const getBreadcrumbs = require('../services/get-breadcrumbs')
+const { SUPER_USER, MANAGER, STAFF } = require('../constants/user-roles')
 let lastUpdated
+const canExportOutstandingRoles = [SUPER_USER, MANAGER, STAFF]
 
 module.exports = function (router) {
   router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/caseload-capacity', function (req, res, next) {
@@ -81,7 +85,7 @@ module.exports = function (router) {
               childOrganisationLevelDisplayText: childOrgUnitDisplayText,
               organisationLevel: organisationLevel,
               date: result.date,
-
+              canExportOutstanding: canExportOutstandingRoles.includes(req.user.user_role),
               workloadType: workloadTypes.PROBATION
             })
           })
@@ -154,7 +158,7 @@ module.exports = function (router) {
               childOrganisationLevelDisplayText: childOrgUnitDisplayText,
               organisationLevel: organisationLevel,
               date: result.date,
-
+              canExportOutstanding: canExportOutstandingRoles.includes(req.user.user_role),
               workloadType: workloadTypes.PROBATION
             })
           })
@@ -166,6 +170,15 @@ module.exports = function (router) {
   })
 
   router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/capacity/outstanding-csv', function (req, res, next) {
+    try {
+      authorisation.hasRole(req, canExportOutstandingRoles)
+    } catch (error) {
+      if (error instanceof Forbidden) {
+        return res.status(error.statusCode).render(error.redirect, {
+          heading: messages.ACCESS_DENIED
+        })
+      }
+    }
     const organisationLevel = req.params.organisationLevel
     const id = req.params.id
 

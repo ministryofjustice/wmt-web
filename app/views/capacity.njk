@@ -401,7 +401,7 @@
   <br>
   {% if organisationLevel != 'offender-manager' %}
   <h3 class="govuk-heading-m">Inactive & UPW cases</h3>
-  {% if organisationLevel === 'team' %}
+  {% if organisationLevel === 'team' and canExportOutstanding %}
     <a href="/{{ workloadType }}/{{ organisationLevel }}/{{ linkId }}/{{ screen }}/outstanding-csv" class="govuk-link govuk-button sln-export floatRightBottom10" data-module="govuk-button">Export</a>
   {% endif %}
   <table id="outstandingReports" class="govuk-table data-table dataTable">
