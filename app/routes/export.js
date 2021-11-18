@@ -2,7 +2,6 @@ const getExport = require('../services/get-export')
 const getSubNav = require('../services/get-sub-nav')
 const organisationUnit = require('../constants/organisation-unit')
 const authorisation = require('../authorisation')
-const Unauthorized = require('../services/errors/authentication-error').Unauthorized
 const workloadTypes = require('../constants/workload-type')
 const getLastUpdated = require('../services/data/get-last-updated')
 const dateFormatter = require('../services/date-formatter')
@@ -18,13 +17,23 @@ const getExportCsv = require('../services/get-export-csv')
 const tabs = require('../constants/wmt-tabs')
 const getExpiringReductions = require('../services/data/get-expiring-reductions-for-export')
 const Forbidden = require('../services/errors/authentication-error').Forbidden
-const roles = require('../constants/user-roles')
+const { SUPER_USER, APPLICATION_SUPPORT, MANAGER } = require('../constants/user-roles')
 const messages = require('../constants/messages')
-
+const canExportRoles = [SUPER_USER, MANAGER]
 let lastUpdated
 
 module.exports = function (router) {
   router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/export', function (req, res, next) {
+    try {
+      authorisation.hasRole(req, [SUPER_USER, APPLICATION_SUPPORT, MANAGER])
+    } catch (error) {
+      if (error instanceof Forbidden) {
+        return res.status(error.statusCode).render(error.redirect, {
+          heading: messages.ACCESS_DENIED
+
+        })
+      }
+    }
     const organisationLevel = req.params.organisationLevel
     let id
 
@@ -46,7 +55,7 @@ module.exports = function (router) {
         breadcrumbs: result.breadcrumbs,
         subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
         date: result.date,
-        canExportReductions: [roles.APPLICATION_SUPPORT, roles.SUPER_USER, roles.MANAGER].includes(authorisedUserRole.userRole)
+        canExport: canExportRoles.includes(authorisedUserRole.userRole)
 
       })
     }).catch(function (error) {
@@ -55,6 +64,16 @@ module.exports = function (router) {
   })
 
   router.post('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/export', function (req, res, next) {
+    try {
+      authorisation.hasRole(req, canExportRoles)
+    } catch (error) {
+      if (error instanceof Forbidden) {
+        return res.status(error.statusCode).render(error.redirect, {
+          heading: messages.ACCESS_DENIED
+
+        })
+      }
+    }
     const organisationLevel = req.params.organisationLevel
     let id
     let exportPromise
@@ -65,23 +84,6 @@ module.exports = function (router) {
 
     const radioButton = req.body.radioInlineGroup
     let tabType
-
-    if (radioButton === '9') {
-      try {
-        authorisation.hasRole(req, [roles.SUPER_USER, roles.MANAGER])
-      } catch (error) {
-        if (error instanceof Unauthorized) {
-          return res.status(error.statusCode).redirect(error.redirect)
-        } else if (error instanceof Forbidden) {
-          return res.status(error.statusCode).render(error.redirect, {
-            heading: messages.ACCESS_DENIED
-
-          })
-        } else {
-          throw error
-        }
-      }
-    }
 
     switch (radioButton) {
       case '1':

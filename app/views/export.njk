@@ -83,21 +83,21 @@
                             <label class="govuk-label govuk-radios__label" for="radio-inline-8">T2A</label>
                         </div>
                     </div>
-                    {% if canExportReductions %}
                         <div class="govuk-grid-column-one-third">
                             <div class="govuk-radios__item">
                                 <input class="govuk-radios__input" id="radio-inline-9" type="radio" name="radioInlineGroup" value="9">
                                 <label class="govuk-label govuk-radios__label" for="radio-inline-9">Expiring Reductions</label>
                             </div>
                         </div>
-                    {% endif %}
                 </fieldset>
             </div>
         </div>
 
         <div class="govuk-grid-row">
             <div class="govuk-form-group">
-                <input type="submit" class="govuk-button sln-export floatLeftBottom10 marginLeft10" value="Export" formaction="/probation/{{ organisationLevel }}/{{ linkId }}/export" data-module="govuk-button">
+                {% if canExport %}
+                    <input type="submit" class="govuk-button sln-export floatLeftBottom10 marginLeft10" value="Export" formaction="/probation/{{ organisationLevel }}/{{ linkId }}/export" data-module="govuk-button">
+                {% endif %}
             </div>
         </div>
     </form>
