@@ -62,12 +62,8 @@ let reductionsRoute
 
 let getSubNavStub
 let getExportCsv
-let authorisationService
 
 before(function () {
-  authorisationService = {
-    assertUserAuthenticated: sinon.stub()
-  }
   getSubNavStub = sinon.stub()
   getOverview = sinon.stub()
   getReductionsExport = sinon.stub()
@@ -77,7 +73,6 @@ before(function () {
     '../services/get-overview': getOverview,
     '../services/data/get-last-updated': getLastUpdated,
     '../services/get-sub-nav': getSubNavStub,
-    '../authorisation': authorisationService,
     '../services/get-export-csv': getExportCsv
   })
   app = routeHelper.buildApp(route)
@@ -85,7 +80,6 @@ before(function () {
   reductionsRoute = proxyquire('../../../app/routes/overview', {
     '../services/get-reductions-export': getReductionsExport,
     '../services/get-sub-nav': getSubNavStub,
-    '../authorisation': authorisationService,
     '../services/get-export-csv': getExportCsv
   })
   reductionApp = routeHelper.buildApp(reductionsRoute)

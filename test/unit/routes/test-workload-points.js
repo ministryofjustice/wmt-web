@@ -205,7 +205,7 @@ let updateAdjustmentPointsConfig
 
 before(function () {
   authorisationService = {
-    assertUserAuthenticated: sinon.stub(),
+
     hasRole: sinon.stub().returns(hasRoleResult)
   }
   workloadPointsService = {

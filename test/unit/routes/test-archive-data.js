@@ -33,7 +33,7 @@ const getArchiveResult = [{
 before(function () {
   userRoleService = sinon.stub()
   authorisationService = {
-    assertUserAuthenticated: sinon.stub(),
+
     hasRole: hasRoleStub
   }
   getArchive = sinon.stub()

@@ -3,7 +3,6 @@ const getSubNav = require('../services/get-sub-nav')
 const getOrganisationUnit = require('../services/helpers/org-unit-finder')
 const organisationUnitConstants = require('../constants/organisation-unit')
 const authorisation = require('../authorisation')
-const Unauthorized = require('../services/errors/authentication-error').Unauthorized
 const workloadTypes = require('../constants/workload-type')
 const getLastUpdated = require('../services/data/get-last-updated')
 const dateFormatter = require('../services/date-formatter')
@@ -12,24 +11,10 @@ let lastUpdated
 
 module.exports = function (router) {
   router.get('/' + workloadTypes.OMIC + '/:organisationLevel/:id/overview', function (req, res, next) {
-    try {
-      authorisation.assertUserAuthenticated(req)
-    } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      }
-    }
     return renderOverview(req, res, next)
   })
 
   router.get('/' + workloadTypes.OMIC + '/:organisationLevel/:id/', function (req, res, next) {
-    try {
-      authorisation.assertUserAuthenticated(req)
-    } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      }
-    }
     return renderOverview(req, res, next)
   })
 }

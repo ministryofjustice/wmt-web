@@ -17,7 +17,6 @@ let lastUpdated
 module.exports = function (router) {
   router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/dashboard', function (req, res, next) {
     try {
-      authorisation.assertUserAuthenticated(req)
       authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT, roles.MANAGER])
     } catch (error) {
       if (error instanceof Unauthorized) {
@@ -62,7 +61,6 @@ module.exports = function (router) {
 
   router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/dashboard/download', function (req, res, next) {
     try {
-      authorisation.assertUserAuthenticated(req)
       authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT, roles.MANAGER])
     } catch (error) {
       if (error instanceof Unauthorized) {

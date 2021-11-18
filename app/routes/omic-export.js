@@ -2,7 +2,6 @@ const getExport = require('../services/get-export')
 const getSubNav = require('../services/get-sub-nav')
 const organisationUnit = require('../constants/organisation-unit')
 const authorisation = require('../authorisation')
-const Unauthorized = require('../services/errors/authentication-error').Unauthorized
 const workloadTypes = require('../constants/workload-type')
 const getLastUpdated = require('../services/data/get-last-updated')
 const dateFormatter = require('../services/date-formatter')
@@ -12,13 +11,6 @@ let lastUpdated
 
 module.exports = function (router) {
   router.get('/' + workloadTypes.OMIC + '/:organisationLevel/:id/export', function (req, res, next) {
-    try {
-      authorisation.assertUserAuthenticated(req)
-    } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      }
-    }
     const organisationLevel = req.params.organisationLevel
     let id
 
@@ -48,13 +40,6 @@ module.exports = function (router) {
   })
 
   router.post('/' + workloadTypes.OMIC + '/:organisationLevel/:id/export', function (req, res, next) {
-    try {
-      authorisation.assertUserAuthenticated(req)
-    } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      }
-    }
     const organisationLevel = req.params.organisationLevel
     let id
     let exportPromise

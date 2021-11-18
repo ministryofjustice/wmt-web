@@ -30,9 +30,7 @@ describe('/caseload-capacity', function () {
   let getLastUpdated
   const capacityStubResult = { breadcrumbs: [{}], capacityBreakdown: [{}], title: 'Test', subTitle: 'Test', capacityTable: {}, crcCapacityTable: {}, subNav: [{}], capacityBreakdownTotals: {}, capacityBreakdownCRCTotals: {} }
   let getCaseDetailsStub
-  const authorisationService = {
-    assertUserAuthenticated: sinon.stub()
-  }
+
   beforeEach(function () {
     getCapacityStub = sinon.stub()
     getCaseDetailsStub = sinon.stub().resolves()
@@ -44,7 +42,6 @@ describe('/caseload-capacity', function () {
         '../services/get-capacity-view': getCapacityStub,
         '../services/get-outstanding-reports': getOutstandingReportsStub,
         '../services/get-case-details-view': getCaseDetailsStub,
-        '../authorisation': authorisationService,
         '../services/get-sub-nav': getSubNavStub,
         '../services/data/get-last-updated': getLastUpdated
       })

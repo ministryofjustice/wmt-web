@@ -24,7 +24,7 @@ const setupLoggedInUserMiddleware = function () {
 const initaliseApp = function () {
   userRoleService = sinon.stub()
   authorisationService = {
-    assertUserAuthenticated: sinon.stub(),
+
     hasRole: hasRoleStub
   }
   route = proxyquire('../../../app/routes/admin', {

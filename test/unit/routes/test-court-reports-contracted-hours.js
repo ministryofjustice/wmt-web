@@ -33,7 +33,7 @@ let getSubNavStub
 
 before(function () {
   authorisationService = {
-    assertUserAuthenticated: sinon.stub(),
+
     hasRole: sinon.stub().returns(hasRoleResult)
   }
 

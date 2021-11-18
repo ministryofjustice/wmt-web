@@ -32,7 +32,7 @@ const hasRoleResult = true
 
 const initaliseApp = function () {
   authorisationService = {
-    assertUserAuthenticated: sinon.stub(),
+
     hasRole: sinon.stub().returns(hasRoleResult)
   }
   getSubNavStub = sinon.stub()

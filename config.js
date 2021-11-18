@@ -14,9 +14,6 @@ function get (name, fallback, options = { requireInProduction: false }) {
 
 module.exports = {
 
-  // Authentication (defaults for development)
-  AUTHENTICATION_ENABLED: process.env.WMT_WEB_AUTHENTICATION_ENABLED || 'true',
-
   // Session and Cookie security (defaults for development)
   APPLICATION_SECRET: process.env.WMT_WEB_APPLICATION_SECRET, // NO DEFAULT FOR SECURITY REASONS, WILL FAIL IF NOT SET
   SECURE_COOKIE: process.env.WMT_WEB_SECURE_COOKIE || 'false',

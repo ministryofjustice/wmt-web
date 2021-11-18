@@ -15,7 +15,6 @@ const Forbidden = require('../services/errors/authentication-error').Forbidden
 module.exports = function (router) {
   router.get('/:workloadType/:organisationLevel/:id/contracted-hours', function (req, res, next) {
     try {
-      authorisation.assertUserAuthenticated(req)
       authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
       if (error instanceof Unauthorized) {
@@ -60,7 +59,6 @@ module.exports = function (router) {
 
   router.post('/:workloadType/:organisationLevel/:id/contracted-hours', function (req, res, next) {
     try {
-      authorisation.assertUserAuthenticated(req)
       authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
       if (error instanceof Unauthorized) {

@@ -118,12 +118,8 @@ let getCaseload
 let getLastUpdated
 let getSubNavStub
 let getExportCsv
-let authorisationService
 
 before(function () {
-  authorisationService = {
-    assertUserAuthenticated: sinon.stub()
-  }
   getSubNavStub = sinon.stub()
   getCaseload = sinon.stub()
   getLastUpdated = sinon.stub().resolves(new Date(2017, 11, 1))
@@ -132,7 +128,6 @@ before(function () {
     '../services/data/get-last-updated': getLastUpdated,
     '../services/get-caseload': getCaseload,
     '../services/get-sub-nav': getSubNavStub,
-    '../authorisation': authorisationService,
     '../services/get-export-csv': getExportCsv
   })
   app = routeHelper.buildApp(route)

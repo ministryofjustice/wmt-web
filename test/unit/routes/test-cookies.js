@@ -1,21 +1,13 @@
 const routeHelper = require('../../helpers/routes/route-helper')
 const supertest = require('supertest')
-const proxyquire = require('proxyquire')
-const sinon = require('sinon')
 
 const COOKIES_URL = '/cookies'
 
 let app
 let route
-let authorisationService
 
 before(function () {
-  authorisationService = {
-    assertUserAuthenticated: sinon.stub()
-  }
-  route = proxyquire('../../../app/routes/cookies', {
-    '../authorisation': authorisationService
-  })
+  route = require('../../../app/routes/cookies')
   app = routeHelper.buildApp(route)
 })
 
