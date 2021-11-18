@@ -9,7 +9,7 @@ let workloadOwnerGrade
 let workloadOwnerDefaultUrl
 
 describe('Offender Manager', function () {
-  describe('View overview for staff', function () {
+  describe('View overview', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.Staff)
       const results = await dataHelper.selectIdsForWorkloadOwner()
@@ -18,9 +18,6 @@ describe('Offender Manager', function () {
       workloadOwnerDefaultUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + workloadOwnerId
 
       workloadOwnerGrade = await dataHelper.selectGradeForWorkloadOwner(workloadOwnerId)
-    })
-
-    beforeEach(async function () {
       await browser.url(workloadOwnerDefaultUrl + '/overview')
     })
 
@@ -34,36 +31,6 @@ describe('Offender Manager', function () {
       const reductionExport = await $('.reduction-export')
       const exists = await reductionExport.isExisting()
       return expect(exists).to.be.false
-    })
-
-    after(function () {
-      authenticationHelper.logout()
-    })
-  })
-
-  describe('overview for managers', function () {
-    before(async function () {
-      await authenticationHelper.login(authenticationHelper.users.Manager)
-    })
-
-    after(function () {
-      authenticationHelper.logout()
-    })
-  })
-
-  describe('overview for Application Support', function () {
-    before(async function () {
-      await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
-    })
-
-    after(function () {
-      authenticationHelper.logout()
-    })
-  })
-
-  describe('overview for Super User', function () {
-    before(async function () {
-      await authenticationHelper.login(authenticationHelper.users.SuperUser)
     })
 
     after(function () {
