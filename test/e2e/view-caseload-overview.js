@@ -12,7 +12,7 @@ let lduDefaultUrl
 let regionDefaultUrl
 const nationalDefaultUrl = '/' + workloadTypes.PROBATION + '/hmpps/0'
 
-describe('View overview', function () {
+describe('View overview for staff', function () {
   before(async function () {
     await authenticationHelper.login(authenticationHelper.users.Staff)
     const results = await dataHelper.selectIdsForWorkloadOwner()
@@ -123,9 +123,14 @@ describe('View overview', function () {
     })
 
     it('should not include the reductions export for staff at national level', async function () {
-      await browser.url(nationalDefaultUrl + '/overview')
       const reductionExport = await $('.reduction-export')
       const exists = await reductionExport.isExisting()
+      return expect(exists).to.be.false
+    })
+
+    it('should not include the overview export for staff at national level', async function () {
+      const exportButton = await $('.sln-export')
+      const exists = await exportButton.isExisting()
       return expect(exists).to.be.false
     })
   })
@@ -230,19 +235,56 @@ describe('overview for managers', function () {
     await authenticationHelper.login(authenticationHelper.users.Manager)
   })
 
-  it('should not include the reductions export for managers at workload owner level', async function () {
+  it('should not include the reductions export at workload owner level', async function () {
     await browser.url(workloadOwnerDefaultUrl + '/overview')
-
     const reductionExport = await $('.reduction-export')
     const exists = await reductionExport.isExisting()
     return expect(exists).to.be.false
   })
 
-  it('should not include the reductions export for managers at national level', async function () {
+  it('should not include the reductions export at national level', async function () {
     await browser.url(nationalDefaultUrl + '/overview')
     const reductionExport = await $('.reduction-export')
     const exists = await reductionExport.isExisting()
     return expect(exists).to.be.false
+  })
+
+  it('should include the overview export at national level', async function () {
+    const exportButton = await $('.sln-export')
+    const exists = await exportButton.isExisting()
+    return expect(exists).to.be.true
+  })
+
+  after(function () {
+    authenticationHelper.logout()
+  })
+})
+
+describe('overview for Application Support', function () {
+  before(async function () {
+    await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
+  })
+
+  it('should not include the overview export at national level', async function () {
+    const exportButton = await $('.sln-export')
+    const exists = await exportButton.isExisting()
+    return expect(exists).to.be.false
+  })
+
+  after(function () {
+    authenticationHelper.logout()
+  })
+})
+
+describe('overview for Super User', function () {
+  before(async function () {
+    await authenticationHelper.login(authenticationHelper.users.SuperUser)
+  })
+
+  it('should  include the overview export at national level', async function () {
+    const exportButton = await $('.sln-export')
+    const exists = await exportButton.isExisting()
+    return expect(exists).to.be.true
   })
 
   after(function () {
