@@ -7,6 +7,8 @@ const sinon = require('sinon')
 const orgUnit = require('../../../app/constants/organisation-unit')
 const tabs = require('../../../app/constants/wmt-tabs')
 const workloadTypes = require('../../../app/constants/workload-type')
+const setupLoggedInUserMiddleware = require('../helpers/setupLoggedInUserMiddleware')
+const { SUPER_USER } = require('../../../app/constants/user-roles')
 
 const REGION_CASELOAD_URL = '/' + workloadTypes.PROBATION + '/region/1/caseload'
 const NATIONAL_CASELOAD_URL = '/' + workloadTypes.PROBATION + '/hmpps/0/caseload'
@@ -130,7 +132,7 @@ before(function () {
     '../services/get-sub-nav': getSubNavStub,
     '../services/get-export-csv': getExportCsv
   })
-  app = routeHelper.buildApp(route)
+  app = routeHelper.buildApp(route, setupLoggedInUserMiddleware('loggedInUser', SUPER_USER))
 })
 
 describe('caseload route', function () {
