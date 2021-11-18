@@ -8,7 +8,6 @@ const ValidationError = require('../services/errors/validation-error')
 const getOrganisationUnit = require('../services/helpers/org-unit-finder')
 const organisationUnitConstants = require('../constants/organisation-unit')
 const authorisation = require('../authorisation')
-const Unauthorized = require('../services/errors/authentication-error').Unauthorized
 const workloadTypes = require('../constants/workload-type')
 const getExportCsv = require('../services/get-export-csv')
 const tabs = require('../constants/wmt-tabs')
@@ -22,14 +21,6 @@ let lastUpdated
 
 module.exports = function (router) {
   router.get('/' + workloadTypes.OMIC + '/:organisationLevel/:id/caseload-capacity', function (req, res, next) {
-    try {
-      authorisation.assertUserAuthenticated(req)
-    } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      }
-    }
-
     let capacityDateRange
     let errors
 
@@ -97,14 +88,6 @@ module.exports = function (router) {
   })
 
   router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/capacity/outstanding-csv', function (req, res, next) {
-    try {
-      authorisation.assertUserAuthenticated(req)
-    } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      }
-    }
-
     const organisationLevel = req.params.organisationLevel
     const id = req.params.id
 

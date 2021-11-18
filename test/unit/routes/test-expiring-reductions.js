@@ -37,7 +37,7 @@ let expiringReductionsStub
 const initaliseApp = function () {
   userRoleService = sinon.stub()
   authorisationService = {
-    assertUserAuthenticated: sinon.stub(),
+
     hasRole: hasRoleStub
   }
   expiringReductionsStub = {

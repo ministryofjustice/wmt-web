@@ -34,7 +34,7 @@ const hasRoleResult = true
 
 before(function () {
   authorisationService = {
-    assertUserAuthenticated: sinon.stub(),
+
     hasRole: sinon.stub().returns(hasRoleResult)
   }
 

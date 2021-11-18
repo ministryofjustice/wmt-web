@@ -26,7 +26,6 @@ let archiveDataForm
 module.exports = function (router) {
   router.get('/archive-data/daily-caseload-data', function (req, res, next) {
     try {
-      authorisation.assertUserAuthenticated(req)
       authorisation.hasRole(req, [roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
@@ -45,7 +44,6 @@ module.exports = function (router) {
 
   router.post('/archive-data/daily-caseload-data', function (req, res, next) {
     try {
-      authorisation.assertUserAuthenticated(req)
       authorisation.hasRole(req, [roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
@@ -92,7 +90,6 @@ module.exports = function (router) {
 
   router.post('/archive-data/daily-caseload-data/archive-csv', function (req, res, next) {
     try {
-      authorisation.assertUserAuthenticated(req)
       authorisation.hasRole(req, [roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {

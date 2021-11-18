@@ -1,21 +1,13 @@
 const routeHelper = require('../../helpers/routes/route-helper')
 const supertest = require('supertest')
-const proxyquire = require('proxyquire')
-const sinon = require('sinon')
 
 const TERMS_CONDITIONS_URL = '/terms-and-conditions'
 
 let app
 let route
-let authorisationService
 
 before(function () {
-  authorisationService = {
-    assertUserAuthenticated: sinon.stub()
-  }
-  route = proxyquire('../../../app/routes/terms-and-conditions', {
-    '../authorisation': authorisationService
-  })
+  route = require('../../../app/routes/terms-and-conditions')
   app = routeHelper.buildApp(route)
 })
 

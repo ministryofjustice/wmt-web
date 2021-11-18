@@ -34,7 +34,7 @@ const initaliseApp = function (middleware) {
     removeDomainFromUsername
   }
   authorisationService = {
-    assertUserAuthenticated: sinon.stub(),
+
     hasRole: hasRoleStub
   }
   route = proxyquire('../../../app/routes/user-rights', {

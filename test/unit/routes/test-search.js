@@ -14,7 +14,7 @@ const hasRoleStub = sinon.stub()
 const initaliseApp = function () {
   userRoleService = sinon.stub()
   authorisationService = {
-    assertUserAuthenticated: sinon.stub(),
+
     hasRole: hasRoleStub
   }
   route = proxyquire('../../../app/routes/search', {

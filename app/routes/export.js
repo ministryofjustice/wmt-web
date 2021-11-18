@@ -25,13 +25,6 @@ let lastUpdated
 
 module.exports = function (router) {
   router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/export', function (req, res, next) {
-    try {
-      authorisation.assertUserAuthenticated(req)
-    } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      }
-    }
     const organisationLevel = req.params.organisationLevel
     let id
 
@@ -62,13 +55,6 @@ module.exports = function (router) {
   })
 
   router.post('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/export', function (req, res, next) {
-    try {
-      authorisation.assertUserAuthenticated(req)
-    } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      }
-    }
     const organisationLevel = req.params.organisationLevel
     let id
     let exportPromise
@@ -82,7 +68,6 @@ module.exports = function (router) {
 
     if (radioButton === '9') {
       try {
-        authorisation.assertUserAuthenticated(req)
         authorisation.hasRole(req, [roles.SUPER_USER, roles.MANAGER])
       } catch (error) {
         if (error instanceof Unauthorized) {

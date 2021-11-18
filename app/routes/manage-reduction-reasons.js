@@ -15,7 +15,6 @@ const Link = require('../services/domain/link')
 module.exports = function (router) {
   router.get('/manage-reduction-reasons', function (req, res, next) {
     try {
-      authorisation.assertUserAuthenticated(req)
       authorisation.hasRole(req, [roles.APPLICATION_SUPPORT, roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
@@ -51,7 +50,6 @@ module.exports = function (router) {
 
   router.get('/add-reduction-reason', function (req, res, next) {
     try {
-      authorisation.assertUserAuthenticated(req)
       authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
       if (error instanceof Unauthorized) {
@@ -79,7 +77,6 @@ module.exports = function (router) {
 
   router.get('/edit-reduction-reason', function (req, res, next) {
     try {
-      authorisation.assertUserAuthenticated(req)
       authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
       if (error instanceof Unauthorized) {
@@ -115,7 +112,6 @@ module.exports = function (router) {
 
   router.post('/add-reduction-reason', function (req, res, next) {
     try {
-      authorisation.assertUserAuthenticated(req)
       authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
       if (error instanceof Unauthorized) {
@@ -174,7 +170,6 @@ module.exports = function (router) {
 
   router.post('/edit-reduction-reason', function (req, res, next) {
     try {
-      authorisation.assertUserAuthenticated(req)
       authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
       if (error instanceof Unauthorized) {

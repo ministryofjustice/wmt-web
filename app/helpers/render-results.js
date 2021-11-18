@@ -12,8 +12,6 @@ module.exports = function (page, title, res, errors, results, authorisedUserRole
     errors: errors,
     subTitle: 'Archive Data',
     breadcrumbs: breadcrumbs,
-
-    noAuth: authorisedUserRole.noAuth, // used by proposition-link for the admin role
     dateRange: dateRange,
     body: body,
     stringifiedBody: stringifiedBody,

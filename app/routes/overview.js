@@ -22,13 +22,6 @@ module.exports = function (router) {
   }
 
   get('/', function (req, res, next) {
-    try {
-      authorisation.assertUserAuthenticated(req)
-    } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      }
-    }
     if (Object.keys(req.query).length !== 0) {
       return next()
     }
@@ -38,35 +31,14 @@ module.exports = function (router) {
   })
 
   get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/overview', function (req, res, next) {
-    try {
-      authorisation.assertUserAuthenticated(req)
-    } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      }
-    }
     return renderOverview(req, res, next)
   })
 
   get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/', function (req, res, next) {
-    try {
-      authorisation.assertUserAuthenticated(req)
-    } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      }
-    }
     return renderOverview(req, res, next)
   })
 
   get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/overview/caseload-csv', function (req, res, next) {
-    try {
-      authorisation.assertUserAuthenticated(req)
-    } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      }
-    }
     const organisationLevel = req.params.organisationLevel
     let id
     if (organisationLevel !== organisationUnitConstants.NATIONAL.name) {
@@ -85,7 +57,6 @@ module.exports = function (router) {
 
   get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/overview/reductions-csv', function (req, res, next) {
     try {
-      authorisation.assertUserAuthenticated(req)
       authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
       if (error instanceof Unauthorized) {

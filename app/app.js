@@ -68,27 +68,26 @@ app.use(function (err, req, res, next) {
   const CSURF_ERROR_CODE = 'EBADCSRFTOKEN'
   if (err.code !== CSURF_ERROR_CODE) return next(err)
   res.status(403)
-  res.render('includes/error', {
+  return res.render('includes/error', {
     error: 'Invalid CSRF token'
   })
 })
 
-// catch 404 and forward to error handler.
-app.use(function (req, res, next) {
-  const err = new Error('Not Found')
-  err.status = 404
+app.use(function (req, res) {
   res.status(404)
-  next(err)
+  return res.render('includes/error-404')
 })
 
 app.use(function (err, req, res, next) {
   logger.error(err)
+  if (res.headersSent) {
+    return next(err)
+  }
   res.status(err.status || 500)
   if (err.status === 404) {
-    res.render('includes/error-404')
-  } else {
-    res.render('includes/error')
+    return res.render('includes/error-404')
   }
+  return res.render('includes/error')
 })
 
 module.exports = app
