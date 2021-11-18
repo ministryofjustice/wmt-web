@@ -111,6 +111,13 @@ describe('View overview for staff', function () {
       const exists = await exportButton.isExisting()
       return expect(exists).to.be.false
     })
+
+    it('should not be able to download overview', async function () {
+      await browser.url(regionDefaultUrl + '/overview/caseload-csv')
+      const header = await $('govuk-heading-xl')
+      const text = await header.getText()
+      expect(text).to.equal('Access is denied')
+    })
   })
 
   describe('national level', function () {
@@ -273,20 +280,43 @@ describe('overview for managers', function () {
 describe('overview for Application Support', function () {
   before(async function () {
     await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
-    await browser.url(nationalDefaultUrl + '/overview')
   })
 
-  it('should not include the overview export at national level', async function () {
-    const exportButton = await $('.sln-export')
-    const exists = await exportButton.isExisting()
-    return expect(exists).to.be.false
-  })
+  describe('national level', function () {
+    before(async function () {
+      await browser.url(nationalDefaultUrl + '/overview')
+    })
 
-  it('should not be able to download overview', async function () {
-    await browser.url(nationalDefaultUrl + '/overview/caseload-csv')
-    const header = await $('govuk-heading-xl')
-    const text = await header.getText()
-    expect(text).to.equal('Access is denied')
+    it('should not include the overview export', async function () {
+      const exportButton = await $('.sln-export')
+      const exists = await exportButton.isExisting()
+      return expect(exists).to.be.false
+    })
+
+    it('should not be able to download overview', async function () {
+      await browser.url(nationalDefaultUrl + '/overview/caseload-csv')
+      const header = await $('govuk-heading-xl')
+      const text = await header.getText()
+      expect(text).to.equal('Access is denied')
+    })
+  })
+  describe('regional level', function () {
+    before(async function () {
+      await browser.url(regionDefaultUrl + '/overview')
+    })
+
+    it('should not include the overview export', async function () {
+      const exportButton = await $('.sln-export')
+      const exists = await exportButton.isExisting()
+      return expect(exists).to.be.false
+    })
+
+    it('should not be able to download overview', async function () {
+      await browser.url(regionDefaultUrl + '/overview/caseload-csv')
+      const header = await $('govuk-heading-xl')
+      const text = await header.getText()
+      expect(text).to.equal('Access is denied')
+    })
   })
 
   after(function () {
