@@ -65,20 +65,20 @@ describe('View editing a new reduction for court-reporters', () => {
     it('with the archive and delete links', async () => {
       await browser.url(reductionUrl)
       const breadcrumbs = await $('.govuk-breadcrumbs')
-      const exists = await breadcrumbs.isExisting()
+      let exists = await breadcrumbs.isExisting()
       expect(exists).to.be.equal(true)
 
       const pageTitle = await $('.govuk-heading-xl')
-      let text = await pageTitle.getText()
+      const text = await pageTitle.getText()
       expect(text).to.equal('Reduction')
 
-      const activeReduction = await $('=Archive reduction')
-      text = await activeReduction.getText()
-      expect(text).to.equal('Archive reduction')
+      const activeReduction = await $('#archive-reduction')
+      exists = await activeReduction.isExisting()
+      expect(exists).to.equal(true)
 
-      const deleteReduction = await $('=Delete reduction')
-      text = await deleteReduction.getText()
-      expect(text).to.equal('Delete reduction')
+      const deleteReduction = await $('#delete-reduction')
+      exists = await deleteReduction.isExisting()
+      return expect(text).to.equal(true)
     })
   })
 
