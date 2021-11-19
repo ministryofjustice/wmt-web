@@ -115,22 +115,6 @@ describe('View editing a new reduction for court-reporters', () => {
     })
   })
 
-  describe('Clicking on Archive reduction link', function () {
-    it('should post the reduction for a ARCHIVE status', async function () {
-      await browser.url(reductionUrl)
-      const activeReduction = await $('=Archive reduction')
-      const text = await activeReduction.getAttribute('href')
-      expect(text).to.equal('javascript:document.archiveReduction.submit()')
-    })
-
-    it('should post the reduction for a DELETE status', async function () {
-      await browser.url(reductionUrl)
-      const deleteReduction = await $('=Delete reduction')
-      const text = await deleteReduction.getAttribute('href')
-      expect(text).to.equal('javascript:document.deleteReduction.submit()')
-    })
-  })
-
   after(async function () {
     await authenticationHelper.logout()
     return dataHelper.deleteReductionsForIds(ids)

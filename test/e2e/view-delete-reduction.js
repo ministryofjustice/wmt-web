@@ -62,12 +62,8 @@ describe('deleting a reduction', () => {
 
     it('should navigate to the edit reduction screen and delete it', async () => {
       const pageTitle = await $('.govuk-heading-xl')
-      let text = await pageTitle.getText()
+      const text = await pageTitle.getText()
       expect(text).to.equal('Reduction')
-
-      const activeReduction = await $('=Archive reduction')
-      text = await activeReduction.getText()
-      expect(text).to.equal('Archive reduction')
 
       const deleteReduction = await $('#delete-reduction')
       await deleteReduction.click()
@@ -196,12 +192,8 @@ describe('deleting a reduction', () => {
 
     it('should navigate to the edit reduction screen and delete it', async () => {
       const pageTitle = await $('.govuk-heading-xl')
-      let text = await pageTitle.getText()
+      const text = await pageTitle.getText()
       expect(text).to.equal('Reduction')
-
-      const activeReduction = await $('=Archive reduction')
-      text = await activeReduction.getText()
-      expect(text).to.equal('Archive reduction')
 
       const deleteReduction = await $('#delete-reduction')
       await deleteReduction.click()

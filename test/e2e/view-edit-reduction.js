@@ -60,7 +60,7 @@ describe('editing a reduction', () => {
       await viewLink.click()
     })
 
-    it('should navigate to the edit reduction screen with the archive and delete links', async () => {
+    it('should navigate to the edit reduction screen', async () => {
       const breadcrumbs = await $('.govuk-breadcrumbs')
       const exists = await breadcrumbs.isExisting()
       expect(exists).to.be.equal(true)
@@ -68,10 +68,6 @@ describe('editing a reduction', () => {
       const pageTitle = await $('.govuk-heading-xl')
       let text = await pageTitle.getText()
       expect(text).to.equal('Reduction')
-
-      const activeReduction = await $('=Archive reduction')
-      text = await activeReduction.getText()
-      expect(text).to.equal('Archive reduction')
 
       const deleteReduction = await $('=Delete reduction')
       text = await deleteReduction.getText()
