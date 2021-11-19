@@ -49,7 +49,7 @@ module.exports = function (router) {
 
   router.get('/admin/workload-points/t2a', function (req, res) {
     try {
-      authorisation.hasRole(req, [roles.SUPER_USER])
+      authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
