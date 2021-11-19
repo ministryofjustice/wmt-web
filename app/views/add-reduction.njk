@@ -178,12 +178,7 @@
     <input type="hidden" name="status" value="ARCHIVED">
   </form>
   
-  <form name="deleteReduction" method="POST" action="/{{ workloadType }}/offender-manager/{{ linkId }}/update-reduction-status">
-    <!-- Including the csrf-hidden-input.njk hides the links -->
-    <input type="hidden"  name="_csrf"  value="{{ csrfToken }}">
-    <input type="hidden" name="reductionId" value="{{ reduction.id }}">
-    <input type="hidden" name="status" value="DELETED">
-  </form>
+  
  
     {% if reduction.status !== 'ARCHIVED' %}
       <div>
@@ -191,7 +186,13 @@
       </div>
     {% endif %}
     <div>
-      <a class="govuk-button govuk-button--warning" href="javascript:document.deleteReduction.submit()">Delete reduction</a>
+      <form name="deleteReduction" method="POST" action="/{{ workloadType }}/offender-manager/{{ linkId }}/update-reduction-status">
+        <!-- Including the csrf-hidden-input.njk hides the links -->
+        <input type="hidden"  name="_csrf"  value="{{ csrfToken }}">
+        <input type="hidden" name="reductionId" value="{{ reduction.id }}">
+        <input type="hidden" name="status" value="DELETED">
+        <input type="submit" class="govuk-button govuk-button--warning" id="delete-reduction" value="Delete reduction">
+      </form>
     </div>
   {% endif %}
   <br>
