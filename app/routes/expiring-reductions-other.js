@@ -12,11 +12,11 @@ const breadcrumbs = [
   new Link('Other Managers\' Expiring Reductions', '/expiring-reductions-other')
 ]
 const title = breadcrumbs[0].title
-
+const expiringReductionsOtherRoles = [roles.SUPER_USER, roles.APPLICATION_SUPPORT, roles.MANAGER]
 module.exports = function (router) {
   router.get('/expiring-reductions-other', function (req, res) {
     try {
-      authorisation.hasRole(req, [roles.SUPER_USER, roles.MANAGER])
+      authorisation.hasRole(req, expiringReductionsOtherRoles)
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -42,7 +42,7 @@ module.exports = function (router) {
 
   router.post('/expiring-reductions-other', function (req, res) {
     try {
-      authorisation.hasRole(req, [roles.SUPER_USER, roles.MANAGER])
+      authorisation.hasRole(req, expiringReductionsOtherRoles)
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)

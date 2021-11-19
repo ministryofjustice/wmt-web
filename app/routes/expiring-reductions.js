@@ -15,7 +15,7 @@ const title = breadcrumbs[0].title
 module.exports = function (router) {
   router.get('/expiring-reductions', function (req, res) {
     try {
-      authorisation.hasRole(req, [roles.SUPER_USER, roles.MANAGER])
+      authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT, roles.MANAGER])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
