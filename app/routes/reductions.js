@@ -275,7 +275,7 @@ module.exports = function (router) {
 
   router.post('/:workloadType/:organisationLevel/:id/edit-reduction', function (req, res, next) {
     try {
-      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.APPLICATION_SUPPORT])
+      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
