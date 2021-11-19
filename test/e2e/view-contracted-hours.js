@@ -97,30 +97,7 @@ describe('View contracted hours', function () {
       await browser.url(workloadOwnerDefaultUrl + '/contracted-hours')
     })
 
-    it('should navigate to the workload owner contracted-hours page', async function () {
-      const breadcrumbs = await $('.govuk-breadcrumbs')
-      let exists = await breadcrumbs.isExisting()
-      expect(exists).to.be.equal(true)
-
-      const subnav = await $('.wmt-sub-nav')
-      exists = await subnav.isExisting()
-      expect(exists).to.be.equal(true)
-
-      const actionForm = await $('.sln-form-action')
-      exists = await actionForm.isExisting()
-      expect(exists).to.be.equal(true)
-
-      const pageTitle = await $('.govuk-heading-l')
-      const text = await pageTitle.getText()
-      expect(text).to.equal('Contracted hours')
-    })
-
-    it('should not be able to edit contracted hours', async function () {
-      const contractedHoursField = await $('#contracted-hours')
-      const submit = await $('.govuk-button')
-      await contractedHoursField.setValue('5')
-      await submit.click()
-
+    it('should not be able to navigate to the workload owner contracted-hours page', async function () {
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')

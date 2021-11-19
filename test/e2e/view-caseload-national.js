@@ -20,17 +20,10 @@ describe('View national caseload', () => {
       expect(pageSubtitle).to.equal('National')
     })
 
-    it('should not display export button', async () => {
+    it('should display export button', async () => {
       const exportButton = await $('.sln-export')
       const exists = await exportButton.isExisting()
-      return expect(exists).to.be.false
-    })
-
-    it('should not be able to download export', async function () {
-      await browser.url(nationalDefaultUrl + '/caseload/caseload-csv')
-      const header = await $('.govuk-heading-xl')
-      const text = await header.getText()
-      expect(text).to.equal('Access is denied')
+      return expect(exists).to.be.true
     })
 
     it('should be accessible via the Caseload tab on national overview page', async () => {

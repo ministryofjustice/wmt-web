@@ -11,8 +11,8 @@ const dateFormatter = require('../services/date-formatter')
 const caseloadTotaller = require('../helpers/caseload-totaller')
 const { Forbidden } = require('../services/errors/authentication-error')
 const messages = require('../constants/messages')
-const { SUPER_USER, MANAGER } = require('../constants/user-roles')
-const canExportCaseloadRoles = [SUPER_USER, MANAGER]
+const { SUPER_USER, MANAGER, STAFF } = require('../constants/user-roles')
+const canExportCaseloadRoles = [SUPER_USER, MANAGER, STAFF]
 let lastUpdated
 
 module.exports = function (router) {
