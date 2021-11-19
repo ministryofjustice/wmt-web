@@ -48,6 +48,7 @@ describe('View editing a new reduction', () => {
 
     await submit.click()
 
+    await $('#headingActive')
     const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
     const viewLink = await $(activeReductions[0])
     const view = await viewLink.getText()
