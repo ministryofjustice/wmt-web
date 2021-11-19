@@ -2,9 +2,10 @@ const Link = require('./domain/link')
 const linkGenerator = require('./helpers/link-generator')
 const organisationUnitConstants = require('../constants/organisation-unit')
 const workloadConstants = require('../constants/workload-type')
-const { SUPER_USER, APPLICATION_SUPPORT, MANAGER } = require('../constants/user-roles')
+const { SUPER_USER, APPLICATION_SUPPORT, MANAGER, STAFF } = require('../constants/user-roles')
 const canViewDashboardRoles = [SUPER_USER, APPLICATION_SUPPORT, MANAGER]
 const canViewExportRoles = [SUPER_USER, APPLICATION_SUPPORT, MANAGER]
+const canViewOmicExportRoles = [SUPER_USER, MANAGER, STAFF]
 
 module.exports = function (id, organisationalUnitName, currentPath, workloadType = workloadConstants.PROBATION, authorisation, userRole) {
   const baseLink = linkGenerator.fromIdAndNameAndWorkloadType(id, organisationalUnitName, workloadType)
@@ -53,7 +54,7 @@ module.exports = function (id, organisationalUnitName, currentPath, workloadType
     case workloadConstants.OMIC:
       navigation.push(new Link('OMIC Overview', baseLink + '/overview'))
       // navigation.push(new Link('OMIC Caseload', baseLink + '/caseload'))
-      if (organisationalUnitName !== organisationUnitConstants.NATIONAL.name) {
+      if (organisationalUnitName !== organisationUnitConstants.NATIONAL.name && canViewOmicExportRoles.includes(userRole)) {
         navigation.push(new Link('Export', baseLink + '/export'))
       }
       break

@@ -6,11 +6,25 @@ const workloadTypes = require('../constants/workload-type')
 const getLastUpdated = require('../services/data/get-last-updated')
 const dateFormatter = require('../services/date-formatter')
 const getScenarioExport = require('../services/get-omic-scenario')
+const Forbidden = require('../services/errors/authentication-error').Forbidden
+const { SUPER_USER, STAFF, MANAGER } = require('../constants/user-roles')
+const messages = require('../constants/messages')
+const canExportRoles = [SUPER_USER, MANAGER, STAFF]
 
 let lastUpdated
 
 module.exports = function (router) {
   router.get('/' + workloadTypes.OMIC + '/:organisationLevel/:id/export', function (req, res, next) {
+    try {
+      authorisation.hasRole(req, canExportRoles)
+    } catch (error) {
+      if (error instanceof Forbidden) {
+        return res.status(error.statusCode).render(error.redirect, {
+          heading: messages.ACCESS_DENIED
+
+        })
+      }
+    }
     const organisationLevel = req.params.organisationLevel
     let id
 
@@ -40,6 +54,16 @@ module.exports = function (router) {
   })
 
   router.post('/' + workloadTypes.OMIC + '/:organisationLevel/:id/export', function (req, res, next) {
+    try {
+      authorisation.hasRole(req, canExportRoles)
+    } catch (error) {
+      if (error instanceof Forbidden) {
+        return res.status(error.statusCode).render(error.redirect, {
+          heading: messages.ACCESS_DENIED
+
+        })
+      }
+    }
     const organisationLevel = req.params.organisationLevel
     let id
     let exportPromise
