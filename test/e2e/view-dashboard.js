@@ -26,6 +26,13 @@ describe('view dashboard reports', function () {
       expect(text).to.equal('Access is denied')
     })
 
+    it('should not be able to download a dashboard', async function () {
+      await browser.url('/probation/hmpps/0/dashboard/download?id=generated-dashboards/dashboard_20210802062147.txt')
+      const header = await $('.govuk-heading-xl')
+      const text = await header.getText()
+      expect(text).to.equal('Access is denied')
+    })
+
     after(async function () {
       await authenticationHelper.logout()
     })
