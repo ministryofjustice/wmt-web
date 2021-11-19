@@ -3,18 +3,17 @@ const authenticationHelp = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 
-let workloadOwnerIds = []
-let workloadOwnerId
 let workloadOwnerDefaultUrl
 
 describe('View contracted hours', function () {
+  before(async function () {
+    const results = await dataHelper.selectIdsForWorkloadOwner()
+    const workloadOwnerId = results.filter((item) => item.table === 'workload_owner')[0].id
+    workloadOwnerDefaultUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + workloadOwnerId
+  })
   describe('Manager', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.Manager)
-      const results = await dataHelper.selectIdsForWorkloadOwner()
-      workloadOwnerIds = results
-      workloadOwnerId = workloadOwnerIds.filter((item) => item.table === 'workload_owner')[0].id
-      workloadOwnerDefaultUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + workloadOwnerId
       await browser.url(workloadOwnerDefaultUrl + '/contracted-hours')
     })
 
@@ -47,18 +46,14 @@ describe('View contracted hours', function () {
       expect(successBannerText).to.equal('You have successfully updated the contracted hours for Test_Forename Test_Surname')
     })
 
-    after(function () {
-      authenticationHelp.logout()
+    after(async function () {
+      await authenticationHelp.logout()
     })
   })
 
   describe('Super User', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.SuperUser)
-      const results = await dataHelper.selectIdsForWorkloadOwner()
-      workloadOwnerIds = results
-      workloadOwnerId = workloadOwnerIds.filter((item) => item.table === 'workload_owner')[0].id
-      workloadOwnerDefaultUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + workloadOwnerId
       await browser.url(workloadOwnerDefaultUrl + '/contracted-hours')
     })
 
@@ -91,18 +86,14 @@ describe('View contracted hours', function () {
       expect(successBannerText).to.equal('You have successfully updated the contracted hours for Test_Forename Test_Surname')
     })
 
-    after(function () {
-      authenticationHelp.logout()
+    after(async function () {
+      await authenticationHelp.logout()
     })
   })
 
   describe('Staff', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.Staff)
-      const results = await dataHelper.selectIdsForWorkloadOwner()
-      workloadOwnerIds = results
-      workloadOwnerId = workloadOwnerIds.filter((item) => item.table === 'workload_owner')[0].id
-      workloadOwnerDefaultUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + workloadOwnerId
       await browser.url(workloadOwnerDefaultUrl + '/contracted-hours')
     })
 
@@ -135,18 +126,14 @@ describe('View contracted hours', function () {
       expect(text).to.equal('Access is denied')
     })
 
-    after(function () {
-      authenticationHelp.logout()
+    after(async function () {
+      await authenticationHelp.logout()
     })
   })
 
   describe('Application Support', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.ApplicationSupport)
-      const results = await dataHelper.selectIdsForWorkloadOwner()
-      workloadOwnerIds = results
-      workloadOwnerId = workloadOwnerIds.filter((item) => item.table === 'workload_owner')[0].id
-      workloadOwnerDefaultUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + workloadOwnerId
       await browser.url(workloadOwnerDefaultUrl + '/contracted-hours')
     })
 
@@ -179,8 +166,8 @@ describe('View contracted hours', function () {
       expect(text).to.equal('Access is denied')
     })
 
-    after(function () {
-      authenticationHelp.logout()
+    after(async function () {
+      await authenticationHelp.logout()
     })
   })
 })
