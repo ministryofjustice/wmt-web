@@ -67,8 +67,8 @@ describe('View national caseload', () => {
       expect(exists).to.be.equal(true)
     })
 
-    after(function () {
-      authenticationHelp.logout()
+    after(async function () {
+      await authenticationHelp.logout()
     })
   })
 
@@ -84,8 +84,8 @@ describe('View national caseload', () => {
       return expect(exists).to.be.true
     })
 
-    after(function () {
-      authenticationHelp.logout()
+    after(async function () {
+      await authenticationHelp.logout()
     })
   })
 
@@ -108,8 +108,8 @@ describe('View national caseload', () => {
       expect(text).to.equal('Access is denied')
     })
 
-    after(function () {
-      authenticationHelp.logout()
+    after(async function () {
+      await authenticationHelp.logout()
     })
   })
 
@@ -125,8 +125,8 @@ describe('View national caseload', () => {
       return expect(exists).to.be.true
     })
 
-    after(function () {
-      authenticationHelp.logout()
+    after(async function () {
+      await authenticationHelp.logout()
     })
   })
 })

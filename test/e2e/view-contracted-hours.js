@@ -38,7 +38,7 @@ describe('View contracted hours', function () {
     it('should be able to edit contracted hours', async function () {
       const contractedHoursField = await $('#contracted-hours')
       const submit = await $('.govuk-button')
-      await contractedHoursField.setValue('5')
+      await contractedHoursField.setValue('36')
       await submit.click()
 
       const successBanner = await $('.govuk-notification-banner--success .govuk-notification-banner__heading')
@@ -78,7 +78,7 @@ describe('View contracted hours', function () {
     it('should be able to edit contracted hours', async function () {
       const contractedHoursField = await $('#contracted-hours')
       const submit = await $('.govuk-button')
-      await contractedHoursField.setValue('5')
+      await contractedHoursField.setValue('35')
       await submit.click()
 
       const successBanner = await $('.govuk-notification-banner--success .govuk-notification-banner__heading')
