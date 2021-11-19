@@ -296,6 +296,9 @@ const addWorkloadOwner = function (inserts) {
     })
     .then(function (inserts) {
       return addWorkloads(inserts)
+        .then(function () {
+          return addOmicWorkloads(inserts)
+        })
     })
 }
 
@@ -393,6 +396,102 @@ const addWorkloads = function (inserts) {
     .then(function (ids) {
       ids.forEach((id) => {
         inserts.push({ table: 'tiers', id: id })
+      })
+      return inserts
+    })
+}
+
+const addOmicWorkloads = function (inserts) {
+  return getMaxOmicStagingId()
+    .then(function (upToDateMaxStagingId) {
+      const workloadOwners = inserts.filter((item) => item.table === 'workload_owner')
+      const workloadReports = inserts.filter((item) => item.table === 'workload_report')
+      const currentWorkloadOwnerId = workloadOwners[workloadOwners.length - 1].id
+
+      const workloads = []
+
+      let i = 1
+      workloadReports.forEach(function (report) {
+        workloads.push(Object.assign({}, defaultWorkload, {
+          workload_owner_id: currentWorkloadOwnerId,
+          staging_id: upToDateMaxStagingId + (i++),
+          workload_report_id: report.id,
+          total_filtered_cases: 5
+        }))
+      })
+      return knex('omic_workload').withSchema('app').returning('id').insert(workloads)
+    })
+    .then(function (ids) {
+      ids.forEach((id) => {
+        inserts.push({ table: 'omic_workload', id: id })
+      })
+
+      const workloads = inserts.filter((item) => item.table === 'omic_workload')
+      const workloadReports = inserts.filter((item) => item.table === 'workload_report')
+
+      const defaultWorkloadPointsCalculations = {
+        workload_points_id: inserts.filter((item) => item.table === 'workload_points')[0].id,
+        t2a_workload_points_id: inserts.filter((item) => item.table === 'workload_points')[2].id,
+        sdr_points: 0,
+        sdr_conversion_points: 0,
+        paroms_points: 0,
+        nominal_target: 0,
+        available_points: 0,
+        contracted_hours: 37.5,
+        arms_total_cases: 5,
+        custody_points: 10,
+        licence_points: 10
+      }
+
+      const calculations = []
+      calculations.push(Object.assign({}, defaultWorkloadPointsCalculations, {
+        arms_points: 20,
+        available_points: 10,
+        workload_report_id: workloadReports[0].id,
+        omic_workload_id: workloads[workloads.length - 2].id
+      }))
+      calculations.push(Object.assign({}, defaultWorkloadPointsCalculations, {
+        workload_report_id: workloadReports[workloadReports.length - 1].id,
+        omic_workload_id: workloads[workloads.length - 1].id,
+        arms_points: 50,
+        available_points: 25
+      }))
+
+      return knex('omic_workload_points_calculations').withSchema('app').returning('id').insert(calculations)
+    })
+    .then(function (ids) {
+      ids.forEach((id) => {
+        inserts.push({ table: 'omic_workload_points_calculations', id: id })
+      })
+      const workloads = inserts.filter((item) => item.table === 'omic_workload')
+      const defaultTier = {
+        omic_workload_id: workloads[workloads.length - 1].id,
+        tier_number: 1,
+        overdue_terminations_total: 10,
+        unpaid_work_total: 10,
+        warrants_total: 10,
+        suspended_total: 10,
+        suspended_lifer_total: 99,
+        t2a_overdue_terminations_total: 10,
+        t2a_unpaid_work_total: 10,
+        t2a_warrants_total: 10,
+        total_cases: 10,
+        total_filtered_cases: 10,
+        location: 'COMMUNITY'
+      }
+
+      const tiers = []
+      const locations = ['COMMUNITY', 'CUSTODY', 'LICENSE']
+      locations.forEach(function (location) {
+        for (let tierNumber = 0, totalCases = 0; tierNumber < 17; tierNumber++, totalCases++) {
+          tiers.push(Object.assign({}, defaultTier, { tier_number: tierNumber, location: location, total_cases: totalCases, total_filtered_cases: totalCases }))
+        }
+      })
+      return knex.batchInsert('app.omic_tiers', tiers, 149).returning('id')
+    })
+    .then(function (ids) {
+      ids.forEach((id) => {
+        inserts.push({ table: 'omic_tiers', id: id })
       })
       return inserts
     })
@@ -704,6 +803,15 @@ module.exports.getLastRecordFromTable = function (table) {
 
 const getMaxStagingId = function () {
   return knex('workload')
+    .withSchema('app')
+    .max('staging_id AS maxStagingId')
+    .then(function (results) {
+      return results[0].maxStagingId
+    })
+}
+
+const getMaxOmicStagingId = function () {
+  return knex('omic_workload')
     .withSchema('app')
     .max('staging_id AS maxStagingId')
     .then(function (results) {
