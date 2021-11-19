@@ -20,9 +20,7 @@ module.exports = function (router) {
     }
 
     return res.render('admin', {
-      title: 'Admin',
-      isSuperUser: req.user.user_role === roles.SUPER_USER
-
+      title: 'Admin'
     })
   })
 }

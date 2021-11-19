@@ -66,8 +66,6 @@ describe('View expiring reductions', () => {
       await authenticationHelper.login(authenticationHelper.users.SuperUser)
       const link = await $('[href="/expiring-reductions"]')
       await link.click()
-      const otherManagerLink = await $('[href="/expiring-reductions-other"]')
-      await otherManagerLink.click()
     })
 
     it('should navigate to the expiring reductions page', async () => {
