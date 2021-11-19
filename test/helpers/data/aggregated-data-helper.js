@@ -554,6 +554,16 @@ module.exports.getAnyExistingWorkloadOwnerId = function () {
     })
 }
 
+module.exports.getAnyExistingCourtReportWorkloadOwnerId = function () {
+  return knex('individual_court_reporter_overview')
+    .withSchema('app')
+    .where('contracted_hours', '>', 0)
+    .first('id')
+    .then(function (result) {
+      return result.id
+    })
+}
+
 module.exports.getAnyExistingWorkloadReportId = function () {
   return knex('workload_report')
     .withSchema('app')

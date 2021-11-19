@@ -1,27 +1,26 @@
 const expect = require('chai').expect
-const authenticationHelper = require('../helpers/routes/authentication-helper')
-const dataHelper = require('../helpers/data/court-reports-aggregated-data-helper')
+const authenticationHelp = require('../helpers/routes/authentication-helper')
+const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 const moment = require('moment')
 
-let offenderManagerId
-let reductionUrl
-let offenderManagerUrl
-let reductionTypeField, hoursField, startDayField, startMonthField, startYearField, endDayField, endMonthField, endYearField, notesField, submit
-const ids = []
+let offenderManagerId, reductionTypeField, hoursField, startDayField, startMonthField, startYearField, endDayField, endMonthField, endYearField, notesField, submit, offenderManagerUrl
 
-describe('View editing a new reduction for court-reporters', () => {
+describe('editing a reduction', () => {
+  const notesFieldValue = moment().format('YYYY-MM-DD HH:mm:ss.SSS')
+
   before(async function () {
-    await authenticationHelper.login(authenticationHelper.users.Manager)
-    const results = await dataHelper.getAnyExistingCourtReporterId()
-    offenderManagerId = results
-    offenderManagerUrl = '/' + workloadTypes.COURT_REPORTS + '/offender-manager/' + offenderManagerId + '/add-reduction'
-    await browser.url(offenderManagerUrl)
+    offenderManagerId = await dataHelper.getAnyExistingCourtReportWorkloadOwnerId()
+    offenderManagerUrl = '/' + workloadTypes.COURT_REPORTS + '/offender-manager/' + offenderManagerId
   })
 
-  describe('should navigate to the edit reduction screen', () => {
-    it('with the correct breadcrumbs and heading title', async () => {
-      await browser.url(offenderManagerUrl)
+  describe('Manager', function () {
+    before(async function () {
+      await authenticationHelp.login(authenticationHelp.users.Manager)
+      await browser.url(offenderManagerUrl + '/add-reduction')
+    })
+
+    it('after first adding a new reduction', async () => {
       const breadcrumbs = await $('.govuk-breadcrumbs')
       const exists = await breadcrumbs.isExisting()
       expect(exists).to.be.equal(true)
@@ -29,10 +28,7 @@ describe('View editing a new reduction for court-reporters', () => {
       const pageTitle = await $('.govuk-heading-xl')
       const text = await pageTitle.getText()
       expect(text).to.equal('New reduction')
-    })
 
-    it('after first adding a new reduction', async () => {
-      const currentTime = moment().format('YYYY-MM-DD HH:mm:ss.SSS')
       reductionTypeField = await $('#select-box')
       hoursField = await $('#hours')
       startDayField = await $('#start-day')
@@ -52,38 +48,19 @@ describe('View editing a new reduction for court-reporters', () => {
       await endDayField.setValue('1')
       await endMonthField.setValue('2')
       await endYearField.setValue('2025')
-      await notesField.setValue(currentTime)
+      await notesField.setValue(notesFieldValue)
 
       await submit.click()
 
-      await $('#active-reduction-table td')
-
-      const reduction = await dataHelper.getLastRecordFromTable('reductions')
-      reductionUrl = '/' + workloadTypes.COURT_REPORTS + '/offender-manager/' + offenderManagerId + '/edit-reduction?reductionId=' + reduction.id
+      await $('#headingActive')
+      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
+      const viewLink = await $(activeReductions[0])
+      const view = await viewLink.getText()
+      expect(view).to.equal('View')
+      await viewLink.click()
     })
 
-    it('with the archive and delete links', async () => {
-      await browser.url(reductionUrl)
-      const breadcrumbs = await $('.govuk-breadcrumbs')
-      let exists = await breadcrumbs.isExisting()
-      expect(exists).to.be.equal(true)
-
-      const pageTitle = await $('.govuk-heading-xl')
-      const text = await pageTitle.getText()
-      expect(text).to.equal('Reduction')
-
-      const activeReduction = await $('#archive-reduction')
-      exists = await activeReduction.isExisting()
-      expect(exists).to.equal(true)
-
-      const deleteReduction = await $('#delete-reduction')
-      exists = await deleteReduction.isExisting()
-      return expect(text).to.equal(true)
-    })
-  })
-
-  describe('should navigate to the edit reduction screen and be editable', () => {
-    it('with the correct breadcrumbs and heading title', async () => {
+    it('should navigate to the edit reduction screen', async () => {
       const breadcrumbs = await $('.govuk-breadcrumbs')
       const exists = await breadcrumbs.isExisting()
       expect(exists).to.be.equal(true)
@@ -91,6 +68,86 @@ describe('View editing a new reduction for court-reporters', () => {
       const pageTitle = await $('.govuk-heading-xl')
       const text = await pageTitle.getText()
       expect(text).to.equal('Reduction')
+
+      const textArea = await $('#textarea')
+      const notesField = await textArea.getValue()
+      expect(notesField).to.be.equal(notesFieldValue)
+    })
+
+    it('should be able to edit a reduction', async () => {
+      const currentTime = moment().format('YYYY-MM-DD HH:mm:ss.SSS')
+      endYearField = await $('#end-year')
+      notesField = await $('#textarea')
+      submit = await $('#submit-button')
+
+      await endYearField.setValue('2027')
+      await notesField.setValue(currentTime)
+
+      await submit.click()
+
+      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
+      const viewLink = await $(activeReductions[0])
+      const view = await viewLink.getText()
+      expect(view).to.equal('View')
+      await viewLink.click()
+
+      notesField = await $('#textarea')
+      notesField = await notesField.getValue()
+      expect(notesField, 'The notes field of the last inserted reduction should have the following contents: ' + currentTime).to.be.equal(currentTime)
+    })
+
+    after(async function () {
+      await authenticationHelp.logout()
+      return dataHelper.deleteReductionsForWorkloadOwner(offenderManagerId)
+    })
+  })
+
+  describe('Application Support', function () {
+    before(async function () {
+      await authenticationHelp.login(authenticationHelp.users.Manager)
+      await browser.url(offenderManagerUrl + '/add-reduction')
+
+      const breadcrumbs = await $('.govuk-breadcrumbs')
+      const exists = await breadcrumbs.isExisting()
+      expect(exists).to.be.equal(true)
+
+      const pageTitle = await $('.govuk-heading-xl')
+      const text = await pageTitle.getText()
+      expect(text).to.equal('New reduction')
+
+      reductionTypeField = await $('#select-box')
+      hoursField = await $('#hours')
+      startDayField = await $('#start-day')
+      startMonthField = await $('#start-month')
+      startYearField = await $('#start-year')
+      endDayField = await $('#end-day')
+      endMonthField = await $('#end-month')
+      endYearField = await $('#end-year')
+      notesField = await $('#textarea')
+      submit = await $('#submit-button')
+
+      await reductionTypeField.selectByVisibleText('Other')
+      await hoursField.setValue('10')
+      await startDayField.setValue('1')
+      await startMonthField.setValue('2')
+      await startYearField.setValue('2017')
+      await endDayField.setValue('1')
+      await endMonthField.setValue('2')
+      await endYearField.setValue('2025')
+      await notesField.setValue(notesFieldValue)
+
+      await submit.click()
+
+      await authenticationHelp.logout()
+
+      await authenticationHelp.login(authenticationHelp.users.ApplicationSupport)
+      await browser.url(offenderManagerUrl + '/reductions')
+    })
+
+    it('should be not be able to edit a reduction', async () => {
+      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
+      const viewLink = await $(activeReductions[0])
+      await viewLink.click()
 
       const currentTime = moment().format('YYYY-MM-DD HH:mm:ss.SSS')
       endYearField = await $('#end-year')
@@ -101,22 +158,89 @@ describe('View editing a new reduction for court-reporters', () => {
       await notesField.setValue(currentTime)
 
       await submit.click()
-      await $('#active-reduction-table td')
 
-      const reduction = await dataHelper.getLastRecordFromTable('reductions')
-      ids.push(reduction.id)
-      const reductionURL = '/' + workloadTypes.COURT_REPORTS + '/offender-manager/' + offenderManagerId + '/edit-reduction?reductionId=' + reduction.id
-      const link = await $('[href="' + reductionURL + '"')
-      await link.click()
-      notesField = await $('#textarea')
-      notesField = await notesField.getValue()
-      expect(reduction.notes, 'Last inserted reduction should have the following notes: ' + currentTime).to.be.equal(currentTime)
-      expect(notesField, 'The notes field of the last inserted reduction should have the following contents: ' + currentTime).to.be.equal(currentTime)
+      const header = await $('.govuk-heading-xl')
+      const text = await header.getText()
+      expect(text).to.equal('Access is denied')
+    })
+
+    after(async function () {
+      await authenticationHelp.logout()
+      return dataHelper.deleteReductionsForWorkloadOwner(offenderManagerId)
     })
   })
 
-  after(async function () {
-    await authenticationHelper.logout()
-    return dataHelper.deleteReductionsForIds(ids)
+  describe('Super User', function () {
+    before(async function () {
+      await authenticationHelp.login(authenticationHelp.users.SuperUser)
+      await browser.url(offenderManagerUrl + '/add-reduction')
+    })
+
+    it('after first adding a new reduction', async () => {
+      const breadcrumbs = await $('.govuk-breadcrumbs')
+      const exists = await breadcrumbs.isExisting()
+      expect(exists).to.be.equal(true)
+
+      const pageTitle = await $('.govuk-heading-xl')
+      const text = await pageTitle.getText()
+      expect(text).to.equal('New reduction')
+
+      reductionTypeField = await $('#select-box')
+      hoursField = await $('#hours')
+      startDayField = await $('#start-day')
+      startMonthField = await $('#start-month')
+      startYearField = await $('#start-year')
+      endDayField = await $('#end-day')
+      endMonthField = await $('#end-month')
+      endYearField = await $('#end-year')
+      notesField = await $('#textarea')
+      submit = await $('#submit-button')
+
+      await reductionTypeField.selectByVisibleText('Other')
+      await hoursField.setValue('10')
+      await startDayField.setValue('1')
+      await startMonthField.setValue('2')
+      await startYearField.setValue('2017')
+      await endDayField.setValue('1')
+      await endMonthField.setValue('2')
+      await endYearField.setValue('2025')
+      await notesField.setValue(notesFieldValue)
+
+      await submit.click()
+
+      await $('#headingActive')
+      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
+      const viewLink = await $(activeReductions[0])
+      const view = await viewLink.getText()
+      expect(view).to.equal('View')
+      await viewLink.click()
+    })
+
+    it('should be able to edit a reduction', async () => {
+      const currentTime = moment().format('YYYY-MM-DD HH:mm:ss.SSS')
+      endYearField = await $('#end-year')
+      notesField = await $('#textarea')
+      submit = await $('#submit-button')
+
+      await endYearField.setValue('2027')
+      await notesField.setValue(currentTime)
+
+      await submit.click()
+
+      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
+      const viewLink = await $(activeReductions[0])
+      const view = await viewLink.getText()
+      expect(view).to.equal('View')
+      await viewLink.click()
+
+      notesField = await $('#textarea')
+      notesField = await notesField.getValue()
+      expect(notesField, 'The notes field of the last inserted reduction should have the following contents: ' + currentTime).to.be.equal(currentTime)
+    })
+
+    after(async function () {
+      await authenticationHelp.logout()
+      return dataHelper.deleteReductionsForWorkloadOwner(offenderManagerId)
+    })
   })
 })

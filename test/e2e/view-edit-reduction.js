@@ -66,12 +66,9 @@ describe('editing a reduction', () => {
       expect(exists).to.be.equal(true)
 
       const pageTitle = await $('.govuk-heading-xl')
-      let text = await pageTitle.getText()
+      const text = await pageTitle.getText()
       expect(text).to.equal('Reduction')
 
-      const deleteReduction = await $('=Delete reduction')
-      text = await deleteReduction.getText()
-      expect(text).to.equal('Delete reduction')
       const textArea = await $('#textarea')
       const notesField = await textArea.getValue()
       expect(notesField).to.be.equal(notesFieldValue)
