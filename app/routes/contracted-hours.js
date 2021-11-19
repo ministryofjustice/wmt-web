@@ -9,7 +9,6 @@ const authorisation = require('../authorisation')
 const messages = require('../constants/messages')
 const roles = require('../constants/user-roles')
 const workloadTypeValidator = require('../services/validators/workload-type-validator')
-const Unauthorized = require('../services/errors/authentication-error').Unauthorized
 const Forbidden = require('../services/errors/authentication-error').Forbidden
 
 module.exports = function (router) {
@@ -17,16 +16,13 @@ module.exports = function (router) {
     try {
       authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      } else if (error instanceof Forbidden) {
+      if (error instanceof Forbidden) {
         return res.status(error.statusCode).render(error.redirect, {
           heading: messages.ACCESS_DENIED
 
         })
       }
     }
-
     const organisationLevel = req.params.organisationLevel
     const id = req.params.id
     const workloadType = req.params.workloadType
@@ -59,11 +55,9 @@ module.exports = function (router) {
 
   router.post('/:workloadType/:organisationLevel/:id/contracted-hours', function (req, res, next) {
     try {
-      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.APPLICATION_SUPPORT])
+      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER])
     } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      } else if (error instanceof Forbidden) {
+      if (error instanceof Forbidden) {
         return res.status(error.statusCode).render(error.redirect, {
           heading: messages.ACCESS_DENIED
 

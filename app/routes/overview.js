@@ -39,7 +39,7 @@ module.exports = function (router) {
 
   get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/overview/caseload-csv', function (req, res, next) {
     try {
-      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER])
+      authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.STAFF])
     } catch (error) {
       if (error instanceof Forbidden) {
         return res.status(error.statusCode).render(error.redirect, {

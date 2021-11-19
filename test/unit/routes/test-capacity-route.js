@@ -5,6 +5,8 @@ const expect = require('chai').expect
 const sinon = require('sinon')
 
 const workloadTypes = require('../../../app/constants/workload-type')
+const { SUPER_USER } = require('../../../app/constants/user-roles')
+const setupLoggedInUserMiddleware = require('../helpers/setupLoggedInUserMiddleware')
 
 // test data
 const OFFENDER_MANAGER_CAPACITY_URI = '/' + workloadTypes.PROBATION + '/offender-manager/1/caseload-capacity'
@@ -45,7 +47,7 @@ describe('/caseload-capacity', function () {
         '../services/get-sub-nav': getSubNavStub,
         '../services/data/get-last-updated': getLastUpdated
       })
-    app = routeHelper.buildApp(route)
+    app = routeHelper.buildApp(route, setupLoggedInUserMiddleware('loggedInUser', SUPER_USER))
   })
 
   describe('/probation/ldu/{id}/caseload-capacity', function () {

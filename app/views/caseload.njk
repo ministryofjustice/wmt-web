@@ -29,7 +29,9 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      {% include "includes/export-caseload.njk" %}
+    {% if canExportCaseload %}
+      <a href="/probation/{{ organisationLevel }}/{{ linkId }}/{{ screen }}/caseload-csv" class="govuk-button sln-export floatRightBottom10" data-module="govuk-button">Export Caseload</a>
+    {% endif %}
     </div>
   </div>
 

@@ -2,7 +2,9 @@ const Link = require('./domain/link')
 const linkGenerator = require('./helpers/link-generator')
 const organisationUnitConstants = require('../constants/organisation-unit')
 const workloadConstants = require('../constants/workload-type')
-const userRoles = require('../constants/user-roles')
+const { SUPER_USER, APPLICATION_SUPPORT, MANAGER } = require('../constants/user-roles')
+const canViewDashboardRoles = [SUPER_USER, APPLICATION_SUPPORT, MANAGER]
+const canViewExportRoles = [SUPER_USER, APPLICATION_SUPPORT, MANAGER]
 
 module.exports = function (id, organisationalUnitName, currentPath, workloadType = workloadConstants.PROBATION, authorisation, userRole) {
   const baseLink = linkGenerator.fromIdAndNameAndWorkloadType(id, organisationalUnitName, workloadType)
@@ -35,7 +37,7 @@ module.exports = function (id, organisationalUnitName, currentPath, workloadType
         navigation.push(new Link('NPS Caseload', baseLink + '/caseload'))
         navigation.push(new Link('CRC Caseload', baseLink + '/crc-caseload'))
         navigation.push(new Link('Case Progress', baseLink + '/case-progress'))
-        if (userRole === userRoles.SUPER_USER || userRole === userRoles.APPLICATION_SUPPORT || userRole === userRoles.MANAGER) {
+        if (canViewDashboardRoles.includes(userRole)) {
           navigation.push(new Link('Dashboard', baseLink + '/dashboard'))
         }
       } else {
@@ -43,7 +45,9 @@ module.exports = function (id, organisationalUnitName, currentPath, workloadType
         navigation.push(new Link('Capacity', baseLink + '/caseload-capacity'))
         navigation.push(new Link('Caseload', baseLink + '/caseload'))
         navigation.push(new Link('Case Progress', baseLink + '/case-progress'))
-        navigation.push(new Link('Export', baseLink + '/export'))
+        if (canViewExportRoles.includes(userRole)) {
+          navigation.push(new Link('Export', baseLink + '/export'))
+        }
       }
       break
     case workloadConstants.OMIC:
