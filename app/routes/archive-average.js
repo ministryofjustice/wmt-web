@@ -2,7 +2,6 @@ const moment = require('moment')
 const authorisation = require('../authorisation')
 const messages = require('../constants/messages')
 const roles = require('../constants/user-roles')
-const Unauthorized = require('../services/errors/authentication-error').Unauthorized
 const Forbidden = require('../services/errors/authentication-error').Forbidden
 const getArchive = require('../services/archive-service')
 const ArchiveDataForm = require('../services/domain/archive-data-form')
@@ -26,11 +25,9 @@ let archiveDataForm
 module.exports = function (router) {
   router.get('/archive-data/average-caseload-data', function (req, res, next) {
     try {
-      authorisation.hasRole(req, [roles.SUPER_USER])
+      authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      } else if (error instanceof Forbidden) {
+      if (error instanceof Forbidden) {
         return res.status(error.statusCode).render(error.redirect, {
           heading: messages.ACCESS_DENIED
 
@@ -38,24 +35,20 @@ module.exports = function (router) {
       }
     }
 
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
-    return renderResults(viewTemplate, title, res, null, null, authorisedUserRole)
+    return renderResults(viewTemplate, title, res, null, null, req.user.user_role)
   })
 
   router.post('/archive-data/average-caseload-data', function (req, res, next) {
     try {
-      authorisation.hasRole(req, [roles.SUPER_USER])
+      authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      } else if (error instanceof Forbidden) {
+      if (error instanceof Forbidden) {
         return res.status(error.statusCode).render(error.redirect, {
           heading: messages.ACCESS_DENIED
 
         })
       }
     }
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
     const multiSearchField = createSearchListArray(req.body['multi-search-field'])
     const stringifiedBody = getStringifiedBody(req.body, multiSearchField)
     const groupBy = heDecode.decode(req.body.groupBy)
@@ -73,7 +66,7 @@ module.exports = function (router) {
       )
     } catch (error) {
       if (error instanceof ValidationError) {
-        return renderResults(viewTemplate, title, res, error.validationErrors, null, authorisedUserRole, archiveDataForm, req.body, null, stringifiedBody, groupBy, interval)
+        return renderResults(viewTemplate, title, res, error.validationErrors, null, req.user.user_role, archiveDataForm, req.body, null, stringifiedBody, groupBy, interval)
       } else {
         throw error
       }
@@ -83,7 +76,7 @@ module.exports = function (router) {
 
     return getArchive(thisArchiveOption, archiveDataForm).then(function (results) {
       results = getGroupedArchiveData(results, groupBy, interval)
-      return renderResults(viewTemplate, title, res, null, results, authorisedUserRole, archiveDataForm, req.body, null, stringifiedBody, groupBy, interval)
+      return renderResults(viewTemplate, title, res, null, results, req.user.user_role, archiveDataForm, req.body, null, stringifiedBody, groupBy, interval)
     }).catch(function (error) {
       next(error)
     })
@@ -93,9 +86,7 @@ module.exports = function (router) {
     try {
       authorisation.hasRole(req, [roles.SUPER_USER])
     } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      } else if (error instanceof Forbidden) {
+      if (error instanceof Forbidden) {
         return res.status(error.statusCode).render(error.redirect, {
           heading: messages.ACCESS_DENIED
 
@@ -103,7 +94,6 @@ module.exports = function (router) {
       }
     }
 
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
     const multiSearchField = createSearchListArray(req.body['multi-search-field'])
     const stringifiedBody = getStringifiedBody(req.body, multiSearchField)
     const groupBy = heDecode.decode(req.body.groupBy)
@@ -121,7 +111,7 @@ module.exports = function (router) {
       )
     } catch (error) {
       if (error instanceof ValidationError) {
-        return renderResults(viewTemplate, title, res, error.validationErrors, null, authorisedUserRole, archiveDataForm, req.body, null, stringifiedBody, groupBy, interval)
+        return renderResults(viewTemplate, title, res, error.validationErrors, null, req.user.user_role, archiveDataForm, req.body, null, stringifiedBody, groupBy, interval)
       } else {
         throw error
       }

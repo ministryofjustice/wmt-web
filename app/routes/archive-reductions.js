@@ -35,9 +35,7 @@ module.exports = function (router) {
       }
     }
 
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
-
-    return renderResults(viewTemplate, title, res, null, null, authorisedUserRole)
+    return renderResults(viewTemplate, title, res, null, null, req.user.user_role)
   })
 
   router.post('/archive-data/reductions', function (req, res, next) {
@@ -54,7 +52,6 @@ module.exports = function (router) {
       }
     }
 
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
     const multiSearchField = createSearchListArray(req.body['multi-search-field'])
     const stringifiedBody = getStringifiedBody(req.body, multiSearchField)
 
@@ -71,7 +68,7 @@ module.exports = function (router) {
       )
     } catch (error) {
       if (error instanceof ValidationError) {
-        return renderResults(viewTemplate, title, res, error.validationErrors, null, authorisedUserRole, archiveDataForm, req.body, null, stringifiedBody)
+        return renderResults(viewTemplate, title, res, error.validationErrors, null, req.user.user_role, archiveDataForm, req.body, null, stringifiedBody)
       } else {
         throw error
       }
@@ -134,7 +131,6 @@ module.exports = function (router) {
       }
     }
 
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
     const multiSearchField = createSearchListArray(req.body['multi-search-field'])
     const stringifiedBody = getStringifiedBody(req.body, multiSearchField)
 
@@ -151,12 +147,12 @@ module.exports = function (router) {
       )
     } catch (error) {
       if (error instanceof ValidationError) {
-        return renderResults(viewTemplate, title, res, error.validationErrors, null, authorisedUserRole, archiveDataForm, req.body, null, stringifiedBody)
+        return renderResults(viewTemplate, title, res, error.validationErrors, null, req.user.user_role, archiveDataForm, req.body, null, stringifiedBody)
       } else {
         throw error
       }
     }
-    return renderResults(viewTemplate, title, res, null, null, authorisedUserRole, archiveDataForm, req.body, true, stringifiedBody)
+    return renderResults(viewTemplate, title, res, null, null, req.user.user_role, archiveDataForm, req.body, true, stringifiedBody)
   })
 
   router.post('/archive-data/reductions/archive-csv', function (req, res, next) {
@@ -172,8 +168,6 @@ module.exports = function (router) {
         })
       }
     }
-
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
     const multiSearchField = createSearchListArray(req.body['multi-search-field'])
     const stringifiedBody = getStringifiedBody(req.body, multiSearchField)
 
@@ -190,7 +184,7 @@ module.exports = function (router) {
       )
     } catch (error) {
       if (error instanceof ValidationError) {
-        return renderResults(viewTemplate, title, res, error.validationErrors, null, authorisedUserRole, archiveDataForm, req.body, null, stringifiedBody)
+        return renderResults(viewTemplate, title, res, error.validationErrors, null, req.user.user_role, archiveDataForm, req.body, null, stringifiedBody)
       } else {
         throw error
       }

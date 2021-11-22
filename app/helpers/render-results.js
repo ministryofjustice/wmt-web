@@ -1,6 +1,6 @@
 const Link = require('../services/domain/link')
-
-module.exports = function (page, title, res, errors, results, authorisedUserRole, dateRange, body, startSearching = false, stringifiedBody = '', groupBy, interval) {
+const { SUPER_USER } = require('../constants/user-roles')
+module.exports = function (page, title, res, errors, results, userRole, dateRange, body, startSearching = false, stringifiedBody = '', groupBy, interval) {
   const breadcrumbs = [
     getTopLink(title),
     new Link('Archive Data Options', '/archive-options'),
@@ -17,7 +17,8 @@ module.exports = function (page, title, res, errors, results, authorisedUserRole
     stringifiedBody: stringifiedBody,
     startSearching: startSearching,
     groupBy: groupBy,
-    interval: interval
+    interval: interval,
+    canExport: SUPER_USER === userRole
   })
 }
 

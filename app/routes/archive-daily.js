@@ -26,7 +26,7 @@ let archiveDataForm
 module.exports = function (router) {
   router.get('/archive-data/daily-caseload-data', function (req, res, next) {
     try {
-      authorisation.hasRole(req, [roles.SUPER_USER])
+      authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -37,14 +37,12 @@ module.exports = function (router) {
         })
       }
     }
-
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
-    return renderResults(viewTemplate, title, res, null, null, authorisedUserRole)
+    return renderResults(viewTemplate, title, res, null, null, req.user.user_role)
   })
 
   router.post('/archive-data/daily-caseload-data', function (req, res, next) {
     try {
-      authorisation.hasRole(req, [roles.SUPER_USER])
+      authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
       if (error instanceof Unauthorized) {
         return res.status(error.statusCode).redirect(error.redirect)
@@ -56,7 +54,6 @@ module.exports = function (router) {
       }
     }
 
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
     const multiSearchField = createSearchListArray(req.body['multi-search-field'])
     const stringifiedBody = getStringifiedBody(req.body, multiSearchField)
 
@@ -72,7 +69,7 @@ module.exports = function (router) {
       )
     } catch (error) {
       if (error instanceof ValidationError) {
-        return renderResults(viewTemplate, title, res, error.validationErrors, null, authorisedUserRole, archiveDataForm, req.body, null, stringifiedBody)
+        return renderResults(viewTemplate, title, res, error.validationErrors, null, req.user.user_role, archiveDataForm, req.body, null, stringifiedBody)
       } else {
         throw error
       }
@@ -82,7 +79,7 @@ module.exports = function (router) {
 
     return getArchive(thisArchiveOption, archiveDataForm).then(function (results) {
       results = formatResults(results)
-      return renderResults(viewTemplate, title, res, null, results, authorisedUserRole, archiveDataForm, req.body, null, stringifiedBody)
+      return renderResults(viewTemplate, title, res, null, results, req.user.user_role, archiveDataForm, req.body, null, stringifiedBody)
     }).catch(function (error) {
       next(error)
     })
@@ -102,7 +99,6 @@ module.exports = function (router) {
       }
     }
 
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
     const multiSearchField = createSearchListArray(req.body['multi-search-field'])
     const stringifiedBody = getStringifiedBody(req.body, multiSearchField)
 
@@ -118,7 +114,7 @@ module.exports = function (router) {
       )
     } catch (error) {
       if (error instanceof ValidationError) {
-        return renderResults(viewTemplate, title, res, error.validationErrors, null, authorisedUserRole, archiveDataForm, req.body, null, stringifiedBody)
+        return renderResults(viewTemplate, title, res, error.validationErrors, null, req.user.user_role, archiveDataForm, req.body, null, stringifiedBody)
       } else {
         throw error
       }
