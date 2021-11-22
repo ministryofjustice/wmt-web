@@ -26,13 +26,9 @@
       </div>
     {% endif %}
 
-    {% set columnNameType='Type' %}
-    {% set columnNameHours='Hours' %}
-    {% set columnNameStartDate='Start date' %}
-    {% set columnNameEndDate='End date' %}
-
+    {% if canAddReason %}
     <a href="/add-reduction-reason" class="govuk-button" data-module="govuk-button">Add a reduction reason</a>
-    
+    {% endif %}
     <h2 id="headingActive" class="govuk-heading-l">Enabled Reduction Reasons</h2>
 
     <table class="govuk-table override-gov-uk-table" id="enable-reduction-reason-table">

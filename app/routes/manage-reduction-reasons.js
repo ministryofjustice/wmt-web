@@ -1,7 +1,6 @@
 const authorisation = require('../authorisation')
 const messages = require('../constants/messages')
-const roles = require('../constants/user-roles')
-const Unauthorized = require('../services/errors/authentication-error').Unauthorized
+const { APPLICATION_SUPPORT, SUPER_USER } = require('../constants/user-roles')
 const Forbidden = require('../services/errors/authentication-error').Forbidden
 const getReductionReasons = require('../services/data/get-reduction-reasons')
 const getReductionReasonById = require('../services/data/get-reduction-reason-by-id')
@@ -11,15 +10,14 @@ const ValidationError = require('../services/errors/validation-error')
 const updateReductionReason = require('../services/data/update-reduction-reason')
 const insertReductionReason = require('../services/data/insert-reduction-reason')
 const Link = require('../services/domain/link')
+const canAddReasonRoles = [SUPER_USER]
 
 module.exports = function (router) {
   router.get('/manage-reduction-reasons', function (req, res, next) {
     try {
-      authorisation.hasRole(req, [roles.APPLICATION_SUPPORT, roles.SUPER_USER])
+      authorisation.hasRole(req, [APPLICATION_SUPPORT, SUPER_USER])
     } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      } else if (error instanceof Forbidden) {
+      if (error instanceof Forbidden) {
         return res.status(error.statusCode).render(error.redirect, {
           heading: messages.ACCESS_DENIED
 
@@ -42,7 +40,8 @@ module.exports = function (router) {
         breadcrumbs: breadcrumbs,
         title: 'Manage Reduction Reasons',
         successText: successText,
-        subTitle: getSubtitle(true)
+        subTitle: getSubtitle(true),
+        canAddReason: canAddReasonRoles.includes(req.user.user_role)
 
       })
     })
@@ -50,11 +49,9 @@ module.exports = function (router) {
 
   router.get('/add-reduction-reason', function (req, res, next) {
     try {
-      authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT])
+      authorisation.hasRole(req, canAddReasonRoles)
     } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      } else if (error instanceof Forbidden) {
+      if (error instanceof Forbidden) {
         return res.status(error.statusCode).render(error.redirect, {
           heading: messages.ACCESS_DENIED
 
@@ -77,11 +74,9 @@ module.exports = function (router) {
 
   router.get('/edit-reduction-reason', function (req, res, next) {
     try {
-      authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT])
+      authorisation.hasRole(req, [SUPER_USER, APPLICATION_SUPPORT])
     } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      } else if (error instanceof Forbidden) {
+      if (error instanceof Forbidden) {
         return res.status(error.statusCode).render(error.redirect, {
           heading: messages.ACCESS_DENIED
 
@@ -112,11 +107,9 @@ module.exports = function (router) {
 
   router.post('/add-reduction-reason', function (req, res, next) {
     try {
-      authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT])
+      authorisation.hasRole(req, [SUPER_USER, APPLICATION_SUPPORT])
     } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      } else if (error instanceof Forbidden) {
+      if (error instanceof Forbidden) {
         return res.status(error.statusCode).render(error.redirect, {
           heading: messages.ACCESS_DENIED
 
@@ -170,11 +163,9 @@ module.exports = function (router) {
 
   router.post('/edit-reduction-reason', function (req, res, next) {
     try {
-      authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT])
+      authorisation.hasRole(req, [SUPER_USER, APPLICATION_SUPPORT])
     } catch (error) {
-      if (error instanceof Unauthorized) {
-        return res.status(error.statusCode).redirect(error.redirect)
-      } else if (error instanceof Forbidden) {
+      if (error instanceof Forbidden) {
         return res.status(error.statusCode).render(error.redirect, {
           heading: messages.ACCESS_DENIED
 
