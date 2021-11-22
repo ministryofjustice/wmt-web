@@ -1,18 +1,50 @@
 const expect = require('chai').expect
-const authenticationHelp = require('../helpers/routes/authentication-helper')
+const authenticationHelper = require('../helpers/routes/authentication-helper')
 
 let adminUserURL
 const username = 'John.Doe@email.com'
+describe('User Rights page', () => {
+  describe('Staff', function () {
+    before(async function () {
+      await authenticationHelper.login(authenticationHelper.users.Staff)
+    })
 
-describe('Application Support', () => {
-  before(async function () {
-    await authenticationHelp.login(authenticationHelp.users.ApplicationSupport)
-    adminUserURL = '/admin/user'
-    await browser.url(adminUserURL)
+    it('Should not be able to go on page', async function () {
+      await browser.url('/admin/user')
+      const header = await $('.govuk-heading-xl')
+      const text = await header.getText()
+      expect(text).to.equal('Access is denied')
+    })
+    after(async function () {
+      authenticationHelper.logout()
+    })
   })
 
-  describe('should navigate to the user rights page', () => {
-    it('and cannot see Super User role', async () => {
+  describe('Manager', function () {
+    before(async function () {
+      await authenticationHelper.login(authenticationHelper.users.Manager)
+    })
+
+    it('Should not be able to go on page', async function () {
+      await browser.url('/admin/user')
+      const header = await $('.govuk-heading-xl')
+      const text = await header.getText()
+      expect(text).to.equal('Access is denied')
+    })
+
+    after(async function () {
+      authenticationHelper.logout()
+    })
+  })
+
+  describe('Application Support', () => {
+    before(async function () {
+      await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
+      adminUserURL = '/admin/user'
+      await browser.url(adminUserURL)
+    })
+
+    it('should navigate to the user rights page and cannot see Super User role', async () => {
       await browser.url(adminUserURL)
 
       const breadcrumbs = await $('.govuk-breadcrumbs')
@@ -48,10 +80,8 @@ describe('Application Support', () => {
       isSelected = await radioButton.isSelected()
       expect(isSelected).to.be.equal(true)
     })
-  })
 
-  describe('should navigate to the user rights page', () => {
-    it('and cannot demote a Super User to Application Support', async () => {
+    it('should not be able to demote a Super User to Application Support', async () => {
       await browser.url(adminUserURL)
 
       const breadcrumbs = await $('.govuk-breadcrumbs')
@@ -59,7 +89,7 @@ describe('Application Support', () => {
       expect(exists).to.be.equal(true)
 
       const usernameField = await $('#username')
-      await usernameField.setValue(`${authenticationHelp.users.SuperUser.username}@email.com`)
+      await usernameField.setValue(`${authenticationHelper.users.SuperUser.username}@email.com`)
 
       const submit = await $('.govuk-button')
       await submit.click()
@@ -80,10 +110,8 @@ describe('Application Support', () => {
       const headerText = await header.getText('.govuk-heading-xl')
       expect(headerText).to.equal('Access is denied')
     })
-  })
 
-  describe('should navigate to the user rights page', () => {
-    it('and cannot demote a Super User to manager', async () => {
+    it('should not be able to demote a Super User to manager', async () => {
       await browser.url(adminUserURL)
 
       const breadcrumbs = await $('.govuk-breadcrumbs')
@@ -91,7 +119,7 @@ describe('Application Support', () => {
       expect(exists).to.be.equal(true)
 
       const usernameField = await $('#username')
-      await usernameField.setValue(`${authenticationHelp.users.SuperUser.username}@email.com`)
+      await usernameField.setValue(`${authenticationHelper.users.SuperUser.username}@email.com`)
 
       const submit = await $('.govuk-button')
       await submit.click()
@@ -112,10 +140,8 @@ describe('Application Support', () => {
       const headerText = await header.getText('.govuk-heading-xl')
       expect(headerText).to.equal('Access is denied')
     })
-  })
 
-  describe('should navigate to the user rights page', () => {
-    it('and cannot demote a Super User to staff', async () => {
+    it('should not be able to demote a Super User to staff', async () => {
       await browser.url(adminUserURL)
 
       const breadcrumbs = await $('.govuk-breadcrumbs')
@@ -123,7 +149,7 @@ describe('Application Support', () => {
       expect(exists).to.be.equal(true)
 
       const usernameField = await $('#username')
-      await usernameField.setValue(`${authenticationHelp.users.SuperUser.username}@email.com`)
+      await usernameField.setValue(`${authenticationHelper.users.SuperUser.username}@email.com`)
 
       const submit = await $('.govuk-button')
       await submit.click()
@@ -144,22 +170,20 @@ describe('Application Support', () => {
       const headerText = await header.getText('.govuk-heading-xl')
       expect(headerText).to.equal('Access is denied')
     })
+
+    after(function () {
+      authenticationHelper.logout()
+    })
   })
 
-  after(function () {
-    authenticationHelp.logout()
-  })
-})
+  describe('Super User', () => {
+    before(async function () {
+      await authenticationHelper.login(authenticationHelper.users.SuperUser)
+      adminUserURL = '/admin/user'
+      await browser.url(adminUserURL)
+    })
 
-describe('Super User', () => {
-  before(async function () {
-    await authenticationHelp.login(authenticationHelp.users.SuperUser)
-    adminUserURL = '/admin/user'
-    await browser.url(adminUserURL)
-  })
-
-  describe('should navigate to the user rights page', () => {
-    it('and can see all roles', async () => {
+    it('should see all roles', async () => {
       await browser.url(adminUserURL)
 
       const breadcrumbs = await $('.govuk-breadcrumbs')
@@ -196,9 +220,9 @@ describe('Super User', () => {
       isSelected = await radioButton.isSelected()
       expect(isSelected).to.be.equal(true)
     })
-  })
 
-  after(function () {
-    authenticationHelp.logout()
+    after(function () {
+      authenticationHelper.logout()
+    })
   })
 })
