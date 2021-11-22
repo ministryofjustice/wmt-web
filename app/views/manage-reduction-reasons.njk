@@ -60,7 +60,9 @@
                 <th id="name_abb">Name</th>
                 <th id="category">Reduction Category</th>
                 <th id="months_to_expiry">Months to Expiry</th>
+                {% if canEditReason %}
                 <th></th>
+                {% endif %}
             </tr>
         </thead>
         <tbody class="">
@@ -69,7 +71,9 @@
                 <td headers="name_abb">{{ disabledReduction.reasonShortName }}</td>
                 <td headers="category">{{ disabledReduction.category }}</td>
                 <td headers="months_to_expiry">{{ disabledReduction.monthsToExpiry }}</td>
+                {% if canEditReason %}
                 <td><a class="govuk-link" href="/edit-reduction-reason?id={{ disabledReduction.id }}">View</a></td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

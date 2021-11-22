@@ -11,6 +11,7 @@ const updateReductionReason = require('../services/data/update-reduction-reason'
 const insertReductionReason = require('../services/data/insert-reduction-reason')
 const Link = require('../services/domain/link')
 const canAddReasonRoles = [SUPER_USER]
+const canEditReasonRoles = [SUPER_USER]
 
 module.exports = function (router) {
   router.get('/manage-reduction-reasons', function (req, res, next) {
@@ -41,7 +42,8 @@ module.exports = function (router) {
         title: 'Manage Reduction Reasons',
         successText: successText,
         subTitle: getSubtitle(true),
-        canAddReason: canAddReasonRoles.includes(req.user.user_role)
+        canAddReason: canAddReasonRoles.includes(req.user.user_role),
+        canEditReason: canEditReasonRoles.includes(req.user.user_role)
 
       })
     })
@@ -74,7 +76,7 @@ module.exports = function (router) {
 
   router.get('/edit-reduction-reason', function (req, res, next) {
     try {
-      authorisation.hasRole(req, [SUPER_USER, APPLICATION_SUPPORT])
+      authorisation.hasRole(req, canEditReasonRoles)
     } catch (error) {
       if (error instanceof Forbidden) {
         return res.status(error.statusCode).render(error.redirect, {
@@ -163,7 +165,7 @@ module.exports = function (router) {
 
   router.post('/edit-reduction-reason', function (req, res, next) {
     try {
-      authorisation.hasRole(req, [SUPER_USER, APPLICATION_SUPPORT])
+      authorisation.hasRole(req, canEditReasonRoles)
     } catch (error) {
       if (error instanceof Forbidden) {
         return res.status(error.statusCode).render(error.redirect, {
