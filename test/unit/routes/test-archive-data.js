@@ -2,6 +2,7 @@ const routeHelper = require('../../helpers/routes/route-helper')
 const supertest = require('supertest')
 const proxyquire = require('proxyquire')
 const sinon = require('sinon')
+const setupLoggedInUserMiddleware = require('../helpers/setupLoggedInUserMiddleware')
 
 const ARCHIVE_DATA_URL = '/archive-data/daily-caseload-data'
 const INVALID_URL = '/fake-url'
@@ -33,7 +34,6 @@ const getArchiveResult = [{
 before(function () {
   userRoleService = sinon.stub()
   authorisationService = {
-
     hasRole: hasRoleStub
   }
   getArchive = sinon.stub()
@@ -42,7 +42,7 @@ before(function () {
     '../authorisation': authorisationService,
     '../services/archive-service': getArchive
   })
-  app = routeHelper.buildApp(route)
+  app = routeHelper.buildApp(route, setupLoggedInUserMiddleware('username'))
 })
 
 describe('archive route', function () {
