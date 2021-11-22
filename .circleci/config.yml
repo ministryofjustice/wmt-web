@@ -12,13 +12,13 @@ parameters:
 
   node-version:
     type: string
-    default: 14.17-browsers
+    default: 16.13-browsers
   postgres_tag:
     default: "11"
     type: string
   database_user:
     default: "root"
-    type: string  
+    type: string
   database_password:
     default: "dev"
     type: string
@@ -166,7 +166,7 @@ jobs:
       - run:
          name: Run integration tests
          command: npm run integration-test
-      
+
       - store_test_results:
           path: test_results
       - store_artifacts:
@@ -303,7 +303,7 @@ workflows:
       - hmpps/deploy_env:
           name: deploy_preprod
           env: "preprod"
-          context: 
+          context:
             - hmpps-common-vars
             - hmpps-workload-preprod
           requires:
@@ -315,7 +315,7 @@ workflows:
       - hmpps/deploy_env:
           name: deploy_prod
           env: "prod"
-          context: 
+          context:
             - hmpps-common-vars
             - hmpps-workload-prod
           requires:
