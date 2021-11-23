@@ -2,7 +2,7 @@ const mockViewEngine = require('../../unit/routes/mock-view-engine')
 const express = require('express')
 const cookieSession = require('cookie-session')
 const csurf = require('csurf')
-
+const setupCacheControl = require('../../../app/middleware/setupCacheControl')
 const VIEWS_DIRECTORY = '../../../app/views'
 
 module.exports.buildApp = function (route, middleware) {
@@ -16,7 +16,7 @@ module.exports.buildApp = function (route, middleware) {
     expires: new Date(2050, 1),
     signed: false
   }))
-
+  app.use(setupCacheControl())
   if (middleware) {
     app.use(middleware)
   }
