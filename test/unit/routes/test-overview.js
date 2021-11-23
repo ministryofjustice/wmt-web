@@ -88,7 +88,12 @@ before(function () {
 describe('overview route', function () {
   it('should respond with 200 when offender-manager and id included in URL', function () {
     getOverview.resolves(OVERVIEW)
-    return supertest(app).get(OM_OVERVIEW_URL).expect(200)
+    return supertest(app).get(OM_OVERVIEW_URL)
+      .then(function (res) {
+        expect(res.statusCode).to.equal(200)
+        expect(res.headers['cache-control']).to.equal('no-store')
+        expect(res.headers.pragma).to.equal('no-cache')
+      })
   })
 
   it('should respond with 200 when ldu and id included in URL', function () {
