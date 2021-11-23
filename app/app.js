@@ -12,6 +12,7 @@ const setUpWebSession = require('./middleware/setUpWebSession')
 const setUpStaticResources = require('./middleware/setUpStaticResources')
 const authorisationMiddleware = require('./middleware/authorisationMiddleware')
 const rolesMiddleware = require('./middleware/rolesMiddleware')
+const setupCacheControl = require('./middleware/setupCacheControl')
 const checkEtlInProgress = require('./middleware/check-etl-in-progress')
 const nunjucksSetup = require('./utils/nunjucksSetup')
 
@@ -33,6 +34,7 @@ nunjucksSetup(app, path)
 app.use(setUpAuthentication())
 app.use(authorisationMiddleware(['ROLE_WORKLOAD_MEASUREMENT']))
 app.use(rolesMiddleware())
+app.use(setupCacheControl())
 
 // Log each HTML request and it's response.
 app.use(function (req, res, next) {
