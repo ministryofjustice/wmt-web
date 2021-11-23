@@ -184,9 +184,9 @@ module.exports = function (router) {
                 reductionsHistory: reductionsHistory
               })
             })
-          }).catch(function (error) {
-            next(error)
           })
+      }).catch(function (error) {
+        next(error)
       })
   })
 
@@ -264,11 +264,8 @@ module.exports = function (router) {
 
         return reductionsService.addReduction(id, reduction, workloadType).then(function () {
           return res.redirect(302, '/' + workloadType + '/' + organisationLevel + '/' + id + '/reductions')
-        }).catch(function (error) {
-          next(error)
         })
-      })
-      .catch(function (error) {
+      }).catch(function (error) {
         next(error)
       })
   })
@@ -408,6 +405,8 @@ module.exports = function (router) {
             next(error)
           })
       })
+    }).catch(function (error) {
+      next(error)
     })
   })
 

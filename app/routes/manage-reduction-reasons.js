@@ -46,6 +46,8 @@ module.exports = function (router) {
         canEditReason: canEditReasonRoles.includes(req.user.user_role)
 
       })
+    }).catch(function (error) {
+      next(error)
     })
   })
 
@@ -71,6 +73,8 @@ module.exports = function (router) {
         subTitle: getSubtitle(false)
 
       })
+    }).catch(function (error) {
+      next(error)
     })
   })
 
@@ -104,6 +108,8 @@ module.exports = function (router) {
 
         })
       })
+    }).catch(function (error) {
+      next(error)
     })
   })
 
@@ -160,6 +166,8 @@ module.exports = function (router) {
         .then(function () {
           return res.redirect(302, '/manage-reduction-reasons?success=true')
         })
+    }).catch(function (error) {
+      next(error)
     })
   })
 
@@ -218,6 +226,8 @@ module.exports = function (router) {
         .then(function () {
           return res.redirect(302, '/manage-reduction-reasons?success=true')
         })
+    }).catch(function (error) {
+      next(error)
     })
   })
 }

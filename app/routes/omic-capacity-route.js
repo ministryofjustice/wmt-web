@@ -105,9 +105,9 @@ module.exports = function (router) {
         const exportCsv = getExportCsv(organisationLevel, result, tabs.CAPACITY.INACTIVE)
         res.attachment(exportCsv.filename)
         return res.send(exportCsv.csv)
-      }).catch(function (error) {
-        next(error)
       })
+    }).catch(function (error) {
+      next(error)
     })
   })
 }

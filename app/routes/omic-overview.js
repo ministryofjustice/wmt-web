@@ -45,10 +45,9 @@ const renderOverview = function (req, res, next) {
 
   const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
 
-  const overviewPromise = getOverview(id, organisationLevel, false, workloadTypes.OMIC)
   return getLastUpdated().then(function (result) {
     lastUpdated = dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY HH:mm')
-    return overviewPromise.then(function (result) {
+    return getOverview(id, organisationLevel, false, workloadTypes.OMIC).then(function (result) {
       result.date = lastUpdated
       return res.render('omic-overview', {
         title: result.title,

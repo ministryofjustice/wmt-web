@@ -12,7 +12,7 @@ const updateAdjustmentPointsConfig = require('../services/data/update-adjustment
 const adjustmentTypes = require('../constants/adjustment-type')
 
 module.exports = function (router) {
-  router.get('/admin/workload-points', function (req, res) {
+  router.get('/admin/workload-points', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
@@ -44,10 +44,12 @@ module.exports = function (router) {
                 })
               })
           })
+      }).catch(function (error) {
+        next(error)
       })
   })
 
-  router.get('/admin/workload-points/t2a', function (req, res) {
+  router.get('/admin/workload-points/t2a', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
@@ -74,6 +76,8 @@ module.exports = function (router) {
           successText: successText
 
         })
+      }).catch(function (error) {
+        next(error)
       })
   })
 
@@ -120,6 +124,8 @@ module.exports = function (router) {
                     })
                 })
             })
+        }).catch(function (error) {
+          next(error)
         })
     } catch (error) {
       logger.error(error)
@@ -145,6 +151,8 @@ module.exports = function (router) {
                     })
                   })
               })
+          }).catch(function (error) {
+            next(error)
           })
       }
       next(error)
@@ -172,6 +180,8 @@ module.exports = function (router) {
       return workloadPointsService.updateWorkloadPoints(updatedT2aWorkloadPoints, true)
         .then(function () {
           return res.redirect(302, '/admin/workload-points/t2a?success=true')
+        }).catch(function (error) {
+          next(error)
         })
     } catch (error) {
       logger.error(error)
