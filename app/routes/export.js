@@ -45,18 +45,19 @@ module.exports = function (router) {
 
     return getLastUpdated().then(function (lastUpdatedDate) {
       lastUpdated = dateFormatter.formatDate(lastUpdatedDate.date_processed, 'DD-MM-YYYY HH:mm')
-      const result = getExport(id, organisationLevel)
-      result.date = lastUpdated
-      return res.render('export', {
-        organisationLevel: organisationLevel,
-        linkId: req.params.id,
-        title: result.title,
-        subTitle: result.subTitle,
-        breadcrumbs: result.breadcrumbs,
-        subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
-        date: result.date,
-        canExport: canExportRoles.includes(authorisedUserRole.userRole)
+      return getExport(id, organisationLevel).then(function (result) {
+        result.date = lastUpdated
+        return res.render('export', {
+          organisationLevel: organisationLevel,
+          linkId: req.params.id,
+          title: result.title,
+          subTitle: result.subTitle,
+          breadcrumbs: result.breadcrumbs,
+          subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
+          date: result.date,
+          canExport: canExportRoles.includes(authorisedUserRole.userRole)
 
+        })
       })
     }).catch(function (error) {
       next(error)
@@ -76,57 +77,58 @@ module.exports = function (router) {
     }
     const organisationLevel = req.params.organisationLevel
     let id
-    let exportPromise
 
     if (organisationLevel !== organisationUnit.NATIONAL.name) {
       id = req.params.id
     }
 
     const radioButton = req.body.radioInlineGroup
-    let tabType
-
-    switch (radioButton) {
-      case '1':
-        exportPromise = getArmsExport(id, organisationLevel)
-        tabType = tabs.EXPORT.ARMS_EXPORT
-        break
-      case '2':
-        exportPromise = getCaseDetailsExport(id, organisationLevel)
-        tabType = tabs.EXPORT.CASE_DETAILS_EXPORT
-        break
-      case '3':
-        exportPromise = getCMSExport(id, organisationLevel)
-        tabType = tabs.EXPORT.CMS_EXPORT
-        break
-      case '4':
-        exportPromise = getGroupSupervisionExport(id, organisationLevel)
-        tabType = tabs.EXPORT.GROUP_SUPERVISION_EXPORT
-        break
-      case '5':
-        exportPromise = getScenarioExport(id, organisationLevel)
-        break
-      case '6':
-        exportPromise = getSuspendedLifersExport(id, organisationLevel)
-        tabType = tabs.EXPORT.SUSPENDED_LIFERS_EXPORT
-        break
-      case '7':
-        exportPromise = getWorkloadPercentageBreakdown(id, organisationLevel)
-        tabType = tabs.EXPORT.WORKLOAD_PERCENTAGE_EXPORT
-        break
-      case '8':
-        exportPromise = getT2aDetailExport(id, organisationLevel)
-        tabType = tabs.EXPORT.T2A_EXPORT
-        break
-      case '9':
-        exportPromise = getExpiringReductions(id, organisationLevel)
-        tabType = tabs.EXPORT.EXPIRING_REDUCTIONS
-        break
-      default:
-        exportPromise = Promise.resolve()
-    }
 
     return getLastUpdated().then(function (result) {
       lastUpdated = dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY HH:mm')
+
+      let tabType
+      let exportPromise
+      switch (radioButton) {
+        case '1':
+          exportPromise = getArmsExport(id, organisationLevel)
+          tabType = tabs.EXPORT.ARMS_EXPORT
+          break
+        case '2':
+          exportPromise = getCaseDetailsExport(id, organisationLevel)
+          tabType = tabs.EXPORT.CASE_DETAILS_EXPORT
+          break
+        case '3':
+          exportPromise = getCMSExport(id, organisationLevel)
+          tabType = tabs.EXPORT.CMS_EXPORT
+          break
+        case '4':
+          exportPromise = getGroupSupervisionExport(id, organisationLevel)
+          tabType = tabs.EXPORT.GROUP_SUPERVISION_EXPORT
+          break
+        case '5':
+          exportPromise = getScenarioExport(id, organisationLevel)
+          break
+        case '6':
+          exportPromise = getSuspendedLifersExport(id, organisationLevel)
+          tabType = tabs.EXPORT.SUSPENDED_LIFERS_EXPORT
+          break
+        case '7':
+          exportPromise = getWorkloadPercentageBreakdown(id, organisationLevel)
+          tabType = tabs.EXPORT.WORKLOAD_PERCENTAGE_EXPORT
+          break
+        case '8':
+          exportPromise = getT2aDetailExport(id, organisationLevel)
+          tabType = tabs.EXPORT.T2A_EXPORT
+          break
+        case '9':
+          exportPromise = getExpiringReductions(id, organisationLevel)
+          tabType = tabs.EXPORT.EXPIRING_REDUCTIONS
+          break
+        default:
+          exportPromise = Promise.resolve()
+      }
+
       return exportPromise.then(function (results) {
         if (radioButton === '5') {
           const scenarioFileName = `BETA-${organisationLevel}_Scenario_${dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY')}.xlsx`

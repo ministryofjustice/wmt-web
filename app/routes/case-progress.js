@@ -19,11 +19,9 @@ module.exports = function (router) {
 
     const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
 
-    const caseProgressPromise = getCaseProgress(id, organisationLevel)
-
     return getLastUpdated().then(function (result) {
       lastUpdated = dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY HH:mm')
-      return caseProgressPromise.then(function (result) {
+      return getCaseProgress(id, organisationLevel).then(function (result) {
         result.date = lastUpdated
         let crcCaseProgressList = Object.assign([], result.caseProgressList)
         let stringifiedCRCCaseProgressList = '[]'

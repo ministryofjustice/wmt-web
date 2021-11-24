@@ -14,6 +14,8 @@ module.exports = function (router) {
         results: result,
         surname: req.body.surnameBox
       })
+    }).catch(function (error) {
+      next(error)
     })
   })
 }
