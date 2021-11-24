@@ -4,4 +4,5 @@ module.exports = function (id) {
   return knex('ldu')
     .withSchema('app')
     .where('id', id)
+    .first()
 }

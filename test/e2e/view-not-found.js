@@ -6,14 +6,44 @@ describe('View not found page', () => {
     await authenticationHelp.login(authenticationHelp.users.ApplicationSupport)
   })
 
-  describe('should navigate to the not found page', () => {
-    it('with the correct heading title', async () => {
-      await browser.url('/a-url-which-does-not-exist')
+  it('should diplay when hitting a url which does not exist', async () => {
+    await browser.url('/a-url-which-does-not-exist')
 
-      const pageTitle = await $('.govuk-heading-xl')
-      const text = await pageTitle.getText('.govuk-heading-xl')
-      expect(text).to.equal('Page not found')
-    })
+    const pageTitle = await $('.govuk-heading-xl')
+    const text = await pageTitle.getText('.govuk-heading-xl')
+    expect(text).to.equal('Page not found')
+  })
+
+  it('should diplay when getting a region which does not exist', async () => {
+    await browser.url('/probation/region/999')
+
+    const pageTitle = await $('.govuk-heading-xl')
+    const text = await pageTitle.getText('.govuk-heading-xl')
+    expect(text).to.equal('Page not found')
+  })
+
+  it('should diplay when getting a LDU which does not exist', async () => {
+    await browser.url('/probation/ldu/999')
+
+    const pageTitle = await $('.govuk-heading-xl')
+    const text = await pageTitle.getText('.govuk-heading-xl')
+    expect(text).to.equal('Page not found')
+  })
+
+  it('should diplay when getting a team which does not exist', async () => {
+    await browser.url('/probation/team/999')
+
+    const pageTitle = await $('.govuk-heading-xl')
+    const text = await pageTitle.getText('.govuk-heading-xl')
+    expect(text).to.equal('Page not found')
+  })
+
+  it('should diplay when getting a offender manager which does not exist', async () => {
+    await browser.url('/probation/offender-manager/999')
+
+    const pageTitle = await $('.govuk-heading-xl')
+    const text = await pageTitle.getText('.govuk-heading-xl')
+    expect(text).to.equal('Page not found')
   })
 
   after(function () {
