@@ -41,14 +41,12 @@ const getOffenderManagerBreadcrumb = function (id, workloadType) {
 
 const getTeamBreadcrumb = function (id, workloadType) {
   return getTeamById(id).then(function (team) {
-    if (team.length) {
-      const breadcrumbs = [new Link(team[0].description, `/${workloadType}/team/${id}`)]
-      return getLduBreadcrumb(team[0].ldu_id, workloadType).then(function (lduBreadcrumbs) {
-        return breadcrumbs.concat(lduBreadcrumbs)
-      })
-    } else {
-      throw new NotFound(`Team not found at id ${id}`)
-    }
+    const breadcrumbs = [new Link(team.description, `/${workloadType}/team/${id}`)]
+    return getLduBreadcrumb(team.ldu_id, workloadType).then(function (lduBreadcrumbs) {
+      return breadcrumbs.concat(lduBreadcrumbs)
+    })
+  }).catch(function () {
+    throw new NotFound(`Team not found at id ${id}`)
   })
 }
 
