@@ -10,4 +10,5 @@ module.exports = function (workloadOwnerId) {
       'workload_owner.id AS workload_owner_id',
       'offender_manager.forename AS offender_manager_forename',
       'offender_manager.surname AS offender_manager_surname')
+    .first()
 }

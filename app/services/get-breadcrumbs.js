@@ -12,8 +12,7 @@ module.exports = function (id, organisationLevel, workloadType = workloadTypeCon
   }
 
   const breadcrumbFunction = getBreadcrumbLevels()[organisationLevel]
-  const breadcrumbs = breadcrumbFunction(id, workloadType)
-  return breadcrumbs
+  return breadcrumbFunction(id, workloadType)
 }
 
 const getBreadcrumbLevels = function () {
@@ -28,14 +27,12 @@ const getBreadcrumbLevels = function () {
 
 const getOffenderManagerBreadcrumb = function (id, workloadType) {
   return getWorkloadOwnerOffenderManagerByWorkloadOwnerId(id).then(function (offenderManager) {
-    if (offenderManager.length) {
-      const breadcrumbs = [new Link(`${offenderManager[0].offender_manager_forename} ${offenderManager[0].offender_manager_surname}`, `/${workloadType}/offender-manager/${id}`)]
-      return getTeamBreadcrumb(offenderManager[0].team_id, workloadType).then(function (teamBreadcrumbs) {
-        return breadcrumbs.concat(teamBreadcrumbs)
-      })
-    } else {
-      throw new NotFound(`Offender Manager not found at id ${id}`)
-    }
+    const breadcrumbs = [new Link(`${offenderManager.offender_manager_forename} ${offenderManager.offender_manager_surname}`, `/${workloadType}/offender-manager/${id}`)]
+    return getTeamBreadcrumb(offenderManager.team_id, workloadType).then(function (teamBreadcrumbs) {
+      return breadcrumbs.concat(teamBreadcrumbs)
+    })
+  }).catch(function () {
+    throw new NotFound(`Offender Manager not found at id ${id}`)
   })
 }
 
@@ -52,27 +49,23 @@ const getTeamBreadcrumb = function (id, workloadType) {
 
 const getLduBreadcrumb = function (id, workloadType) {
   return getLduById(id).then(function (ldu) {
-    if (ldu.length) {
-      const breadcrumbs = [new Link(ldu[0].description, `/${workloadType}/ldu/${id}`)]
-      return getRegionalBreadcrumb(ldu[0].region_id, workloadType).then(function (regionalBreadcrumbs) {
-        return breadcrumbs.concat(regionalBreadcrumbs)
-      })
-    } else {
-      throw new NotFound(`LDU not found at id ${id}`)
-    }
+    const breadcrumbs = [new Link(ldu.description, `/${workloadType}/ldu/${id}`)]
+    return getRegionalBreadcrumb(ldu.region_id, workloadType).then(function (regionalBreadcrumbs) {
+      return breadcrumbs.concat(regionalBreadcrumbs)
+    })
+  }).catch(function () {
+    throw new NotFound(`LDU not found at id ${id}`)
   })
 }
 
 const getRegionalBreadcrumb = function (id, workloadType) {
   return getRegionById(id).then(function (region) {
-    if (region.length) {
-      const breadcrumbs = [new Link(region[0].description, `/${workloadType}/region/${id}`)]
-      return getNationalBreadcrumb(0, workloadType).then(function (nationalBreadcrumbs) {
-        return breadcrumbs.concat(nationalBreadcrumbs)
-      })
-    } else {
-      throw new NotFound(`Region not found at id ${id}`)
-    }
+    const breadcrumbs = [new Link(region.description, `/${workloadType}/region/${id}`)]
+    return getNationalBreadcrumb(0, workloadType).then(function (nationalBreadcrumbs) {
+      return breadcrumbs.concat(nationalBreadcrumbs)
+    })
+  }).catch(function () {
+    throw new NotFound(`Region not found at id ${id}`)
   })
 }
 
