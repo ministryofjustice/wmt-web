@@ -41,6 +41,7 @@ class ArchiveDataForm {
       .isPastOrPresentDate(this.archiveToDate)
       .isLaterThan(this.archiveFromDate, 'archiveFromDate')
       .getFormattedDate()
+      .add(1, 'days')
 
     FieldSetValidator(this.multiSearchField, 'multiSearchField', errors)
       .isArray(multiSearchFieldErrorMessage)
