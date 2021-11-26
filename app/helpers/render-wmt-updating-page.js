@@ -9,7 +9,6 @@ module.exports = function (res, importInProgress) {
   }
   return res.render('etl_in_progress', {
     title: 'WMT Updating',
-    subTitle: 'WMT Updating',
     ETA: ETA.format('h:mm a')
   })
 }
