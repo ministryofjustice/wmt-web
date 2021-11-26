@@ -20,9 +20,7 @@ describe('View updating page when ETL is running', () => {
     const updateTime = await $('#eta')
     const effectiveFrom = inserts[0].effective_from
     const updateTimeText = await updateTime.getText()
-    const ETAMinutes = moment(effectiveFrom).format('mm')
-    const minutesToAdd = 15 - (parseInt(ETAMinutes) % 15)
-    const ETA = moment(effectiveFrom).add(90, 'minutes').add(minutesToAdd, 'minutes').format('h:mm a')
+    const ETA = moment(effectiveFrom).add(30, 'minutes').format('h:mm a')
     expect(updateTimeText).to.equal(ETA)
   })
 
