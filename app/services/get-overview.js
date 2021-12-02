@@ -24,7 +24,7 @@ module.exports = function (id, organisationLevel, isCSV = false, workloadType = 
 
   result.breadcrumbs = getBreadcrumbs(id, organisationLevel, workloadType)
   return overviewPromise.then(function (results) {
-    result.overviewDetails = calculateOverviewValues(results, isCSV, workloadType, organisationLevel)
+    result.overviewDetails = calculateOverviewValues(results, isCSV, workloadType)
     result.title = result.breadcrumbs[0].title
     result.subTitle = organisationalUnitType.displayText
     return result
