@@ -34,16 +34,6 @@ module.exports = function (router) {
       lastUpdated = dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY HH:mm')
       return caseProgressPromise.then(function (result) {
         result.date = lastUpdated
-        let crcCaseProgressList = Object.assign([], result.caseProgressList)
-        let stringifiedCRCCaseProgressList = ''
-        if (organisationLevel === organisationUnit.NATIONAL.name) {
-          crcCaseProgressList = crcCaseProgressList.filter(c => c.name.includes('CPA '))
-          result.caseProgressList = result.caseProgressList.filter(c => !c.name.includes('CPA '))
-          stringifiedCRCCaseProgressList = Object.assign([], crcCaseProgressList)
-          stringifiedCRCCaseProgressList = JSON.stringify(stringifiedCRCCaseProgressList)
-        } else {
-          crcCaseProgressList = []
-        }
         let stringifiedCaseProgressList = Object.assign([], result.caseProgressList)
         stringifiedCaseProgressList = JSON.stringify(stringifiedCaseProgressList)
         return res.render('case-progress', {
@@ -53,13 +43,10 @@ module.exports = function (router) {
           subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
           caseProgressList: result.caseProgressList,
           stringifiedCaseProgressList: stringifiedCaseProgressList,
-          crcCaseProgressList: crcCaseProgressList,
-          stringifiedCRCCaseProgressList: stringifiedCRCCaseProgressList,
           date: result.date,
           userRole: authorisedUserRole.userRole, // used by proposition-link for the admin role
           authorisation: authorisedUserRole.authorisation, // used by proposition-link for the admin role
-          workloadType: workloadTypes.PROBATION,
-          organisationLevel: organisationLevel
+          workloadType: workloadTypes.PROBATION
         })
       })
     }).catch(function (error) {
