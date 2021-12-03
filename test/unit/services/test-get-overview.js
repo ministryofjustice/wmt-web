@@ -22,7 +22,7 @@ const OVERVIEW = {
   cmsPercentage: 0
 }
 const ORGANISATION_OVERVIEWS = [
-  Object.assign({}, OVERVIEW, { capacityPercentage: 80, name: 'NPS' }), Object.assign({}, OVERVIEW, { capacityPercentage: 80, name: 'CRC' })
+  Object.assign({}, OVERVIEW, { capacityPercentage: 80 }), Object.assign({}, OVERVIEW, { capacityPercentage: 80 })
 ]
 
 const ZERO_AVAILABLE_POINTS_OVERVIEWS = [
