@@ -19,7 +19,7 @@ const generateLoginUrlConfig = function () {
   return {
     url: host,
     actions: [
-      'set field #username to AUTH_RO_USER_TEST3',
+      'set field #username to WMT_SUPER_USER',
       'set field #password to password123456',
       'click element #submit'
     ]
