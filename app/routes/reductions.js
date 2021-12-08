@@ -155,34 +155,30 @@ module.exports = function (router) {
       .then(function (result) {
         return reductionsService.getReductionByReductionId(reductionId)
           .then(function (reduction) {
-            return reductionsService.getReductionsHistory(reductionId).then(function (reductionsHistory) {
-              if (reduction !== undefined && reduction.workloadOwnerId !== id) {
-                reduction = undefined
-              }
-              let reductionEnabled, reductionStatus
-              if (!reduction) {
-                reductionEnabled = false
-                reductionStatus = ''
-              } else {
-                reductionEnabled = reduction.isEnabled
-                reductionStatus = reduction.status
-              }
-              return res.render('add-reduction', {
-                breadcrumbs: result.breadcrumbs,
-                linkId: id,
-                title: result.title,
-                subTitle: result.subTitle,
-                subNav: getSubNav(id, organisationLevel, req.path, workloadType),
-                referenceData: result.referenceData,
-                stringifiedReferenceData: stringifyReductionsData(result.referenceData),
-                reduction: mapReductionToViewModel(reduction),
-                reductionToPopulate: true,
-                reductionEnabled: reductionEnabled,
-                reductionStatus: reductionStatus,
-                workloadType: workloadType,
-
-                reductionsHistory: reductionsHistory
-              })
+            if (reduction !== undefined && reduction.workloadOwnerId !== id) {
+              reduction = undefined
+            }
+            let reductionEnabled, reductionStatus
+            if (!reduction) {
+              reductionEnabled = false
+              reductionStatus = ''
+            } else {
+              reductionEnabled = reduction.isEnabled
+              reductionStatus = reduction.status
+            }
+            return res.render('add-reduction', {
+              breadcrumbs: result.breadcrumbs,
+              linkId: id,
+              title: result.title,
+              subTitle: result.subTitle,
+              subNav: getSubNav(id, organisationLevel, req.path, workloadType),
+              referenceData: result.referenceData,
+              stringifiedReferenceData: stringifyReductionsData(result.referenceData),
+              reduction: mapReductionToViewModel(reduction),
+              reductionToPopulate: true,
+              reductionEnabled: reductionEnabled,
+              reductionStatus: reductionStatus,
+              workloadType: workloadType
             })
           })
       }).catch(function (error) {
@@ -296,66 +292,61 @@ module.exports = function (router) {
     const reductionId = req.body.reductionId
     let reduction
     let reductionReason
-
-    return reductionsService.getReductionsHistory(reductionId).then(function (reductionsHistory) {
-      return reductionsService.getAddReductionsRefData(id, organisationLevel, workloadType)
-        .then(function (result) {
-          try {
+    return reductionsService.getAddReductionsRefData(id, organisationLevel, workloadType)
+      .then(function (result) {
+        try {
           // Find the index in the array of reasons where this reason occurs
-            const index = result.referenceData.findIndex(reason => reason.id === parseInt(req.body.reasonForReductionId))
-            reductionReason = result.referenceData[index]
-            let userId = null
-            if (req.user !== undefined && req.user !== null) {
-              userId = req.user.userId
-            }
-            reduction = generateNewReductionFromRequest(req.body, reductionReason, userId)
-          } catch (error) {
-            if (error instanceof ValidationError) {
-              return res.status(400).render('add-reduction', {
-                breadcrumbs: result.breadcrumbs,
-                linkId: id,
-                title: result.title,
-                subTitle: result.subTitle,
-                subNav: getSubNav(id, organisationLevel, req.path, workloadType),
-                referenceData: result.referenceData,
-                stringifiedReferenceData: stringifyReductionsData(result.referenceData),
-                reduction: {
-                  id: req.body.reductionId,
-                  reasonId: req.body.reasonForReductionId,
-                  hours: req.body.reductionHours,
-                  start_day: req.body.redStartDay,
-                  start_month: req.body.redStartMonth,
-                  start_year: req.body.redStartYear,
-                  end_day: req.body.redEndDay,
-                  end_month: req.body.redEndMonth,
-                  end_year: req.body.redEndYear,
-                  notes: req.body.notes,
-                  isEnabled: reductionReason.isEnabled
-                },
-                reductionToPopulate: true,
-                reductionEnabled: reductionReason.isEnabled,
-                errors: error.validationErrors,
-                workloadType: workloadType,
-
-                reductionsHistory: reductionsHistory
-              })
-            } else {
-              next(error)
-            }
+          const index = result.referenceData.findIndex(reason => reason.id === parseInt(req.body.reasonForReductionId))
+          reductionReason = result.referenceData[index]
+          let userId = null
+          if (req.user !== undefined && req.user !== null) {
+            userId = req.user.userId
           }
-
-          return reductionsService.getOldReductionForHistory(reductionId).then(function (oldReduction) {
-            return reductionsService.addOldReductionToHistory(oldReduction).then(function () {
-              return reductionsService.updateReduction(id, reductionId, reduction, workloadType)
-                .then(function () {
-                  return res.redirect(302, '/' + workloadType + '/' + organisationLevel + '/' + id + '/reductions')
-                }).catch(function (error) {
-                  next(error)
-                })
+          reduction = generateNewReductionFromRequest(req.body, reductionReason, userId)
+        } catch (error) {
+          if (error instanceof ValidationError) {
+            return res.status(400).render('add-reduction', {
+              breadcrumbs: result.breadcrumbs,
+              linkId: id,
+              title: result.title,
+              subTitle: result.subTitle,
+              subNav: getSubNav(id, organisationLevel, req.path, workloadType),
+              referenceData: result.referenceData,
+              stringifiedReferenceData: stringifyReductionsData(result.referenceData),
+              reduction: {
+                id: req.body.reductionId,
+                reasonId: req.body.reasonForReductionId,
+                hours: req.body.reductionHours,
+                start_day: req.body.redStartDay,
+                start_month: req.body.redStartMonth,
+                start_year: req.body.redStartYear,
+                end_day: req.body.redEndDay,
+                end_month: req.body.redEndMonth,
+                end_year: req.body.redEndYear,
+                notes: req.body.notes,
+                isEnabled: reductionReason.isEnabled
+              },
+              reductionToPopulate: true,
+              reductionEnabled: reductionReason.isEnabled,
+              errors: error.validationErrors,
+              workloadType: workloadType
             })
+          } else {
+            next(error)
+          }
+        }
+
+        return reductionsService.getOldReductionForHistory(reductionId).then(function (oldReduction) {
+          return reductionsService.addOldReductionToHistory(oldReduction).then(function () {
+            return reductionsService.updateReduction(id, reductionId, reduction, workloadType)
+              .then(function () {
+                return res.redirect(302, '/' + workloadType + '/' + organisationLevel + '/' + id + '/reductions')
+              }).catch(function (error) {
+                next(error)
+              })
           })
         })
-    })
+      })
       .catch(function (error) {
         next(error)
       })

@@ -196,44 +196,6 @@
       </form>
     </div>
   {% endif %}
-  <br>
-  <details class="govuk-details" data-module="govuk-details">
-      <summary class="govuk-details__summary">
-        <span class="govuk-details__summary-text">
-          Audit Log
-        </span>
-      </summary>
-      <div class="govuk-details__text">
-        <table class="govuk-table override-gov-uk-table" id="reduction-table">
-            <thead>
-                <tr>
-                    <th id="type">Reason</th>
-                    <th id="reduction_reason_hours">Hours</th>
-                    <th id="comments">Comments</th>
-                    <th id="start_date">Start Date</th>
-                    <th id="end_date">End Date</th>
-                    <th id="status">Status</th>
-                    <th id="action_date">Date</th>
-                    <th id="user">User</th>
-                </tr>
-            </thead>
-            <tbody class="">
-                {% for reduction in reductionsHistory %}
-                <tr>
-                    <td headers="type">{{ reduction.reasonShortName }}</td>
-                    <td headers="reduction_reason_hours">{{ reduction.hours }}</td>
-                    <td headers="comments">{{ reduction.notes }}</td>
-                    <td headers="start_date">{{ reduction.reductionStartDate }}</td>
-                    <td headers="end_date">{{ reduction.reductionEndDate }}</td>     
-                    <td headers="status">{{ reduction.status }}</td>                
-                    <td headers="action_date">{{ reduction.updatedDate }}</td>    
-                    <td headers="user">{{ reduction.name }}</td>    
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-      </div>
-    </details>
 </main>
 {% endblock %} {% block bodyEnd %}
 <script src="/public/javascripts/vendor/jquery.min.js"></script>

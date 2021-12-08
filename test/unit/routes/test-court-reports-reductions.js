@@ -81,7 +81,7 @@ const failureDataToPost = {
   workloadType: workloadType.COURT_REPORTS
 }
 
-const reductionsHistory = [{
+const reductionsHistory = {
   reasonShortName: 'SPOC lead',
   hours: 1.8,
   notes: '',
@@ -91,7 +91,7 @@ const reductionsHistory = [{
   updatedDate: '16/12/2019 17:50',
   name: '',
   reductionId: 32716
-}]
+}
 
 const returnedId = 1
 
@@ -128,7 +128,6 @@ const initaliseApp = function (middleware) {
   reductionsService.getReductionByReductionId = sinon.stub()
   reductionsService.getOldReductionForHistory = sinon.stub()
   reductionsService.addOldReductionToHistory = sinon.stub()
-  reductionsService.getReductionsHistory = sinon.stub()
   route = proxyquire('../../../app/routes/reductions', {
     '../services/data/get-last-updated': getLastUpdated,
     '../services/reductions-service': reductionsService,
@@ -201,7 +200,6 @@ describe('court-reports reductions route', function () {
     it('should respond with 200 and the correct data and an existing reduction', function () {
       reductionsService.getAddReductionsRefData.resolves(addReduction)
       reductionsService.getReductionByReductionId.resolves(existingReduction)
-      reductionsService.getReductionsHistory.resolves()
       const url = EDIT_REDUCTION_PAGE_URL + '?reductionId=' + existingReduction.id
       return superTest(app)
         .get(url)
@@ -259,8 +257,7 @@ describe('court-reports reductions route', function () {
     it('should post the correct data and respond with 200 for existing reduction', function () {
       reductionsService.getAddReductionsRefData.resolves(addReductionsRefData)
       reductionsService.updateReduction.resolves(returnedId)
-      reductionsService.getReductionsHistory.resolves(reductionsHistory)
-      reductionsService.getOldReductionForHistory.resolves(reductionsHistory[0])
+      reductionsService.getOldReductionForHistory.resolves(reductionsHistory)
       reductionsService.addOldReductionToHistory.resolves()
       return superTest(app)
         .post(EDIT_REDUCTION_POST_URL)
@@ -275,7 +272,6 @@ describe('court-reports reductions route', function () {
       reductionsService.updateReduction.resolves(returnedId)
       reductionsService.getOldReductionForHistory.resolves()
       reductionsService.addOldReductionToHistory.resolves()
-      reductionsService.getReductionsHistory.resolves()
       return superTest(app)
         .post(EDIT_REDUCTION_POST_URL)
         .send(failureDataToPost)
