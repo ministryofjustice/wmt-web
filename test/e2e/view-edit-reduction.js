@@ -74,6 +74,12 @@ describe('editing a reduction', () => {
       expect(notesField).to.be.equal(notesFieldValue)
     })
 
+    it('should not be able to view the Audit log', async () => {
+      const auditTable = await $('#reduction-table')
+      const exists = await auditTable.isExisting()
+      expect(exists).to.be.equal(false)
+    })
+
     it('should be able to edit a reduction', async () => {
       const currentTime = moment().format('YYYY-MM-DD HH:mm:ss.SSS')
       endYearField = await $('#end-year')

@@ -92,7 +92,6 @@ const initaliseApp = function (middleware) {
   reductionsService.getReductionByReductionId = sinon.stub()
   reductionsService.getOldReductionForHistory = sinon.stub()
   reductionsService.addOldReductionToHistory = sinon.stub()
-  reductionsService.getReductionsHistory = sinon.stub()
 
   route = proxyquire('../../../app/routes/reductions', {
     '../services/reductions-service': reductionsService,
@@ -138,7 +137,6 @@ describe('reductions route', function () {
   describe('For the edit reductions page route', function () {
     it('should respond with 200 and the correct data and an existing reduction', function () {
       reductionsService.getAddReductionsRefData.resolves(addReductionsRefData)
-      reductionsService.getReductionsHistory.resolves()
       reductionsService.getReductionByReductionId.resolves(existingReduction)
       return superTest(app)
         .get(EDIT_REDUCTION_PAGE_URL + '?reductionId=' + existingReduction.id)
@@ -161,7 +159,6 @@ describe('reductions route', function () {
       reductionsService.addReduction.resolves(returnedId)
       reductionsService.getOldReductionForHistory.resolves()
       reductionsService.addOldReductionToHistory.resolves()
-      reductionsService.getReductionsHistory.resolves()
       return superTest(app)
         .post(ADD_REDUCTION_POST_URL)
         .send(successDataToPost)
@@ -183,7 +180,6 @@ describe('reductions route', function () {
       reductionsService.updateReduction.resolves()
       reductionsService.getOldReductionForHistory.resolves()
       reductionsService.addOldReductionToHistory.resolves()
-      reductionsService.getReductionsHistory.resolves()
       return superTest(app)
         .post(EDIT_REDUCTION_POST_URL)
         .send(successDataToPost)
@@ -194,7 +190,6 @@ describe('reductions route', function () {
       reductionsService.getAddReductionsRefData.resolves(addReductionsRefData)
       reductionsService.getOldReductionForHistory.resolves()
       reductionsService.addOldReductionToHistory.resolves()
-      reductionsService.getReductionsHistory.resolves()
       return superTest(app)
         .post(EDIT_REDUCTION_POST_URL)
         .send(failureDataToPost)
@@ -208,7 +203,6 @@ describe('reductions route', function () {
       reductionsService.updateReductionStatus.resolves(returnedId)
       reductionsService.getOldReductionForHistory.resolves()
       reductionsService.addOldReductionToHistory.resolves()
-      reductionsService.getReductionsHistory.resolves()
       return superTest(app)
         .post(UPDATE_REDUCTION_STATUS_POST_URL)
         .send(Object.assign({}, successDataToPost, { status: 'ARCHIVED' }))
@@ -220,7 +214,6 @@ describe('reductions route', function () {
       reductionsService.updateReductionStatus.resolves(returnedId)
       reductionsService.getOldReductionForHistory.resolves()
       reductionsService.addOldReductionToHistory.resolves()
-      reductionsService.getReductionsHistory.resolves()
       return superTest(app)
         .post(UPDATE_REDUCTION_STATUS_POST_URL)
         .send(Object.assign({}, successDataToPost, { status: 'DELETED' }))
@@ -232,7 +225,6 @@ describe('reductions route', function () {
       reductionsService.updateReductionStatus.resolves(returnedId)
       reductionsService.getOldReductionForHistory.resolves()
       reductionsService.addOldReductionToHistory.resolves()
-      reductionsService.getReductionsHistory.resolves()
       return superTest(app)
         .post(EDIT_REDUCTION_POST_URL)
         .send(failureDataToPost)
