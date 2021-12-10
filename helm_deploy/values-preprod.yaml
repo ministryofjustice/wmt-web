@@ -3,7 +3,7 @@ generic-service:
 
   ingress:
     host: workload-measurement-preprod.hmpps.service.justice.gov.uk
-
+    contextColour: green
   env:
     INGRESS_URL: "https://workload-measurement-preprod.hmpps.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in-preprod.hmpps.service.justice.gov.uk/auth"
