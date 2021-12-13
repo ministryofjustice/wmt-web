@@ -21,7 +21,7 @@ const login = async function ({ username }) {
 }
 
 const logout = async function () {
-  const link = await $('[href="/logout"')
+  const link = await $('[href="/logout"]')
   await link.click()
   await $('#username')
 }
