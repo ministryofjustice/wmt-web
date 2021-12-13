@@ -70,34 +70,33 @@ describe('View adding a new reduction', () => {
       notesField = await $('#textarea')
       notesField = await notesField.getValue()
       expect(notesField, 'The notes field of the last inserted reduction should have the following contents: ' + currentTime).to.be.equal(currentTime)
-      return pollAndCheck().then(function (data) {
-        const body = JSON.parse(data.Body)
-        const currentDate = new Date().getTime()
-        const whenDate = new Date(body.when).getTime()
-        expect(body.what).to.equal('REDUCTION_STARTED')
-        expect(body.who).to.equal('WMT_MANAGER@digital.justice.gov.uk')
-        expect(body.service).to.equal('wmt')
-        expect(whenDate).to.be.lessThan(currentDate)
-        expect(body.operationId).to.not.equal(null)
+      const data = await pollCheckAndDelete()
+      const body = JSON.parse(data.Body)
+      const currentDate = new Date().getTime()
+      const whenDate = new Date(body.when).getTime()
+      expect(body.what).to.equal('REDUCTION_CREATED')
+      expect(body.who).to.equal(`${authenticationHelp.users.Manager.username.toLowerCase()}@digital.justice.gov.uk`)
+      expect(body.service).to.equal('wmt')
+      expect(whenDate).to.be.lessThan(currentDate)
+      expect(body.operationId).to.not.equal(null)
 
-        const actualDetails = JSON.parse(body.details)
-        expect(actualDetails.previousReason).to.equal('Other')
-        expect(actualDetails.newReason).to.equal('Other')
-        expect(actualDetails.previousHours).to.equal(10)
-        expect(actualDetails.newHours).to.equal(10)
-        expect(actualDetails.previousAdditionalNotes).to.equal(currentTime)
-        expect(actualDetails.newAdditionalNotes).to.equal(currentTime)
-        expect(actualDetails.previousEffectiveFrom).to.equal('2017-02-01')
-        expect(actualDetails.newEffectiveFrom).to.equal('2017-02-01')
-        expect(actualDetails.previousEffectiveTo).to.equal('2028-02-01')
-        expect(actualDetails.newEffectiveTo).to.equal('2028-02-01')
-        expect(actualDetails.previousStatus).to.equal('ACTIVE')
-        expect(actualDetails.newStatus).to.equal('ACTIVE')
-        expect(actualDetails.offenderManagerName).to.equal(`${auditData.forename} ${auditData.surname}`)
-        expect(actualDetails.team).to.equal(`${auditData.teamCode} - ${auditData.teamDescription}`)
-        expect(actualDetails.pdu).to.equal(`${auditData.lduCode} - ${auditData.lduDescription}`)
-        expect(actualDetails.region).to.equal(`${auditData.regionCode} - ${auditData.regionDescription}`)
-      })
+      const actualDetails = JSON.parse(body.details)
+      expect(actualDetails.previousReason).to.equal('Other')
+      expect(actualDetails.newReason).to.equal('Other')
+      expect(actualDetails.previousHours).to.equal(10)
+      expect(actualDetails.newHours).to.equal(10)
+      expect(actualDetails.previousAdditionalNotes).to.equal(currentTime)
+      expect(actualDetails.newAdditionalNotes).to.equal(currentTime)
+      expect(actualDetails.previousEffectiveFrom).to.equal('2017-02-01T00:00:00.000Z')
+      expect(actualDetails.newEffectiveFrom).to.equal('2017-02-01T00:00:00.000Z')
+      expect(actualDetails.previousEffectiveTo).to.equal('2028-02-01T00:00:00.000Z')
+      expect(actualDetails.newEffectiveTo).to.equal('2028-02-01T00:00:00.000Z')
+      expect(actualDetails.previousStatus).to.equal('ACTIVE')
+      expect(actualDetails.newStatus).to.equal('ACTIVE')
+      expect(actualDetails.offenderManagerName).to.equal(`${auditData.forename} ${auditData.surname}`)
+      expect(actualDetails.team).to.equal(`${auditData.teamCode} - ${auditData.teamDescription}`)
+      expect(actualDetails.pdu).to.equal(`${auditData.lduCode} - ${auditData.lduDescription}`)
+      expect(actualDetails.region).to.equal(`${auditData.regionCode} - ${auditData.regionDescription}`)
     })
 
     after(async function () {
@@ -199,18 +198,17 @@ describe('View adding a new reduction', () => {
 
     after(async function () {
       await authenticationHelp.logout()
+      await pollCheckAndDelete()
       return dataHelper.deleteReductionsForWorkloadOwner(offenderManagerId)
     })
   })
 })
 
-function pollAndCheck () {
-  return receiveSqsMessage(sqsClient, queueURL).then(function (data) {
-    if (data.Messages) {
-      return deleteSqsMessage(sqsClient, queueURL, data.Messages[0].ReceiptHandle).then(function () {
-        return data.Messages[0]
-      })
-    }
-    return pollAndCheck()
-  })
+async function pollCheckAndDelete () {
+  const data = await receiveSqsMessage(sqsClient, queueURL)
+  if (data.Messages) {
+    await deleteSqsMessage(sqsClient, queueURL, data.Messages[0].ReceiptHandle)
+    return data.Messages[0]
+  }
+  return await pollCheckAndDelete()
 }

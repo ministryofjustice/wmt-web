@@ -258,7 +258,7 @@ module.exports = function (router) {
           }
         }
 
-        return reductionsService.addReduction(id, reduction, workloadType).then(function () {
+        return reductionsService.addReduction(id, reduction, workloadType, res.locals.user.email).then(function () {
           return res.redirect(302, '/' + workloadType + '/' + organisationLevel + '/' + id + '/reductions')
         })
       }).catch(function (error) {
