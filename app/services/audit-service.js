@@ -7,22 +7,26 @@ const sendSqsMessage = require('./aws/sqs/send-sqs-message')
 const sqsClient = getSqsClient({ region: audit.region, accessKeyId: audit.accessKeyId, secretAccessKey: audit.secretAccessKey, endpoint: audit.endpoint })
 
 module.exports.auditReductionCreation = function (offenderManagerDetails, reduction, loggedInUserEmail) {
-  return sendSqsMessage(sqsClient, audit.queueUrl, messageFrom('REDUCTION_CREATED', getDetailsForReduction(offenderManagerDetails, reduction), loggedInUserEmail))
+  return sendSqsMessage(sqsClient, audit.queueUrl, messageFrom('REDUCTION_CREATED', getDetailsForReduction(offenderManagerDetails, reduction, reduction), loggedInUserEmail))
 }
 
-function getDetailsForReduction (offenderManagerDetails, reduction) {
+module.exports.auditReductionEdited = function (offenderManagerDetails, reduction, oldReduction, loggedInUserEmail) {
+  return sendSqsMessage(sqsClient, audit.queueUrl, messageFrom('REDUCTION_EDITED', getDetailsForReduction(offenderManagerDetails, reduction, oldReduction), loggedInUserEmail))
+}
+
+function getDetailsForReduction (offenderManagerDetails, reduction, oldReduction) {
   return {
-    previousReason: reduction.reason,
+    previousReason: oldReduction.reason,
     newReason: reduction.reason,
-    previousHours: reduction.hours,
+    previousHours: oldReduction.hours,
     newHours: reduction.hours,
-    previousAdditionalNotes: reduction.notes,
+    previousAdditionalNotes: oldReduction.notes,
     newAdditionalNotes: reduction.notes,
-    previousEffectiveFrom: reduction.reductionStartDate,
+    previousEffectiveFrom: oldReduction.reductionStartDate,
     newEffectiveFrom: reduction.reductionStartDate,
-    previousEffectiveTo: reduction.reductionEndDate,
+    previousEffectiveTo: oldReduction.reductionEndDate,
     newEffectiveTo: reduction.reductionEndDate,
-    previousStatus: reduction.status,
+    previousStatus: oldReduction.status,
     newStatus: reduction.status,
     offenderManagerName: `${offenderManagerDetails.forename} ${offenderManagerDetails.surname}`,
     team: `${offenderManagerDetails.teamCode} - ${offenderManagerDetails.teamDescription}`,
