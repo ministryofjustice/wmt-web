@@ -10,6 +10,8 @@ export AWS_SECRET_ACCESS_KEY=foobar
 export AWS_DEFAULT_REGION=eu-west-2
 export PAGER=
 
+aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name audit_event_queue
+
 aws --endpoint-url=http://localhost:4566 s3api create-bucket --bucket wmt-web
 aws --endpoint-url=http://localhost:4566 s3api put-object --bucket wmt-web --key generated-dashboards/dashboard_20210729062147.txt --body $excelPath/dashboard-file.txt
 sleep 1

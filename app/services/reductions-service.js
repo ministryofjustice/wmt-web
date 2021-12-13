@@ -60,6 +60,7 @@ module.exports.getAddReductionsRefData = function (id, organisationLevel, worklo
 module.exports.addReduction = function (id, reduction, workloadType) {
   return addReduction(id, reduction)
     .then(function () {
+      // here
       if (workloadType === workloadTypes.PROBATION) {
         return getLatestIdsForWorkloadPointsRecalc(id)
           .then(function (ids) {
