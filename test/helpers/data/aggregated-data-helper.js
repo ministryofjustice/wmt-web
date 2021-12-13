@@ -211,7 +211,7 @@ module.exports.addInProgressWorkloadReport = function (inserts) {
 }
 
 const addRegion = function (inserts) {
-  return knex('region').withSchema('app').returning('id').insert({ description: 'NPS Test Region' })
+  return knex('region').withSchema('app').returning('id').insert({ description: 'NPS Test Region', code: 'NPS1' })
     .then(function (ids) {
       inserts.push({ table: 'region', id: ids[0] })
       return inserts
@@ -223,7 +223,7 @@ const addRegion = function (inserts) {
 
 const addTeam = function (inserts) {
   const ldus = inserts.filter((item) => item.table === 'ldu')
-  return knex('team').withSchema('app').returning('id').insert({ ldu_id: ldus[ldus.length - 1].id, description: 'Test Team' })
+  return knex('team').withSchema('app').returning('id').insert({ ldu_id: ldus[ldus.length - 1].id, description: 'Test Team', code: 'NPS1LDU1T1' })
     .then(function (ids) {
       inserts.push({ table: 'team', id: ids[0] })
       return inserts
@@ -235,7 +235,7 @@ const addTeam = function (inserts) {
 
 const addLdu = function (inserts) {
   const regions = inserts.filter((item) => item.table === 'region')
-  return knex('ldu').withSchema('app').returning('id').insert({ region_id: regions[regions.length - 1].id, description: 'Test LDU' })
+  return knex('ldu').withSchema('app').returning('id').insert({ region_id: regions[regions.length - 1].id, description: 'Test LDU', code: 'NPS1LDU1' })
     .then(function (ids) {
       inserts.push({ table: 'ldu', id: ids[0] })
       return inserts
