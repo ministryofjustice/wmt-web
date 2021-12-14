@@ -17,7 +17,7 @@ const getLatestIdsForCourtReportsCalc = require('./data/get-latest-court-reports
 const getOldReductionForHistory = require('./data/get-old-reduction-for-history')
 const insertOldReductionToHistory = require('./data/insert-old-reduction-to-history')
 const getOffenderManagerTeamLduRegion = require('./data/get-offender-manager-team-ldu-region')
-const { auditReductionCreation, auditReductionEdited } = require('./audit-service')
+const { auditReductionCreated, auditReductionEdited } = require('./audit-service')
 
 module.exports.getReductions = function (id, organisationLevel, workloadType) {
   const result = {}
@@ -64,7 +64,7 @@ module.exports.addReduction = function (id, reduction, workloadType, loggedInUse
 
     .then(function () {
       return getOffenderManagerTeamLduRegion(id).then(function (offenderManagerDetails) {
-        return auditReductionCreation(offenderManagerDetails, reduction, loggedInUserEmail).then(function () {
+        return auditReductionCreated(offenderManagerDetails, reduction, loggedInUserEmail).then(function () {
           if (workloadType === workloadTypes.PROBATION) {
             return getLatestIdsForWorkloadPointsRecalc(id)
               .then(function (ids) {

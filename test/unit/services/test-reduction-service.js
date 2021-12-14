@@ -28,7 +28,7 @@ let createCourtReportsCalculationTask
 let getLatestIdsForCourtReportsCalc
 let getOffenderManagerTeamLduRegion
 let auditReductionEdited
-let auditReductionCreation
+let auditReductionCreated
 
 const newReductionId = 9
 const existingReductionId = 10
@@ -124,7 +124,7 @@ beforeEach(function () {
   createCourtReportsCalculationTask = sinon.stub()
   getLatestIdsForCourtReportsCalc = sinon.stub().resolves(crRecalcIds)
   getOffenderManagerTeamLduRegion = sinon.stub().resolves(offenderManager)
-  auditReductionCreation = sinon.stub().resolves()
+  auditReductionCreated = sinon.stub().resolves()
   auditReductionEdited = sinon.stub().resolves()
 
   reductionService =
@@ -144,7 +144,7 @@ beforeEach(function () {
         './data/create-court-reports-calculation-task': createCourtReportsCalculationTask,
         './data/get-latest-court-reports-staging-id-and-workload-report-id': getLatestIdsForCourtReportsCalc,
         './data/get-offender-manager-team-ldu-region': getOffenderManagerTeamLduRegion,
-        './audit-service': { auditReductionCreation, auditReductionEdited }
+        './audit-service': { auditReductionCreated, auditReductionEdited }
 
       })
 })

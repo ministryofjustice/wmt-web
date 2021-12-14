@@ -6,7 +6,7 @@ const sendSqsMessage = require('./aws/sqs/send-sqs-message')
 
 const sqsClient = getSqsClient({ region: audit.region, accessKeyId: audit.accessKeyId, secretAccessKey: audit.secretAccessKey, endpoint: audit.endpoint })
 
-module.exports.auditReductionCreation = function (offenderManagerDetails, reduction, loggedInUserEmail) {
+module.exports.auditReductionCreated = function (offenderManagerDetails, reduction, loggedInUserEmail) {
   return sendSqsMessage(sqsClient, audit.queueUrl, messageFrom('REDUCTION_CREATED', getDetailsForReduction(offenderManagerDetails, reduction, reduction), loggedInUserEmail))
 }
 
