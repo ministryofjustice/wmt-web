@@ -1,10 +1,7 @@
 const knex = require('../../../knex').web
 
 module.exports = function (id) {
-  let whereObject = {}
-  if (id !== undefined) {
-    whereObject = { 'reductions.id': id }
-  }
+  const whereObject = { 'reductions.id': id }
 
   return knex('reductions')
     .withSchema('app')
@@ -13,14 +10,12 @@ module.exports = function (id) {
     .select('reductions.id AS reductionId',
       'reductions.reduction_reason_id AS reductionReasonId',
       'reductions.hours',
-      'effective_from AS reductionStartDate',
-      'effective_to AS reductionEndDate',
+      'reductions.effective_from AS reductionStartDate',
+      'reductions.effective_to AS reductionEndDate',
       'reductions.status',
       'reductions.notes',
       'reductions.updated_date AS updatedDate',
       'reductions.user_id AS userId',
       'reduction_reason.reason')
-    .then(function (reduction) {
-      return reduction[0]
-    })
+    .first()
 }
