@@ -19,6 +19,7 @@ let auditData
 
 describe('View adding a new reduction', () => {
   before(async function () {
+    await deleteAllMessages()
     return dataHelper.getAnyExistingWorkloadOwnerId()
       .then(function (results) {
         offenderManagerId = results
@@ -198,7 +199,7 @@ describe('View adding a new reduction', () => {
 
     after(async function () {
       await authenticationHelp.logout()
-      await pollCheckAndDelete()
+      await deleteAllMessages()
       return dataHelper.deleteReductionsForWorkloadOwner(offenderManagerId)
     })
   })
@@ -210,5 +211,14 @@ async function pollCheckAndDelete () {
     await deleteSqsMessage(sqsClient, queueURL, data.Messages[0].ReceiptHandle)
     return data.Messages[0]
   }
-  return await pollCheckAndDelete()
+  return pollCheckAndDelete()
+}
+
+async function deleteAllMessages () {
+  const data = await receiveSqsMessage(sqsClient, queueURL)
+  if (data.Messages) {
+    await deleteSqsMessage(sqsClient, queueURL, data.Messages[0].ReceiptHandle)
+    return deleteAllMessages()
+  }
+  return Promise.resolve()
 }

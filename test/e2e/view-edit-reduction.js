@@ -21,6 +21,7 @@ describe('editing a reduction', () => {
     offenderManagerId = await dataHelper.getAnyExistingWorkloadOwnerId()
     offenderManagerUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + offenderManagerId
     auditData = await dataHelper.getOffenderManagerTeamRegionLduByWorkloadOwnerId(offenderManagerId)
+    await deleteAllMessages()
   })
 
   describe('Manager', function () {
@@ -297,5 +298,14 @@ async function pollCheckAndDelete () {
     await deleteSqsMessage(sqsClient, queueURL, data.Messages[0].ReceiptHandle)
     return data.Messages[0]
   }
-  return await pollCheckAndDelete()
+  return pollCheckAndDelete()
+}
+
+async function deleteAllMessages () {
+  const data = await receiveSqsMessage(sqsClient, queueURL)
+  if (data.Messages) {
+    await deleteSqsMessage(sqsClient, queueURL, data.Messages[0].ReceiptHandle)
+    return deleteAllMessages()
+  }
+  return Promise.resolve()
 }
