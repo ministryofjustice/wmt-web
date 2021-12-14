@@ -194,8 +194,10 @@ describe('View adding a new reduction', () => {
 
     after(async function () {
       await authenticationHelp.logout()
-      await deleteAllMessages(sqsClient, queueURL)
       return dataHelper.deleteReductionsForWorkloadOwner(offenderManagerId)
     })
+  })
+  after(async function () {
+    await deleteAllMessages(sqsClient, queueURL)
   })
 })
