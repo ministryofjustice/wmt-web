@@ -149,7 +149,7 @@ beforeEach(function () {
       })
 })
 
-describe.only('services/reductions-service', function () {
+describe('services/reductions-service', function () {
   describe('Get reductions', function () {
     it('should create the result object with the right information for standard OM', function () {
       getReductions.resolves([])
