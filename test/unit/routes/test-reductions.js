@@ -1,9 +1,10 @@
-const routeHelper = require('../../helpers/routes/route-helper')
 const superTest = require('supertest')
+const sinon = require('sinon')
 const proxyquire = require('proxyquire').noPreserveCache()
+
+const routeHelper = require('../../helpers/routes/route-helper')
 const roles = require('../../..//app/constants/user-roles')
 const hasRoleFunction = require('../../../app/authorisation').hasRole
-const sinon = require('sinon')
 
 const workloadTypes = require('../../../app/constants/workload-type')
 
@@ -72,6 +73,8 @@ const createMiddleWare = function () {
     req.user = {
       user_role: validRole
     }
+    res.locals.user = { email: 'some.email@justice.gov.uk' }
+
     next()
   }
 }

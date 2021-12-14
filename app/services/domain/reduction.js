@@ -14,6 +14,7 @@ class Reduction {
     this.isValid(reductionReason)
     this.status = this.setReductionStatus()
     this.reductionSubmitter = reductionSubmitter
+    this.reason = reductionReason.reason
   }
 
   isValid (reductionReason) {

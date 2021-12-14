@@ -1,13 +1,13 @@
 const expect = require('chai').expect
-const routeHelper = require('../../helpers/routes/route-helper')
 const superTest = require('supertest')
+const sinon = require('sinon')
 const proxyquire = require('proxyquire').noPreserveCache()
+
+const routeHelper = require('../../helpers/routes/route-helper')
 const roles = require('../../..//app/constants/user-roles')
 const hasRoleFunction = require('../../../app/authorisation').hasRole
 const orgUnit = require('../../../app/constants/organisation-unit')
 const workloadType = require('../../../app/constants/workload-type')
-
-const sinon = require('sinon')
 
 const GET_REDUCTIONS_URL = '/' + workloadType.COURT_REPORTS + '/offender-manager/1/reductions'
 const TEAM_GET_REDUCTIONS_URL = '/' + workloadType.COURT_REPORTS + '/team/1/reductions'
@@ -108,6 +108,7 @@ const createMiddleWare = function () {
     req.user = {
       user_role: validRole
     }
+    res.locals.user = { email: 'some.email@justice.gov.uk' }
     next()
   }
 }
@@ -204,7 +205,7 @@ describe('court-reports reductions route', function () {
       return superTest(app)
         .get(url)
         .expect(200)
-        .then(function (results) {
+        .then(function () {
         expect(getSubNavStub.calledWith(1, orgUnit.OFFENDER_MANAGER.name, EDIT_REDUCTION_PAGE_URL, workloadType.COURT_REPORTS)).to.be.true //eslint-disable-line
           expect(reductionsService.getAddReductionsRefData.calledWith(1, orgUnit.OFFENDER_MANAGER.name, workloadType.COURT_REPORTS))
           expect(reductionsService.getReductionByReductionId.calledWith(existingReduction.id)).to.be.eql(true)
@@ -234,7 +235,7 @@ describe('court-reports reductions route', function () {
         .post(ADD_REDUCTION_POST_URL)
         .send(successDataToPost)
         .expect(302, 'Found. Redirecting to /' + workloadType.COURT_REPORTS + '/offender-manager/1/reductions')
-        .then(function (results) {
+        .then(function () {
           expect(reductionsService.addReduction.called).to.be.eql(true)
         })
     })
@@ -246,7 +247,7 @@ describe('court-reports reductions route', function () {
         .post(ADD_REDUCTION_POST_URL)
         .send(failureDataToPost)
         .expect(400)
-        .then(function (results) {
+        .then(function () {
           expect(reductionsService.addReduction.called).to.be.eql(false)
         expect(getSubNavStub.called).to.be.true //eslint-disable-line
         })

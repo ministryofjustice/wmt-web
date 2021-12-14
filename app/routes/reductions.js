@@ -258,7 +258,7 @@ module.exports = function (router) {
           }
         }
 
-        return reductionsService.addReduction(id, reduction, workloadType).then(function () {
+        return reductionsService.addReduction(id, reduction, workloadType, res.locals.user.email).then(function () {
           return res.redirect(302, '/' + workloadType + '/' + organisationLevel + '/' + id + '/reductions')
         })
       }).catch(function (error) {
@@ -338,7 +338,7 @@ module.exports = function (router) {
 
         return reductionsService.getOldReductionForHistory(reductionId).then(function (oldReduction) {
           return reductionsService.addOldReductionToHistory(oldReduction).then(function () {
-            return reductionsService.updateReduction(id, reductionId, reduction, workloadType)
+            return reductionsService.updateReduction(id, reductionId, reduction, workloadType, oldReduction, res.locals.user.email)
               .then(function () {
                 return res.redirect(302, '/' + workloadType + '/' + organisationLevel + '/' + id + '/reductions')
               }).catch(function (error) {
