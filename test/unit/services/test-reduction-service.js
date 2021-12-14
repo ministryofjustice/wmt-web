@@ -26,6 +26,9 @@ let reductionHelper
 let getLatestIdsForWpRecalc
 let createCourtReportsCalculationTask
 let getLatestIdsForCourtReportsCalc
+let getOffenderManagerTeamLduRegion
+let auditReductionEdited
+let auditReductionCreation
 
 const newReductionId = 9
 const existingReductionId = 10
@@ -75,6 +78,16 @@ const baseReduction =
     status: 'ACTIVE'
   }
 
+const offenderManager = {
+  forename: 'fore',
+  surname: 'sur',
+  teamCode: 'tc',
+  teamDescription: 'td',
+  lduCode: 'lc',
+  lduDescription: 'ld',
+  regionCode: 'rc',
+  regionDescription: 'rd'
+}
 const activeReductions = [baseReduction]
 
 const archivedReductions = [
@@ -110,6 +123,10 @@ beforeEach(function () {
   getLatestIdsForWpRecalc = sinon.stub().resolves(recalcIds)
   createCourtReportsCalculationTask = sinon.stub()
   getLatestIdsForCourtReportsCalc = sinon.stub().resolves(crRecalcIds)
+  getOffenderManagerTeamLduRegion = sinon.stub().resolves(offenderManager)
+  auditReductionCreation = sinon.stub().resolves()
+  auditReductionEdited = sinon.stub().resolves()
+
   reductionService =
     proxyquire('../../../app/services/reductions-service',
       {
@@ -125,11 +142,14 @@ beforeEach(function () {
         './data/get-latest-workload-staging-id-and-workload-report-id': getLatestIdsForWpRecalc,
         './data/get-reduction-by-id': getReductionById,
         './data/create-court-reports-calculation-task': createCourtReportsCalculationTask,
-        './data/get-latest-court-reports-staging-id-and-workload-report-id': getLatestIdsForCourtReportsCalc
+        './data/get-latest-court-reports-staging-id-and-workload-report-id': getLatestIdsForCourtReportsCalc,
+        './data/get-offender-manager-team-ldu-region': getOffenderManagerTeamLduRegion,
+        './audit-service': { auditReductionCreation, auditReductionEdited }
+
       })
 })
 
-describe('services/reductions-service', function () {
+describe.only('services/reductions-service', function () {
   describe('Get reductions', function () {
     it('should create the result object with the right information for standard OM', function () {
       getReductions.resolves([])
@@ -216,7 +236,9 @@ describe('services/reductions-service', function () {
     it('should update reduction and create worker task when reduction Id given for standard OM', function () {
       createCalculateWorkloadTaskStub.resolves(1)
       updateReductionStub.withArgs(existingReductionId, workloadOwnerId, reduction).resolves(existingReductionId)
-      return reductionService.updateReduction(workloadOwnerId, existingReductionId, reduction, workloadTypes.PROBATION)
+      const oldReduction = {}
+      const email = 'some.email.@justice.gov.uk'
+      return reductionService.updateReduction(workloadOwnerId, existingReductionId, reduction, workloadTypes.PROBATION, oldReduction, email)
         .then(function (result) {
           expect(getLatestIdsForWpRecalc.calledWith(workloadOwnerId)).to.be.true //eslint-disable-line
           expect(createCalculateWorkloadTaskStub.calledWith(latestWorkloadStagingId, latestWorkloadReportId, 1)).to.be.true //eslint-disable-line
@@ -228,7 +250,9 @@ describe('services/reductions-service', function () {
     it('should update reduction and create worker task when reduction Id given for court-reporter', function () {
       createCourtReportsCalculationTask.resolves(1)
       updateReductionStub.withArgs(existingReductionId, workloadOwnerId, reduction).resolves(existingReductionId)
-      return reductionService.updateReduction(workloadOwnerId, existingReductionId, reduction, workloadTypes.COURT_REPORTS)
+      const oldReduction = {}
+      const email = 'some.email.@justice.gov.uk'
+      return reductionService.updateReduction(workloadOwnerId, existingReductionId, reduction, workloadTypes.COURT_REPORTS, oldReduction, email)
         .then(function (result) {
           expect(getLatestIdsForCourtReportsCalc.calledWith(workloadOwnerId)).to.be.true //eslint-disable-line
           expect(createCourtReportsCalculationTask.calledWith(latestCourtReportsStagingId, latestWorkloadReportId, 1)).to.be.true //eslint-disable-line
