@@ -3,7 +3,7 @@ const moment = require('moment')
 
 const authenticationHelp = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
-const { deleteAllMessages } = require('../helpers/sqs')
+const { deleteAllMessages, pollCheckAndDelete } = require('../helpers/sqs')
 
 const workloadTypes = require('../../app/constants/workload-type')
 const getSqsClient = require('../../app/services/aws/sqs/get-sqs-client')
@@ -12,7 +12,7 @@ const { audit } = require('../../config')
 const sqsClient = getSqsClient({ region: audit.region, accessKeyId: audit.accessKeyId, secretAccessKey: audit.secretAccessKey, endpoint: audit.endpoint })
 const queueURL = audit.queueUrl
 
-let offenderManagerId, reductionTypeField, hoursField, startDayField, startMonthField, startYearField, endDayField, endMonthField, endYearField, notesField, submit, offenderManagerUrl
+let offenderManagerId, reductionTypeField, hoursField, startDayField, startMonthField, startYearField, endDayField, endMonthField, endYearField, notesField, submit, offenderManagerUrl, auditData
 
 describe('archiving a reduction', () => {
   const notesFieldValue = moment().format('YYYY-MM-DD HH:mm:ss.SSS')
@@ -20,6 +20,8 @@ describe('archiving a reduction', () => {
   before(async function () {
     offenderManagerId = await dataHelper.getAnyExistingWorkloadOwnerId()
     offenderManagerUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + offenderManagerId
+    auditData = await dataHelper.getOffenderManagerTeamRegionLduByWorkloadOwnerId(offenderManagerId)
+
     await deleteAllMessages(sqsClient, queueURL)
   })
 
@@ -80,6 +82,34 @@ describe('archiving a reduction', () => {
       const successMessage = await $('#reduction-success-text')
       const successText = await successMessage.getText()
       expect(successText).to.be.equal('You have successfully archived the reduction!')
+
+      const data = await pollCheckAndDelete(sqsClient, queueURL)
+      const body = JSON.parse(data.Body)
+      const currentDate = new Date().getTime()
+      const whenDate = new Date(body.when).getTime()
+      expect(body.what).to.equal('REDUCTION_ARCHIVED')
+      expect(body.who).to.equal(`${authenticationHelp.users.Manager.username.toLowerCase()}@digital.justice.gov.uk`)
+      expect(body.service).to.equal('wmt')
+      expect(whenDate).to.be.lessThan(currentDate)
+      expect(body.operationId).to.not.equal(null)
+
+      const actualDetails = JSON.parse(body.details)
+      expect(actualDetails.previousReason).to.equal('Other')
+      expect(actualDetails.newReason).to.equal('Other')
+      expect(actualDetails.previousHours).to.equal(10)
+      expect(actualDetails.newHours).to.equal(10)
+      expect(actualDetails.previousAdditionalNotes).to.equal(notesFieldValue)
+      expect(actualDetails.newAdditionalNotes).to.equal(notesFieldValue)
+      expect(actualDetails.previousEffectiveFrom).to.equal('2017-02-01T00:00:00.000Z')
+      expect(actualDetails.newEffectiveFrom).to.equal('2017-02-01T00:00:00.000Z')
+      expect(actualDetails.previousEffectiveTo).to.equal('2025-02-01T00:00:00.000Z')
+      expect(actualDetails.newEffectiveTo).to.equal('2025-02-01T00:00:00.000Z')
+      expect(actualDetails.previousStatus).to.equal('ACTIVE')
+      expect(actualDetails.newStatus).to.equal('ARCHIVED')
+      expect(actualDetails.offenderManagerName).to.equal(`${auditData.forename} ${auditData.surname}`)
+      expect(actualDetails.team).to.equal(`${auditData.teamCode} - ${auditData.teamDescription}`)
+      expect(actualDetails.pdu).to.equal(`${auditData.lduCode} - ${auditData.lduDescription}`)
+      expect(actualDetails.region).to.equal(`${auditData.regionCode} - ${auditData.regionDescription}`)
     })
 
     after(async function () {
