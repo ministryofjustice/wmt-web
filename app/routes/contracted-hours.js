@@ -1,6 +1,5 @@
 const contractedHoursService = require('../services/contracted-hours-service')
 const getSubNav = require('../services/get-sub-nav')
-const organisationUnitConstants = require('../constants/organisation-unit')
 const ErrorHandler = require('../services/validators/error-handler')
 const FieldValidator = require('../services/validators/field-validator')
 const ValidationError = require('../services/errors/validation-error')
@@ -12,7 +11,7 @@ const workloadTypeValidator = require('../services/validators/workload-type-vali
 const Forbidden = require('../services/errors/authentication-error').Forbidden
 
 module.exports = function (router) {
-  router.get('/:workloadType/:organisationLevel/:id/contracted-hours', function (req, res, next) {
+  router.get('/:workloadType/offender-manager/:id/contracted-hours', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
@@ -23,15 +22,11 @@ module.exports = function (router) {
         })
       }
     }
-    const organisationLevel = req.params.organisationLevel
+    const organisationLevel = 'offender-manager'
     const id = req.params.id
     const workloadType = req.params.workloadType
 
     workloadTypeValidator.validate(workloadType)
-
-    if (organisationLevel !== organisationUnitConstants.OFFENDER_MANAGER.name) {
-      return res.sendStatus(404)
-    }
 
     const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
 
@@ -53,7 +48,7 @@ module.exports = function (router) {
       })
   })
 
-  router.post('/:workloadType/:organisationLevel/:id/contracted-hours', function (req, res, next) {
+  router.post('/:workloadType/offender-manager/:id/contracted-hours', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER])
     } catch (error) {
@@ -65,16 +60,12 @@ module.exports = function (router) {
       }
     }
 
-    const organisationLevel = req.params.organisationLevel
+    const organisationLevel = 'offender-manager'
     const id = req.params.id
     const updatedHours = req.body.hours
     const workloadType = req.params.workloadType
 
     workloadTypeValidator.validate(workloadType)
-
-    if (organisationLevel !== organisationUnitConstants.OFFENDER_MANAGER.name) {
-      return res.sendStatus(404)
-    }
 
     try {
       isValid(updatedHours, next)
@@ -102,7 +93,7 @@ module.exports = function (router) {
       }
     }
 
-    return contractedHoursService.updateContractedHours(id, organisationLevel, updatedHours, workloadType)
+    return contractedHoursService.updateContractedHours(id, updatedHours, workloadType, res.locals.user.email)
       .then(function () {
         return res.redirect('/' + workloadType + '/offender-manager/' + id + '/contracted-hours?hoursUpdatedSuccess=true')
       }).catch(function (error) {
