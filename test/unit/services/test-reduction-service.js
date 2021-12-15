@@ -29,6 +29,7 @@ let getLatestIdsForCourtReportsCalc
 let getOffenderManagerTeamLduRegion
 let auditReductionEdited
 let auditReductionCreated
+let auditReductionStatusChange
 
 const newReductionId = 9
 const existingReductionId = 10
@@ -126,6 +127,7 @@ beforeEach(function () {
   getOffenderManagerTeamLduRegion = sinon.stub().resolves(offenderManager)
   auditReductionCreated = sinon.stub().resolves()
   auditReductionEdited = sinon.stub().resolves()
+  auditReductionStatusChange = sinon.stub().resolves()
 
   reductionService =
     proxyquire('../../../app/services/reductions-service',
@@ -144,7 +146,7 @@ beforeEach(function () {
         './data/create-court-reports-calculation-task': createCourtReportsCalculationTask,
         './data/get-latest-court-reports-staging-id-and-workload-report-id': getLatestIdsForCourtReportsCalc,
         './data/get-offender-manager-team-ldu-region': getOffenderManagerTeamLduRegion,
-        './audit-service': { auditReductionCreated, auditReductionEdited }
+        './audit-service': { auditReductionCreated, auditReductionEdited, auditReductionStatusChange }
 
       })
 })

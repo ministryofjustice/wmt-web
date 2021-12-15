@@ -389,7 +389,7 @@ module.exports = function (router) {
 
     return reductionsService.getOldReductionForHistory(reductionId).then(function (oldReduction) {
       return reductionsService.addOldReductionToHistory(oldReduction).then(function () {
-        return reductionsService.updateReductionStatus(id, reductionId, reductionStatus, workloadType)
+        return reductionsService.updateReductionStatus(id, reductionId, reductionStatus, workloadType, oldReduction, res.locals.user.email)
           .then(function () {
             return res.redirect(302, '/' + workloadType + '/' + organisationLevel + '/' + id + '/reductions' + successType)
           }).catch(function (error) {
