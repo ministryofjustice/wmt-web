@@ -6,14 +6,11 @@ const getLatestIdsForWorkloadPointsRecalc = require('./data/get-latest-workload-
 const getLatestIdsForCourtReportsCalc = require('./data/get-latest-court-reports-staging-id-and-workload-report-id')
 const getBreadcrumbs = require('./get-breadcrumbs')
 const getOrganisationUnit = require('./helpers/org-unit-finder')
-const organisationUnitConstants = require('../constants/organisation-unit')
 const workloadTypes = require('../constants/workload-type')
+const getOffenderManagerTeamLduRegion = require('./data/get-offender-manager-team-ldu-region')
+const { auditContractedHoursEdited } = require('./audit-service')
 
 module.exports.getContractedHours = function (id, organisationLevel, workloadType) {
-  if (organisationLevel !== organisationUnitConstants.OFFENDER_MANAGER.name) {
-    throw new Error('Can only get contracted hours for an offender manager')
-  }
-
   const organisationalUnitType = getOrganisationUnit('name', organisationLevel)
   return getBreadcrumbs(id, organisationLevel, workloadType).then(function (breadcrumbs) {
     return getContractedHoursForWorkloadOwner(id)
@@ -28,28 +25,23 @@ module.exports.getContractedHours = function (id, organisationLevel, workloadTyp
   })
 }
 
-module.exports.updateContractedHours = function (id, organisationLevel, hours, workloadType) {
-  if (organisationLevel !== organisationUnitConstants.OFFENDER_MANAGER.name) {
-    throw new Error('Can only update contracted hours for an offender manager')
-  }
-
-  return updateContractedHoursForWorkloadOwner(id, hours)
-    .then(function (count) {
-      if (count === 0) {
-        throw new Error('Offender manager with id: ' + id + ' has not had contracted hours updated')
-      }
-      if (workloadType === workloadTypes.PROBATION) {
-        return getLatestIdsForWorkloadPointsRecalc(id)
-          .then(function (ids) {
-            return createWorkloadPointsRecalculationTask(ids.workloadStagingId, ids.workloadReportId, 1)
-          })
-      } else {
-        return getLatestIdsForCourtReportsCalc(id)
-          .then(function (ids) {
-            return createCourtReportsCalculationTask(ids.courtReportsStagingId, ids.workloadReportId, 1)
-          })
-      }
-    }).catch(function (err) {
-      throw err
-    })
+module.exports.updateContractedHours = function (id, hours, workloadType, who) {
+  return getOffenderManagerTeamLduRegion(id).then(function (offenderManagerDetails) {
+    return updateContractedHoursForWorkloadOwner(id, hours)
+      .then(function () {
+        return auditContractedHoursEdited(offenderManagerDetails, hours, who).then(function () {
+          if (workloadType === workloadTypes.PROBATION) {
+            return getLatestIdsForWorkloadPointsRecalc(id)
+              .then(function (ids) {
+                return createWorkloadPointsRecalculationTask(ids.workloadStagingId, ids.workloadReportId, 1)
+              })
+          } else {
+            return getLatestIdsForCourtReportsCalc(id)
+              .then(function (ids) {
+                return createCourtReportsCalculationTask(ids.courtReportsStagingId, ids.workloadReportId, 1)
+              })
+          }
+        })
+      })
+  })
 }

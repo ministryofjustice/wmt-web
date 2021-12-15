@@ -7,6 +7,7 @@ const roles = require('../../..//app/constants/user-roles')
 const hasRoleFunction = require('../../../app/authorisation').hasRole
 
 const workloadTypes = require('../../../app/constants/workload-type')
+const setupLoggedInUserMiddleware = require('../helpers/setupLoggedInUserMiddleware')
 
 const GET_REDUCTIONS_URL = '/' + workloadTypes.PROBATION + '/offender-manager/1/reductions'
 const ADD_REDUCTION_PAGE_URL = '/' + workloadTypes.PROBATION + '/offender-manager/1/add-reduction'
@@ -68,18 +69,7 @@ let getSubNavStub
 let authorisationService
 const validRole = roles.MANAGER
 
-const createMiddleWare = function () {
-  return function (req, res, next) {
-    req.user = {
-      user_role: validRole
-    }
-    res.locals.user = { email: 'some.email@justice.gov.uk' }
-
-    next()
-  }
-}
-
-const initaliseApp = function (middleware) {
+const initaliseApp = function () {
   authorisationService = {
 
     hasRole: hasRoleFunction
@@ -102,11 +92,11 @@ const initaliseApp = function (middleware) {
     '../authorisation': authorisationService,
     '../services/get-sub-nav': getSubNavStub
   })
-  app = routeHelper.buildApp(route, middleware)
+  app = routeHelper.buildApp(route, setupLoggedInUserMiddleware('username', validRole))
 }
 
 beforeEach(function () {
-  initaliseApp(createMiddleWare())
+  initaliseApp()
 })
 
 describe('reductions route', function () {

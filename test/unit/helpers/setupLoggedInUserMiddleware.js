@@ -5,6 +5,7 @@ module.exports = function (username, role) {
       username,
       user_role: role
     }
+    res.locals.user = { email: 'some.email@justice.gov.uk' }
     next()
   }
 }

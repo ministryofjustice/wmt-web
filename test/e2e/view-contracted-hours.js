@@ -1,14 +1,22 @@
 const expect = require('chai').expect
 const authenticationHelp = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
+const { deleteAllMessages, pollCheckAndDelete } = require('../helpers/sqs')
 const workloadTypes = require('../../app/constants/workload-type')
+const getSqsClient = require('../../app/services/aws/sqs/get-sqs-client')
+const { audit } = require('../../config')
+
+const sqsClient = getSqsClient({ region: audit.region, accessKeyId: audit.accessKeyId, secretAccessKey: audit.secretAccessKey, endpoint: audit.endpoint })
+const queueURL = audit.queueUrl
 
 let workloadOwnerDefaultUrl
+let auditData
 
 describe('View contracted hours', function () {
   before(async function () {
     const results = await dataHelper.selectIdsForWorkloadOwner()
     const workloadOwnerId = results.filter((item) => item.table === 'workload_owner')[0].id
+    auditData = await dataHelper.getOffenderManagerTeamRegionLduByWorkloadOwnerId(workloadOwnerId)
     workloadOwnerDefaultUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + workloadOwnerId
   })
   describe('Manager', function () {
@@ -44,6 +52,24 @@ describe('View contracted hours', function () {
       const successBanner = await $('.govuk-notification-banner--success .govuk-notification-banner__heading')
       const successBannerText = await successBanner.getText()
       expect(successBannerText).to.equal('You have successfully updated the contracted hours for Test_Forename Test_Surname')
+
+      const data = await pollCheckAndDelete(sqsClient, queueURL)
+      const body = JSON.parse(data.Body)
+      const currentDate = new Date().getTime()
+      const whenDate = new Date(body.when).getTime()
+      expect(body.what).to.equal('CONTRACTED_HOURS_EDITED')
+      expect(body.who).to.equal(`${authenticationHelp.users.Manager.username.toLowerCase()}@digital.justice.gov.uk`)
+      expect(body.service).to.equal('wmt')
+      expect(whenDate).to.be.lessThan(currentDate)
+      expect(body.operationId).to.not.equal(null)
+
+      const actualDetails = JSON.parse(body.details)
+      expect(actualDetails.offenderManagerName).to.equal(`${auditData.forename} ${auditData.surname}`)
+      expect(actualDetails.team).to.equal(`${auditData.teamCode} - ${auditData.teamDescription}`)
+      expect(actualDetails.pdu).to.equal(`${auditData.lduCode} - ${auditData.lduDescription}`)
+      expect(actualDetails.region).to.equal(`${auditData.regionCode} - ${auditData.regionDescription}`)
+      expect(actualDetails.previousContractedHours).to.equal(parseInt(auditData.contractedHours))
+      expect(actualDetails.newContractedHours).to.equal('36')
     })
 
     after(async function () {
@@ -87,6 +113,7 @@ describe('View contracted hours', function () {
     })
 
     after(async function () {
+      await deleteAllMessages(sqsClient, queueURL)
       await authenticationHelp.logout()
     })
   })
