@@ -287,7 +287,7 @@ const addWorkloadOwner = function (inserts) {
     {
       team_id: teams[teams.length - 1].id,
       offender_manager_id: offenderManagers[offenderManagers.length - 1].id,
-      contracted_hours: 37.5
+      contracted_hours: 37
     }
   )
     .then(function (ids) {
@@ -625,7 +625,7 @@ module.exports.getOffenderManagerTeamRegionLduByWorkloadOwnerId = function (work
     .join('region', 'ldu.region_id', 'region.id')
     .first()
     .select('offender_manager.forename', 'offender_manager.surname', 'team.code AS teamCode', 'team.description AS teamDescription', 'ldu.code AS lduCode', 'ldu.description AS lduDescription',
-      'region.code AS regionCode', 'region.description AS regionDescription')
+      'region.code AS regionCode', 'region.description AS regionDescription', 'workload_owner.contracted_hours as contractedHours')
     .where('workload_owner.id', workloadOwnerId)
 }
 

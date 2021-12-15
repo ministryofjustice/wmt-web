@@ -18,6 +18,21 @@ module.exports.auditReductionArchived = function (offenderManagerDetails, reduct
   return sendSqsMessage(sqsClient, audit.queueUrl, messageFrom('REDUCTION_ARCHIVED', getDetailsForReduction(offenderManagerDetails, reduction, oldReduction), loggedInUserEmail))
 }
 
+module.exports.auditContractedHoursEdited = function (offenderManagerDetails, newHours, loggedInUserEmail) {
+  return sendSqsMessage(sqsClient, audit.queueUrl, messageFrom('CONTRACTED_HOURS_EDITED', getDetailsForContractedHours(offenderManagerDetails, newHours), loggedInUserEmail))
+}
+
+function getDetailsForContractedHours (offenderManagerDetails, newContractedHours) {
+  return {
+    offenderManagerName: `${offenderManagerDetails.forename} ${offenderManagerDetails.surname}`,
+    team: `${offenderManagerDetails.teamCode} - ${offenderManagerDetails.teamDescription}`,
+    pdu: `${offenderManagerDetails.lduCode} - ${offenderManagerDetails.lduDescription}`,
+    region: `${offenderManagerDetails.regionCode} - ${offenderManagerDetails.regionDescription}`,
+    previousContractedHours: offenderManagerDetails.contractedHours,
+    newContractedHours
+  }
+}
+
 function getDetailsForReduction (offenderManagerDetails, reduction, oldReduction) {
   return {
     previousReason: oldReduction.reason,

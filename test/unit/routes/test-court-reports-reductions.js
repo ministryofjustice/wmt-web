@@ -9,6 +9,8 @@ const hasRoleFunction = require('../../../app/authorisation').hasRole
 const orgUnit = require('../../../app/constants/organisation-unit')
 const workloadType = require('../../../app/constants/workload-type')
 
+const setupLoggedInUserMiddleware = require('../helpers/setupLoggedInUserMiddleware')
+
 const GET_REDUCTIONS_URL = '/' + workloadType.COURT_REPORTS + '/offender-manager/1/reductions'
 const TEAM_GET_REDUCTIONS_URL = '/' + workloadType.COURT_REPORTS + '/team/1/reductions'
 const INVALID_GET_REDUCTIONS_URL = '/' + workloadType.COURT_REPORTS + '/offender-manager/reductions'
@@ -103,17 +105,7 @@ let getSubNavStub
 let authorisationService
 const validRole = roles.MANAGER
 
-const createMiddleWare = function () {
-  return function (req, res, next) {
-    req.user = {
-      user_role: validRole
-    }
-    res.locals.user = { email: 'some.email@justice.gov.uk' }
-    next()
-  }
-}
-
-const initaliseApp = function (middleware) {
+const initaliseApp = function () {
   authorisationService = {
     hasRole: hasRoleFunction,
     isUserAuthenticated: sinon.stub().returns(true)
@@ -135,11 +127,11 @@ const initaliseApp = function (middleware) {
     '../authorisation': authorisationService,
     '../services/get-sub-nav': getSubNavStub
   })
-  app = routeHelper.buildApp(route, middleware)
+  app = routeHelper.buildApp(route, setupLoggedInUserMiddleware('', validRole))
 }
 
 beforeEach(function () {
-  initaliseApp(createMiddleWare())
+  initaliseApp()
 })
 
 describe('court-reports reductions route', function () {
