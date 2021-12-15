@@ -3,6 +3,12 @@ const crypto = require('crypto')
 
 const getSqsClient = require('./aws/sqs/get-sqs-client')
 const sendSqsMessage = require('./aws/sqs/send-sqs-message')
+const { ARCHIVED, DELETED } = require('../constants/reduction-status-type')
+
+const reductionStatusToAuditAction = {
+  [DELETED]: 'REDUCTION_DELETED',
+  [ARCHIVED]: 'REDUCTION_ARCHIVED'
+}
 
 const sqsClient = getSqsClient({ region: audit.region, accessKeyId: audit.accessKeyId, secretAccessKey: audit.secretAccessKey, endpoint: audit.endpoint })
 
@@ -14,8 +20,8 @@ module.exports.auditReductionEdited = function (offenderManagerDetails, reductio
   return sendSqsMessage(sqsClient, audit.queueUrl, messageFrom('REDUCTION_EDITED', getDetailsForReduction(offenderManagerDetails, reduction, oldReduction), loggedInUserEmail))
 }
 
-module.exports.auditReductionArchived = function (offenderManagerDetails, reduction, oldReduction, loggedInUserEmail) {
-  return sendSqsMessage(sqsClient, audit.queueUrl, messageFrom('REDUCTION_ARCHIVED', getDetailsForReduction(offenderManagerDetails, reduction, oldReduction), loggedInUserEmail))
+module.exports.auditReductionStatusChange = function (offenderManagerDetails, reduction, oldReduction, loggedInUserEmail) {
+  return sendSqsMessage(sqsClient, audit.queueUrl, messageFrom(reductionStatusToAuditAction[reduction.status], getDetailsForReduction(offenderManagerDetails, reduction, oldReduction), loggedInUserEmail))
 }
 
 module.exports.auditContractedHoursEdited = function (offenderManagerDetails, newHours, loggedInUserEmail) {
