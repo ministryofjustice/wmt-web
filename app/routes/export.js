@@ -131,7 +131,7 @@ module.exports = function (router) {
 
       return exportPromise.then(function (results) {
         if (radioButton === '5') {
-          const scenarioFileName = `BETA-${organisationLevel}_Scenario_${dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY')}.xlsx`
+          const scenarioFileName = `${organisationLevel}_Scenario_${dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY')}.xlsx`
           results.write(scenarioFileName, res)
         } else {
           formatResults(results, tabType)

@@ -56,7 +56,7 @@ module.exports = function (organisationLevel, result, tab) {
 
   const csv = getCsv(organisationLevel, result, tab, fields, fieldNames)
 
-  return { filename: `BETA-${filename}`, csv: csv }
+  return { filename, csv }
 }
 
 const getFilename = function (orgName, screen) {
