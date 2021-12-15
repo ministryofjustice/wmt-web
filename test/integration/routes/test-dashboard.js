@@ -43,7 +43,7 @@ describe('download dashboard file', function () {
 
     expect(response.statusCode).to.equal(200)
     expect(response.body.toString()).to.equal('dashboard')
-    expect(response.headers['content-disposition']).to.be.equal('attachment; filename=BETA-generated-dashboards/dashboard_20210802062147.txt')
+    expect(response.headers['content-disposition']).to.be.equal('attachment; filename=generated-dashboards/dashboard_20210802062147.txt')
     expect(response.headers['content-type']).to.be.equal('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
   })
 

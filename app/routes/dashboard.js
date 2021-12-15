@@ -77,7 +77,7 @@ module.exports = function (router) {
       throw new Error('Only available for National Level')
     }
     return getDashboardFile(fileId).then(function (dataStream) {
-      res.set('Content-disposition', 'attachment; filename=BETA-' + fileId)
+      res.set('Content-disposition', `attachment; filename=${fileId}`)
       res.set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
       dataStream.pipe(res)
     }).catch(function (error) {
