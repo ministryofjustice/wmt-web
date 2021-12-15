@@ -14,6 +14,10 @@ module.exports.auditReductionEdited = function (offenderManagerDetails, reductio
   return sendSqsMessage(sqsClient, audit.queueUrl, messageFrom('REDUCTION_EDITED', getDetailsForReduction(offenderManagerDetails, reduction, oldReduction), loggedInUserEmail))
 }
 
+module.exports.auditReductionArchived = function (offenderManagerDetails, reduction, oldReduction, loggedInUserEmail) {
+  return sendSqsMessage(sqsClient, audit.queueUrl, messageFrom('REDUCTION_ARCHIVED', getDetailsForReduction(offenderManagerDetails, reduction, oldReduction), loggedInUserEmail))
+}
+
 function getDetailsForReduction (offenderManagerDetails, reduction, oldReduction) {
   return {
     previousReason: oldReduction.reason,

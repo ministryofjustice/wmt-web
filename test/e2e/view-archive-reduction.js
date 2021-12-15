@@ -69,6 +69,7 @@ describe('archiving a reduction', () => {
       const view = await viewLink.getText()
       expect(view).to.equal('View')
       await viewLink.click()
+      await pollCheckAndDelete(sqsClient, queueURL)
     })
 
     it('should navigate to the edit reduction screen and archive it', async () => {
@@ -94,6 +95,7 @@ describe('archiving a reduction', () => {
       expect(body.operationId).to.not.equal(null)
 
       const actualDetails = JSON.parse(body.details)
+      console.log(actualDetails)
       expect(actualDetails.previousReason).to.equal('Other')
       expect(actualDetails.newReason).to.equal('Other')
       expect(actualDetails.previousHours).to.equal(10)
