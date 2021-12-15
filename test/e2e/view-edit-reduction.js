@@ -1,14 +1,14 @@
 const expect = require('chai').expect
-const authenticationHelp = require('../helpers/routes/authentication-helper')
-const dataHelper = require('../helpers/data/aggregated-data-helper')
-const workloadTypes = require('../../app/constants/workload-type')
 const moment = require('moment')
 
+const authenticationHelp = require('../helpers/routes/authentication-helper')
+const dataHelper = require('../helpers/data/aggregated-data-helper')
+const { deleteAllMessages, pollCheckAndDelete } = require('../helpers/sqs')
+
+const workloadTypes = require('../../app/constants/workload-type')
 const getSqsClient = require('../../app/services/aws/sqs/get-sqs-client')
 const { audit } = require('../../config')
 
-const receiveSqsMessage = require('../../app/services/aws/sqs/receive-sqs-message')
-const deleteSqsMessage = require('../../app/services/aws/sqs/delete-sqs-message')
 const sqsClient = getSqsClient({ region: audit.region, accessKeyId: audit.accessKeyId, secretAccessKey: audit.secretAccessKey, endpoint: audit.endpoint })
 const queueURL = audit.queueUrl
 
@@ -21,7 +21,7 @@ describe('editing a reduction', () => {
     offenderManagerId = await dataHelper.getAnyExistingWorkloadOwnerId()
     offenderManagerUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + offenderManagerId
     auditData = await dataHelper.getOffenderManagerTeamRegionLduByWorkloadOwnerId(offenderManagerId)
-    await deleteAllMessages()
+    await deleteAllMessages(sqsClient, queueURL)
   })
 
   describe('Manager', function () {
@@ -62,7 +62,7 @@ describe('editing a reduction', () => {
 
       await submit.click()
 
-      await pollCheckAndDelete()
+      await pollCheckAndDelete(sqsClient, queueURL)
 
       await $('#headingActive')
       const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
@@ -113,7 +113,7 @@ describe('editing a reduction', () => {
       notesField = await notesField.getValue()
       expect(notesField, 'The notes field of the last inserted reduction should have the following contents: ' + currentTime).to.be.equal(currentTime)
 
-      const data = await pollCheckAndDelete()
+      const data = await pollCheckAndDelete(sqsClient, queueURL)
       const body = JSON.parse(data.Body)
       const currentDate = new Date().getTime()
       const whenDate = new Date(body.when).getTime()
@@ -286,26 +286,10 @@ describe('editing a reduction', () => {
 
     after(async function () {
       await authenticationHelp.logout()
-      await pollCheckAndDelete()
       return dataHelper.deleteReductionsForWorkloadOwner(offenderManagerId)
     })
   })
+  after(async function () {
+    await deleteAllMessages(sqsClient, queueURL)
+  })
 })
-
-async function pollCheckAndDelete () {
-  const data = await receiveSqsMessage(sqsClient, queueURL)
-  if (data.Messages) {
-    await deleteSqsMessage(sqsClient, queueURL, data.Messages[0].ReceiptHandle)
-    return data.Messages[0]
-  }
-  return pollCheckAndDelete()
-}
-
-async function deleteAllMessages () {
-  const data = await receiveSqsMessage(sqsClient, queueURL)
-  if (data.Messages) {
-    await deleteSqsMessage(sqsClient, queueURL, data.Messages[0].ReceiptHandle)
-    return deleteAllMessages()
-  }
-  return Promise.resolve()
-}

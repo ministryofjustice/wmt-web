@@ -1,8 +1,16 @@
 const expect = require('chai').expect
+const moment = require('moment')
+
 const authenticationHelp = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
+const { deleteAllMessages } = require('../helpers/sqs')
+
 const workloadTypes = require('../../app/constants/workload-type')
-const moment = require('moment')
+const getSqsClient = require('../../app/services/aws/sqs/get-sqs-client')
+const { audit } = require('../../config')
+
+const sqsClient = getSqsClient({ region: audit.region, accessKeyId: audit.accessKeyId, secretAccessKey: audit.secretAccessKey, endpoint: audit.endpoint })
+const queueURL = audit.queueUrl
 
 let offenderManagerId, reductionTypeField, hoursField, startDayField, startMonthField, startYearField, endDayField, endMonthField, endYearField, notesField, submit, offenderManagerUrl
 
@@ -12,6 +20,7 @@ describe('archiving a reduction', () => {
   before(async function () {
     offenderManagerId = await dataHelper.getAnyExistingWorkloadOwnerId()
     offenderManagerUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + offenderManagerId
+    await deleteAllMessages(sqsClient, queueURL)
   })
 
   describe('Manager', function () {
@@ -202,10 +211,15 @@ describe('archiving a reduction', () => {
       const successText = await successMessage.getText()
       expect(successText).to.be.equal('You have successfully archived the reduction!')
     })
+  })
 
-    after(async function () {
-      await authenticationHelp.logout()
-      return dataHelper.deleteReductionsForWorkloadOwner(offenderManagerId)
-    })
+  after(async function () {
+    await authenticationHelp.logout()
+    await deleteAllMessages(sqsClient, queueURL)
+    return dataHelper.deleteReductionsForWorkloadOwner(offenderManagerId)
+  })
+
+  after(async function () {
+    await deleteAllMessages(sqsClient, queueURL)
   })
 })
