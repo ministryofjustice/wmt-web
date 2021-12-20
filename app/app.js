@@ -99,22 +99,16 @@ app.use(function (req, res, next) {
 })
 
 // Build the router to route all HTTP requests and pass to the routes file for route configuration.
-// const router = express.Router()
-// routes(router)
-// app.use('/', router)
+const router = express.Router()
+routes(router)
+app.use('/', router)
 
 // catch 404 and forward to error handler.
-// app.use(function (req, res, next) {
-//   const err = new Error('Not Found')
-//   err.status = 404
-//   res.status(404)
-//   next(err)
-// })
 app.use(function (req, res, next) {
-  res.render('maintenance-page', {
-    title: 'WMT Unavailable',
-    subTitle: ''
-  })
+  const err = new Error('Not Found')
+  err.status = 404
+  res.status(404)
+  next(err)
 })
 
 // catch CSRF token errors
