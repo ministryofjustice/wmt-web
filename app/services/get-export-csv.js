@@ -282,18 +282,11 @@ const getCsv = function (organisationLevel, result, tab, fields, fieldNames) {
       }
       break
     case tabs.OVERVIEW:
-      if (organisationLevel === organisationUnitConstants.OFFENDER_MANAGER.name) {
-        result.overviewDetails.lduCluster = result.breadcrumbs[2].title
-        result.overviewDetails.capacity = formatCapacityValue(result.overviewDetails.capacity)
-        result.overviewDetails.cmsPercentage = formatCMSPercentage(result.overviewDetails.cmsPercentage)
-      } else {
-        result.overviewDetails.forEach(function (team) {
-          team.capacityPercentage = formatCapacityValue(team.capacityPercentage)
-          team.cmsPercentage = formatCMSPercentage(team.cmsPercentage)
-        })
-      }
-
-      csv = generateCsv(result.overviewDetails, fields, fieldNames)
+      result.overviewDetails.rows.forEach(function (team) {
+        team.capacityPercentage = formatCapacityValue(team.capacityPercentage)
+        team.cmsPercentage = formatCMSPercentage(team.cmsPercentage)
+      })
+      csv = generateCsv(result.overviewDetails.rows, fields, fieldNames)
       break
     case tabs.REDUCTIONS_EXPORT:
       csv = generateCsv(result.reductionNotes, fields, fieldNames)

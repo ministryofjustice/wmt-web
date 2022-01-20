@@ -35,7 +35,7 @@ const OVERVIEW = {
   subTitle: 'SubTitle',
   breadcrumbs: [{ title: 'Offender Manager' }],
   subNav: {},
-  overviewDetails: [{}]
+  overviewDetails: { rows: [{}], totals: {} }
 }
 
 const REDUCTIONS = {
@@ -54,6 +54,7 @@ const EXPORT_CSV = '"TeamName","Grade","Overall","Untiered","D2","D1","C2","C1",
 let app
 let route
 let getOverview
+let getIndividualOverview
 let getLastUpdated
 
 let getReductionsExport
@@ -67,13 +68,15 @@ before(function () {
   getSubNavStub = sinon.stub()
   getOverview = sinon.stub()
   getReductionsExport = sinon.stub()
+  getIndividualOverview = sinon.stub().resolves({})
   getLastUpdated = sinon.stub().resolves(new Date(2017, 11, 1))
   getExportCsv = sinon.stub().returns({ filename: EXPORT_CSV_FILENAME, csv: EXPORT_CSV })
   route = proxyquire('../../../app/routes/overview', {
     '../services/get-overview': getOverview,
     '../services/data/get-last-updated': getLastUpdated,
     '../services/get-sub-nav': getSubNavStub,
-    '../services/get-export-csv': getExportCsv
+    '../services/get-export-csv': getExportCsv,
+    '../services/get-individual-overview': getIndividualOverview
   })
   app = routeHelper.buildApp(route)
 
@@ -87,7 +90,6 @@ before(function () {
 
 describe('overview route', function () {
   it('should respond with 200 when offender-manager and id included in URL', function () {
-    getOverview.resolves(OVERVIEW)
     return supertest(app).get(OM_OVERVIEW_URL)
       .then(function (res) {
         expect(res.statusCode).to.equal(200)
@@ -114,16 +116,6 @@ describe('overview route', function () {
   it('should respond with 500 when offender-manager, but no id, included in URL', function () {
     getOverview.resolves(OVERVIEW)
     return supertest(app).get(OM_MISSING_ID_URL).expect(500)
-  })
-
-  it('should call the getSubNav with the correct parameters', function () {
-    getOverview.resolves(OVERVIEW)
-    return supertest(app)
-      .get(OM_OVERVIEW_URL)
-      .expect(200)
-      .then(function () {
-          expect(getSubNavStub.calledWith('1', orgUnit.OFFENDER_MANAGER.name, OM_OVERVIEW_URL)).to.be.true //eslint-disable-line
-      })
   })
 })
 

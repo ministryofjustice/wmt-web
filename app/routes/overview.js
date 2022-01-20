@@ -1,7 +1,8 @@
 const getOverview = require('../services/get-overview')
+const getIndividualOverview = require('../services/get-individual-overview')
 const getReductionsExport = require('../services/get-reductions-export')
 const getSubNav = require('../services/get-sub-nav')
-// const getOrganisationUnit = require('../services/helpers/org-unit-finder')
+const getOrganisationUnit = require('../services/helpers/org-unit-finder')
 const organisationUnitConstants = require('../constants/organisation-unit')
 const roles = require('../constants/user-roles')
 const getExportCsv = require('../services/get-export-csv')
@@ -30,10 +31,45 @@ module.exports = function (router) {
   })
 
   get(`/${workloadTypes.PROBATION}/${organisationUnitConstants.OFFENDER_MANAGER.name}/:id/overview`, function (req, res, next) {
-    // TODO
-    // const organisationUnit = getOrganisationUnit('name', organisationUnitConstants.OFFENDER_MANAGER)
-    // const childOrganisationLevel = organisationUnit.childOrganisationLevel
-    // let childOrganisationLevelDisplayText = getOrganisationUnit('name', childOrganisationLevel).displayText
+    return getLastUpdated().then(function (result) {
+      const lastUpdated = dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY HH:mm')
+      const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
+      return getIndividualOverview(req.params.id, workloadTypes.PROBATION).then(function (result) {
+        return res.render('individual-overview', {
+          title: result.title,
+          subTitle: organisationUnitConstants.OFFENDER_MANAGER.displayText,
+          breadcrumbs: result.breadcrumbs,
+          organisationLevel: organisationUnitConstants.OFFENDER_MANAGER.name,
+          subNav: getSubNav(req.params.id, organisationUnitConstants.OFFENDER_MANAGER.name, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
+          overviewDetails: result.overviewDetails,
+          date: lastUpdated,
+          workloadType: workloadTypes.PROBATION
+        })
+      })
+    }).catch(function (error) {
+      next(error)
+    })
+  })
+
+  get(`/${workloadTypes.PROBATION}/${organisationUnitConstants.OFFENDER_MANAGER.name}/:id/`, function (req, res, next) {
+    return getLastUpdated().then(function (result) {
+      const lastUpdated = dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY HH:mm')
+      const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
+      return getIndividualOverview(req.params.id, workloadTypes.PROBATION).then(function (result) {
+        return res.render('individual-overview', {
+          title: result.title,
+          subTitle: organisationUnitConstants.OFFENDER_MANAGER.displayText,
+          breadcrumbs: result.breadcrumbs,
+          organisationLevel: organisationUnitConstants.OFFENDER_MANAGER.name,
+          subNav: getSubNav(req.params.id, organisationUnitConstants.OFFENDER_MANAGER.name, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
+          overviewDetails: result.overviewDetails,
+          date: lastUpdated,
+          workloadType: workloadTypes.PROBATION
+        })
+      })
+    }).catch(function (error) {
+      next(error)
+    })
   })
 
   get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/overview', function (req, res, next) {
@@ -61,8 +97,7 @@ module.exports = function (router) {
       id = req.params.id
     }
 
-    const isCSV = true
-    return getOverview(id, organisationLevel, isCSV).then(function (result) {
+    return getOverview(id, organisationLevel, true).then(function (result) {
       const exportCsv = getExportCsv(organisationLevel, result, tabs.OVERVIEW)
       res.attachment(exportCsv.filename)
       res.send(exportCsv.csv)
@@ -103,9 +138,10 @@ module.exports = function (router) {
 
 const renderOverview = function (req, res, next) {
   const organisationLevel = req.params.organisationLevel
+  const organisationUnit = getOrganisationUnit('name', organisationLevel)
   let id
-  let childOrganisationLevel
-  let childOrganisationLevelDisplayText
+  const childOrganisationLevel = organisationUnit.childOrganisationLevel
+  const childOrganisationLevelDisplayText = organisationUnit.displayText
 
   if (organisationLevel !== organisationUnitConstants.NATIONAL.name) {
     if (req.params.id !== undefined && !isNaN(parseInt(req.params.id, 10))) {
@@ -120,7 +156,6 @@ const renderOverview = function (req, res, next) {
   return getLastUpdated().then(function (result) {
     lastUpdated = dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY HH:mm')
     return getOverview(id, organisationLevel).then(function (result) {
-      result.date = lastUpdated
       return res.render('overview', {
         title: result.title,
         subTitle: result.subTitle,
@@ -132,8 +167,7 @@ const renderOverview = function (req, res, next) {
         childOrganisationLevelDisplayText: childOrganisationLevelDisplayText,
         subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
         overviewDetails: result.overviewDetails,
-        date: result.date,
-
+        date: lastUpdated,
         workloadType: workloadTypes.PROBATION
       })
     })
