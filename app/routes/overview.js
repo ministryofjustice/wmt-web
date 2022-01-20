@@ -1,7 +1,7 @@
 const getOverview = require('../services/get-overview')
 const getReductionsExport = require('../services/get-reductions-export')
 const getSubNav = require('../services/get-sub-nav')
-const getOrganisationUnit = require('../services/helpers/org-unit-finder')
+// const getOrganisationUnit = require('../services/helpers/org-unit-finder')
 const organisationUnitConstants = require('../constants/organisation-unit')
 const roles = require('../constants/user-roles')
 const getExportCsv = require('../services/get-export-csv')
@@ -27,6 +27,13 @@ module.exports = function (router) {
     req.params.id = '0'
     req.params.organisationLevel = 'hmpps'
     return renderOverview(req, res, next)
+  })
+
+  get(`/${workloadTypes.PROBATION}/${organisationUnitConstants.OFFENDER_MANAGER.name}/:id/overview`, function (req, res, next) {
+    // TODO
+    // const organisationUnit = getOrganisationUnit('name', organisationUnitConstants.OFFENDER_MANAGER)
+    // const childOrganisationLevel = organisationUnit.childOrganisationLevel
+    // let childOrganisationLevelDisplayText = getOrganisationUnit('name', childOrganisationLevel).displayText
   })
 
   get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/overview', function (req, res, next) {
@@ -96,7 +103,6 @@ module.exports = function (router) {
 
 const renderOverview = function (req, res, next) {
   const organisationLevel = req.params.organisationLevel
-  const organisationUnit = getOrganisationUnit('name', organisationLevel)
   let id
   let childOrganisationLevel
   let childOrganisationLevelDisplayText
@@ -107,11 +113,6 @@ const renderOverview = function (req, res, next) {
     } else {
       return next()
     }
-  }
-
-  if (organisationLevel !== organisationUnitConstants.OFFENDER_MANAGER.name) {
-    childOrganisationLevel = organisationUnit.childOrganisationLevel
-    childOrganisationLevelDisplayText = getOrganisationUnit('name', childOrganisationLevel).displayText
   }
 
   const authorisedUserRole = authorisation.getAuthorisedUserRole(req)

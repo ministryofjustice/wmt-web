@@ -1,4 +1,4 @@
-const getOverview = require('../services/get-overview')
+const getOmicOverview = require('../services/get-omic-overview')
 const getSubNav = require('../services/get-sub-nav')
 const getOrganisationUnit = require('../services/helpers/org-unit-finder')
 const organisationUnitConstants = require('../constants/organisation-unit')
@@ -47,7 +47,7 @@ const renderOverview = function (req, res, next) {
 
   return getLastUpdated().then(function (result) {
     lastUpdated = dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY HH:mm')
-    return getOverview(id, organisationLevel, false, workloadTypes.OMIC).then(function (result) {
+    return getOmicOverview(id, organisationLevel).then(function (result) {
       result.date = lastUpdated
       return res.render('omic-overview', {
         title: result.title,

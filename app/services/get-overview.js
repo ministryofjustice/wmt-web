@@ -1,9 +1,9 @@
 const getBreadcrumbs = require('./get-breadcrumbs')
 const getOrganisationUnit = require('./helpers/org-unit-finder')
-const getIndividualOverview = require('./data/get-individual-overview')
+// const getIndividualOverview = require('./data/get-individual-overview')
 const getOrganisationOverview = require('./data/get-organisation-overview')
 const getFullOverview = require('./data/get-full-overview')
-const orgUnit = require('../constants/organisation-unit')
+// const orgUnit = require('../constants/organisation-unit')
 const calculateOverviewValues = require('./helpers/calculate-overview-values')
 const workloadTypes = require('../constants/workload-type')
 
@@ -12,20 +12,16 @@ module.exports = function (id, organisationLevel, isCSV = false, workloadType = 
   let overviewPromise = {}
   const organisationalUnitType = getOrganisationUnit('name', organisationLevel)
 
-  if (organisationLevel === orgUnit.OFFENDER_MANAGER.name) {
-    overviewPromise = getIndividualOverview(id, organisationLevel)
+  if (isCSV) {
+    overviewPromise = getFullOverview(id, organisationLevel, workloadType)
   } else {
-    if (isCSV) {
-      overviewPromise = getFullOverview(id, organisationLevel, workloadType)
-    } else {
-      overviewPromise = getOrganisationOverview(id, organisationLevel, workloadType)
-    }
+    overviewPromise = getOrganisationOverview(id, organisationLevel, workloadType)
   }
 
   return getBreadcrumbs(id, organisationLevel, workloadType).then(function (breadcrumbs) {
     result.breadcrumbs = breadcrumbs
     return overviewPromise.then(function (results) {
-      result.overviewDetails = calculateOverviewValues(results, isCSV, workloadType, organisationLevel)
+      result.overviewDetails = calculateOverviewValues(results, isCSV, workloadType)
       result.title = result.breadcrumbs[0].title
       result.subTitle = organisationalUnitType.displayText
       return result
