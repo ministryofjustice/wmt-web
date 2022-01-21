@@ -147,7 +147,7 @@ const renderOverview = function (req, res, next) {
   const organisationUnit = getOrganisationUnit('name', organisationLevel)
   let id
   const childOrganisationLevel = organisationUnit.childOrganisationLevel
-  const childOrganisationLevelDisplayText = organisationUnit.displayText
+  const childOrganisationLevelDisplayText = getOrganisationUnit('name', childOrganisationLevel).displayText
 
   if (organisationLevel !== organisationUnitConstants.NATIONAL.name) {
     if (req.params.id !== undefined && !isNaN(parseInt(req.params.id, 10))) {
