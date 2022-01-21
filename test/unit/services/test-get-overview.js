@@ -4,36 +4,51 @@ const sinon = require('sinon')
 
 const proxyquire = require('proxyquire')
 const orgUnitConstant = require('../../../app/constants/organisation-unit.js')
-const orgUnitFinder = require('../../../app/services/helpers/org-unit-finder')
 
 const breadcrumbHelper = require('../../helpers/breadcrumb-helper')
 
-const OVERVIEW = {
-  grade: 'PO',
-  teamId: 1,
-  teamName: 'Medway',
-  availablePoints: 50,
-  totalPoints: 40,
+const OVERVIEW = [{
+  name: 'Medway',
   totalCases: 2,
-  hours: 3,
-  reductionHours: 3,
+  availablePoints: 100,
+  totalPoints: 50,
   contractedHours: 37,
+  reductionHours: 3,
   cmsAdjustmentPoints: 0,
-  cmsPercentage: 0
+  linkId: 5
+}]
+const ORGANISATION_OVERVIEWS = {
+  rows: [{ ...OVERVIEW[0], cmsPercentage: 0, capacityPercentage: 50, remainingPoints: 50 }],
+  totals: {
+    totalAvailablePoints: OVERVIEW[0].availablePoints,
+    totalCapacityPercentage: 50,
+    totalCMSPercentage: 0,
+    totalCMSPoints: OVERVIEW[0].cmsAdjustmentPoints,
+    totalContractedHours: OVERVIEW[0].contractedHours,
+    totalPoints: OVERVIEW[0].totalPoints,
+    totalReduction: OVERVIEW[0].reductionHours,
+    totalRemainingPoints: 50,
+    totalTotalCases: OVERVIEW[0].totalCases
+  }
 }
-const ORGANISATION_OVERVIEWS = [
-  Object.assign({}, OVERVIEW, { capacityPercentage: 80, name: 'NPS' }), Object.assign({}, OVERVIEW, { capacityPercentage: 80, name: 'CRC' })
-]
 
-const ZERO_AVAILABLE_POINTS_OVERVIEWS = [
-  Object.assign({}, OVERVIEW, { capacity: 0, availablePoints: 0 })
-]
-
-const expectedOverview = Object.assign({}, OVERVIEW, { capacity: 80 })
+const ZERO_AVAILABLE_POINTS_OVERVIEWS = {
+  rows: [{ ...OVERVIEW[0], cmsPercentage: 0, capacityPercentage: 0, remainingPoints: 0 }],
+  totals: {
+    totalAvailablePoints: OVERVIEW[0].availablePoints,
+    totalCapacityPercentage: 0,
+    totalCMSPercentage: 0,
+    totalCMSPoints: OVERVIEW[0].cmsAdjustmentPoints,
+    totalContractedHours: OVERVIEW[0].contractedHours,
+    totalPoints: OVERVIEW[0].totalPoints,
+    totalReduction: OVERVIEW[0].reductionHours,
+    totalRemainingPoints: 0,
+    totalTotalCases: OVERVIEW[0].totalCases
+  }
+}
 
 const id = 1
 const breadcrumbs = breadcrumbHelper.OFFENDER_MANAGER_BREADCRUMBS
-const expectedTitle = breadcrumbs[0].title
 
 let getOverview
 let getIndividualOverview
@@ -54,36 +69,11 @@ beforeEach(function () {
 })
 
 describe('services/get-overview', function () {
-  it('should return a results object with breadcrumbs, title and subtitle for an offender manager', function () {
-    const omName = orgUnitConstant.OFFENDER_MANAGER.name
-    getIndividualOverview.withArgs(id, omName).resolves(OVERVIEW)
-
-    return getOverview(id, omName).then(function (result) {
-      const omSubtitle = orgUnitFinder('name', omName).displayText
-      sinon.assert.calledOnce(getBreadcrumbs)
-      expect(result.breadcrumbs).to.eql(breadcrumbs)
-      expect(result.subTitle).to.eql(omSubtitle)
-      expect(result.title).to.eql(expectedTitle)
-    })
-  })
-
-  it('should call get-individual-overview and return a results object with the correct overview details for an offender manager', function () {
-    const omName = orgUnitConstant.OFFENDER_MANAGER.name
-    getIndividualOverview.withArgs(id, omName).resolves(OVERVIEW)
-
-    return getOverview(id, omName).then(function (result) {
-      assert(getIndividualOverview.called)
-      assert(!getOrganisationOverview.called)
-      expect(result.overviewDetails).to.eql(expectedOverview)
-    })
-  })
-
   it('should call get-organisation-overview and return a results object with the correct overview details for a team', function () {
     const orgName = orgUnitConstant.TEAM.name
-    getOrganisationOverview.withArgs(id, orgName).resolves(ORGANISATION_OVERVIEWS)
+    getOrganisationOverview.withArgs(id, orgName).resolves(OVERVIEW)
 
     return getOverview(id, orgName).then(function (result) {
-      assert(!getIndividualOverview.called)
       assert(getOrganisationOverview.called)
       expect(result.overviewDetails).to.eql(ORGANISATION_OVERVIEWS)
     })
@@ -91,10 +81,9 @@ describe('services/get-overview', function () {
 
   it('should call get-organisation-overview and return a results object with the correct overview details for an LDU', function () {
     const orgName = orgUnitConstant.LDU.name
-    getOrganisationOverview.withArgs(id, orgName).resolves(ORGANISATION_OVERVIEWS)
+    getOrganisationOverview.withArgs(id, orgName).resolves(OVERVIEW)
 
     return getOverview(id, orgName).then(function (result) {
-      assert(!getIndividualOverview.called)
       assert(getOrganisationOverview.called)
       expect(result.overviewDetails).to.eql(ORGANISATION_OVERVIEWS)
     })
@@ -102,10 +91,9 @@ describe('services/get-overview', function () {
 
   it('should call get-organisation-overview and return a results object with the correct overview details for a Region', function () {
     const orgName = orgUnitConstant.REGION.name
-    getOrganisationOverview.withArgs(id, orgName).resolves(ORGANISATION_OVERVIEWS)
+    getOrganisationOverview.withArgs(id, orgName).resolves(OVERVIEW)
 
     return getOverview(id, orgName).then(function (result) {
-      assert(!getIndividualOverview.called)
       assert(getOrganisationOverview.called)
       expect(result.overviewDetails).to.eql(ORGANISATION_OVERVIEWS)
     })
@@ -113,10 +101,9 @@ describe('services/get-overview', function () {
 
   it('should call get-organisation-overview and return a results object with the correct overview details for national', function () {
     const orgName = orgUnitConstant.NATIONAL.name
-    getOrganisationOverview.withArgs(id, orgName).resolves(ORGANISATION_OVERVIEWS)
+    getOrganisationOverview.withArgs(id, orgName).resolves(OVERVIEW)
 
     return getOverview(id, orgName).then(function (result) {
-      assert(!getIndividualOverview.called)
       assert(getOrganisationOverview.called)
       expect(result.overviewDetails).to.eql(ORGANISATION_OVERVIEWS)
     })
@@ -127,7 +114,6 @@ describe('services/get-overview', function () {
     getOrganisationOverview.withArgs(id, orgName).resolves(ZERO_AVAILABLE_POINTS_OVERVIEWS)
 
     return getOverview(id, orgName).then(function (result) {
-      assert(!getIndividualOverview.called)
       assert(getOrganisationOverview.called)
       expect(result.overviewDetails).to.eql(ZERO_AVAILABLE_POINTS_OVERVIEWS)
     })
@@ -140,7 +126,7 @@ describe('services/get-overview', function () {
     getOrganisationOverview.withArgs(id, orgName).resolves([zeroContractedHours])
 
     return getOverview(id, orgName).then(function (result) {
-      expect(result.overviewDetails).to.eql([zeroContractedHours, totals])
+      expect(result.overviewDetails).to.eql({ rows: [zeroContractedHours], totals })
     })
   })
 })

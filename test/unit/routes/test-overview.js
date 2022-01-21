@@ -114,7 +114,6 @@ describe('overview route', function () {
   })
 
   it('should respond with 500 when offender-manager, but no id, included in URL', function () {
-    getOverview.resolves(OVERVIEW)
     return supertest(app).get(OM_MISSING_ID_URL).expect(500)
   })
 })

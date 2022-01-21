@@ -31,6 +31,9 @@ module.exports = function (router) {
   })
 
   get(`/${workloadTypes.PROBATION}/${organisationUnitConstants.OFFENDER_MANAGER.name}/:id/overview`, function (req, res, next) {
+    if (req.params.id === undefined || isNaN(parseInt(req.params.id, 10))) {
+      return next()
+    }
     return getLastUpdated().then(function (result) {
       const lastUpdated = dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY HH:mm')
       const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
@@ -52,6 +55,9 @@ module.exports = function (router) {
   })
 
   get(`/${workloadTypes.PROBATION}/${organisationUnitConstants.OFFENDER_MANAGER.name}/:id/`, function (req, res, next) {
+    if (req.params.id === undefined || isNaN(parseInt(req.params.id, 10))) {
+      return next()
+    }
     return getLastUpdated().then(function (result) {
       const lastUpdated = dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY HH:mm')
       const authorisedUserRole = authorisation.getAuthorisedUserRole(req)

@@ -1,9 +1,7 @@
 const getBreadcrumbs = require('./get-breadcrumbs')
 const getOrganisationUnit = require('./helpers/org-unit-finder')
-// const getIndividualOverview = require('./data/get-individual-overview')
 const getOrganisationOverview = require('./data/get-organisation-overview')
 const getFullOverview = require('./data/get-full-overview')
-// const orgUnit = require('../constants/organisation-unit')
 const calculateOverviewValues = require('./helpers/calculate-overview-values')
 const workloadTypes = require('../constants/workload-type')
 
