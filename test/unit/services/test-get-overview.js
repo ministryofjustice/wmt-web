@@ -32,18 +32,22 @@ const ORGANISATION_OVERVIEWS = {
   }
 }
 
+const zeroAvailablePointsOverview = [
+  { ...OVERVIEW[0], availablePoints: 0 }
+]
+
 const ZERO_AVAILABLE_POINTS_OVERVIEWS = {
-  rows: [{ ...OVERVIEW[0], cmsPercentage: 0, capacityPercentage: 0, remainingPoints: 0 }],
+  rows: [{ ...zeroAvailablePointsOverview[0], cmsPercentage: 0, capacityPercentage: 0, remainingPoints: -50 }],
   totals: {
-    totalAvailablePoints: OVERVIEW[0].availablePoints,
+    totalAvailablePoints: zeroAvailablePointsOverview[0].availablePoints,
     totalCapacityPercentage: 0,
     totalCMSPercentage: 0,
-    totalCMSPoints: OVERVIEW[0].cmsAdjustmentPoints,
-    totalContractedHours: OVERVIEW[0].contractedHours,
-    totalPoints: OVERVIEW[0].totalPoints,
-    totalReduction: OVERVIEW[0].reductionHours,
-    totalRemainingPoints: 0,
-    totalTotalCases: OVERVIEW[0].totalCases
+    totalCMSPoints: zeroAvailablePointsOverview[0].cmsAdjustmentPoints,
+    totalContractedHours: zeroAvailablePointsOverview[0].contractedHours,
+    totalPoints: zeroAvailablePointsOverview[0].totalPoints,
+    totalReduction: zeroAvailablePointsOverview[0].reductionHours,
+    totalRemainingPoints: -50,
+    totalTotalCases: zeroAvailablePointsOverview[0].totalCases
   }
 }
 
@@ -111,22 +115,11 @@ describe('services/get-overview', function () {
 
   it('should call get-organisation-overview and return a results object with zero capacity if available points is zero', function () {
     const orgName = orgUnitConstant.REGION.name
-    getOrganisationOverview.withArgs(id, orgName).resolves(ZERO_AVAILABLE_POINTS_OVERVIEWS)
+    getOrganisationOverview.withArgs(id, orgName).resolves(zeroAvailablePointsOverview)
 
     return getOverview(id, orgName).then(function (result) {
       assert(getOrganisationOverview.called)
       expect(result.overviewDetails).to.eql(ZERO_AVAILABLE_POINTS_OVERVIEWS)
-    })
-  })
-
-  it('should return 0 contracted hours if there are indeed 0 contracted hours, and the correct overview totals', function () {
-    const orgName = orgUnitConstant.REGION.name
-    const totals = { name: 'Total / Average', totalContractedHours: 0, totalCapacityPercentage: 80, totalPoints: 40, totalAvailablePoints: 50, totalReduction: 3, totalRemainingPoints: 10, totalTotalCases: 2, totalCMSPoints: 0, totalCMSPercentage: 0 }
-    const zeroContractedHours = Object.assign({}, OVERVIEW, { contractedHours: 0 })
-    getOrganisationOverview.withArgs(id, orgName).resolves([zeroContractedHours])
-
-    return getOverview(id, orgName).then(function (result) {
-      expect(result.overviewDetails).to.eql({ rows: [zeroContractedHours], totals })
     })
   })
 })
