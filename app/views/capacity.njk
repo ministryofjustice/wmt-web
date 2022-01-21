@@ -280,7 +280,7 @@
 
       <tfoot>
         <tr>
-            <td colspan="2" headers="name org">NPS {{ capacityBreakdownTotals.name }}</td>
+            <td colspan="2" headers="name org">{{ capacityBreakdownTotals.name }}</td>
             <td headers="capacity breakdown">{{ capacityBreakdownTotals.capacity | round(1) }}%</td>
             <td headers="cases breakdown">{{ capacityBreakdownTotals.totalCases | round(1) }}</td>
             <td headers="t2aCases breakdown">{{ capacityBreakdownTotals.totalTotalT2aCases | round(1) }}</td>
@@ -413,7 +413,7 @@
     </tbody>
     <tfoot>
       <tr>
-        <td colspan="2" headers="name org">NPS {{ outstandingReportsTotals.name }}</td>
+        <td colspan="2" headers="name org">{{ outstandingReportsTotals.name }}</td>
         <td headers="outstanding warrants">{{ outstandingReportsTotals.totalOW }}</td>
         <td headers="unpaid work">{{ outstandingReportsTotals.totalUPW }}</td>
         <td headers="overdue terminations">{{ outstandingReportsTotals.totalOT }}</td>
