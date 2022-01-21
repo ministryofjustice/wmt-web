@@ -21,7 +21,7 @@ module.exports = function (term) {
       results = results.concat(legacyDBResults)
       let resultArray = []
       results.forEach(function (result) {
-        resultArray.push(capitalize(result.forename) + ' ' + capitalize(result.surname))
+        resultArray.push(`${result.forename} ${result.surname}`)
       })
       resultArray = Array.from(new Set(resultArray)).sort()
       results = []
@@ -33,13 +33,4 @@ module.exports = function (term) {
       })
       return results
     })
-}
-
-const capitalize = function (s) {
-  if (typeof s !== 'string') {
-    return ''
-  } else {
-    s = s.toLowerCase()
-  }
-  return s.charAt(0).toUpperCase() + s.slice(1)
 }
