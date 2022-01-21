@@ -69,9 +69,9 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
       await archiveFromDayField.setValue('18')
       await archiveFromMonthField.setValue('6')
       await archiveFromYearField.setValue('2014')
-      await archiveToDayField.setValue('25')
-      await archiveToMonthField.setValue('8')
-      await archiveToYearField.setValue('2016')
+      await archiveToDayField.setValue('10')
+      await archiveToMonthField.setValue('2')
+      await archiveToYearField.setValue('2017')
 
       const extraSearchCritera = await $('.select2-search__field')
       await extraSearchCritera.setValue('t')
@@ -86,7 +86,7 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
 
       const nameElement = await $(tableData[0])
       const nameElementValue = await nameElement.getText()
-      expect(nameElementValue).to.equal('Test_forename Test_surname')
+      expect(nameElementValue).to.equal('Test_Forename Test_Surname')
     })
 
     after(async function () {
@@ -128,9 +128,9 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
       await archiveFromDayField.setValue('18')
       await archiveFromMonthField.setValue('6')
       await archiveFromYearField.setValue('2014')
-      await archiveToDayField.setValue('25')
-      await archiveToMonthField.setValue('8')
-      await archiveToYearField.setValue('2016')
+      await archiveToDayField.setValue('10')
+      await archiveToMonthField.setValue('2')
+      await archiveToYearField.setValue('2017')
 
       const extraSearchCritera = await $('.select2-search__field')
       await extraSearchCritera.setValue('t')
@@ -145,7 +145,7 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
 
       const nameElement = await $(tableData[0])
       const nameElementValue = await nameElement.getText()
-      expect(nameElementValue).to.equal('Test_forename Test_surname')
+      expect(nameElementValue).to.equal('Test_Forename Test_Surname')
     })
 
     after(async function () {
