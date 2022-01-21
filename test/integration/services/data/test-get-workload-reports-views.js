@@ -50,12 +50,10 @@ describe('services/data/get-workload-report-views', function () {
   })
 
   it('should retrieve all the workloads within the date range at National level', function () {
-    let queryResults
     return getWorkloadReportsViews(undefined, startDate, endDate, 'hmpps')
-      .then(function (results) {
-        queryResults = results
+      .then(function (queryResults) {
         return getExpectedNationalCapacity(startDate, endDate).then(function (capacityResults) {
-          expect(queryResults.workloadReportResults).to.include.deep.members(capacityResults)
+          expect(queryResults).to.include.deep.members(capacityResults)
         })
       })
   })
@@ -63,29 +61,29 @@ describe('services/data/get-workload-report-views', function () {
   it('should retrieve all the workloads within the date range for a given Region', function () {
     return getWorkloadReportsViews(inserts.filter((item) => item.table === 'region')[0].id, startDate, endDate, 'region')
       .then(function (results) {
-        expect(results.workloadReportResults).to.deep.include(expectedResults)
+        expect(results).to.deep.include(expectedResults)
       })
   })
 
   it('should retrieve all the workloads within the date range for a given LDU', function () {
     return getWorkloadReportsViews(inserts.filter((item) => item.table === 'ldu')[0].id, startDate, endDate, 'ldu')
       .then(function (results) {
-        expect(results.workloadReportResults).to.deep.include(expectedResults)
+        expect(results).to.deep.include(expectedResults)
       })
   })
 
   it('should retrieve all the workloads within the date range for a given Team', function () {
     return getWorkloadReportsViews(inserts.filter((item) => item.table === 'team')[0].id, startDate, endDate, 'team')
       .then(function (results) {
-        expect(results.workloadReportResults).to.deep.include(expectedResults)
+        expect(results).to.deep.include(expectedResults)
       })
   })
 
   it('should retrieve all the workloads within the date range for an OM', function () {
     return getWorkloadReportsViews(inserts.filter((item) => item.table === 'workload_owner')[0].id, startDate, endDate, 'offender-manager')
       .then(function (results) {
-        expect(results.workloadReportResults.length).to.equal(2)
-        expect(results.workloadReportResults).to.deep.include(expectedResults)
+        expect(results.length).to.equal(2)
+        expect(results).to.deep.include(expectedResults)
       })
   })
 
