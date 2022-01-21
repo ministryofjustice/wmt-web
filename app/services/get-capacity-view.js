@@ -18,8 +18,7 @@ module.exports = function (id, capacityDateRange, organisationLevel) {
     return getWorkloadReports(id, capacityDateRange.capacityFromDate.toISOString(), capacityDateRange.capacityToDate.toISOString(), organisationLevel)
       .then(function (results) {
         result.capacityBreakdown = []
-        result.capacityTable = tableCreator.createCapacityTable(id, organisationalUnitType.displayText, results.workloadReportResults)
-        result.crcCapacityTable = tableCreator.createCapacityTable(id, organisationalUnitType.displayText, results.crcWorkloadReportResults)
+        result.capacityTable = tableCreator.createCapacityTable(id, organisationalUnitType.displayText, results)
         result.title = result.breadcrumbs[0].title
         result.subTitle = organisationalUnitType.displayText
 
@@ -33,7 +32,6 @@ module.exports = function (id, capacityDateRange, organisationLevel) {
               result.capacityBreakdown.sort(function (a, b) { return a.name.localeCompare(b.name) })
               result.capacityBreakdown.push(temp)
               result.capacityBreakdownTotals = parsedCapacityBreakdown.totals
-              result.capacityBreakdownCRCTotals = parsedCapacityBreakdown.crcTotals
               return result
             })
         }
@@ -46,9 +44,6 @@ const parseCapacityBreakdown = function (workloadReports, organisationLevel) {
   const returnObject = {}
   const capacityBreakdown = []
   let totals = { name: 'Total / Average', capacity: 0, totalCases: 0, totalARMS: 0, totalGs: 0, totalCMS: 0, totalSDRs: 0, totalParoms: 0, totalSdrConversions: 0, totalTotalT2aCases: 0, totalCMSPoints: 0, totalGSPoints: 0, totalPoints: 0, availablePoints: 0 }
-  let crcTotals = { name: 'CRC Total / Average', capacity: 0, totalCases: 0, totalARMS: 0, totalGs: 0, totalCMS: 0, totalSDRs: 0, totalParoms: 0, totalSdrConversions: 0, totalTotalT2aCases: 0, totalCMSPoints: 0, totalGSPoints: 0, totalPoints: 0, availablePoints: 0 }
-  let totalNumberOfGrades = 0
-  let crcTotalNumberOfGrades = 0
 
   if (organisationLevel === organisationConstant.TEAM.name) {
     workloadReports.forEach(function (workloadReport) {
@@ -56,11 +51,10 @@ const parseCapacityBreakdown = function (workloadReports, organisationLevel) {
       totals = addTotals(totals, capacityBreakdownRow)
       capacityBreakdown.push(buildCapacityBreakdownEntry(workloadReport))
     })
-    totals = averageTotals(totals, capacityBreakdown.length)
+    totals = averageTotals(totals)
     capacityBreakdown.push(totals)
     returnObject.capacityBreakdown = capacityBreakdown
     returnObject.totals = totals
-    returnObject.crcTotals = crcTotals
   } else if (organisationLevel !== organisationConstant.OFFENDER_MANAGER.name) {
     const organisationMap = new Map()
 
@@ -77,59 +71,22 @@ const parseCapacityBreakdown = function (workloadReports, organisationLevel) {
     })
 
     organisationMap.forEach(function (reports, orgName) {
-      if (organisationLevel === organisationConstant.NATIONAL.name) {
-        if (!orgName.includes('CPA ')) {
-          const newEntry = {
-            name: orgName,
-            linkId: reports[0].linkId,
-            grades: []
-          }
-          reports.forEach(function (report) {
-            const capacityBreakdownRow = buildCapacityBreakdownEntry(report)
-            totals = addTotals(totals, capacityBreakdownRow)
-            newEntry.grades.push(capacityBreakdownRow)
-            totalNumberOfGrades++
-          })
-          capacityBreakdown.push(newEntry)
-        } else {
-          const newEntry = {
-            name: orgName,
-            linkId: reports[0].linkId,
-            grades: []
-          }
-          reports.forEach(function (report) {
-            const capacityBreakdownRow = buildCapacityBreakdownEntry(report)
-            crcTotals = addTotals(crcTotals, capacityBreakdownRow)
-            newEntry.grades.push(capacityBreakdownRow)
-            crcTotalNumberOfGrades++
-          })
-          capacityBreakdown.push(newEntry)
-        }
-      } else {
-        const newEntry = {
-          name: orgName,
-          linkId: reports[0].linkId,
-          grades: []
-        }
-        reports.forEach(function (report) {
-          const capacityBreakdownRow = buildCapacityBreakdownEntry(report)
-          totals = addTotals(totals, capacityBreakdownRow)
-          newEntry.grades.push(capacityBreakdownRow)
-          totalNumberOfGrades++
-        })
-        capacityBreakdown.push(newEntry)
+      const newEntry = {
+        name: orgName,
+        linkId: reports[0].linkId,
+        grades: []
       }
+      reports.forEach(function (report) {
+        const capacityBreakdownRow = buildCapacityBreakdownEntry(report)
+        totals = addTotals(totals, capacityBreakdownRow)
+        newEntry.grades.push(capacityBreakdownRow)
+      })
+      capacityBreakdown.push(newEntry)
     })
-    totals = averageTotals(totals, totalNumberOfGrades)
+    totals = averageTotals(totals)
     capacityBreakdown.push(totals)
     returnObject.capacityBreakdown = capacityBreakdown
     returnObject.totals = totals
-    returnObject.crcTotals = crcTotals
-    if (organisationLevel === organisationConstant.NATIONAL.name) {
-      crcTotals = averageTotals(crcTotals, crcTotalNumberOfGrades)
-      returnObject.totals = totals
-      returnObject.crcTotals = crcTotals
-    }
   }
   return returnObject
 }
@@ -151,7 +108,7 @@ const addTotals = function (totals, capacityBreakdown) {
   return totals
 }
 
-const averageTotals = function (totals, totalNumberOfGrades) {
+const averageTotals = function (totals) {
   totals.capacity = percentageCalculator.calculatePercentage(totals.totalPoints, totals.availablePoints)
   totals.totalGs = percentageCalculator.calculatePercentage(totals.totalGSPoints, totals.totalPoints)
   totals.totalCMS = percentageCalculator.calculatePercentage(totals.totalCMSPoints, totals.availablePoints)

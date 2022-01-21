@@ -5,22 +5,19 @@ const proxyquire = require('proxyquire')
 const CapacityDateRange = require('../../../app/services/domain/capacity-date-range')
 const breadcrumbHelper = require('../../helpers/breadcrumb-helper')
 
-const CAPACITY_RESULTS = {
-  workloadReportResults: [
-    {
-      effectiveFrom: '2017-01-01',
-      totalPoints: 100,
-      availablePoints: 100,
-      reductionHours: 6,
-      armsTotalCases: 5,
-      sdrs: 10,
-      sdrConversions: 9,
-      paroms: 8,
-      oralReports: 7
-    }
-  ],
-  crcWorkloadReportResults: []
-}
+const CAPACITY_RESULTS = [
+  {
+    effectiveFrom: '2017-01-01',
+    totalPoints: 100,
+    availablePoints: 100,
+    reductionHours: 6,
+    armsTotalCases: 5,
+    sdrs: 10,
+    sdrConversions: 9,
+    paroms: 8,
+    oralReports: 7
+  }
+]
 
 const TEAM_RESULTS = [
   {

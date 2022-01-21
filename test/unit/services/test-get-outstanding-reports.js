@@ -45,14 +45,6 @@ const EXPECTED_TEAM_RESULT = {
     totalUPW: 0,
     totalSL: 0,
     totalSSO: 0
-  },
-  crcTotals: {
-    name: 'CRC Total',
-    totalOW: 0,
-    totalOT: 0,
-    totalUPW: 0,
-    totalSL: 0,
-    totalSSO: 0
   }
 }
 
@@ -133,14 +125,6 @@ const EXPECTED_LDU_RESULT = {
     totalUPW: 45,
     totalSL: 181,
     totalSSO: 199
-  },
-  crcTotals: {
-    name: 'CRC Total',
-    totalOW: 0,
-    totalOT: 0,
-    totalUPW: 0,
-    totalSL: 0,
-    totalSSO: 0
   }
 }
 
@@ -221,14 +205,6 @@ const EXPECTED_REGION_RESULT = {
     totalUPW: 60,
     totalSL: 20,
     totalSSO: 37
-  },
-  crcTotals: {
-    name: 'CRC Total',
-    totalOW: 0,
-    totalOT: 0,
-    totalUPW: 0,
-    totalSL: 0,
-    totalSSO: 0
   }
 }
 
