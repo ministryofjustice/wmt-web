@@ -504,7 +504,12 @@ module.exports.addCaseDetails = function (caseDetails) {
     .returning('id')
     .insert(caseDetails).then(function (ids) {
       inserts.push({ table: 'case_details', id: ids[0] })
-      return inserts
+      return knex
+        .schema
+        .raw('REFRESH MATERIALIZED VIEW app.case_details_export_view')
+        .then(function () {
+          return inserts
+        })
     })
 }
 
