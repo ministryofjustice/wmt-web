@@ -61,7 +61,6 @@ module.exports = function (router) {
           const caseDetails = result
           return getLastUpdated().then(function (result) {
             lastUpdated = dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY HH:mm')
-            result.date = lastUpdated
             return res.render('capacity', {
               screen: 'capacity',
               linkId: id,
@@ -71,20 +70,16 @@ module.exports = function (router) {
               breadcrumbs: capacityBreakdown.breadcrumbs,
               capacity: capacityBreakdown.capacityTable,
               stringifiedCapacity: stringifyCapacityData(capacityBreakdown.capacityTable),
-              crcCapacity: capacityBreakdown.crcCapacityTable,
-              crcStringifiedCapacity: stringifyCapacityData(capacityBreakdown.crcCapacityTable),
               errors: errors,
               capacityBreakdown: capacityBreakdown.capacityBreakdown,
               capacityBreakdownTotals: capacityBreakdown.capacityBreakdownTotals,
-              capacityBreakdownCRCTotals: capacityBreakdown.capacityBreakdownCRCTotals,
               outstandingReports: outstandingReports.result,
               outstandingReportsTotals: outstandingReports.totals,
-              outstandingReportsCRCTotals: outstandingReports.crcTotals,
               caseDetails: caseDetails,
               childOrganisationLevel: orgUnit.childOrganisationLevel,
               childOrganisationLevelDisplayText: childOrgUnitDisplayText,
               organisationLevel: organisationLevel,
-              date: result.date,
+              date: lastUpdated,
               canExportOutstanding: canExportOutstandingRoles.includes(req.user.user_role),
               workloadType: workloadTypes.PROBATION
             })
@@ -144,15 +139,11 @@ module.exports = function (router) {
               breadcrumbs: capacityBreakdown.breadcrumbs,
               capacity: capacityBreakdown.capacityTable,
               stringifiedCapacity: stringifyCapacityData(capacityBreakdown.capacityTable),
-              crcCapacity: capacityBreakdown.crcCapacityTable,
-              crcStringifiedCapacity: stringifyCapacityData(capacityBreakdown.crcCapacityTable),
               errors: errors,
               capacityBreakdown: capacityBreakdown.capacityBreakdown,
               capacityBreakdownTotals: capacityBreakdown.capacityBreakdownTotals,
-              capacityBreakdownCRCTotals: capacityBreakdown.capacityBreakdownCRCTotals,
               outstandingReports: outstandingReports.result,
               outstandingReportsTotals: outstandingReports.totals,
-              outstandingReportsCRCTotals: outstandingReports.crcTotals,
               caseDetails: caseDetails,
               childOrganisationLevel: orgUnit.childOrganisationLevel,
               childOrganisationLevelDisplayText: childOrgUnitDisplayText,

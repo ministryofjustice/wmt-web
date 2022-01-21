@@ -14,7 +14,6 @@
 <form method="post">
   {% include "includes/csrf-hidden-input.njk"%}
     <input id="capacityTable" type="hidden" disabled name="capacityTable" value="{{ stringifiedCapacity }}">
-    <input id="crcCapacityTable" type="hidden" disabled name="crcCapacityTable" value="{{ crcStringifiedCapacity }}">
 
     <div class="govuk-form-group  {% if errors['capacityFromDate'][0] %} govuk-form-group--error {% endif %}">
       <fieldset id="capacityFromDate" class="govuk-fieldset" role="group" aria-describedby="capacity-from-date-hint  {% if errors['capacityFromDate'][0] %} capacity-from-date-error {% endif %}">
@@ -132,46 +131,7 @@
     </tbody>
 </table>
 
-<table class="non-javascript">
-  <thead>
-      <tr>
-          <th scope="col"></th>
-           {% for heading in crcCapacity.headings %}
-              <th scope="col">{{ heading | date("MMM DD, YYYY")}}</th>
-          {% endfor %}
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <th scope="row">Capacity</th>
-          {% for i in range(0, crcCapacity.rows[0].values.length)%}
-              <td> {{crcCapacity.rows[0].values[i]}}% </td>
-          {% endfor %}
-      </tr>
-      <tr>
-          <th scope="row">Reductions</th>
-          {% for i in range(0, crcCapacity.rows[0].values.length)%}
-              <td> {{crcCapacity.rows[1].values[i]}}</td>
-          {% endfor %}
-      </tr>
-  </tbody>
-</table>
-
-{% if organisationLevel === 'hmpps' %}
-  <h3 class="govuk-heading-m">NPS Capacity</h3>
-{% endif %}
-
 <div id="plotly-div-line" aria-hidden="true"></div>
-
-<br/>
-<br/>
-<br/>
-<br/>
-
-{% if organisationLevel === 'hmpps' %}
-  <h3 class="govuk-heading-m">CRC Capacity</h3>
-  <div id="plotly-div-line-crc" aria-hidden="true"></div>
-{% endif %}
 
 
 {% if organisationLevel === 'offender-manager' %}
@@ -333,20 +293,6 @@
             <td headers="cms breakdown">{{ capacityBreakdownTotals.totalCMS | round(1) }}%</td>
             <td headers="cms points breakdown">{{ capacityBreakdownTotals.totalCMSPoints }}</td>
         </tr>
-        <tr>
-          <td colspan="2" headers="name org">{{ capacityBreakdownCRCTotals.name }}</td>
-          <td headers="capacity breakdown">{{ capacityBreakdownCRCTotals.capacity | round(1) }}%</td>
-          <td headers="cases breakdown">{{ capacityBreakdownCRCTotals.totalCases | round(1) }}</td>
-          <td headers="t2aCases breakdown">{{ capacityBreakdownCRCTotals.totalTotalT2aCases | round(1) }}</td>
-          <td headers="arms breakdown">{{ capacityBreakdownCRCTotals.totalARMS }}</td>
-          <td headers="paroms breakdown">{{ capacityBreakdownCRCTotals.totalParoms }}</td>
-          <td headers="fdrs breakdown">{{ capacityBreakdownCRCTotals.totalSdrConversions }}</td>
-          <td headers="sdrs breakdown">{{ capacityBreakdownCRCTotals.totalSDRs }}</td>
-          <td headers="gs breakdown">{{ capacityBreakdownCRCTotals.totalGs | round(1) }}%</td>
-          <td headers="gs points breakdown">{{ capacityBreakdownCRCTotals.totalGSPoints }}</td>
-          <td headers="cms breakdown">{{ capacityBreakdownCRCTotals.totalCMS | round(1) }}%</td>
-          <td headers="cms points breakdown">{{ capacityBreakdownCRCTotals.totalCMSPoints }}</td>
-      </tr>
     </tfoot>
     </table>
     {% else %}
@@ -474,14 +420,6 @@
         <td headers="suspended lifers">{{ outstandingReportsTotals.totalSL }}</td>
         <td headers="suspended sentence orders">{{ outstandingReportsTotals.totalSSO }}</td>
       </tr>
-      <tr>
-        <td colspan="2" headers="name org">{{ outstandingReportsCRCTotals.name }}</td>
-        <td headers="outstanding warrants">{{ outstandingReportsCRCTotals.totalOW }}</td>
-        <td headers="unpaid work">{{ outstandingReportsCRCTotals.totalUPW }}</td>
-        <td headers="overdue terminations">{{ outstandingReportsCRCTotals.totalOT }}</td>
-        <td headers="suspended lifers">{{ outstandingReportsCRCTotals.totalSL }}</td>
-        <td headers="suspended sentence orders">{{ outstandingReportsCRCTotals.totalSSO }}</td>
-      </tr>
     </tfoot>
 
     {% else %}
@@ -528,9 +466,6 @@
     <script src="/public/javascripts/vendor/jquery.min.js"></script>
     <script src="/public/javascripts/plotly-latest.min.js"></script>
     <script src="/public/javascripts/caseload-capacity.js"></script>
-    {% if organisationLevel === 'hmpps' %}
-    <script src="/public/javascripts/caseload-capacity-crc.js"></script>
-    {% endif %}
     <script src="/public/javascripts/datatables.min.js"></script>
     <script src="/public/javascripts/case-details.js"></script>
 {% endblock %}
