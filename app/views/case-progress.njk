@@ -13,7 +13,6 @@
 {% include "includes/sub-nav.njk" %}
 
 <input id="caseProgressList" type="hidden" name="caseProgressList" value="{{ stringifiedCaseProgressList }}">
-<input id="crcCaseProgressList" type="hidden" name="crcCaseProgressList" value="{{ stringifiedCRCCaseProgressList }}">
 
 <table class="non-javascript">
     <thead>
@@ -42,46 +41,12 @@
     </tbody>
 </table>
 
-<table class="non-javascript">
-    <thead>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Community Last 16 Weeks</th>
-            <th scope="col">License Last 16 Weeks</th>
-            <th scope="col">Total Cases</th>
-            <th scope="col">Warrants Total</th>
-            <th scope="col">Unpaid Work Total</th>
-            <th scope="col">Overdue Terminations Total</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for crcCaseProgress in crcCaseProgressList %}
-        <tr>
-            <th scope="row">{{ crcCaseProgress.name }}</th>
-            <td>{{ crcCaseProgress.communityLast16Weeks }}</td>
-            <td>{{ crcCaseProgress.licenseLast16Weeks }}</td>
-            <td>{{ crcCaseProgress.totalCases }}</td>
-            <td>{{ crcCaseProgress.warrantsTotal }}</td>
-            <td>{{ crcCaseProgress.unpaidWorkTotal }}</td>
-            <td>{{ crcCaseProgress.overdueTerminationsTotal }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
 
 {% if organisationLevel === 'hmpps' %}
-    <h3 class="govuk-heading-m">NPS Case Progress</h3>
+    <h3 class="govuk-heading-m">Case Progress</h3>
 {% endif %}
 
 <div id="plotly-div-cases" aria-hidden="true"></div>
-<br/>
-<br/>
-<br/>
-<br/>
-{% if organisationLevel === 'hmpps' %}
-    <h3 class="govuk-heading-m">CRC Case Progress</h3>
-    <div id="plotly-div-cases-crc" aria-hidden="true"></div>
-{% endif %}
 
 </main>
 
@@ -92,7 +57,4 @@
 {% block bodyEnd %}
     <script src="/public/javascripts/plotly-latest.min.js"></script>
     <script src="/public/javascripts/case-progress.js"></script>
-    {% if organisationLevel === 'hmpps' %}
-        <script src="/public/javascripts/case-progress-crc.js"></script>
-    {% endif %}
 {% endblock %}

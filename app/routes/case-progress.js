@@ -22,17 +22,6 @@ module.exports = function (router) {
     return getLastUpdated().then(function (result) {
       lastUpdated = dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY HH:mm')
       return getCaseProgress(id, organisationLevel).then(function (result) {
-        result.date = lastUpdated
-        let crcCaseProgressList = Object.assign([], result.caseProgressList)
-        let stringifiedCRCCaseProgressList = '[]'
-        if (organisationLevel === organisationUnit.NATIONAL.name) {
-          crcCaseProgressList = crcCaseProgressList.filter(c => c.name.includes('CPA '))
-          result.caseProgressList = result.caseProgressList.filter(c => !c.name.includes('CPA '))
-          stringifiedCRCCaseProgressList = Object.assign([], crcCaseProgressList)
-          stringifiedCRCCaseProgressList = JSON.stringify(stringifiedCRCCaseProgressList)
-        } else {
-          crcCaseProgressList = []
-        }
         let stringifiedCaseProgressList = Object.assign([], result.caseProgressList)
         stringifiedCaseProgressList = JSON.stringify(stringifiedCaseProgressList)
         return res.render('case-progress', {
@@ -42,9 +31,7 @@ module.exports = function (router) {
           subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
           caseProgressList: result.caseProgressList,
           stringifiedCaseProgressList: stringifiedCaseProgressList,
-          crcCaseProgressList: crcCaseProgressList,
-          stringifiedCRCCaseProgressList: stringifiedCRCCaseProgressList,
-          date: result.date,
+          date: lastUpdated,
           workloadType: workloadTypes.PROBATION,
           organisationLevel: organisationLevel
         })

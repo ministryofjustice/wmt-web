@@ -5,9 +5,8 @@ const getCaseProgress = require('./data/get-caseload-progress')
 module.exports = function (id, organisationLevel) {
   const result = {}
   const organisationalUnitType = getOrganisationUnit('name', organisationLevel)
-  const caseProgressPromise = getCaseProgress(id, organisationLevel)
 
-  return caseProgressPromise.then(function (results) {
+  return getCaseProgress(id, organisationLevel).then(function (results) {
     return getBreadcrumbs(id, organisationLevel).then(function (breadcrumbs) {
       result.caseProgressList = results
       result.breadcrumbs = breadcrumbs
