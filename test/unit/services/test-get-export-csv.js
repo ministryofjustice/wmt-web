@@ -24,10 +24,6 @@ describe('services/get-export-csv', function () {
       expect(getExportCsv(orgUnit.NATIONAL.name, helper.NATIONAL_CASELOAD_RESULT, tabs.CASELOAD).csv).to.eql(helper.NATIONAL_CASELOAD_CSV.csv)
     })
 
-    it('for Offender Manager Overview', function () {
-      expect(getExportCsv(orgUnit.OFFENDER_MANAGER.name, helper.OM_OVERVIEW_RESULT, tabs.OVERVIEW).csv).to.eql(helper.OM_OVERVIEW_CSV.csv)
-    })
-
     it('for Team Overview', function () {
       expect(getExportCsv(orgUnit.TEAM.name, helper.TEAM_OVERVIEW_RESULT, tabs.OVERVIEW).csv).to.eql(helper.TEAM_OVERVIEW_CSV.csv)
     })

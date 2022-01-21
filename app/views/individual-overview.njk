@@ -1,0 +1,50 @@
+{% extends "includes/layout.njk" %}  
+
+{% block content %}
+
+<main id="content" role="main">
+
+{% include "includes/breadcrumbs.njk" %}
+
+{% include "includes/title-subtitle.njk" %}
+
+{% include "includes/sub-nav.njk" %}
+
+<div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <table class="govuk-table override-gov-uk-table" id="offender-manager-overview-table">
+                <tbody>
+                    <tr>
+                        <th class="bold" scope="row">Grade</th>
+                        <td class="sln-grade numeric">{{ overviewDetails.grade }}</td>
+                    </tr>
+                    <tr>
+                        <th class="bold" scope="row">Team</th>
+                        <td class="numeric"><a href="/{{ workloadType }}/team/{{ overviewDetails.teamId }}">{{ overviewDetails.teamName }}</a></td>
+                    </tr>
+                    <tr>
+                        <th class="bold" scope="row">Capacity</th>
+                        <td class="numeric {% if overviewDetails.capacity > 110 %} capacity-red {% endif %}"> {{ overviewDetails.capacity | round }}%</td>
+                    </tr>
+                    <tr>
+                        <th class="bold" scope="row">Cases</th>
+                        <td class="numeric">{{ overviewDetails.cases }}</td>
+                    </tr>
+                    <tr>
+                        <th class="bold" scope="row">Contracted hours</th>
+                        <td class="numeric">{{ overviewDetails.contractedHours }}</td>
+                    </tr>
+                    <tr>
+                        <th class="bold" scope="row">Reduction</th>
+                        <td class="numeric">{{ overviewDetails.reduction }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</main>
+
+{% include "includes/last-updated.njk" %}
+
+{% endblock %}
