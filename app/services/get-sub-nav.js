@@ -35,8 +35,7 @@ module.exports = function (id, organisationalUnitName, currentPath, workloadType
       } else if (isNational) {
         navigation.push(new Link('Overview', baseLink + '/overview'))
         navigation.push(new Link('Capacity', baseLink + '/caseload-capacity'))
-        navigation.push(new Link('NPS Caseload', baseLink + '/caseload'))
-        navigation.push(new Link('CRC Caseload', baseLink + '/crc-caseload'))
+        navigation.push(new Link('Caseload', baseLink + '/caseload'))
         navigation.push(new Link('Case Progress', baseLink + '/case-progress'))
         if (canViewDashboardRoles.includes(userRole)) {
           navigation.push(new Link('Dashboard', baseLink + '/dashboard'))
