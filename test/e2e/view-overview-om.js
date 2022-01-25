@@ -7,6 +7,7 @@ let workloadOwnerIds = []
 let workloadOwnerId
 let workloadOwnerGrade
 let workloadOwnerDefaultUrl
+let workloadOwnerCapacity
 
 describe('Offender Manager', function () {
   describe('View overview', function () {
@@ -18,6 +19,7 @@ describe('Offender Manager', function () {
       workloadOwnerDefaultUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + workloadOwnerId
 
       workloadOwnerGrade = await dataHelper.selectGradeForWorkloadOwner(workloadOwnerId)
+      workloadOwnerCapacity = await dataHelper.selectCapacityForWorkloadOwner(workloadOwnerId)
       await browser.url(workloadOwnerDefaultUrl + '/overview')
     })
 
@@ -25,6 +27,10 @@ describe('Offender Manager', function () {
       let grade = await $('.sln-grade')
       grade = await grade.getText()
       expect(grade).to.equal(workloadOwnerGrade)
+
+      let capacity = await $('.sln-capacity')
+      capacity = await capacity.getText()
+      expect(capacity).to.equal(`${workloadOwnerCapacity}%`)
     })
 
     after(function () {

@@ -621,6 +621,16 @@ module.exports.selectGradeForWorkloadOwner = function (workloadOwnerId) {
   return promise
 }
 
+module.exports.selectCapacityForWorkloadOwner = function (workloadOwnerId) {
+  return knex('individual_case_overview')
+    .withSchema('app')
+    .select('total_points', 'available_points')
+    .where('workload_owner_id', workloadOwnerId)
+    .then(function ([result]) {
+      return (result.total_points / result.available_points) * 100
+    })
+}
+
 module.exports.getOffenderManagerTeamRegionLduByWorkloadOwnerId = function (workloadOwnerId) {
   return knex('workload_owner')
     .withSchema('app')
