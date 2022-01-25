@@ -1,20 +1,15 @@
-const redis = require('redis')
+const uuidv4 = require('uuid').v4
 const session = require('express-session')
 const connectRedis = require('connect-redis')
-const addRequestId = require('express-request-id')
 const express = require('express')
 const config = require('../../config')
+const { createRedisClient } = require('../data/redisClient')
 
 const RedisStore = connectRedis(session)
 
-const client = redis.createClient({
-  port: config.redis.port,
-  password: config.redis.password,
-  host: config.redis.host,
-  tls: config.redis.tls_enabled === 'true' ? {} : false
-})
-
 module.exports = function () {
+  const client = createRedisClient(true)
+  client.connect()
   const router = express.Router()
   router.use(
     session({
@@ -34,7 +29,16 @@ module.exports = function () {
     next()
   })
 
-  router.use(addRequestId())
+  router.use((req, res, next) => {
+    const headerName = 'X-Request-Id'
+    const oldValue = req.get(headerName)
+    const id = oldValue === undefined ? uuidv4() : oldValue
+
+    res.set(headerName, id)
+    req.id = id
+
+    next()
+  })
 
   return router
 }

@@ -26,8 +26,8 @@ module.exports.createDailyArchive = function (dailyArchiveData) {
   }
 
   return knex('daily_archive_data').withSchema('dbo').returning('id').insert(insert)
-    .then(function (ids) {
-      return ids
+    .then(function ([id]) {
+      return id.id
     })
 }
 
