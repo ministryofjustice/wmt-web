@@ -11,7 +11,7 @@ module.exports = function (id, workloadType = workloadTypes.PROBATION) {
     result.breadcrumbs = breadcrumbs
     return getIndividualOverview(id).then(function (results) {
       result.overviewDetails = results
-      result.overviewDetails.capacity = calculatePercentage(results.availablePoints, results.totalPoints)
+      result.overviewDetails.capacity = calculatePercentage(results.totalPoints, results.availablePoints)
       result.title = result.breadcrumbs[0].title
       return result
     })
