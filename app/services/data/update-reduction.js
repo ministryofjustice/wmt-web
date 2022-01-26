@@ -16,4 +16,7 @@ module.exports = function (reductionId, workloadOwnerId, newReduction) {
     })
     .where('id', reductionId)
     .returning('id')
+    .then(function ([id]) {
+      return id.id
+    })
 }

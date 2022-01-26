@@ -9,7 +9,7 @@ module.exports = function (newUserRole) {
       last_updated: newUserRole.lastUpdated,
       last_updated_by: newUserRole.lastUpdatedBy
     })
-    .returning('id').then(function (ids) {
-      return ids[0]
+    .returning('id').then(function ([id]) {
+      return id.id
     })
 }

@@ -14,4 +14,7 @@ module.exports = function (oldReduction) {
       user_id: oldReduction.userId
     })
     .returning('id')
+    .then(function ([id]) {
+      return id.id
+    })
 }
