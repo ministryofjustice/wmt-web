@@ -16,8 +16,8 @@ module.exports.addCourtReportWorkloadsForOffenderManager = function () {
     .returning('id')
     .insert(offenderManagerTypes)
     .then(function (ids) {
-      ids.forEach((id) => {
-        inserts.push({ table: 'offender_manager_type', id: id.id })
+      ids.forEach(({ id }) => {
+        inserts.push({ table: 'offender_manager_type', id })
       })
 
       return addRegion(inserts)
