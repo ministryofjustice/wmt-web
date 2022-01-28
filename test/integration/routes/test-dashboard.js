@@ -26,7 +26,7 @@ describe('download dashboard file', function () {
     app = initaliseApp()
   })
 
-  it('should return correct dashboard file response', async () => {
+  it.only('should return correct dashboard file response', async () => {
     const response = await supertest(app)
       .get(downloadUrl)
       .buffer()

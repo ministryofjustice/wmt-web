@@ -270,8 +270,8 @@ const addPsoOffenderManager = function (inserts) {
       forename: 'Test_Forename',
       surname: 'Test_Surname'
     })
-    .then(function (ids) {
-      inserts.push({ table: 'offender_manager', id: ids[0] })
+    .then(function ([id]) {
+      inserts.push({ table: 'offender_manager', id: id.id })
       return inserts
     })
     .then(function () {
