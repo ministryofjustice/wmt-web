@@ -144,8 +144,8 @@ module.exports.addWorkloadCapacitiesForOffenderManager = function () {
       return knex('offender_manager_type').withSchema('app').returning('id').insert(offenderManagerTypes)
     })
     .then(function (ids) {
-      ids.forEach((id) => {
-        inserts.push({ table: 'offender_manager_type', id: id })
+      ids.forEach(({ id }) => {
+        inserts.push({ table: 'offender_manager_type', id })
       })
       return addRegion(inserts)
     })
@@ -177,7 +177,7 @@ module.exports.addWorkloadPoints = function (inserts, isT2A = false) {
   return knex('workload_points').withSchema('app').returning('id').insert(workloadPoints)
     .then(function (ids) {
       ids.forEach((id) => {
-        inserts.push({ table: 'workload_points', id: id })
+        inserts.push({ table: 'workload_points', id: id.id })
       })
       return inserts
     })
@@ -191,8 +191,8 @@ const addWorkloadReports = function (inserts) {
 
   return knex('workload_report').withSchema('app').returning('id').insert(workloadReports)
     .then(function (ids) {
-      ids.forEach((id) => {
-        inserts.push({ table: 'workload_report', id: id })
+      ids.forEach(({ id }) => {
+        inserts.push({ table: 'workload_report', id })
       })
       return inserts
     })
@@ -212,8 +212,8 @@ module.exports.addInProgressWorkloadReport = function (inserts) {
 
 const addRegion = function (inserts) {
   return knex('region').withSchema('app').returning('id').insert({ description: 'NPS Test Region', code: 'NPS1' })
-    .then(function (ids) {
-      inserts.push({ table: 'region', id: ids[0] })
+    .then(function ([id]) {
+      inserts.push({ table: 'region', id: id.id })
       return inserts
     })
     .then(function (inserts) {
@@ -224,8 +224,8 @@ const addRegion = function (inserts) {
 const addTeam = function (inserts) {
   const ldus = inserts.filter((item) => item.table === 'ldu')
   return knex('team').withSchema('app').returning('id').insert({ ldu_id: ldus[ldus.length - 1].id, description: 'Test Team', code: 'NPS1LDU1T1' })
-    .then(function (ids) {
-      inserts.push({ table: 'team', id: ids[0] })
+    .then(function ([id]) {
+      inserts.push({ table: 'team', id: id.id })
       return inserts
     })
     .then(function (inserts) {
@@ -236,8 +236,8 @@ const addTeam = function (inserts) {
 const addLdu = function (inserts) {
   const regions = inserts.filter((item) => item.table === 'region')
   return knex('ldu').withSchema('app').returning('id').insert({ region_id: regions[regions.length - 1].id, description: 'Test LDU', code: 'NPS1LDU1' })
-    .then(function (ids) {
-      inserts.push({ table: 'ldu', id: ids[0] })
+    .then(function ([id]) {
+      inserts.push({ table: 'ldu', id: id.id })
       return inserts
     })
     .then(function (inserts) {
@@ -253,8 +253,8 @@ module.exports.addPoOffenderManager = function (inserts) {
       forename: 'Test_Forename',
       surname: 'Test_Surname'
     })
-    .then(function (ids) {
-      inserts.push({ table: 'offender_manager', id: ids[0] })
+    .then(function ([id]) {
+      inserts.push({ table: 'offender_manager', id: id.id })
       return inserts
     })
     .then(function () {
@@ -270,8 +270,8 @@ const addPsoOffenderManager = function (inserts) {
       forename: 'Test_Forename',
       surname: 'Test_Surname'
     })
-    .then(function (ids) {
-      inserts.push({ table: 'offender_manager', id: ids[0] })
+    .then(function ([id]) {
+      inserts.push({ table: 'offender_manager', id: id.id })
       return inserts
     })
     .then(function () {
@@ -290,8 +290,8 @@ const addWorkloadOwner = function (inserts) {
       contracted_hours: 37
     }
   )
-    .then(function (ids) {
-      inserts.push({ table: 'workload_owner', id: ids[0] })
+    .then(function ([id]) {
+      inserts.push({ table: 'workload_owner', id: id.id })
       return inserts
     })
     .then(function (inserts) {
@@ -324,7 +324,7 @@ const addWorkloads = function (inserts) {
       return knex('workload').withSchema('app').returning('id').insert(workloads)
     })
     .then(function (ids) {
-      ids.forEach((id) => {
+      ids.forEach(({ id }) => {
         inserts.push({ table: 'workload', id: id })
       })
 
@@ -364,7 +364,7 @@ const addWorkloads = function (inserts) {
       return knex('workload_points_calculations').withSchema('app').returning('id').insert(calculations)
     })
     .then(function (ids) {
-      ids.forEach((id) => {
+      ids.forEach(({ id }) => {
         inserts.push({ table: 'workload_points_calculations', id: id })
       })
       const workloads = inserts.filter((item) => item.table === 'workload')
@@ -394,7 +394,7 @@ const addWorkloads = function (inserts) {
       return knex.batchInsert('app.tiers', tiers, 149).returning('id')
     })
     .then(function (ids) {
-      ids.forEach((id) => {
+      ids.forEach(({ id }) => {
         inserts.push({ table: 'tiers', id: id })
       })
       return inserts
@@ -422,7 +422,7 @@ const addOmicWorkloads = function (inserts) {
       return knex('omic_workload').withSchema('app').returning('id').insert(workloads)
     })
     .then(function (ids) {
-      ids.forEach((id) => {
+      ids.forEach(({ id }) => {
         inserts.push({ table: 'omic_workload', id: id })
       })
 
@@ -460,7 +460,7 @@ const addOmicWorkloads = function (inserts) {
       return knex('omic_workload_points_calculations').withSchema('app').returning('id').insert(calculations)
     })
     .then(function (ids) {
-      ids.forEach((id) => {
+      ids.forEach(({ id }) => {
         inserts.push({ table: 'omic_workload_points_calculations', id: id })
       })
       const workloads = inserts.filter((item) => item.table === 'omic_workload')
@@ -490,7 +490,7 @@ const addOmicWorkloads = function (inserts) {
       return knex.batchInsert('app.omic_tiers', tiers, 149).returning('id')
     })
     .then(function (ids) {
-      ids.forEach((id) => {
+      ids.forEach(({ id }) => {
         inserts.push({ table: 'omic_tiers', id: id })
       })
       return inserts
@@ -502,8 +502,8 @@ module.exports.addCaseDetails = function (caseDetails) {
   return knex('case_details')
     .withSchema('app')
     .returning('id')
-    .insert(caseDetails).then(function (ids) {
-      inserts.push({ table: 'case_details', id: ids[0] })
+    .insert(caseDetails).then(function ([id]) {
+      inserts.push({ table: 'case_details', id: id.id })
       return knex
         .schema
         .raw('REFRESH MATERIALIZED VIEW app.case_details_export_view')

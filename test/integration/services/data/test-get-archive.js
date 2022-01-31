@@ -32,7 +32,7 @@ const archiveDataForm = new ArchiveDataForm(fromDate.date(), fromDate.month() + 
 describe('services/data/get-daily-archive', function () {
   before(function () {
     return createDailyArchive(expectedResult).then(function (results) {
-      idsSaved = results[0]
+      idsSaved = results
     })
   })
   it('should retrieve all twelve columns for archive data', function () {
