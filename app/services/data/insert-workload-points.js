@@ -71,4 +71,7 @@ module.exports = function (workloadPoints) {
       default_contracted_hours_spo: workloadPoints.defaultContractedHoursSpo
     })
     .returning('id')
+    .then(function ([id]) {
+      return id.id
+    })
 }

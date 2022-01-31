@@ -22,7 +22,7 @@ const archiveDateRange = new ArchiveDateRange(fromDate.date(), fromDate.month() 
 describe('services/data/get-archived-reductions', function () {
   before(function () {
     return createArchiveReductions(expectedResult).then(function (results) {
-      idsSaved = results[0]
+      idsSaved = results
     })
   })
   it('should retrieve all 5 columns for archive data', function () {

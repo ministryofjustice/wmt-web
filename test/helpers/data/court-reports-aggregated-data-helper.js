@@ -1,5 +1,4 @@
-const config = require('../../../knexfile').integrationTests
-const knex = require('knex')(config)
+const knex = require('../../../knex').integrationTests
 const { arrayToPromise } = require('../promise-helper')
 
 const helper = require('./aggregated-data-helper')
@@ -17,21 +16,15 @@ module.exports.addCourtReportWorkloadsForOffenderManager = function () {
     .returning('id')
     .insert(offenderManagerTypes)
     .then(function (ids) {
-      ids.forEach((id) => {
-        inserts.push({ table: 'offender_manager_type', id: id })
+      ids.forEach(({ id }) => {
+        inserts.push({ table: 'offender_manager_type', id })
       })
 
       return addRegion(inserts)
         .then(function (inserts) {
-          const workloadReports = [
-            { effective_from: '2017-02-01' }
-          ]
-
-          return knex('workload_report').withSchema('app').returning('id').insert(workloadReports)
-            .then(function (ids) {
-              ids.forEach((id) => {
-                inserts.push({ table: 'workload_report', id: id })
-              })
+          return knex('workload_report').withSchema('app').returning('id').insert({ effective_from: '2017-02-01' })
+            .then(function ([id]) {
+              inserts.push({ table: 'workload_report', id: id.id })
               return addCourtReportWorkloadPoints(inserts)
                 .then(function (inserts) {
                   return addCrWorkloadPointsCalculation(inserts)
@@ -146,7 +139,7 @@ const addCrWorkloadPointsCalculation = function (inserts) {
     .insert(crWPCEntries)
     .then(function (ids) {
       ids.forEach((id) => {
-        inserts.push({ table: 'court_reports_calculations', id: id })
+        inserts.push({ table: 'court_reports_calculations', id: id.id })
       })
       return inserts
     })
@@ -159,18 +152,16 @@ const addCourtReportWorkloadPoints = function (inserts) {
 
   return knex('workload_points').withSchema('app').returning('id')
     .insert(helper.defaultWorkloadPoints)
-    .then(function (ids) {
-      ids.forEach((id) => {
-        inserts.push({ table: 'workload_points', id: id })
-      })
+    .then(function ([id]) {
+      inserts.push({ table: 'workload_points', id: id.id })
       return inserts
     })
 }
 
 const addRegion = function (inserts) {
   return knex('region').withSchema('app').returning('id').insert({ description: 'NPS Test Region' })
-    .then(function (ids) {
-      inserts.push({ table: 'region', id: ids[0] })
+    .then(function ([id]) {
+      inserts.push({ table: 'region', id: id.id })
       return inserts
     })
     .then(function (inserts) {
@@ -181,8 +172,8 @@ const addRegion = function (inserts) {
 const addLdu = function (inserts) {
   const regions = inserts.filter((item) => item.table === 'region')
   return knex('ldu').withSchema('app').returning('id').insert({ region_id: regions[regions.length - 1].id, description: 'Test LDU' })
-    .then(function (ids) {
-      inserts.push({ table: 'ldu', id: ids[0] })
+    .then(function ([id]) {
+      inserts.push({ table: 'ldu', id: id.id })
       return inserts
     })
     .then(function (inserts) {
@@ -193,8 +184,8 @@ const addLdu = function (inserts) {
 const addTeam = function (inserts) {
   const ldus = inserts.filter((item) => item.table === 'ldu')
   return knex('team').withSchema('app').returning('id').insert({ ldu_id: ldus[ldus.length - 1].id, description: 'Test Team' })
-    .then(function (ids) {
-      inserts.push({ table: 'team', id: ids[0] })
+    .then(function ([id]) {
+      inserts.push({ table: 'team', id: id.id })
       return inserts
     })
     .then(function (inserts) {
@@ -213,8 +204,8 @@ const addPOOffenderManager = function (inserts) {
       forename: 'Test_Forename',
       surname: 'Test_Surname'
     })
-    .then(function (ids) {
-      inserts.push({ table: 'offender_manager', id: ids[0] })
+    .then(function ([id]) {
+      inserts.push({ table: 'offender_manager', id: id.id })
       return inserts
     })
     .then(function () {
@@ -232,8 +223,8 @@ const addCrWorkload = function (inserts) {
   }
 
   return knex('workload_owner').withSchema('app').returning('id').insert(workloadOwner)
-    .then(function (ids) {
-      inserts.push({ table: 'workload_owner', id: ids[0] })
+    .then(function ([id]) {
+      inserts.push({ table: 'workload_owner', id: id.id })
       return inserts
     })
     .then(function () {
@@ -248,8 +239,8 @@ const addCrWorkload = function (inserts) {
       }
 
       return knex('court_reports').withSchema('app').returning('id').insert(crWorkload)
-        .then(function (ids) {
-          inserts.push({ table: 'court_reports', id: ids[0] })
+        .then(function ([id]) {
+          inserts.push({ table: 'court_reports', id: id.id })
           return inserts
         })
     })

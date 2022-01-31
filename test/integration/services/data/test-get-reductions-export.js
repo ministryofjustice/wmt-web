@@ -39,7 +39,7 @@ describe('services/data/get-reduction-notes-export', function () {
             testReductionInsert.reasonForReductionId = id
             return insertReduction(workloadOwnerId, testReductionInsert)
               .then(function (reductionId) {
-                reductionResult.id = reductionId[0]
+                reductionResult.id = reductionId
                 inserts.push(reductionResult)
               })
           })
