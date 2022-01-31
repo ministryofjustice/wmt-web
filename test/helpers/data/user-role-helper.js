@@ -13,8 +13,8 @@ const addUserRoleData = function (userId, roleId) {
 
   return knex('user_role').withSchema('app').returning('id').insert(userRole)
     .then(function (ids) {
-      ids.forEach((id) => {
-        insertedData.push({ table: 'user_role', id: id })
+      ids.forEach(({ id }) => {
+        insertedData.push({ table: 'user_role', id })
       })
       return insertedData
     })
@@ -48,8 +48,8 @@ module.exports.addRoles = function () {
 
   return knex('roles').withSchema('app').returning('id').insert(roles)
     .then(function (ids) {
-      ids.forEach((id) => {
-        inserts.push({ table: 'roles', id: id })
+      ids.forEach(({ id }) => {
+        inserts.push({ table: 'roles', id })
       })
       return inserts
     })
@@ -59,12 +59,12 @@ module.exports.addUserAndRole = function (testUser, role) {
   const inserts = []
 
   return knex('users').withSchema('app').returning(['id', 'username', 'name']).insert({ username: testUser, name: testUser })
-    .then(function (result) {
-      inserts.push({ table: 'users', id: result[0].id, username: result[0].username, name: result[0].name })
+    .then(function ([result]) {
+      inserts.push({ table: 'users', id: result.id, username: result.username, name: result.name })
       if (!role) {
         return inserts
       }
-      return addUserRoleData(result[0].id, role).then(function (insertedRole) {
+      return addUserRoleData(result.id, role).then(function (insertedRole) {
         return inserts.concat(insertedRole)
       })
     })

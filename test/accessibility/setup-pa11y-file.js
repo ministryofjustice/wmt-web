@@ -15,9 +15,9 @@ const extractInserts = function (inserts) {
   }
 }
 
-const generateLoginUrlConfig = function () {
+const generateLoginActionConfig = function (url) {
   return {
-    url: host,
+    url,
     actions: [
       'set field #username to WMT_SUPER_USER',
       'set field #password to password123456',
@@ -37,56 +37,56 @@ const ldu = 'ldu'
 const region = 'region'
 const national = 'hmpps/0'
 
-const urls = [generateLoginUrlConfig()]
+const urls = [generateLoginActionConfig(host)]
 
 setupAllDataFs().then(function (result) {
   const extractedCourtReports = extractInserts(result.courtReportInserts)
   const extractedWorkload = extractInserts(result.workloadInserts)
   const capacityUrl = 'caseload-capacity'
-  urls.push(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${capacityUrl}`)
-  urls.push(`${probationBase}/${team}/${extractedWorkload.teamId}/${capacityUrl}`)
-  urls.push(`${probationBase}/${ldu}/${extractedWorkload.lduId}/${capacityUrl}`)
-  urls.push(`${probationBase}/${region}/${extractedWorkload.regionId}/${capacityUrl}`)
+  urls.push(generateLoginActionConfig(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${capacityUrl}`))
+  urls.push(generateLoginActionConfig(`${probationBase}/${team}/${extractedWorkload.teamId}/${capacityUrl}`))
+  urls.push(generateLoginActionConfig(`${probationBase}/${ldu}/${extractedWorkload.lduId}/${capacityUrl}`))
+  urls.push(generateLoginActionConfig(`${probationBase}/${region}/${extractedWorkload.regionId}/${capacityUrl}`))
 
   const caseProgressUrl = 'case-progress'
-  urls.push(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${caseProgressUrl}`)
-  urls.push(`${probationBase}/${team}/${extractedWorkload.teamId}/${caseProgressUrl}`)
-  urls.push(`${probationBase}/${ldu}/${extractedWorkload.lduId}/${caseProgressUrl}`)
-  urls.push(`${probationBase}/${region}/${extractedWorkload.regionId}/${caseProgressUrl}`)
+  urls.push(generateLoginActionConfig(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${caseProgressUrl}`))
+  urls.push(generateLoginActionConfig(`${probationBase}/${team}/${extractedWorkload.teamId}/${caseProgressUrl}`))
+  urls.push(generateLoginActionConfig(`${probationBase}/${ldu}/${extractedWorkload.lduId}/${caseProgressUrl}`))
+  urls.push(generateLoginActionConfig(`${probationBase}/${region}/${extractedWorkload.regionId}/${caseProgressUrl}`))
 
   const overviewUrl = 'overview'
-  urls.push(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${overviewUrl}`)
-  urls.push(`${probationBase}/${team}/${extractedWorkload.teamId}/${overviewUrl}`)
-  urls.push(`${probationBase}/${ldu}/${extractedWorkload.lduId}/${overviewUrl}`)
-  urls.push(`${probationBase}/${region}/${extractedWorkload.regionId}/${overviewUrl}`)
-  urls.push(`${probationBase}/${national}/${overviewUrl}`)
+  urls.push(generateLoginActionConfig(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${overviewUrl}`))
+  urls.push(generateLoginActionConfig(`${probationBase}/${team}/${extractedWorkload.teamId}/${overviewUrl}`))
+  urls.push(generateLoginActionConfig(`${probationBase}/${ldu}/${extractedWorkload.lduId}/${overviewUrl}`))
+  urls.push(generateLoginActionConfig(`${probationBase}/${region}/${extractedWorkload.regionId}/${overviewUrl}`))
+  urls.push(generateLoginActionConfig(`${probationBase}/${national}/${overviewUrl}`))
 
-  urls.push(`${courtReportsBase}/${offenderManager}/${extractedCourtReports.offenderManagerId}/${overviewUrl}`)
-  urls.push(`${courtReportsBase}/${team}/${extractedCourtReports.teamId}/${overviewUrl}`)
-  urls.push(`${courtReportsBase}/${ldu}/${extractedCourtReports.lduId}/${overviewUrl}`)
-  urls.push(`${courtReportsBase}/${region}/${extractedCourtReports.regionId}/${overviewUrl}`)
-  urls.push(`${courtReportsBase}/${national}/${overviewUrl}`)
+  urls.push(generateLoginActionConfig(`${courtReportsBase}/${offenderManager}/${extractedCourtReports.offenderManagerId}/${overviewUrl}`))
+  urls.push(generateLoginActionConfig(`${courtReportsBase}/${team}/${extractedCourtReports.teamId}/${overviewUrl}`))
+  urls.push(generateLoginActionConfig(`${courtReportsBase}/${ldu}/${extractedCourtReports.lduId}/${overviewUrl}`))
+  urls.push(generateLoginActionConfig(`${courtReportsBase}/${region}/${extractedCourtReports.regionId}/${overviewUrl}`))
+  urls.push(generateLoginActionConfig(`${courtReportsBase}/${national}/${overviewUrl}`))
 
   const caseloadUrl = 'caseload'
-  urls.push(`${probationBase}/${team}/${extractedWorkload.teamId}/${caseloadUrl}`)
-  urls.push(`${probationBase}/${ldu}/${extractedWorkload.lduId}/${caseloadUrl}`)
-  urls.push(`${probationBase}/${region}/${extractedWorkload.regionId}/${caseloadUrl}`)
-  urls.push(`${probationBase}/${national}/${caseloadUrl}`)
+  urls.push(generateLoginActionConfig(`${probationBase}/${team}/${extractedWorkload.teamId}/${caseloadUrl}`))
+  urls.push(generateLoginActionConfig(`${probationBase}/${ldu}/${extractedWorkload.lduId}/${caseloadUrl}`))
+  urls.push(generateLoginActionConfig(`${probationBase}/${region}/${extractedWorkload.regionId}/${caseloadUrl}`))
+  urls.push(generateLoginActionConfig(`${probationBase}/${national}/${caseloadUrl}`))
 
   const contractedHoursUrl = 'contracted-hours'
-  urls.push(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${contractedHoursUrl}`)
+  urls.push(generateLoginActionConfig(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${contractedHoursUrl}`))
 
   const reductionsUrl = 'reductions'
   const addReductionsUrl = 'add-reduction'
-  urls.push(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${reductionsUrl}`)
-  urls.push(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${addReductionsUrl}`)
-  urls.push(`${courtReportsBase}/${offenderManager}/${extractedCourtReports.offenderManagerId}/${reductionsUrl}`)
-  urls.push(`${courtReportsBase}/${offenderManager}/${extractedCourtReports.offenderManagerId}/${addReductionsUrl}`)
+  urls.push(generateLoginActionConfig(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${reductionsUrl}`))
+  urls.push(generateLoginActionConfig(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${addReductionsUrl}`))
+  urls.push(generateLoginActionConfig(`${courtReportsBase}/${offenderManager}/${extractedCourtReports.offenderManagerId}/${reductionsUrl}`))
+  urls.push(generateLoginActionConfig(`${courtReportsBase}/${offenderManager}/${extractedCourtReports.offenderManagerId}/${addReductionsUrl}`))
 
   const admin = 'admin'
-  urls.push(`${host}/${admin}/workload-points`)
-  urls.push(`${host}/${admin}/user`)
-  urls.push(`${host}/${admin}/user-rights`)
+  urls.push(generateLoginActionConfig(`${host}/${admin}/workload-points`))
+  urls.push(generateLoginActionConfig(`${host}/${admin}/user`))
+  urls.push(generateLoginActionConfig(`${host}/${admin}/user-rights`))
   pa11yJson.urls = urls
 
   try {

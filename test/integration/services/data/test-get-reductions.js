@@ -34,7 +34,7 @@ describe('services/data/get-reductions', function () {
                 reductionToInsert.reasonForReductionId = reductionReasonId
                 return insertReduction(workloadOwnerId, reductionToInsert)
                   .then(function (result) {
-                    insertedReduction.id = result[0]
+                    insertedReduction.id = result
                   })
               })
           })

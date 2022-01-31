@@ -5,9 +5,13 @@ buildAppInsightsClient()
 /**
  * Module dependencies.
  */
-const app = require('../app')
+const { createApplication } = require('../app')
 const logger = require('../logger')
 
-app.listen(app.get('port'), () => {
-  logger.info(`Server listening on port ${app.get('port')}`)
+createApplication().then(app => {
+  app.listen(app.get('port'), () => {
+    logger.info(`Server listening on port: ${app.get('port')}`)
+  })
+}).catch(error => {
+  logger.error(`Failed to start application: ${error.message}`)
 })
