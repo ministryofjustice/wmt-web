@@ -385,7 +385,7 @@
                 <td class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d0">{{ total.d0 | round(1) }}</td>
 
                 <td class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_untiered">{{ total.untiered | round(1) }}</td>   
-                <td class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_overall" >{{ total.totalCases | round(1) }}</td>   
+                <td class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_total" >{{ total.totalCases | round(1) }}</td>   
             </tr>
             <tr>
           {% endfor %}
@@ -463,7 +463,7 @@
         </tbody>
         <tfoot>
           <tr>
-            <td rowspan="{{caseType.array.totals | length}}" headers="{{caseType.displayName}}_name {{caseType.displayName}}_om">Average</td>
+            <td rowspan="{{caseType.array.totals | length}}" headers="{{caseType.displayName}}_om">Average</td>
             {% for grade, total in caseType.array.percentageTotals %}
             <td class="align-centre" headers="{{caseType.displayName}}_om {{caseType.displayName}}_grade">{{ grade }}</td> 
             <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_a3">{{ total.a3  | round(1) }}%</td>

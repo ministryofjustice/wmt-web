@@ -7,7 +7,4 @@ module.exports = function (reductionReason) {
     .withSchema('app')
     .insert(insertObject)
     .returning('id')
-    .then(function ([id]) {
-      return id.id
-    })
 }

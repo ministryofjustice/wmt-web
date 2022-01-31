@@ -11,8 +11,8 @@ module.exports.createArchiveReductions = function (archiveReductionData) {
   }
 
   return knex('archive_reduction_data').withSchema('dbo').returning('id').insert(insert)
-    .then(function ([id]) {
-      return id.id
+    .then(function (ids) {
+      return ids
     })
 }
 

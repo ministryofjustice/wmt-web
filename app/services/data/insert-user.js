@@ -7,7 +7,7 @@ module.exports = function (username, name) {
       username: username,
       name: name
     })
-    .returning('id').then(function ([id]) {
-      return id.id
+    .returning('id').then(function (ids) {
+      return ids[0]
     })
 }

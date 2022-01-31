@@ -8,7 +8,4 @@ module.exports = function (reductionId, reductionStatus) {
     })
     .where('id', reductionId)
     .returning('id')
-    .then(function ([id]) {
-      return id.id
-    })
 }
