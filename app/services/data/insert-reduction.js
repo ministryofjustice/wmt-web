@@ -14,7 +14,4 @@ module.exports = function (id, newReduction) {
       user_id: newReduction.reductionSubmitter
     })
     .returning('id')
-    .then(function ([id]) {
-      return id.id
-    })
 }

@@ -8,7 +8,4 @@ module.exports = function (workloadPointsId) {
       effective_to: knex.fn.now()
     })
     .returning('id')
-    .then(function ([id]) {
-      return id.id
-    })
 }

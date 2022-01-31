@@ -42,7 +42,7 @@ const caseDetailsData =
 
 module.exports = function () {
   return dailyArchiveDataHelper.createDailyArchive(dailyArchiveData).then(function (dailyArchiveId) {
-    const dailyArchiveIdInsert = [{ table: 'daily_archive_data', id: dailyArchiveId }]
+    const dailyArchiveIdInsert = [{ table: 'daily_archive_data', id: dailyArchiveId[0] }]
     return courtReportsDataHelper.addCourtReportWorkloadsForOffenderManager()
       .then(function (courtReportInserts) {
         return aggregatedDataHelper.addWorkloadCapacitiesForOffenderManager().then(function (workloadInserts) {

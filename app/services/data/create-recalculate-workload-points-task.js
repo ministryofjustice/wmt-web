@@ -10,7 +10,4 @@ module.exports = function (workloadReportId) {
     status: 'PENDING'
   }
   return knex('tasks').withSchema('app').returning('id').insert(newTask)
-    .then(function ([id]) {
-      return id.id
-    })
 }

@@ -14,7 +14,4 @@ module.exports = function (workloadStagingId, workloadReportId, batchSize) {
     status: 'PENDING'
   }
   return knex('tasks').withSchema('app').returning('id').insert(newTask)
-    .then(function ([id]) {
-      return id.id
-    })
 }
