@@ -206,6 +206,8 @@ jobs:
       - run:
           name: run accessibility tests
           command: npm run accessibility-test-ci
+      - store_artifacts:
+          path: test/accessibility/screenShots
   e2e_test:
     executor: docker-env
     steps:

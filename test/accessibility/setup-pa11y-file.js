@@ -15,14 +15,15 @@ const extractInserts = function (inserts) {
   }
 }
 
-const generateLoginActionConfig = function (url) {
+const generateLoginActionConfig = function (url, additionalFields = {}) {
   return {
     url,
     actions: [
       'set field #username to WMT_SUPER_USER',
       'set field #password to password123456',
       'click element #submit'
-    ]
+    ],
+    ...additionalFields
   }
 }
 
@@ -69,7 +70,7 @@ setupAllDataFs().then(function (result) {
 
   const caseloadUrl = 'caseload'
   urls.push(generateLoginActionConfig(`${probationBase}/${team}/${extractedWorkload.teamId}/${caseloadUrl}`))
-  urls.push(generateLoginActionConfig(`${probationBase}/${ldu}/${extractedWorkload.lduId}/${caseloadUrl}`))
+  urls.push(generateLoginActionConfig(`${probationBase}/${ldu}/${extractedWorkload.lduId}/${caseloadUrl}`, { screenCapture: 'test/accessibility/screenShots/ldu-caseload.png' }))
   urls.push(generateLoginActionConfig(`${probationBase}/${region}/${extractedWorkload.regionId}/${caseloadUrl}`))
   urls.push(generateLoginActionConfig(`${probationBase}/${national}/${caseloadUrl}`))
 
