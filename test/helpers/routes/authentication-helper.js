@@ -4,7 +4,8 @@ const USERS = {
   ApplicationSupport: { username: 'WMT_APPLICATION_SUPPORT', roleId: 2 },
   Manager: { username: 'WMT_MANAGER', roleId: 1 },
   Staff: { username: 'WMT_STAFF' },
-  unautheticatedUser: { username: 'UNAUTHN_USER' }
+  unautheticatedUser: { username: 'UNAUTHN_USER' },
+  onlyWmtUser: { username: 'ONLY_WMT_USER' }
 }
 
 const login = async function ({ username }) {

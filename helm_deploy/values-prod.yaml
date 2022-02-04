@@ -8,6 +8,7 @@ generic-service:
     INGRESS_URL: "https://workload-measurement.hmpps.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in.hmpps.service.justice.gov.uk/auth"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api.prison.service.justice.gov.uk"
+    WORKFORCE_ALLOCATIONS_URL: "https://workforce-management.hmpps.service.justice.gov.uk"
 
   allowlist:
     office: "217.33.148.210/32"
