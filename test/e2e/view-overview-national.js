@@ -2,6 +2,7 @@ const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
+const config = require('../../config')
 
 let workloadOwnerIds = []
 let workloadOwnerId
@@ -26,6 +27,12 @@ describe('National', function () {
 
     beforeEach(async function () {
       await browser.url(nationalDefaultUrl)
+    })
+
+    it('should display allocations link', async function () {
+      const allocationsLink = await $(`a[href*="${config.nav.allocations.url}"`)
+      const exists = await allocationsLink.isExisting()
+      return expect(exists).to.be.true
     })
 
     it('should show regional breakdown table', async function () {
@@ -145,6 +152,13 @@ describe('National', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.Manager)
     })
+
+    it('should display allocations link', async function () {
+      const allocationsLink = await $(`a[href*="${config.nav.allocations.url}"`)
+      const exists = await allocationsLink.isExisting()
+      return expect(exists).to.be.true
+    })
+
     it('should not include the reductions export at workload owner level', async function () {
       await browser.url(workloadOwnerDefaultUrl + '/overview')
       const reductionExport = await $('.reduction-export')
@@ -173,10 +187,13 @@ describe('National', function () {
   describe('overview for Application Support', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
+      await browser.url(nationalDefaultUrl + '/overview')
     })
 
-    before(async function () {
-      await browser.url(nationalDefaultUrl + '/overview')
+    it('should display allocations link', async function () {
+      const allocationsLink = await $(`a[href*="${config.nav.allocations.url}"`)
+      const exists = await allocationsLink.isExisting()
+      return expect(exists).to.be.true
     })
 
     it('should not include the overview export', async function () {
@@ -202,10 +219,32 @@ describe('National', function () {
       await authenticationHelper.login(authenticationHelper.users.SuperUser)
     })
 
+    it('should display allocations link', async function () {
+      const allocationsLink = await $(`a[href*="${config.nav.allocations.url}"`)
+      const exists = await allocationsLink.isExisting()
+      return expect(exists).to.be.true
+    })
+
     it('should  include the overview export', async function () {
       const exportButton = await $('.sln-export')
       const exists = await exportButton.isExisting()
       return expect(exists).to.be.true
+    })
+
+    after(function () {
+      authenticationHelper.logout()
+    })
+  })
+
+  describe('overview for only WMT User', function () {
+    before(async function () {
+      await authenticationHelper.login(authenticationHelper.users.onlyWmtUser)
+    })
+
+    it('should not display allocations link', async function () {
+      const allocationsLink = await $(`a[href*="${config.nav.allocations.url}"`)
+      const exists = await allocationsLink.isExisting()
+      return expect(exists).to.be.false
     })
 
     after(function () {

@@ -105,5 +105,10 @@ module.exports = {
     endpoint: production ? null : 'http://localhost:4566',
     queueUrl: process.env.AUDIT_SQS_QUEUE_URL || 'http://localhost:4566/000000000000/audit_event_queue'
   },
-  googleAnalyticsKey: get('GOOGLE_ANALYTICS_KEY', null)
+  googleAnalyticsKey: get('GOOGLE_ANALYTICS_KEY', null),
+  nav: {
+    allocations: {
+      url: get('WORKFORCE_ALLOCATIONS_URL', 'http://localhost:3010', requiredInProduction)
+    }
+  }
 }
