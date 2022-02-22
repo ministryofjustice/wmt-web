@@ -31,16 +31,16 @@ function shallowEqual (object1, object2) {
   return true
 }
 
-const preprodResults = exportToMap('PREPROD-HMPPS_Overview.csv')
+const replatformResults = exportToMap('BETA-HMPPS_Overview.csv')
 const liveResults = exportToMap('HMPPS_Overview.csv')
 
-preprodResults.then(function (preprodResult) {
+replatformResults.then(function (replatformResult) {
   return liveResults.then(function (liveResult) {
     let count = 0
     liveResult.forEach((value, key) => {
-      const preprodEntry = preprodResult.get(key)
-      if (!shallowEqual(value, preprodEntry)) {
-        console.log(`difference with: ${key} \n in live: \n ${JSON.stringify(value)} \n in preprod: \n ${JSON.stringify(preprodEntry)}`)
+      const replatformEntry = replatformResult.get(key)
+      if (!shallowEqual(value, replatformEntry)) {
+        console.log(`difference with: ${key} \n in live: \n ${JSON.stringify(value)} \n in replatform: \n ${JSON.stringify(replatformEntry)}`)
         count++
       }
     })
