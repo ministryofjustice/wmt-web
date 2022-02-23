@@ -12,7 +12,8 @@ module.exports = function (archiveDataForm) {
     'reduction_reason AS reductionReason',
     'start_date AS startDate',
     'end_date AS endDate',
-    'reduction_status AS reductionStatus'
+    'reduction_status AS reductionStatus',
+    'teamname'
   ]
 
   if (archiveDataForm.multiSearchField !== null && archiveDataForm.multiSearchField !== undefined && archiveDataForm.multiSearchField !== '') {
