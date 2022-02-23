@@ -69,6 +69,38 @@ describe('Admin Archive Data Options Page', () => {
       expect(pageTitleText).to.equal('Archived Reductions')
     })
 
+    it('Should be able to search', async function () {
+      const archiveFromDayField = await $('#archive-from-day')
+      const archiveFromMonthField = await $('#archive-from-month')
+      const archiveFromYearField = await $('#archive-from-year')
+      const archiveToDayField = await $('#archive-to-day')
+      const archiveToMonthField = await $('#archive-to-month')
+      const archiveToYearField = await $('#archive-to-year')
+
+      await archiveFromDayField.setValue('24')
+      await archiveFromMonthField.setValue('10')
+      await archiveFromYearField.setValue('2014')
+      await archiveToDayField.setValue('22')
+      await archiveToMonthField.setValue('2')
+      await archiveToYearField.setValue('2022')
+
+      const extraSearchCritera = await $('.select2-search__field')
+      await extraSearchCritera.setValue('t')
+
+      const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="5"]')
+      await criteriaName.click()
+
+      const search = await $('#archive-reductions-filter-submit')
+      await search.click()
+
+      const firstRow = await $('#reduction-archive-table tbody tr:first-child')
+      const firstRowData = await firstRow.getText()
+      expect(firstRowData.replace(/\t+/g, '')).to.equal('Test_Forename Test_SurnameNot Available5N/ATest CommentN/AN/A01/01/2015Test Added By')
+      const secondRow = await $('#reduction-archive-table tbody tr:last-child')
+      const secondRowData = await secondRow.getText()
+      expect(secondRowData.replace(/\t+/g, '')).to.equal('Test_Forename Test_SurnameTest Team10Other.01/01/202023/02/2022wmt_super_user')
+    })
+
     after(async function () {
       authenticationHelper.logout()
     })

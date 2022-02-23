@@ -804,6 +804,23 @@ module.exports.deleteReductionsForIds = function (ids) {
     })
 }
 
+module.exports.createReductionForWorkloadOwner = function (workloadOwnerId, userId) {
+  return knex('reductions')
+    .withSchema('app')
+    .returning('id')
+    .insert({
+      workload_owner_id: workloadOwnerId,
+      hours: 10,
+      effective_from: '01 Jan 2020 00:00:00 GMT',
+      status: 'ACTIVE',
+      notes: '.',
+      user_id: userId
+    })
+    .then(function ([result]) {
+      return { table: 'reductions', id: result.id }
+    })
+}
+
 module.exports.deleteReductionsForWorkloadOwner = function (workloadOwnerId) {
   return knex('reductions')
     .withSchema('app')
