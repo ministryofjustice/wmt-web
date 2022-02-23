@@ -559,6 +559,15 @@ module.exports.getAnyExistingWorkloadOwnerId = function () {
     })
 }
 
+module.exports.getAnyExistingUserId = function () {
+  return knex('users')
+    .withSchema('app')
+    .first('id')
+    .then(function (result) {
+      return result.id
+    })
+}
+
 module.exports.getAnyExistingCourtReportWorkloadOwnerId = function () {
   return knex('individual_court_reporter_overview')
     .withSchema('app')
@@ -801,6 +810,23 @@ module.exports.deleteReductionsForIds = function (ids) {
         .withSchema('app')
         .whereIn('id', ids)
         .del()
+    })
+}
+
+module.exports.createReductionForWorkloadOwner = function (workloadOwnerId, userId) {
+  return knex('reductions')
+    .withSchema('app')
+    .returning('id')
+    .insert({
+      workload_owner_id: workloadOwnerId,
+      hours: 10,
+      effective_from: '01 Jan 2020 00:00:00 GMT',
+      status: 'ACTIVE',
+      notes: '.',
+      user_id: userId
+    })
+    .then(function ([result]) {
+      return { table: 'reductions', id: result.id }
     })
 }
 

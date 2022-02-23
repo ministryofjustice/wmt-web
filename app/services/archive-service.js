@@ -68,6 +68,7 @@ module.exports = function (archiveOption, archiveDataForm) {
         oldReduction.startDate = 'N/A'
         oldReduction.endDate = 'N/A'
         oldReduction.reductionStatus = 'N/A'
+        oldReduction.teamname = 'Not Available'
       })
       return getReductionArchiveFromNewDB(archiveDataForm).then(function (newReductions) {
         const results = oldReductions.concat(newReductions)

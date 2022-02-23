@@ -23,8 +23,8 @@ const GROUPED_ARCHIVE_FIELDS = ['startDate', 'endDate', 'regionName', 'lduName',
 const GROUPED_ARCHIVE_FIELD_NAMES_TEAM = ['Start Date', 'End Date', 'Region', 'Probation Delivery Unit', 'Team', 'Total Cases', 'Total Points', 'SDR Points', 'SDR Conversion Points', 'PAROMS Points', 'Nominal Target', 'Contracted Hours', 'Reductions', 'Available Points', 'Capacity', 'CMS Points', 'CMS %', 'GS Points', 'GS %', 'ARMS Total Cases']
 const GROUPED_ARCHIVE_FIELDS_TEAM = ['startDate', 'endDate', 'regionName', 'lduName', 'teamName', 'totalCases', 'totalPoints', 'sdrPoints', 'sdrConversionPoints', 'paromsPoints', 'nominalTarget', 'contractedHours', 'hoursReduction', 'availablePoints', 'capacity', 'cmsPoints', 'cmsPercentage', 'gsPoints', 'gsPercentage', 'armsTotalCases']
 
-const REDUCTION_ARCHIVE_FIELD_NAMES = ['Offender Manager Name', 'Reduction Hours', 'Reduction Reason', 'Comments', 'Start Date', 'End Date', 'Date Updated', 'Reduction Updated By']
-const REDUCTION_ARCHIVE_FIELDS = ['omName', 'hoursReduced', 'reductionReason', 'comments', 'startDate', 'endDate', 'lastUpdatedDate', 'reductionAddedBy']
+const REDUCTION_ARCHIVE_FIELD_NAMES = ['Offender Manager Name', 'Team Name', 'Reduction Hours', 'Reduction Reason', 'Comments', 'Start Date', 'End Date', 'Date Updated', 'Reduction Updated By']
+const REDUCTION_ARCHIVE_FIELDS = ['omName', 'teamname', 'hoursReduced', 'reductionReason', 'comments', 'startDate', 'endDate', 'lastUpdatedDate', 'reductionAddedBy']
 
 const ARMS_EXPORT_FIELD_NAMES = ['Region Name', 'Probation Delivery Unit', 'Team Name', 'Assessment Date', 'CRN', 'Offender Manager Name', 'Offender Manager Grade', 'Sentence Type', 'Sentence or Release Date', 'Completion Date']
 const ARMS_EXPORT_FIELDS = ['regionname', 'lduname', 'teamname', 'assessmentdate', 'crn', 'omname', 'omgrade', 'sentencetype', 'releasedate', 'completeddate']
