@@ -559,6 +559,15 @@ module.exports.getAnyExistingWorkloadOwnerId = function () {
     })
 }
 
+module.exports.getAnyExistingUserId = function () {
+  return knex('users')
+    .withSchema('app')
+    .first('id')
+    .then(function (result) {
+      return result.id
+    })
+}
+
 module.exports.getAnyExistingCourtReportWorkloadOwnerId = function () {
   return knex('individual_court_reporter_overview')
     .withSchema('app')

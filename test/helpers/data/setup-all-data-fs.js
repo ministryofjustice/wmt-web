@@ -2,7 +2,7 @@ const aggregatedDataHelper = require('./aggregated-data-helper')
 const courtReportsDataHelper = require('./court-reports-aggregated-data-helper')
 const userRoleHelper = require('./user-role-helper')
 const dailyArchiveDataHelper = require('./daily-archive-data-helper')
-const archiveReductionDataHelper = require('./archive-reduction-data-helper')
+
 const { users } = require('../routes/authentication-helper')
 const path = require('path')
 const fs = require('fs')
@@ -11,7 +11,6 @@ const pallyCourtInserts = path.resolve(__dirname, '../../../pallyCourtInserts.js
 const pallyWorkloadInserts = path.resolve(__dirname, '../../../pallyWorkloadInserts.json')
 const pallyUserInserts = path.resolve(__dirname, '../../../pallyUserInserts.json')
 const dailyArchiveInserts = path.resolve(__dirname, '../../../dailyArchiveInserts.json')
-const archiveReductionInserts = path.resolve(__dirname, '../../../archiveReductionInserts.json')
 
 const dailyArchiveData = {
   workloadID: 2745,
@@ -31,14 +30,6 @@ const dailyArchiveData = {
   hoursReduction: 0
 }
 
-const archiveReductionData = {
-  omName: 'Test_Forename Test_Surname',
-  lastUpdatedDate: '01 Jan 2015 00:00:00 GMT',
-  hoursReduced: 5,
-  comments: 'Test Comment',
-  reductionAddedBy: 'Test Added By'
-}
-
 const caseDetailsData =
   {
     workload_id: 0,
@@ -53,43 +44,34 @@ const caseDetailsData =
 module.exports = function () {
   return dailyArchiveDataHelper.createDailyArchive(dailyArchiveData).then(function (dailyArchiveId) {
     const dailyArchiveIdInsert = [{ table: 'daily_archive_data', id: dailyArchiveId }]
-    return archiveReductionDataHelper.createArchiveReductions(archiveReductionData).then(function (archiveReductionId) {
-      const archiveReductionIdInsert = [{ table: 'archive_reduction_data', id: archiveReductionId }]
-      return courtReportsDataHelper.addCourtReportWorkloadsForOffenderManager()
-        .then(function (courtReportInserts) {
-          return aggregatedDataHelper.addWorkloadCapacitiesForOffenderManager().then(function (workloadInserts) {
-            caseDetailsData.workload_id = workloadInserts.filter((item) => item.table === 'workload')[1].id
-            return aggregatedDataHelper.addCaseDetails(caseDetailsData).then(function (caseDetailInserts) {
-              workloadInserts = workloadInserts.concat(caseDetailInserts)
+    return courtReportsDataHelper.addCourtReportWorkloadsForOffenderManager()
+      .then(function (courtReportInserts) {
+        return aggregatedDataHelper.addWorkloadCapacitiesForOffenderManager().then(function (workloadInserts) {
+          caseDetailsData.workload_id = workloadInserts.filter((item) => item.table === 'workload')[1].id
+          return aggregatedDataHelper.addCaseDetails(caseDetailsData).then(function (caseDetailInserts) {
+            workloadInserts = workloadInserts.concat(caseDetailInserts)
 
-              const promises = Object.entries(users).map(function ([, u]) {
-                return userRoleHelper.addUserAndRole(u.username.toLowerCase(), u.roleId)
-              })
-              return Promise.all(promises).then(function (userInserts) {
-                return aggregatedDataHelper.createReductionForWorkloadOwner(workloadInserts.filter((item) => item.table === 'workload_owner')[0].id,
-                  userInserts[0].filter((item) => item.table === 'users')[0].id)
-                  .then(function (reductionInsert) {
-                    workloadInserts.push(reductionInsert)
-                    try {
-                      fs.writeFileSync(dailyArchiveInserts, JSON.stringify(dailyArchiveIdInsert))
-                      fs.writeFileSync(archiveReductionInserts, JSON.stringify(archiveReductionIdInsert))
-                      fs.writeFileSync(pallyCourtInserts, JSON.stringify(courtReportInserts))
-                      fs.writeFileSync(pallyWorkloadInserts, JSON.stringify(workloadInserts))
-                      fs.writeFileSync(pallyUserInserts, JSON.stringify(userInserts.reduce((acc, x) => acc.concat(x), [])))
-                    } catch (err) {
-                      console.error(err)
-                    }
-                    return {
-                      courtReportInserts,
-                      workloadInserts,
-                      dailyArchiveIdInsert,
-                      userInserts
-                    }
-                  })
-              })
+            const promises = Object.entries(users).map(function ([, u]) {
+              return userRoleHelper.addUserAndRole(u.username.toLowerCase(), u.roleId)
+            })
+            return Promise.all(promises).then(function (userInserts) {
+              try {
+                fs.writeFileSync(dailyArchiveInserts, JSON.stringify(dailyArchiveIdInsert))
+                fs.writeFileSync(pallyCourtInserts, JSON.stringify(courtReportInserts))
+                fs.writeFileSync(pallyWorkloadInserts, JSON.stringify(workloadInserts))
+                fs.writeFileSync(pallyUserInserts, JSON.stringify(userInserts.reduce((acc, x) => acc.concat(x), [])))
+              } catch (err) {
+                console.error(err)
+              }
+              return {
+                courtReportInserts,
+                workloadInserts,
+                dailyArchiveIdInsert,
+                userInserts
+              }
             })
           })
         })
-    })
+      })
   })
 }

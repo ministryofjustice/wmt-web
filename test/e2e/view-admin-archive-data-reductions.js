@@ -1,6 +1,10 @@
 const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
+const aggregatedDataHelper = require('../helpers/data/aggregated-data-helper')
+const archiveReductionDataHelper = require('../helpers/data/archive-reduction-data-helper')
 
+let workloadOwnerId
+let archiveReductionId
 describe('Admin Archive Data Options Page', () => {
   describe('Staff', function () {
     before(async function () {
@@ -54,6 +58,16 @@ describe('Admin Archive Data Options Page', () => {
 
   describe('Super User', function () {
     before(async function () {
+      workloadOwnerId = await aggregatedDataHelper.getAnyExistingWorkloadOwnerId()
+      const userId = await aggregatedDataHelper.getAnyExistingUserId()
+      archiveReductionId = await archiveReductionDataHelper.createArchiveReductions({
+        omName: 'Test_Forename Test_Surname',
+        lastUpdatedDate: '01 Jan 2015 00:00:00 GMT',
+        hoursReduced: 5,
+        comments: 'Test Comment',
+        reductionAddedBy: 'Test Added By'
+      })
+      await aggregatedDataHelper.createReductionForWorkloadOwner(workloadOwnerId, userId)
       await authenticationHelper.login(authenticationHelper.users.SuperUser)
       const link = await $('[href="/admin"]')
       await link.click()
@@ -102,7 +116,9 @@ describe('Admin Archive Data Options Page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
+      await archiveReductionDataHelper.deleteArchiveReductionsByIds(archiveReductionId)
+      return aggregatedDataHelper.deleteReductionsForWorkloadOwner(workloadOwnerId)
     })
   })
 })
