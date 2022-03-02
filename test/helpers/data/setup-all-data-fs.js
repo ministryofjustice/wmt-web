@@ -2,6 +2,7 @@ const aggregatedDataHelper = require('./aggregated-data-helper')
 const courtReportsDataHelper = require('./court-reports-aggregated-data-helper')
 const userRoleHelper = require('./user-role-helper')
 const dailyArchiveDataHelper = require('./daily-archive-data-helper')
+
 const { users } = require('../routes/authentication-helper')
 const path = require('path')
 const fs = require('fs')
@@ -49,6 +50,7 @@ module.exports = function () {
           caseDetailsData.workload_id = workloadInserts.filter((item) => item.table === 'workload')[1].id
           return aggregatedDataHelper.addCaseDetails(caseDetailsData).then(function (caseDetailInserts) {
             workloadInserts = workloadInserts.concat(caseDetailInserts)
+
             const promises = Object.entries(users).map(function ([, u]) {
               return userRoleHelper.addUserAndRole(u.username.toLowerCase(), u.roleId)
             })

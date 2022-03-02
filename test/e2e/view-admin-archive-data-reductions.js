@@ -1,6 +1,10 @@
 const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
+const aggregatedDataHelper = require('../helpers/data/aggregated-data-helper')
+const archiveReductionDataHelper = require('../helpers/data/archive-reduction-data-helper')
 
+let workloadOwnerId
+let archiveReductionId
 describe('Admin Archive Data Options Page', () => {
   describe('Staff', function () {
     before(async function () {
@@ -14,7 +18,7 @@ describe('Admin Archive Data Options Page', () => {
       expect(text).to.equal('Access is denied')
     })
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
@@ -48,12 +52,22 @@ describe('Admin Archive Data Options Page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
   describe('Super User', function () {
     before(async function () {
+      workloadOwnerId = await aggregatedDataHelper.getAnyExistingWorkloadOwnerId()
+      const userId = await aggregatedDataHelper.getAnyExistingUserId()
+      archiveReductionId = await archiveReductionDataHelper.createArchiveReductions({
+        omName: 'Test_Forename Test_Surname',
+        lastUpdatedDate: '01 Jan 2015 00:00:00 GMT',
+        hoursReduced: 5,
+        comments: 'Test Comment',
+        reductionAddedBy: 'Test Added By'
+      })
+      await aggregatedDataHelper.createReductionForWorkloadOwner(workloadOwnerId, userId)
       await authenticationHelper.login(authenticationHelper.users.SuperUser)
       const link = await $('[href="/admin"]')
       await link.click()
@@ -69,8 +83,42 @@ describe('Admin Archive Data Options Page', () => {
       expect(pageTitleText).to.equal('Archived Reductions')
     })
 
+    it('Should be able to search', async function () {
+      const archiveFromDayField = await $('#archive-from-day')
+      const archiveFromMonthField = await $('#archive-from-month')
+      const archiveFromYearField = await $('#archive-from-year')
+      const archiveToDayField = await $('#archive-to-day')
+      const archiveToMonthField = await $('#archive-to-month')
+      const archiveToYearField = await $('#archive-to-year')
+
+      await archiveFromDayField.setValue('24')
+      await archiveFromMonthField.setValue('10')
+      await archiveFromYearField.setValue('2014')
+      await archiveToDayField.setValue('22')
+      await archiveToMonthField.setValue('2')
+      await archiveToYearField.setValue('2022')
+
+      const extraSearchCritera = await $('.select2-search__field')
+      await extraSearchCritera.setValue('t')
+
+      const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="5"]')
+      await criteriaName.click()
+
+      const search = await $('#archive-reductions-filter-submit')
+      await search.click()
+
+      const firstRow = await $('#reduction-archive-table tbody tr:first-child')
+      const firstRowData = await firstRow.getText()
+      expect(firstRowData.replace(/\t+/g, '')).to.equal('Test_Forename Test_SurnameNot Available5N/ATest CommentN/AN/A01/01/2015Test Added By')
+      const secondRow = await $('#reduction-archive-table tbody tr:last-child')
+      const secondRowData = await secondRow.getText()
+      expect(secondRowData.replace(/\t+/g, '')).to.equal('Test_Forename Test_SurnameTest Team10Other.01/01/202023/02/2022wmt_super_user')
+    })
+
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
+      await archiveReductionDataHelper.deleteArchiveReductionsByIds(archiveReductionId)
+      return aggregatedDataHelper.deleteReductionsForWorkloadOwner(workloadOwnerId)
     })
   })
 })

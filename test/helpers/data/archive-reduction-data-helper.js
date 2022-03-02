@@ -1,5 +1,4 @@
-const config = require('../../../knexfile').legacy
-const knex = require('knex')(config)
+const knex = require('../../../knex').legacy
 
 module.exports.createArchiveReductions = function (archiveReductionData) {
   const insert = {
