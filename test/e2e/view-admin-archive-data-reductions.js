@@ -2,6 +2,7 @@ const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 const aggregatedDataHelper = require('../helpers/data/aggregated-data-helper')
 const archiveReductionDataHelper = require('../helpers/data/archive-reduction-data-helper')
+const dateFormatter = require('../../app/services/date-formatter')
 
 let workloadOwnerId
 let archiveReductionId
@@ -112,7 +113,7 @@ describe('Admin Archive Data Options Page', () => {
       expect(firstRowData.replace(/\t+/g, '')).to.equal('Test_Forename Test_SurnameNot Available5N/ATest CommentN/AN/A01/01/2015Test Added By')
       const secondRow = await $('#reduction-archive-table tbody tr:last-child')
       const secondRowData = await secondRow.getText()
-      expect(secondRowData.replace(/\t+/g, '')).to.equal('Test_Forename Test_SurnameTest Team10Other.01/01/202023/02/2022wmt_super_user')
+      expect(secondRowData.replace(/\t+/g, '')).to.equal(`Test_Forename Test_SurnameTest Team10Other.01/01/2020${dateFormatter.formatDate(new Date(), 'DD/MM/YYYY')}wmt_super_user`)
     })
 
     after(async function () {
