@@ -149,18 +149,13 @@ module.exports = function (router) {
   })
 }
 
-const removeUserRole = function (username) {
-  return userRoleService.getUserByUsername(userRoleService.removeDomainFromUsername(username)).then(function (user) {
-    if (user) {
-      return userRoleService.removeUserRoleByUserId(user.id).then(function () {
-        return userRoleService.removeUserByUsername(userRoleService.removeDomainFromUsername(user.username))
-      })
-    }
-  })
+const removeUserRole = function (existingUser) {
+  return userRoleService.removeUserRoleByUserId(existingUser.id)
 }
 
 const addUpdateUserRole = function (username, rights, loggedInUsername, fullname) {
   const assignUserToRole = userRoleService.removeDomainFromUsername(username)
+
   return userRoleService.getUserByUsername(assignUserToRole).then(function (existingUser) {
     return userRoleService.getUserByUsername(loggedInUsername).then(function (loggedInUser) {
       return userRoleService.getRole(rights).then(function (role) {
@@ -169,9 +164,9 @@ const addUpdateUserRole = function (username, rights, loggedInUsername, fullname
             if (authorisation.hasAccessToRole(loggedInUserRole.role, role.role) && authorisation.hasAccessToRole(loggedInUserRole.role, existingRole.role)) {
               if (existingUser) {
                 if (rights === roles.STAFF) {
-                  return removeUserRole(username)
+                  return removeUserRole(existingUser)
                 }
-                return updateUserAndRole(existingUser, role, fullname, loggedInUser)
+                return upsertUserAndRole(existingUser, existingRole, role, loggedInUser, fullname)
               } else {
                 return createUserAndRole(role, username, fullname, loggedInUser)
               }
@@ -192,9 +187,14 @@ const createUserAndRole = function (toAssignRole, email, fullName, loggedInUser)
   })
 }
 
-const updateUserAndRole = function (existingUser, toAssignRole, fullName, loggedInUser) {
+const upsertUserAndRole = function (existingUser, existingRole, role, loggedInUser, fullName) {
   return userRoleService.updateUser(existingUser.id, fullName).then(function () {
-    return userRoleService.updateUserRole(existingUser.id, toAssignRole.id, loggedInUser.id)
+    if (existingRole.userRoleId) {
+      return userRoleService.updateUserRole(existingUser.id, role.id, loggedInUser.id)
+    } else {
+      const newUserRole = new UserRole(existingUser.id, role.id, new Date(), loggedInUser.id)
+      return userRoleService.addUserRole(newUserRole)
+    }
   })
 }
 

@@ -7,7 +7,7 @@ module.exports = function (username) {
     .join('roles', 'roles.id', 'user_role.role_id')
     .join('users', 'users.id', 'user_role.user_id')
     .where('users.username', 'ilike', username)
-    .select('roles.id AS roleId', 'roles.role', 'users.name AS fullname')
+    .select('roles.id AS roleId', 'roles.role', 'users.name AS fullname', 'user_role.id AS userRoleId')
     .then(function ([role]) {
       return role || { roleId: 0, role: STAFF }
     })
