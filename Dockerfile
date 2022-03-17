@@ -14,9 +14,6 @@ RUN addgroup --gid 2000 --system appgroup && \
 
 WORKDIR /app
 
-RUN apt-get update && \
-    apt-get upgrade -y
-
 RUN npm i -g npm@8
 
 # Stage: build assets
@@ -24,7 +21,9 @@ FROM base as build
 ARG BUILD_NUMBER
 ARG GIT_REF
 
-RUN apt-get install -y make python g++ git
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y make python g++ git
 
 COPY package*.json ./
 RUN CYPRESS_INSTALL_BINARY=0 npm ci --no-audit
