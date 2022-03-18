@@ -1,8 +1,8 @@
 # Stage: base image
-ARG BUILD_NUMBER
-ARG GIT_REF
+ARG BUILD_NUMBER=1_0_0
+ARG GIT_REF=not-available
 
-FROM node:16.13-bullseye-slim as base
+FROM node:16.14-bullseye-slim as base
 
 LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
 
@@ -14,7 +14,13 @@ RUN addgroup --gid 2000 --system appgroup && \
 
 WORKDIR /app
 
-RUN npm i -g npm@8
+# Cache breaking
+ENV BUILD_NUMBER ${BUILD_NUMBER:-1_0_0}
+
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
 
 # Stage: build assets
 FROM base as build
@@ -22,7 +28,6 @@ ARG BUILD_NUMBER
 ARG GIT_REF
 
 RUN apt-get update && \
-    apt-get upgrade -y && \
     apt-get install -y make python g++ git
 
 COPY package*.json ./
