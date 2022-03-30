@@ -35,6 +35,10 @@ module.exports = function (app, path) {
     return `${array[0][0]}. ${array.reverse()[0]}`
   })
 
+  njkEnv.addFilter('getCaseCount', (cases) => {
+    return cases > 99 ? '99+' : `${cases}`
+  })
+
   njkEnv.addGlobal('googleAnalyticsKey', googleAnalyticsKey)
   njkEnv.addGlobal('allocationsUrl', nav.allocations.url)
 }
