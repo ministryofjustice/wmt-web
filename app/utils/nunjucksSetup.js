@@ -26,6 +26,15 @@ module.exports = function (app, path) {
     return typeof obj === 'object'
   })
 
+  njkEnv.addFilter('initialiseName', (fullName) => {
+    // this check is for the authError page
+    if (!fullName) {
+      return null
+    }
+    const array = fullName.split(' ')
+    return `${array[0][0]}. ${array.reverse()[0]}`
+  })
+
   njkEnv.addGlobal('googleAnalyticsKey', googleAnalyticsKey)
   njkEnv.addGlobal('allocationsUrl', nav.allocations.url)
 }

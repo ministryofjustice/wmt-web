@@ -5,7 +5,9 @@ $govuk-assets-path: "/public";
 $govuk-images-path: "/public/images/";
 $govuk-fonts-path: "/public/fonts/";
 @import 'govuk/all';
+@import 'moj/all';
 @import 'select2.scss';
+@import 'local.scss';
 // Take a look at in app/assets/sass/patterns/ to see which files are imported.
 // Autocomplete styles from https://github.com/ministryofjustice/prison-visits-public
 
@@ -189,7 +191,7 @@ tr.shown td.details-control {
 
 table.override-gov-uk-table {
   text-align: left;
-  font-size: 19px; 
+  font-size: 19px;
   line-height: 1.31579;
 }
 
