@@ -47,6 +47,8 @@ services:
       - SERVER_PORT=8080
       - SPRING_PROFILES_ACTIVE=dev
       - DATABASE_ENDPOINT=postgres:5432
+      - COMMUNITY_ENDPOINT_URL=http://wiremock:8099
+      - HMPPS_TIER_ENDPOINT_URL=http://wiremock:8099
     entrypoint: ["/bin/sh", "-c" , "sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar"]
     depends_on:
         - "postgres"
