@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "url": "http://localhost:8091/cases/unallocated"
+    "urlPattern": "/cases/unallocated"
   },
   "response": {
     "headers": {
