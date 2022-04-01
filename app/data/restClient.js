@@ -1,13 +1,12 @@
 const superagent = require('superagent')
 const logger = require('../logger')
-const config = require('../../config')
 const sanitiseError = require('../sanitisedError')
 
 const get = async function ({ path = null, query = '', headers = {}, responseType = '', raw = false, token }) {
   logger.info(`Get using user credentials: calling: ${path} ${query}`)
   try {
     const result = await superagent
-      .get(`${config.apis.hmppsAuth.url}${path}`)
+      .get(path)
       .agent(this.agent)
       .retry(2, function (err, res) {
         if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
