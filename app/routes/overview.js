@@ -3,7 +3,6 @@ const getIndividualOverview = require('../services/get-individual-overview')
 const getReductionsExport = require('../services/get-reductions-export')
 const getSubNav = require('../services/get-sub-nav')
 const getOrganisationUnit = require('../services/helpers/org-unit-finder')
-const getAllocations = require('../services/allocations')
 const organisationUnitConstants = require('../constants/organisation-unit')
 const roles = require('../constants/user-roles')
 const getExportCsv = require('../services/get-export-csv')
@@ -22,13 +21,12 @@ module.exports = function (router) {
     router.get(path, asyncMiddleware(handler))
   }
 
-  get('/', async function (req, res, next) {
+  get('/', function (req, res, next) {
     if (Object.keys(req.query).length !== 0) {
       return next()
     }
     req.params.id = '0'
     req.params.organisationLevel = 'hmpps'
-    req.session.allocations = await getAllocations(res.locals.user.token)
     return renderOverview(req, res, next)
   })
 
@@ -177,8 +175,8 @@ const renderOverview = function (req, res, next) {
         overviewDetails: result.overviewDetails,
         date: lastUpdated,
         workloadType: workloadTypes.PROBATION,
-        displayName: res.locals.user.name,
-        allocations: req.session.allocations
+        displayName: res.locals.displayName,
+        allocations: res.locals.allocations
       })
     })
   }).catch(function (error) {
