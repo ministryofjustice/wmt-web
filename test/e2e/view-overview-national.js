@@ -35,6 +35,12 @@ describe('National', function () {
       return expect(exists).to.be.true
     })
 
+    it('should display number of unallocated cases', async function () {
+      const allocationsNumber = await $('#notifications')
+      const number = await allocationsNumber.getText()
+      return expect(number).to.equal('2')
+    })
+
     it('should show regional breakdown table', async function () {
       const element = await $('.sln-table-org-level')
       const text = await element.getText()
