@@ -66,7 +66,7 @@ module.exports = {
       apiClientSecret: get('API_CLIENT_SECRET', 'clientsecret', requiredInProduction)
     },
     allocationsService: {
-      url: get('ALLOCATIONS_SERVICE_URL', 'http://localhost:8091', requiredInProduction),
+      url: get('ALLOCATIONS_SERVICE_URL', 'http://localhost:8099', requiredInProduction),
       timeout: {
         response: 10000,
         deadline: 10000
