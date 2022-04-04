@@ -22,13 +22,13 @@ module.exports = function (router) {
     router.get(path, asyncMiddleware(handler))
   }
 
-  get('/', function (req, res, next) {
+  get('/', async function (req, res, next) {
     if (Object.keys(req.query).length !== 0) {
       return next()
     }
     req.params.id = '0'
     req.params.organisationLevel = 'hmpps'
-    req.session.allocations = getAllocations(res.locals.user.token)
+    req.session.allocations = await getAllocations(res.locals.user.token)
     return renderOverview(req, res, next)
   })
 
