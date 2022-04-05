@@ -74,9 +74,9 @@ describe('Admin Archive Data Daily Caseload Page', () => {
       await archiveToYearField.setValue('2017')
 
       const extraSearchCritera = await $('.select2-search__field')
-      await extraSearchCritera.setValue('t')
+      await extraSearchCritera.setValue('Test_Forename')
 
-      const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="5"]')
+      const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="15"]')
       await criteriaName.click()
 
       const search = await $('#archive-filter-submit')
@@ -133,9 +133,9 @@ describe('Admin Archive Data Daily Caseload Page', () => {
       await archiveToYearField.setValue('2017')
 
       const extraSearchCritera = await $('.select2-search__field')
-      await extraSearchCritera.setValue('t')
+      await extraSearchCritera.setValue('Test_Forename')
 
-      const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="5"]')
+      const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="15"]')
       await criteriaName.click()
 
       const search = await $('#archive-filter-submit')
