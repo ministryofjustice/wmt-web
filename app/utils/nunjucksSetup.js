@@ -32,7 +32,7 @@ module.exports = function (app, path) {
       return null
     }
     const array = fullName.split('.')
-    return `${array[0][0]}. ${array.reverse()[0]}`
+    return `${array[0][0]}. ${array[1].charAt(0).toUpperCase()}${array[1].slice(1).toLowerCase()}`
   })
 
   njkEnv.addFilter('getCaseCount', (cases) => {
