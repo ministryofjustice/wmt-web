@@ -12,7 +12,7 @@
   navigation: {
     label: 'Account navigation',
     items: [{
-      text: displayName,
+      text: displayName | capitalize | initialiseName,
       href: '#',
       active: true
     }, {

@@ -31,7 +31,7 @@ module.exports = function (app, path) {
     if (!fullName) {
       return null
     }
-    const array = fullName.split(' ')
+    const array = fullName.split('.')
     return `${array[0][0]}. ${array.reverse()[0]}`
   })
 
