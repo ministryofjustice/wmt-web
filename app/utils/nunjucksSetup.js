@@ -27,10 +27,6 @@ module.exports = function (app, path) {
   })
 
   njkEnv.addFilter('initialiseName', (fullName) => {
-    // this check is for the authError page
-    if (!fullName) {
-      return null
-    }
     const array = fullName.split('.')
     return `${array[0][0]}. ${array[1].charAt(0).toUpperCase()}${array[1].slice(1).toLowerCase()}`
   })
