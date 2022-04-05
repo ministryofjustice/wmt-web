@@ -65,6 +65,18 @@ module.exports = {
       apiClientId: get('API_CLIENT_ID', 'workload-measurement-ui', requiredInProduction),
       apiClientSecret: get('API_CLIENT_SECRET', 'clientsecret', requiredInProduction)
     },
+    allocationsService: {
+      url: get('ALLOCATIONS_SERVICE_URL', 'http://localhost:8099', requiredInProduction),
+      timeout: {
+        response: 10000,
+        deadline: 10000
+      },
+      agent: {
+        maxSockets: 100,
+        maxFreeSockets: 10,
+        freeSocketTimeout: 30000
+      }
+    },
     tokenVerification: {
       url: get('TOKEN_VERIFICATION_API_URL', 'http://localhost:8100', requiredInProduction),
       timeout: {

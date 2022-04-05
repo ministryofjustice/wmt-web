@@ -9,6 +9,7 @@ generic-service:
     HMPPS_AUTH_URL: "https://sign-in.hmpps.service.justice.gov.uk/auth"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api.prison.service.justice.gov.uk"
     WORKFORCE_ALLOCATIONS_URL: "https://workforce-management.hmpps.service.justice.gov.uk"
+    ALLOCATIONS_SERVICE_URL: "https://hmpps-allocations.hmpps.service.justice.gov.uk"
 
   allowlist:
     office: "217.33.148.210/32"
@@ -19,4 +20,3 @@ generic-service:
     cloudplatform-live1-3: "35.177.252.54/32"
     ark-internet-1: "194.33.192.0/25"
     ark-internet-2: "194.33.196.0/25"
-   

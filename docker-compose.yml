@@ -4,7 +4,7 @@ services:
     image: 'bitnami/redis:5.0'
     networks:
       - hmpps
-    container_name: wmt-web-redis 
+    container_name: wmt-web-redis
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     ports:
@@ -13,7 +13,7 @@ services:
     image: quay.io/hmpps/hmpps-auth:latest
     networks:
       - hmpps
-    container_name: wmt-web-hmpps-auth 
+    container_name: wmt-web-hmpps-auth
     ports:
       - "9090:8080"
     healthcheck:
@@ -23,6 +23,16 @@ services:
       - APPLICATION_AUTHENTICATION_UI_ALLOWLIST=0.0.0.0/0
       - DELIUS_ENABLED=true
       - DELIUS_ENDPOINT_URL=http://wiremock:8099
+
+  allocations-service:
+    image: quay.io/hmpps/hmpps-allocations
+    container_name: allocations-service
+    ports:
+      - "8091:8080"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/auth/health" ]
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
 
   hmpps-workload:
     image: quay.io/hmpps/hmpps-workload:latest
@@ -37,6 +47,8 @@ services:
       - SERVER_PORT=8080
       - SPRING_PROFILES_ACTIVE=dev
       - DATABASE_ENDPOINT=postgres:5432
+      - COMMUNITY_ENDPOINT_URL=http://wiremock:8099
+      - HMPPS_TIER_ENDPOINT_URL=http://wiremock:8099
     entrypoint: ["/bin/sh", "-c" , "sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar"]
     depends_on:
         - "postgres"
@@ -60,7 +72,7 @@ services:
     ports:
       - "8099:8099"
     command: ["--port","8099","--global-response-templating"]
-    volumes: 
+    volumes:
       - $PWD/test/e2e/resources/wiremock:/home/wiremock:rw
   localstack:
     image: localstack/localstack:0.12.15

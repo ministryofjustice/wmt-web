@@ -6,7 +6,7 @@ const dateFormatter = require('../../app/services/date-formatter')
 
 let workloadOwnerId
 let archiveReductionId
-describe('Admin Archive Data Options Page', () => {
+describe('Admin Archive Data Reductions Page', () => {
   describe('Staff', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.Staff)
@@ -100,9 +100,9 @@ describe('Admin Archive Data Options Page', () => {
       await archiveToYearField.setValue('2022')
 
       const extraSearchCritera = await $('.select2-search__field')
-      await extraSearchCritera.setValue('t')
+      await extraSearchCritera.setValue('Test_Forename')
 
-      const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="5"]')
+      const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="15"]')
       await criteriaName.click()
 
       const search = await $('#archive-reductions-filter-submit')

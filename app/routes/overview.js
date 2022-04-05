@@ -174,7 +174,9 @@ const renderOverview = function (req, res, next) {
         subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
         overviewDetails: result.overviewDetails,
         date: lastUpdated,
-        workloadType: workloadTypes.PROBATION
+        workloadType: workloadTypes.PROBATION,
+        displayName: res.locals.displayName,
+        allocations: res.locals.allocations
       })
     })
   }).catch(function (error) {

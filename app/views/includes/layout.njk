@@ -1,28 +1,91 @@
-{# {% extends "govuk_template.njk" %} #}
 {% extends "govuk/template.njk" %}
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 
 {% block pageTitle %}
-  {% include "includes/page-title.njk" %}
+    {% include "includes/page-title.njk" %}
 {% endblock %}
 
 {% block head %}
-  {% include "includes/head.njk" %}
+    {% include "includes/head.njk" %}
 {% endblock %}
 
 {% block cookie_message %}
-<p>{{'GOV.UK uses cookies to make the site simpler.'}} </p>
+    <p>{{'GOV.UK uses cookies to make the site simpler.'}} </p>
 {% endblock %}
 
 {% block header %}
-  {% include "includes/header.njk" %}
+    {% include "includes/header.njk" %}
+    <div class="govuk-width-container">
+        {{ govukPhaseBanner({
+            tag: {
+                text: "beta"
+            },
+            classes: 'maw-no-border',
+            html: 'This is a new service – your <a class="govuk-link" href="https://teams.microsoft.com/l/channel/19%3a58338293349f4599ae718557c212b39d%40thread.tacv2/Feedback%2520and%2520Queries?groupId=0f8c1490-bf11-4ba6-a889-6438b082c3f8&tenantId=c6874728-71e6-41fe-a9e1-2e8c36776ad8">feedback</a> will help us to improve it.'
+        }) }}
+    </div>
+
+    <div class="moj-primary-navigation">
+
+        <div class="moj-primary-navigation__container">
+
+            <div class="moj-primary-navigation__nav">
+
+                <nav class="moj-primary-navigation" aria-label="Primary navigation">
+
+                    <ul class="moj-primary-navigation__list">
+                        {% if canAllocate %}
+                            <li class="moj-primary-navigation__item">
+                                <a class="moj-primary-navigation__link" aria-current="page"
+                                   href="{{ allocationsUrl }}">Allocations {% if allocations %}
+                                        <span id="notifications" class="moj-notification-badge">{{ allocations | getCaseCount }}</span>
+                                    {% endif %}</a>
+                            </li>
+                        {% endif %}
+
+                        {% if canViewAdmin %}
+                            <li class="moj-primary-navigation__item">
+                                <a class="moj-primary-navigation__link" href="/admin">Admin</a>
+                            </li>
+                        {% endif %}
+
+                        <li class="moj-primary-navigation__item">
+                            <a class="moj-primary-navigation__link" href="/probation/hmpps/0">Offender Management</a>
+                        </li>
+
+                        <li class="moj-primary-navigation__item">
+                            <a class="moj-primary-navigation__link" href="/omic/hmpps/0">OMIC</a>
+                        </li>
+
+                        <li class="moj-primary-navigation__item">
+                            <a class="moj-primary-navigation__link" href="/court-reports/hmpps/0" id="courts-link">Courts</a>
+                        </li>
+
+                        {% if canViewExpiringReductions %}
+                            <li class="moj-primary-navigation__item">
+                                <a class="moj-primary-navigation__link" href="/expiring-reductions">Expiring reductions</a>
+                            </li>
+                        {% endif %}
+
+                        <li class="moj-primary-navigation__item">
+                            <a class="moj-primary-navigation__link" href="/officer-search" id="search-link">Search</a>
+                        </li>
+                    </ul>
+
+                </nav>
+
+            </div>
+        </div>
+
+    </div>
 {% endblock %}
 
 {% block bodyStart %}
-  {% include "includes/scripts.njk" %}
+    {% include "includes/scripts.njk" %}
 {% endblock %}
 
 {% block footer %}
-  {% include "includes/footer.njk" %}
+    {% include "includes/footer.njk" %}
 {% endblock %}
 
 {% block bodyEnd %}
