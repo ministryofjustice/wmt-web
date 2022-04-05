@@ -175,7 +175,7 @@ const renderOverview = function (req, res, next) {
         overviewDetails: result.overviewDetails,
         date: lastUpdated,
         workloadType: workloadTypes.PROBATION,
-        displayName: res.locals.user.name,
+        displayName: res.locals.displayName,
         allocations: res.locals.allocations
       })
     })
