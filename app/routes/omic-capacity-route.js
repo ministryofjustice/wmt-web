@@ -77,7 +77,8 @@ module.exports = function (router) {
               organisationLevel: organisationLevel,
               date: result.date,
 
-              workloadType: workloadTypes.OMIC
+              workloadType: workloadTypes.OMIC,
+              onOmic: true
             })
           })
         })

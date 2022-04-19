@@ -54,7 +54,8 @@ const renderOverview = function (req, res, next) {
           childOrganisationLevelDisplayText: childOrganisationLevelDisplayText,
           subNav: getSubNav(id, organisationLevel, req.path, workloadTypeConstants.COURT_REPORTS, authorisedUserRole.authorisation, authorisedUserRole.userRole),
           overviewDetails: result.overviewDetails,
-          date: result.date
+          date: result.date,
+          onCourtReports: true
 
         })
       }).catch(function (error) {

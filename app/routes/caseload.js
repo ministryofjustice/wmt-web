@@ -60,7 +60,8 @@ module.exports = function (router) {
             caseloadDetails: caseloadDetailsData,
             date: lastUpdated,
             canExportCaseload: canExportCaseloadRoles.includes(req.user.user_role),
-            workloadType: workloadTypes.PROBATION
+            workloadType: workloadTypes.PROBATION,
+            onOffenderManager: true
           })
         })
     }).catch(function (error) {

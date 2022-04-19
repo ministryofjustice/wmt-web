@@ -39,7 +39,8 @@ module.exports = function (router) {
           breadcrumbs: breadcrumbs,
           reductions: reductions,
 
-          subNav: getSubNav(req.path)
+          subNav: getSubNav(req.path),
+          onExpiringReductions: true
         })
       })
   })

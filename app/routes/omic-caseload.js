@@ -43,7 +43,8 @@ module.exports = function (router) {
             caseloadDetails: caseloadDetails(organisationLevel, result),
             date: result.date,
 
-            workloadType: workloadTypes.OMIC
+            workloadType: workloadTypes.OMIC,
+            onOmic: true
           })
         })
     }).catch(function (error) {

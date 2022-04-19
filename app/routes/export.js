@@ -55,7 +55,8 @@ module.exports = function (router) {
           breadcrumbs: result.breadcrumbs,
           subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
           date: result.date,
-          canExport: canExportRoles.includes(authorisedUserRole.userRole)
+          canExport: canExportRoles.includes(authorisedUserRole.userRole),
+          onOffenderManager: true
 
         })
       })

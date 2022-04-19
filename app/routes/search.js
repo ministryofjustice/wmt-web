@@ -3,7 +3,7 @@ const offenderSearch = require('../services/data/search-for-offender')
 module.exports = function (router) {
   router.get('/officer-search', function (req, res, next) {
     return res.render('search-for-officer', {
-
+      onOfficerSearch: true
     })
   })
 
@@ -12,7 +12,8 @@ module.exports = function (router) {
       res.render('search-for-officer', {
 
         results: result,
-        surname: req.body.surnameBox
+        surname: req.body.surnameBox,
+        onOfficerSearch: true
       })
     }).catch(function (error) {
       next(error)

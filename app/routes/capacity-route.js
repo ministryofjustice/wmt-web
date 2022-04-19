@@ -81,7 +81,8 @@ module.exports = function (router) {
               organisationLevel: organisationLevel,
               date: lastUpdated,
               canExportOutstanding: canExportOutstandingRoles.includes(req.user.user_role),
-              workloadType: workloadTypes.PROBATION
+              workloadType: workloadTypes.PROBATION,
+              onOffenderManager: true
             })
           })
         })
@@ -150,7 +151,8 @@ module.exports = function (router) {
               organisationLevel: organisationLevel,
               date: result.date,
               canExportOutstanding: canExportOutstandingRoles.includes(req.user.user_role),
-              workloadType: workloadTypes.PROBATION
+              workloadType: workloadTypes.PROBATION,
+              onOffenderManager: true
             })
           })
         })

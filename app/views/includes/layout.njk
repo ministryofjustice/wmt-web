@@ -50,25 +50,25 @@
                         {% endif %}
 
                         <li class="moj-primary-navigation__item">
-                            <a class="moj-primary-navigation__link" href="/probation/hmpps/0">Offender Management</a>
+                            <a class="moj-primary-navigation__link" href="/probation/hmpps/0" {% if onOffenderManager %} aria-current="page" {% endif%}>Offender Management</a>
                         </li>
 
                         <li class="moj-primary-navigation__item">
-                            <a class="moj-primary-navigation__link" href="/omic/hmpps/0">OMIC</a>
+                            <a class="moj-primary-navigation__link" href="/omic/hmpps/0"  {% if onOmic %} aria-current="page" {% endif%}>OMIC</a>
                         </li>
 
                         <li class="moj-primary-navigation__item">
-                            <a class="moj-primary-navigation__link" href="/court-reports/hmpps/0" id="courts-link">Courts</a>
+                            <a class="moj-primary-navigation__link" href="/court-reports/hmpps/0"  {% if onCourtReports %} aria-current="page" {% endif%} id="courts-link">Courts</a>
                         </li>
 
                         {% if canViewExpiringReductions %}
                             <li class="moj-primary-navigation__item">
-                                <a class="moj-primary-navigation__link" href="/expiring-reductions">Expiring reductions</a>
+                                <a class="moj-primary-navigation__link" href="/expiring-reductions"  {% if onExpiringReductions %} aria-current="page" {% endif%}>Expiring reductions</a>
                             </li>
                         {% endif %}
 
                         <li class="moj-primary-navigation__item">
-                            <a class="moj-primary-navigation__link" href="/officer-search" id="search-link">Search</a>
+                            <a class="moj-primary-navigation__link" href="/officer-search" id="search-link"  {% if onOfficerSearch %} aria-current="page" {% endif%}>Search</a>
                         </li>
                     </ul>
 
