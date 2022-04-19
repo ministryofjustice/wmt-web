@@ -18,7 +18,8 @@ module.exports = function (page, title, res, errors, results, userRole, dateRang
     startSearching: startSearching,
     groupBy: groupBy,
     interval: interval,
-    canExport: SUPER_USER === userRole
+    canExport: SUPER_USER === userRole,
+    onAdmin: true
   })
 }
 

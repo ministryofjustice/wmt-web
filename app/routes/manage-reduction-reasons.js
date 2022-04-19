@@ -43,7 +43,8 @@ module.exports = function (router) {
         successText: successText,
         subTitle: getSubtitle(true),
         canAddReason: canAddReasonRoles.includes(req.user.user_role),
-        canEditReason: canEditReasonRoles.includes(req.user.user_role)
+        canEditReason: canEditReasonRoles.includes(req.user.user_role),
+        onAdmin: true
 
       })
     }).catch(function (error) {
@@ -70,7 +71,8 @@ module.exports = function (router) {
         categories: categories,
         breadcrumbs: breadcrumbs,
         title: 'Add Reduction Reason',
-        subTitle: getSubtitle(false)
+        subTitle: getSubtitle(false),
+        onAdmin: true
 
       })
     }).catch(function (error) {
@@ -104,7 +106,8 @@ module.exports = function (router) {
           breadcrumbs: breadcrumbs,
           categories: categories,
           title: 'Edit Reduction Reason',
-          subTitle: getSubtitle(false)
+          subTitle: getSubtitle(false),
+          onAdmin: true
 
         })
       })
@@ -155,7 +158,8 @@ module.exports = function (router) {
             subTitle: getSubtitle(false),
             breadcrumbs: breadcrumbs,
             errors: error.validationErrors,
-            categories: categories
+            categories: categories,
+            onAdmin: true
 
           })
         } else {
@@ -215,7 +219,8 @@ module.exports = function (router) {
             subTitle: getSubtitle(false),
             title: 'Edit Reduction Reason',
             errors: error.validationErrors,
-            categories: categories
+            categories: categories,
+            onAdmin: true
 
           })
         } else {

@@ -39,7 +39,8 @@ module.exports = function (router) {
                   gs: gs,
                   cms: cms,
                   updatedBy: result.updatedBy,
-                  successText: successText
+                  successText: successText,
+                  onAdmin: true
 
                 })
               })
@@ -73,7 +74,8 @@ module.exports = function (router) {
           breadcrumbs: result.breadcrumbs,
           wp: result.workloadPoints,
           updatedBy: result.updatedBy,
-          successText: successText
+          successText: successText,
+          onAdmin: true
 
         })
       }).catch(function (error) {
@@ -146,7 +148,8 @@ module.exports = function (router) {
                       cms: cmsUpdated,
                       gs: gsUpdated,
                       updatedBy: result.updatedBy,
-                      errors: error.validationErrors
+                      errors: error.validationErrors,
+                      onAdmin: true
 
                     })
                   })
@@ -194,7 +197,8 @@ module.exports = function (router) {
               breadcrumbs: result.breadcrumbs,
               wp: req.body,
               updatedBy: result.updatedBy,
-              errors: error.validationErrors
+              errors: error.validationErrors,
+              onAdmin: true
 
             })
           })

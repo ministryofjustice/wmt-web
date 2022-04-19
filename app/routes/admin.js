@@ -20,7 +20,8 @@ module.exports = function (router) {
     }
 
     return res.render('admin', {
-      title: 'Admin'
+      title: 'Admin',
+      onAdmin: true
     })
   })
 }
