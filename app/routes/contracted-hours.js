@@ -8,6 +8,7 @@ const authorisation = require('../authorisation')
 const messages = require('../constants/messages')
 const roles = require('../constants/user-roles')
 const workloadTypeValidator = require('../services/validators/workload-type-validator')
+const { COURT_REPORTS, PROBATION } = require('../constants/workload-type')
 const Forbidden = require('../services/errors/authentication-error').Forbidden
 
 module.exports = function (router) {
@@ -41,7 +42,8 @@ module.exports = function (router) {
           woId: id,
           hoursUpdatedSuccess: req.query.hoursUpdatedSuccess,
           workloadType: workloadType,
-          onOffenderManager: true
+          onOffenderManager: workloadType === PROBATION,
+          onCourtReports: workloadType === COURT_REPORTS
 
         })
       }).catch(function (error) {
@@ -83,7 +85,9 @@ module.exports = function (router) {
               subNav: getSubNav(id, organisationLevel, req.path, workloadType, authorisedUserRole.authorisation, authorisedUserRole.userRole),
               contractedHours: updatedHours,
               workloadType: workloadType,
-              woId: id
+              woId: id,
+              onOffenderManager: workloadType === PROBATION,
+              onCourtReports: workloadType === COURT_REPORTS
 
             })
           }).catch(function (error) {
