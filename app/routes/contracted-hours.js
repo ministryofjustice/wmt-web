@@ -40,7 +40,8 @@ module.exports = function (router) {
           contractedHours: result.contractedHours,
           woId: id,
           hoursUpdatedSuccess: req.query.hoursUpdatedSuccess,
-          workloadType: workloadType
+          workloadType: workloadType,
+          onOffenderManager: true
 
         })
       }).catch(function (error) {

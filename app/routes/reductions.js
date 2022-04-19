@@ -10,6 +10,7 @@ const roles = require('../constants/user-roles')
 const Unauthorized = require('../services/errors/authentication-error').Unauthorized
 const Forbidden = require('../services/errors/authentication-error').Forbidden
 const workloadTypeValidator = require('../services/validators/workload-type-validator')
+const { COURT_REPORTS, PROBATION } = require('../constants/workload-type')
 const getLastUpdated = require('../services/data/get-last-updated')
 const dateFormatter = require('../services/date-formatter')
 const ErrorHandler = require('../services/validators/error-handler')
@@ -117,7 +118,9 @@ module.exports = function (router) {
             errors: errors,
             workloadType: workloadType,
             reductionToPopulate: false,
-            reductionEnabled: false
+            reductionEnabled: false,
+            onOffenderManager: workloadType === PROBATION,
+            onCourtReports: workloadType === COURT_REPORTS
 
           })
         }
@@ -178,7 +181,9 @@ module.exports = function (router) {
               reductionToPopulate: true,
               reductionEnabled: reductionEnabled,
               reductionStatus: reductionStatus,
-              workloadType: workloadType
+              workloadType: workloadType,
+              onOffenderManager: workloadType === PROBATION,
+              onCourtReports: workloadType === COURT_REPORTS
             })
           })
       }).catch(function (error) {
@@ -250,7 +255,9 @@ module.exports = function (router) {
               reductionToPopulate: true,
               reductionEnabled: reductionReason.isEnabled,
               errors: error.validationErrors,
-              workloadType: workloadType
+              workloadType: workloadType,
+              onOffenderManager: workloadType === PROBATION,
+              onCourtReports: workloadType === COURT_REPORTS
 
             })
           } else {
@@ -329,7 +336,9 @@ module.exports = function (router) {
               reductionToPopulate: true,
               reductionEnabled: reductionReason.isEnabled,
               errors: error.validationErrors,
-              workloadType: workloadType
+              workloadType: workloadType,
+              onOffenderManager: workloadType === PROBATION,
+              onCourtReports: workloadType === COURT_REPORTS
             })
           } else {
             next(error)
@@ -472,7 +481,9 @@ module.exports = function (router) {
       archivedReductions: results.archivedReductions,
       successText: successText,
       workloadType: workloadType,
-      date: results.date
+      date: results.date,
+      onOffenderManager: workloadType === PROBATION,
+      onCourtReports: workloadType === COURT_REPORTS
 
     }
     if (error) {

@@ -27,7 +27,8 @@ module.exports = function (router) {
       subTitle: 'Admin',
       title: 'Archive Data Options',
       breadcrumbs: breadcrumbs,
-      canViewArchiveReductions: roles.SUPER_USER === req.user.user_role
+      canViewArchiveReductions: roles.SUPER_USER === req.user.user_role,
+      onAdmin: true
 
     })
   })
