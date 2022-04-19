@@ -33,7 +33,8 @@ module.exports = function (router) {
           caseProgressList: result.caseProgressList,
           date: result.date,
 
-          workloadType: workloadTypes.OMIC
+          workloadType: workloadTypes.OMIC,
+          onOmic: true
         })
       })
     }).catch(function (error) {

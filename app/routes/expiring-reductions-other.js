@@ -35,7 +35,8 @@ module.exports = function (router) {
           subTitle: title,
           breadcrumbs: breadcrumbs,
 
-          subNav: getSubNav(req.path)
+          subNav: getSubNav(req.path),
+          onExpiringReductions: true
         })
       })
   })
@@ -67,7 +68,8 @@ module.exports = function (router) {
               users: users,
 
               userId: req.body['expiring-reductions-search-field-entry'],
-              subNav: getSubNav(req.path)
+              subNav: getSubNav(req.path),
+              onExpiringReductions: true
             })
           })
       })

@@ -46,7 +46,8 @@ module.exports = function (router) {
           subNav: getSubNav(req.params.id, organisationUnitConstants.OFFENDER_MANAGER.name, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
           overviewDetails: result.overviewDetails,
           date: lastUpdated,
-          workloadType: workloadTypes.PROBATION
+          workloadType: workloadTypes.PROBATION,
+          onOffenderManager: true
         })
       })
     }).catch(function (error) {
@@ -70,7 +71,8 @@ module.exports = function (router) {
           subNav: getSubNav(req.params.id, organisationUnitConstants.OFFENDER_MANAGER.name, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
           overviewDetails: result.overviewDetails,
           date: lastUpdated,
-          workloadType: workloadTypes.PROBATION
+          workloadType: workloadTypes.PROBATION,
+          onOffenderManager: true
         })
       })
     }).catch(function (error) {
@@ -176,7 +178,8 @@ const renderOverview = function (req, res, next) {
         date: lastUpdated,
         workloadType: workloadTypes.PROBATION,
         displayName: res.locals.displayName,
-        allocations: res.locals.allocations
+        allocations: res.locals.allocations,
+        onOffenderManager: true
       })
     })
   }).catch(function (error) {

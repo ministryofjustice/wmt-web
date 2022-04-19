@@ -33,7 +33,8 @@ module.exports = function (router) {
           stringifiedCaseProgressList: stringifiedCaseProgressList,
           date: lastUpdated,
           workloadType: workloadTypes.PROBATION,
-          organisationLevel: organisationLevel
+          organisationLevel: organisationLevel,
+          onOffenderManager: true
         })
       })
     }).catch(function (error) {

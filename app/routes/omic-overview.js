@@ -62,7 +62,8 @@ const renderOverview = function (req, res, next) {
         overviewDetails: result.overviewDetails,
         date: result.date,
 
-        workloadType: workloadTypes.OMIC
+        workloadType: workloadTypes.OMIC,
+        onOmic: true
       })
     })
   }).catch(function (error) {

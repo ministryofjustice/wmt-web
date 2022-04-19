@@ -45,7 +45,8 @@ module.exports = function (router) {
         subTitle: result.subTitle,
         breadcrumbs: result.breadcrumbs,
         subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.OMIC, authorisedUserRole.authorisation, authorisedUserRole.userRole),
-        date: result.date
+        date: result.date,
+        onOmic: true
 
       })
     }).catch(function (error) {
