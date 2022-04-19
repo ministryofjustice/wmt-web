@@ -38,7 +38,8 @@ module.exports = function (router) {
     return res.render('user', {
       title: 'User rights',
       breadcrumbs: breadcrumbs,
-      failureText: failureText
+      failureText: failureText,
+      onAdmin: true
 
     })
   })
@@ -79,7 +80,8 @@ module.exports = function (router) {
         userIsManager: roles.MANAGER === role.role,
         userIsStaff: roles.STAFF === role.role,
         breadcrumbs: breadcrumbs,
-        canAssignSuperAdmin: roles.SUPER_USER === authorisedUserRole.userRole
+        canAssignSuperAdmin: roles.SUPER_USER === authorisedUserRole.userRole,
+        onAdmin: true
 
       })
     }).catch(function (error) {
@@ -124,7 +126,8 @@ module.exports = function (router) {
           userIsStaff: roles.STAFF === req.body.rights,
           errors: error.validationErrors,
           breadcrumbs: breadcrumbs,
-          canAssignSuperAdmin: roles.SUPER_USER === authorisedUserRole.userRole
+          canAssignSuperAdmin: roles.SUPER_USER === authorisedUserRole.userRole,
+          onAdmin: true
         })
       } else {
         next(error)
@@ -134,7 +137,8 @@ module.exports = function (router) {
     return addUpdateUserRole(username, rights, loggedInUsername, thisUser.name).then(function (result) {
       return res.render('user', {
         title: 'User rights',
-        userRights: { username: username, rights: rights }
+        userRights: { username: username, rights: rights },
+        onAdmin: true
 
       })
     }).catch(function (error) {
