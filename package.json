@@ -54,7 +54,7 @@
     "cheerio": "^1.0.0-rc.10",
     "cookie-session": "^2.0.0",
     "csv-parser": "^3.0.0",
-    "husky": "^7.0.4",
+    "husky": "^8.0.1",
     "jsonwebtoken": "^8.5.1",
     "mocha": "10.0.x",
     "mocha-simple-html-reporter": "^2.0.0",
