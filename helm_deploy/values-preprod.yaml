@@ -11,6 +11,7 @@ generic-service:
     ALLOCATIONS_SERVICE_URL: "https://hmpps-allocations-preprod.hmpps.service.justice.gov.uk"
 
   allowlist:
+    accessibilityAuditors: "194.75.245.154/32"
     office: "217.33.148.210/32"
     health-kick: "35.177.252.195/32"
     mojvpn: "81.134.202.29/32"
