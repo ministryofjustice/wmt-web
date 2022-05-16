@@ -96,7 +96,7 @@
     "moment": "^2.29.3",
     "nunjucks": "3.2.x",
     "nunjucks-date-filter": "^0.1.1",
-    "passport": "^0.5.2",
+    "passport": "^0.5.3",
     "passport-oauth2": "^1.6.1",
     "pg": "^8.7.3",
     "redis": "^4.1.0",
