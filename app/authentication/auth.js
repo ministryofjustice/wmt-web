@@ -27,8 +27,8 @@ passport.serializeUser(async function (user, done) {
         name: displayName,
         username: wmtUserName,
         user_role: role.role,
-        nameID: nameID,
-        nameIDFormat: nameIDFormat
+        nameID,
+        nameIDFormat
       }))
     })
   })

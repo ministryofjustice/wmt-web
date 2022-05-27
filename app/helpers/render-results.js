@@ -7,17 +7,17 @@ module.exports = function (page, title, res, errors, results, userRole, dateRang
     new Link('Admin', '/admin')
   ]
   return res.render(page, {
-    title: title,
-    results: results,
-    errors: errors,
+    title,
+    results,
+    errors,
     subTitle: 'Archive Data',
-    breadcrumbs: breadcrumbs,
-    dateRange: dateRange,
-    body: body,
-    stringifiedBody: stringifiedBody,
-    startSearching: startSearching,
-    groupBy: groupBy,
-    interval: interval,
+    breadcrumbs,
+    dateRange,
+    body,
+    stringifiedBody,
+    startSearching,
+    groupBy,
+    interval,
     canExport: SUPER_USER === userRole,
     onAdmin: true
   })

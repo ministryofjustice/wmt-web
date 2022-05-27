@@ -37,8 +37,8 @@ module.exports = function (router) {
     const failureText = fail ? 'Invalid username specified' : null
     return res.render('user', {
       title: 'User rights',
-      breadcrumbs: breadcrumbs,
-      failureText: failureText,
+      breadcrumbs,
+      failureText,
       onAdmin: true
 
     })
@@ -73,13 +73,13 @@ module.exports = function (router) {
     return userRoleService.getRoleByUsername(userRoleService.removeDomainFromUsername(username)).then(function (role) {
       return res.render('user-rights', {
         title: 'User rights',
-        username: username,
+        username,
         fullname: role.fullname,
         userIsSuperUser: roles.SUPER_USER === role.role,
         userIsApplicationSupport: roles.APPLICATION_SUPPORT === role.role,
         userIsManager: roles.MANAGER === role.role,
         userIsStaff: roles.STAFF === role.role,
-        breadcrumbs: breadcrumbs,
+        breadcrumbs,
         canAssignSuperAdmin: roles.SUPER_USER === authorisedUserRole.userRole,
         onAdmin: true
 
@@ -118,14 +118,14 @@ module.exports = function (router) {
         ]
         return res.render('user-rights', {
           title: 'User rights',
-          username: username,
+          username,
           fullname: req.body.fullname,
           userIsSuperUser: roles.SUPER_USER === req.body.rights,
           userIsApplicationSupport: roles.APPLICATION_SUPPORT === req.body.rights,
           userIsManager: roles.MANAGER === req.body.rights,
           userIsStaff: roles.STAFF === req.body.rights,
           errors: error.validationErrors,
-          breadcrumbs: breadcrumbs,
+          breadcrumbs,
           canAssignSuperAdmin: roles.SUPER_USER === authorisedUserRole.userRole,
           onAdmin: true
         })
@@ -137,7 +137,7 @@ module.exports = function (router) {
     return addUpdateUserRole(username, rights, loggedInUsername, thisUser.name).then(function (result) {
       return res.render('user', {
         title: 'User rights',
-        userRights: { username: username, rights: rights },
+        userRights: { username, rights },
         onAdmin: true
 
       })

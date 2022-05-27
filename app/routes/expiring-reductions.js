@@ -34,10 +34,10 @@ module.exports = function (router) {
     return expiringReductionsService(userId)
       .then(function (reductions) {
         return res.render('expiring-reductions', {
-          title: title,
+          title,
           subTitle: title,
-          breadcrumbs: breadcrumbs,
-          reductions: reductions,
+          breadcrumbs,
+          reductions,
 
           subNav: getSubNav(req.path),
           onExpiringReductions: true

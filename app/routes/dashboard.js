@@ -41,8 +41,8 @@ module.exports = function (router) {
       result.date = lastUpdated
       return getDashboardFiles().then(function (dashboardFiles) {
         return res.render('dashboard', {
-          organisationLevel: organisationLevel,
-          dashboardFiles: dashboardFiles,
+          organisationLevel,
+          dashboardFiles,
           linkId: req.params.id,
           title: result.title,
           subTitle: result.subTitle,

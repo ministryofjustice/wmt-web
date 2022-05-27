@@ -30,10 +30,10 @@ module.exports = function (router) {
     return userSearchService()
       .then(function (users) {
         return res.render('expiring-reductions-other', {
-          title: title,
-          users: users,
+          title,
+          users,
           subTitle: title,
-          breadcrumbs: breadcrumbs,
+          breadcrumbs,
 
           subNav: getSubNav(req.path),
           onExpiringReductions: true
@@ -61,11 +61,11 @@ module.exports = function (router) {
         return expiringReductionsService(userIds)
           .then(function (reductions) {
             return res.render('expiring-reductions-other', {
-              title: title,
+              title,
               subTitle: title,
-              breadcrumbs: breadcrumbs,
-              reductions: reductions,
-              users: users,
+              breadcrumbs,
+              reductions,
+              users,
 
               userId: req.body['expiring-reductions-search-field-entry'],
               subNav: getSubNav(req.path),

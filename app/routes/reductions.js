@@ -115,8 +115,8 @@ module.exports = function (router) {
             subNav: getSubNav(id, organisationLevel, req.path, workloadType, authorisedUserRole.authorisation, authorisedUserRole.userRole),
             referenceData: result.referenceData,
             stringifiedReferenceData: stringifyReductionsData(result.referenceData),
-            errors: errors,
-            workloadType: workloadType,
+            errors,
+            workloadType,
             reductionToPopulate: false,
             reductionEnabled: false,
             onOffenderManager: workloadType === PROBATION,
@@ -179,9 +179,9 @@ module.exports = function (router) {
               stringifiedReferenceData: stringifyReductionsData(result.referenceData),
               reduction: mapReductionToViewModel(reduction),
               reductionToPopulate: true,
-              reductionEnabled: reductionEnabled,
-              reductionStatus: reductionStatus,
-              workloadType: workloadType,
+              reductionEnabled,
+              reductionStatus,
+              workloadType,
               onOffenderManager: workloadType === PROBATION,
               onCourtReports: workloadType === COURT_REPORTS
             })
@@ -255,7 +255,7 @@ module.exports = function (router) {
               reductionToPopulate: true,
               reductionEnabled: reductionReason.isEnabled,
               errors: error.validationErrors,
-              workloadType: workloadType,
+              workloadType,
               onOffenderManager: workloadType === PROBATION,
               onCourtReports: workloadType === COURT_REPORTS
 
@@ -336,7 +336,7 @@ module.exports = function (router) {
               reductionToPopulate: true,
               reductionEnabled: reductionReason.isEnabled,
               errors: error.validationErrors,
-              workloadType: workloadType,
+              workloadType,
               onOffenderManager: workloadType === PROBATION,
               onCourtReports: workloadType === COURT_REPORTS
             })
@@ -479,8 +479,8 @@ module.exports = function (router) {
       activeReductions: results.activeReductions,
       scheduledReductions: results.scheduledReductions,
       archivedReductions: results.archivedReductions,
-      successText: successText,
-      workloadType: workloadType,
+      successText,
+      workloadType,
       date: results.date,
       onOffenderManager: workloadType === PROBATION,
       onCourtReports: workloadType === COURT_REPORTS

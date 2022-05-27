@@ -54,7 +54,7 @@ module.exports = function (router) {
             subTitle: result.subTitle,
             breadcrumbs: result.breadcrumbs,
             subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
-            organisationLevel: organisationLevel,
+            organisationLevel,
             childOrganisationLevel: orgUnit.childOrganisationLevel,
             childOrganisationLevelDisplayText: childOrgUnit.displayText,
             caseloadDetails: caseloadDetailsData,

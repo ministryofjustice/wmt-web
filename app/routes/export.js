@@ -48,7 +48,7 @@ module.exports = function (router) {
       return getExport(id, organisationLevel).then(function (result) {
         result.date = lastUpdated
         return res.render('export', {
-          organisationLevel: organisationLevel,
+          organisationLevel,
           linkId: req.params.id,
           title: result.title,
           subTitle: result.subTitle,

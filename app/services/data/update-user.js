@@ -5,6 +5,6 @@ module.exports = function (userId, name) {
     .withSchema('app')
     .where('id', userId)
     .update({
-      name: name
+      name
     })
 }

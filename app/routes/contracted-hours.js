@@ -41,7 +41,7 @@ module.exports = function (router) {
           contractedHours: result.contractedHours,
           woId: id,
           hoursUpdatedSuccess: req.query.hoursUpdatedSuccess,
-          workloadType: workloadType,
+          workloadType,
           onOffenderManager: workloadType === PROBATION,
           onCourtReports: workloadType === COURT_REPORTS
 
@@ -84,7 +84,7 @@ module.exports = function (router) {
               breadcrumbs: result.breadcrumbs,
               subNav: getSubNav(id, organisationLevel, req.path, workloadType, authorisedUserRole.authorisation, authorisedUserRole.userRole),
               contractedHours: updatedHours,
-              workloadType: workloadType,
+              workloadType,
               woId: id,
               onOffenderManager: workloadType === PROBATION,
               onCourtReports: workloadType === COURT_REPORTS

@@ -93,7 +93,7 @@ module.exports = function (router) {
         draw: req.body.draw,
         recordsTotal: results.length,
         recordsFiltered: results.length,
-        reductions: reductions
+        reductions
       })
     }).catch(function (error) {
       next(error)
@@ -222,7 +222,7 @@ module.exports = function (router) {
 
     return getReductionsHistory(reductionId).then(function (reductionsHistory) {
       return res.json({
-        reductionsHistory: reductionsHistory
+        reductionsHistory
       })
     })
   })

@@ -97,9 +97,9 @@ const archivedReductions = [
 ]
 
 const reductionsByStatus = {
-  activeReductions: activeReductions,
+  activeReductions,
   scheduledReductions: [],
-  archivedReductions: archivedReductions
+  archivedReductions
 }
 
 const latestWorkloadStagingId = 3

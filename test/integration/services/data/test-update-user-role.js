@@ -26,7 +26,7 @@ describe('/services/data/update-user-role', function () {
             newRole = addedRole[1].id
             return insertUserRole(userRole)
               .then(function (id) {
-                insertedData = insertedData.concat([{ table: 'user_role', id: id }])
+                insertedData = insertedData.concat([{ table: 'user_role', id }])
               })
           })
       })
