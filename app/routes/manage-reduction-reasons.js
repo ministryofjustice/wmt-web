@@ -36,11 +36,11 @@ module.exports = function (router) {
       const enabledReductionReasons = reductionReasons.filter(enabledReduction => enabledReduction.isEnabled === true)
       const disabledReductionReasons = reductionReasons.filter(disabledReduction => disabledReduction.isEnabled === false)
       return res.render('manage-reduction-reasons', {
-        enabledReductionReasons: enabledReductionReasons,
-        disabledReductionReasons: disabledReductionReasons,
-        breadcrumbs: breadcrumbs,
+        enabledReductionReasons,
+        disabledReductionReasons,
+        breadcrumbs,
         title: 'Manage Reduction Reasons',
-        successText: successText,
+        successText,
         subTitle: getSubtitle(true),
         canAddReason: canAddReasonRoles.includes(req.user.user_role),
         canEditReason: canEditReasonRoles.includes(req.user.user_role),
@@ -68,8 +68,8 @@ module.exports = function (router) {
 
     return getReductionCategories().then(function (categories) {
       return res.render('add-reduction-reason', {
-        categories: categories,
-        breadcrumbs: breadcrumbs,
+        categories,
+        breadcrumbs,
         title: 'Add Reduction Reason',
         subTitle: getSubtitle(false),
         onAdmin: true
@@ -103,8 +103,8 @@ module.exports = function (router) {
       return getReductionCategories().then(function (categories) {
         return res.render('edit-reduction-reason', {
           reduction: reason,
-          breadcrumbs: breadcrumbs,
-          categories: categories,
+          breadcrumbs,
+          categories,
           title: 'Edit Reduction Reason',
           subTitle: getSubtitle(false),
           onAdmin: true
@@ -156,9 +156,9 @@ module.exports = function (router) {
             },
             title: 'Add Reduction Reason',
             subTitle: getSubtitle(false),
-            breadcrumbs: breadcrumbs,
+            breadcrumbs,
             errors: error.validationErrors,
-            categories: categories,
+            categories,
             onAdmin: true
 
           })
@@ -215,11 +215,11 @@ module.exports = function (router) {
               isEnabled: getIsEnabled(req.body.isEnabled),
               category: findCategoryById(categories, req.body.category)
             },
-            breadcrumbs: breadcrumbs,
+            breadcrumbs,
             subTitle: getSubtitle(false),
             title: 'Edit Reduction Reason',
             errors: error.validationErrors,
-            categories: categories,
+            categories,
             onAdmin: true
 
           })

@@ -27,7 +27,7 @@ describe('/services/data/test-court-reports-calculation-task', function () {
           submitting_agent: 'WEB',
           type: 'COURT-REPORTS-CALCULATION',
           additional_data: JSON.stringify({
-            workloadBatch: { startingId: workloadId, batchSize: batchSize },
+            workloadBatch: { startingId: workloadId, batchSize },
             operationType: 'UPDATE'
           }),
           workload_report_id: workloadReportId,

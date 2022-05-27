@@ -36,10 +36,10 @@ module.exports = function (router) {
                   subTitle: result.subTitle,
                   breadcrumbs: result.breadcrumbs,
                   wp: result.workloadPoints,
-                  gs: gs,
-                  cms: cms,
+                  gs,
+                  cms,
                   updatedBy: result.updatedBy,
-                  successText: successText,
+                  successText,
                   onAdmin: true
 
                 })
@@ -74,7 +74,7 @@ module.exports = function (router) {
           breadcrumbs: result.breadcrumbs,
           wp: result.workloadPoints,
           updatedBy: result.updatedBy,
-          successText: successText,
+          successText,
           onAdmin: true
 
         })

@@ -30,10 +30,10 @@ module.exports = function (router) {
           breadcrumbs: result.breadcrumbs,
           subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
           caseProgressList: result.caseProgressList,
-          stringifiedCaseProgressList: stringifiedCaseProgressList,
+          stringifiedCaseProgressList,
           date: lastUpdated,
           workloadType: workloadTypes.PROBATION,
-          organisationLevel: organisationLevel,
+          organisationLevel,
           onOffenderManager: true
         })
       })

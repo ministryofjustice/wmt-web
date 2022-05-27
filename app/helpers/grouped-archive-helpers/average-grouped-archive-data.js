@@ -23,8 +23,8 @@ module.exports = function (archiveArray, searchStartDate, searchEndDate, groupBy
       regionName: group[0].regionName,
       lduName: group[0].lduName,
       teamName: group[0].teamName,
-      omName: omName,
-      grade: grade
+      omName,
+      grade
     }
     //
     while (currentStartingDate.isSameOrBefore(endDate)) {

@@ -30,13 +30,20 @@ module.exports = function () {
   }
   )
 
-  const authLogoutUrl = `${config.apis.hmppsAuth.externalUrl}/sign-out?client_id=${config.apis.hmppsAuth.apiClientId}&redirect_uri=${config.domain}`
+  const authUrl = config.apis.hmppsAuth.externalUrl
+  const authSignOutUrl = `${config.apis.hmppsAuth.externalUrl}/sign-out?client_id=${config.apis.hmppsAuth.apiClientId}&redirect_uri=${config.domain}`
 
-  router.use('/logout', function (req, res) {
+  router.use('/sign-out', (req, res, next) => {
     if (req.user) {
-      req.logout()
-    }
-    res.redirect(authLogoutUrl)
+      req.logout(err => {
+        if (err) return next(err)
+        return req.session.destroy(() => res.redirect(authSignOutUrl))
+      })
+    } else res.redirect(authSignOutUrl)
+  })
+
+  router.use('/account-details', (req, res) => {
+    res.redirect(`${authUrl}/account-details`)
   })
 
   router.use(function (req, res, next) {

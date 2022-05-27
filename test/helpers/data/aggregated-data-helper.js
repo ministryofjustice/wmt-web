@@ -325,7 +325,7 @@ const addWorkloads = function (inserts) {
     })
     .then(function (ids) {
       ids.forEach(({ id }) => {
-        inserts.push({ table: 'workload', id: id })
+        inserts.push({ table: 'workload', id })
       })
 
       const workloads = inserts.filter((item) => item.table === 'workload')
@@ -365,7 +365,7 @@ const addWorkloads = function (inserts) {
     })
     .then(function (ids) {
       ids.forEach(({ id }) => {
-        inserts.push({ table: 'workload_points_calculations', id: id })
+        inserts.push({ table: 'workload_points_calculations', id })
       })
       const workloads = inserts.filter((item) => item.table === 'workload')
       const defaultTier = {
@@ -388,14 +388,14 @@ const addWorkloads = function (inserts) {
       const locations = ['COMMUNITY', 'CUSTODY', 'LICENSE']
       locations.forEach(function (location) {
         for (let tierNumber = 0, totalCases = 0; tierNumber < 17; tierNumber++, totalCases++) {
-          tiers.push(Object.assign({}, defaultTier, { tier_number: tierNumber, location: location, total_cases: totalCases, total_filtered_cases: totalCases }))
+          tiers.push(Object.assign({}, defaultTier, { tier_number: tierNumber, location, total_cases: totalCases, total_filtered_cases: totalCases }))
         }
       })
       return knex.batchInsert('app.tiers', tiers, 149).returning('id')
     })
     .then(function (ids) {
       ids.forEach(({ id }) => {
-        inserts.push({ table: 'tiers', id: id })
+        inserts.push({ table: 'tiers', id })
       })
       return inserts
     })
@@ -423,7 +423,7 @@ const addOmicWorkloads = function (inserts) {
     })
     .then(function (ids) {
       ids.forEach(({ id }) => {
-        inserts.push({ table: 'omic_workload', id: id })
+        inserts.push({ table: 'omic_workload', id })
       })
 
       const workloads = inserts.filter((item) => item.table === 'omic_workload')
@@ -461,7 +461,7 @@ const addOmicWorkloads = function (inserts) {
     })
     .then(function (ids) {
       ids.forEach(({ id }) => {
-        inserts.push({ table: 'omic_workload_points_calculations', id: id })
+        inserts.push({ table: 'omic_workload_points_calculations', id })
       })
       const workloads = inserts.filter((item) => item.table === 'omic_workload')
       const defaultTier = {
@@ -484,14 +484,14 @@ const addOmicWorkloads = function (inserts) {
       const locations = ['COMMUNITY', 'CUSTODY', 'LICENSE']
       locations.forEach(function (location) {
         for (let tierNumber = 0, totalCases = 0; tierNumber < 17; tierNumber++, totalCases++) {
-          tiers.push(Object.assign({}, defaultTier, { tier_number: tierNumber, location: location, total_cases: totalCases, total_filtered_cases: totalCases }))
+          tiers.push(Object.assign({}, defaultTier, { tier_number: tierNumber, location, total_cases: totalCases, total_filtered_cases: totalCases }))
         }
       })
       return knex.batchInsert('app.omic_tiers', tiers, 149).returning('id')
     })
     .then(function (ids) {
       ids.forEach(({ id }) => {
-        inserts.push({ table: 'omic_tiers', id: id })
+        inserts.push({ table: 'omic_tiers', id })
       })
       return inserts
     })
@@ -667,7 +667,7 @@ module.exports.rowGenerator = function (name, baseRow, multiplier) {
       row[key] = value * multiplier
     }
   }
-  return Object.assign({}, row, { name: name })
+  return Object.assign({}, row, { name })
 }
 
 module.exports.getWorkloadReportEffectiveFromDate = function () {

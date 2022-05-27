@@ -26,7 +26,7 @@ describe('services/validators/validation-error-messages', function () {
     const min = 1
     const max = 99
     const expected = `${fieldName} must be between ${min} and ${max}`
-    const message = ValidationErrorMessages.getIsRangeMessage(fieldName, { min: min, max: max })
+    const message = ValidationErrorMessages.getIsRangeMessage(fieldName, { min, max })
     expect(message).to.equal(expected)
   })
 
@@ -34,7 +34,7 @@ describe('services/validators/validation-error-messages', function () {
     const min = 1
     const max = 99
     const expected = `${fieldName} must be a whole number between ${min} and ${max}`
-    const message = ValidationErrorMessages.getIsIntegerMessage(fieldName, { min: min, max: max })
+    const message = ValidationErrorMessages.getIsIntegerMessage(fieldName, { min, max })
     expect(message).to.equal(expected)
   })
 
@@ -42,7 +42,7 @@ describe('services/validators/validation-error-messages', function () {
     const min = 0.9
     const max = 37.5
     const expected = `${fieldName} must be a number between ${min} and ${max}`
-    const message = ValidationErrorMessages.getIsFloatMessage(fieldName, { min: min, max: max })
+    const message = ValidationErrorMessages.getIsFloatMessage(fieldName, { min, max })
     expect(message).to.equal(expected)
   })
 
@@ -61,14 +61,14 @@ describe('services/validators/validation-error-messages', function () {
   it('should return expected IsDateLaterThanMessage validation error message', function () {
     const secondaryDisplayName = 'secondary'
     const expected = `${fieldName} must be after ${secondaryDisplayName}`
-    const message = ValidationErrorMessages.getIsDateLaterThanMessage(fieldName, { secondaryDisplayName: secondaryDisplayName })
+    const message = ValidationErrorMessages.getIsDateLaterThanMessage(fieldName, { secondaryDisplayName })
     expect(message).to.equal(expected)
   })
 
   it('should return expected IsDateLaterThanMessage validation error message', function () {
     const length = 100
     const expected = `${fieldName} must be shorter than ${length} characters`
-    const message = ValidationErrorMessages.getIsLessThanLengthMessage(fieldName, { length: length })
+    const message = ValidationErrorMessages.getIsLessThanLengthMessage(fieldName, { length })
     expect(message).to.equal(expected)
   })
 })

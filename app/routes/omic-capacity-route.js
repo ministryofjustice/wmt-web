@@ -67,14 +67,14 @@ module.exports = function (router) {
               subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.OMIC, authorisedUserRole.authorisation, authorisedUserRole.userRole),
               breadcrumbs: capacityBreakdown.breadcrumbs,
               capacity: capacityBreakdown.capacityTable,
-              errors: errors,
+              errors,
               query: req.query,
               capacityBreakdown: capacityBreakdown.capacityBreakdown,
-              outstandingReports: outstandingReports,
-              caseDetails: caseDetails,
+              outstandingReports,
+              caseDetails,
               childOrganisationLevel: orgUnit.childOrganisationLevel,
               childOrganisationLevelDisplayText: childOrgUnitDisplayText,
-              organisationLevel: organisationLevel,
+              organisationLevel,
               date: result.date,
 
               workloadType: workloadTypes.OMIC,
@@ -126,7 +126,7 @@ const formatCaseDetailsForExport = function (caseDetails) {
       inactiveCaseType: caseType,
       crn: caseDetail.caseRefNumber,
       location: caseDetail.location,
-      tier: tier
+      tier
     }
     result.push(formattedCaseDetails)
   })

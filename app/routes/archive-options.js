@@ -26,7 +26,7 @@ module.exports = function (router) {
     return res.render('archive-options', {
       subTitle: 'Admin',
       title: 'Archive Data Options',
-      breadcrumbs: breadcrumbs,
+      breadcrumbs,
       canViewArchiveReductions: roles.SUPER_USER === req.user.user_role,
       onAdmin: true
 

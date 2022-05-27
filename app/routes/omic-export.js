@@ -39,7 +39,7 @@ module.exports = function (router) {
       const result = getExport(id, organisationLevel)
       result.date = lastUpdated
       return res.render('omic-export', {
-        organisationLevel: organisationLevel,
+        organisationLevel,
         linkId: req.params.id,
         title: result.title,
         subTitle: result.subTitle,

@@ -83,7 +83,7 @@ module.exports = function (wb) {
     border: baseLightBorderStyle,
     fill: {
       type: 'pattern',
-      patternType: patternType,
+      patternType,
       fgColor: lightGray
     }
   })
@@ -96,7 +96,7 @@ module.exports = function (wb) {
     border: baseLightBorderStyle,
     fill: {
       type: 'pattern',
-      patternType: patternType,
+      patternType,
       fgColor: goldenYellow
     }
   })
@@ -109,7 +109,7 @@ module.exports = function (wb) {
     border: baseMediumBorderStyle,
     fill: {
       type: 'pattern',
-      patternType: patternType,
+      patternType,
       fgColor: goldenYellow
     }
   })
@@ -122,7 +122,7 @@ module.exports = function (wb) {
     },
     fill: {
       type: 'pattern',
-      patternType: patternType,
+      patternType,
       fgColor: lavender
     },
     border: baseMediumBorderStyle
@@ -136,7 +136,7 @@ module.exports = function (wb) {
     },
     fill: {
       type: 'pattern',
-      patternType: patternType,
+      patternType,
       fgColor: gold
     },
     border: baseMediumBorderStyle
@@ -150,7 +150,7 @@ module.exports = function (wb) {
     },
     fill: {
       type: 'pattern',
-      patternType: patternType,
+      patternType,
       fgColor: blueGray
     },
     border: baseMediumBorderStyle
@@ -164,7 +164,7 @@ module.exports = function (wb) {
     },
     fill: {
       type: 'pattern',
-      patternType: patternType,
+      patternType,
       fgColor: sageGreen
     },
     border: baseMediumBorderStyle
@@ -178,7 +178,7 @@ module.exports = function (wb) {
     },
     fill: {
       type: 'pattern',
-      patternType: patternType,
+      patternType,
       fgColor: azureBlue
     },
     border: baseMediumBorderStyle
@@ -192,7 +192,7 @@ module.exports = function (wb) {
     },
     fill: {
       type: 'pattern',
-      patternType: patternType,
+      patternType,
       fgColor: magentaPink
     },
     border: baseMediumBorderStyle
@@ -206,7 +206,7 @@ module.exports = function (wb) {
     },
     fill: {
       type: 'pattern',
-      patternType: patternType,
+      patternType,
       fgColor: persianGreen
     },
     border: baseMediumBorderStyle
@@ -220,7 +220,7 @@ module.exports = function (wb) {
     },
     fill: {
       type: 'pattern',
-      patternType: patternType,
+      patternType,
       fgColor: aquaBlue
     },
     border: baseMediumBorderStyle
@@ -233,7 +233,7 @@ module.exports = function (wb) {
     },
     fill: {
       type: 'pattern',
-      patternType: patternType,
+      patternType,
       fgColor: '#0000FF'
     },
     border: baseMediumBorderStyle
@@ -246,7 +246,7 @@ module.exports = function (wb) {
     },
     fill: {
       type: 'pattern',
-      patternType: patternType,
+      patternType,
       fgColor: '#0000FF'
     },
     numberFormat: '#; -#; 0',
@@ -257,7 +257,7 @@ module.exports = function (wb) {
     font: baseFontStyle,
     fill: {
       type: 'pattern',
-      patternType: patternType,
+      patternType,
       fgColor: '#FFFF00'
     },
     border: baseMediumBorderStyle
@@ -268,7 +268,7 @@ module.exports = function (wb) {
     numberFormat: '0.0%; -0.0%; 0%',
     fill: {
       type: 'pattern',
-      patternType: patternType,
+      patternType,
       fgColor: '#FFFF00'
     },
     border: baseMediumBorderStyle
@@ -279,7 +279,7 @@ module.exports = function (wb) {
     numberFormat: '0.0%; -0.0%; 0%',
     fill: {
       type: 'pattern',
-      patternType: patternType,
+      patternType,
       fgColor: '#FFFF00'
     },
     border: baseMediumBorderStyle
@@ -291,7 +291,7 @@ module.exports = function (wb) {
     border: baseLightBorderStyle,
     fill: {
       type: 'pattern',
-      patternType: patternType,
+      patternType,
       fgColor: lightGray
     }
   })
@@ -302,30 +302,30 @@ module.exports = function (wb) {
     border: baseLightBorderStyle,
     fill: {
       type: 'pattern',
-      patternType: patternType,
+      patternType,
       fgColor: lightGray
     }
   })
 
   return {
-    caseStyle: caseStyle,
-    nameHeadersStyle: nameHeadersStyle,
-    commStyle: commStyle,
-    cusStyle: cusStyle,
-    licStyle: licStyle,
-    t2aCommStyle: t2aCommStyle,
-    t2aCusStyle: t2aCusStyle,
-    t2aLicStyle: t2aLicStyle,
-    reportsStyle: reportsStyle,
-    sumStyle: sumStyle,
-    roundedSumStyle: roundedSumStyle,
-    averageStyle: averageStyle,
-    averagePercentageStyle: averagePercentageStyle,
-    cmsGsPercentageStyle: cmsGsPercentageStyle,
-    percentageStyle: percentageStyle,
-    roundedStyle: roundedStyle,
-    editableStyle: editableStyle,
-    nonEditableCaseStyle: nonEditableCaseStyle,
-    totalAverageStyle: totalAverageStyle
+    caseStyle,
+    nameHeadersStyle,
+    commStyle,
+    cusStyle,
+    licStyle,
+    t2aCommStyle,
+    t2aCusStyle,
+    t2aLicStyle,
+    reportsStyle,
+    sumStyle,
+    roundedSumStyle,
+    averageStyle,
+    averagePercentageStyle,
+    cmsGsPercentageStyle,
+    percentageStyle,
+    roundedStyle,
+    editableStyle,
+    nonEditableCaseStyle,
+    totalAverageStyle
   }
 }

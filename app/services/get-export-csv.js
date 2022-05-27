@@ -222,7 +222,7 @@ const getFields = function (organisationLevel, tab) {
       fieldNames = EXPIRING_REDUCTIONS_FIELD_NAMES
       break
   }
-  return { fields: fields, fieldNames: fieldNames }
+  return { fields, fieldNames }
 }
 
 const getCsv = function (organisationLevel, result, tab, fields, fieldNames) {

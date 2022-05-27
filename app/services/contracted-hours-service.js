@@ -16,7 +16,7 @@ module.exports.getContractedHours = function (id, organisationLevel, workloadTyp
     return getContractedHoursForWorkloadOwner(id)
       .then(function (result) {
         return {
-          breadcrumbs: breadcrumbs,
+          breadcrumbs,
           title: breadcrumbs[0].title,
           subTitle: organisationalUnitType.displayText,
           contractedHours: result

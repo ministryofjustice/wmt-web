@@ -8,8 +8,8 @@ const startDate = new Date(new Date().setDate(new Date().getDate() - 5))
 const endDate = new Date(new Date().setDate(new Date().getDate() - 3))
 
 const expectedResult = {
-  startDate: startDate,
-  endDate: endDate,
+  startDate,
+  endDate,
   lduName: 'NPS Team',
   teamName: 'NPS - Newport - Team 1',
   omName: 'A.N. Offender Manager 1511',

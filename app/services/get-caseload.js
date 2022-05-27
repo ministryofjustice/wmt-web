@@ -16,9 +16,9 @@ module.exports = function (id, organisationLevel, isCSV = false) {
 
         const caseloadResults = parseCaseloadResults(organisationLevel, results, isCSV)
         return {
-          breadcrumbs: breadcrumbs,
-          title: title,
-          subTitle: subTitle,
+          breadcrumbs,
+          title,
+          subTitle,
           caseloadDetails: caseloadResults
         }
       })

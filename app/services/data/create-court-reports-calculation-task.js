@@ -6,7 +6,7 @@ module.exports = function (courtReportStagingId, workloadReportId, batchSize) {
     type: 'COURT-REPORTS-CALCULATION',
     additional_data: JSON.stringify(
       {
-        workloadBatch: { startingId: courtReportStagingId, batchSize: batchSize },
+        workloadBatch: { startingId: courtReportStagingId, batchSize },
         operationType: 'UPDATE'
       }),
     workload_report_id: workloadReportId,

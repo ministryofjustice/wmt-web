@@ -6,7 +6,7 @@ module.exports = function (workloadStagingId, workloadReportId, batchSize) {
     type: 'CALCULATE-WORKLOAD-POINTS',
     additional_data: JSON.stringify(
       {
-        workloadBatch: { startingId: workloadStagingId, batchSize: batchSize },
+        workloadBatch: { startingId: workloadStagingId, batchSize },
         operationType: 'UPDATE'
       }),
     workload_report_id: workloadReportId,

@@ -4,8 +4,8 @@ module.exports = function (username, name) {
   return knex('users')
     .withSchema('app')
     .insert({
-      username: username,
-      name: name
+      username,
+      name
     })
     .returning('id').then(function ([id]) {
       return id.id
