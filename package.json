@@ -60,7 +60,7 @@
     "mocha-simple-html-reporter": "^2.0.0",
     "pa11y-ci": "^3.0.1",
     "proxyquire": "2.1.x",
-    "sass": "^1.52.1",
+    "sass": "^1.52.2",
     "selenium-standalone": "8.1.4",
     "sinon": "^14.0.0",
     "sinon-chai": "^3.7.0",
