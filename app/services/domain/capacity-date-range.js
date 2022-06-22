@@ -1,8 +1,6 @@
 const ValidationError = require('../errors/validation-error')
 const FieldSetValidator = require('../validators/fieldset-validator')
 const ErrorHandler = require('../validators/error-handler')
-const CASELOAD_CAPACITY = require('../../constants/caseload-capacity')
-const moment = require('moment')
 
 class CapacityDateRange {
   constructor (fromDay, fromMonth, fromYear, toDay, toMonth, toYear) {
@@ -28,7 +26,6 @@ class CapacityDateRange {
       .isRequired()
       .isValidDate()
       .isPastDate()
-      .isLaterThan(moment().subtract(CASELOAD_CAPACITY.MAX_HISTORY, 'years'), 'maxCapacityHistory')
       .getFormattedDate()
 
     this.capacityToDate = FieldSetValidator(this.toFields, 'capacityToDate', errors)

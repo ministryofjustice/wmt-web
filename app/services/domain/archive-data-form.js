@@ -1,9 +1,7 @@
 const ValidationError = require('../errors/validation-error')
 const FieldSetValidator = require('../validators/fieldset-validator')
 const ErrorHandler = require('../validators/error-handler')
-const CASELOAD_CAPACITY = require('../../constants/caseload-capacity')
 const ERROR_MESSAGES = require('../validators/validation-error-messages')
-const moment = require('moment')
 
 class ArchiveDataForm {
   constructor (fromDay, fromMonth, fromYear, toDay, toMonth, toYear, multiSearchField, isReduction = false) {
@@ -32,7 +30,6 @@ class ArchiveDataForm {
       .isRequired()
       .isValidDate()
       .isPastDate()
-      .isLaterThan(moment().subtract(CASELOAD_CAPACITY.MAX_HISTORY, 'years'), 'maxArchiveHistory')
       .getFormattedDate()
 
     this.archiveToDate = FieldSetValidator(this.toFields, 'archiveToDate', errors)
