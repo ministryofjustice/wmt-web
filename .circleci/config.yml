@@ -46,6 +46,7 @@ executors:
           - COMMUNITY_ENDPOINT_URL=http://wiremock:8099
           - HMPPS_TIER_ENDPOINT_URL=http://wiremock:8099
           - OFFENDER_SEARCH_ENDPOINT_URL=http://wiremock:8099
+          - ASSESS_RISKS_NEEDS_ENDPOINT_URL=http://wiremock:8099
         entrypoint: ["/bin/sh", "-c" , "sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar"]
       - image: localstack/localstack:0.12.15
         environment:
