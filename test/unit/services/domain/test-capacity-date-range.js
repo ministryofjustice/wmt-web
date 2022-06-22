@@ -3,7 +3,6 @@ const ERROR_MESSAGES = require('../../../../app/services/validators/validation-e
 const FIELD_NAMES = require('../../../../app/services/validators/validation-field-names')
 const dateFormatter = require('../../../../app/services/date-formatter')
 const CapacityDateRange = require('../../../../app/services/domain/capacity-date-range')
-const CASELOAD_CAPACITY = require('../../../../app/constants/caseload-capacity')
 
 let capacityDateRange
 
@@ -76,38 +75,6 @@ describe('services/domain/capacity-date-range', function () {
       .that.contains.a.property('validationErrors')
       .that.contains.a.property('capacityToDate')
       .that.contains(ERROR_MESSAGES.getPastOrPresentDateMessage(FIELD_NAMES.capacityToDate))
-  })
-
-  it('should throw ValidationError if capacity from date is more than 6 years old', function () {
-    expect(function () {
-      return new CapacityDateRange(
-        VALID_FROM_DAY,
-        VALID_FROM_MONTH,
-        dateFormatter.now().year() - (CASELOAD_CAPACITY.MAX_HISTORY + 1),
-        VALID_TO_DAY,
-        VALID_TO_MONTH,
-        VALID_FUTURE_YEAR
-      )
-    }).to.throw()
-      .that.contains.a.property('validationErrors')
-      .that.contains.a.property('capacityFromDate')
-      .that.contains(ERROR_MESSAGES.getIsDateLaterThanMessage(FIELD_NAMES.capacityFromDate, { secondaryDisplayName: FIELD_NAMES.maxCapacityHistory }))
-  })
-
-  it('should throw ValidationError if capacity to date is more than 6 years old', function () {
-    expect(function () {
-      return new CapacityDateRange(
-        VALID_FROM_DAY,
-        VALID_FROM_MONTH,
-        VALID_FROM_YEAR,
-        VALID_TO_DAY,
-        VALID_TO_MONTH,
-        dateFormatter.now().year() - (CASELOAD_CAPACITY.MAX_HISTORY + 1)
-      )
-    }).to.throw()
-      .that.contains.a.property('validationErrors')
-      .that.contains.a.property('capacityToDate')
-      .that.contains(ERROR_MESSAGES.getIsDateLaterThanMessage(FIELD_NAMES.capacityToDate, { secondaryDisplayName: FIELD_NAMES.capacityFromDate }))
   })
 
   it('should throw ValidationError if given invalid day for capacity from date', function () {
