@@ -9,11 +9,9 @@ parameters:
   alerts-slack-channel:
     type: string
     default: manage_a_workforce_dev
-
   releases-slack-channel:
     type: string
     default: manage_a_workforce_dev
-
   node-version:
     type: string
     default: 16.13-browsers
@@ -47,7 +45,8 @@ executors:
         environment:
           - DATABASE_USERNAME=<< pipeline.parameters.database_user >>
           - DATABASE_PASSWORD=<< pipeline.parameters.database_password >>
-          - SPRING_PROFILES_ACTIVE=dev,docker  
+          - SPRING_PROFILES_ACTIVE=dev,docker
+          - HMPPS_SQS_LOCALSTACK_URL=http://localstack:4566
         entrypoint: ["/bin/sh", "-c" , "sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar"]
       - image: localstack/localstack:0.14.1
         environment:
