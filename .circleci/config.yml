@@ -11,6 +11,10 @@ parameters:
     type: string
     default: manage_a_workforce_dev
 
+  releases-slack-channel:
+    type: string
+    default: manage_a_workforce_dev
+
   node-version:
     type: string
     default: 16.13-browsers
@@ -44,11 +48,7 @@ executors:
         environment:
           - DATABASE_USERNAME=<< pipeline.parameters.database_user >>
           - DATABASE_PASSWORD=<< pipeline.parameters.database_password >>
-          - COMMUNITY_ENDPOINT_URL=http://wiremock:8099
-          - HMPPS_TIER_ENDPOINT_URL=http://wiremock:8099
-          - OFFENDER_SEARCH_ENDPOINT_URL=http://wiremock:8099
-          - ASSESS_RISKS_NEEDS_ENDPOINT_URL=http://wiremock:8099
-          - HMPPS_SQS_PROVIDER=localstack
+          - SPRING_PROFILES_ACTIVE=dev,docker  
         entrypoint: ["/bin/sh", "-c" , "sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar"]
       - image: localstack/localstack:0.14.1
         environment:
@@ -325,6 +325,8 @@ workflows:
       - hmpps/deploy_env:
           name: deploy_prod
           env: "prod"
+          slack_notification: true
+          slack_channel_name: << pipeline.parameters.releases-slack-channel >>
           context:
             - hmpps-common-vars
             - hmpps-workload-prod
