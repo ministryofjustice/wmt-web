@@ -50,7 +50,7 @@ executors:
         entrypoint: ["/bin/sh", "-c" , "sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar"]
       - image: localstack/localstack:0.14.1
         environment:
-          - SERVICES=s3,sqs
+          - SERVICES=s3,sqs,sns
           - DEBUG=${DEBUG- }
           - DATA_DIR=/tmp/localstack/data
           - DOCKER_HOST=unix:///var/run/docker.sock
