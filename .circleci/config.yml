@@ -1,7 +1,6 @@
 version: 2.1
 
 orbs:
-orbs:
   hmpps: ministryofjustice/hmpps@5.1
   slack: circleci/slack@4.4.2
   browser-tools: circleci/browser-tools@1.2.1
@@ -10,7 +9,9 @@ parameters:
   alerts-slack-channel:
     type: string
     default: manage_a_workforce_dev
-
+  releases-slack-channel:
+    type: string
+    default: manage_a_workforce_dev
   node-version:
     type: string
     default: 16.13-browsers
@@ -44,15 +45,12 @@ executors:
         environment:
           - DATABASE_USERNAME=<< pipeline.parameters.database_user >>
           - DATABASE_PASSWORD=<< pipeline.parameters.database_password >>
-          - COMMUNITY_ENDPOINT_URL=http://wiremock:8099
-          - HMPPS_TIER_ENDPOINT_URL=http://wiremock:8099
-          - OFFENDER_SEARCH_ENDPOINT_URL=http://wiremock:8099
-          - ASSESS_RISKS_NEEDS_ENDPOINT_URL=http://wiremock:8099
-          - HMPPS_SQS_PROVIDER=localstack
+          - SPRING_PROFILES_ACTIVE=dev,docker
+          - HMPPS_SQS_LOCALSTACK_URL=http://localhost:4566
         entrypoint: ["/bin/sh", "-c" , "sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar"]
       - image: localstack/localstack:0.14.1
         environment:
-          - SERVICES=s3,sqs
+          - SERVICES=s3,sqs,sns
           - DEBUG=${DEBUG- }
           - DATA_DIR=/tmp/localstack/data
           - DOCKER_HOST=unix:///var/run/docker.sock
@@ -325,6 +323,8 @@ workflows:
       - hmpps/deploy_env:
           name: deploy_prod
           env: "prod"
+          slack_notification: true
+          slack_channel_name: << pipeline.parameters.releases-slack-channel >>
           context:
             - hmpps-common-vars
             - hmpps-workload-prod
