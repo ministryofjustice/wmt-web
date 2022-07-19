@@ -10,13 +10,3 @@ generic-service:
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api.prison.service.justice.gov.uk"
     WORKFORCE_ALLOCATIONS_URL: "https://workforce-management.hmpps.service.justice.gov.uk"
     ALLOCATIONS_SERVICE_URL: "https://hmpps-allocations.hmpps.service.justice.gov.uk"
-
-  allowlist:
-    office: "217.33.148.210/32"
-    health-kick: "35.177.252.195/32"
-    mojvpn: "81.134.202.29/32"
-    cloudplatform-live1-1: "35.178.209.113/32"
-    cloudplatform-live1-2: "3.8.51.207/32"
-    cloudplatform-live1-3: "35.177.252.54/32"
-    ark-internet-1: "194.33.192.0/25"
-    ark-internet-2: "194.33.196.0/25"
