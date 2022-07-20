@@ -80,5 +80,6 @@ Run tests using the following commands:
 
 ```
 docker-compose up -d
+npm run start
 npm run test-e2e # Chrome
 ```
