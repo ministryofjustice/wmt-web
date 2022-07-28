@@ -122,5 +122,6 @@ module.exports = {
     allocations: {
       url: get('WORKFORCE_ALLOCATIONS_URL', 'http://localhost:3010', requiredInProduction)
     }
-  }
+  },
+  staticResourceCacheDuration: 20
 }
