@@ -24,13 +24,9 @@ Install Node version 14
 
 Run installation for local code 
 ```shell
-npm install 
+docker compose up -d
 
-docker-compose up -d
-
-npm run build
-
-npm start
+npm install && npm run build && npm start
 ```
 
 Navigate to `http://localhost:3000` to see the running application.
