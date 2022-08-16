@@ -1,7 +1,6 @@
 const knex = require('../../../knex').web
 
 module.exports = function (id, type) {
-  const table = 'contact_cms_export_view AS contactCMS'
   const selectList = [
     'contactregionname',
     'contactlduname',
@@ -13,25 +12,22 @@ module.exports = function (id, type) {
     'omregionname',
     'omlduname',
     'omteamname',
-    'contactCMS.contactid',
+    'contactid',
     'omname',
     'omgradecode',
-    'contactCMS.contactdescription',
-    'contactCMS.contactcode',
-    'contactCMS.contactpoints',
-    'omCMS.ompoints',
-    'contactCMS.caserefno',
-    'omCMS.caserefno AS omcaserefno',
-    'omCMS.contactdescription AS omcontactdescription',
-    'omCMS.contactcode AS omcontactcode'
+    'contactdescription',
+    'contactcode',
+    'contactpoints',
+    'ompoints',
+    'caserefno',
+    'omcaserefno',
+    'omcontactdescription',
+    'omcontactcode'
   ]
 
-  const table2 = 'om_cms_export_view AS omCMS'
-
-  let query = knex(table)
+  let query = knex('cms_export_view')
     .withSchema('app')
     .select(selectList)
-    .fullOuterJoin(table2, 'contactCMS.contactid', 'omCMS.contactid')
 
   if (id !== undefined && (!isNaN(parseInt(id, 10)))) {
     query = query.where(`om${type}id`, id).orWhere(`contact${type}id`, id)
