@@ -67,7 +67,7 @@
     "standard": "^17.0.0",
     "supertest": "6.2.x",
     "wdio-html-nice-reporter": "^8.0.2",
-    "webdriverio": "^7.20.7"
+    "webdriverio": "^7.21.0"
   },
   "dependencies": {
     "@ministryofjustice/frontend": "1.4.2",
