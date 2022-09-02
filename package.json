@@ -45,11 +45,11 @@
   },
   "devDependencies": {
     "@rpii/wdio-report-events": "^0.2.0",
-    "@wdio/cli": "^7.23.0",
+    "@wdio/cli": "^7.24.0",
     "@wdio/local-runner": "^7.24.0",
     "@wdio/mocha-framework": "^7.24.0",
-    "@wdio/selenium-standalone-service": "^7.23.0",
-    "@wdio/spec-reporter": "^7.23.0",
+    "@wdio/selenium-standalone-service": "^7.24.0",
+    "@wdio/spec-reporter": "^7.24.0",
     "chai": "4.3.x",
     "cheerio": "^1.0.0-rc.12",
     "cookie-session": "^2.0.0",
@@ -67,12 +67,12 @@
     "standard": "^17.0.0",
     "supertest": "6.2.x",
     "wdio-html-nice-reporter": "^8.0.2",
-    "webdriverio": "^7.23.0"
+    "webdriverio": "^7.24.0"
   },
   "dependencies": {
     "@ministryofjustice/frontend": "1.4.2",
     "@aws-sdk/client-s3": "^3.162.0",
-    "@aws-sdk/client-sqs": "^3.162.0",
+    "@aws-sdk/client-sqs": "^3.163.0",
     "applicationinsights": "^2.3.4",
     "bunyan": "^1.8.15",
     "bunyan-prettystream": "^0.1.3",
