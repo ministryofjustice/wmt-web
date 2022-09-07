@@ -1,12 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "url": "/cases/unallocated/teamCount",
-    "queryParameters": {
-      "teams": {
-        "equalTo": "TM1"
-      }
-    }
+    "url": "/cases/unallocated/teamCount?teams=TM1"
   },
   "response": {
     "headers": {

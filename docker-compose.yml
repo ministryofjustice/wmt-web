@@ -81,7 +81,7 @@ services:
     container_name: user-preferencewiremock
     restart: always
     ports:
-      - "8098:8099"
+      - "8098:8098"
     command: ["--port","8098","--global-response-templating"]
     volumes:
       - $PWD/test/e2e/resources/user-preference-wiremock:/home/wiremock:rw
