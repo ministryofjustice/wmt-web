@@ -37,8 +37,8 @@
                         {% if canAllocate %}
                             <li class="moj-primary-navigation__item">
                                 <a class="moj-primary-navigation__link"
-                                   href="{{ allocationsUrl }}">Allocations {% if allocations %}
-                                        <span id="notifications" class="moj-notification-badge">{{ allocations | getCaseCount }}</span>
+                                   href="{{ allocationsUrl }}">Allocations {% if unallocatedCaseCount %}
+                                        <span id="notifications" class="moj-notification-badge">{{ unallocatedCaseCount | getCaseCount }}</span>
                                     {% endif %}</a>
                             </li>
                         {% endif %}

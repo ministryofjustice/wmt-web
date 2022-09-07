@@ -77,6 +77,18 @@ module.exports = {
         freeSocketTimeout: 30000
       }
     },
+    userPreferenceService: {
+      url: get('USER_PREFERENCE_SERVICE_URL', 'http://localhost:8098', requiredInProduction),
+      timeout: {
+        response: 10000,
+        deadline: 10000
+      },
+      agent: {
+        maxSockets: 100,
+        maxFreeSockets: 10,
+        freeSocketTimeout: 30000
+      }
+    },
     tokenVerification: {
       url: get('TOKEN_VERIFICATION_API_URL', 'http://localhost:8100', requiredInProduction),
       timeout: {

@@ -74,6 +74,17 @@ services:
     command: ["--port","8099","--global-response-templating"]
     volumes:
       - $PWD/test/e2e/resources/wiremock:/home/wiremock:rw
+  user-preference-wiremock:
+    image: rodolpheche/wiremock
+    networks:
+      - hmpps
+    container_name: user-preferencewiremock
+    restart: always
+    ports:
+      - "8098:8099"
+    command: ["--port","8098","--global-response-templating"]
+    volumes:
+      - $PWD/test/e2e/resources/user-preference-wiremock:/home/wiremock:rw
   localstack:
     image: localstack/localstack:0.12.15
     networks:

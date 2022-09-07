@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/cases/unallocated/teamCount",
+    "queryParameters": {
+      "teams": {
+        "equalTo": "TM1"
+      }
+    }
+  },
+  "response": {
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "status": 200,
+    "jsonBody": [
+      {
+        "teamCode": "TM1",
+        "caseCount": 10
+      }
+    ]
+  }
+}
