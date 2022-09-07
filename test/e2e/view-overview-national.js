@@ -38,7 +38,7 @@ describe('National', function () {
     it('should display number of unallocated cases', async function () {
       const allocationsNumber = await $('#notifications')
       const number = await allocationsNumber.getText()
-      return expect(number).to.equal('2')
+      return expect(number).to.equal('10')
     })
 
     it('should show regional breakdown table', async function () {
