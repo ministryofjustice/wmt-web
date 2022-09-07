@@ -15,7 +15,7 @@ const rolesMiddleware = require('./middleware/rolesMiddleware')
 const setupCacheControl = require('./middleware/setupCacheControl')
 const checkEtlInProgress = require('./middleware/check-etl-in-progress')
 const nunjucksSetup = require('./utils/nunjucksSetup')
-const getUnallocatedCases = require('./middleware/getUnallocatedCases')
+const getUnallocatedCaseCount = require('./middleware/getUnallocatedCasesCount')
 
 const auth = require('./authentication/auth')
 const userService = require('./services/user-service')
@@ -60,7 +60,7 @@ module.exports.createApplication = async function () {
   const router = express.Router({ mergeParams: true })
   router.use(auth.authenticationMiddleware())
   router.use(populateCurrentUser(userService))
-  router.use(getUnallocatedCases())
+  router.use(getUnallocatedCaseCount())
 
   app.use(checkEtlInProgress)
 

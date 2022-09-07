@@ -16,7 +16,6 @@ module.exports = function () {
         res.locals.unallocatedCaseCount = unallocatedCasesCountByTeams
           .map(teamCount => teamCount.caseCount)
           .reduce((first, second) => first + second, 0)
-        res.locals.allocations = await allocationsClient.getAllocations(res.locals.user.token)
       }
       next()
     } catch (error) {
