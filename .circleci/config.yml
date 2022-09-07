@@ -198,6 +198,10 @@ jobs:
           command: java -jar wiremock.jar --port 8099 --global-response-templating --root-dir test/e2e/resources/wiremock
           background: true
       - run:
+          name: Run user preference wiremock
+          command: java -jar wiremock.jar --port 8098 --global-response-templating --root-dir test/e2e/resources/user-preference-wiremock
+          background: true
+      - run:
           name: Wait for db to initialise
           command: sleep 20
       - run:
@@ -237,6 +241,10 @@ jobs:
       - run:
           name: Run wiremock
           command: java -jar wiremock.jar --port 8099 --global-response-templating --root-dir test/e2e/resources/wiremock
+          background: true
+      - run:
+          name: Run user preference wiremock
+          command: java -jar wiremock.jar --port 8098 --global-response-templating --root-dir test/e2e/resources/user-preference-wiremock
           background: true
       - run:
           name: Wait for db to initialise

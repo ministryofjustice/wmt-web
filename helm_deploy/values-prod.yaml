@@ -10,3 +10,4 @@ generic-service:
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api.prison.service.justice.gov.uk"
     WORKFORCE_ALLOCATIONS_URL: "https://workforce-management.hmpps.service.justice.gov.uk"
     ALLOCATIONS_SERVICE_URL: "https://hmpps-allocations.hmpps.service.justice.gov.uk"
+    USER_PREFERENCE_SERVICE_URL: "https://hmpps-user-preferences.hmpps.service.justice.gov.uk"

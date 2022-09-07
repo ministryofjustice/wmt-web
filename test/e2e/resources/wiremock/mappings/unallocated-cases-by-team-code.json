@@ -1,15 +1,18 @@
 {
   "request": {
     "method": "GET",
-    "url": "/cases/unallocated/count"
+    "url": "/cases/unallocated/teamCount?teams=TM1"
   },
   "response": {
     "headers": {
       "Content-Type": "application/json"
     },
     "status": 200,
-    "jsonBody": {
-      "count": 2
-    }
+    "jsonBody": [
+      {
+        "teamCode": "TM1",
+        "caseCount": 10
+      }
+    ]
   }
 }
