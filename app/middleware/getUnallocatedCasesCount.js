@@ -6,7 +6,7 @@ module.exports = function () {
   return async function (req, res, next) {
     try {
       if (res.locals.canAllocate && res.locals.user) {
-        const { token, username } = res.locals.user
+        const { token, nameID: username } = res.locals.user
         const { items: teamSelection } = await userPreferenceClient.getTeamsUserPreference(token, username)
         if (teamSelection.length) {
           const unallocatedCasesCountByTeams = await allocationsClient.getCaseCountByTeamCodes(token, teamSelection)
