@@ -8,14 +8,12 @@ module.exports = function () {
       if (res.locals.canAllocate && res.locals.user) {
         const { token, username } = res.locals.user
         const { items: teamSelection } = await userPreferenceClient.getTeamsUserPreference(token, username)
-        // backwards compatibility for current journey, once multiple teams released this should be removed
-        if (!teamSelection.length) {
-          teamSelection.push('N03F01')
+        if (teamSelection.length) {
+          const unallocatedCasesCountByTeams = await allocationsClient.getCaseCountByTeamCodes(token, teamSelection)
+          res.locals.unallocatedCaseCount = unallocatedCasesCountByTeams
+            .map(teamCount => teamCount.caseCount)
+            .reduce((first, second) => first + second, 0)
         }
-        const unallocatedCasesCountByTeams = await allocationsClient.getCaseCountByTeamCodes(token, teamSelection)
-        res.locals.unallocatedCaseCount = unallocatedCasesCountByTeams
-          .map(teamCount => teamCount.caseCount)
-          .reduce((first, second) => first + second, 0)
       }
       next()
     } catch (error) {
