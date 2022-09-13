@@ -9,7 +9,6 @@ const userService = require('../services/user-service')
 
 passport.serializeUser(async function (user, done) {
   const { email } = await userService.getUser(user.token)
-  const displayName = user.username
   const nameID = user.username
   const nameIDFormat = user.username
   const wmtUserName = userRoleService.removeDomainFromUsername(email)
@@ -24,11 +23,12 @@ passport.serializeUser(async function (user, done) {
     return userRoleService.getRoleByUsername(wmtUserName).then(function (role) {
       done(null, Object.assign(user, {
         userId: dbUser.id,
-        name: displayName,
+        name: user.username,
         username: wmtUserName,
         user_role: role.role,
         nameID,
-        nameIDFormat
+        nameIDFormat,
+        displayName: user.name
       }))
     })
   })

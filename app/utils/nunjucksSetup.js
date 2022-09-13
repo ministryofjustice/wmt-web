@@ -1,6 +1,7 @@
 const nunjucks = require('nunjucks')
 const dateFilter = require('nunjucks-date-filter')
 const { googleAnalyticsKey, nav } = require('../../config')
+const { initialiseName } = require('./utils')
 
 module.exports = function (app, path) {
   app.set('view engine', 'njk')
@@ -26,13 +27,7 @@ module.exports = function (app, path) {
     return typeof obj === 'object'
   })
 
-  njkEnv.addFilter('initialiseName', (fullName) => {
-    if (!fullName) {
-      return null
-    }
-    const array = fullName.split('.')
-    return `${array[0][0]}. ${array[1].charAt(0).toUpperCase()}${array[1].slice(1).toLowerCase()}`
-  })
+  njkEnv.addFilter('initialiseName', initialiseName)
 
   njkEnv.addFilter('getCaseCount', (cases) => {
     return cases > 99 ? '99+' : `${cases}`
