@@ -8,7 +8,7 @@ module.exports = function (userService) {
         const user = res.locals.user && (await userService.getUser(res.locals.user.token))
         if (user) {
           res.locals.user = { ...user, ...res.locals.user }
-          res.locals.displayName = res.locals.user.name
+          res.locals.displayName = res.locals.user.displayName
         } else {
           logger.info('No user available')
         }
