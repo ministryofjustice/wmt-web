@@ -48,7 +48,7 @@
     "@wdio/cli": "^7.24.1",
     "@wdio/local-runner": "^7.24.1",
     "@wdio/mocha-framework": "^7.24.1",
-    "@wdio/selenium-standalone-service": "^7.24.1",
+    "@wdio/selenium-standalone-service": "^7.25.0",
     "@wdio/spec-reporter": "^7.24.1",
     "chai": "4.3.x",
     "cheerio": "^1.0.0-rc.12",
