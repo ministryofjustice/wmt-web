@@ -46,7 +46,7 @@
   "devDependencies": {
     "@rpii/wdio-report-events": "^0.2.0",
     "@wdio/cli": "^7.24.1",
-    "@wdio/local-runner": "^7.24.1",
+    "@wdio/local-runner": "^7.25.0",
     "@wdio/mocha-framework": "^7.24.1",
     "@wdio/selenium-standalone-service": "^7.25.0",
     "@wdio/spec-reporter": "^7.24.1",
