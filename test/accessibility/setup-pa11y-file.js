@@ -62,7 +62,6 @@ setupAllDataFs().then(function (result) {
   urls.push(generateLoginActionConfig(`${probationBase}/${region}/${extractedWorkload.regionId}/${overviewUrl}`))
   urls.push(generateLoginActionConfig(`${probationBase}/${national}/${overviewUrl}`))
 
-  urls.push(generateLoginActionConfig(`${courtReportsBase}/${offenderManager}/${extractedCourtReports.offenderManagerId}/${overviewUrl}`))
   urls.push(generateLoginActionConfig(`${courtReportsBase}/${team}/${extractedCourtReports.teamId}/${overviewUrl}`))
   urls.push(generateLoginActionConfig(`${courtReportsBase}/${ldu}/${extractedCourtReports.lduId}/${overviewUrl}`))
   urls.push(generateLoginActionConfig(`${courtReportsBase}/${region}/${extractedCourtReports.regionId}/${overviewUrl}`))
