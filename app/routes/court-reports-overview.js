@@ -22,19 +22,11 @@ module.exports = function (router) {
 
 const renderOverview = function (req, res, next) {
   const organisationLevel = req.params.organisationLevel
-  const organisationUnit = getOrganisationUnit('name', organisationLevel)
   let id
   if (organisationLevel !== organisationUnitConstants.NATIONAL.name) {
     if (req.params.id !== undefined && !isNaN(parseInt(req.params.id, 10))) {
       id = req.params.id
     }
-  }
-
-  let childOrganisationLevel
-  let childOrganisationLevelDisplayText
-  if (organisationLevel !== organisationUnitConstants.OFFENDER_MANAGER.name) {
-    childOrganisationLevel = organisationUnit.childOrganisationLevel
-    childOrganisationLevelDisplayText = getOrganisationUnit('name', childOrganisationLevel).displayText
   }
 
   const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
@@ -50,8 +42,6 @@ const renderOverview = function (req, res, next) {
           subTitle: result.subTitle,
           breadcrumbs: result.breadcrumbs,
           organisationLevel,
-          childOrganisationLevel,
-          childOrganisationLevelDisplayText,
           subNav: getSubNav(id, organisationLevel, req.path, workloadTypeConstants.COURT_REPORTS, authorisedUserRole.authorisation, authorisedUserRole.userRole),
           overviewDetails: result.overviewDetails,
           date: result.date,

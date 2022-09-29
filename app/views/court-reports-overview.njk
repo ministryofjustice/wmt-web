@@ -12,32 +12,6 @@
 
 {% include "includes/sub-nav.njk" %}
 
-{% if organisationLevel === "offender-manager" %}
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <table class="govuk-table override-gov-uk-table" id="offender-manager-court-reports-table">
-    <tbody>
-      <tr>
-        <th class="bold" scope="row">Grade</th>
-        <td class="sln-grade numeric">{{ overviewDetails[0].grade }}</td>
-      </tr>
-      <tr>
-        <th class="bold" scope="row">Team</th>
-        <td class="numeric"><a class="govuk-link" href="/court-reports/team/{{ overviewDetails[0].linkId }}">{{ overviewDetails[0].name }}</a></td>
-      </tr>
-      <tr>
-        <th class="bold" scope="row">Contracted hours</th>
-        <td class="numeric">{{ overviewDetails[0].contractedHours }}</td>
-      </tr>
-      <tr>
-        <th class="bold" scope="row">Reduction</th>
-        <td class="numeric">{{ overviewDetails[0].reduction }}</td>
-      </tr>
-    </tbody>
-    </table>
-  </div>
-</div>
-{% else %}
 <div>
   <div id="{{ organisationLevel }}">
     <table class="govuk-table sln-table-overview data-table">
@@ -64,8 +38,6 @@
           <td headers="total_sdrs">{{ member.totalSdrs }}</td>
           <td headers="total_fdrs">{{ member.totalFdrs }}</td>
           <td headers="total_oral_reports">{{ member.totalOralReports }}</td>
-          <td headers="contracted_hours">{{ member.contractedHours }}</td>
-          <td headers="reduction_hours">{{ member.reduction }}</td>
         </tr> 
         {% endfor %}
       </tbody>
@@ -73,7 +45,6 @@
   </div>
 </div>
 
-{% endif %}
 </main>
 
 {% include "includes/last-updated.njk" %}
