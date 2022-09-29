@@ -31,9 +31,11 @@
       <tbody>
         {% for member in overviewDetails %}
         <tr>
-          <td headers="name"><a class="govuk-link" href="/court-reports/{{ childOrganisationLevel }}/{{ member.linkId }}">{{ member.name }}</a></td>
           {% if organisationLevel === "team" %}
+            <td headers="name">{{ member.name }}</td>
             <td headers="grade">{{ member.grade }}</td>
+          {% else %}
+          <td headers="name"><a class="govuk-link" href="/court-reports/{{ childOrganisationLevel }}/{{ member.linkId }}">{{ member.name }}</a></td>
           {% endif %}
           <td headers="total_sdrs">{{ member.totalSdrs }}</td>
           <td headers="total_fdrs">{{ member.totalFdrs }}</td>
