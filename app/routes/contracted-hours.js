@@ -7,12 +7,11 @@ const ERROR_MESSAGES = require('../services/validators/validation-error-messages
 const authorisation = require('../authorisation')
 const messages = require('../constants/messages')
 const roles = require('../constants/user-roles')
-const workloadTypeValidator = require('../services/validators/workload-type-validator')
-const { COURT_REPORTS, PROBATION } = require('../constants/workload-type')
+const { PROBATION } = require('../constants/workload-type')
 const Forbidden = require('../services/errors/authentication-error').Forbidden
 
 module.exports = function (router) {
-  router.get('/:workloadType/offender-manager/:id/contracted-hours', function (req, res, next) {
+  router.get('/' + PROBATION + '/offender-manager/:id/contracted-hours', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
@@ -25,13 +24,11 @@ module.exports = function (router) {
     }
     const organisationLevel = 'offender-manager'
     const id = req.params.id
-    const workloadType = req.params.workloadType
-
-    workloadTypeValidator.validate(workloadType)
+    const workloadType = PROBATION
 
     const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
 
-    return contractedHoursService.getContractedHours(id, organisationLevel, workloadType)
+    return contractedHoursService.getContractedHours(id, organisationLevel)
       .then(function (result) {
         return res.render('contracted-hours', {
           title: result.title,
@@ -42,16 +39,14 @@ module.exports = function (router) {
           woId: id,
           hoursUpdatedSuccess: req.query.hoursUpdatedSuccess,
           workloadType,
-          onOffenderManager: workloadType === PROBATION,
-          onCourtReports: workloadType === COURT_REPORTS
-
+          onOffenderManager: true
         })
       }).catch(function (error) {
         next(error)
       })
   })
 
-  router.post('/:workloadType/offender-manager/:id/contracted-hours', function (req, res, next) {
+  router.post('/' + PROBATION + '/offender-manager/:id/contracted-hours', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER])
     } catch (error) {
@@ -66,15 +61,12 @@ module.exports = function (router) {
     const organisationLevel = 'offender-manager'
     const id = req.params.id
     const updatedHours = req.body.hours
-    const workloadType = req.params.workloadType
-
-    workloadTypeValidator.validate(workloadType)
 
     try {
       isValid(updatedHours, next)
     } catch (error) {
       if (error instanceof ValidationError) {
-        return contractedHoursService.getContractedHours(id, organisationLevel, workloadType)
+        return contractedHoursService.getContractedHours(id, organisationLevel)
           .then(function (result) {
             const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
             return res.render('contracted-hours', {
@@ -82,12 +74,11 @@ module.exports = function (router) {
               title: result.title,
               subTitle: result.subTitle,
               breadcrumbs: result.breadcrumbs,
-              subNav: getSubNav(id, organisationLevel, req.path, workloadType, authorisedUserRole.authorisation, authorisedUserRole.userRole),
+              subNav: getSubNav(id, organisationLevel, req.path, PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
               contractedHours: updatedHours,
-              workloadType,
+              workloadType: PROBATION,
               woId: id,
-              onOffenderManager: workloadType === PROBATION,
-              onCourtReports: workloadType === COURT_REPORTS
+              onOffenderManager: true
 
             })
           }).catch(function (error) {
@@ -98,9 +89,9 @@ module.exports = function (router) {
       }
     }
 
-    return contractedHoursService.updateContractedHours(id, updatedHours, workloadType, res.locals.user.email)
+    return contractedHoursService.updateContractedHours(id, updatedHours, res.locals.user.email)
       .then(function () {
-        return res.redirect('/' + workloadType + '/offender-manager/' + id + '/contracted-hours?hoursUpdatedSuccess=true')
+        return res.redirect('/' + PROBATION + '/offender-manager/' + id + '/contracted-hours?hoursUpdatedSuccess=true')
       }).catch(function (error) {
         next(error)
       })
