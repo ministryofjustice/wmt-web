@@ -1,6 +1,5 @@
 const getCourtReportOverview = require('../services/get-court-report-overview')
 const getSubNav = require('../services/get-sub-nav')
-const getOrganisationUnit = require('../services/helpers/org-unit-finder')
 const organisationUnitConstants = require('../constants/organisation-unit')
 const workloadTypeConstants = require('../constants/workload-type')
 const workloadTypes = require('../../app/constants/workload-type')
