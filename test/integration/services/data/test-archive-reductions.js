@@ -24,7 +24,7 @@ const archiveDataForm = new ArchiveDataForm(
   toDate.date(),
   toDate.month() + 1,
   toDate.year(),
-  [],
+  ['data'],
   true
 )
 describe('services/data/get-archived-reductions', function () {
