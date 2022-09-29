@@ -1,7 +1,7 @@
 const expect = require('chai').expect
 const moment = require('moment')
 const getArchivedReductions = require('../../../../app/services/data/get-reduction-archive')
-const ArchiveDateRange = require('../../../../app/services/domain/archive-date-range')
+const ArchiveDataForm = require('../../../../app/services/domain/archive-data-form')
 const { createArchiveReductions, deleteArchiveReductionsByIds } = require('../../../helpers/data/archive-reduction-data-helper')
 
 const toDate = moment()
@@ -17,8 +17,16 @@ const expectedResult = {
 
 let idsSaved
 
-const archiveDateRange = new ArchiveDateRange(fromDate.date(), fromDate.month() + 1, fromDate.year(), toDate.date(), toDate.month() + 1, toDate.year())
-
+const archiveDataForm = new ArchiveDataForm(
+  fromDate.date(),
+  fromDate.month() + 1,
+  fromDate.year(),
+  toDate.date(),
+  toDate.month() + 1,
+  toDate.year(),
+  [],
+  true
+)
 describe('services/data/get-archived-reductions', function () {
   before(function () {
     return createArchiveReductions(expectedResult).then(function (results) {
@@ -26,7 +34,7 @@ describe('services/data/get-archived-reductions', function () {
     })
   })
   it('should retrieve all 5 columns for archive data', function () {
-    return getArchivedReductions(archiveDateRange).then(function (results) {
+    return getArchivedReductions(archiveDataForm).then(function (results) {
       expect(results[0].omName).to.eql(expectedResult.omName)
       expect(parseFloat(results[0].hoursReduced).toPrecision(3)).to.eql(expectedResult.hoursReduced)
       expect(results[0].comments).to.eql(expectedResult.comments)
