@@ -1,9 +1,9 @@
 const expect = require('chai').expect
 const aggregatedDataHelper = require('../../../helpers/data/aggregated-data-helper')
 const getScenario = require('../../../../app/services/data/get-scenario')
-const getTeam = require('../../../../app/services/data/get-team-by-name')
-const getLDU = require('../../../../app/services/data/get-ldu-by-name')
-const getRegion = require('../../../../app/services/data/get-region-by-name')
+const getTeam = require('../../../helpers/data/get-team-by-name')
+const getLDU = require('../../../helpers/data/get-ldu-by-name')
+const getRegion = require('../../../helpers/data/get-region-by-name')
 
 let inserts
 describe('services/data/get-scenario team', function () {
