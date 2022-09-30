@@ -46,7 +46,6 @@ module.exports = function (router) {
           subNav: getSubNav(req.params.id, organisationUnitConstants.OFFENDER_MANAGER.name, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
           overviewDetails: result.overviewDetails,
           date: lastUpdated,
-          workloadType: workloadTypes.PROBATION,
           onOffenderManager: true
         })
       })
@@ -71,7 +70,6 @@ module.exports = function (router) {
           subNav: getSubNav(req.params.id, organisationUnitConstants.OFFENDER_MANAGER.name, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
           overviewDetails: result.overviewDetails,
           date: lastUpdated,
-          workloadType: workloadTypes.PROBATION,
           onOffenderManager: true
         })
       })

@@ -24,7 +24,6 @@ module.exports = function (router) {
     }
     const organisationLevel = 'offender-manager'
     const id = req.params.id
-    const workloadType = PROBATION
 
     const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
 
@@ -34,11 +33,10 @@ module.exports = function (router) {
           title: result.title,
           subTitle: result.subTitle,
           breadcrumbs: result.breadcrumbs,
-          subNav: getSubNav(id, organisationLevel, req.path, workloadType, authorisedUserRole.authorisation, authorisedUserRole.userRole),
+          subNav: getSubNav(id, organisationLevel, req.path, PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
           contractedHours: result.contractedHours,
           woId: id,
           hoursUpdatedSuccess: req.query.hoursUpdatedSuccess,
-          workloadType,
           onOffenderManager: true
         })
       }).catch(function (error) {
@@ -76,10 +74,8 @@ module.exports = function (router) {
               breadcrumbs: result.breadcrumbs,
               subNav: getSubNav(id, organisationLevel, req.path, PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
               contractedHours: updatedHours,
-              workloadType: PROBATION,
               woId: id,
               onOffenderManager: true
-
             })
           }).catch(function (error) {
             next(error)

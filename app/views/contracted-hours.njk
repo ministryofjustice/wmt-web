@@ -31,7 +31,7 @@
 
 <p class="govuk-body-l">Change the contracted hours for <strong class="bold">{{title}}</strong></p>
 
-<form action="/{{ workloadType }}/offender-manager/{{woId}}/contracted-hours" method="post" class="sln-form-action">
+<form action="/probation/offender-manager/{{woId}}/contracted-hours" method="post" class="sln-form-action">
 
   <div class="govuk-form-group  {% if errors['hours'][0] %} govuk-form-group--error {% endif %}">
     {% if errors['hours'][0] %}
@@ -49,7 +49,7 @@
   <div class="govuk-form-group">
     <input class="govuk-button" data-module="govuk-button"  type="submit" value="Save changes">
     <div class="u-space-t10">
-      <p class='govuk-body'>or <a class="govuk-link" href="/{{ workloadType }}/offender-manager/{{woId}}/overview">cancel and return to overview</a>
+      <p class='govuk-body'>or <a class="govuk-link" href="/probation/offender-manager/{{woId}}/overview">cancel and return to overview</a>
     </div>
   </div>
 

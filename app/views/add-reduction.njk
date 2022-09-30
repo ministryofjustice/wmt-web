@@ -11,25 +11,25 @@
     {% if reduction.status !== 'ARCHIVED' %}
       {% if reduction.id %}
         {% set submitButtonText='Save changes' %}
-        {% set formAction='/' + workloadType + '/offender-manager/' +  linkId  + '/edit-reduction' %}
+        {% set formAction='/probation/offender-manager/' +  linkId  + '/edit-reduction' %}
         {% set formMethod='POST' %}
       {% else %}
         {% set headerText='New reduction' %}
         {% set reductionText='Add a new reduction for ' %}
         {% set submitButtonText='Add reduction' %}
-        {% set formAction='/' + workloadType + '/offender-manager/' + linkId +'/add-reduction' %}
+        {% set formAction='/probation/offender-manager/' + linkId +'/add-reduction' %}
         {% set formMethod='POST' %}
       {% endif %}
     {% else %}
       {% set submitButtonText='Back to Reductions' %}
-      {% set formAction='/' + workloadType + '/offender-manager/' + linkId + '/reductions' %}
+      {% set formAction='/probation/offender-manager/' + linkId + '/reductions' %}
       {% set formMethod='GET' %}
     {% endif %}
   {% else %}
     {% set headerText='New reduction' %}
     {% set reductionText='Add a new reduction for ' %}
     {% set submitButtonText='Add reduction' %}
-    {% set formAction='/' + workloadType + '/offender-manager/' + linkId +'/add-reduction' %}
+    {% set formAction='/probation/offender-manager/' + linkId +'/add-reduction' %}
     {% set formMethod='POST' %}  
   {% endif %}
 
@@ -177,7 +177,7 @@
  
     {% if reduction.status !== 'ARCHIVED' %}
       <div>
-        <form name="archiveReduction" method="POST" action="/{{ workloadType }}/offender-manager/{{ linkId }}/update-reduction-status">
+        <form name="archiveReduction" method="POST" action="/probation/offender-manager/{{ linkId }}/update-reduction-status">
           <!-- Including the csrf-hidden-input.njk hides the links -->
           <input type="hidden"  name="_csrf"  value="{{ csrfToken }}">
           <input type="hidden" name="reductionId" value="{{reduction.id}}">
@@ -187,7 +187,7 @@
       </div>
     {% endif %}
     <div>
-      <form name="deleteReduction" method="POST" action="/{{ workloadType }}/offender-manager/{{ linkId }}/update-reduction-status">
+      <form name="deleteReduction" method="POST" action="/probation/offender-manager/{{ linkId }}/update-reduction-status">
         <!-- Including the csrf-hidden-input.njk hides the links -->
         <input type="hidden"  name="_csrf"  value="{{ csrfToken }}">
         <input type="hidden" name="reductionId" value="{{ reduction.id }}">

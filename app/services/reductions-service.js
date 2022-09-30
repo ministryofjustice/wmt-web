@@ -11,19 +11,16 @@ const getReductionById = require('./data/get-reduction-by-id')
 const getBreadcrumbs = require('./get-breadcrumbs')
 const getOrganisationUnit = require('./helpers/org-unit-finder')
 const reductionHelper = require('./helpers/reduction-helper')
-const workloadTypes = require('../../app/constants/workload-type')
-const createCourtReportsCalculationTask = require('./data/create-court-reports-calculation-task')
-const getLatestIdsForCourtReportsCalc = require('./data/get-latest-court-reports-staging-id-and-workload-report-id')
 const getOldReductionForHistory = require('./data/get-old-reduction-for-history')
 const insertOldReductionToHistory = require('./data/insert-old-reduction-to-history')
 const getOffenderManagerTeamLduRegion = require('./data/get-offender-manager-team-ldu-region')
 const { auditReductionCreated, auditReductionEdited, auditReductionStatusChange } = require('./audit-service')
 
-module.exports.getReductions = function (id, organisationLevel, workloadType) {
+module.exports.getReductions = function (id, organisationLevel) {
   const result = {}
   const organisationalUnitType = getOrganisationUnit('name', organisationLevel)
 
-  return getBreadcrumbs(id, organisationLevel, workloadType).then(function (breadcrumbs) {
+  return getBreadcrumbs(id, organisationLevel).then(function (breadcrumbs) {
     result.breadcrumbs = breadcrumbs
     result.title = result.breadcrumbs[0].title
     result.subTitle = organisationalUnitType.displayText
@@ -38,13 +35,13 @@ module.exports.getReductions = function (id, organisationLevel, workloadType) {
   })
 }
 
-module.exports.getAddReductionsRefData = function (id, organisationLevel, workloadType) {
+module.exports.getAddReductionsRefData = function (id, organisationLevel) {
   const result = {}
   const getReductionReasonsPromise = getReductionReasons()
   const getContractedHoursPromise = getContractedHoursForWorkloadOwner(id)
   const organisationalUnitType = getOrganisationUnit('name', organisationLevel)
 
-  return getBreadcrumbs(id, organisationLevel, workloadType).then(function (breadcrumbs) {
+  return getBreadcrumbs(id, organisationLevel).then(function (breadcrumbs) {
     result.breadcrumbs = breadcrumbs
     result.title = result.breadcrumbs[0].title
     result.subTitle = organisationalUnitType.displayText
@@ -59,66 +56,45 @@ module.exports.getAddReductionsRefData = function (id, organisationLevel, worklo
   })
 }
 
-module.exports.addReduction = function (id, reduction, workloadType, loggedInUserEmail) {
+module.exports.addReduction = function (id, reduction, loggedInUserEmail) {
   return addReduction(id, reduction)
 
     .then(function () {
       return getOffenderManagerTeamLduRegion(id).then(function (offenderManagerDetails) {
         return auditReductionCreated(offenderManagerDetails, reduction, loggedInUserEmail).then(function () {
-          if (workloadType === workloadTypes.PROBATION) {
-            return getLatestIdsForWorkloadPointsRecalc(id)
-              .then(function (ids) {
-                return createWorkloadPointsRecalculationTask(ids.workloadStagingId, ids.workloadReportId, 1)
-              })
-          } else {
-            return getLatestIdsForCourtReportsCalc(id)
-              .then(function (ids) {
-                return createCourtReportsCalculationTask(ids.courtReportsStagingId, ids.workloadReportId, 1)
-              })
-          }
+          return getLatestIdsForWorkloadPointsRecalc(id)
+            .then(function (ids) {
+              return createWorkloadPointsRecalculationTask(ids.workloadStagingId, ids.workloadReportId, 1)
+            })
         })
       })
     })
 }
 
-module.exports.updateReduction = function (id, reductionId, reduction, workloadType, oldReduction, loggedInUserEmail) {
+module.exports.updateReduction = function (id, reductionId, reduction, oldReduction, loggedInUserEmail) {
   return updateReduction(reductionId, id, reduction)
     .then(function () {
       return getOffenderManagerTeamLduRegion(id).then(function (offenderManagerDetails) {
         return auditReductionEdited(offenderManagerDetails, reduction, oldReduction, loggedInUserEmail).then(function () {
-          if (workloadType === workloadTypes.PROBATION) {
-            return getLatestIdsForWorkloadPointsRecalc(id)
-              .then(function (ids) {
-                return createWorkloadPointsRecalculationTask(ids.workloadStagingId, ids.workloadReportId, 1)
-              })
-          } else {
-            return getLatestIdsForCourtReportsCalc(id)
-              .then(function (ids) {
-                return createCourtReportsCalculationTask(ids.courtReportsStagingId, ids.workloadReportId, 1)
-              })
-          }
+          return getLatestIdsForWorkloadPointsRecalc(id)
+            .then(function (ids) {
+              return createWorkloadPointsRecalculationTask(ids.workloadStagingId, ids.workloadReportId, 1)
+            })
         })
       })
     })
 }
 
-module.exports.updateReductionStatus = function (id, reductionId, reductionStatus, workloadType, oldReduction, loggedInUserEmail) {
+module.exports.updateReductionStatus = function (id, reductionId, reductionStatus, oldReduction, loggedInUserEmail) {
   const reduction = { ...oldReduction, ...{ status: reductionStatus } }
   return updateReductionStatus(reductionId, reductionStatus)
     .then(function () {
       return getOffenderManagerTeamLduRegion(id).then(function (offenderManagerDetails) {
         return auditReductionStatusChange(offenderManagerDetails, reduction, oldReduction, loggedInUserEmail).then(function () {
-          if (workloadType === workloadTypes.PROBATION) {
-            return getLatestIdsForWorkloadPointsRecalc(id)
-              .then(function (ids) {
-                return createWorkloadPointsRecalculationTask(ids.workloadStagingId, ids.workloadReportId, 1)
-              })
-          } else {
-            return getLatestIdsForCourtReportsCalc(id)
-              .then(function (ids) {
-                return createCourtReportsCalculationTask(ids.courtReportsStagingId, ids.workloadReportId, 1)
-              })
-          }
+          return getLatestIdsForWorkloadPointsRecalc(id)
+            .then(function (ids) {
+              return createWorkloadPointsRecalculationTask(ids.workloadStagingId, ids.workloadReportId, 1)
+            })
         })
       })
     })
