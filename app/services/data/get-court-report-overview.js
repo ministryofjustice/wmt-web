@@ -8,8 +8,6 @@ module.exports = function (id, type) {
 
   const selectList = [
     'link_id AS linkId',
-    'contracted_hours AS contractedHours',
-    'reduction_hours AS reduction',
     'total_sdrs AS totalSdrs',
     'total_fdrs AS totalFdrs',
     'total_oral_reports AS totalOralReports'
@@ -19,10 +17,7 @@ module.exports = function (id, type) {
     selectList.push('id')
   }
 
-  if (ORGANISATION_UNIT.OFFENDER_MANAGER.name === type) {
-    selectList.push('name')
-    selectList.push('grade_code AS grade')
-  } else if (ORGANISATION_UNIT.TEAM.name === type) {
+  if (ORGANISATION_UNIT.TEAM.name === type) {
     selectList.push(knex.raw('CONCAT(forename, \' \', surname) AS name'))
     selectList.push('grade_code AS grade')
   } else {

@@ -30,12 +30,8 @@ const renderOverview = function (req, res, next) {
     }
   }
 
-  let childOrganisationLevel
-  let childOrganisationLevelDisplayText
-  if (organisationLevel !== organisationUnitConstants.OFFENDER_MANAGER.name) {
-    childOrganisationLevel = organisationUnit.childOrganisationLevel
-    childOrganisationLevelDisplayText = getOrganisationUnit('name', childOrganisationLevel).displayText
-  }
+  const childOrganisationLevel = organisationUnit.childOrganisationLevel
+  const childOrganisationLevelDisplayText = getOrganisationUnit('name', childOrganisationLevel).displayText
 
   const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
 

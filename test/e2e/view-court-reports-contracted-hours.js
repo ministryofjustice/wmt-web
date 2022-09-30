@@ -18,7 +18,6 @@ describe('View contracted hours for court reporter', async function () {
   })
 
   it('should navigate to the court reporter contracted-hours page', async function () {
-    await browser.url(workloadOwnerDefaultUrl + '/contracted-hours')
     const breadcrumbs = await $('.govuk-breadcrumbs')
     let exists = await breadcrumbs.isExisting()
     expect(exists).to.be.equal(true)
@@ -31,25 +30,9 @@ describe('View contracted hours for court reporter', async function () {
     exists = await actionForm.isExisting()
     expect(exists).to.be.equal(true)
 
-    const link = await $('[href="' + workloadOwnerDefaultUrl + '/overview"]')
-    exists = await link.isExisting()
-    expect(exists).to.be.equal(true)
-
     const pageTitle = await $('.govuk-caption-xl')
     const text = await pageTitle.getText()
     expect(text).to.equal('Offender Manager')
-  })
-
-  it('should be accessible via the Contracted Hours tab when on any other tab', async () => {
-    await browser.url(workloadOwnerDefaultUrl + '/overview')
-
-    const subnav = await $('.wmt-sub-nav')
-    let exists = await subnav.isExisting()
-    expect(exists).to.be.equal(true)
-
-    const link = await $('[href="' + workloadOwnerDefaultUrl + '/contracted-hours"]')
-    exists = await link.isExisting()
-    expect(exists).to.be.equal(true)
   })
 
   after(function () {
