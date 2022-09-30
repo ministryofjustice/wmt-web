@@ -80,8 +80,6 @@ setupAllDataFs().then(function (result) {
   const addReductionsUrl = 'add-reduction'
   urls.push(generateLoginActionConfig(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${reductionsUrl}`))
   urls.push(generateLoginActionConfig(`${probationBase}/${offenderManager}/${extractedWorkload.offenderManagerId}/${addReductionsUrl}`))
-  urls.push(generateLoginActionConfig(`${courtReportsBase}/${offenderManager}/${extractedCourtReports.offenderManagerId}/${reductionsUrl}`))
-  urls.push(generateLoginActionConfig(`${courtReportsBase}/${offenderManager}/${extractedCourtReports.offenderManagerId}/${addReductionsUrl}`))
 
   const admin = 'admin'
   urls.push(generateLoginActionConfig(`${host}/${admin}/workload-points`))
