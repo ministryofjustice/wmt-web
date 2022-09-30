@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   hmpps: ministryofjustice/hmpps@5.1.1
-  slack: circleci/slack@4.4.2
+  slack: circleci/slack@4.10.1
   browser-tools: circleci/browser-tools@1.4.0
 
 parameters:
@@ -16,7 +16,7 @@ parameters:
     type: string
     default: 16.13-browsers
   postgres_tag:
-    default: "11"
+    default: "14"
     type: string
   database_user:
     default: "root"
@@ -29,7 +29,7 @@ executors:
   docker-env:
     docker:
       - image: cimg/node:<< pipeline.parameters.node-version >>
-      - image: bitnami/redis:5.0
+      - image: bitnami/redis:7.0
         environment:
           - ALLOW_EMPTY_PASSWORD=yes
       - image: quay.io/hmpps/hmpps-auth:latest
@@ -48,7 +48,7 @@ executors:
           - SPRING_PROFILES_ACTIVE=dev,docker
           - HMPPS_SQS_LOCALSTACK_URL=http://localhost:4566
         entrypoint: ["/bin/sh", "-c" , "sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar"]
-      - image: localstack/localstack:0.14.1
+      - image: localstack/localstack:0.14.5
         environment:
           - SERVICES=s3,sqs,sns
           - DEBUG=${DEBUG- }
