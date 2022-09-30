@@ -108,7 +108,7 @@ module.exports = function (router) {
             referenceData: result.referenceData,
             stringifiedReferenceData: stringifyReductionsData(result.referenceData),
             errors,
-            workloadType: PROBATION,
+
             reductionToPopulate: false,
             reductionEnabled: false,
             onOffenderManager: true
@@ -169,7 +169,7 @@ module.exports = function (router) {
               reductionToPopulate: true,
               reductionEnabled,
               reductionStatus,
-              workloadType: PROBATION,
+
               onOffenderManager: true
             })
           })
@@ -239,7 +239,7 @@ module.exports = function (router) {
               reductionToPopulate: true,
               reductionEnabled: reductionReason.isEnabled,
               errors: error.validationErrors,
-              workloadType: PROBATION,
+
               onOffenderManager: true
 
             })
@@ -316,7 +316,7 @@ module.exports = function (router) {
               reductionToPopulate: true,
               reductionEnabled: reductionReason.isEnabled,
               errors: error.validationErrors,
-              workloadType: PROBATION,
+
               onOffenderManager: true
             })
           } else {
@@ -456,7 +456,7 @@ module.exports = function (router) {
       scheduledReductions: results.scheduledReductions,
       archivedReductions: results.archivedReductions,
       successText,
-      workloadType: PROBATION,
+
       date: results.date,
       onOffenderManager: true
 
