@@ -314,10 +314,6 @@ workflows:
             - e2e_test
             - accessibility_test
             - integration_test
-      - request-preprod-approval:
-          type: approval
-          requires:
-            - deploy_dev
       - hmpps/deploy_env:
           name: deploy_preprod
           env: "preprod"
@@ -327,7 +323,7 @@ workflows:
             - hmpps-common-vars
             - hmpps-workload-preprod
           requires:
-            - request-preprod-approval
+            - deploy_dev
       - request-prod-approval:
           type: approval
           requires:
