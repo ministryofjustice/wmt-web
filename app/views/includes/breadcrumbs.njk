@@ -2,7 +2,7 @@
 {% if breadcrumbs.length > 1 %}
   <ol class="govuk-breadcrumbs__list">
   {% for breadcrumb in breadcrumbs.reverse() %}
-    {% if !loop.last %}
+    {% if not loop.last %}
       <li class="govuk-breadcrumbs__list-item"><a class="govuk-breadcrumbs__link" href="{{ breadcrumb.link }}">{{ breadcrumb.title }}</a></li>
     {% endif %}
   {% endfor %}
