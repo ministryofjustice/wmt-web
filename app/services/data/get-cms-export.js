@@ -35,17 +35,17 @@ module.exports = function (id, type) {
 
   return query.then(function (results) {
     results.forEach(function (result) {
-      if (!result.caseRefNo) {
-        result.caseRefNo = result.omCaseRefNo
+      if (!result.caserefno) {
+        result.caserefno = result.omcaserefno
       }
-      if (!result.contactDescription) {
-        result.contactDescription = result.omContactDescription
+      if (!result.contactdescription) {
+        result.contactdescription = result.omcontactdescription
       }
-      if (!result.contactCode) {
-        result.contactCode = result.omContactCode
+      if (!result.contactcode) {
+        result.contactcode = result.omcontactcode
       }
-      if (!result.contactDate) {
-        result.contactDate = result.omContactDate
+      if (!result.contactdate) {
+        result.contactdate = result.omcontactdate
       }
     })
     return results
