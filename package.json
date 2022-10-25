@@ -64,7 +64,7 @@
     "sinon": "14.0.1",
     "sinon-chai": "3.7.0",
     "standard": "17.0.0",
-    "supertest": "6.3.0",
+    "supertest": "6.3.1",
     "wdio-html-nice-reporter": "8.0.5",
     "webdriverio": "7.25.2"
   },
@@ -99,9 +99,15 @@
     "passport-oauth2": "1.6.1",
     "pg": "8.8.0",
     "redis": "4.3.1",
-    "superagent": "8.0.2",
+    "superagent": "8.0.3",
     "util": "0.12.4",
     "uuid": "9.0.0",
     "validator": "13.7.0"
+  },
+  "overrides": {
+    "minimatch@3.0.4": "3.0.5",
+    "recursive-readdir": {
+      "minimatch": "3.0.5"      
+    }  
   }
 }
