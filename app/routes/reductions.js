@@ -14,6 +14,8 @@ const getLastUpdated = require('../services/data/get-last-updated')
 const dateFormatter = require('../services/date-formatter')
 const ErrorHandler = require('../services/validators/error-handler')
 const ERROR_MESSAGES = require('../services/validators/validation-error-messages')
+const getTabTitle = require('../services/get-tab-title')
+
 let lastUpdated
 
 module.exports = function (router) {
@@ -99,12 +101,14 @@ module.exports = function (router) {
           const routeToReductionPage = '/' + PROBATION + '/' + organisationLevel + '/' + id + '/reductions'
           res.redirect(routeToReductionPage)
         } else {
+          const subNav = getSubNav(id, organisationLevel, req.path, PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole)
           return res.render('add-reduction', {
             breadcrumbs: result.breadcrumbs,
             linkId: id,
             title: result.title,
             subTitle: result.subTitle,
-            subNav: getSubNav(id, organisationLevel, req.path, PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
+            tabTitle: getTabTitle(result.title, subNav, organisationLevel),
+            subNav,
             referenceData: result.referenceData,
             stringifiedReferenceData: stringifyReductionsData(result.referenceData),
             errors,
@@ -157,12 +161,14 @@ module.exports = function (router) {
               reductionEnabled = reduction.isEnabled
               reductionStatus = reduction.status
             }
+            const subNav = getSubNav(id, organisationLevel, req.path, PROBATION)
             return res.render('add-reduction', {
               breadcrumbs: result.breadcrumbs,
               linkId: id,
               title: result.title,
               subTitle: result.subTitle,
-              subNav: getSubNav(id, organisationLevel, req.path, PROBATION),
+              tabTitle: getTabTitle(result.title, subNav, organisationLevel),
+              subNav,
               referenceData: result.referenceData,
               stringifiedReferenceData: stringifyReductionsData(result.referenceData),
               reduction: mapReductionToViewModel(reduction),
@@ -215,12 +221,14 @@ module.exports = function (router) {
           reduction = generateNewReductionFromRequest(req.body, reductionReason, userId)
         } catch (error) {
           if (error instanceof ValidationError) {
+            const subNav = getSubNav(id, organisationLevel, req.path, PROBATION)
             return res.status(400).render('add-reduction', {
               breadcrumbs: result.breadcrumbs,
               linkId: id,
               title: result.title,
               subTitle: result.subTitle,
-              subNav: getSubNav(id, organisationLevel, req.path, PROBATION),
+              tabTitle: getTabTitle(result.title, subNav, organisationLevel),
+              subNav,
               referenceData: result.referenceData,
               stringifiedReferenceData: stringifyReductionsData(result.referenceData),
               reduction: {
@@ -292,12 +300,14 @@ module.exports = function (router) {
           reduction = generateNewReductionFromRequest(req.body, reductionReason, userId)
         } catch (error) {
           if (error instanceof ValidationError) {
+            const subNav = getSubNav(id, organisationLevel, req.path, PROBATION)
             return res.status(400).render('add-reduction', {
               breadcrumbs: result.breadcrumbs,
               linkId: id,
               title: result.title,
               subTitle: result.subTitle,
-              subNav: getSubNav(id, organisationLevel, req.path, PROBATION),
+              tabTitle: getTabTitle(result.title, subNav, organisationLevel),
+              subNav,
               referenceData: result.referenceData,
               stringifiedReferenceData: stringifyReductionsData(result.referenceData),
               reduction: {
@@ -446,12 +456,14 @@ module.exports = function (router) {
   }
 
   const renderReductionsMainPage = function (req, res, results, successText, id, organisationLevel, error = null) {
+    const subNav = getSubNav(id, organisationLevel, req.path, PROBATION)
     const displayJson = {
       breadcrumbs: results.breadcrumbs,
       linkId: id,
       title: results.title,
       subTitle: results.subTitle,
-      subNav: getSubNav(id, organisationLevel, req.path, PROBATION),
+      tabTitle: getTabTitle(results.title, subNav, organisationLevel),
+      subNav,
       activeReductions: results.activeReductions,
       scheduledReductions: results.scheduledReductions,
       archivedReductions: results.archivedReductions,

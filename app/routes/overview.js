@@ -14,6 +14,8 @@ const getLastUpdated = require('../services/data/get-last-updated')
 const dateFormatter = require('../services/date-formatter')
 const messages = require('../constants/messages')
 const asyncMiddleware = require('../middleware/asyncMiddleware')
+const getTabTitle = require('../services/get-tab-title')
+
 let lastUpdated
 
 module.exports = function (router) {
@@ -38,12 +40,14 @@ module.exports = function (router) {
       const lastUpdated = dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY HH:mm')
       const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
       return getIndividualOverview(req.params.id, workloadTypes.PROBATION).then(function (result) {
+        const subNav = getSubNav(req.params.id, organisationUnitConstants.OFFENDER_MANAGER.name, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole)
         return res.render('individual-overview', {
           title: result.title,
           subTitle: organisationUnitConstants.OFFENDER_MANAGER.displayText,
+          tabTitle: getTabTitle(result.title, subNav, organisationUnitConstants.OFFENDER_MANAGER.name),
           breadcrumbs: result.breadcrumbs,
           organisationLevel: organisationUnitConstants.OFFENDER_MANAGER.name,
-          subNav: getSubNav(req.params.id, organisationUnitConstants.OFFENDER_MANAGER.name, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
+          subNav,
           overviewDetails: result.overviewDetails,
           date: lastUpdated,
           onOffenderManager: true
@@ -62,12 +66,14 @@ module.exports = function (router) {
       const lastUpdated = dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY HH:mm')
       const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
       return getIndividualOverview(req.params.id, workloadTypes.PROBATION).then(function (result) {
+        const subNav = getSubNav(req.params.id, organisationUnitConstants.OFFENDER_MANAGER.name, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole)
         return res.render('individual-overview', {
           title: result.title,
           subTitle: organisationUnitConstants.OFFENDER_MANAGER.displayText,
+          tabTitle: getTabTitle(result.title, subNav, organisationUnitConstants.OFFENDER_MANAGER.name),
           breadcrumbs: result.breadcrumbs,
           organisationLevel: organisationUnitConstants.OFFENDER_MANAGER.name,
-          subNav: getSubNav(req.params.id, organisationUnitConstants.OFFENDER_MANAGER.name, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
+          subNav,
           overviewDetails: result.overviewDetails,
           date: lastUpdated,
           onOffenderManager: true
@@ -162,16 +168,18 @@ const renderOverview = function (req, res, next) {
   return getLastUpdated().then(function (result) {
     lastUpdated = dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY HH:mm')
     return getOverview(id, organisationLevel).then(function (result) {
+      const subNav = getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole)
       return res.render('overview', {
         title: result.title,
         subTitle: result.subTitle,
+        tabTitle: getTabTitle(result.title, subNav, organisationLevel),
         breadcrumbs: result.breadcrumbs,
         organisationLevel,
         linkId: req.params.id,
         screen: 'overview',
         childOrganisationLevel,
         childOrganisationLevelDisplayText,
-        subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
+        subNav,
         overviewDetails: result.overviewDetails,
         date: lastUpdated,
         workloadType: workloadTypes.PROBATION,

@@ -13,6 +13,8 @@ const { Forbidden } = require('../services/errors/authentication-error')
 const messages = require('../constants/messages')
 const { SUPER_USER, MANAGER, STAFF } = require('../constants/user-roles')
 const canExportCaseloadRoles = [SUPER_USER, MANAGER, STAFF]
+const getTabTitle = require('../services/get-tab-title')
+
 let lastUpdated
 
 module.exports = function (router) {
@@ -47,13 +49,15 @@ module.exports = function (router) {
               caseloadDetailsData[3].array.totals = defaultTotals
             }
           }
+          const subNav = getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole)
           return res.render('caseload', {
             screen: 'caseload',
             linkId: req.params.id,
             title: result.title,
             subTitle: result.subTitle,
+            tabTitle: getTabTitle(result.title, subNav, organisationLevel),
             breadcrumbs: result.breadcrumbs,
-            subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
+            subNav,
             organisationLevel,
             childOrganisationLevel: orgUnit.childOrganisationLevel,
             childOrganisationLevelDisplayText: childOrgUnit.displayText,

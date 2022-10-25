@@ -20,6 +20,8 @@ const Forbidden = require('../services/errors/authentication-error').Forbidden
 const { SUPER_USER, APPLICATION_SUPPORT, MANAGER } = require('../constants/user-roles')
 const messages = require('../constants/messages')
 const canExportRoles = [SUPER_USER, MANAGER]
+const getTabTitle = require('../services/get-tab-title')
+
 let lastUpdated
 
 module.exports = function (router) {
@@ -47,13 +49,15 @@ module.exports = function (router) {
       lastUpdated = dateFormatter.formatDate(lastUpdatedDate.date_processed, 'DD-MM-YYYY HH:mm')
       return getExport(id, organisationLevel).then(function (result) {
         result.date = lastUpdated
+        const subNav = getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole)
         return res.render('export', {
           organisationLevel,
           linkId: req.params.id,
           title: result.title,
           subTitle: result.subTitle,
+          tabTitle: getTabTitle(result.title, subNav, organisationLevel),
           breadcrumbs: result.breadcrumbs,
-          subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
+          subNav,
           date: result.date,
           canExport: canExportRoles.includes(authorisedUserRole.userRole),
           onOffenderManager: true
