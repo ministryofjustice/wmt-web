@@ -107,7 +107,7 @@
   "overrides": {
     "minimatch@3.0.4": "3.0.5",
     "recursive-readdir": {
-      "minimatch": "3.0.5"      
+      "minimatch": "5.1.0"      
     }  
   }
 }
