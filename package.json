@@ -103,11 +103,5 @@
     "util": "0.12.4",
     "uuid": "9.0.0",
     "validator": "13.7.0"
-  },
-  "overrides": {
-    "minimatch@3.0.4": "3.0.5",
-    "recursive-readdir": {
-      "minimatch": "3.0.5"      
-    }  
   }
 }
