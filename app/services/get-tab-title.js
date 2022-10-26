@@ -2,7 +2,7 @@ const organisationUnitConstants = require('../constants/organisation-unit')
 
 module.exports = function (pageTitle, subNav, organisationLevel) {
   let selectedSubNavTitle = ''
-  subNav.forEach(function (item) {
+  subNav?.forEach(function (item) {
     if (item.active) {
       selectedSubNavTitle = item.title
     }
