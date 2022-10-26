@@ -9,6 +9,7 @@ const messages = require('../constants/messages')
 const roles = require('../constants/user-roles')
 const { PROBATION } = require('../constants/workload-type')
 const Forbidden = require('../services/errors/authentication-error').Forbidden
+const getTabTitle = require('../services/get-tab-title')
 
 module.exports = function (router) {
   router.get('/' + PROBATION + '/offender-manager/:id/contracted-hours', function (req, res, next) {
@@ -29,11 +30,13 @@ module.exports = function (router) {
 
     return contractedHoursService.getContractedHours(id, organisationLevel)
       .then(function (result) {
+        const subNav = getSubNav(id, organisationLevel, req.path, PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole)
         return res.render('contracted-hours', {
           title: result.title,
           subTitle: result.subTitle,
+          tabTitle: getTabTitle(result.title, subNav, organisationLevel),
           breadcrumbs: result.breadcrumbs,
-          subNav: getSubNav(id, organisationLevel, req.path, PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
+          subNav,
           contractedHours: result.contractedHours,
           woId: id,
           hoursUpdatedSuccess: req.query.hoursUpdatedSuccess,
@@ -67,12 +70,14 @@ module.exports = function (router) {
         return contractedHoursService.getContractedHours(id, organisationLevel)
           .then(function (result) {
             const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
+            const subNav = getSubNav(id, organisationLevel, req.path, PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole)
             return res.render('contracted-hours', {
               errors: error.validationErrors,
               title: result.title,
               subTitle: result.subTitle,
+              tabTitle: getTabTitle(result.title, subNav, organisationLevel),
               breadcrumbs: result.breadcrumbs,
-              subNav: getSubNav(id, organisationLevel, req.path, PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
+              subNav,
               contractedHours: updatedHours,
               woId: id,
               onOffenderManager: true

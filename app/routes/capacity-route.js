@@ -19,6 +19,8 @@ const dateFormatter = require('../services/date-formatter')
 const getCaseDetailsView = require('../services/get-case-details-view')
 const getBreadcrumbs = require('../services/get-breadcrumbs')
 const { SUPER_USER, MANAGER, STAFF } = require('../constants/user-roles')
+const getTabTitle = require('../services/get-tab-title')
+
 let lastUpdated
 const canExportOutstandingRoles = [SUPER_USER, MANAGER, STAFF]
 
@@ -61,12 +63,14 @@ module.exports = function (router) {
           const caseDetails = result
           return getLastUpdated().then(function (result) {
             lastUpdated = dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY HH:mm')
+            const subNav = getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole)
             return res.render('capacity', {
               screen: 'capacity',
               linkId: id,
               title: capacityBreakdown.title,
               subTitle: capacityBreakdown.subTitle,
-              subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
+              tabTitle: getTabTitle(capacityBreakdown.title, subNav, organisationLevel),
+              subNav,
               breadcrumbs: capacityBreakdown.breadcrumbs,
               capacity: capacityBreakdown.capacityTable,
               stringifiedCapacity: stringifyCapacityData(capacityBreakdown.capacityTable),
@@ -131,12 +135,14 @@ module.exports = function (router) {
           return getLastUpdated().then(function (result) {
             lastUpdated = dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY HH:mm')
             result.date = lastUpdated
+            const subNav = getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole)
             return res.render('capacity', {
               screen: 'capacity',
               linkId: id,
               title: capacityBreakdown.title,
               subTitle: capacityBreakdown.subTitle,
-              subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
+              tabTitle: getTabTitle(capacityBreakdown.title, subNav, organisationLevel),
+              subNav,
               breadcrumbs: capacityBreakdown.breadcrumbs,
               capacity: capacityBreakdown.capacityTable,
               stringifiedCapacity: stringifyCapacityData(capacityBreakdown.capacityTable),

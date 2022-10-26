@@ -5,6 +5,7 @@ const authorisation = require('../authorisation')
 const workloadTypes = require('../../app/constants/workload-type')
 const getLastUpdated = require('../services/data/get-last-updated')
 const dateFormatter = require('../services/date-formatter')
+const getTabTitle = require('../services/get-tab-title')
 
 let lastUpdated
 
@@ -24,11 +25,13 @@ module.exports = function (router) {
       return getCaseProgress(id, organisationLevel).then(function (result) {
         let stringifiedCaseProgressList = Object.assign([], result.caseProgressList)
         stringifiedCaseProgressList = JSON.stringify(stringifiedCaseProgressList)
+        const subNav = getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole)
         return res.render('case-progress', {
           title: result.title,
           subTitle: result.subTitle,
+          tabTitle: getTabTitle(result.title, subNav, organisationLevel),
           breadcrumbs: result.breadcrumbs,
-          subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole),
+          subNav,
           caseProgressList: result.caseProgressList,
           stringifiedCaseProgressList,
           date: lastUpdated,
