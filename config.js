@@ -22,12 +22,12 @@ module.exports = {
   SAVE_UNINITIALIZED_SESSION: process.env.WMT_WEB_SESSION_COOKIE_SAVE_UNINITIALISED || 'false',
 
   // DB
-  LIVE_DATABASE_SERVER: process.env.WMT_LIVE_DB_SERVER || 'localhost',
+  LIVE_DATABASE_SERVER: process.env.WMT_LIVE_DB_SERVER || '127.0.0.1',
   LIVE_DATABASE: process.env.WMT_LIVE_DB_NAME || 'postgres',
   LIVE_DATABASE_USERNAME: process.env.WMT_LIVE_DB_USERNAME || 'root',
   LIVE_DATABASE_PASSWORD: process.env.WMT_LIVE_DB_PASSWORD || 'dev',
 
-  HISTORY_DATABASE_SERVER: process.env.WMT_HISTORY_DB_SERVER || 'localhost',
+  HISTORY_DATABASE_SERVER: process.env.WMT_HISTORY_DB_SERVER || '127.0.0.1',
   HISTORY_DATABASE: process.env.WMT_HISTORY_DB_NAME || 'postgres',
   HISTORY_DATABASE_USERNAME: process.env.WMT_HISTORY_DB_USERNAME || 'root',
   HISTORY_DATABASE_PASSWORD: process.env.WMT_HISTORY_DB_PASSWORD || 'dev',
@@ -51,8 +51,8 @@ module.exports = {
   APPINSIGHTS_INSTRUMENTATIONKEY: process.env.APPINSIGHTS_INSTRUMENTATIONKEY,
   apis: {
     hmppsAuth: {
-      url: get('HMPPS_AUTH_URL', 'http://localhost:9090/auth', requiredInProduction),
-      externalUrl: get('HMPPS_AUTH_EXTERNAL_URL', get('HMPPS_AUTH_URL', 'http://localhost:9090/auth')),
+      url: get('HMPPS_AUTH_URL', 'http://127.0.0.1:9090/auth', requiredInProduction),
+      externalUrl: get('HMPPS_AUTH_EXTERNAL_URL', get('HMPPS_AUTH_URL', 'http://127.0.0.1:9090/auth')),
       timeout: {
         response: get('HMPPS_AUTH_TIMEOUT_RESPONSE', 10000),
         deadline: get('HMPPS_AUTH_TIMEOUT_DEADLINE', 10000)
@@ -66,7 +66,7 @@ module.exports = {
       apiClientSecret: get('API_CLIENT_SECRET', 'clientsecret', requiredInProduction)
     },
     allocationsService: {
-      url: get('ALLOCATIONS_SERVICE_URL', 'http://localhost:8099', requiredInProduction),
+      url: get('ALLOCATIONS_SERVICE_URL', 'http://127.0.0.1:8099', requiredInProduction),
       timeout: {
         response: 10000,
         deadline: 10000
@@ -78,7 +78,7 @@ module.exports = {
       }
     },
     userPreferenceService: {
-      url: get('USER_PREFERENCE_SERVICE_URL', 'http://localhost:8098', requiredInProduction),
+      url: get('USER_PREFERENCE_SERVICE_URL', 'http://127.0.0.1:8098', requiredInProduction),
       timeout: {
         response: 10000,
         deadline: 10000
@@ -90,7 +90,7 @@ module.exports = {
       }
     },
     tokenVerification: {
-      url: get('TOKEN_VERIFICATION_API_URL', 'http://localhost:8100', requiredInProduction),
+      url: get('TOKEN_VERIFICATION_API_URL', 'http://127.0.0.1:8100', requiredInProduction),
       timeout: {
         response: get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000),
         deadline: get('TOKEN_VERIFICATION_API_TIMEOUT_DEADLINE', 5000)
@@ -110,7 +110,7 @@ module.exports = {
     expiryMinutes: Number(get('WEB_SESSION_TIMEOUT_IN_MINUTES', 720))
   },
   redis: {
-    host: get('REDIS_HOST', 'localhost', requiredInProduction),
+    host: get('REDIS_HOST', '127.0.0.1', requiredInProduction),
     port: parseInt(process.env.REDIS_PORT, 10) || 6379,
     password: process.env.REDIS_AUTH_TOKEN,
     tls_enabled: get('REDIS_TLS_ENABLED', 'false')
@@ -119,20 +119,20 @@ module.exports = {
     region: process.env.DASHBOARD_S3_REGION || 'eu-west-2',
     accessKeyId: process.env.DASHBOARD_AWS_ACCESS_KEY_ID || 'foobar',
     secretAccessKey: process.env.DASHBOARD_AWS_SECRET_ACCESS_KEY || 'foobar',
-    endpoint: production ? null : 'http://localhost:4566',
+    endpoint: production ? null : 'http://127.0.0.1:4566',
     bucketName: process.env.DASHBOARD_AWS_BUCKET || 'wmt-web'
   },
   audit: {
     region: process.env.AUDIT_SQS_REGION || 'eu-west-2',
     accessKeyId: process.env.AUDIT_SQS_ACCESS_KEY_ID || 'foobar',
     secretAccessKey: process.env.AUDIT_SQS_SECRET_ACCESS_KEY || 'foobar',
-    endpoint: production ? null : 'http://localhost:4566',
-    queueUrl: process.env.AUDIT_SQS_QUEUE_URL || 'http://localhost:4566/000000000000/audit_event_queue'
+    endpoint: production ? null : 'http://127.0.0.1:4566',
+    queueUrl: process.env.AUDIT_SQS_QUEUE_URL || 'http://127.0.0.1:4566/000000000000/audit_event_queue'
   },
   googleAnalyticsKey: get('GOOGLE_ANALYTICS_KEY', null),
   nav: {
     allocations: {
-      url: get('WORKFORCE_ALLOCATIONS_URL', 'http://localhost:3010', requiredInProduction)
+      url: get('WORKFORCE_ALLOCATIONS_URL', 'http://127.0.0.1:3010', requiredInProduction)
     }
   },
   staticResourceCacheDuration: 20

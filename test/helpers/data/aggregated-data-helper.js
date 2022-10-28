@@ -513,6 +513,22 @@ module.exports.addCaseDetails = function (caseDetails) {
     })
 }
 
+module.exports.addCMSData = function (cmsData) {
+  const inserts = []
+  return knex('adjustments')
+    .withSchema('app')
+    .returning('id')
+    .insert(cmsData).then(function ([id]) {
+      inserts.push({ table: 'adjustments', id: id.id })
+      return knex
+        .schema
+        .raw('REFRESH MATERIALIZED VIEW app.cms_export_view')
+        .then(function () {
+          return inserts
+        })
+    })
+}
+
 module.exports.selectIdsForWorkloadOwner = function () {
   const results = []
 

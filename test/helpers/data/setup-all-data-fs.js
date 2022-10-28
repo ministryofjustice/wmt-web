@@ -41,6 +41,17 @@ const caseDetailsData =
     location: 'COMMUNITY'
   }
 
+const cmsData = {
+  adjustment_reason_id: 1,
+  workload_owner_id: 1,
+  points: -9,
+  contact_id: 123456789,
+  effective_from: new Date(),
+  effective_to: new Date(),
+  status: 'ACTIVE',
+  case_ref_no: 'X555555'
+}
+
 module.exports = function () {
   return dailyArchiveDataHelper.createDailyArchive(dailyArchiveData).then(function (dailyArchiveId) {
     const dailyArchiveIdInsert = [{ table: 'daily_archive_data', id: dailyArchiveId }]
@@ -50,25 +61,28 @@ module.exports = function () {
           caseDetailsData.workload_id = workloadInserts.filter((item) => item.table === 'workload')[1].id
           return aggregatedDataHelper.addCaseDetails(caseDetailsData).then(function (caseDetailInserts) {
             workloadInserts = workloadInserts.concat(caseDetailInserts)
-
-            const promises = Object.entries(users).map(function ([, u]) {
-              return userRoleHelper.addUserAndRole(u.username.toLowerCase(), u.roleId)
-            })
-            return Promise.all(promises).then(function (userInserts) {
-              try {
-                fs.writeFileSync(dailyArchiveInserts, JSON.stringify(dailyArchiveIdInsert))
-                fs.writeFileSync(pallyCourtInserts, JSON.stringify(courtReportInserts))
-                fs.writeFileSync(pallyWorkloadInserts, JSON.stringify(workloadInserts))
-                fs.writeFileSync(pallyUserInserts, JSON.stringify(userInserts.reduce((acc, x) => acc.concat(x), [])))
-              } catch (err) {
-                console.error(err)
-              }
-              return {
-                courtReportInserts,
-                workloadInserts,
-                dailyArchiveIdInsert,
-                userInserts
-              }
+            cmsData.workload_owner_id = workloadInserts.filter((item) => item.table === 'workload_owner')[0].id
+            return aggregatedDataHelper.addCMSData(cmsData).then(function (CMSInserts) {
+              workloadInserts = workloadInserts.concat(CMSInserts)
+              const promises = Object.entries(users).map(function ([, u]) {
+                return userRoleHelper.addUserAndRole(u.username.toLowerCase(), u.roleId)
+              })
+              return Promise.all(promises).then(function (userInserts) {
+                try {
+                  fs.writeFileSync(dailyArchiveInserts, JSON.stringify(dailyArchiveIdInsert))
+                  fs.writeFileSync(pallyCourtInserts, JSON.stringify(courtReportInserts))
+                  fs.writeFileSync(pallyWorkloadInserts, JSON.stringify(workloadInserts))
+                  fs.writeFileSync(pallyUserInserts, JSON.stringify(userInserts.reduce((acc, x) => acc.concat(x), [])))
+                } catch (err) {
+                  console.error(err)
+                }
+                return {
+                  courtReportInserts,
+                  workloadInserts,
+                  dailyArchiveIdInsert,
+                  userInserts
+                }
+              })
             })
           })
         })
