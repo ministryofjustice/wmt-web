@@ -314,6 +314,7 @@ workflows:
             - e2e_test
             - accessibility_test
             - integration_test
+          helm_timeout: 5m
       - hmpps/deploy_env:
           name: deploy_preprod
           env: "preprod"
@@ -324,6 +325,7 @@ workflows:
             - hmpps-workload-preprod
           requires:
             - deploy_dev
+          helm_timeout: 5m
       - request-prod-approval:
           type: approval
           requires:
@@ -340,6 +342,7 @@ workflows:
             - hmpps-workload-prod
           requires:
             - request-prod-approval
+          helm_timeout: 5m
 
   security:
     triggers:
