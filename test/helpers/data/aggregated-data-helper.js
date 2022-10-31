@@ -522,7 +522,7 @@ module.exports.addCMSData = function (cmsData) {
       inserts.push({ table: 'adjustments', id: id.id })
       return knex
         .schema
-        .raw('REFRESH MATERIALIZED VIEW app.cms_export_view')
+        .raw('REFRESH MATERIALIZED VIEW app.enriched_cms_export_view')
         .then(function () {
           return inserts
         })

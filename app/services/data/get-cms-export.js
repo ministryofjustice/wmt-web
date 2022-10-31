@@ -22,10 +22,15 @@ module.exports = function (id, type) {
     'caserefno',
     'omcaserefno',
     'omcontactdescription',
-    'omcontactcode'
+    'omcontactcode',
+    'cmsregionname',
+    'cmscontactlduname',
+    'cmscontactteamname',
+    'cmscontactname',
+    'cmscontactgradecode'
   ]
 
-  let query = knex('cms_export_view')
+  let query = knex('enriched_cms_export_view')
     .withSchema('app')
     .select(selectList)
 
@@ -46,6 +51,21 @@ module.exports = function (id, type) {
       }
       if (!result.contactdate) {
         result.contactdate = result.omcontactdate
+      }
+      if (!result.contactregionname) {
+        result.contactregionname = result.cmsregionname
+      }
+      if (!result.contactlduname) {
+        result.contactlduname = result.cmscontactlduname
+      }
+      if (!result.contactteamname) {
+        result.contactteamname = result.cmscontactteamname
+      }
+      if (!result.contactname) {
+        result.contactname = result.cmscontactname
+      }
+      if (!result.contactgradecode) {
+        result.contactgradecode = result.cmscontactgradecode
       }
     })
     return results
