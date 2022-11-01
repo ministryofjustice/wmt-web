@@ -26,146 +26,11 @@ const canExportOutstandingRoles = [SUPER_USER, MANAGER, STAFF]
 
 module.exports = function (router) {
   router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/caseload-capacity', function (req, res, next) {
-    let capacityDateRange
-    let errors
-
-    try {
-      capacityDateRange = dateRangeHelper.createCapacityDateRange(req.query)
-    } catch (error) {
-      if (error instanceof ValidationError) {
-        errors = error.validationErrors
-        capacityDateRange = dateRangeHelper.createCapacityDateRange({})
-      } else {
-        throw error
-      }
-    }
-
-    const organisationLevel = req.params.organisationLevel
-    let id
-
-    if (organisationLevel !== organisationUnit.NATIONAL.name) {
-      id = req.params.id
-    }
-
-    const orgUnit = getOrganisationUnit('name', organisationLevel)
-    let childOrgUnitDisplayText
-    if (organisationLevel !== organisationUnit.OFFENDER_MANAGER.name) {
-      childOrgUnitDisplayText = getOrganisationUnit('name', orgUnit.childOrganisationLevel).displayText
-    }
-
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
-
-    return getCapacityView(id, capacityDateRange, organisationLevel).then(function (result) {
-      const capacityBreakdown = result
-      return getOutstandingReports(id, organisationLevel).then(function (result) {
-        const outstandingReports = result
-        return getCaseDetailsView(id, organisationLevel).then(function (result) {
-          const caseDetails = result
-          return getLastUpdated().then(function (result) {
-            lastUpdated = dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY HH:mm')
-            const subNav = getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole)
-            return res.render('capacity', {
-              screen: 'capacity',
-              linkId: id,
-              title: capacityBreakdown.title,
-              subTitle: capacityBreakdown.subTitle,
-              tabTitle: getTabTitle(capacityBreakdown.title, subNav, organisationLevel),
-              subNav,
-              breadcrumbs: capacityBreakdown.breadcrumbs,
-              capacity: capacityBreakdown.capacityTable,
-              stringifiedCapacity: stringifyCapacityData(capacityBreakdown.capacityTable),
-              errors,
-              capacityBreakdown: capacityBreakdown.capacityBreakdown,
-              capacityBreakdownTotals: capacityBreakdown.capacityBreakdownTotals,
-              outstandingReports: outstandingReports.result,
-              outstandingReportsTotals: outstandingReports.totals,
-              caseDetails,
-              childOrganisationLevel: orgUnit.childOrganisationLevel,
-              childOrganisationLevelDisplayText: childOrgUnitDisplayText,
-              organisationLevel,
-              date: lastUpdated,
-              canExportOutstanding: canExportOutstandingRoles.includes(req.user.user_role),
-              workloadType: workloadTypes.PROBATION,
-              onOffenderManager: true
-            })
-          })
-        })
-      })
-    }).catch(function (error) {
-      next(error)
-    })
+    return renderView(req, res, next, req.query)
   })
 
   router.post('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/caseload-capacity', function (req, res, next) {
-    let capacityDateRange
-    let errors
-
-    try {
-      capacityDateRange = dateRangeHelper.createCapacityDateRange(req.body)
-    } catch (error) {
-      if (error instanceof ValidationError) {
-        errors = error.validationErrors
-        capacityDateRange = dateRangeHelper.createCapacityDateRange({})
-      } else {
-        throw error
-      }
-    }
-
-    const organisationLevel = req.params.organisationLevel
-    let id
-
-    if (organisationLevel !== organisationUnit.NATIONAL.name) {
-      id = req.params.id
-    }
-
-    const orgUnit = getOrganisationUnit('name', organisationLevel)
-    let childOrgUnitDisplayText
-    if (organisationLevel !== organisationUnit.OFFENDER_MANAGER.name) {
-      childOrgUnitDisplayText = getOrganisationUnit('name', orgUnit.childOrganisationLevel).displayText
-    }
-
-    const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
-
-    return getCapacityView(id, capacityDateRange, organisationLevel).then(function (result) {
-      const capacityBreakdown = result
-      return getOutstandingReports(id, organisationLevel).then(function (result) {
-        const outstandingReports = result
-        return getCaseDetailsView(id, organisationLevel).then(function (result) {
-          const caseDetails = result
-          return getLastUpdated().then(function (result) {
-            lastUpdated = dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY HH:mm')
-            result.date = lastUpdated
-            const subNav = getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole)
-            return res.render('capacity', {
-              screen: 'capacity',
-              linkId: id,
-              title: capacityBreakdown.title,
-              subTitle: capacityBreakdown.subTitle,
-              tabTitle: getTabTitle(capacityBreakdown.title, subNav, organisationLevel),
-              subNav,
-              breadcrumbs: capacityBreakdown.breadcrumbs,
-              capacity: capacityBreakdown.capacityTable,
-              stringifiedCapacity: stringifyCapacityData(capacityBreakdown.capacityTable),
-              errors,
-              capacityBreakdown: capacityBreakdown.capacityBreakdown,
-              capacityBreakdownTotals: capacityBreakdown.capacityBreakdownTotals,
-              outstandingReports: outstandingReports.result,
-              outstandingReportsTotals: outstandingReports.totals,
-              caseDetails,
-              childOrganisationLevel: orgUnit.childOrganisationLevel,
-              childOrganisationLevelDisplayText: childOrgUnitDisplayText,
-              organisationLevel,
-              date: result.date,
-              canExportOutstanding: canExportOutstandingRoles.includes(req.user.user_role),
-              workloadType: workloadTypes.PROBATION,
-              onOffenderManager: true
-            })
-          })
-        })
-      })
-    }).catch(function (error) {
-      next(error)
-    })
+    return renderView(req, res, next, req.body)
   })
 
   router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/capacity/outstanding-csv', function (req, res, next) {
@@ -199,6 +64,69 @@ module.exports = function (router) {
         next(error)
       })
     })
+  })
+}
+
+const renderView = function (req, res, next, dateParameters) {
+  let capacityDateRange
+  let errors
+
+  try {
+    capacityDateRange = dateRangeHelper.createCapacityDateRange(dateParameters)
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      errors = error.validationErrors
+      capacityDateRange = dateRangeHelper.createCapacityDateRange({})
+    } else {
+      throw error
+    }
+  }
+
+  const organisationLevel = req.params.organisationLevel
+  let id
+
+  if (organisationLevel !== organisationUnit.NATIONAL.name) {
+    id = req.params.id
+  }
+
+  const orgUnit = getOrganisationUnit('name', organisationLevel)
+  let childOrgUnitDisplayText
+  if (organisationLevel !== organisationUnit.OFFENDER_MANAGER.name) {
+    childOrgUnitDisplayText = getOrganisationUnit('name', orgUnit.childOrganisationLevel).displayText
+  }
+
+  const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
+  return Promise.all([getCapacityView(id, capacityDateRange, organisationLevel), getOutstandingReports(id, organisationLevel), getCaseDetailsView(id, organisationLevel)]).then(function ([capacityBreakdown, outstandingReports, caseDetails]) {
+    return getLastUpdated().then(function (result) {
+      lastUpdated = dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY HH:mm')
+      const subNav = getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole)
+      return res.render('capacity', {
+        screen: 'capacity',
+        linkId: id,
+        title: capacityBreakdown.title,
+        subTitle: capacityBreakdown.subTitle,
+        tabTitle: getTabTitle(capacityBreakdown.title, subNav, organisationLevel),
+        subNav,
+        breadcrumbs: capacityBreakdown.breadcrumbs,
+        capacity: capacityBreakdown.capacityTable,
+        stringifiedCapacity: stringifyCapacityData(capacityBreakdown.capacityTable),
+        errors,
+        capacityBreakdown: capacityBreakdown.capacityBreakdown,
+        capacityBreakdownTotals: capacityBreakdown.capacityBreakdownTotals,
+        outstandingReports: outstandingReports.result,
+        outstandingReportsTotals: outstandingReports.totals,
+        caseDetails,
+        childOrganisationLevel: orgUnit.childOrganisationLevel,
+        childOrganisationLevelDisplayText: childOrgUnitDisplayText,
+        organisationLevel,
+        date: lastUpdated,
+        canExportOutstanding: canExportOutstandingRoles.includes(req.user.user_role),
+        workloadType: workloadTypes.PROBATION,
+        onOffenderManager: true
+      })
+    })
+  }).catch(function (error) {
+    next(error)
   })
 }
 
