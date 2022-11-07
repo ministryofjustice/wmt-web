@@ -24,7 +24,7 @@ describe('LDU Omic Overview', function () {
 
       const pageTitle = await $('.govuk-caption-xl')
       const text = await pageTitle.getText()
-      expect(text).to.equal('Probation Delivery Unit')
+      expect(text).to.equal('OMIC')
     })
 
     after(function () {
@@ -51,7 +51,7 @@ describe('LDU Omic Overview', function () {
 
       const pageTitle = await $('.govuk-caption-xl')
       const text = await pageTitle.getText()
-      expect(text).to.equal('Probation Delivery Unit')
+      expect(text).to.equal('OMIC')
     })
 
     it('should be able to go to export page', async function () {
@@ -90,7 +90,7 @@ describe('LDU Omic Overview', function () {
 
       const pageTitle = await $('.govuk-caption-xl')
       const text = await pageTitle.getText()
-      expect(text).to.equal('Probation Delivery Unit')
+      expect(text).to.equal('OMIC')
     })
 
     it('should not be able to go to export page', async function () {
@@ -122,7 +122,7 @@ describe('LDU Omic Overview', function () {
 
       const pageTitle = await $('.govuk-caption-xl')
       const text = await pageTitle.getText()
-      expect(text).to.equal('Probation Delivery Unit')
+      expect(text).to.equal('OMIC')
     })
 
     it('should be able to go to export page', async function () {

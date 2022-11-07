@@ -115,7 +115,7 @@ describe('View court-reports overview', function () {
 
     let pageTitle = await $('.govuk-caption-xl')
     let text = await pageTitle.getText()
-    expect(text).to.equal('National')
+    expect(text).to.equal('Courts')
 
     let link = await $('[href="' + regionDefaultUrl + '"]')
     await link.click()
@@ -143,7 +143,7 @@ describe('View court-reports overview', function () {
     await browser.url(teamDefaultUrl)
     let pageTitle = await $('.govuk-caption-xl')
     let text = await pageTitle.getText()
-    expect(text).to.equal('Team')
+    expect(text).to.equal('Courts')
 
     let link = await $('[href="' + nationalDefaultUrl + '"]')
     let exists = await link.isExisting()

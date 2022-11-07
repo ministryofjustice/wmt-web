@@ -14,7 +14,7 @@ describe('National Omic Overview', function () {
     it('should show regional breakdown table', async function () {
       const element = await $('.sln-table-org-level')
       const text = await element.getText()
-      expect(text).to.equal('OMIC')
+      expect(text).to.equal('Region')
     })
 
     it('should allow the user to navigate down the org hierarchy from the national page', async function () {
