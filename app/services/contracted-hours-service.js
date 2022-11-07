@@ -6,16 +6,22 @@ const getBreadcrumbs = require('./get-breadcrumbs')
 const getOrganisationUnit = require('./helpers/org-unit-finder')
 const getOffenderManagerTeamLduRegion = require('./data/get-offender-manager-team-ldu-region')
 const { auditContractedHoursEdited } = require('./audit-service')
+const navTitleConstants = require('./nav-title')
 
 module.exports.getContractedHours = function (id, organisationLevel) {
   const organisationalUnitType = getOrganisationUnit('name', organisationLevel)
   return getBreadcrumbs(id, organisationLevel).then(function (breadcrumbs) {
     return getContractedHoursForWorkloadOwner(id)
       .then(function (result) {
+        let title = breadcrumbs[0].title
+        if (organisationalUnitType.name === 'hmpps') {
+          title = organisationalUnitType.displayText
+        }
+        const subTitle = navTitleConstants.OFFENDER_MANAGER.displayText
         return {
           breadcrumbs,
-          title: breadcrumbs[0].title,
-          subTitle: organisationalUnitType.displayText,
+          title,
+          subTitle,
           contractedHours: result
         }
       })
