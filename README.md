@@ -7,7 +7,7 @@ This is the webserver application that will present the information stored in th
 It is a node.js application using the express web framework.
 
 ## Prerequisites
-- Node v16 (managed using [nvm](https://github.com/creationix/nvm))
+- Node v18 (managed using [nvm](https://github.com/creationix/nvm))
 - Docker
 
 On OSX (using [homebrew](https://brew.sh/)):
@@ -17,8 +17,8 @@ On OSX (using [homebrew](https://brew.sh/)):
 
 - Go to [Docker get started](https://www.docker.com/get-started) to install Docker
 
-Install Node version 14
-- `nvm install 14`
+Install Node version 18
+- `nvm install 18`
 
 ## Getting Started Locally
 
@@ -48,7 +48,7 @@ All passwords of test users are `password123456`.
 To run Unit Tests run the following command:
 
 ```
-npm run test
+npm t
 ```
 
 ### Integration Tests
