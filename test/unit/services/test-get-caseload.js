@@ -4,7 +4,6 @@ const sinon = require('sinon')
 
 const proxyquire = require('proxyquire')
 const orgUnitConstant = require('../../../app/constants/organisation-unit.js')
-const orgUnitFinder = require('../../../app/services/helpers/org-unit-finder')
 const caseType = require('../../../app/constants/case-type.js')
 const breadcrumbHelper = require('../../helpers/breadcrumb-helper')
 
@@ -141,10 +140,9 @@ describe('services/get-caseload', function () {
     caseloadHelper.getCaseloadByType.withArgs(OVERALL_CASELOAD, caseType.LICENSE).returns({})
     caseloadHelper.calculateTotalTiersRow.withArgs([{}]).returns({})
     return getCaseload(id, teamName).then(function (result) {
-      const teamSubtitle = orgUnitFinder('name', teamName).displayText
       assert(getBreadcrumbs.called)
       expect(result.breadcrumbs).to.eql(breadcrumbs)
-      expect(result.subTitle).to.eql(teamSubtitle)
+      expect(result.subTitle).to.eql('Offender Manager')
       expect(result.title).to.eql(expectedTitle)
     })
   })
