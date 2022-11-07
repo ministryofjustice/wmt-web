@@ -122,21 +122,21 @@ describe('View court-reports overview', function () {
 
     pageTitle = await $('.govuk-caption-xl')
     text = await pageTitle.getText()
-    expect(text).to.equal('Region')
+    expect(text).to.equal('Courts')
 
     link = await $('[href="' + lduDefaultUrl + '"]')
     await link.click()
 
     pageTitle = await $('.govuk-caption-xl')
     text = await pageTitle.getText()
-    expect(text).to.equal('Probation Delivery Unit')
+    expect(text).to.equal('Courts')
 
     link = await $('[href="' + teamDefaultUrl + '"]')
     await link.click()
 
     pageTitle = await $('.govuk-caption-xl')
     text = await pageTitle.getText()
-    expect(text).to.equal('Team')
+    expect(text).to.equal('Courts')
   })
 
   it('should contain breadcrumbs which allow the user to navigate up the org hierarchy', async function () {
@@ -162,21 +162,21 @@ describe('View court-reports overview', function () {
 
     pageTitle = await $('.govuk-caption-xl')
     text = await pageTitle.getText()
-    expect(text).to.equal('Probation Delivery Unit')
+    expect(text).to.equal('Courts')
 
     link = await $('[href="' + regionDefaultUrl + '"]')
     await link.click()
 
     pageTitle = await $('.govuk-caption-xl')
     text = await pageTitle.getText()
-    expect(text).to.equal('Region')
+    expect(text).to.equal('Courts')
 
     link = await $('[href="' + nationalDefaultUrl + '"]')
     await link.click()
 
     pageTitle = await $('.govuk-caption-xl')
     text = await pageTitle.getText()
-    expect(text).to.equal('National')
+    expect(text).to.equal('Courts')
   })
 
   after(function () {

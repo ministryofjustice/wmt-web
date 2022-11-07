@@ -116,7 +116,7 @@ describe('National', function () {
 
       pageTitle = await $('.govuk-caption-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Team')
+      expect(text).to.equal('Offender Manager')
 
       link = await $('[href="' + lduDefaultUrl + '"]')
       exists = await link.isExisting()
@@ -136,7 +136,7 @@ describe('National', function () {
 
       pageTitle = await $('.govuk-caption-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Region')
+      expect(text).to.equal('Offender Manager')
 
       link = await $('[href="' + nationalDefaultUrl + '"]')
       exists = await link.isExisting()
@@ -146,7 +146,7 @@ describe('National', function () {
 
       pageTitle = await $('.govuk-caption-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('National')
+      expect(text).to.equal('Offender Manager')
     })
 
     after(function () {
