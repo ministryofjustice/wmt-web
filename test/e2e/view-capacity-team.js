@@ -24,7 +24,7 @@ describe('Team', () => {
     it('should navigate to the team caseload capacity screen', async () => {
       pageSubtitle = await $('.govuk-caption-xl')
       pageSubtitle = await pageSubtitle.getText()
-      expect(pageSubtitle).to.equal('Team')
+      expect(pageSubtitle).to.equal('Offender Manager')
 
       const fromDayField = await $('#capacity-from-day')
       const fromMonthField = await $('#capacity-from-month')

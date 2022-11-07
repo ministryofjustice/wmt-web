@@ -63,7 +63,7 @@ describe('National', function () {
       await browser.url(nationalDefaultUrl + '/overview')
       let pageTitle = await $('.govuk-caption-xl')
       let text = await pageTitle.getText()
-      expect(text).to.equal('National')
+      expect(text).to.equal('Offender Manager')
       let link = await $('[href="' + regionDefaultUrl + '"]')
       await link.click()
 
@@ -126,7 +126,7 @@ describe('National', function () {
 
       pageTitle = await $('.govuk-caption-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Probation Delivery Unit')
+      expect(text).to.equal('Offender Manager')
 
       link = await $('[href="' + regionDefaultUrl + '"]')
       exists = await link.isExisting()

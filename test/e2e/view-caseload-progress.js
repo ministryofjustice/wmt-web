@@ -72,7 +72,7 @@ describe('View caseload progress flow', () => {
 
     const pageTitle = await $('.govuk-caption-xl')
     const text = await pageTitle.getText()
-    expect(text).to.equal('Team')
+    expect(text).to.equal('Offender Manager')
   })
 
   it('should navigate to the ldu caseload progress screen', async () => {
@@ -100,7 +100,7 @@ describe('View caseload progress flow', () => {
 
     const pageTitle = await $('.govuk-caption-xl')
     const text = await pageTitle.getText()
-    expect(text).to.equal('Probation Delivery Unit')
+    expect(text).to.equal('Offender Manager')
   })
 
   it('should navigate to the region caseload progress screen', async () => {
@@ -128,7 +128,7 @@ describe('View caseload progress flow', () => {
 
     const pageTitle = await $('.govuk-caption-xl')
     const text = await pageTitle.getText()
-    expect(text).to.equal('Region')
+    expect(text).to.equal('Offender Manager')
   })
 
   it('should navigate to the national caseload progress screen', async () => {
@@ -156,7 +156,7 @@ describe('View caseload progress flow', () => {
 
     const pageTitle = await $('.govuk-caption-xl')
     const text = await pageTitle.getText()
-    expect(text).to.equal('National')
+    expect(text).to.equal('Offender Manager')
   })
 
   it('should be accessible via the Case Progress tab on each org levels default view', async () => {

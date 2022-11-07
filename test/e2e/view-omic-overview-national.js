@@ -14,14 +14,14 @@ describe('National Omic Overview', function () {
     it('should show regional breakdown table', async function () {
       const element = await $('.sln-table-org-level')
       const text = await element.getText()
-      expect(text).to.equal('Region')
+      expect(text).to.equal('OMIC')
     })
 
     it('should allow the user to navigate down the org hierarchy from the national page', async function () {
       await browser.url(nationalDefaultUrl + '/overview')
       let pageTitle = await $('.govuk-caption-xl')
       let text = await pageTitle.getText()
-      expect(text).to.equal('National')
+      expect(text).to.equal('OMIC')
 
       const activeRegion = await browser.findElements('xpath', '//*[@id="example"]/tbody/tr[position()=1]/td[position()=1]/a')
       const viewRegionLink = await $(activeRegion[0])
@@ -29,7 +29,7 @@ describe('National Omic Overview', function () {
 
       pageTitle = await $('.govuk-caption-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Region')
+      expect(text).to.equal('OMIC')
 
       const activeLdu = await browser.findElements('xpath', '//*[@id="example"]/tbody/tr[position()=1]/td[position()=1]/a')
       const viewLduLink = await $(activeLdu[0])
@@ -38,7 +38,7 @@ describe('National Omic Overview', function () {
 
       pageTitle = await $('.govuk-caption-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Probation Delivery Unit')
+      expect(text).to.equal('OMIC')
     })
 
     it('should contain breadcrumbs which allow the user to navigate up the org hierarchy', async function () {
@@ -49,7 +49,7 @@ describe('National Omic Overview', function () {
 
       let pageTitle = await $('.govuk-caption-xl')
       let text = await pageTitle.getText()
-      expect(text).to.equal('Region')
+      expect(text).to.equal('OMIC')
 
       const breadcrumbNational = await browser.findElements('xpath', '//*[@class="govuk-breadcrumbs__list"]/li[position()=1]/a')
       const breadcrumbNationalLink = await $(breadcrumbNational[0])
@@ -58,7 +58,7 @@ describe('National Omic Overview', function () {
 
       pageTitle = await $('.govuk-caption-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('National')
+      expect(text).to.equal('OMIC')
     })
 
     after(function () {

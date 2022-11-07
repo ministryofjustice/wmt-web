@@ -17,7 +17,7 @@ describe('View your caseload capacity flow at national level', () => {
     await nationalCaseloadLink.click()
     pageSubtitle = await $('.govuk-caption-xl')
     pageSubtitle = await pageSubtitle.getText()
-    expect(pageSubtitle).to.equal('National')
+    expect(pageSubtitle).to.equal('Offender Manager')
 
     const fromDayField = await $('#capacity-from-day')
     const fromMonthField = await $('#capacity-from-month')

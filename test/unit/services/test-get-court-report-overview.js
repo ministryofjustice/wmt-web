@@ -114,7 +114,6 @@ describe('services/get-court-report-overview', function () {
   it('should return a results object with the correct overview details for a court-reporter national', function () {
     const orgName = orgUnitConstant.NATIONAL.name
     const breadcrumbs = breadcrumbHelper.COURT_REPORTER_NATIONAL_BREADCRUMBS
-    const expectedTitle = breadcrumbs[0].title
 
     getCourtReportOverviewData.withArgs(id, orgName).resolves(ORGANISATION_OVERVIEW)
     getBreadcrumbs.resolves(breadcrumbs)

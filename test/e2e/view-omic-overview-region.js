@@ -15,7 +15,7 @@ describe('Regional Omic Overview', function () {
       await browser.url(nationalDefaultUrl + '/overview')
       let pageTitle = await $('.govuk-caption-xl')
       let text = await pageTitle.getText()
-      expect(text).to.equal('National')
+      expect(text).to.equal('OMIC')
 
       const activeRegion = await browser.findElements('xpath', '//*[@id="example"]/tbody/tr[position()=1]/td[position()=1]/a')
       const viewRegionLink = await $(activeRegion[0])
@@ -23,7 +23,7 @@ describe('Regional Omic Overview', function () {
 
       pageTitle = await $('.govuk-caption-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Region')
+      expect(text).to.equal('OMIC')
     })
 
     after(function () {
@@ -41,7 +41,7 @@ describe('Regional Omic Overview', function () {
       await browser.url(nationalDefaultUrl + '/overview')
       let pageTitle = await $('.govuk-caption-xl')
       let text = await pageTitle.getText()
-      expect(text).to.equal('National')
+      expect(text).to.equal('OMIC')
 
       const activeRegion = await browser.findElements('xpath', '//*[@id="example"]/tbody/tr[position()=1]/td[position()=1]/a')
       const viewRegionLink = await $(activeRegion[0])
@@ -49,7 +49,7 @@ describe('Regional Omic Overview', function () {
 
       pageTitle = await $('.govuk-caption-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Region')
+      expect(text).to.equal('OMIC')
     })
 
     it('should be able to go to export page', async function () {
@@ -79,7 +79,7 @@ describe('Regional Omic Overview', function () {
       await browser.url(nationalDefaultUrl + '/overview')
       let pageTitle = await $('.govuk-caption-xl')
       let text = await pageTitle.getText()
-      expect(text).to.equal('National')
+      expect(text).to.equal('OMIC')
 
       const activeRegion = await browser.findElements('xpath', '//*[@id="example"]/tbody/tr[position()=1]/td[position()=1]/a')
       const viewRegionLink = await $(activeRegion[0])
@@ -87,7 +87,7 @@ describe('Regional Omic Overview', function () {
 
       pageTitle = await $('.govuk-caption-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Region')
+      expect(text).to.equal('OMIC')
     })
 
     it('should not be able to go to export page', async function () {
@@ -110,7 +110,7 @@ describe('Regional Omic Overview', function () {
       await browser.url(nationalDefaultUrl + '/overview')
       let pageTitle = await $('.govuk-caption-xl')
       let text = await pageTitle.getText()
-      expect(text).to.equal('National')
+      expect(text).to.equal('OMIC')
 
       const activeRegion = await browser.findElements('xpath', '//*[@id="example"]/tbody/tr[position()=1]/td[position()=1]/a')
       const viewRegionLink = await $(activeRegion[0])
@@ -118,7 +118,7 @@ describe('Regional Omic Overview', function () {
 
       pageTitle = await $('.govuk-caption-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Region')
+      expect(text).to.equal('OMIC')
     })
 
     it('should be able to go to export page', async function () {
