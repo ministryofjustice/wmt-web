@@ -2,6 +2,7 @@ const getCourtReportOverview = require('./data/get-court-report-overview')
 const getBreadcrumbs = require('./get-breadcrumbs')
 const getOrganisationUnit = require('./helpers/org-unit-finder')
 const workloadTypeConst = require('../constants/workload-type')
+const navTitleConstants = require('./nav-title')
 
 module.exports = function (id, organisationLevel) {
   const result = {}
@@ -13,7 +14,10 @@ module.exports = function (id, organisationLevel) {
         result.breadcrumbs = breadcrumbs
         result.overviewDetails = courtReportOverview
         result.title = result.breadcrumbs[0].title
-        result.subTitle = organisationalUnitType.displayText
+        if (organisationalUnitType.name === 'hmpps') {
+          result.title = organisationalUnitType.displayText
+        }
+        result.subTitle = navTitleConstants.COURT_REPORTS.displayText
         return result
       })
     })
