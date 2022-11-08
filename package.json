@@ -50,7 +50,7 @@
     "@wdio/mocha-framework": "7.25.4",
     "@wdio/selenium-standalone-service": "7.25.4",
     "@wdio/spec-reporter": "7.25.4",
-    "chai": "4.3.6",
+    "chai": "4.3.7",
     "cookie-session": "2.0.0",
     "csv-parser": "3.0.0",
     "husky": "8.0.1",
