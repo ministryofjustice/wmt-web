@@ -34,7 +34,7 @@ describe('/services/data/update-reduction-status', function () {
                 testReduction.reasonForReductionId = id
                 return insertReduction(workloadOwnerId, testReduction)
                   .then(function (reductionId) {
-                    addedReductionId = reductionId[0]
+                    addedReductionId = reductionId
                     reductionResult.id = addedReductionId
                   })
               })
@@ -45,8 +45,8 @@ describe('/services/data/update-reduction-status', function () {
   it('should update a reduction status and return an id ', function () {
     return updateReductionStatus(addedReductionId, reductionStatusType.ARCHIVED)
       .then(function (result) {
-        expect(result[0]).to.be.a('number')
-        expect(result[0]).to.eql(addedReductionId)
+        expect(result).to.be.a('number')
+        expect(result).to.eql(addedReductionId)
       })
   })
 
