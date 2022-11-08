@@ -151,7 +151,7 @@ describe('services/reductions-service', function () {
           expect(getReductions.calledWith(1)).to.be.eql(true)
           expect(getBreadcrumbsStub.calledWith(1, orgUnitConstant.OFFENDER_MANAGER.name)).to.be.eql(true)
           expect(result.title).to.equal('John Doe')
-          expect(result.subTitle).to.equal('Offender Manageement')
+          expect(result.subTitle).to.equal('Offender Management')
           expect(result.activeReductions).to.eql(activeReductions)
           expect(result.scheduledReductions).to.eql([])
           expect(result.archivedReductions).to.eql(archivedReductions)
@@ -165,7 +165,7 @@ describe('services/reductions-service', function () {
         .then(function (result) {
           expect(result.referenceData).to.be.an('array')
           expect(result.title).to.equal('John Doe')
-          expect(result.subTitle).to.equal('Offender Manageement')
+          expect(result.subTitle).to.equal('Offender Management')
         expect(getContractedHoursForWorkloadOwnerStub.calledWith(1)).to.be.true //eslint-disable-line
           expect(getBreadcrumbsStub.calledWith(1, orgUnitConstant.OFFENDER_MANAGER.name)).to.be.eql(true)
           assert(getReferenceDataStub.called)
