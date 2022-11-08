@@ -2,6 +2,7 @@ const expect = require('chai').expect
 const authenticationHelp = require('../helpers/routes/authentication-helper')
 const caseProgressDataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
+const dailyArchiveData = require('../helpers/data/setup-data')
 
 let workloadOwnerIds = []
 let workloadOwnerDefaultUrl
@@ -42,9 +43,9 @@ describe('View caseload progress flow', () => {
     exists = await plotlyPlot.isExisting()
     expect(exists).to.be.equal(true)
 
-    const pageTitle = await $('.govuk-caption-xl')
+    const pageTitle = await $('.govuk-heading-xl')
     const text = await pageTitle.getText()
-    expect(text).to.equal('Offender Manager')
+    expect(text).to.equal(dailyArchiveData.omNameDisplayed)
   })
 
   it('should navigate to the team caseload progress screen', async () => {
@@ -70,9 +71,9 @@ describe('View caseload progress flow', () => {
     exists = await plotlyPlot.isExisting()
     expect(exists).to.be.equal(true)
 
-    const pageTitle = await $('.govuk-caption-xl')
+    const pageTitle = await $('.govuk-heading-xl')
     const text = await pageTitle.getText()
-    expect(text).to.equal('Team')
+    expect(text).to.equal(dailyArchiveData.teamName)
   })
 
   it('should navigate to the ldu caseload progress screen', async () => {
@@ -98,9 +99,9 @@ describe('View caseload progress flow', () => {
     exists = await plotlyPlot.isExisting()
     expect(exists).to.be.equal(true)
 
-    const pageTitle = await $('.govuk-caption-xl')
+    const pageTitle = await $('.govuk-heading-xl')
     const text = await pageTitle.getText()
-    expect(text).to.equal('Probation Delivery Unit')
+    expect(text).to.equal(dailyArchiveData.lduName)
   })
 
   it('should navigate to the region caseload progress screen', async () => {
@@ -126,9 +127,9 @@ describe('View caseload progress flow', () => {
     exists = await plotlyPlot.isExisting()
     expect(exists).to.be.equal(true)
 
-    const pageTitle = await $('.govuk-caption-xl')
+    const pageTitle = await $('.govuk-heading-xl')
     const text = await pageTitle.getText()
-    expect(text).to.equal('Region')
+    expect(text).to.equal(dailyArchiveData.regionName)
   })
 
   it('should navigate to the national caseload progress screen', async () => {
@@ -154,7 +155,7 @@ describe('View caseload progress flow', () => {
     exists = await plotlyPlot.isExisting()
     expect(exists).to.be.equal(true)
 
-    const pageTitle = await $('.govuk-caption-xl')
+    const pageTitle = await $('.govuk-heading-xl')
     const text = await pageTitle.getText()
     expect(text).to.equal('National')
   })

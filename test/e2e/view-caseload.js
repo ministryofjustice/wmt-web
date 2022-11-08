@@ -2,6 +2,7 @@ const expect = require('chai').expect
 const authenticationHelp = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
+const dailyArchiveData = require('../helpers/data/setup-data')
 
 let workloadOwnerIds = []
 let teamDefaultUrl
@@ -27,9 +28,9 @@ describe('View your caseload flow', () => {
   describe('should navigate to the team caseload screen', () => {
     it('with the correct breadcrumbs, subnav, title and export button', async () => {
       await browser.url(teamDefaultUrl + '/caseload')
-      pageSubtitle = await $('.govuk-caption-xl')
+      pageSubtitle = await $('.govuk-heading-xl')
       pageSubtitle = await pageSubtitle.getText()
-      expect(pageSubtitle).to.equal('Team')
+      expect(pageSubtitle).to.equal(dailyArchiveData.teamName)
     })
 
     it('with the correct caseload total summary for each case type', async () => {
@@ -83,9 +84,9 @@ describe('View your caseload flow', () => {
   describe('should navigate to the LDU caseload screen', () => {
     it('with the correct table, breadcrumbs and export button', async () => {
       await browser.url(lduDefaultUrl + '/caseload')
-      pageSubtitle = await $('.govuk-caption-xl')
+      pageSubtitle = await $('.govuk-heading-xl')
       pageSubtitle = await pageSubtitle.getText()
-      expect(pageSubtitle).to.equal('Probation Delivery Unit')
+      expect(pageSubtitle).to.equal(dailyArchiveData.lduName)
 
       const grade = await $('.sln-table-caseload-by-grade')
       let exists = await grade.isExisting()
@@ -182,9 +183,9 @@ describe('View your caseload flow', () => {
   describe('should navigate to the Region caseload screen', () => {
     it('with the correct table, breadcrumbs and export button', async () => {
       await browser.url(regionDefaultUrl + '/caseload')
-      pageSubtitle = await $('.govuk-caption-xl')
+      pageSubtitle = await $('.govuk-heading-xl')
       pageSubtitle = await pageSubtitle.getText()
-      expect(pageSubtitle).to.equal('Region')
+      expect(pageSubtitle).to.equal(dailyArchiveData.regionName)
     })
 
     it('should be accessible via the Caseload tab on regions default view', async () => {
@@ -233,7 +234,7 @@ describe('View your caseload flow', () => {
   describe('should navigate to the National caseload screen', () => {
     it('with the correct table, breadcrumbs and export button', async () => {
       await browser.url(nationalDefaultUrl + '/caseload')
-      pageSubtitle = await $('.govuk-caption-xl')
+      pageSubtitle = await $('.govuk-heading-xl')
       pageSubtitle = await pageSubtitle.getText()
       expect(pageSubtitle).to.equal('National')
     })

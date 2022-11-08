@@ -3,6 +3,7 @@ const authenticationHelper = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 const config = require('../../config')
+const dailyArchiveData = require('../helpers/data/setup-data')
 
 let workloadOwnerIds = []
 let workloadOwnerId
@@ -61,40 +62,40 @@ describe('National', function () {
 
     it('should allow the user to navigate down the org hierarchy from the national page', async function () {
       await browser.url(nationalDefaultUrl + '/overview')
-      let pageTitle = await $('.govuk-caption-xl')
+      let pageTitle = await $('.govuk-heading-xl')
       let text = await pageTitle.getText()
       expect(text).to.equal('National')
       let link = await $('[href="' + regionDefaultUrl + '"]')
       await link.click()
 
-      pageTitle = await $('.govuk-caption-xl')
+      pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Region')
+      expect(text).to.equal(dailyArchiveData.regionName)
       link = await $('[href="' + lduDefaultUrl + '"]')
       await link.click()
 
-      pageTitle = await $('.govuk-caption-xl')
+      pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Probation Delivery Unit')
+      expect(text).to.equal(dailyArchiveData.lduName)
       link = await $('[href="' + teamDefaultUrl + '"]')
       await link.click()
 
-      pageTitle = await $('.govuk-caption-xl')
+      pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Team')
+      expect(text).to.equal(dailyArchiveData.teamName)
       link = await $('[href="' + workloadOwnerDefaultUrl + '"]')
       await link.click()
 
-      pageTitle = await $('.govuk-caption-xl')
+      pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Offender Manager')
+      expect(text).to.equal(dailyArchiveData.omNameDisplayed)
     })
 
     it('should contain breadcrumbs which allow the user to navigate up the org hierarchy', async function () {
       await browser.url(workloadOwnerDefaultUrl)
-      let pageTitle = await $('.govuk-caption-xl')
+      let pageTitle = await $('.govuk-heading-xl')
       let text = await pageTitle.getText()
-      expect(text).to.equal('Offender Manager')
+      expect(text).to.equal(dailyArchiveData.omNameDisplayed)
 
       let link = await $('[href="' + nationalDefaultUrl + '"]')
       let exists = await link.isExisting()
@@ -114,9 +115,9 @@ describe('National', function () {
 
       await link.click()
 
-      pageTitle = await $('.govuk-caption-xl')
+      pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Team')
+      expect(text).to.equal(dailyArchiveData.teamName)
 
       link = await $('[href="' + lduDefaultUrl + '"]')
       exists = await link.isExisting()
@@ -124,9 +125,9 @@ describe('National', function () {
 
       await link.click()
 
-      pageTitle = await $('.govuk-caption-xl')
+      pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Probation Delivery Unit')
+      expect(text).to.equal(dailyArchiveData.lduName)
 
       link = await $('[href="' + regionDefaultUrl + '"]')
       exists = await link.isExisting()
@@ -134,9 +135,9 @@ describe('National', function () {
 
       await link.click()
 
-      pageTitle = await $('.govuk-caption-xl')
+      pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Region')
+      expect(text).to.equal(dailyArchiveData.regionName)
 
       link = await $('[href="' + nationalDefaultUrl + '"]')
       exists = await link.isExisting()
@@ -144,7 +145,7 @@ describe('National', function () {
 
       await link.click()
 
-      pageTitle = await $('.govuk-caption-xl')
+      pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
       expect(text).to.equal('National')
     })

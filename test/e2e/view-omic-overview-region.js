@@ -1,6 +1,7 @@
 const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 const workloadTypes = require('../../app/constants/workload-type')
+const dailyArchiveData = require('../helpers/data/setup-data')
 
 const nationalDefaultUrl = '/' + workloadTypes.OMIC + '/hmpps/0'
 
@@ -13,7 +14,7 @@ describe('Regional Omic Overview', function () {
 
     it('should be able to go to Overview for region', async function () {
       await browser.url(nationalDefaultUrl + '/overview')
-      let pageTitle = await $('.govuk-caption-xl')
+      let pageTitle = await $('.govuk-heading-xl')
       let text = await pageTitle.getText()
       expect(text).to.equal('National')
 
@@ -21,9 +22,9 @@ describe('Regional Omic Overview', function () {
       const viewRegionLink = await $(activeRegion[0])
       await viewRegionLink.click()
 
-      pageTitle = await $('.govuk-caption-xl')
+      pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Region')
+      expect(text).to.equal(dailyArchiveData.regionName)
     })
 
     after(function () {
@@ -39,7 +40,7 @@ describe('Regional Omic Overview', function () {
 
     it('should be able to go to Overview for region', async function () {
       await browser.url(nationalDefaultUrl + '/overview')
-      let pageTitle = await $('.govuk-caption-xl')
+      let pageTitle = await $('.govuk-heading-xl')
       let text = await pageTitle.getText()
       expect(text).to.equal('National')
 
@@ -47,9 +48,9 @@ describe('Regional Omic Overview', function () {
       const viewRegionLink = await $(activeRegion[0])
       await viewRegionLink.click()
 
-      pageTitle = await $('.govuk-caption-xl')
+      pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Region')
+      expect(text).to.equal(dailyArchiveData.regionName)
     })
 
     it('should be able to go to export page', async function () {
@@ -77,7 +78,7 @@ describe('Regional Omic Overview', function () {
 
     it('should be able to go to Overview for region', async function () {
       await browser.url(nationalDefaultUrl + '/overview')
-      let pageTitle = await $('.govuk-caption-xl')
+      let pageTitle = await $('.govuk-heading-xl')
       let text = await pageTitle.getText()
       expect(text).to.equal('National')
 
@@ -85,9 +86,9 @@ describe('Regional Omic Overview', function () {
       const viewRegionLink = await $(activeRegion[0])
       await viewRegionLink.click()
 
-      pageTitle = await $('.govuk-caption-xl')
+      pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Region')
+      expect(text).to.equal(dailyArchiveData.regionName)
     })
 
     it('should not be able to go to export page', async function () {
@@ -108,7 +109,7 @@ describe('Regional Omic Overview', function () {
 
     it('should be able to go to Overview for region', async function () {
       await browser.url(nationalDefaultUrl + '/overview')
-      let pageTitle = await $('.govuk-caption-xl')
+      let pageTitle = await $('.govuk-heading-xl')
       let text = await pageTitle.getText()
       expect(text).to.equal('National')
 
@@ -116,9 +117,9 @@ describe('Regional Omic Overview', function () {
       const viewRegionLink = await $(activeRegion[0])
       await viewRegionLink.click()
 
-      pageTitle = await $('.govuk-caption-xl')
+      pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Region')
+      expect(text).to.equal(dailyArchiveData.regionName)
     })
 
     it('should be able to go to export page', async function () {

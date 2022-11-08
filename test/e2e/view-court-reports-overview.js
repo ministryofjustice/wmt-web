@@ -2,6 +2,7 @@ const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 const crDataHelper = require('../helpers/data/court-reports-aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
+const dailyArchiveData = require('../helpers/data/setup-data')
 
 let teamDefaultUrl
 let lduDefaultUrl
@@ -113,37 +114,37 @@ describe('View court-reports overview', function () {
   it('should allow the user to navigate down the org hierarchy from the national page', async function () {
     await browser.url(nationalDefaultUrl + '/overview')
 
-    let pageTitle = await $('.govuk-caption-xl')
+    let pageTitle = await $('.govuk-heading-xl')
     let text = await pageTitle.getText()
     expect(text).to.equal('National')
 
     let link = await $('[href="' + regionDefaultUrl + '"]')
     await link.click()
 
-    pageTitle = await $('.govuk-caption-xl')
+    pageTitle = await $('.govuk-heading-xl')
     text = await pageTitle.getText()
-    expect(text).to.equal('Region')
+    expect(text).to.equal(dailyArchiveData.regionName)
 
     link = await $('[href="' + lduDefaultUrl + '"]')
     await link.click()
 
-    pageTitle = await $('.govuk-caption-xl')
+    pageTitle = await $('.govuk-heading-xl')
     text = await pageTitle.getText()
-    expect(text).to.equal('Probation Delivery Unit')
+    expect(text).to.equal(dailyArchiveData.lduName)
 
     link = await $('[href="' + teamDefaultUrl + '"]')
     await link.click()
 
-    pageTitle = await $('.govuk-caption-xl')
+    pageTitle = await $('.govuk-heading-xl')
     text = await pageTitle.getText()
-    expect(text).to.equal('Team')
+    expect(text).to.equal(dailyArchiveData.teamName)
   })
 
   it('should contain breadcrumbs which allow the user to navigate up the org hierarchy', async function () {
     await browser.url(teamDefaultUrl)
-    let pageTitle = await $('.govuk-caption-xl')
+    let pageTitle = await $('.govuk-heading-xl')
     let text = await pageTitle.getText()
-    expect(text).to.equal('Team')
+    expect(text).to.equal(dailyArchiveData.teamName)
 
     let link = await $('[href="' + nationalDefaultUrl + '"]')
     let exists = await link.isExisting()
@@ -160,21 +161,21 @@ describe('View court-reports overview', function () {
     link = await $('[href="' + lduDefaultUrl + '"]')
     await link.click()
 
-    pageTitle = await $('.govuk-caption-xl')
+    pageTitle = await $('.govuk-heading-xl')
     text = await pageTitle.getText()
-    expect(text).to.equal('Probation Delivery Unit')
+    expect(text).to.equal(dailyArchiveData.lduName)
 
     link = await $('[href="' + regionDefaultUrl + '"]')
     await link.click()
 
-    pageTitle = await $('.govuk-caption-xl')
+    pageTitle = await $('.govuk-heading-xl')
     text = await pageTitle.getText()
-    expect(text).to.equal('Region')
+    expect(text).to.equal(dailyArchiveData.regionName)
 
     link = await $('[href="' + nationalDefaultUrl + '"]')
     await link.click()
 
-    pageTitle = await $('.govuk-caption-xl')
+    pageTitle = await $('.govuk-heading-xl')
     text = await pageTitle.getText()
     expect(text).to.equal('National')
   })

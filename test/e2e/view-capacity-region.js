@@ -2,6 +2,7 @@ const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 const workloadCapacityHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
+const dailyArchiveData = require('../helpers/data/setup-data')
 
 let regionDefaultUrl
 let pageSubtitle
@@ -19,9 +20,9 @@ describe('View your caseload capacity flow', () => {
     await regionLink.click()
     const regionCasloadLink = await $('[href="' + regionDefaultUrl + '/caseload-capacity"]')
     await regionCasloadLink.click()
-    pageSubtitle = await $('.govuk-caption-xl')
+    pageSubtitle = await $('.govuk-heading-xl')
     pageSubtitle = await pageSubtitle.getText()
-    expect(pageSubtitle).to.equal('Region')
+    expect(pageSubtitle).to.equal(dailyArchiveData.regionName)
 
     const fromDayField = await $('#capacity-from-day')
     const fromMonthField = await $('#capacity-from-month')
