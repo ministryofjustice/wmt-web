@@ -10,7 +10,7 @@ trace1 = {
         line: {width: -0.5},
         size: 9
     },
-    name: 'Capacity %',
+    name: 'Capacity %   ',
 };
 trace2 = {
     x: capacityTable.headings,
@@ -20,7 +20,7 @@ trace2 = {
         line: {width: -0.5},
         size: 9
     },
-    name: 'Reduction Hours %',
+    name: 'Reduction Hours %      ',
 };
 data = [trace1, trace2];
 layout = {
