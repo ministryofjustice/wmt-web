@@ -53,7 +53,7 @@ describe('Regional Omic Overview', function () {
     })
 
     it('should be able to go to export page', async function () {
-      const exportElement = await browser.findElements('xpath', '//*[@class="wmt-sub-nav"]/li[position()=2]/a')
+      const exportElement = await browser.findElements('xpath', '//*[@class="moj-sub-navigation__list"]/li[position()=2]/a')
       const exportTab = $(exportElement[0])
       const exists = await exportTab.isExisting()
       expect(exists).to.be.equal(true)
@@ -91,7 +91,7 @@ describe('Regional Omic Overview', function () {
     })
 
     it('should not be able to go to export page', async function () {
-      const exportElement = await browser.findElements('xpath', '//*[@class="wmt-sub-nav"]/li[position()=2]/a')
+      const exportElement = await browser.findElements('xpath', '//*[@class="moj-sub-navigation__list"]/li[position()=2]/a')
       return expect(exportElement.length).to.be.equal(0)
     })
 
@@ -122,7 +122,7 @@ describe('Regional Omic Overview', function () {
     })
 
     it('should be able to go to export page', async function () {
-      const exportElement = await browser.findElements('xpath', '//*[@class="wmt-sub-nav"]/li[position()=2]/a')
+      const exportElement = await browser.findElements('xpath', '//*[@class="moj-sub-navigation__list"]/li[position()=2]/a')
       const exportTab = $(exportElement[0])
       const exists = await exportTab.isExisting()
       expect(exists).to.be.equal(true)

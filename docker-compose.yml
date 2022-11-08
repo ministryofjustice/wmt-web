@@ -45,10 +45,11 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health/ping"]
     environment:
       - SERVER_PORT=8080
-      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_PROFILES_ACTIVE=dev,docker
       - DATABASE_ENDPOINT=postgres:5432
       - COMMUNITY_ENDPOINT_URL=http://wiremock:8099
       - HMPPS_TIER_ENDPOINT_URL=http://wiremock:8099
+      - HMPPS_SQS_LOCALSTACK_URL=http://localstack:4566
     entrypoint: ["/bin/sh", "-c" , "sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar"]
     depends_on:
         - "postgres"

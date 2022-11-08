@@ -30,7 +30,7 @@ describe('View caseload progress flow', () => {
     let exists = await breadcrumbs.isExisting()
     expect(exists).to.be.equal(true)
 
-    const subnav = await $('.wmt-sub-nav')
+    const subnav = await $('.moj-sub-navigation__list')
     exists = await subnav.isExisting()
     expect(exists).to.be.equal(true)
 
@@ -54,7 +54,7 @@ describe('View caseload progress flow', () => {
     let exists = await breadcrumbs.isExisting()
     expect(exists).to.be.equal(true)
 
-    const subnav = await $('.wmt-sub-nav')
+    const subnav = await $('.moj-sub-navigation__list')
     exists = await subnav.isExisting()
     expect(exists).to.be.equal(true)
 
@@ -82,7 +82,7 @@ describe('View caseload progress flow', () => {
     let exists = await breadcrumbs.isExisting()
     expect(exists).to.be.equal(true)
 
-    const subnav = await $('.wmt-sub-nav')
+    const subnav = await $('.moj-sub-navigation__list')
     exists = await subnav.isExisting()
     expect(exists).to.be.equal(true)
 
@@ -110,7 +110,7 @@ describe('View caseload progress flow', () => {
     let exists = await breadcrumbs.isExisting()
     expect(exists).to.be.equal(true)
 
-    const subnav = await $('.wmt-sub-nav')
+    const subnav = await $('.moj-sub-navigation__list')
     exists = await subnav.isExisting()
     expect(exists).to.be.equal(true)
 
@@ -138,7 +138,7 @@ describe('View caseload progress flow', () => {
     let exists = await breadcrumbs.isExisting()
     expect(exists).to.be.equal(true)
 
-    const subnav = await $('.wmt-sub-nav')
+    const subnav = await $('.moj-sub-navigation__list')
     exists = await subnav.isExisting()
     expect(exists).to.be.equal(true)
 

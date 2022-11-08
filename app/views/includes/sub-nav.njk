@@ -1,9 +1,11 @@
 {% if subNav %}
-<ul class="wmt-sub-nav">
-{% for item in subNav %}
-    <li class="wmt-sub-nav__item 	govuk-!-font-size-24 govuk-!-font-weight-bold">
-      <a class="wmt-sub-nav__link {% if item.active %} is-active {% endif %}" href="{{ item.link }}"{% if item.active %} aria-current="page"{% endif %}>{{ item.title }}</a>
+<nav class="moj-sub-navigation" aria-label="Sub navigation">
+  <ul class="moj-sub-navigation__list">
+  {% for item in subNav %}
+    <li class="moj-sub-navigation__item">
+      <a class="moj-sub-navigation__link" href="{{ item.link }}"{% if item.active %} aria-current="page"{% endif %}>{{ item.title }}</a>
     </li>
-{% endfor %}
-</ul>
+  {% endfor %}
+  </ul>
+</nav>
 {% endif %}
