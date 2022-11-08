@@ -142,7 +142,7 @@ describe('services/get-caseload', function () {
     return getCaseload(id, teamName).then(function (result) {
       assert(getBreadcrumbs.called)
       expect(result.breadcrumbs).to.eql(breadcrumbs)
-      expect(result.subTitle).to.eql('Offender Manager')
+      expect(result.subTitle).to.eql('Offender Management')
       expect(result.title).to.eql(expectedTitle)
     })
   })

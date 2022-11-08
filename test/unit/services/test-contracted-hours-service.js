@@ -4,7 +4,6 @@ const sinon = require('sinon')
 
 const proxyquire = require('proxyquire')
 const orgUnitConstant = require('../../../app/constants/organisation-unit.js')
-const orgUnitFinder = require('../../../app/services/helpers/org-unit-finder')
 const breadcrumbHelper = require('../../helpers/breadcrumb-helper')
 
 const CONTRACTED_HOURS = 37.5
@@ -13,7 +12,7 @@ const UPDATED_CONTRACTED_HOURS = 22
 const id = 1
 const breadcrumbs = breadcrumbHelper.OFFENDER_MANAGER_BREADCRUMBS
 const expectedTitle = breadcrumbs[0].title
-const expectedSubTitile = orgUnitFinder('name', orgUnitConstant.OFFENDER_MANAGER.name).displayText
+const expectedSubTitile = 'Offender Management'
 
 let contractedHoursService
 let getBreadcrumbs
