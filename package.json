@@ -53,7 +53,7 @@
     "chai": "4.3.7",
     "cookie-session": "2.0.0",
     "csv-parser": "3.0.0",
-    "husky": "8.0.1",
+    "husky": "8.0.2",
     "jsonwebtoken": "8.5.1",
     "mocha": "10.1.0",
     "mocha-simple-html-reporter": "2.0.0",
