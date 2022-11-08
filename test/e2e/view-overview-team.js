@@ -16,7 +16,7 @@ describe('Team', function () {
     it('should navigate to the team overview page', async function () {
       const element = await $('.sln-table-org-level')
       const text = await element.getText()
-      expect(text).to.equal('Offender Manager')
+      expect(text).to.equal('Offender Management')
     })
 
     it('should not include the reductions export for staff at team level', async function () {
@@ -52,7 +52,7 @@ describe('Team', function () {
     it('should navigate to the team overview page', async function () {
       const element = await $('.sln-table-org-level')
       const text = await element.getText()
-      expect(text).to.equal('Offender Manager')
+      expect(text).to.equal('Offender Management')
     })
 
     it('should include the reductions export for staff at team level', async function () {
@@ -81,7 +81,7 @@ describe('Team', function () {
     it('should navigate to the team overview page', async function () {
       const element = await $('.sln-table-org-level')
       const text = await element.getText()
-      expect(text).to.equal('Offender Manager')
+      expect(text).to.equal('Offender Management')
     })
 
     it('should not include the reductions export for staff at team level', async function () {
@@ -124,7 +124,7 @@ describe('Team', function () {
     it('should navigate to the team overview page', async function () {
       const element = await $('.sln-table-org-level')
       const text = await element.getText()
-      expect(text).to.equal('Offender Manager')
+      expect(text).to.equal('Offender Management')
     })
 
     it('should include the reductions export for staff at team level', async function () {

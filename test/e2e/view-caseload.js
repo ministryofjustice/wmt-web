@@ -29,7 +29,7 @@ describe('View your caseload flow', () => {
       await browser.url(teamDefaultUrl + '/caseload')
       pageSubtitle = await $('.govuk-caption-xl')
       pageSubtitle = await pageSubtitle.getText()
-      expect(pageSubtitle).to.equal('Offender Manager')
+      expect(pageSubtitle).to.equal('Offender Management')
     })
 
     it('with the correct caseload total summary for each case type', async () => {
@@ -85,7 +85,7 @@ describe('View your caseload flow', () => {
       await browser.url(lduDefaultUrl + '/caseload')
       pageSubtitle = await $('.govuk-caption-xl')
       pageSubtitle = await pageSubtitle.getText()
-      expect(pageSubtitle).to.equal('Offender Manager')
+      expect(pageSubtitle).to.equal('Offender Management')
 
       const grade = await $('.sln-table-caseload-by-grade')
       let exists = await grade.isExisting()
@@ -184,7 +184,7 @@ describe('View your caseload flow', () => {
       await browser.url(regionDefaultUrl + '/caseload')
       pageSubtitle = await $('.govuk-caption-xl')
       pageSubtitle = await pageSubtitle.getText()
-      expect(pageSubtitle).to.equal('Offender Manager')
+      expect(pageSubtitle).to.equal('Offender Management')
     })
 
     it('should be accessible via the Caseload tab on regions default view', async () => {
@@ -235,7 +235,7 @@ describe('View your caseload flow', () => {
       await browser.url(nationalDefaultUrl + '/caseload')
       pageSubtitle = await $('.govuk-caption-xl')
       pageSubtitle = await pageSubtitle.getText()
-      expect(pageSubtitle).to.equal('Offender Manager')
+      expect(pageSubtitle).to.equal('Offender Management')
     })
 
     it('should be accessible via the Caseload tab on regions default view', async () => {

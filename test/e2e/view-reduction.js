@@ -47,7 +47,7 @@ describe('View a reduction', () => {
 
         const pageTitle = await $('.govuk-caption-xl')
         const text = await pageTitle.getText()
-        expect(text).to.equal('Offender Manager')
+        expect(text).to.equal('Offender Management')
       })
 
       it('with an active table', async () => {

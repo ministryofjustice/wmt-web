@@ -17,7 +17,7 @@ describe('View national caseload', () => {
     it('with the correct table, breadcrumbs', async () => {
       pageSubtitle = await $('.govuk-caption-xl')
       pageSubtitle = await pageSubtitle.getText()
-      expect(pageSubtitle).to.equal('Offender Manager')
+      expect(pageSubtitle).to.equal('Offender Management')
     })
 
     it('should display export button', async () => {

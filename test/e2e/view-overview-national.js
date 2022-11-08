@@ -63,38 +63,38 @@ describe('National', function () {
       await browser.url(nationalDefaultUrl + '/overview')
       let pageTitle = await $('.govuk-caption-xl')
       let text = await pageTitle.getText()
-      expect(text).to.equal('Offender Manager')
+      expect(text).to.equal('Offender Management')
       let link = await $('[href="' + regionDefaultUrl + '"]')
       await link.click()
 
       pageTitle = await $('.govuk-caption-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Offender Manager')
+      expect(text).to.equal('Offender Management')
       link = await $('[href="' + lduDefaultUrl + '"]')
       await link.click()
 
       pageTitle = await $('.govuk-caption-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Offender Manager')
+      expect(text).to.equal('Offender Management')
       link = await $('[href="' + teamDefaultUrl + '"]')
       await link.click()
 
       pageTitle = await $('.govuk-caption-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Offender Manager')
+      expect(text).to.equal('Offender Management')
       link = await $('[href="' + workloadOwnerDefaultUrl + '"]')
       await link.click()
 
       pageTitle = await $('.govuk-caption-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Offender Manager')
+      expect(text).to.equal('Offender Management')
     })
 
     it('should contain breadcrumbs which allow the user to navigate up the org hierarchy', async function () {
       await browser.url(workloadOwnerDefaultUrl)
       let pageTitle = await $('.govuk-caption-xl')
       let text = await pageTitle.getText()
-      expect(text).to.equal('Offender Manager')
+      expect(text).to.equal('Offender Management')
 
       let link = await $('[href="' + nationalDefaultUrl + '"]')
       let exists = await link.isExisting()
@@ -116,7 +116,7 @@ describe('National', function () {
 
       pageTitle = await $('.govuk-caption-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Offender Manager')
+      expect(text).to.equal('Offender Management')
 
       link = await $('[href="' + lduDefaultUrl + '"]')
       exists = await link.isExisting()
@@ -126,7 +126,7 @@ describe('National', function () {
 
       pageTitle = await $('.govuk-caption-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Offender Manager')
+      expect(text).to.equal('Offender Management')
 
       link = await $('[href="' + regionDefaultUrl + '"]')
       exists = await link.isExisting()
@@ -136,7 +136,7 @@ describe('National', function () {
 
       pageTitle = await $('.govuk-caption-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Offender Manager')
+      expect(text).to.equal('Offender Management')
 
       link = await $('[href="' + nationalDefaultUrl + '"]')
       exists = await link.isExisting()
@@ -146,7 +146,7 @@ describe('National', function () {
 
       pageTitle = await $('.govuk-caption-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Offender Manager')
+      expect(text).to.equal('Offender Management')
     })
 
     after(function () {

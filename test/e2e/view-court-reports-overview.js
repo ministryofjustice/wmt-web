@@ -35,7 +35,7 @@ describe('View court-reports overview', function () {
 
     const orgLevelTable = await $('.sln-table-org-level')
     const text = await orgLevelTable.getText()
-    expect(text).to.equal('Offender Manager')
+    expect(text).to.equal('Offender Management')
   })
 
   it('should naviagte to the ldu court-reports overview page', async function () {
