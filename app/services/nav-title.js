@@ -1,6 +1,6 @@
 module.exports = {
-  OFFENDER_MANAGER: {
-    displayText: 'Offender Manager'
+  OFFENDER_MANAGEMENT: {
+    displayText: 'Offender Management'
   },
   OMIC: {
     displayText: 'OMIC'

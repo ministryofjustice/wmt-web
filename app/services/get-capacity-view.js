@@ -24,7 +24,7 @@ module.exports = function (id, capacityDateRange, organisationLevel) {
         if (organisationalUnitType.name === 'hmpps') {
           result.title = organisationalUnitType.displayText
         }
-        result.subTitle = navTitleConstants.OFFENDER_MANAGER.displayText
+        result.subTitle = navTitleConstants.OFFENDER_MANAGEMENT.displayText
 
         if (organisationalUnitType !== organisationConstant.OFFENDER_MANAGER) {
           return getCapacityBreakdown(id, organisationLevel)
