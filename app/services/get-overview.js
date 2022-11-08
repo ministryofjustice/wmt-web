@@ -25,7 +25,7 @@ module.exports = function (id, organisationLevel, isCSV = false, workloadType = 
       if (organisationalUnitType.name === 'hmpps') {
         result.title = organisationalUnitType.displayText
       }
-      result.subTitle = navTitleConstants.OFFENDER_MANAGER.displayText
+      result.subTitle = navTitleConstants.OFFENDER_MANAGEMENT.displayText
       return result
     })
   })

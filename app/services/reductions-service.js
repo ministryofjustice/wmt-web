@@ -27,7 +27,7 @@ module.exports.getReductions = function (id, organisationLevel) {
     if (organisationalUnitType.name === 'hmpps') {
       result.title = organisationalUnitType.displayText
     }
-    result.subTitle = navTitleConstants.OFFENDER_MANAGER.displayText
+    result.subTitle = navTitleConstants.OFFENDER_MANAGEMENT.displayText
 
     return getReductions(id).then(function (results) {
       const reductionsByStatus = reductionHelper.getReductionsByStatus(results)
@@ -51,7 +51,7 @@ module.exports.getAddReductionsRefData = function (id, organisationLevel) {
     if (organisationalUnitType.name === 'hmpps') {
       result.title = organisationalUnitType.displayText
     }
-    result.subTitle = navTitleConstants.OFFENDER_MANAGER.displayText
+    result.subTitle = navTitleConstants.OFFENDER_MANAGEMENT.displayText
 
     return getContractedHoursPromise.then(function (hours) {
       return getReductionReasonsPromise.then(function (results) {

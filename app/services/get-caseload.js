@@ -16,7 +16,7 @@ module.exports = function (id, organisationLevel, isCSV = false) {
         if (organisationUnitType.name === 'hmpps') {
           title = organisationUnitType.displayText
         }
-        const subTitle = navTitleConstants.OFFENDER_MANAGER.displayText
+        const subTitle = navTitleConstants.OFFENDER_MANAGEMENT.displayText
 
         const caseloadResults = parseCaseloadResults(organisationLevel, results, isCSV)
         return {

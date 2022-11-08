@@ -17,7 +17,7 @@ module.exports.getContractedHours = function (id, organisationLevel) {
         if (organisationalUnitType.name === 'hmpps') {
           title = organisationalUnitType.displayText
         }
-        const subTitle = navTitleConstants.OFFENDER_MANAGER.displayText
+        const subTitle = navTitleConstants.OFFENDER_MANAGEMENT.displayText
         return {
           breadcrumbs,
           title,

@@ -15,7 +15,7 @@ module.exports = function (id, organisationLevel) {
       if (organisationalUnitType.name === 'hmpps') {
         result.title = organisationalUnitType.displayText
       }
-      result.subTitle = navTitleConstants.OFFENDER_MANAGER.displayText
+      result.subTitle = navTitleConstants.OFFENDER_MANAGEMENT.displayText
       result.caseProgressList.sort(function (a, b) { return b.name.localeCompare(a.name) }) // sorted backwards as the plot displays backwards, table is incorrect
       return result
     })
