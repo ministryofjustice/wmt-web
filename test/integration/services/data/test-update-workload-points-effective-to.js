@@ -15,7 +15,7 @@ describe('/services/data/update-workload-points-effective-to', function () {
   it('should update the workload points when a valid id is passed in', function () {
     return updateWorkloadPointsEffectiveTo(workloadPointsInserts.filter((item) => item.table === 'workload_points')[0].id)
       .then(function (id) {
-        expect(id[0]).to.be.a('number')
+        expect(id).to.be.a('number')
       })
   })
 
