@@ -2,6 +2,7 @@ const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 const workloadCapacityHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
+const dailyArchiveData = require('../helpers/data/setup-data')
 
 let workloadOwnerDefaultUrl
 let lduDefaultUrl
@@ -23,9 +24,9 @@ describe('View your caseload capacity flow', () => {
     await lduUrl.click()
     const caseloadCapacityUrl = await $('[href="' + lduDefaultUrl + '/caseload-capacity"]')
     await caseloadCapacityUrl.click()
-    pageSubtitle = await $('.govuk-caption-xl')
+    pageSubtitle = await $('.govuk-heading-xl')
     pageSubtitle = await pageSubtitle.getText()
-    expect(pageSubtitle).to.equal('Probation Delivery Unit')
+    expect(pageSubtitle).to.equal(dailyArchiveData.lduName)
 
     const fromDayField = await $('#capacity-from-day')
     const fromMonthField = await $('#capacity-from-month')

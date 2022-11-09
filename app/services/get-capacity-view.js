@@ -5,6 +5,7 @@ const tableCreator = require('./helpers/table-creator')
 const getOrganisationUnit = require('./helpers/org-unit-finder')
 const organisationConstant = require('../constants/organisation-unit')
 const percentageCalculator = require('./helpers/percentage-calculator')
+const navTitleConstants = require('./nav-title')
 
 module.exports = function (id, capacityDateRange, organisationLevel) {
   const organisationalUnitType = getOrganisationUnit('name', organisationLevel)
@@ -20,7 +21,10 @@ module.exports = function (id, capacityDateRange, organisationLevel) {
         result.capacityBreakdown = []
         result.capacityTable = tableCreator.createCapacityTable(id, organisationalUnitType.displayText, results)
         result.title = result.breadcrumbs[0].title
-        result.subTitle = organisationalUnitType.displayText
+        if (organisationalUnitType.name === 'hmpps') {
+          result.title = organisationalUnitType.displayText
+        }
+        result.subTitle = navTitleConstants.OFFENDER_MANAGEMENT.displayText
 
         if (organisationalUnitType !== organisationConstant.OFFENDER_MANAGER) {
           return getCapacityBreakdown(id, organisationLevel)

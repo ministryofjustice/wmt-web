@@ -15,7 +15,7 @@ describe('View national caseload', () => {
     })
 
     it('with the correct table, breadcrumbs', async () => {
-      pageSubtitle = await $('.govuk-caption-xl')
+      pageSubtitle = await $('.govuk-heading-xl')
       pageSubtitle = await pageSubtitle.getText()
       expect(pageSubtitle).to.equal('National')
     })

@@ -1,6 +1,7 @@
 const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 const workloadTypes = require('../../app/constants/workload-type')
+const dailyArchiveData = require('../helpers/data/setup-data')
 
 const nationalDefaultUrl = '/' + workloadTypes.OMIC + '/hmpps/0'
 
@@ -19,7 +20,7 @@ describe('National Omic Overview', function () {
 
     it('should allow the user to navigate down the org hierarchy from the national page', async function () {
       await browser.url(nationalDefaultUrl + '/overview')
-      let pageTitle = await $('.govuk-caption-xl')
+      let pageTitle = await $('.govuk-heading-xl')
       let text = await pageTitle.getText()
       expect(text).to.equal('National')
 
@@ -27,18 +28,18 @@ describe('National Omic Overview', function () {
       const viewRegionLink = await $(activeRegion[0])
       await viewRegionLink.click()
 
-      pageTitle = await $('.govuk-caption-xl')
+      pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Region')
+      expect(text).to.equal(dailyArchiveData.regionName)
 
       const activeLdu = await browser.findElements('xpath', '//*[@id="example"]/tbody/tr[position()=1]/td[position()=1]/a')
       const viewLduLink = await $(activeLdu[0])
 
       await viewLduLink.click()
 
-      pageTitle = await $('.govuk-caption-xl')
+      pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
-      expect(text).to.equal('Probation Delivery Unit')
+      expect(text).to.equal(dailyArchiveData.lduName)
     })
 
     it('should contain breadcrumbs which allow the user to navigate up the org hierarchy', async function () {
@@ -47,16 +48,16 @@ describe('National Omic Overview', function () {
 
       await breadcrumbRegionLink.click()
 
-      let pageTitle = await $('.govuk-caption-xl')
+      let pageTitle = await $('.govuk-heading-xl')
       let text = await pageTitle.getText()
-      expect(text).to.equal('Region')
+      expect(text).to.equal(dailyArchiveData.regionName)
 
       const breadcrumbNational = await browser.findElements('xpath', '//*[@class="govuk-breadcrumbs__list"]/li[position()=1]/a')
       const breadcrumbNationalLink = await $(breadcrumbNational[0])
 
       await breadcrumbNationalLink.click()
 
-      pageTitle = await $('.govuk-caption-xl')
+      pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
       expect(text).to.equal('National')
     })

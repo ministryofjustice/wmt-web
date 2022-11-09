@@ -15,6 +15,7 @@ const dateFormatter = require('../services/date-formatter')
 const messages = require('../constants/messages')
 const asyncMiddleware = require('../middleware/asyncMiddleware')
 const getTabTitle = require('../services/get-tab-title')
+const navTitleConstants = require('../services/nav-title')
 
 let lastUpdated
 
@@ -43,7 +44,7 @@ module.exports = function (router) {
         const subNav = getSubNav(req.params.id, organisationUnitConstants.OFFENDER_MANAGER.name, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole)
         return res.render('individual-overview', {
           title: result.title,
-          subTitle: organisationUnitConstants.OFFENDER_MANAGER.displayText,
+          subTitle: navTitleConstants.OFFENDER_MANAGEMENT.displayText,
           tabTitle: getTabTitle(result.title, subNav, organisationUnitConstants.OFFENDER_MANAGER.name),
           breadcrumbs: result.breadcrumbs,
           organisationLevel: organisationUnitConstants.OFFENDER_MANAGER.name,
@@ -69,7 +70,7 @@ module.exports = function (router) {
         const subNav = getSubNav(req.params.id, organisationUnitConstants.OFFENDER_MANAGER.name, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole)
         return res.render('individual-overview', {
           title: result.title,
-          subTitle: organisationUnitConstants.OFFENDER_MANAGER.displayText,
+          subTitle: navTitleConstants.OFFENDER_MANAGEMENT.displayText,
           tabTitle: getTabTitle(result.title, subNav, organisationUnitConstants.OFFENDER_MANAGER.name),
           breadcrumbs: result.breadcrumbs,
           organisationLevel: organisationUnitConstants.OFFENDER_MANAGER.name,

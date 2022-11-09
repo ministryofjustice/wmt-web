@@ -15,6 +15,7 @@ const getOldReductionForHistory = require('./data/get-old-reduction-for-history'
 const insertOldReductionToHistory = require('./data/insert-old-reduction-to-history')
 const getOffenderManagerTeamLduRegion = require('./data/get-offender-manager-team-ldu-region')
 const { auditReductionCreated, auditReductionEdited, auditReductionStatusChange } = require('./audit-service')
+const navTitleConstants = require('./nav-title')
 
 module.exports.getReductions = function (id, organisationLevel) {
   const result = {}
@@ -23,7 +24,10 @@ module.exports.getReductions = function (id, organisationLevel) {
   return getBreadcrumbs(id, organisationLevel).then(function (breadcrumbs) {
     result.breadcrumbs = breadcrumbs
     result.title = result.breadcrumbs[0].title
-    result.subTitle = organisationalUnitType.displayText
+    if (organisationalUnitType.name === 'hmpps') {
+      result.title = organisationalUnitType.displayText
+    }
+    result.subTitle = navTitleConstants.OFFENDER_MANAGEMENT.displayText
 
     return getReductions(id).then(function (results) {
       const reductionsByStatus = reductionHelper.getReductionsByStatus(results)
@@ -44,7 +48,10 @@ module.exports.getAddReductionsRefData = function (id, organisationLevel) {
   return getBreadcrumbs(id, organisationLevel).then(function (breadcrumbs) {
     result.breadcrumbs = breadcrumbs
     result.title = result.breadcrumbs[0].title
-    result.subTitle = organisationalUnitType.displayText
+    if (organisationalUnitType.name === 'hmpps') {
+      result.title = organisationalUnitType.displayText
+    }
+    result.subTitle = navTitleConstants.OFFENDER_MANAGEMENT.displayText
 
     return getContractedHoursPromise.then(function (hours) {
       return getReductionReasonsPromise.then(function (results) {

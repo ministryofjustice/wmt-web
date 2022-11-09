@@ -2,6 +2,7 @@ const expect = require('chai').expect
 const authenticationHelp = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
+const dailyArchiveData = require('../helpers/data/setup-data')
 
 let offenderManagerId
 let offenderManagerUrl
@@ -45,9 +46,9 @@ describe('View a reduction', () => {
         exists = await subnav.isExisting()
         expect(exists).to.be.equal(true)
 
-        const pageTitle = await $('.govuk-caption-xl')
+        const pageTitle = await $('.govuk-heading-xl')
         const text = await pageTitle.getText()
-        expect(text).to.equal('Offender Manager')
+        expect(text).to.equal(dailyArchiveData.omNameDisplayed)
       })
 
       it('with an active table', async () => {

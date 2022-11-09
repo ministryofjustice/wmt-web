@@ -52,10 +52,9 @@ describe('services/get-court-report-overview', function () {
 
     return getCourtReportOverview(id, omName)
       .then(function (result) {
-        const omSubtitle = orgUnitFinder('name', omName).displayText
-      expect(getBreadcrumbs.calledWith(id, omName, workloadTypes.COURT_REPORTS)).to.be.true //eslint-disable-line
+        expect(getBreadcrumbs.calledWith(id, omName, workloadTypes.COURT_REPORTS)).to.be.true //eslint-disable-line
         expect(result.breadcrumbs).to.eql(breadcrumbs)
-        expect(result.subTitle).to.eql(omSubtitle)
+        expect(result.subTitle).to.eql('Courts')
         expect(result.title).to.eql(expectedTitle)
         expect(result.overviewDetails).to.eql(OVERVIEW)
       })
@@ -70,10 +69,9 @@ describe('services/get-court-report-overview', function () {
     getBreadcrumbs.resolves(breadcrumbs)
 
     return getCourtReportOverview(id, orgName).then(function (result) {
-      const teamSubtitle = orgUnitFinder('name', orgName).displayText
       expect(getBreadcrumbs.calledWith(id, orgName, workloadTypes.COURT_REPORTS)).to.be.true //eslint-disable-line
       expect(result.breadcrumbs).to.eql(breadcrumbs)
-      expect(result.subTitle).to.eql(teamSubtitle)
+      expect(result.subTitle).to.eql('Courts')
       expect(result.title).to.eql(expectedTitle)
       expect(result.overviewDetails).to.eql(ORGANISATION_OVERVIEW)
     })
@@ -88,10 +86,9 @@ describe('services/get-court-report-overview', function () {
     getBreadcrumbs.resolves(breadcrumbs)
 
     return getCourtReportOverview(id, orgName).then(function (result) {
-      const orgSubtitle = orgUnitFinder('name', orgName).displayText
       expect(getBreadcrumbs.calledWith(id, orgName, workloadTypes.COURT_REPORTS)).to.be.true //eslint-disable-line
       expect(result.breadcrumbs).to.eql(breadcrumbs)
-      expect(result.subTitle).to.eql(orgSubtitle)
+      expect(result.subTitle).to.eql('Courts')
       expect(result.title).to.eql(expectedTitle)
       expect(result.overviewDetails).to.eql(ORGANISATION_OVERVIEW)
     })
@@ -106,10 +103,9 @@ describe('services/get-court-report-overview', function () {
     getBreadcrumbs.resolves(breadcrumbs)
 
     return getCourtReportOverview(id, orgName).then(function (result) {
-      const orgSubtitle = orgUnitFinder('name', orgName).displayText
       expect(getBreadcrumbs.calledWith(id, orgName, workloadTypes.COURT_REPORTS)).to.be.true //eslint-disable-line
       expect(result.breadcrumbs).to.eql(breadcrumbs)
-      expect(result.subTitle).to.eql(orgSubtitle)
+      expect(result.subTitle).to.eql('Courts')
       expect(result.title).to.eql(expectedTitle)
       expect(result.overviewDetails).to.eql(ORGANISATION_OVERVIEW)
     })
@@ -118,7 +114,6 @@ describe('services/get-court-report-overview', function () {
   it('should return a results object with the correct overview details for a court-reporter national', function () {
     const orgName = orgUnitConstant.NATIONAL.name
     const breadcrumbs = breadcrumbHelper.COURT_REPORTER_NATIONAL_BREADCRUMBS
-    const expectedTitle = breadcrumbs[0].title
 
     getCourtReportOverviewData.withArgs(id, orgName).resolves(ORGANISATION_OVERVIEW)
     getBreadcrumbs.resolves(breadcrumbs)
@@ -127,8 +122,8 @@ describe('services/get-court-report-overview', function () {
       const orgSubtitle = orgUnitFinder('name', orgName).displayText
       expect(getBreadcrumbs.calledWith(id, orgName, workloadTypes.COURT_REPORTS)).to.be.true //eslint-disable-line
       expect(result.breadcrumbs).to.eql(breadcrumbs)
-      expect(result.subTitle).to.eql(orgSubtitle)
-      expect(result.title).to.eql(expectedTitle)
+      expect(result.subTitle).to.eql('Courts')
+      expect(result.title).to.eql(orgSubtitle)
       expect(result.overviewDetails).to.eql(ORGANISATION_OVERVIEW)
     })
   })

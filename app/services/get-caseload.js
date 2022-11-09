@@ -4,6 +4,7 @@ const getOrganisationUnit = require('./helpers/org-unit-finder')
 const caseloadHelper = require('./helpers/caseload-helper')
 const organistaionUnit = require('../constants/organisation-unit')
 const caseType = require('../constants/case-type')
+const navTitleConstants = require('./nav-title')
 
 module.exports = function (id, organisationLevel, isCSV = false) {
   const organisationUnitType = getOrganisationUnit('name', organisationLevel)
@@ -11,8 +12,11 @@ module.exports = function (id, organisationLevel, isCSV = false) {
   return getCaseload(id, organisationLevel)
     .then(function (results) {
       return getBreadcrumbs(id, organisationLevel).then(function (breadcrumbs) {
-        const title = breadcrumbs[0].title
-        const subTitle = organisationUnitType.displayText
+        let title = breadcrumbs[0].title
+        if (organisationUnitType.name === 'hmpps') {
+          title = organisationUnitType.displayText
+        }
+        const subTitle = navTitleConstants.OFFENDER_MANAGEMENT.displayText
 
         const caseloadResults = parseCaseloadResults(organisationLevel, results, isCSV)
         return {

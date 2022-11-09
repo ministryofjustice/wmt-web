@@ -1,6 +1,7 @@
 const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 const workloadTypes = require('../../app/constants/workload-type')
+const dailyArchiveData = require('../helpers/data/setup-data')
 
 const nationalDefaultUrl = '/' + workloadTypes.OMIC + '/hmpps/0'
 
@@ -22,9 +23,9 @@ describe('LDU Omic Overview', function () {
       const viewLduLink = await $(activeLdu[0])
       await viewLduLink.click()
 
-      const pageTitle = await $('.govuk-caption-xl')
+      const pageTitle = await $('.govuk-heading-xl')
       const text = await pageTitle.getText()
-      expect(text).to.equal('Probation Delivery Unit')
+      expect(text).to.equal(dailyArchiveData.lduName)
     })
 
     after(function () {
@@ -49,9 +50,9 @@ describe('LDU Omic Overview', function () {
       const viewLduLink = await $(activeLdu[0])
       await viewLduLink.click()
 
-      const pageTitle = await $('.govuk-caption-xl')
+      const pageTitle = await $('.govuk-heading-xl')
       const text = await pageTitle.getText()
-      expect(text).to.equal('Probation Delivery Unit')
+      expect(text).to.equal(dailyArchiveData.lduName)
     })
 
     it('should be able to go to export page', async function () {
@@ -88,9 +89,9 @@ describe('LDU Omic Overview', function () {
       const viewLduLink = await $(activeLdu[0])
       await viewLduLink.click()
 
-      const pageTitle = await $('.govuk-caption-xl')
+      const pageTitle = await $('.govuk-heading-xl')
       const text = await pageTitle.getText()
-      expect(text).to.equal('Probation Delivery Unit')
+      expect(text).to.equal(dailyArchiveData.lduName)
     })
 
     it('should not be able to go to export page', async function () {
@@ -120,9 +121,9 @@ describe('LDU Omic Overview', function () {
       const viewLduLink = await $(activeLdu[0])
       await viewLduLink.click()
 
-      const pageTitle = await $('.govuk-caption-xl')
+      const pageTitle = await $('.govuk-heading-xl')
       const text = await pageTitle.getText()
-      expect(text).to.equal('Probation Delivery Unit')
+      expect(text).to.equal(dailyArchiveData.lduName)
     })
 
     it('should be able to go to export page', async function () {

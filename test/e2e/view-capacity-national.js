@@ -15,7 +15,7 @@ describe('View your caseload capacity flow at national level', () => {
     await browser.url('/')
     const nationalCaseloadLink = await $('[href="' + nationalDefaultUrl + '"]')
     await nationalCaseloadLink.click()
-    pageSubtitle = await $('.govuk-caption-xl')
+    pageSubtitle = await $('.govuk-heading-xl')
     pageSubtitle = await pageSubtitle.getText()
     expect(pageSubtitle).to.equal('National')
 

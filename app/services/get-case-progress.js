@@ -1,6 +1,7 @@
 const getBreadcrumbs = require('./get-breadcrumbs')
 const getOrganisationUnit = require('./helpers/org-unit-finder')
 const getCaseProgress = require('./data/get-caseload-progress')
+const navTitleConstants = require('./nav-title')
 
 module.exports = function (id, organisationLevel) {
   const result = {}
@@ -11,7 +12,10 @@ module.exports = function (id, organisationLevel) {
       result.caseProgressList = results
       result.breadcrumbs = breadcrumbs
       result.title = result.breadcrumbs[0].title
-      result.subTitle = organisationalUnitType.displayText
+      if (organisationalUnitType.name === 'hmpps') {
+        result.title = organisationalUnitType.displayText
+      }
+      result.subTitle = navTitleConstants.OFFENDER_MANAGEMENT.displayText
       result.caseProgressList.sort(function (a, b) { return b.name.localeCompare(a.name) }) // sorted backwards as the plot displays backwards, table is incorrect
       return result
     })

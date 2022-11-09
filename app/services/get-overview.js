@@ -4,6 +4,7 @@ const getOrganisationOverview = require('./data/get-organisation-overview')
 const getFullOverview = require('./data/get-full-overview')
 const calculateOverviewValues = require('./helpers/calculate-overview-values')
 const workloadTypes = require('../constants/workload-type')
+const navTitleConstants = require('./nav-title')
 
 module.exports = function (id, organisationLevel, isCSV = false, workloadType = workloadTypes.PROBATION) {
   const result = {}
@@ -21,7 +22,10 @@ module.exports = function (id, organisationLevel, isCSV = false, workloadType = 
     return overviewPromise.then(function (results) {
       result.overviewDetails = calculateOverviewValues(results, isCSV, workloadType)
       result.title = result.breadcrumbs[0].title
-      result.subTitle = organisationalUnitType.displayText
+      if (organisationalUnitType.name === 'hmpps') {
+        result.title = organisationalUnitType.displayText
+      }
+      result.subTitle = navTitleConstants.OFFENDER_MANAGEMENT.displayText
       return result
     })
   })

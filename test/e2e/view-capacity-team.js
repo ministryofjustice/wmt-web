@@ -2,6 +2,7 @@ const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 const workloadCapacityHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
+const dailyArchiveData = require('../helpers/data/setup-data')
 
 let workloadOwnerDefaultUrl
 let teamDefaultUrl
@@ -22,9 +23,9 @@ describe('Team', () => {
     })
 
     it('should navigate to the team caseload capacity screen', async () => {
-      pageSubtitle = await $('.govuk-caption-xl')
+      pageSubtitle = await $('.govuk-heading-xl')
       pageSubtitle = await pageSubtitle.getText()
-      expect(pageSubtitle).to.equal('Team')
+      expect(pageSubtitle).to.equal(dailyArchiveData.teamName)
 
       const fromDayField = await $('#capacity-from-day')
       const fromMonthField = await $('#capacity-from-month')
