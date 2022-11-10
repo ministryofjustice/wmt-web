@@ -7,6 +7,9 @@ module.exports = function (pageTitle, pageSubTitle, subNav, organisationLevel) {
       selectedSubNavTitle = item.title
     }
   })
+  if (selectedSubNavTitle === 'OMIC Overview') {
+    selectedSubNavTitle = 'Overview'
+  }
 
   let selectedAreaTitle = pageTitle
   if (organisationLevel === organisationUnitConstants.NATIONAL.name) {
