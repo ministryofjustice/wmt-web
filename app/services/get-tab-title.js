@@ -1,7 +1,7 @@
 const organisationUnitConstants = require('../constants/organisation-unit')
 
-module.exports = function (pageTitle, subNav, organisationLevel) {
-  let selectedSubNavTitle = ''
+module.exports = function (pageTitle, pageSubTitle, subNav, organisationLevel) {
+  let selectedSubNavTitle = null
   subNav?.forEach(function (item) {
     if (item.active) {
       selectedSubNavTitle = item.title
@@ -14,8 +14,8 @@ module.exports = function (pageTitle, subNav, organisationLevel) {
   }
 
   return {
-    first: selectedSubNavTitle,
-    second: selectedAreaTitle,
-    third: 'HMPPS'
+    first: selectedAreaTitle,
+    second: selectedSubNavTitle,
+    third: pageSubTitle
   }
 }
