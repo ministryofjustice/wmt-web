@@ -7,6 +7,7 @@ const workloadTypes = require('../../app/constants/workload-type')
 const authorisation = require('../authorisation')
 const getLastUpdated = require('../services/data/get-last-updated')
 const dateFormatter = require('../services/date-formatter')
+const getTabTitle = require('../services/get-tab-title')
 
 let lastUpdated
 
@@ -44,6 +45,7 @@ const renderOverview = function (req, res, next) {
         return res.render('court-reports-overview', {
           title: result.title,
           subTitle: result.subTitle,
+          tabTitle: getTabTitle(result.title, result.subTitle, null, organisationLevel),
           breadcrumbs: result.breadcrumbs,
           organisationLevel,
           childOrganisationLevel,
