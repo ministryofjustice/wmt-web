@@ -1,8 +1,6 @@
 {% extends "includes/layout.njk" %} 
 
 {% block content %}
-
-<main id="content" role="main">
   {% include "includes/breadcrumbs.njk" %}
   <header class="govuk-heading-xl officerSearchHeader">Search for an Offender Manager</header>
     {% include "includes/validation-error-messages.njk" %}
@@ -49,9 +47,7 @@
             {% endif %}
         </tbody>
     </table>
-  </div>
-</main>
-<script src="/public/javascripts/vendor/jquery.min.js"></script>
+  </div><script src="/public/javascripts/vendor/jquery.min.js"></script>
 <script src="/public/javascripts/datatables.min.js"></script>
 <script src="/public/javascripts/search-data.js"></script>
 {% endblock %}
