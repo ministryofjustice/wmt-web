@@ -21,6 +21,7 @@ const { SUPER_USER, APPLICATION_SUPPORT, MANAGER } = require('../constants/user-
 const messages = require('../constants/messages')
 const canExportRoles = [SUPER_USER, MANAGER]
 const getTabTitle = require('../services/get-tab-title')
+const navTitleConstants = require('../services/nav-title')
 
 let lastUpdated
 
@@ -54,8 +55,8 @@ module.exports = function (router) {
           organisationLevel,
           linkId: req.params.id,
           title: result.title,
-          subTitle: result.subTitle,
-          tabTitle: getTabTitle(result.title, result.subTitle, subNav, organisationLevel),
+          subTitle: navTitleConstants.OFFENDER_MANAGEMENT.displayText,
+          tabTitle: getTabTitle(result.title, navTitleConstants.OFFENDER_MANAGEMENT.displayText, subNav, organisationLevel),
           breadcrumbs: result.breadcrumbs,
           subNav,
           date: result.date,
