@@ -1,9 +1,7 @@
 {% extends "includes/layout.njk" %}
 
 
-{% block content %}
-<main id="content" role="main">
-  {% include "includes/breadcrumbs.njk" %}
+{% block content %}  {% include "includes/breadcrumbs.njk" %}
 
   {% include "includes/title-subtitle.njk" %}
 
@@ -62,6 +60,4 @@
     </div>
     {% include "includes/csrf-hidden-input.njk"%}
   </form>
-
-</main>
 {% endblock %}

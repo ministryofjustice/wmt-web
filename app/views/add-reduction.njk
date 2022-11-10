@@ -1,8 +1,6 @@
 {% extends "includes/layout.njk" %} 
 
 {% block content %}
-
-<main id="content" role="main">
   {% include "includes/breadcrumbs.njk" %}
 
   {% if reduction %}
@@ -195,9 +193,7 @@
         <input type="submit" class="govuk-button govuk-button--warning" id="delete-reduction" value="Delete reduction">
       </form>
     </div>
-  {% endif %}
-</main>
-{% endblock %} {% block bodyEnd %}
+  {% endif %}{% endblock %} {% block bodyEnd %}
 <script src="/public/javascripts/vendor/jquery.min.js"></script>
 <script src="/public/javascripts/add-reduction.js"></script>
 {% endblock %}
