@@ -58,7 +58,6 @@ module.exports = function (router) {
         breadcrumbs,
         title: 'Manage Reduction Reasons',
         successText,
-        subTitle: getSubtitle(true),
         tabTitle: manageTabTitle,
         canAddReason: canAddReasonRoles.includes(req.user.user_role),
         canEditReason: canEditReasonRoles.includes(req.user.user_role),
@@ -89,7 +88,7 @@ module.exports = function (router) {
         categories,
         breadcrumbs,
         title: 'Add Reduction Reason',
-        subTitle: getSubtitle(false),
+        subTitle: 'Manage Reduction Reasons',
         tabTitle: addTabTitle,
         onAdmin: true
 
@@ -125,7 +124,7 @@ module.exports = function (router) {
           breadcrumbs,
           categories,
           title: 'Edit Reduction Reason',
-          subTitle: getSubtitle(false),
+          subTitle: 'Manage Reduction Reasons',
           tabTitle: editTabTitle,
           onAdmin: true
 
@@ -175,7 +174,7 @@ module.exports = function (router) {
               category: findCategoryById(categories, req.body.category)
             },
             title: 'Add Reduction Reason',
-            subTitle: getSubtitle(false),
+            subTitle: 'Manage Reduction Reasons',
             tabTitle: addTabTitle,
             breadcrumbs,
             errors: error.validationErrors,
@@ -238,7 +237,7 @@ module.exports = function (router) {
             },
             breadcrumbs,
             title: 'Edit Reduction Reason',
-            subTitle: getSubtitle(false),
+            subTitle: 'Manage Reduction Reasons',
             tabTitle: editTabTitle,
             errors: error.validationErrors,
             categories,
@@ -313,12 +312,4 @@ const getBreadcrumbs = function (currentRoute) {
       break
   }
   return breadcrumbs
-}
-
-const getSubtitle = function (isListPage) {
-  if (isListPage) {
-    return null
-  } else {
-    return 'Manage Reduction Reasons'
-  }
 }
