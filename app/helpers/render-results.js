@@ -11,6 +11,7 @@ module.exports = function (page, title, res, errors, results, userRole, dateRang
     results,
     errors,
     subTitle: 'Archive Data',
+    tabTitle: getTabTitle(title),
     breadcrumbs,
     dateRange,
     body,
@@ -32,9 +33,17 @@ const getTopLink = function (title) {
     case 'Averaged Caseload Data':
       link = new Link(title, '/archive-data/average-caseload-data')
       break
-    case 'Archived Daily Caseload Data':
+    case 'Daily Caseload Data':
       link = new Link(title, '/archive-data/daily-caseload-data')
       break
   }
   return link
+}
+
+const getTabTitle = function (title) {
+  return {
+    first: title,
+    second: 'Archive Data Options',
+    third: 'Admin'
+  }
 }

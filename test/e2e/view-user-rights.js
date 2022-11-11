@@ -59,7 +59,7 @@ describe('User Rights page', () => {
 
       const pageTitle = await $('.govuk-heading-xl')
       const text = await pageTitle.getText('.govuk-heading-xl')
-      expect(text).to.equal('User rights')
+      expect(text).to.equal('Amend user rights')
 
       let radioButton = await $('#superAdminRadio')
       const SuperUserVisible = await radioButton.isExisting()
@@ -96,7 +96,7 @@ describe('User Rights page', () => {
 
       const pageTitle = await $('.govuk-heading-xl')
       const text = await pageTitle.getText('.govuk-heading-xl')
-      expect(text).to.equal('User rights')
+      expect(text).to.equal('Amend user rights')
 
       const radioButton = await $('#managerRadio')
       await radioButton.click()
@@ -126,7 +126,7 @@ describe('User Rights page', () => {
 
       const pageTitle = await $('.govuk-heading-xl')
       const text = await pageTitle.getText('.govuk-heading-xl')
-      expect(text).to.equal('User rights')
+      expect(text).to.equal('Amend user rights')
 
       const radioButton = await $('#applicationSupportRadio')
       await radioButton.click()
@@ -156,7 +156,7 @@ describe('User Rights page', () => {
 
       const pageTitle = await $('.govuk-heading-xl')
       const text = await pageTitle.getText('.govuk-heading-xl')
-      expect(text).to.equal('User rights')
+      expect(text).to.equal('Amend user rights')
 
       const radioButton = await $('#staffRadio')
       await radioButton.click()
@@ -198,7 +198,7 @@ describe('User Rights page', () => {
 
       const pageTitle = await $('.govuk-heading-xl')
       const text = await pageTitle.getText('.govuk-heading-xl')
-      expect(text).to.equal('User rights')
+      expect(text).to.equal('Amend user rights')
 
       let radioButton = await $('#superAdminRadio')
       await radioButton.click()
