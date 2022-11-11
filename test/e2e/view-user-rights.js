@@ -198,7 +198,7 @@ describe('User Rights page', () => {
 
       const pageTitle = await $('.govuk-heading-xl')
       const text = await pageTitle.getText('.govuk-heading-xl')
-      expect(text).to.equal('User rights')
+      expect(text).to.equal('Amend user rights')
 
       let radioButton = await $('#superAdminRadio')
       await radioButton.click()
