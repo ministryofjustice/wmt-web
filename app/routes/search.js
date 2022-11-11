@@ -4,7 +4,6 @@ const tabTitle = {
   third: 'Search for an Offender Manager'
 }
 
-
 module.exports = function (router) {
   router.get('/officer-search', function (req, res, next) {
     return res.render('search-for-officer', {
