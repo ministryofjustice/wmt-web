@@ -16,13 +16,16 @@ class ErrorHandler {
   }
 
   get () {
-    const errors = this.errors
-    for (const field in errors) {
-      if (errors[field].length > 0) {
-        return errors
+    const errorList = []
+    for (const [key, value] of Object.entries(this.errors)) {
+      if (value.length > 0) {
+        errorList.push({
+          href: key,
+          text: value[0]
+        })
       }
     }
-    return false
+    return errorList.length > 0 ? errorList : false
   }
 }
 
