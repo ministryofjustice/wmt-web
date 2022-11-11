@@ -74,16 +74,13 @@
     </div>
 {% endblock %}
 
-{% block bodyStart %}
-    {% include "includes/scripts.njk" %}
-{% endblock %}
-
 {% block beforeContent %}
     {% include "includes/breadcrumbs.njk" %}
 {% endblock %}  
 
 {% block footer %}
     {% include "includes/footer.njk" %}
+    {% include "includes/scripts.njk" %}
 {% endblock %}
 
 {% block bodyEnd %}
