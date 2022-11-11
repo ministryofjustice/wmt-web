@@ -18,7 +18,7 @@ describe('services/validators/field-validator', function () {
       const errorHandler = ErrorHandler()
       FieldValidator(null, FIELD_NAME, errorHandler).isRequired()
       const errors = errorHandler.get()
-      expect(errors).to.have.property(FIELD_NAME)
+      expect(errors[0].href).to.eq(FIELD_NAME)
     })
 
     it('should return an error object if passed undefined', function () {
@@ -26,7 +26,7 @@ describe('services/validators/field-validator', function () {
       FieldValidator(undefined, FIELD_NAME, errorHandler)
         .isRequired()
       const errors = errorHandler.get()
-      expect(errors).to.have.property(FIELD_NAME)
+      expect(errors[0].href).to.eq(FIELD_NAME)
     })
 
     it('should return false if passed valid data', function () {
@@ -42,7 +42,7 @@ describe('services/validators/field-validator', function () {
       FieldValidator(EMPTY_DATA, FIELD_NAME, errorHandler)
         .isRequired()
       const errors = errorHandler.get()
-      expect(errors).to.have.property(FIELD_NAME)
+      expect(errors[0].href).to.eq(FIELD_NAME)
     })
   })
 
@@ -76,7 +76,7 @@ describe('services/validators/field-validator', function () {
       const max = 99
       FieldValidator('0', FIELD_NAME, errorHandler).isInt(min, max)
       const errors = errorHandler.get()
-      expect(errors).to.have.property(FIELD_NAME)
+      expect(errors[0].href).to.eq(FIELD_NAME)
     })
 
     it('upper boundary + 1: should return an error if passed invalid data', function () {
@@ -84,7 +84,7 @@ describe('services/validators/field-validator', function () {
       const max = 99
       FieldValidator('100', FIELD_NAME, errorHandler).isInt(min, max)
       const errors = errorHandler.get()
-      expect(errors).to.have.property(FIELD_NAME)
+      expect(errors[0].href).to.eq(FIELD_NAME)
     })
 
     it('whitespace: should return an error if passed invalid data', function () {
@@ -92,7 +92,7 @@ describe('services/validators/field-validator', function () {
       const max = 99
       FieldValidator(' ', FIELD_NAME, errorHandler).isInt(min, max)
       const errors = errorHandler.get()
-      expect(errors).to.have.property(FIELD_NAME)
+      expect(errors[0].href).to.eq(FIELD_NAME)
     })
 
     it('string: should return an error if passed invalid data', function () {
@@ -100,7 +100,7 @@ describe('services/validators/field-validator', function () {
       const max = 99
       FieldValidator('testing', FIELD_NAME, errorHandler).isInt(min, max)
       const errors = errorHandler.get()
-      expect(errors).to.have.property(FIELD_NAME)
+      expect(errors[0].href).to.eq(FIELD_NAME)
     })
 
     it('partial int: should return an error if passed invalid data', function () {
@@ -108,7 +108,7 @@ describe('services/validators/field-validator', function () {
       const max = 99
       FieldValidator('£3', FIELD_NAME, errorHandler).isInt(min, max)
       const errors = errorHandler.get()
-      expect(errors).to.have.property(FIELD_NAME)
+      expect(errors[0].href).to.eq(FIELD_NAME)
     })
 
     it('leading zeros: should return an error if passed a value interpreted as octal', function () {
@@ -116,7 +116,7 @@ describe('services/validators/field-validator', function () {
       const max = 99
       FieldValidator('072', FIELD_NAME, errorHandler).isInt(min, max)
       const errors = errorHandler.get()
-      expect(errors).to.have.property(FIELD_NAME)
+      expect(errors[0].href).to.eq(FIELD_NAME)
     })
   })
 
@@ -150,7 +150,7 @@ describe('services/validators/field-validator', function () {
       const max = 99.0
       FieldValidator('0.9', FIELD_NAME, errorHandler).isFloat(min, max)
       const errors = errorHandler.get()
-      expect(errors).to.have.property(FIELD_NAME)
+      expect(errors[0].href).to.eq(FIELD_NAME)
     })
 
     it('upper boundary + 0.1: should return an error if passed invalid data', function () {
@@ -158,7 +158,7 @@ describe('services/validators/field-validator', function () {
       const max = 99.0
       FieldValidator('99.1', FIELD_NAME, errorHandler).isFloat(min, max)
       const errors = errorHandler.get()
-      expect(errors).to.have.property(FIELD_NAME)
+      expect(errors[0].href).to.eq(FIELD_NAME)
     })
 
     it('whitespace: should return an error if passed invalid data', function () {
@@ -166,7 +166,7 @@ describe('services/validators/field-validator', function () {
       const max = 99.0
       FieldValidator(' ', FIELD_NAME, errorHandler).isFloat(min, max)
       const errors = errorHandler.get()
-      expect(errors).to.have.property(FIELD_NAME)
+      expect(errors[0].href).to.eq(FIELD_NAME)
     })
 
     it('string: should return an error if passed invalid data', function () {
@@ -174,7 +174,7 @@ describe('services/validators/field-validator', function () {
       const max = 99.0
       FieldValidator('testing', FIELD_NAME, errorHandler).isFloat(min, max)
       const errors = errorHandler.get()
-      expect(errors).to.have.property(FIELD_NAME)
+      expect(errors[0].href).to.eq(FIELD_NAME)
     })
 
     it('partial int: should return an error if passed invalid data', function () {
@@ -182,7 +182,7 @@ describe('services/validators/field-validator', function () {
       const max = 99.0
       FieldValidator('£3.50', FIELD_NAME, errorHandler).isFloat(min, max)
       const errors = errorHandler.get()
-      expect(errors).to.have.property(FIELD_NAME)
+      expect(errors[0].href).to.eq(FIELD_NAME)
     })
 
     it('leading zeros: should return an error if passed a value interpreted as octal', function () {
@@ -204,7 +204,7 @@ describe('services/validators/field-validator', function () {
     it('upper boundary + 1: should return an error if passed a value which is equal to boundary', function () {
       FieldValidator('12345678912', FIELD_NAME, errorHandler).isLessThanLength(10)
       const errors = errorHandler.get()
-      expect(errors).to.have.property(FIELD_NAME)
+      expect(errors[0].href).to.eq(FIELD_NAME)
     })
 
     it('empty string: should return false if passed valid data', function () {
@@ -230,7 +230,7 @@ describe('services/validators/field-validator', function () {
     it('should return an error if passed in invalid true or false value', function () {
       FieldValidator('xxxx', FIELD_NAME, errorHandler).isBoolean()
       const errors = errorHandler.get()
-      expect(errors).to.have.property(FIELD_NAME)
+      expect(errors[0].href).to.eq(FIELD_NAME)
     })
   })
 })

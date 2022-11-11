@@ -9,40 +9,36 @@ describe('services/validators/error-handler', function () {
   const FIELD_NAME_1 = 'some field name 1'
   const FIELD_NAME_2 = 'some field name 2'
   const MESSAGE = 'some error message'
-  const OPTIONS = 'some options'
   const message = function () {
     return MESSAGE
   }
 
   describe('add', function () {
     it('should return single result if one error is added', function () {
-      this.errorHandler.add(FIELD_NAME_1, message, OPTIONS)
+      this.errorHandler.add(FIELD_NAME_1, message)
       const result = this.errorHandler.get()
-      expect(result).to.have.property(FIELD_NAME_1)
+      expect(result)
         .that.is.an('array')
         .that.has.length(1)
     })
 
-    it('should have three errors saved against the field name if add is called three times', function () {
-      this.errorHandler.add(FIELD_NAME_1, message, OPTIONS)
-      this.errorHandler.add(FIELD_NAME_1, message, OPTIONS)
-      this.errorHandler.add(FIELD_NAME_1, message, OPTIONS)
+    it('should have a single error if add is called three times with the same error message', function () {
+      this.errorHandler.add(FIELD_NAME_1, message)
+      this.errorHandler.add(FIELD_NAME_1, message)
+      this.errorHandler.add(FIELD_NAME_1, message)
       const result = this.errorHandler.get()
-      expect(result).to.have.property(FIELD_NAME_1)
+      expect(result)
         .that.is.an('array')
-        .that.has.length(3)
+        .that.has.length(1)
     })
 
     it('should have a property and error for each differnet field name passed to add', function () {
-      this.errorHandler.add(FIELD_NAME_1, message, OPTIONS)
-      this.errorHandler.add(FIELD_NAME_2, message, OPTIONS)
+      this.errorHandler.add(FIELD_NAME_1, message)
+      this.errorHandler.add(FIELD_NAME_2, message)
       const result = this.errorHandler.get()
-      expect(result).to.have.property(FIELD_NAME_1)
+      expect(result)
         .that.is.an('array')
-        .that.has.length(1)
-      expect(result).to.have.property(FIELD_NAME_2)
-        .that.is.an('array')
-        .that.has.length(1)
+        .that.has.length(2)
     })
   })
 
