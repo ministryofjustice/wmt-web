@@ -1,18 +1,18 @@
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
 {% if errors %}
-<div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
-  <h2 class="govuk-error-summary__title" id="error-summary-title">
-    There is a problem
-  </h2>
 
-  <div class="govuk-error-summary__body">
-    <ul class="govuk-list govuk-error-summary__list">
-      {% for field, messages in errors %}
-        {% if messages[0] %}
-          <li><a href="#{{ field }}">{{ messages[0] }}</a></li>
-        {% endif %}
-      {% endfor %}
-    </ul>
-  </div>
+    {% set errorList = [] %}
+    {% for field, messages in errors %}
+        {% set errorList = (errorList.push({
+          href: field,
+          text: messages[0]
+        }), errorList) %}
+    {% endfor %}
 
-</div>
+    {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errorList
+    }) }}
+
 {% endif %}
