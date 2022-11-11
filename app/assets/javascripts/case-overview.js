@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $('.js-data-table').dataTable({
+    $('.js-data-table').DataTable({
       fixedHeader: true,
       paging: false,
       searching: false,

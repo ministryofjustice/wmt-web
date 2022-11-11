@@ -1,7 +1,7 @@
 //var data
 
 $(document).ready(function() {
-    $('.js-data-table').dataTable({
+    $('.js-data-table').DataTable({
       paging: true,
       "pageLength": 100,
       searching: true,
