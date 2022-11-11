@@ -13,6 +13,23 @@ const Link = require('../services/domain/link')
 const canAddReasonRoles = [SUPER_USER]
 const canEditReasonRoles = [SUPER_USER]
 
+const manageTabTitle = {
+  second: 'Manage Reduction Reasons',
+  third: 'Admin'
+}
+
+const addTabTitle = {
+  first: 'Add Reduction Reason',
+  second: 'Manage Reduction Reasons',
+  third: 'Admin'
+}
+
+const editTabTitle = {
+  first: 'Edit Reduction Reason',
+  second: 'Manage Reduction Reasons',
+  third: 'Admin'
+}
+
 module.exports = function (router) {
   router.get('/manage-reduction-reasons', function (req, res, next) {
     try {
@@ -42,6 +59,7 @@ module.exports = function (router) {
         title: 'Manage Reduction Reasons',
         successText,
         subTitle: getSubtitle(true),
+        tabTitle: manageTabTitle,
         canAddReason: canAddReasonRoles.includes(req.user.user_role),
         canEditReason: canEditReasonRoles.includes(req.user.user_role),
         onAdmin: true
@@ -72,6 +90,7 @@ module.exports = function (router) {
         breadcrumbs,
         title: 'Add Reduction Reason',
         subTitle: getSubtitle(false),
+        tabTitle: addTabTitle,
         onAdmin: true
 
       })
@@ -107,6 +126,7 @@ module.exports = function (router) {
           categories,
           title: 'Edit Reduction Reason',
           subTitle: getSubtitle(false),
+          tabTitle: editTabTitle,
           onAdmin: true
 
         })
@@ -156,6 +176,7 @@ module.exports = function (router) {
             },
             title: 'Add Reduction Reason',
             subTitle: getSubtitle(false),
+            tabTitle: addTabTitle,
             breadcrumbs,
             errors: error.validationErrors,
             categories,
@@ -216,8 +237,9 @@ module.exports = function (router) {
               category: findCategoryById(categories, req.body.category)
             },
             breadcrumbs,
-            subTitle: getSubtitle(false),
             title: 'Edit Reduction Reason',
+            subTitle: getSubtitle(false),
+            tabTitle: editTabTitle,
             errors: error.validationErrors,
             categories,
             onAdmin: true
@@ -295,7 +317,7 @@ const getBreadcrumbs = function (currentRoute) {
 
 const getSubtitle = function (isListPage) {
   if (isListPage) {
-    return 'Admin'
+    return null
   } else {
     return 'Manage Reduction Reasons'
   }

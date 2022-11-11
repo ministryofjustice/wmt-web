@@ -12,6 +12,16 @@ const User = require('../services/domain/user')
 const ValidationError = require('../services/errors/validation-error')
 const log = require('../logger')
 
+const searchTabTitle = {
+  second: 'User rights',
+  third: 'Admin'
+}
+
+const userRightsTabTitle = {
+  second: 'Amend user rights',
+  third: 'Admin'
+}
+
 module.exports = function (router) {
   router.get('/admin/user', function (req, res) {
     try {
@@ -37,6 +47,7 @@ module.exports = function (router) {
     const failureText = fail ? 'Invalid username specified' : null
     return res.render('user', {
       title: 'User rights',
+      tabTitle: searchTabTitle,
       breadcrumbs,
       failureText,
       onAdmin: true
@@ -73,6 +84,7 @@ module.exports = function (router) {
     return userRoleService.getRoleByUsername(userRoleService.removeDomainFromUsername(username)).then(function (role) {
       return res.render('user-rights', {
         title: 'User rights',
+        tabTitle: userRightsTabTitle,
         username,
         fullname: role.fullname,
         userIsSuperUser: roles.SUPER_USER === role.role,
@@ -118,6 +130,7 @@ module.exports = function (router) {
         ]
         return res.render('user-rights', {
           title: 'User rights',
+          tabTitle: userRightsTabTitle,
           username,
           fullname: req.body.fullname,
           userIsSuperUser: roles.SUPER_USER === req.body.rights,

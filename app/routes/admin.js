@@ -4,6 +4,10 @@ const roles = require('../constants/user-roles')
 const Unauthorized = require('../services/errors/authentication-error').Unauthorized
 const Forbidden = require('../services/errors/authentication-error').Forbidden
 
+const tabTitle = {
+  third: 'Admin'
+}
+
 module.exports = function (router) {
   router.get('/admin', function (req, res, next) {
     try {
@@ -21,6 +25,7 @@ module.exports = function (router) {
 
     return res.render('admin', {
       title: 'Admin',
+      tabTitle,
       onAdmin: true
     })
   })

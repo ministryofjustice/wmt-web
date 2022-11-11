@@ -11,6 +11,16 @@ const getAdjustmentPointsConfig = require('../services/data/get-adjustment-point
 const updateAdjustmentPointsConfig = require('../services/data/update-adjustment-points-config')
 const adjustmentTypes = require('../constants/adjustment-type')
 
+const workloadPointsTitle = {
+  second: 'Workload points',
+  third: 'Admin'
+}
+
+const workloadPointsT2ATitle = {
+  second: 'Workload points (T2A)',
+  third: 'Admin'
+}
+
 module.exports = function (router) {
   router.get('/admin/workload-points', function (req, res, next) {
     try {
@@ -33,7 +43,7 @@ module.exports = function (router) {
               .then(function (gs) {
                 return res.render('workload-points', {
                   title: result.title,
-                  subTitle: result.subTitle,
+                  tabTitle: workloadPointsTitle,
                   breadcrumbs: result.breadcrumbs,
                   wp: result.workloadPoints,
                   gs,
@@ -70,7 +80,7 @@ module.exports = function (router) {
       .then(function (result) {
         return res.render('workload-points', {
           title: result.title,
-          subTitle: result.subTitle,
+          tabTitle: workloadPointsT2ATitle,
           breadcrumbs: result.breadcrumbs,
           wp: result.workloadPoints,
           updatedBy: result.updatedBy,
@@ -142,7 +152,7 @@ module.exports = function (router) {
                     const gsUpdated = updateAdjustmentObjects(gs, adjustmentsFromInput)
                     return res.status(400).render('workload-points', {
                       title: result.title,
-                      subTitle: result.subTitle,
+                      tabTitle: workloadPointsTitle,
                       breadcrumbs: result.breadcrumbs,
                       wp: req.body,
                       cms: cmsUpdated,
@@ -193,7 +203,7 @@ module.exports = function (router) {
           .then(function (result) {
             return res.status(400).render('workload-points', {
               title: result.title,
-              subTitle: result.subTitle,
+              tabTitle: workloadPointsT2ATitle,
               breadcrumbs: result.breadcrumbs,
               wp: req.body,
               updatedBy: result.updatedBy,
