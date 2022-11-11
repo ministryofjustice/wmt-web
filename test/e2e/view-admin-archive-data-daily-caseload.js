@@ -49,7 +49,7 @@ describe('Admin Archive Data Daily Caseload Page', () => {
     it('Should be able to navigate to page', async function () {
       const pageTitle = await $('.govuk-heading-xl')
       const pageTitleText = await pageTitle.getText()
-      expect(pageTitleText).to.equal('Archived Daily Caseload Data')
+      expect(pageTitleText).to.equal('Daily Caseload Data')
     })
 
     it('should not show the export button', async function () {
@@ -108,7 +108,7 @@ describe('Admin Archive Data Daily Caseload Page', () => {
     it('Should be able to navigate to page', async function () {
       const pageTitle = await $('.govuk-heading-xl')
       const pageTitleText = await pageTitle.getText()
-      expect(pageTitleText).to.equal('Archived Daily Caseload Data')
+      expect(pageTitleText).to.equal('Daily Caseload Data')
     })
 
     it('should show the export button', async function () {
