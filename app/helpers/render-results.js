@@ -32,7 +32,7 @@ const getTopLink = function (title) {
     case 'Averaged Caseload Data':
       link = new Link(title, '/archive-data/average-caseload-data')
       break
-    case 'Archived Daily Caseload Data':
+    case 'Daily Caseload Data':
       link = new Link(title, '/archive-data/daily-caseload-data')
       break
   }
