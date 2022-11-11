@@ -5,6 +5,11 @@ const Unauthorized = require('../services/errors/authentication-error').Unauthor
 const Forbidden = require('../services/errors/authentication-error').Forbidden
 const Link = require('../services/domain/link')
 
+const tabTitle = {
+  second: 'Archive Data Options',
+  third: 'Admin'
+}
+
 module.exports = function (router) {
   router.get('/archive-options', function (req, res, next) {
     try {
@@ -24,7 +29,7 @@ module.exports = function (router) {
       new Link('Admin', '/admin')
     ]
     return res.render('archive-options', {
-      subTitle: 'Admin',
+      tabTitle,
       title: 'Archive Data Options',
       breadcrumbs,
       canViewArchiveReductions: roles.SUPER_USER === req.user.user_role,

@@ -11,6 +11,7 @@ module.exports = function (page, title, res, errors, results, userRole, dateRang
     results,
     errors,
     subTitle: 'Archive Data',
+    tabTitle: getTabTitle(title),
     breadcrumbs,
     dateRange,
     body,
@@ -37,4 +38,12 @@ const getTopLink = function (title) {
       break
   }
   return link
+}
+
+const getTabTitle = function (title) {
+  return {
+    first: title,
+    second: 'Archive Data Options',
+    third: 'Admin'
+  }
 }
