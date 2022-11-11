@@ -105,7 +105,7 @@ const renderView = function (req, res, next, dateParameters) {
         linkId: id,
         title: capacityBreakdown.title,
         subTitle: capacityBreakdown.subTitle,
-        tabTitle: getTabTitle(capacityBreakdown.title, subNav, organisationLevel),
+        tabTitle: getTabTitle(capacityBreakdown.title, capacityBreakdown.subTitle, subNav, organisationLevel),
         subNav,
         breadcrumbs: capacityBreakdown.breadcrumbs,
         capacity: capacityBreakdown.capacityTable,

@@ -55,7 +55,7 @@ module.exports = function (router) {
             linkId: req.params.id,
             title: result.title,
             subTitle: result.subTitle,
-            tabTitle: getTabTitle(result.title, subNav, organisationLevel),
+            tabTitle: getTabTitle(result.title, result.subTitle, subNav, organisationLevel),
             breadcrumbs: result.breadcrumbs,
             subNav,
             organisationLevel,

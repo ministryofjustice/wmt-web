@@ -45,7 +45,7 @@ module.exports = function (router) {
         return res.render('individual-overview', {
           title: result.title,
           subTitle: navTitleConstants.OFFENDER_MANAGEMENT.displayText,
-          tabTitle: getTabTitle(result.title, subNav, organisationUnitConstants.OFFENDER_MANAGER.name),
+          tabTitle: getTabTitle(result.title, navTitleConstants.OFFENDER_MANAGEMENT.displayText, subNav, organisationUnitConstants.OFFENDER_MANAGER.name),
           breadcrumbs: result.breadcrumbs,
           organisationLevel: organisationUnitConstants.OFFENDER_MANAGER.name,
           subNav,
@@ -71,7 +71,7 @@ module.exports = function (router) {
         return res.render('individual-overview', {
           title: result.title,
           subTitle: navTitleConstants.OFFENDER_MANAGEMENT.displayText,
-          tabTitle: getTabTitle(result.title, subNav, organisationUnitConstants.OFFENDER_MANAGER.name),
+          tabTitle: getTabTitle(result.title, navTitleConstants.OFFENDER_MANAGEMENT.displayText, subNav, organisationUnitConstants.OFFENDER_MANAGER.name),
           breadcrumbs: result.breadcrumbs,
           organisationLevel: organisationUnitConstants.OFFENDER_MANAGER.name,
           subNav,
@@ -173,7 +173,7 @@ const renderOverview = function (req, res, next) {
       return res.render('overview', {
         title: result.title,
         subTitle: result.subTitle,
-        tabTitle: getTabTitle(result.title, subNav, organisationLevel),
+        tabTitle: getTabTitle(result.title, navTitleConstants.OFFENDER_MANAGEMENT.displayText, subNav, organisationLevel),
         breadcrumbs: result.breadcrumbs,
         organisationLevel,
         linkId: req.params.id,

@@ -10,6 +10,8 @@ const Forbidden = require('../services/errors/authentication-error').Forbidden
 const { SUPER_USER, STAFF, MANAGER } = require('../constants/user-roles')
 const messages = require('../constants/messages')
 const canExportRoles = [SUPER_USER, MANAGER, STAFF]
+const getTabTitle = require('../services/get-tab-title')
+const navTitleConstants = require('../services/nav-title')
 
 let lastUpdated
 
@@ -36,18 +38,20 @@ module.exports = function (router) {
 
     return getLastUpdated().then(function (lastUpdatedDate) {
       lastUpdated = dateFormatter.formatDate(lastUpdatedDate.date_processed, 'DD-MM-YYYY HH:mm')
-      const result = getExport(id, organisationLevel)
-      result.date = lastUpdated
-      return res.render('omic-export', {
-        organisationLevel,
-        linkId: req.params.id,
-        title: result.title,
-        subTitle: result.subTitle,
-        breadcrumbs: result.breadcrumbs,
-        subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.OMIC, authorisedUserRole.authorisation, authorisedUserRole.userRole),
-        date: result.date,
-        onOmic: true
-
+      return getExport(id, organisationLevel).then(function (result) {
+        result.date = lastUpdated
+        const subNav = getSubNav(id, organisationLevel, req.path, workloadTypes.OMIC, authorisedUserRole.authorisation, authorisedUserRole.userRole)
+        return res.render('omic-export', {
+          organisationLevel,
+          linkId: req.params.id,
+          title: result.title,
+          subTitle: navTitleConstants.OMIC.displayText,
+          tabTitle: getTabTitle(result.title, navTitleConstants.OMIC.displayText, subNav, organisationLevel),
+          breadcrumbs: result.breadcrumbs,
+          subNav,
+          date: result.date,
+          onOmic: true
+        })
       })
     }).catch(function (error) {
       next(error)

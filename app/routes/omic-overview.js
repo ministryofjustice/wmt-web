@@ -6,6 +6,7 @@ const authorisation = require('../authorisation')
 const workloadTypes = require('../constants/workload-type')
 const getLastUpdated = require('../services/data/get-last-updated')
 const dateFormatter = require('../services/date-formatter')
+const getTabTitle = require('../services/get-tab-title')
 
 let lastUpdated
 
@@ -49,16 +50,22 @@ const renderOverview = function (req, res, next) {
     lastUpdated = dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY HH:mm')
     return getOmicOverview(id, organisationLevel).then(function (result) {
       result.date = lastUpdated
+      const subNav = getSubNav(id, organisationLevel, req.path, workloadTypes.OMIC, authorisedUserRole.authorisation, authorisedUserRole.userRole)
+      let subNavForTabTitle = null
+      if (subNav?.length > 1) {
+        subNavForTabTitle = subNav
+      }
       return res.render('omic-overview', {
         title: result.title,
         subTitle: result.subTitle,
+        tabTitle: getTabTitle(result.title, result.subTitle, subNavForTabTitle, organisationLevel),
         breadcrumbs: result.breadcrumbs,
         organisationLevel,
         linkId: req.params.id,
         screen: 'overview',
         childOrganisationLevel,
         childOrganisationLevelDisplayText,
-        subNav: getSubNav(id, organisationLevel, req.path, workloadTypes.OMIC, authorisedUserRole.authorisation, authorisedUserRole.userRole),
+        subNav,
         overviewDetails: result.overviewDetails,
         date: result.date,
 

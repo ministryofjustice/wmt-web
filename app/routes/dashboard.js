@@ -12,6 +12,7 @@ const roles = require('../constants/user-roles')
 const Forbidden = require('../services/errors/authentication-error').Forbidden
 const messages = require('../constants/messages')
 const getTabTitle = require('../services/get-tab-title')
+const navTitleConstants = require('../services/nav-title')
 
 let lastUpdated
 
@@ -38,22 +39,22 @@ module.exports = function (router) {
 
     return getLastUpdated().then(function (lastUpdatedDate) {
       lastUpdated = dateFormatter.formatDate(lastUpdatedDate.date_processed, 'DD-MM-YYYY HH:mm')
-      const result = getExport(id, organisationLevel)
-      result.date = lastUpdated
-      return getDashboardFiles().then(function (dashboardFiles) {
-        const subNav = getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole)
-        return res.render('dashboard', {
-          organisationLevel,
-          dashboardFiles,
-          linkId: req.params.id,
-          title: result.title,
-          subTitle: result.subTitle,
-          tabTitle: getTabTitle(result.title, subNav, organisationLevel),
-          breadcrumbs: result.breadcrumbs,
-          subNav,
-          date: result.date,
-          onOffenderManager: true
-
+      return getExport(id, organisationLevel).then(function (result) {
+        result.date = lastUpdated
+        return getDashboardFiles().then(function (dashboardFiles) {
+          const subNav = getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole)
+          return res.render('dashboard', {
+            organisationLevel,
+            dashboardFiles,
+            linkId: req.params.id,
+            title: result.title,
+            subTitle: navTitleConstants.OFFENDER_MANAGEMENT.displayText,
+            tabTitle: getTabTitle(result.title, navTitleConstants.OFFENDER_MANAGEMENT.displayText, subNav, organisationLevel),
+            breadcrumbs: result.breadcrumbs,
+            subNav,
+            date: result.date,
+            onOffenderManager: true
+          })
         })
       })
     }).catch(function (error) {
