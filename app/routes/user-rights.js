@@ -83,7 +83,7 @@ module.exports = function (router) {
     const authorisedUserRole = authorisation.getAuthorisedUserRole(req)
     return userRoleService.getRoleByUsername(userRoleService.removeDomainFromUsername(username)).then(function (role) {
       return res.render('user-rights', {
-        title: 'User rights',
+        title: 'Amend user rights',
         tabTitle: userRightsTabTitle,
         username,
         fullname: role.fullname,
@@ -129,7 +129,7 @@ module.exports = function (router) {
           new Link('Admin', '/admin')
         ]
         return res.render('user-rights', {
-          title: 'User rights',
+          title: 'Amend user rights',
           tabTitle: userRightsTabTitle,
           username,
           fullname: req.body.fullname,
