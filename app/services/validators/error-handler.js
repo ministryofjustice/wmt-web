@@ -20,7 +20,7 @@ class ErrorHandler {
     for (const [key, value] of Object.entries(this.errors)) {
       if (value.length > 0) {
         errorList.push({
-          href: key,
+          href: `#${key}`,
           text: value[0]
         })
       }
