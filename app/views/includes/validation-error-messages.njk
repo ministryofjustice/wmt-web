@@ -2,17 +2,9 @@
 
 {% if errors %}
 
-    {% set errorList = [] %}
-    {% for field, messages in errors %}
-        {% set errorList = (errorList.push({
-          href: field,
-          text: messages[0]
-        }), errorList) %}
-    {% endfor %}
-
     {{ govukErrorSummary({
         titleText: "There is a problem",
-        errorList: errorList
+        errorList: errors
     }) }}
 
 {% endif %}
