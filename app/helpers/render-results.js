@@ -10,7 +10,6 @@ module.exports = function (page, title, res, errors, results, userRole, dateRang
     title,
     results,
     errors,
-    subTitle: 'Archive Data',
     tabTitle: getTabTitle(title),
     breadcrumbs,
     dateRange,

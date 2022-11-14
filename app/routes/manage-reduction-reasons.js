@@ -88,7 +88,6 @@ module.exports = function (router) {
         categories,
         breadcrumbs,
         title: 'Add Reduction Reason',
-        subTitle: 'Manage Reduction Reasons',
         tabTitle: addTabTitle,
         onAdmin: true
 
@@ -124,7 +123,6 @@ module.exports = function (router) {
           breadcrumbs,
           categories,
           title: 'Edit Reduction Reason',
-          subTitle: 'Manage Reduction Reasons',
           tabTitle: editTabTitle,
           onAdmin: true
 
@@ -174,7 +172,6 @@ module.exports = function (router) {
               category: findCategoryById(categories, req.body.category)
             },
             title: 'Add Reduction Reason',
-            subTitle: 'Manage Reduction Reasons',
             tabTitle: addTabTitle,
             breadcrumbs,
             errors: error.validationErrors,
@@ -237,7 +234,6 @@ module.exports = function (router) {
             },
             breadcrumbs,
             title: 'Edit Reduction Reason',
-            subTitle: 'Manage Reduction Reasons',
             tabTitle: editTabTitle,
             errors: error.validationErrors,
             categories,
