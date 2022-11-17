@@ -191,11 +191,11 @@ jobs:
           command: sleep 20
       - run:
           name: Run the node app
-          command: npm run start
+          command: npm start
           background: true
       - run:
           name: Wait for node app to start
-          command: sleep 10
+          command: sleep 20
       - run:
           name: run accessibility tests
           command: npm run accessibility-test-ci
