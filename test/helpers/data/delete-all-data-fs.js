@@ -5,16 +5,16 @@ const dailyArchiveDataHelper = require('./daily-archive-data-helper')
 const path = require('path')
 const { readFileSync } = require('fs')
 
-const pallyCourtInserts = path.resolve(__dirname, '../../../pallyCourtInserts.json')
-const pallyWorkloadInserts = path.resolve(__dirname, '../../../pallyWorkloadInserts.json')
-const pallyUserInserts = path.resolve(__dirname, '../../../pallyUserInserts.json')
-const dailyArchiveInserts = path.resolve(__dirname, '../../../dailyArchiveInserts.json')
+const testCourtInserts = path.resolve(__dirname, '../../testDataCourtInserts.json')
+const testWorkloadInserts = path.resolve(__dirname, '../../testDataWorkloadInserts.json')
+const testUserInserts = path.resolve(__dirname, '../../testDataUserInserts.json')
+const dailyArchiveInserts = path.resolve(__dirname, '../../testDataDailyArchiveInserts.json')
 
 module.exports = function () {
   try {
-    const courtReportInserts = JSON.parse(readFileSync(pallyCourtInserts, 'utf8'))
-    const workloadInserts = JSON.parse(readFileSync(pallyWorkloadInserts, 'utf8'))
-    const userInserts = JSON.parse(readFileSync(pallyUserInserts, 'utf8'))
+    const courtReportInserts = JSON.parse(readFileSync(testCourtInserts, 'utf8'))
+    const workloadInserts = JSON.parse(readFileSync(testWorkloadInserts, 'utf8'))
+    const userInserts = JSON.parse(readFileSync(testUserInserts, 'utf8'))
     const archiveInserts = JSON.parse(readFileSync(dailyArchiveInserts, 'utf8'))
 
     return dailyArchiveDataHelper.deleteDailyArchiveByIds(archiveInserts[0].id).then(function () {
@@ -28,8 +28,8 @@ module.exports = function () {
         })
       })
     })
-  } catch (err) {
-    console.error(err)
-    throw err
+  } catch (e) {
+    // Do nothing - assume the files are missing
+    return Promise.resolve()
   }
 }

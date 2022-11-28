@@ -15,7 +15,7 @@
     "build": "npm run compile-sass && npm run copy-assets",
     "integration-test": "npm run build && mocha --recursive test/integration --timeout=60000 --exit --reporter mocha-simple-html-reporter --reporter-options output=test_results/integration-test-reports.html",
     "test": "mocha --recursive test/unit/ --exit --reporter mocha-simple-html-reporter --reporter-options output=test_results/unit-test-reports.html",
-    "test-e2e": "node ./test/helpers/data/setup-e2e-data-helper.js && wdio test/e2e.conf.js && node ./test/helpers/data/delete-e2e-data-helper.js",
+    "test-e2e": "npm run clean-dev-data && npm run seed-dev-data && wdio test/e2e.conf.js && npm run clean-dev-data",
     "record-build-info": "node ./bin/record-build-info",
     "security_audit": "npx audit-ci --config audit-ci.json",
     "lint": "standard",

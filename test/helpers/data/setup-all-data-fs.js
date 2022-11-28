@@ -8,10 +8,10 @@ const path = require('path')
 const fs = require('fs')
 const dailyArchiveData = require('./setup-data')
 
-const pallyCourtInserts = path.resolve(__dirname, '../../../pallyCourtInserts.json')
-const pallyWorkloadInserts = path.resolve(__dirname, '../../../pallyWorkloadInserts.json')
-const pallyUserInserts = path.resolve(__dirname, '../../../pallyUserInserts.json')
-const dailyArchiveInserts = path.resolve(__dirname, '../../../dailyArchiveInserts.json')
+const testCourtInserts = path.resolve(__dirname, '../../testDataCourtInserts.json')
+const testWorkloadInserts = path.resolve(__dirname, '../../testDataWorkloadInserts.json')
+const testUserInserts = path.resolve(__dirname, '../../testDataUserInserts.json')
+const dailyArchiveInserts = path.resolve(__dirname, '../../testDataDailyArchiveInserts.json')
 
 const caseDetailsData =
   {
@@ -53,9 +53,9 @@ module.exports = function () {
               return Promise.all(promises).then(function (userInserts) {
                 try {
                   fs.writeFileSync(dailyArchiveInserts, JSON.stringify(dailyArchiveIdInsert))
-                  fs.writeFileSync(pallyCourtInserts, JSON.stringify(courtReportInserts))
-                  fs.writeFileSync(pallyWorkloadInserts, JSON.stringify(workloadInserts))
-                  fs.writeFileSync(pallyUserInserts, JSON.stringify(userInserts.reduce((acc, x) => acc.concat(x), [])))
+                  fs.writeFileSync(testCourtInserts, JSON.stringify(courtReportInserts))
+                  fs.writeFileSync(testWorkloadInserts, JSON.stringify(workloadInserts))
+                  fs.writeFileSync(testUserInserts, JSON.stringify(userInserts.reduce((acc, x) => acc.concat(x), [])))
                 } catch (err) {
                   console.error(err)
                 }
