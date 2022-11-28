@@ -167,38 +167,6 @@ jobs:
           path: test_results
       - store_artifacts:
           path: test_results/integration-test-reports.html
-  accessibility_test:
-    executor: docker-env
-    steps:
-      - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
-      - attach_workspace:
-          at: ~/app
-      - run:
-          name: Get wiremock
-          command: curl -o wiremock.jar https://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-standalone/2.27.1/wiremock-standalone-2.27.1.jar
-      - run:
-          name: Run wiremock
-          command: java -jar wiremock.jar --port 8099 --global-response-templating --root-dir test/e2e/resources/wiremock
-          background: true
-      - run:
-          name: Run user preference wiremock
-          command: java -jar wiremock.jar --port 8098 --global-response-templating --root-dir test/e2e/resources/user-preference-wiremock
-          background: true
-      - run:
-          name: Wait for db to initialise
-          command: sleep 20
-      - run:
-          name: Run the node app
-          command: npm run start
-          background: true
-      - run:
-          name: Wait for node app to start
-          command: sleep 10
-      - run:
-          name: run accessibility tests
-          command: npm run accessibility-test-ci
   e2e_test:
     executor: docker-env
     steps:
@@ -263,10 +231,6 @@ workflows:
           context: hmpps-common-vars
           requires:
             - build
-      - accessibility_test:
-          context: hmpps-common-vars
-          requires:
-            - build
       - e2e_test:
           context: hmpps-common-vars
           requires:
@@ -294,7 +258,6 @@ workflows:
             - unit_test
             - build_docker
             - e2e_test
-            - accessibility_test
             - integration_test
           helm_timeout: 5m
       - hmpps/deploy_env:
