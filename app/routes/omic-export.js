@@ -41,6 +41,7 @@ module.exports = function (router) {
       return getExport(id, organisationLevel).then(function (result) {
         result.date = lastUpdated
         const subNav = getSubNav(id, organisationLevel, req.path, workloadTypes.OMIC, authorisedUserRole.authorisation, authorisedUserRole.userRole)
+        const isRegionLevel = organisationLevel === organisationUnit.REGION.name
         return res.render('omic-export', {
           organisationLevel,
           linkId: req.params.id,
@@ -49,6 +50,7 @@ module.exports = function (router) {
           tabTitle: getTabTitle(result.title, navTitleConstants.OMIC.displayText, subNav, organisationLevel),
           breadcrumbs: result.breadcrumbs,
           subNav,
+          isRegionLevel,
           date: result.date,
           onOmic: true
         })
