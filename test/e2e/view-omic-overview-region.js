@@ -62,7 +62,7 @@ describe('Regional Omic Overview', function () {
 
       const title = await $('.govuk-heading-m')
       const text = await title.getText()
-      expect(text).to.equal('Please select the type of export to download:')
+      expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
     })
 
     after(function () {
@@ -131,7 +131,7 @@ describe('Regional Omic Overview', function () {
 
       const title = await $('.govuk-heading-m')
       const text = await title.getText()
-      expect(text).to.equal('Please select the type of export to download:')
+      expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
     })
 
     after(function () {

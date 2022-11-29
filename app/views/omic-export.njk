@@ -13,7 +13,7 @@
 
         {% include "includes/csrf-hidden-input.njk"%}
         <h2 class="govuk-heading-m">
-            Please select the type of export to download:
+            Select the data type to export (this will download as a .CSV file):
         </h2>
             <div class="govuk-grid-row">
                 <div class="govuk-form-group">
@@ -28,9 +28,15 @@
                 </div>
             </div>
 
+            {% if isRegionLevel === true %}
+              {% set exportLabel = 'Download regional OMIC data' %}
+            {% else %}
+              {% set exportLabel = 'Download PDU OMIC data' %}
+            {% endif %}
+
             <div class="govuk-grid-row">
                 <div class="govuk-form-group">
-                    <input type="submit" class="govuk-button sln-export floatLeftBottom10 marginLeft10" style="float: left; margin-left:10px; margin-bottom: 10px" value="Export" formaction="/omic/{{ organisationLevel }}/{{ linkId }}/export" data-module="govuk-button">
+                    <input type="submit" class="govuk-button sln-export floatLeftBottom10 marginLeft10" style="float: left; margin-left:10px; margin-bottom: 10px" value="{{ exportLabel }}" formaction="/omic/{{ organisationLevel }}/{{ linkId }}/export" data-module="govuk-button">
                 </div>
             </div>
 
