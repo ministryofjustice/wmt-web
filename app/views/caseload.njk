@@ -24,11 +24,16 @@
   </div>
 
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
     {% if canExportCaseload %}
-      <a href="/probation/{{ organisationLevel }}/{{ linkId }}/{{ screen }}/caseload-csv" class="govuk-button sln-export floatRightBottom10" data-module="govuk-button">Export Caseload</a>
+      {% if not isNationalExport %}
+        <div class="govuk-grid-column-full">
+          <p class="govuk-body floatRightBottom10">Download all caseload data for {{ exportAreaTitle }}</p>
+        </div>
+      {% endif %}
+      <div class="govuk-grid-column-full">
+        <a href="/probation/{{ organisationLevel }}/{{ linkId }}/{{ screen }}/caseload-csv" class="govuk-button sln-export floatRightBottom10" data-module="govuk-button">Download {{ exportOrganisationLevel }} caseload (.CSV)</a>
+      </div>
     {% endif %}
-    </div>
   </div>
 
   <h2 class="govuk-heading-l">Caseload type breakdown</h2>
