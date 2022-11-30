@@ -1,16 +1,4 @@
 
-
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-
-            {% if ((organisationLevel === 'region') or (organisationLevel === 'ldu') or (organisationLevel === 'team')) and canExportReductions %}
-                    <a href="/{{ workloadType }}/{{ organisationLevel }}/{{ linkId }}/{{ screen }}/reductions-csv" class="govuk-button reduction-export floatRightBottom10 marginLeft10" data-module="govuk-button">Export Reductions</a>
-            {% endif %}
-            {% if ((organisationLevel === 'hmpps') or (organisationLevel === 'region') or (organisationLevel === 'ldu') or (organisationLevel === 'team')) and canExportOverview %}
-                <a href="/{{ workloadType }}/{{ organisationLevel }}/{{ linkId }}/{{ screen }}/caseload-csv" class="govuk-button sln-export floatRightBottom10" data-module="govuk-button">Export Overview</a>
-            {% endif %}
-        </div>
-</div>
         
     <table id="example" class="govuk-table js-data-table data-table dataTable width100Percent" cellspacing="0" width="100%"  aria-describedby="example_info">
         <thead>
@@ -83,7 +71,27 @@
         </tfoot>
       </table>
 
-    
+<div class="govuk-grid-row">
+
+    {% if showExportReductions or showExportOverview %}
+        {% if showExportReductions and showExportOverview %}
+            <div class="govuk-grid-column-full">
+                <p class="govuk-body floatLeftBottom10">Download overview or reductions data for {{ exportAreaTitle }}</p>
+            </div>
+        {% endif %}
+        <div class="govuk-grid-column-full">
+            {% if showExportReductions %}
+                    <a href="/{{ workloadType }}/{{ organisationLevel }}/{{ linkId }}/{{ screen }}/reductions-csv" class="govuk-button reduction-export floatLeftBottom10" data-module="govuk-button">Download {{ exportOrganisationLevel }} reductions (.CSV)</a>
+            {% endif %}
+        </div>
+        <div class="govuk-grid-column-full">
+            {% if showExportOverview %}
+                <a href="/{{ workloadType }}/{{ organisationLevel }}/{{ linkId }}/{{ screen }}/caseload-csv" class="govuk-button sln-export floatLeftBottom10" data-module="govuk-button">Download {{ exportOrganisationLevel }} overview (.CSV)</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+
     {% block page_specific_scripts %}
     
         <script src="/public/javascripts/vendor/jquery.min.js"></script>

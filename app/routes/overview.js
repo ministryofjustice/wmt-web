@@ -170,6 +170,15 @@ const renderOverview = function (req, res, next) {
     lastUpdated = dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY HH:mm')
     return getOverview(id, organisationLevel).then(function (result) {
       const subNav = getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole)
+      const showExportOverview = res.locals.canExportOverview &&
+        (organisationLevel === organisationUnitConstants.NATIONAL.name ||
+          organisationLevel === organisationUnitConstants.REGION.name ||
+          organisationLevel === organisationUnitConstants.LDU.name ||
+          organisationLevel === organisationUnitConstants.TEAM.name)
+      const showExportReductions = res.locals.canExportReductions &&
+        (organisationLevel === organisationUnitConstants.REGION.name ||
+          organisationLevel === organisationUnitConstants.LDU.name ||
+          organisationLevel === organisationUnitConstants.TEAM.name)
       return res.render('overview', {
         title: result.title,
         subTitle: result.subTitle,
@@ -186,10 +195,30 @@ const renderOverview = function (req, res, next) {
         workloadType: workloadTypes.PROBATION,
         displayName: res.locals.displayName,
         allocations: res.locals.allocations,
+        showExportOverview,
+        showExportReductions,
+        exportAreaTitle: result.title,
+        exportOrganisationLevel: exportOrganisationLevelText(organisationLevel),
         onOffenderManager: true
       })
     })
   }).catch(function (error) {
     next(error)
   })
+}
+
+const exportOrganisationLevelText = function (organisationLevel) {
+  if (organisationLevel === organisationUnitConstants.NATIONAL.name) {
+    return 'national'
+  }
+  if (organisationLevel === organisationUnitConstants.REGION.name) {
+    return 'regional'
+  }
+  if (organisationLevel === organisationUnitConstants.LDU.name) {
+    return 'PDU'
+  }
+  if (organisationLevel === organisationUnitConstants.TEAM.name) {
+    return 'team'
+  }
+  return ''
 }
