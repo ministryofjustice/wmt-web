@@ -16,7 +16,7 @@ parameters:
     type: string
     default: 18.10-browsers
   postgres_tag:
-    default: "14"
+    default: "11"
     type: string
   database_user:
     default: "root"
@@ -52,7 +52,6 @@ executors:
         environment:
           - SERVICES=s3,sqs,sns
           - DEBUG=${DEBUG- }
-          - DATA_DIR=/tmp/localstack/data
           - DOCKER_HOST=unix:///var/run/docker.sock
           - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR- }
           - AWS_EXECUTION_ENV=True
