@@ -87,7 +87,7 @@ services:
     volumes:
       - $PWD/test/e2e/resources/user-preference-wiremock:/home/wiremock:rw
   localstack:
-    image: localstack/localstack:1.2.0
+    image: localstack/localstack:1.3.0
     networks:
       - hmpps
     container_name: wmt-web-localstack
