@@ -266,12 +266,17 @@ workflows:
             - hmpps-common-vars
             - hmpps-workload-preprod
           requires:
-            - deploy_dev
+            - helm_lint
+            - unit_test
+            - build_docker
+            - e2e_test
+            - integration_test
           helm_timeout: 5m
       - request-prod-approval:
           type: approval
           requires:
             - deploy_preprod
+            - deploy_dev
       - hmpps/deploy_env:
           name: deploy_prod
           env: "prod"
