@@ -54,7 +54,7 @@ services:
     depends_on:
         - "postgres"
   postgres:
-    image: postgres:14
+    image: postgres:11
     networks:
       - hmpps
     container_name: wmt-web-hmpps-workload-postgres
@@ -87,7 +87,7 @@ services:
     volumes:
       - $PWD/test/e2e/resources/user-preference-wiremock:/home/wiremock:rw
   localstack:
-    image: localstack/localstack:1.2.0
+    image: localstack/localstack:1.3.0
     networks:
       - hmpps
     container_name: wmt-web-localstack
@@ -101,7 +101,7 @@ services:
       - DOCKER_HOST=unix:///var/run/docker.sock
       - DEFAULT_REGION=eu-west-2
     volumes:
-      - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
+      - "${TMPDIR:-/tmp/localstack}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
       - $PWD/test/integration/resources:/docker-entrypoint-initaws.d
 networks:
