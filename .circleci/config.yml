@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   hmpps: ministryofjustice/hmpps@6.2.0
-  slack: circleci/slack@4.10.1
+  slack: circleci/slack@4.12.0
   browser-tools: circleci/browser-tools@1.4.0
 
 parameters:
@@ -175,9 +175,7 @@ jobs:
       - attach_workspace:
           at: ~/app
       - hmpps/install_aws_cli
-      - browser-tools/install-chrome:
-          chrome-version: 108.0.5359.94-1
-      - browser-tools/install-chromedriver
+      - browser-tools/install-browser-tools
       - run:
           name: Wait for s3 to be ready
           command: curl -4 --connect-timeout 30 --retry-connrefused --retry 20 --retry-delay 5 http://localhost:4566
