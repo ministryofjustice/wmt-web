@@ -54,51 +54,42 @@ module.exports = {
       url: get('HMPPS_AUTH_URL', 'http://127.0.0.1:9090/auth', requiredInProduction),
       externalUrl: get('HMPPS_AUTH_EXTERNAL_URL', get('HMPPS_AUTH_URL', 'http://127.0.0.1:9090/auth')),
       timeout: {
-        response: get('HMPPS_AUTH_TIMEOUT_RESPONSE', 10000),
-        deadline: get('HMPPS_AUTH_TIMEOUT_DEADLINE', 10000)
+        response: get('HMPPS_AUTH_TIMEOUT_RESPONSE', 1000)
       },
       agent: {
-        maxSockets: 100,
-        maxFreeSockets: 10,
-        freeSocketTimeout: 30000
+        timeout: 1000
       },
+      retries: 2,
       apiClientId: get('API_CLIENT_ID', 'workload-measurement-ui', requiredInProduction),
       apiClientSecret: get('API_CLIENT_SECRET', 'clientsecret', requiredInProduction)
     },
     allocationsService: {
       url: get('ALLOCATIONS_SERVICE_URL', 'http://127.0.0.1:8099', requiredInProduction),
       timeout: {
-        response: 10000,
-        deadline: 10000
+        response: 3000
       },
       agent: {
-        maxSockets: 100,
-        maxFreeSockets: 10,
-        freeSocketTimeout: 30000
-      }
+        timeout: 3000
+      },
+      retries: 2
     },
     userPreferenceService: {
       url: get('USER_PREFERENCE_SERVICE_URL', 'http://127.0.0.1:8098', requiredInProduction),
       timeout: {
-        response: 10000,
-        deadline: 10000
+        response: 2000
       },
       agent: {
-        maxSockets: 100,
-        maxFreeSockets: 10,
-        freeSocketTimeout: 30000
-      }
+        timeout: 2000
+      },
+      retries: 2
     },
     tokenVerification: {
       url: get('TOKEN_VERIFICATION_API_URL', 'http://127.0.0.1:8100', requiredInProduction),
       timeout: {
-        response: get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000),
-        deadline: get('TOKEN_VERIFICATION_API_TIMEOUT_DEADLINE', 5000)
+        response: get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 8000)
       },
       agent: {
-        maxSockets: 100,
-        maxFreeSockets: 10,
-        freeSocketTimeout: 30000
+        timeout: 8000
       },
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true'
     }
