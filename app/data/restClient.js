@@ -1,30 +1,43 @@
-const superagent = require('superagent')
-const logger = require('../logger')
 const sanitiseError = require('../sanitisedError')
+const Agent = require('agentkeepalive')
+const HttpsAgent = require('agentkeepalive').HttpsAgent
+const axios = require('axios')
+const axiosRetry = require('axios-retry')
 
-const get = async function ({ path = null, query = '', headers = {}, responseType = '', raw = false, token }) {
-  logger.info(`Get using user credentials: calling: ${path} ${query}`)
-  try {
-    const result = await superagent
-      .get(path)
-      .agent(this.agent)
-      .retry(2, function (err, res) {
-        if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
-        return undefined // retry handler only for logging retries, not to influence retry logic
-      })
-      .query(query)
-      .auth(token, { type: 'bearer' })
-      .set(headers)
-      .responseType(responseType)
+class RestClient {
+  agent
 
-    return raw ? result : result.body
-  } catch (error) {
-    const sanitisedError = sanitiseError(error)
-    logger.error({ ...sanitisedError, query }, `Error calling, path: '${path}', verb: 'GET'`)
-    throw sanitisedError
+  axiosClient
+
+  constructor (config) {
+    this.agent = config.url.startsWith('https') ? new HttpsAgent(config.agent) : new Agent(config.agent)
+    this.axiosClient = axios.create({
+      baseURL: config.url,
+      timeout: config.timeout.response,
+      httpsAgent: this.agent,
+      httpAgent: this.agent
+    })
+    axiosRetry(this.axiosClient, {
+      retries: config.retries,
+      retryCondition: error => {
+        return (
+          axiosRetry.isNetworkOrIdempotentRequestError(error) || (error.config.method !== 'post' && error.code === 'ECONNABORTED')
+        )
+      },
+      shouldResetTimeout: true
+    })
+  }
+
+  get (path, token) {
+    return this.axiosClient.get(path, {
+      headers: { 'Accept-Encoding': 'application/json', Authorization: `Bearer ${token}` }
+    }).then(function (result) {
+      return result.data
+    }).catch(function (error) {
+      const sanitisedError = sanitiseError(error)
+      throw sanitisedError
+    })
   }
 }
 
-module.exports = {
-  get
-}
+module.exports = RestClient

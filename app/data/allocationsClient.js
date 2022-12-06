@@ -1,8 +1,10 @@
-const restClient = require('./restClient')
+const RestClient = require('./restClient')
 const config = require('../../config')
 
+const restClient = new RestClient(config.apis.allocationsService)
+
 async function getCaseCountByTeamCodes (token, teamCodes) {
-  return await restClient.get({ path: `${config.apis.allocationsService.url}/cases/unallocated/teamCount?teams=${teamCodes.join(',')}`, headers: { Accept: 'application/json' }, token })
+  return await restClient.get(`/cases/unallocated/teamCount?teams=${teamCodes.join(',')}`, token)
 }
 
 module.exports = {
