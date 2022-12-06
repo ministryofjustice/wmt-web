@@ -44,11 +44,11 @@
   },
   "devDependencies": {
     "@rpii/wdio-report-events": "0.2.0",
-    "@wdio/cli": "7.27.0",
-    "@wdio/local-runner": "7.27.0",
-    "@wdio/mocha-framework": "7.26.0",
-    "@wdio/selenium-standalone-service": "7.26.0",
-    "@wdio/spec-reporter": "7.26.0",
+    "@wdio/cli": "8.0.6",
+    "@wdio/local-runner": "8.0.6",
+    "@wdio/mocha-framework": "8.0.6",
+    "@wdio/selenium-standalone-service": "8.0.6",
+    "@wdio/spec-reporter": "8.0.6",
     "chai": "4.3.7",
     "cookie-session": "2.0.0",
     "csv-parser": "3.0.0",
@@ -64,7 +64,7 @@
     "standard": "17.0.0",
     "supertest": "6.3.2",
     "wdio-html-nice-reporter": "8.0.6",
-    "webdriverio": "7.27.0"
+    "webdriverio": "8.0.6"
   },
   "dependencies": {
     "@ministryofjustice/frontend": "1.6.3",
