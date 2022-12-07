@@ -21,7 +21,7 @@ module.exports.buildApp = function (route, middleware) {
     app.use(middleware)
   }
 
-  route(app)
+  route(app.get.bind(app), app.post.bind(app))
   mockViewEngine(app, VIEWS_DIRECTORY)
 
   // Check for valid CSRF tokens on state-changing methods.

@@ -19,8 +19,8 @@ const getBreadcrumbs = require('../services/get-breadcrumbs')
 
 let lastUpdated
 
-module.exports = function (router) {
-  router.get('/' + workloadTypes.OMIC + '/:organisationLevel/:id/caseload-capacity', function (req, res, next) {
+module.exports = function (get) {
+  get('/' + workloadTypes.OMIC + '/:organisationLevel/:id/caseload-capacity', function (req, res, next) {
     let capacityDateRange
     let errors
 
@@ -88,7 +88,7 @@ module.exports = function (router) {
     })
   })
 
-  router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/capacity/outstanding-csv', function (req, res, next) {
+  get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/capacity/outstanding-csv', function (req, res, next) {
     const organisationLevel = req.params.organisationLevel
     const id = req.params.id
 

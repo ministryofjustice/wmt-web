@@ -9,8 +9,8 @@ const getTabTitle = require('../services/get-tab-title')
 
 let lastUpdated
 
-module.exports = function (router) {
-  router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/case-progress', function (req, res, next) {
+module.exports = function (get) {
+  get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/case-progress', function (req, res, next) {
     const organisationLevel = req.params.organisationLevel
     let id
 

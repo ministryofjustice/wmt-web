@@ -11,8 +11,8 @@ const { PROBATION } = require('../constants/workload-type')
 const Forbidden = require('../services/errors/authentication-error').Forbidden
 const getTabTitle = require('../services/get-tab-title')
 
-module.exports = function (router) {
-  router.get('/' + PROBATION + '/offender-manager/:id/contracted-hours', function (req, res, next) {
+module.exports = function (get, post) {
+  get('/' + PROBATION + '/offender-manager/:id/contracted-hours', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
@@ -47,7 +47,7 @@ module.exports = function (router) {
       })
   })
 
-  router.post('/' + PROBATION + '/offender-manager/:id/contracted-hours', function (req, res, next) {
+  post('/' + PROBATION + '/offender-manager/:id/contracted-hours', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER])
     } catch (error) {

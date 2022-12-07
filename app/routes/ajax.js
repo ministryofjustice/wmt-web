@@ -3,8 +3,8 @@ const getUsersForSearch = require('../services/data/get-users-for-search')
 const getTeamsForSearch = require('../services/data/get-teams-for-search')
 const getLdusForSearch = require('../services/data/get-ldus-for-search')
 
-module.exports = function (router) {
-  router.get('/archive-search-lists', function (req, res, next) {
+module.exports = function (get) {
+  get('/archive-search-lists', function (req, res, next) {
     if (req.query.q) {
       return getOffenderManagersForSearch(req.query.q)
         .then(function (omResults) {
@@ -21,7 +21,7 @@ module.exports = function (router) {
     }
   })
 
-  router.get('/reduction-search-lists', function (req, res, next) {
+  get('/reduction-search-lists', function (req, res, next) {
     if (req.query.q) {
       return getOffenderManagersForSearch(req.query.q)
         .then(function (omResults) {

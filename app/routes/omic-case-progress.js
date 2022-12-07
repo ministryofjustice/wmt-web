@@ -8,8 +8,8 @@ const dateFormatter = require('../services/date-formatter')
 
 let lastUpdated
 
-module.exports = function (router) {
-  router.get('/' + workloadTypes.OMIC + '/:organisationLevel/:id/case-progress', function (req, res, next) {
+module.exports = function (get) {
+  get('/' + workloadTypes.OMIC + '/:organisationLevel/:id/case-progress', function (req, res, next) {
     const organisationLevel = req.params.organisationLevel
     let id
 

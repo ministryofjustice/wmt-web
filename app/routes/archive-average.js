@@ -22,8 +22,8 @@ const getStringifiedBody = require('../helpers/archive-helpers/get-stringified-b
 const createSearchListArray = require('../helpers/archive-helpers/create-search-list-array')
 let archiveDataForm
 
-module.exports = function (router) {
-  router.get('/archive-data/average-caseload-data', function (req, res, next) {
+module.exports = function (get, post) {
+  get('/archive-data/average-caseload-data', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
@@ -38,7 +38,7 @@ module.exports = function (router) {
     return renderResults(viewTemplate, title, res, null, null, req.user.user_role)
   })
 
-  router.post('/archive-data/average-caseload-data', function (req, res, next) {
+  post('/archive-data/average-caseload-data', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
@@ -82,7 +82,7 @@ module.exports = function (router) {
     })
   })
 
-  router.post('/archive-data/average-caseload-data/archive-csv', function (req, res, next) {
+  post('/archive-data/average-caseload-data/archive-csv', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.SUPER_USER])
     } catch (error) {
