@@ -20,8 +20,8 @@ const createSearchListArray = require('../helpers/archive-helpers/create-search-
 
 let archiveDataForm
 
-module.exports = function (router) {
-  router.get('/archive-data/reductions', function (req, res, next) {
+module.exports = function (get, post) {
+  get('/archive-data/reductions', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.SUPER_USER])
     } catch (error) {
@@ -38,7 +38,7 @@ module.exports = function (router) {
     return renderResults(viewTemplate, title, res, null, null, req.user.user_role)
   })
 
-  router.post('/archive-data/reductions', function (req, res, next) {
+  post('/archive-data/reductions', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.SUPER_USER])
     } catch (error) {
@@ -100,7 +100,7 @@ module.exports = function (router) {
     })
   })
 
-  router.get('/archive-data/reductions-search', function (req, res, next) {
+  get('/archive-data/reductions-search', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.SUPER_USER])
     } catch (error) {
@@ -117,7 +117,7 @@ module.exports = function (router) {
     return res.redirect('/archive-data/reductions')
   })
 
-  router.post('/archive-data/reductions-search', function (req, res, next) {
+  post('/archive-data/reductions-search', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.SUPER_USER])
     } catch (error) {
@@ -155,7 +155,7 @@ module.exports = function (router) {
     return renderResults(viewTemplate, title, res, null, null, req.user.user_role, archiveDataForm, req.body, true, stringifiedBody)
   })
 
-  router.post('/archive-data/reductions/archive-csv', function (req, res, next) {
+  post('/archive-data/reductions/archive-csv', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.SUPER_USER])
     } catch (error) {
@@ -204,7 +204,7 @@ module.exports = function (router) {
     })
   })
 
-  router.post('/archive-data/reductions-history', function (req, res, next) {
+  post('/archive-data/reductions-history', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.SUPER_USER])
     } catch (error) {

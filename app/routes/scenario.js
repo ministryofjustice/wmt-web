@@ -2,8 +2,8 @@ const workloadPointsService = require('../services/data/get-workload-points-expo
 const getExportXlsx = require('../services/get-export-xlsx')
 const getScenario = require('../services/data/get-scenario')
 
-module.exports = function (router) {
-  router.get('/scenario', function (req, res, next) {
+module.exports = function (get) {
+  get('/scenario', function (req, res, next) {
     return getScenario().then(function (scenarioData) {
       return workloadPointsService(false).then(function (result) {
         return workloadPointsService(true).then(function (t2aResult) {

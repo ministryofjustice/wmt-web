@@ -18,8 +18,8 @@ const getTabTitle = require('../services/get-tab-title')
 
 let lastUpdated
 
-module.exports = function (router) {
-  router.get('/' + PROBATION + '/:organisationLevel/:id/reductions', function (req, res, next) {
+module.exports = function (get, post) {
+  get('/' + PROBATION + '/:organisationLevel/:id/reductions', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
@@ -68,7 +68,7 @@ module.exports = function (router) {
     })
   })
 
-  router.get('/' + PROBATION + '/:organisationLevel/:id/add-reduction', function (req, res, next) {
+  get('/' + PROBATION + '/:organisationLevel/:id/add-reduction', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
@@ -124,7 +124,7 @@ module.exports = function (router) {
       })
   })
 
-  router.get('/' + PROBATION + '/:organisationLevel/:id/edit-reduction', function (req, res, next) {
+  get('/' + PROBATION + '/:organisationLevel/:id/edit-reduction', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
@@ -184,7 +184,7 @@ module.exports = function (router) {
       })
   })
 
-  router.post('/' + PROBATION + '/:organisationLevel/:id/add-reduction', function (req, res, next) {
+  post('/' + PROBATION + '/:organisationLevel/:id/add-reduction', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER])
     } catch (error) {
@@ -264,7 +264,7 @@ module.exports = function (router) {
       })
   })
 
-  router.post('/' + PROBATION + '/:organisationLevel/:id/edit-reduction', function (req, res, next) {
+  post('/' + PROBATION + '/:organisationLevel/:id/edit-reduction', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER])
     } catch (error) {
@@ -350,7 +350,7 @@ module.exports = function (router) {
       })
   })
 
-  router.post('/' + PROBATION + '/:organisationLevel/:id/update-reduction-status', function (req, res, next) {
+  post('/' + PROBATION + '/:organisationLevel/:id/update-reduction-status', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.MANAGER, roles.SUPER_USER])
     } catch (error) {

@@ -11,12 +11,12 @@ const getTabTitle = require('../services/get-tab-title')
 
 let lastUpdated
 
-module.exports = function (router) {
-  router.get('/' + workloadTypes.COURT_REPORTS + '/:organisationLevel/:id/overview', function (req, res, next) {
+module.exports = function (get) {
+  get('/' + workloadTypes.COURT_REPORTS + '/:organisationLevel/:id/overview', function (req, res, next) {
     return renderOverview(req, res, next)
   })
 
-  router.get('/' + workloadTypes.COURT_REPORTS + '/:organisationLevel/:id', function (req, res, next) {
+  get('/' + workloadTypes.COURT_REPORTS + '/:organisationLevel/:id', function (req, res, next) {
     return renderOverview(req, res, next)
   })
 }

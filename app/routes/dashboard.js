@@ -16,8 +16,8 @@ const navTitleConstants = require('../services/nav-title')
 
 let lastUpdated
 
-module.exports = function (router) {
-  router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/dashboard', function (req, res, next) {
+module.exports = function (get) {
+  get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/dashboard', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT, roles.MANAGER])
     } catch (error) {
@@ -62,7 +62,7 @@ module.exports = function (router) {
     })
   })
 
-  router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/dashboard/download', function (req, res, next) {
+  get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/dashboard/download', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT, roles.MANAGER])
     } catch (error) {

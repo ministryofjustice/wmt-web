@@ -21,8 +21,8 @@ const workloadPointsT2ATitle = {
   third: 'Admin'
 }
 
-module.exports = function (router) {
-  router.get('/admin/workload-points', function (req, res, next) {
+module.exports = function (get, post) {
+  get('/admin/workload-points', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
@@ -60,7 +60,7 @@ module.exports = function (router) {
       })
   })
 
-  router.get('/admin/workload-points/t2a', function (req, res, next) {
+  get('/admin/workload-points/t2a', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.SUPER_USER, roles.APPLICATION_SUPPORT])
     } catch (error) {
@@ -93,7 +93,7 @@ module.exports = function (router) {
       })
   })
 
-  router.post('/admin/workload-points', function (req, res, next) {
+  post('/admin/workload-points', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.SUPER_USER])
     } catch (error) {
@@ -172,7 +172,7 @@ module.exports = function (router) {
     }
   })
 
-  router.post('/admin/workload-points/t2a', function (req, res, next) {
+  post('/admin/workload-points/t2a', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.SUPER_USER])
     } catch (error) {

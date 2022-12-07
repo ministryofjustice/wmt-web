@@ -25,8 +25,8 @@ const navTitleConstants = require('../services/nav-title')
 
 let lastUpdated
 
-module.exports = function (router) {
-  router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/export', function (req, res, next) {
+module.exports = function (get, post) {
+  get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/export', function (req, res, next) {
     try {
       authorisation.hasRole(req, [SUPER_USER, APPLICATION_SUPPORT, MANAGER])
     } catch (error) {
@@ -70,7 +70,7 @@ module.exports = function (router) {
     })
   })
 
-  router.post('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/export', function (req, res, next) {
+  post('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/export', function (req, res, next) {
     try {
       authorisation.hasRole(req, canExportRoles)
     } catch (error) {

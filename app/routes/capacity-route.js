@@ -24,16 +24,16 @@ const getTabTitle = require('../services/get-tab-title')
 let lastUpdated
 const canExportOutstandingRoles = [SUPER_USER, MANAGER, STAFF]
 
-module.exports = function (router) {
-  router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/caseload-capacity', function (req, res, next) {
+module.exports = function (get, post) {
+  get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/caseload-capacity', function (req, res, next) {
     return renderView(req, res, next, req.query)
   })
 
-  router.post('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/caseload-capacity', function (req, res, next) {
+  post('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/caseload-capacity', function (req, res, next) {
     return renderView(req, res, next, req.body)
   })
 
-  router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/capacity/outstanding-csv', function (req, res, next) {
+  get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/capacity/outstanding-csv', function (req, res, next) {
     try {
       authorisation.hasRole(req, canExportOutstandingRoles)
     } catch (error) {
