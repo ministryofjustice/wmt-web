@@ -4,7 +4,7 @@ const RestClient = require('./restClient')
 const restClient = new RestClient(config.apis.tokenVerification)
 
 function getApiClientToken (token) {
-  return restClient.get('/token/verify', token).then(function ({ active }) {
+  return restClient.post('/token/verify', token).then(function ({ active }) {
     return Boolean(active)
   }).catch(function () {
     return false

@@ -38,6 +38,17 @@ class RestClient {
       throw sanitisedError
     })
   }
+
+  post (path, token, body) {
+    return this.axiosClient.post(path, body, {
+      headers: { 'Accept-Encoding': 'application/json', Authorization: `Bearer ${token}` }
+    }).then(function (result) {
+      return result.data
+    }).catch(function (error) {
+      const sanitisedError = sanitiseError(error)
+      throw sanitisedError
+    })
+  }
 }
 
 module.exports = RestClient
