@@ -1,7 +1,8 @@
 
 const logger = require('../logger')
+const userService = require('../services/user-service')
 
-module.exports = function (userService) {
+module.exports = function () {
   return async function (req, res, next) {
     try {
       if (res.locals.user) {
