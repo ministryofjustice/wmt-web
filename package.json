@@ -8,7 +8,7 @@
   },
   "scripts": {
     "prepare": "husky install",
-    "start": "node app/bin/www",
+    "start": "export $(cat feature.env) && node app/bin/www",
     "clean": "rm -rf app/public",
     "compile-sass": "sass --quiet-deps --no-source-map --load-path=node_modules/govuk-frontend --load-path=node_modules/@ministryofjustice/frontend --load-path=. ./app/assets/sass/application.scss:./app/public/stylesheets/application.css ./app/assets/sass/select2.scss:./app/public/stylesheets/select2.css --style compressed",
     "copy-assets": "mkdir -p app/public/javascripts/vendor/ && cp node_modules/jquery/dist/jquery.min.js app/public/javascripts/vendor/ && cp node_modules/datatables.net/js/jquery.dataTables.min.js app/public/javascripts/vendor/ && cp node_modules/govuk-frontend/govuk/all.js app/public/javascripts/gov-uk.js && cp -a app/assets/javascripts/. app/public/javascripts/ && cp -r node_modules/govuk-frontend/govuk/assets/. app/public/ && cp -a app/assets/images/. app/public/images/",
