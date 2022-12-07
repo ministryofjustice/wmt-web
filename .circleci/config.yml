@@ -194,6 +194,10 @@ jobs:
           command: java -jar wiremock.jar --port 8098 --global-response-templating --root-dir test/e2e/resources/user-preference-wiremock
           background: true
       - run:
+          name: Run token verify wiremock
+          command: java -jar wiremock.jar --port 8100 --global-response-templating --root-dir test/e2e/resources/token-verify-wiremock
+          background: true
+      - run:
           name: Wait for db to initialise
           command: sleep 20
       - run:
