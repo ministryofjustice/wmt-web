@@ -26,7 +26,7 @@ Run installation for local code
 ```shell
 docker compose up -d
 
-npm install && npm run build && npm start
+npm install && npm run build && npm run start-dev
 ```
 
 Navigate to `http://localhost:3000` to see the running application.
@@ -67,6 +67,6 @@ Run tests using the following commands:
 
 ```
 docker-compose up -d
-npm start
+npm run start-dev
 npm run test-e2e # Chrome
 ```

@@ -14,7 +14,7 @@ parameters:
     default: manage_a_workforce_dev
   node-version:
     type: string
-    default: 18.10-browsers
+    default: 18.12-browsers
   postgres_tag:
     default: "11"
     type: string
@@ -202,7 +202,7 @@ jobs:
           command: sleep 20
       - run:
           name: Run the node app
-          command: npm run start
+          command: npm run start-dev
           background: true
       - run:
           name: Wait for node app to start
