@@ -2,12 +2,14 @@
  * applicable to all routes can be added here.
  */
 
+const { Router } = require('express')
 const fs = require('fs')
 const path = require('path')
 const asyncMiddleware = require('./middleware/asyncMiddleware')
 const files = fs.readdirSync(path.resolve(__dirname, 'routes'))
 
-module.exports = function (router) {
+module.exports = function () {
+  const router = Router()
   const routes = files.map((file) => {
     return require(path.resolve(__dirname, 'routes', file.replace('.js', '')))
   })
@@ -20,4 +22,5 @@ module.exports = function (router) {
   routes.forEach(function (route) {
     route(get, post)
   })
+  return router
 }
