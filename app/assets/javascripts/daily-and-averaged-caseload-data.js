@@ -27,7 +27,6 @@ $(document).ready(function () {
         // since we are using custom formatting functions we do not need to
         // alter the remote JSON data, except to indicate that infinite
         // scrolling can be used
-        console.log(data.items)
         params.page = params.page || 1;
   
         return {

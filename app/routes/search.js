@@ -4,15 +4,15 @@ const tabTitle = {
   third: 'Search for an Offender Manager'
 }
 
-module.exports = function (router) {
-  router.get('/officer-search', function (req, res, next) {
+module.exports = function (get, post) {
+  get('/officer-search', function (req, res, next) {
     return res.render('search-for-officer', {
       tabTitle,
       onOfficerSearch: true
     })
   })
 
-  router.post('/officer-search', function (req, res, next) {
+  post('/officer-search', function (req, res, next) {
     return offenderSearch(req.body.surnameBox).then(function (result) {
       res.render('search-for-officer', {
         tabTitle,

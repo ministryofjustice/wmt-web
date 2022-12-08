@@ -30,8 +30,8 @@ const editTabTitle = {
   third: 'Admin'
 }
 
-module.exports = function (router) {
-  router.get('/manage-reduction-reasons', function (req, res, next) {
+module.exports = function (get, post) {
+  get('/manage-reduction-reasons', function (req, res, next) {
     try {
       authorisation.hasRole(req, [APPLICATION_SUPPORT, SUPER_USER])
     } catch (error) {
@@ -69,7 +69,7 @@ module.exports = function (router) {
     })
   })
 
-  router.get('/add-reduction-reason', function (req, res, next) {
+  get('/add-reduction-reason', function (req, res, next) {
     try {
       authorisation.hasRole(req, canAddReasonRoles)
     } catch (error) {
@@ -97,7 +97,7 @@ module.exports = function (router) {
     })
   })
 
-  router.get('/edit-reduction-reason', function (req, res, next) {
+  get('/edit-reduction-reason', function (req, res, next) {
     try {
       authorisation.hasRole(req, canEditReasonRoles)
     } catch (error) {
@@ -133,7 +133,7 @@ module.exports = function (router) {
     })
   })
 
-  router.post('/add-reduction-reason', function (req, res, next) {
+  post('/add-reduction-reason', function (req, res, next) {
     try {
       authorisation.hasRole(req, [SUPER_USER, APPLICATION_SUPPORT])
     } catch (error) {
@@ -192,7 +192,7 @@ module.exports = function (router) {
     })
   })
 
-  router.post('/edit-reduction-reason', function (req, res, next) {
+  post('/edit-reduction-reason', function (req, res, next) {
     try {
       authorisation.hasRole(req, canEditReasonRoles)
     } catch (error) {

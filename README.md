@@ -59,15 +59,6 @@ docker-compose up -d
 npm run integration-test
 ```
 
-### Accessibility Tests
-
-WCAG 2.0 AA audit tests can be run using [pa11y](https://github.com/pa11y/pa11y)
-
-```
-docker-compose up -d
-npm run accessibility-test-ci
-```
-
 ## E2E Tests
 
 E2E Tests are run using Selenium and webdriver

@@ -17,8 +17,8 @@ const getTabTitle = require('../services/get-tab-title')
 
 let lastUpdated
 
-module.exports = function (router) {
-  router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/caseload', function (req, res, next) {
+module.exports = function (get) {
+  get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/caseload', function (req, res, next) {
     const organisationLevel = req.params.organisationLevel
     const id = req.params.id
 
@@ -73,7 +73,7 @@ module.exports = function (router) {
     })
   })
 
-  router.get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/caseload/caseload-csv', function (req, res, next) {
+  get('/' + workloadTypes.PROBATION + '/:organisationLevel/:id/caseload/caseload-csv', function (req, res, next) {
     try {
       authorisation.hasRole(req, canExportCaseloadRoles)
     } catch (error) {

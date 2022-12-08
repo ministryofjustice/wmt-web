@@ -22,8 +22,8 @@ const userRightsTabTitle = {
   third: 'Admin'
 }
 
-module.exports = function (router) {
-  router.get('/admin/user', function (req, res) {
+module.exports = function (get, post) {
+  get('/admin/user', function (req, res) {
     try {
       authorisation.hasRole(req, [roles.APPLICATION_SUPPORT, roles.SUPER_USER])
     } catch (error) {
@@ -55,7 +55,7 @@ module.exports = function (router) {
     })
   })
 
-  router.post('/admin/user-rights', function (req, res, next) {
+  post('/admin/user-rights', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.APPLICATION_SUPPORT, roles.SUPER_USER])
     } catch (error) {
@@ -101,7 +101,7 @@ module.exports = function (router) {
     })
   })
 
-  router.post('/admin/user-rights/:username', function (req, res, next) {
+  post('/admin/user-rights/:username', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.APPLICATION_SUPPORT, roles.SUPER_USER])
     } catch (error) {

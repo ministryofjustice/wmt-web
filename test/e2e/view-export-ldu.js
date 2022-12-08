@@ -34,7 +34,7 @@ describe('LDU', function () {
     it('should navigate to the ldu export page', async function () {
       const element = await $('.govuk-heading-m')
       const text = await element.getText()
-      expect(text).to.equal('Please select the type of export to download:')
+      expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
     })
 
     it('should include the export button at ldu level', async function () {
@@ -57,7 +57,7 @@ describe('LDU', function () {
     it('should navigate to the ldu export page', async function () {
       const element = await $('.govuk-heading-m')
       const text = await element.getText()
-      expect(text).to.equal('Please select the type of export to download:')
+      expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
     })
 
     it('should not include the export button at ldu level', async function () {
@@ -80,7 +80,7 @@ describe('LDU', function () {
     it('should navigate to the ldu export page', async function () {
       const element = await $('.govuk-heading-m')
       const text = await element.getText()
-      expect(text).to.equal('Please select the type of export to download:')
+      expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
     })
 
     it('should include the export button at ldu level', async function () {

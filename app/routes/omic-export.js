@@ -15,8 +15,8 @@ const navTitleConstants = require('../services/nav-title')
 
 let lastUpdated
 
-module.exports = function (router) {
-  router.get('/' + workloadTypes.OMIC + '/:organisationLevel/:id/export', function (req, res, next) {
+module.exports = function (get, post) {
+  get('/' + workloadTypes.OMIC + '/:organisationLevel/:id/export', function (req, res, next) {
     try {
       authorisation.hasRole(req, canExportRoles)
     } catch (error) {
@@ -41,6 +41,7 @@ module.exports = function (router) {
       return getExport(id, organisationLevel).then(function (result) {
         result.date = lastUpdated
         const subNav = getSubNav(id, organisationLevel, req.path, workloadTypes.OMIC, authorisedUserRole.authorisation, authorisedUserRole.userRole)
+        const isRegionLevel = organisationLevel === organisationUnit.REGION.name
         return res.render('omic-export', {
           organisationLevel,
           linkId: req.params.id,
@@ -49,6 +50,7 @@ module.exports = function (router) {
           tabTitle: getTabTitle(result.title, navTitleConstants.OMIC.displayText, subNav, organisationLevel),
           breadcrumbs: result.breadcrumbs,
           subNav,
+          isRegionLevel,
           date: result.date,
           onOmic: true
         })
@@ -58,7 +60,7 @@ module.exports = function (router) {
     })
   })
 
-  router.post('/' + workloadTypes.OMIC + '/:organisationLevel/:id/export', function (req, res, next) {
+  post('/' + workloadTypes.OMIC + '/:organisationLevel/:id/export', function (req, res, next) {
     try {
       authorisation.hasRole(req, canExportRoles)
     } catch (error) {

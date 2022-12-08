@@ -8,8 +8,8 @@ const tabTitle = {
   third: 'Admin'
 }
 
-module.exports = function (router) {
-  router.get('/admin', function (req, res, next) {
+module.exports = function (get) {
+  get('/admin', function (req, res, next) {
     try {
       authorisation.hasRole(req, [roles.APPLICATION_SUPPORT, roles.SUPER_USER])
     } catch (error) {

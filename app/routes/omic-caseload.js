@@ -11,8 +11,8 @@ const dateFormatter = require('../services/date-formatter')
 
 let lastUpdated
 
-module.exports = function (router) {
-  router.get('/' + workloadTypes.OMIC + '/:organisationLevel/:id/caseload', function (req, res, next) {
+module.exports = function (get) {
+  get('/' + workloadTypes.OMIC + '/:organisationLevel/:id/caseload', function (req, res, next) {
     const organisationLevel = req.params.organisationLevel
     const id = req.params.id
 
@@ -52,7 +52,7 @@ module.exports = function (router) {
     })
   })
 
-  router.get('/' + workloadTypes.OMIC + '/:organisationLevel/:id/caseload/caseload-csv', function (req, res, next) {
+  get('/' + workloadTypes.OMIC + '/:organisationLevel/:id/caseload/caseload-csv', function (req, res, next) {
     const organisationLevel = req.params.organisationLevel
     const id = req.params.id
 

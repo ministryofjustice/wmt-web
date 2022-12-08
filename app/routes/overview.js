@@ -13,17 +13,12 @@ const workloadTypes = require('../../app/constants/workload-type')
 const getLastUpdated = require('../services/data/get-last-updated')
 const dateFormatter = require('../services/date-formatter')
 const messages = require('../constants/messages')
-const asyncMiddleware = require('../middleware/asyncMiddleware')
 const getTabTitle = require('../services/get-tab-title')
 const navTitleConstants = require('../services/nav-title')
 
 let lastUpdated
 
-module.exports = function (router) {
-  const get = function (path, handler) {
-    router.get(path, asyncMiddleware(handler))
-  }
-
+module.exports = function (get) {
   get('/', function (req, res, next) {
     if (Object.keys(req.query).length !== 0) {
       return next()
