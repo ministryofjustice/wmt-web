@@ -65,7 +65,7 @@ services:
       - POSTGRES_PASSWORD=dev
       - POSTGRES_USER=root
   wiremock:
-    image: rodolpheche/wiremock
+    image: wiremock/wiremock
     networks:
       - hmpps
     container_name: wiremock
@@ -76,7 +76,7 @@ services:
     volumes:
       - $PWD/test/e2e/resources/wiremock:/home/wiremock:rw
   user-preference-wiremock:
-    image: rodolpheche/wiremock
+    image: wiremock/wiremock
     networks:
       - hmpps
     container_name: user-preferencewiremock
@@ -87,7 +87,7 @@ services:
     volumes:
       - $PWD/test/e2e/resources/user-preference-wiremock:/home/wiremock:rw
   token-verify-wiremock:
-    image: rodolpheche/wiremock
+    image: wiremock/wiremock
     networks:
       - hmpps
     container_name: token-verify-wiremock
