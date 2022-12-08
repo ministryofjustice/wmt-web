@@ -13,7 +13,7 @@ let lduDefaultUrl
 let regionDefaultUrl
 const nationalDefaultUrl = '/' + workloadTypes.PROBATION + '/hmpps/0'
 
-describe('National', function () {
+describe.only('National', function () {
   describe('View overview for staff', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.Staff)
@@ -164,6 +164,12 @@ describe('National', function () {
       const allocationsLink = await $(`a[href*="${config.nav.allocations.url}"`)
       const exists = await allocationsLink.isExisting()
       return expect(exists).to.be.true
+    })
+
+    it('should fall back to + when number of unallocated cases cannot be retrieved', async function () {
+      const allocationsNumber = await $('#notifications')
+      const number = await allocationsNumber.getText()
+      return expect(number).to.equal('+')
     })
 
     it('should not include the reductions export at workload owner level', async function () {

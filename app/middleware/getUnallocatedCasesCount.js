@@ -3,7 +3,7 @@ const allocationsClient = require('../data/allocationsClient')
 const userPreferenceClient = require('../data/userPreferenceClient')
 
 module.exports = function () {
-  return async function (req, res, next) {
+  return async function (_, res, next) {
     try {
       if (res.locals.canAllocate && res.locals.user) {
         const { token, nameID: username } = res.locals.user
@@ -15,10 +15,10 @@ module.exports = function () {
             .reduce((first, second) => first + second, 0)
         }
       }
-      next()
     } catch (error) {
       logger.error(error, 'Failed to retrieve unallocated cases')
-      next(error)
+      res.locals.unallocatedCaseCount = '+'
     }
+    next()
   }
 }

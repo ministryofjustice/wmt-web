@@ -95,7 +95,6 @@ describe('archiving a reduction', () => {
       expect(body.operationId).to.not.equal(null)
 
       const actualDetails = JSON.parse(body.details)
-      console.log(actualDetails)
       expect(actualDetails.previousReason).to.equal('Other')
       expect(actualDetails.newReason).to.equal('Other')
       expect(actualDetails.previousHours).to.equal(10)
