@@ -58,11 +58,11 @@ executors:
           - DEFAULT_REGION=eu-west-2
           - TMPDIR=/private
       - image: wiremock/wiremock:latest
-        command: --port 8099 --global-response-templating --verbose
+        command: --port 8099 --global-response-templating
       - image: wiremock/wiremock:latest
-        command: --port 8098 --global-response-templating --verbose
+        command: --port 8098 --global-response-templating
       - image: wiremock/wiremock:latest
-        command: --port 8100 --global-response-templating --verbose
+        command: --port 8100 --global-response-templating
     working_directory: ~/app
 
 jobs:
