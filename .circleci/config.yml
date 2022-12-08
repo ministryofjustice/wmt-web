@@ -58,11 +58,11 @@ executors:
           - DEFAULT_REGION=eu-west-2
           - TMPDIR=/private
       - image: wiremock/wiremock:latest
-        command: --port 8099 --global-response-templating --root-dir ../test/e2e/resources/wiremock  
+        command: --port 8099 --global-response-templating --root-dir ~/test/e2e/resources/wiremock  
       - image: wiremock/wiremock:latest
-        command: --port 8098 --global-response-templating --root-dir ../test/e2e/resources/user-preference-wiremock
+        command: --port 8098 --global-response-templating --root-dir ~/test/e2e/resources/user-preference-wiremock
       - image: wiremock/wiremock:latest
-        command: --port 8100 --global-response-templating --root-dir ../test/e2e/resources/token-verify-wiremock          
+        command: --port 8100 --global-response-templating --root-dir ~/test/e2e/resources/token-verify-wiremock          
     working_directory: ~/app
 
 jobs:
@@ -155,19 +155,14 @@ jobs:
       - attach_workspace:
           at: ~/app
       - hmpps/install_aws_cli
-      - run:
-          name: Wait for s3 to be ready
-          command: curl -4 --connect-timeout 30 --retry-connrefused --retry 20 --retry-delay 5 http://localhost:4566
+      - hmpps/wait_till_ready
       - run:
           name: Set up s3 bucket
           command: test/integration/resources/setup-s3.sh test/integration/resources
-      - run:
-          name: Wait for db to initialise
-          command: sleep 20
+      - hmpps/wait_till_ready_postgres
       - run:
          name: Run integration tests
          command: npm run integration-test
-
       - store_test_results:
           path: test_results
       - store_artifacts:
@@ -188,15 +183,11 @@ jobs:
             google-chrome --version
             chromedriver --version
           name: Check install
-      - run:
-          name: Wait for s3 to be ready
-          command: curl -4 --connect-timeout 30 --retry-connrefused --retry 20 --retry-delay 5 http://localhost:4566
+      - hmpps/wait_till_ready
       - run:
           name: Set up s3 bucket
           command: test/integration/resources/setup-s3.sh test/integration/resources
-      - run:
-          name: Wait for db to initialise
-          command: sleep 20
+      - hmpps/wait_till_ready_postgres
       - run:
           name: Run the node app
           command: npm run start-dev
