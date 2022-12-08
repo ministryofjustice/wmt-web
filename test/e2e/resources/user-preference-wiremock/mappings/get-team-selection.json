@@ -2,7 +2,7 @@
   "priority": 2,
   "request": {
     "method": "GET",
-    "urlPattern": "/users/.*/preferences/allocation-teams"
+    "urlPathPattern": "/users/.*/preferences/allocation-teams"
   },
   "response": {
     "headers": {

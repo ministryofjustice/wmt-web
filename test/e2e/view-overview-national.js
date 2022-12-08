@@ -13,7 +13,7 @@ let lduDefaultUrl
 let regionDefaultUrl
 const nationalDefaultUrl = '/' + workloadTypes.PROBATION + '/hmpps/0'
 
-describe.only('National', function () {
+describe('National', function () {
   describe('View overview for staff', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.Staff)

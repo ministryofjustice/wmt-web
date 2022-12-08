@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "POST",
-    "urlPattern": "/token/verify"
+    "urlPathPattern": "/token/verify"
   },
   "response": {
     "headers": {

@@ -1,8 +1,8 @@
 {
-  "priority": 2,
+  "priority": 1,
   "request": {
     "method": "GET",
-    "urlPattern": "/users/WMT_MANAGER/preferences/allocation-teams"
+    "urlPathPattern": "/users/WMT_MANAGER/preferences/allocation-teams"
   },
   "response": {
     "headers": {
