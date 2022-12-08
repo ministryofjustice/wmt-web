@@ -2,7 +2,7 @@
     "priority": 2,
     "request": {
       "method": "GET",
-      "urlPattern": "(?i)/secure/users/ONLY_WMT.*/details"
+      "urlPathPattern": "(?i)/secure/users/ONLY_WMT.*/details"
     },
     "response": {
       "transformers": ["response-template"],

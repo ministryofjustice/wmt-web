@@ -2,7 +2,7 @@
     "priority": 2,
     "request": {
       "method": "GET",
-      "urlPattern": "(?i)/secure/users/UNAUTHN.*/details"
+      "urlPathPattern": "(?i)/secure/users/UNAUTHN.*/details"
     },
     "response": {
       "transformers": ["response-template"],
