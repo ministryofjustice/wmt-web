@@ -1,40 +1,12 @@
-const { defaultClient: appInsightsClient } = require('applicationinsights')
 const bunyan = require('bunyan')
-const PrettyStream = require('bunyan-prettystream')
+const bunyanFormat = require('bunyan-format')
 
-// Add logging
-const prettyStream = new PrettyStream()
-prettyStream.pipe(process.stdout)
+const formatOut = bunyanFormat({ outputMode: 'short', color: true })
 
 const logger = bunyan.createLogger({
   name: 'wmt-web',
-  streams: [],
-  serializers: {
-    error: errorSerializer
-  }
+  stream: formatOut,
+  level: 'debug'
 })
 
-logger.addStream({
-  level: 'DEBUG',
-  stream: prettyStream
-})
-
-function errorSerializer (error) {
-  return {
-    message: error.message,
-    name: error.name,
-    stack: error.stack
-  }
-}
-
-module.exports = {
-  info: logger.info.bind(logger),
-  error: function (e) {
-    if (appInsightsClient) {
-      appInsightsClient.trackException({ exception: e })
-    } else {
-      logger.error(e)
-    }
-  }
-
-}
+module.exports = logger
