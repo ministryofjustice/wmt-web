@@ -26,4 +26,5 @@ app/assets/javascripts/vendor
 pally*.json
 dailyArchiveInserts.json
 archiveReductionInserts.json
+test/testData*
 exportCompare/*.csv
