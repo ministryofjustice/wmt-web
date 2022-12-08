@@ -1,15 +1,17 @@
 const { ReportAggregator } = require('wdio-html-nice-reporter')
+const dns = require('node:dns')
 let reportAggregator
 
 exports.config = {
   services: [
     [
-      ['selenium-standalone', { drivers: { chrome: '108.0.5359.94-1' } }],
+      ['selenium-standalone', { drivers: { chrome: 'latest' } }],
       {
         logs: 'logs'
       }
     ]
   ],
+
   specs: ['./test/e2e/**/*.js'],
   exclude: [],
   maxInstances: 1,
@@ -19,7 +21,7 @@ exports.config = {
     browserName: 'chrome'
   }],
   sync: false,
-  logLevel: 'info',
+  logLevel: 'error',
   coloredLogs: true,
   screenshotPath: './errorShots/',
   waitforTimeout: 2000,
@@ -43,6 +45,9 @@ exports.config = {
     }
     ]
   ],
+  beforeSession: () => {
+    dns.setDefaultResultOrder('ipv4first')
+  },
   onPrepare: function (config, capabilities) {
     reportAggregator = new ReportAggregator({
       outputDir: './test_results/e2e/',
