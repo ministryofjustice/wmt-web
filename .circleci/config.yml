@@ -57,6 +57,15 @@ executors:
           - AWS_EXECUTION_ENV=True
           - DEFAULT_REGION=eu-west-2
           - TMPDIR=/private
+      - image: wiremock/wiremock:latest
+        name: mainWiremock
+        command: --port 8099 --global-response-templating --root-dir test/e2e/resources/wiremock  
+      - image: wiremock/wiremock:latest
+        name: userPreferencesWiremock
+        command: --port 8098 --global-response-templating --root-dir test/e2e/resources/user-preference-wiremock
+      - image: wiremock/wiremock:latest
+        name: tokenVerificationWiremock
+        command: --port 8100 --global-response-templating --root-dir test/e2e/resources/token-verify-wiremock          
     working_directory: ~/app
 
 jobs:
@@ -182,21 +191,6 @@ jobs:
       - run:
           name: Set up s3 bucket
           command: test/integration/resources/setup-s3.sh test/integration/resources
-      - run:
-          name: Get wiremock
-          command: curl -o wiremock.jar https://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-standalone/2.27.1/wiremock-standalone-2.27.1.jar
-      - run:
-          name: Run wiremock
-          command: java -jar wiremock.jar --port 8099 --global-response-templating --root-dir test/e2e/resources/wiremock
-          background: true
-      - run:
-          name: Run user preference wiremock
-          command: java -jar wiremock.jar --port 8098 --global-response-templating --root-dir test/e2e/resources/user-preference-wiremock
-          background: true
-      - run:
-          name: Run token verify wiremock
-          command: java -jar wiremock.jar --port 8100 --global-response-templating --root-dir test/e2e/resources/token-verify-wiremock
-          background: true
       - run:
           name: Wait for db to initialise
           command: sleep 20
