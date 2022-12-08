@@ -213,5 +213,7 @@ table.override-gov-uk-table tr{
 #caseload-data-table th{
   font-size: 15px;
 }
-
-@import 'beta-testing.scss';
+  
+.govuk-notification-banner__content>* {
+  max-width: none;
+}
