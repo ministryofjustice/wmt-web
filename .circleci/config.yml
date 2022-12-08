@@ -58,13 +58,10 @@ executors:
           - DEFAULT_REGION=eu-west-2
           - TMPDIR=/private
       - image: wiremock/wiremock:latest
-        name: mainWiremock
         command: --port 8099 --global-response-templating --root-dir test/e2e/resources/wiremock  
       - image: wiremock/wiremock:latest
-        name: userPreferencesWiremock
         command: --port 8098 --global-response-templating --root-dir test/e2e/resources/user-preference-wiremock
       - image: wiremock/wiremock:latest
-        name: tokenVerificationWiremock
         command: --port 8100 --global-response-templating --root-dir test/e2e/resources/token-verify-wiremock          
     working_directory: ~/app
 
@@ -184,7 +181,13 @@ jobs:
       - attach_workspace:
           at: ~/app
       - hmpps/install_aws_cli
-      - browser-tools/install-browser-tools
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+      - run:
+          command: |
+            google-chrome --version
+            chromedriver --version
+          name: Check install
       - run:
           name: Wait for s3 to be ready
           command: curl -4 --connect-timeout 30 --retry-connrefused --retry 20 --retry-delay 5 http://localhost:4566
