@@ -23,8 +23,10 @@ module.exports = function () {
             (req, res) => `'nonce-${res.locals.cspNonce}'`,
             'https://www.googletagmanager.com'],
           styleSrc: ["'self'", 'code.jquery.com', "'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='", "'sha256-7ynffF12wDROtneyCyZQeDPLI7U5bQGlCJO3PFWnaTg='"],
-          imgSrc: ["'self'", 'https://www.google-analytics.com', 'data:'],
-          connectSrc: ["'self'", 'www.googletagmanager.com', 'https://www.google-analytics.com'],
+          imgSrc: ["'self'", 
+          'https://www.google-analytics.com', 
+          'data:'],
+          connectSrc: ["'self'", 'www.googletagmanager.com','*.google-analytics.com'],
           fontSrc: ["'self'", 'data:']
         }
       }
