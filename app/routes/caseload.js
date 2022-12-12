@@ -50,6 +50,7 @@ module.exports = function (get) {
             }
           }
           const subNav = getSubNav(id, organisationLevel, req.path, workloadTypes.PROBATION, authorisedUserRole.authorisation, authorisedUserRole.userRole)
+          const isNationalExport = organisationLevel === organisationUnitConstants.NATIONAL.name
           return res.render('caseload', {
             screen: 'caseload',
             linkId: req.params.id,
@@ -64,6 +65,9 @@ module.exports = function (get) {
             caseloadDetails: caseloadDetailsData,
             date: lastUpdated,
             canExportCaseload: canExportCaseloadRoles.includes(req.user.user_role),
+            isNationalExport,
+            exportAreaTitle: result.title,
+            exportOrganisationLevel: exportOrganisationLevelText(organisationLevel),
             workloadType: workloadTypes.PROBATION,
             onOffenderManager: true
           })
@@ -100,6 +104,22 @@ module.exports = function (get) {
       next(error)
     })
   })
+
+  const exportOrganisationLevelText = function (organisationLevel) {
+    if (organisationLevel === organisationUnitConstants.NATIONAL.name) {
+      return 'national'
+    }
+    if (organisationLevel === organisationUnitConstants.REGION.name) {
+      return 'regional'
+    }
+    if (organisationLevel === organisationUnitConstants.LDU.name) {
+      return 'PDU'
+    }
+    if (organisationLevel === organisationUnitConstants.TEAM.name) {
+      return 'team'
+    }
+    return ''
+  }
 
   const caseloadDetails = function (organisationLevel, result) {
     let details
