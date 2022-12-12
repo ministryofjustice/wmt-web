@@ -54,10 +54,10 @@ module.exports = {
       url: get('HMPPS_AUTH_URL', 'http://127.0.0.1:9090/auth', requiredInProduction),
       externalUrl: get('HMPPS_AUTH_EXTERNAL_URL', get('HMPPS_AUTH_URL', 'http://127.0.0.1:9090/auth')),
       timeout: {
-        response: get('HMPPS_AUTH_TIMEOUT_RESPONSE', 1000)
+        response: get('HMPPS_AUTH_TIMEOUT_RESPONSE', 3000)
       },
       agent: {
-        timeout: 1000
+        timeout: 3000
       },
       retries: 2,
       apiClientId: get('API_CLIENT_ID', 'workload-measurement-ui', requiredInProduction),
