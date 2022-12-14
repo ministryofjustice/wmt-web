@@ -1,7 +1,9 @@
 module.exports = [
   {
     startDate: '04-01-2021',
+    startDateSortBy: 1609718400,
     endDate: '31-01-2021',
+    endDateSortBy: 1612051200,
     totalCases: 215,
     totalPoints: 13523,
     availablePoints: 16191,
@@ -26,7 +28,9 @@ module.exports = [
   },
   {
     startDate: '01-02-2021',
+    startDateSortBy: 1612137600,
     endDate: '28-02-2021',
+    endDateSortBy: 1614470400,
     totalCases: 195,
     totalPoints: 13017,
     availablePoints: 14322,
