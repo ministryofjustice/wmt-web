@@ -1,4 +1,4 @@
-const moment = require('moment')
+const Moment = require('moment')
 const authorisation = require('../authorisation')
 const messages = require('../constants/messages')
 const roles = require('../constants/user-roles')
@@ -15,8 +15,8 @@ const viewTemplate = 'daily-caseload-data'
 const title = 'Daily Caseload Data'
 const archiveDatabaseStartDateString = require('../../config').ARCHIVE_DATABASE_START_DATE
 const currentDatabaseStartDateString = require('../../config').CURRENT_DATABASE_START_DATE
-const archiveDatabaseStartDate = new moment(archiveDatabaseStartDateString, 'DD/MM/YYYY') //eslint-disable-line
-const currentDatabaseStartDate = new moment(currentDatabaseStartDateString, 'DD/MM/YYYY') //eslint-disable-line
+const archiveDatabaseStartDate = new Moment(archiveDatabaseStartDateString, 'DD/MM/YYYY') //eslint-disable-line
+const currentDatabaseStartDate = new Moment(currentDatabaseStartDateString, 'DD/MM/YYYY') //eslint-disable-line
 const getArchiveOption = require('../helpers/archive-helpers/get-archive-option')
 const getStringifiedBody = require('../helpers/archive-helpers/get-stringified-body')
 const createSearchListArray = require('../helpers/archive-helpers/create-search-list-array')
@@ -140,6 +140,7 @@ module.exports = function (get, post) {
 const formatResults = function (results) {
   results.forEach(function (result) {
     result.workloadDate = dateFormatter.formatDate(result.workloadDate, 'DD-MM-YYYY')
+    result.workloadDateSortBy = new Moment(result.workloadDate, 'DD-MM-YYYY').unix()
   })
   return results
 }
