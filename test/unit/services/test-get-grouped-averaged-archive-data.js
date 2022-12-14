@@ -13,24 +13,39 @@ describe('services/get-grouped-averaged-archive-data', function () {
   it('should return the expected array with 77 objects - Group By OM - Weekly', function () {
     groupedData = getGroupedAveragedArchiveData(preGroupedData, new moment('2021-01-04'), '2021-02-15', 'offenderManager', 'weekly') //eslint-disable-line
     expect(groupedData.length).to.eql(77)
+    const expected = expectedGroupedDataByOmWeekly.map(item => ({
+      startDateSortBy: moment(item.startDate, 'DD-MM-YYYY').unix(),
+      endDateSortBy: moment(item.endDate, 'DD-MM-YYYY').unix(),
+      ...item
+    }))
     for (let i = 0; i < groupedData.length; i++) {
-      expect(groupedData[i]).to.deep.equal(expectedGroupedDataByOmWeekly[i])
+      expect(groupedData[i]).to.deep.equal(expected[i])
     }
   })
 
   it('should return the expected array with 22 objects - Group By OM - Monthly', function () {
     groupedData = getGroupedAveragedArchiveData(preGroupedData, new moment('2021-01-04'), '2021-02-15', 'offenderManager', 'monthly') //eslint-disable-line
     expect(groupedData.length).to.eql(22)
+    const expected = expectedGroupedDataByOmMonthly.map(item => ({
+      startDateSortBy: moment(item.startDate, 'DD-MM-YYYY').unix(),
+      endDateSortBy: moment(item.endDate, 'DD-MM-YYYY').unix(),
+      ...item
+    }))
     for (let i = 0; i < groupedData.length; i++) {
-      expect(groupedData[i]).to.deep.equal(expectedGroupedDataByOmMonthly[i])
+      expect(groupedData[i]).to.deep.equal(expected[i])
     }
   })
 
   it('should return the expected array with 7 objects - Group By Team - Weekly', function () {
     groupedData = getGroupedAveragedArchiveData(preGroupedData, new moment('2021-01-04'), '2021-02-15', 'team', 'weekly') //eslint-disable-line
     expect(groupedData.length).to.eql(7)
+    const expected = expectedGroupedDataByTeamWeekly.map(item => ({
+      startDateSortBy: moment(item.startDate, 'DD-MM-YYYY').unix(),
+      endDateSortBy: moment(item.endDate, 'DD-MM-YYYY').unix(),
+      ...item
+    }))
     for (let i = 0; i < groupedData.length; i++) {
-      expect(groupedData[i]).to.deep.equal(expectedGroupedDataByTeamWeekly[i])
+      expect(groupedData[i]).to.deep.equal(expected[i])
     }
   })
 

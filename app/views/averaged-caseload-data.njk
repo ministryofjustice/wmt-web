@@ -192,8 +192,8 @@
     <tbody>
       {% for result in results %}
         <tr>
-            <td>{{ result.startDate }}</td>
-            <td>{{ result.endDate }}</td>
+            <td><span class="invisible-sort">{{ result.startDateSortBy }}</span>{{ result.startDate }}</td>
+            <td><span class="invisible-sort">{{ result.endDateSortBy }}</span>{{ result.endDate }}</td>
             <td>{{ result.regionName }}</td>
             <td>{{ result.lduName }}</td>
             <td>{{ result.teamName }}</td>
