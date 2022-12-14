@@ -1,21 +1,21 @@
-$.fn.dataTable.moment = function ( format, locale ) {
+$.fn.dataTable.setupDateSort = function ( format ) {
   var types = $.fn.dataTable.ext.type;
 
   // Add type detection
   types.detect.unshift( function ( d ) {
-      return moment( d, format, locale, true ).isValid() ?
-          'moment-'+format :
-          null;
+    return new Date(d) != 'Invalid Date' ?
+      'sort-'+format :
+      null;
   } );
 
   // Add sorting method - use an integer for the sorting
-  types.order[ 'moment-'+format+'-pre' ] = function ( d ) {
-      return moment( d, format, locale, true ).unix();
+  types.order[ 'sort-'+format+'-pre' ] = function ( d ) {
+      return new Date(d).getTime();
   };
 };
 
 $(document).ready(function() {
-    $.fn.dataTable.moment( 'DD-MM-YYYY');
+    $.fn.dataTable.setupDateSort( 'DD-MM-YYYY');
     $('#daily-caseload-table').DataTable({
       paging: true,
       "pageLength": 100,
