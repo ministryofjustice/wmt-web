@@ -112,7 +112,9 @@ const averageTotals = function (totals, daysWithData) {
 const initialiseTotals = function (startDate, endDate) {
   return {
     startDate: startDate.format('DD-MM-YYYY'),
+    startDateSortBy: startDate.unix(),
     endDate: endDate.format('DD-MM-YYYY'),
+    endDateSortBy: endDate.unix(),
     totalCases: 0,
     totalPoints: 0,
     availablePoints: 0,
