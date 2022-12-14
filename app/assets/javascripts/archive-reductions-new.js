@@ -1,19 +1,4 @@
 var search
-$.fn.dataTable.moment = function ( format, locale ) {
-  var types = $.fn.dataTable.ext.type;
-
-  // Add type detection
-  types.detect.unshift( function ( d ) {
-      return moment( d, format, locale, true ).isValid() ?
-          'moment-'+format :
-          null;
-  } );
-
-  // Add sorting method - use an integer for the sorting
-  types.order[ 'moment-'+format+'-pre' ] = function ( d ) {
-      return moment( d, format, locale, true ).unix();
-  };
-};
 
 function cleanColumnOutput (data, type, row) {
   var unsafeOutputPattern = new RegExp(/>|<|&|"|\/|'/g)
