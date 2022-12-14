@@ -15,7 +15,7 @@
     "copy-assets": "mkdir -p app/public/javascripts/vendor/ && cp node_modules/jquery/dist/jquery.min.js app/public/javascripts/vendor/ && cp node_modules/datatables.net/js/jquery.dataTables.min.js app/public/javascripts/vendor/ && cp node_modules/govuk-frontend/govuk/all.js app/public/javascripts/gov-uk.js && cp -a app/assets/javascripts/. app/public/javascripts/ && cp -r node_modules/govuk-frontend/govuk/assets/. app/public/ && cp -a app/assets/images/. app/public/images/",
     "build": "npm run compile-sass && npm run copy-assets",
     "integration-test": "npm run build && mocha --recursive test/integration --timeout=60000 --exit --reporter mocha-simple-html-reporter --reporter-options output=test_results/integration-test-reports.html",
-    "test": "mocha --recursive test/unit/ --exit --reporter mocha-simple-html-reporter --reporter-options output=test_results/unit-test-reports.html",
+    "test": "mocha --recursive test/unit/ --timeout=3000 --exit --reporter mocha-simple-html-reporter --reporter-options output=test_results/unit-test-reports.html",
     "test-e2e": "npm run clean-dev-data && npm run seed-dev-data && wdio test/e2e.conf.js && npm run clean-dev-data",
     "record-build-info": "node ./bin/record-build-info",
     "security_audit": "npx audit-ci --config audit-ci.json",
