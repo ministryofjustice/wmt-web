@@ -18,7 +18,7 @@ module.exports = function (id, organisationLevel) {
         if (organisationalUnitType.name === 'hmpps') {
           result.title = organisationalUnitType.displayText
         }
-        result.subTitle = navTitleConstants.OMIC.displayText
+        result.subTitle = navTitleConstants.OMIC.subTitleText
         return result
       })
   })
