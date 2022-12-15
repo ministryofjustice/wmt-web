@@ -46,7 +46,7 @@ module.exports = function (get, post) {
           organisationLevel,
           linkId: req.params.id,
           title: result.title,
-          subTitle: navTitleConstants.OMIC.displayText,
+          subTitle: navTitleConstants.OMIC.subTitleText,
           tabTitle: getTabTitle(result.title, navTitleConstants.OMIC.displayText, subNav, organisationLevel),
           breadcrumbs: result.breadcrumbs,
           subNav,
