@@ -1,4 +1,80 @@
 {% extends "includes/layout.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% set tableData = {
+    classes: 'sln-table-overview data-table',
+    attributes: {
+        'data-module': 'moj-sortable-table',
+    },
+    head: [],
+    rows: []
+} %}
+
+{%- set tableHeader1 = {
+    text: childOrganisationLevelDisplayText,
+    attributes: {
+        "class" : "sln-table-org-level",
+        "id": "name"
+    },
+    classes: "govuk-!-width-one-third"
+} -%}
+{{ tableData.head.push(tableHeader1) }}
+
+{% if organisationLevel === "team" %}
+    {%- set tableHeader2 = {
+        text: 'Grade',
+        attributes: {
+            "id": "grade"
+        }
+    } -%}
+    {{ tableData.head.push(tableHeader2) }}
+{% endif %}
+
+{%- set tableHeader3 = {
+    text: 'Standard Delivery Reports',
+    attributes: {
+        "id": "total_sdrs"
+    }
+} -%}
+{{ tableData.head.push(tableHeader3) }}
+
+{%- set tableHeader4 = {
+    text: 'Fast Delivery Reports',
+    attributes: {
+        "id": "total_fdrs"
+    }
+} -%}
+{{ tableData.head.push(tableHeader4) }}
+
+{%- set tableHeader5 = {
+    text: 'Oral Reports',
+    attributes: {
+        "id": "total_oral_reports"
+    }
+} -%}
+{{ tableData.head.push(tableHeader5) }}
+
+{% for member in overviewDetails %}
+    {% if organisationLevel === "team" %}
+        {%- set tableRowTeam = [
+            { text: member.name },
+            { text: member.grade },
+            { text: member.totalSdrs },
+            { text: member.totalFdrs },
+            { text: member.totalOralReports }
+        ] -%}
+        {{ tableData.rows.push(tableRowTeam) }}
+    {% else %}
+        {%- set tableRow = [
+            { text: ('<a class="govuk-link" href="/court-reports/' + childOrganisationLevel +'/' + member.linkId + '">' + member.name + '</a>' ) | safe },
+            { text: member.totalSdrs },
+            { text: member.totalFdrs },
+            { text: member.totalOralReports }
+        ] -%}
+        {{ tableData.rows.push(tableRow) }}
+    {% endif %}
+{% endfor %}
+
 
 {% block content %}
 
@@ -10,34 +86,7 @@
 
 <div>
   <div id="{{ organisationLevel }}">
-    <table class="govuk-table sln-table-overview data-table">
-      <thead>
-        <tr>
-          <th class="sln-table-org-level" id="name">{{ childOrganisationLevelDisplayText }}</th>
-          {% if organisationLevel === "team" %}
-            <th id="grade">Grade</th>
-          {% endif %}
-          <th id="total_sdrs">Standard Delivery Reports</th>
-          <th id="total_fdrs">Fast Delivery Reports</th>
-          <th id="total_oral_reports">Oral Reports</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for member in overviewDetails %}
-        <tr>
-          {% if organisationLevel === "team" %}
-            <td headers="name">{{ member.name }}</td>
-            <td headers="grade">{{ member.grade }}</td>
-          {% else %}
-          <td headers="name"><a class="govuk-link" href="/court-reports/{{ childOrganisationLevel }}/{{ member.linkId }}">{{ member.name }}</a></td>
-          {% endif %}
-          <td headers="total_sdrs">{{ member.totalSdrs }}</td>
-          <td headers="total_fdrs">{{ member.totalFdrs }}</td>
-          <td headers="total_oral_reports">{{ member.totalOralReports }}</td>
-        </tr> 
-        {% endfor %}
-      </tbody>
-    </table>
+    {{ govukTable(tableData) }}
   </div>
 </div>
 
