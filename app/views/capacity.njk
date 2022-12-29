@@ -174,6 +174,7 @@
 {% if organisationLevel !== 'offender-manager' %}
   <h3 class="govuk-heading-m">Capacity breakdown</h3>
 
+  <p class="govuk-body-s"><span class="capacity-red">Red</span> numbers are shown when capacity is over 110%</p>
   <table id="capacity-breakdown" class="govuk-table data-table dataTable">
     <thead>
       <tr>
@@ -223,7 +224,7 @@
           <td headers="capacityName org"><a class="govuk-link" href="/{{ workloadType }}/offender-manager/{{ member.linkId }}">{{ member.name }}</a></td>
           <td headers="capacityGrade org">{{ member.grade }}</td>
           {% if member.capacityPercentage > 110 %}
-            <td class="capacity-red" headers="capacity breakdown">{{ member.capacityPercentage | round(1) }}%</td>
+            <td class="capacity-red" headers="capacity breakdown">{{ member.capacityPercentage | round(1) }}%<span class="govuk-visually-hidden">. This is over 110% capacity</span></td>
           {% else %}
             <td headers="capacity breakdown">{{ member.capacityPercentage | round(1) }}%</td>
           {% endif %}
@@ -254,7 +255,7 @@
             {% endif %}
           <td class="align-centre" headers="grade org">{{ member.grades[i].grade }}</td>
           {% if member.grades[i].capacityPercentage > 110 %}
-            <td class="capacity-red" headers="capacity breakdown">{{ member.grades[i].capacityPercentage | round(1) }}%</td>
+            <td class="capacity-red" headers="capacity breakdown">{{ member.grades[i].capacityPercentage | round(1) }}%<span class="govuk-visually-hidden">. This is over 110% capacity</span></td>
           {% else %}
             <td headers="capacity breakdown">{{ member.grades[i].capacityPercentage | round(1) }}%</td>
           {% endif %}
@@ -301,7 +302,7 @@
             {% endif %}
           <td class="align-centre" headers="capacityGrade org">{{ member.grades[i].grade }}</td>
           {% if member.grades[i].capacityPercentage > 110 %}
-            <td class="capacity-red" headers="capacity breakdown">{{ member.grades[i].capacityPercentage | round(1) }}%</td>
+            <td class="capacity-red" headers="capacity breakdown">{{ member.grades[i].capacityPercentage | round(1) }}%<span class="govuk-visually-hidden">. This is over 110% capacity</span></td>
           {% else %}
             <td headers="capacity breakdown">{{ member.grades[i].capacityPercentage | round(1) }}%</td>
           {% endif %}
