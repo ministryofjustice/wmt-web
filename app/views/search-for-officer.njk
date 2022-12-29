@@ -1,4 +1,74 @@
 {% extends "includes/layout.njk" %} 
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% set tableData = {
+    classes: 'data-table width100Percent',
+    attributes: {
+        'data-module': 'moj-sortable-table',
+        'id': 'results-table',
+        'cellspacing':  '0',
+        'width':  '100%"'
+    },
+    head: [
+        {
+            text: 'Region',
+            attributes: {
+                "aria-sort": "none",
+                "id": "division"
+            }
+        },
+        {
+            text: 'Probation Delivery Unit',
+            attributes: {
+                "aria-sort": "none",
+                "id": "ldu"
+            }
+        },
+        {
+            text: 'Team',
+            attributes: {
+                "aria-sort": "none",
+                "id": "team"
+            }
+        },
+        {
+            text: 'Surname',
+            attributes: {
+                "aria-sort": "none",
+                "id": "surname"
+            }
+        },
+        {
+            text: 'Forename',
+            attributes: {
+                "aria-sort": "ascending",
+                "id": "forename"
+            }
+        },
+        {
+            text: 'Link',
+            attributes: {
+                "aria-sort": "none",
+                "id": "link"
+            }
+        }
+    ],
+    rows: []
+} %}
+
+{% if (results) %}
+    {% for result in results %}
+        {%- set tableRow = [
+            { text: result.region },
+            { text: result.ldu },
+            { text: result.team },
+            { text: result.surname },
+            { text: result.forename },
+            { html: ('<a href="/probation/offender-manager/' + result.workloadOwnerId + '">View</a>') }
+        ] -%}
+        {{ tableData.rows.push(tableRow) }}
+    {% endfor %}
+{% endif %}
 
 {% block content %}
     <header class="govuk-heading-xl officerSearchHeader">Search for an Offender Manager</header>
@@ -19,34 +89,7 @@
   </form>
   <div class="results">
 
-
-    <table id="results-table" class="govuk-table js-data-table data-table dataTable width100Percent" cellspacing="0" width="100%"  aria-describedby="example_info">
-        <thead>
-            <tr class="headers">
-                <th id="division">Region</th>
-                <th id="ldu">Probation Delivery Unit</th>
-                <th id="team">Team</th>
-                <th id="surname">Surname</th>
-                <th id="forename">Forename</th>
-                <th id="link">Link</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if (results) %}
-                {% for result in results %}
-                <tr>
-                    <td>{{ result.region }}</td>
-                    <td>{{ result.ldu }}</td>
-                    <td>{{ result.team }}</td>
-                    <td>{{ result.surname }}</td>
-                    <td>{{ result.forename }}</td>
-                    <td><a href="/probation/offender-manager/{{ result.workloadOwnerId }}">View</a></td>
-                </tr>
-                {% endfor %}
-            {% endif %}
-        </tbody>
-    </table>
-  </div><script src="/public/javascripts/vendor/jquery.min.js"></script>
-<script src="/public/javascripts/vendor/jquery.dataTables.min.js"></script>
-<script src="/public/javascripts/search-data.js"></script>
+  <script src="/public/javascripts/vendor/jquery.min.js"></script>
+  {{ govukTable(tableData) }}
+  </div>
 {% endblock %}
