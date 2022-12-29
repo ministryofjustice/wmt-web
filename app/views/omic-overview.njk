@@ -1,4 +1,72 @@
 {% extends "includes/layout.njk" %}  
+{%- from "govuk/components/table/macro.njk" import govukTable -%}
+
+{% set tableData = {
+    classes: 'data-table summary-row',
+    attributes: {
+        'data-module': 'moj-sortable-table',
+        'id': 'results-table',
+        'cellspacing':  '0',
+        'width':  '100%"'
+    },
+    head: [
+        {
+            text: childOrganisationLevelDisplayText,
+            attributes: {
+                "aria-sort": "ascending",
+                "id": "name"
+            }
+        },
+        {
+            text: 'OMIC Cases',
+            attributes: {
+                "aria-sort": "none"
+            }
+        },
+        {
+            text: 'Total Points while in Custody',
+            attributes: {
+                "aria-sort": "none"
+            }
+        },
+        {
+            text: 'Anticipated Points while on Licence',
+            attributes: {
+                "aria-sort": "none"
+            }
+        }
+    ],
+    rows: []
+} %}
+
+{% if (overviewDetails) %}
+    {% for member in overviewDetails.rows %}
+        {% if childOrganisationLevelDisplayText !== 'Team' and childOrganisationLevelDisplayText !== 'Offender Manager' %}
+            {%- set tableRow = [
+                { html: ('<a class="govuk-link" href="/' + workloadType + '/' + childOrganisationLevel + '/' + member.linkId + '">' + member.name + '</a>') },
+                { text: member.totalCases },
+                { text: member.custodyPoints },
+                { text: member.licencePoints }
+            ] -%}
+            {{ tableData.rows.push(tableRow) }}
+        {% else %}
+            {%- set tableRow = [
+                { text: member.name },
+                { text: member.totalCases },
+                { text: member.custodyPoints },
+                { text: member.licencePoints }
+            ] -%}
+            {{ tableData.rows.push(tableRow) }}
+        {% endif %}
+    {% endfor %}
+    {%- set tableRowFooter = [
+        { text: 'Total/ Average' },
+        { text: overviewDetails.totals.totalTotalCases },
+        { text: overviewDetails.totals.totalCustodyPoints },
+        { text: overviewDetails.totals.totalLicencePoints }
+    ] -%}
+    {{ tableData.rows.push(tableRowFooter) }}
+{% endif %}
 
 {% block content %}
 
@@ -8,7 +76,8 @@
 
 {% include "includes/sub-nav.njk" %}
 
-{% include "includes/omic-organisation-overview.njk"%}
+<script src="/public/javascripts/vendor/jquery.min.js"></script>
+{{ govukTable(tableData) }}
 
 {% include "includes/last-updated.njk" %}
 

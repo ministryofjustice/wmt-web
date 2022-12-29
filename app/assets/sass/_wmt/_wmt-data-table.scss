@@ -46,6 +46,10 @@ table tr.headers th{
     padding-right: 25px!important;
 }
 
+table.summary-row tr:last-child {
+    background: rgb(199, 192, 192);
+}
+
 table.data-table tr td{
     padding:5px 10px 5px 10px;
 }
