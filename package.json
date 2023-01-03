@@ -87,7 +87,7 @@
     "express-nunjucks": "2.2.5",
     "express-session": "1.17.3",
     "floatthead": "2.2.4",
-    "govuk-frontend": "4.4.0",
+    "govuk-frontend": "4.4.1",
     "he": "1.2.0",
     "helmet": "6.0.1",
     "http-errors": "2.0.0",
