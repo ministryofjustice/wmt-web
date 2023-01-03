@@ -1,5 +1,6 @@
 
-        
+    <p class="govuk-body-s"><span class="capacity-red">Red</span> numbers are shown when capacity is over 110%</p>
+
     <table id="example" class="govuk-table js-data-table data-table dataTable width100Percent" cellspacing="0" width="100%"  aria-describedby="example_info">
         <thead>
             <tr>
@@ -35,14 +36,14 @@
               <td headers="grade om">{{ member.gradeCode }}</td>
             {% endif %}
             {% if member.capacityPercentage > 110 %}
-              <td class="capacity-red" headers="current cap">{{ member.capacityPercentage | round(1) }}%</td>
+              <td class="capacity-red" headers="current cap">{{ member.capacityPercentage | round(1) }}%<span class="govuk-visually-hidden">. This is over 110% capacity</span></td>
             {% else %}
               <td headers="current cap">{{ member.capacityPercentage | round(1) }}%</td>
             {% endif %}
             <td headers="points cap">{{ member.availablePoints }}</td>
             <td headers="totalPoints cap">{{ member.totalPoints }}</td>
             {% if member.capacityPercentage > 110 %}
-              <td class="capacity-red" headers="remaining cap">{{ member.remainingPoints }}</td>
+              <td class="capacity-red" headers="remaining cap">{{ member.remainingPoints }}<span class="govuk-visually-hidden">. This is over 110% capacity</span></td>
             {% else %}
               <td headers="remaining cap">{{ member.remainingPoints}}</td>
             {% endif %}
