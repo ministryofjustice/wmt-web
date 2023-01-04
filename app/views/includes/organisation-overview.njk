@@ -56,17 +56,17 @@
         <tfoot>
         
             <tr>
-            <td headers="name om">Total / Average</td>
+            <th headers="name om">Total / Average</th>
             {% if organisationLevel === 'team' %}  
-              <td headers="grade om">{{ overviewDetails.totals.gradeCode }}</td>
+              <th headers="grade om">{{ overviewDetails.totals.gradeCode }}</th>
             {% endif %}
-            <td headers="current cap">{{ overviewDetails.totals.totalCapacityPercentage | round(1) }}%</td>
-            <td headers="points cap">{{ overviewDetails.totals.totalAvailablePoints }}</td>
-            <td headers="totalPoints cap">{{ overviewDetails.totals.totalPoints }}</td>
-            <td headers="remaining cap">{{ overviewDetails.totals.totalRemainingPoints}}</td>
-            <td headers="hrs contracted">{{ overviewDetails.totals.totalContractedHours }}</td>
-            <td headers="hrs reduction">{{ overviewDetails.totals.totalReduction }}</td>
-            <td headers="cases total">{{ overviewDetails.totals.totalTotalCases }}</td>  
+            <th headers="current cap">{{ overviewDetails.totals.totalCapacityPercentage | round(1) }}%</th>
+            <th headers="points cap">{{ overviewDetails.totals.totalAvailablePoints }}</th>
+            <th headers="totalPoints cap">{{ overviewDetails.totals.totalPoints }}</th>
+            <th headers="remaining cap">{{ overviewDetails.totals.totalRemainingPoints}}</th>
+            <th headers="hrs contracted">{{ overviewDetails.totals.totalContractedHours }}</th>
+            <th headers="hrs reduction">{{ overviewDetails.totals.totalReduction }}</th>
+            <th headers="cases total">{{ overviewDetails.totals.totalTotalCases }}</th>  
             </tr>
             
         </tfoot>
