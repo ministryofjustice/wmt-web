@@ -47,7 +47,7 @@ module.exports = function (id, capacityDateRange, organisationLevel) {
 const parseCapacityBreakdown = function (workloadReports, organisationLevel) {
   const returnObject = {}
   const capacityBreakdown = []
-  let totals = { name: 'Total / Average', capacity: 0, totalCases: 0, totalARMS: 0, totalGs: 0, totalCMS: 0, totalSDRs: 0, totalParoms: 0, totalSdrConversions: 0, totalTotalT2aCases: 0, totalCMSPoints: 0, totalGSPoints: 0, totalPoints: 0, availablePoints: 0 }
+  let totals = { name: 'Total / Average', capacity: 0, totalCases: 0, totalGs: 0, totalCMS: 0, totalSDRs: 0, totalSdrConversions: 0, totalTotalT2aCases: 0, totalCMSPoints: 0, totalGSPoints: 0, totalPoints: 0, availablePoints: 0 }
 
   if (organisationLevel === organisationConstant.TEAM.name) {
     workloadReports.forEach(function (workloadReport) {
@@ -98,11 +98,9 @@ const parseCapacityBreakdown = function (workloadReports, organisationLevel) {
 const addTotals = function (totals, capacityBreakdown) {
   totals.capacity += capacityBreakdown.capacityPercentage
   totals.totalCases += capacityBreakdown.totalCases
-  totals.totalARMS += capacityBreakdown.armsTotalCases
   totals.totalGs += capacityBreakdown.gsPercentage
   totals.totalCMS += capacityBreakdown.cmsPercentage
   totals.totalSDRs += capacityBreakdown.sdrs
-  totals.totalParoms += capacityBreakdown.paroms
   totals.totalSdrConversions += capacityBreakdown.sdrConversions
   totals.totalTotalT2aCases += capacityBreakdown.totalT2aCases
   totals.totalGSPoints += capacityBreakdown.gsPoints
@@ -133,8 +131,6 @@ const buildCapacityBreakdownEntry = function (workloadReport) {
     totalPoints: workloadReport.totalPoints,
     availablePoints: workloadReport.availablePoints,
     totalCases: workloadReport.totalCases,
-    armsTotalCases: workloadReport.armsTotalCases,
-    paroms: workloadReport.paroms,
     sdrConversions: workloadReport.sdrConversions,
     sdrs: workloadReport.sdrs,
     totalT2aCases: workloadReport.totalT2aCases,
