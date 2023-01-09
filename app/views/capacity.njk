@@ -203,16 +203,16 @@
         </tbody>
         <tfoot>
             <tr>
-          <td colspan="2" headers="capacityGrade capacityName org">{{ member.name }}</td>
-          <td headers="capacity breakdown">{{ member.capacity | round(1) }}%</td>
-          <td headers="cases breakdown">{{ member.totalCases | round(1) }}</td>
-          <td headers="t2aCases breakdown">{{ member.totalTotalT2aCases | round(1) }}</td>
-          <td headers="fdrs breakdown">{{ member.totalSdrConversions }}</td>
-          <td headers="sdrs breakdown">{{ member.totalSDRs }}</td>
-          <td headers="gs breakdown">{{ member.totalGs | round(1) }}%</td>
-          <td headers="breakdown gsPoints">{{ member.totalGSPoints }}</td>
-          <td headers="cms breakdown">{{ member.totalCMS | round(1) }}%</td>
-          <td headers="breakdown cmsPoints">{{ member.totalCMSPoints }}</td>
+          <th colspan="2" headers="capacityGrade capacityName org">{{ member.name }}</th>
+          <th headers="capacity breakdown">{{ member.capacity | round(1) }}%</th>
+          <th headers="cases breakdown">{{ member.totalCases | round(1) }}</th>
+          <th headers="t2aCases breakdown">{{ member.totalTotalT2aCases | round(1) }}</th>
+          <th headers="fdrs breakdown">{{ member.totalSdrConversions }}</th>
+          <th headers="sdrs breakdown">{{ member.totalSDRs }}</th>
+          <th headers="gs breakdown">{{ member.totalGs | round(1) }}%</th>
+          <th headers="breakdown gsPoints">{{ member.totalGSPoints }}</th>
+          <th headers="cms breakdown">{{ member.totalCMS | round(1) }}%</th>
+          <th headers="breakdown cmsPoints">{{ member.totalCMSPoints }}</th>
         </tr>
         </tfoot>
           {% else %}
@@ -269,16 +269,16 @@
 
       <tfoot>
         <tr>
-            <td colspan="2" headers="name org">{{ capacityBreakdownTotals.name }}</td>
-            <td headers="capacity breakdown">{{ capacityBreakdownTotals.capacity | round(1) }}%</td>
-            <td headers="cases breakdown">{{ capacityBreakdownTotals.totalCases | round(1) }}</td>
-            <td headers="t2aCases breakdown">{{ capacityBreakdownTotals.totalTotalT2aCases | round(1) }}</td>
-            <td headers="fdrs breakdown">{{ capacityBreakdownTotals.totalSdrConversions }}</td>
-            <td headers="sdrs breakdown">{{ capacityBreakdownTotals.totalSDRs }}</td>
-            <td headers="gs breakdown">{{ capacityBreakdownTotals.totalGs | round(1) }}%</td>
-            <td headers="gs points breakdown">{{ capacityBreakdownTotals.totalGSPoints }}</td>
-            <td headers="cms breakdown">{{ capacityBreakdownTotals.totalCMS | round(1) }}%</td>
-            <td headers="cms points breakdown">{{ capacityBreakdownTotals.totalCMSPoints }}</td>
+            <th colspan="2" headers="name org">{{ capacityBreakdownTotals.name }}</th>
+            <th headers="capacity breakdown">{{ capacityBreakdownTotals.capacity | round(1) }}%</th>
+            <th headers="cases breakdown">{{ capacityBreakdownTotals.totalCases | round(1) }}</th>
+            <th headers="t2aCases breakdown">{{ capacityBreakdownTotals.totalTotalT2aCases | round(1) }}</th>
+            <th headers="fdrs breakdown">{{ capacityBreakdownTotals.totalSdrConversions }}</th>
+            <th headers="sdrs breakdown">{{ capacityBreakdownTotals.totalSDRs }}</th>
+            <th headers="gs breakdown">{{ capacityBreakdownTotals.totalGs | round(1) }}%</th>
+            <th headers="gs points breakdown">{{ capacityBreakdownTotals.totalGSPoints }}</th>
+            <th headers="cms breakdown">{{ capacityBreakdownTotals.totalCMS | round(1) }}%</th>
+            <th headers="cms points breakdown">{{ capacityBreakdownTotals.totalCMSPoints }}</th>
         </tr>
     </tfoot>
     </table>
@@ -310,16 +310,16 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="2" headers="capacityGrade capacityName org">{{ member.name }}</td>
-            <td headers="capacity breakdown">{{ member.capacity | round(1) }}%</td>
-            <td headers="cases breakdown">{{ member.totalCases | round(1) }}</td>
-            <td headers="t2aCases breakdown">{{ member.totalTotalT2aCases | round(1) }}</td>
-            <td headers="fdrs breakdown">{{ member.totalSdrConversions }}</td>
-            <td headers="sdrs breakdown">{{ member.totalSDRs }}</td>
-            <td headers="gs breakdown">{{ member.totalGs | round(1) }}%</td>
-            <td headers="breakdown gsPoints">{{ member.totalGSPoints }}</td>
-            <td headers="cms breakdown">{{ member.totalCMS | round(1) }}%</td>
-            <td headers="breakdown cmsPoints">{{ member.totalCMSPoints }}</td>
+            <th colspan="2" headers="capacityGrade capacityName org">{{ member.name }}</th>
+            <th headers="capacity breakdown">{{ member.capacity | round(1) }}%</th>
+            <th headers="cases breakdown">{{ member.totalCases | round(1) }}</th>
+            <th headers="t2aCases breakdown">{{ member.totalTotalT2aCases | round(1) }}</th>
+            <th headers="fdrs breakdown">{{ member.totalSdrConversions }}</th>
+            <th headers="sdrs breakdown">{{ member.totalSDRs }}</th>
+            <th headers="gs breakdown">{{ member.totalGs | round(1) }}%</th>
+            <th headers="breakdown gsPoints">{{ member.totalGSPoints }}</th>
+            <th headers="cms breakdown">{{ member.totalCMS | round(1) }}%</th>
+            <th headers="breakdown cmsPoints">{{ member.totalCMSPoints }}</th>
         </tr>
     </tfoot>
         {% endif %}
@@ -356,12 +356,12 @@
     </tbody>
     <tfoot>
       <tr>
-            <td colspan="2" headers="grade name organisationLevel">{{ member.name }}</td>
-            <td headers="inactiveHeader outstandingWarrants">{{ member.totalOW }}</td>
-            <td headers="inactiveHeader unpaidWork">{{ member.totalUPW }}</td>
-            <td headers="inactiveHeader overdueTermination">{{ member.totalOT }}</td>
-            <td headers="inactiveHeader suspendedLifers">{{ member.totalSL }}</td>
-            <td headers="inactiveHeader suspendedSentenceOrders">{{ member.totalSSO }}</td>
+            <th colspan="2" headers="grade name organisationLevel">{{ member.name }}</th>
+            <th headers="inactiveHeader outstandingWarrants">{{ member.totalOW }}</th>
+            <th headers="inactiveHeader unpaidWork">{{ member.totalUPW }}</th>
+            <th headers="inactiveHeader overdueTermination">{{ member.totalOT }}</th>
+            <th headers="inactiveHeader suspendedLifers">{{ member.totalSL }}</th>
+            <th headers="inactiveHeader suspendedSentenceOrders">{{ member.totalSSO }}</th>
       </tr>
     </tfoot>
       {% else %}
@@ -396,12 +396,12 @@
     </tbody>
     <tfoot>
       <tr>
-        <td colspan="2" headers="name org">{{ outstandingReportsTotals.name }}</td>
-        <td headers="outstanding warrants">{{ outstandingReportsTotals.totalOW }}</td>
-        <td headers="unpaid work">{{ outstandingReportsTotals.totalUPW }}</td>
-        <td headers="overdue terminations">{{ outstandingReportsTotals.totalOT }}</td>
-        <td headers="suspended lifers">{{ outstandingReportsTotals.totalSL }}</td>
-        <td headers="suspended sentence orders">{{ outstandingReportsTotals.totalSSO }}</td>
+        <th colspan="2" headers="name org">{{ outstandingReportsTotals.name }}</th>
+        <th headers="outstanding warrants">{{ outstandingReportsTotals.totalOW }}</th>
+        <th headers="unpaid work">{{ outstandingReportsTotals.totalUPW }}</th>
+        <th headers="overdue terminations">{{ outstandingReportsTotals.totalOT }}</th>
+        <th headers="suspended lifers">{{ outstandingReportsTotals.totalSL }}</th>
+        <th headers="suspended sentence orders">{{ outstandingReportsTotals.totalSSO }}</th>
       </tr>
     </tfoot>
 
@@ -425,12 +425,12 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="2" headers="grade name organisationLevel">{{ member.name }}</td>
-            <td headers="inactiveHeader outstandingWarrants">{{ member.totalOW }}</td>
-            <td headers="inactiveHeader unpaidWork">{{ member.totalUPW }}</td>
-            <td headers="inactiveHeader overdueTermination">{{ member.totalOT }}</td>
-            <td headers="inactiveHeader suspendedLifers">{{ member.totalSL }}</td>
-            <td headers="inactiveHeader suspendedSentenceOrders">{{ member.totalSSO }}</td>
+            <th colspan="2" headers="grade name organisationLevel">{{ member.name }}</th>
+            <th headers="inactiveHeader outstandingWarrants">{{ member.totalOW }}</th>
+            <th headers="inactiveHeader unpaidWork">{{ member.totalUPW }}</th>
+            <th headers="inactiveHeader overdueTermination">{{ member.totalOT }}</th>
+            <th headers="inactiveHeader suspendedLifers">{{ member.totalSL }}</th>
+            <th headers="inactiveHeader suspendedSentenceOrders">{{ member.totalSSO }}</th>
         </tr>
     </tfoot>
         {% endif %}
