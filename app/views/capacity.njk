@@ -187,8 +187,6 @@
         <th id="capacity">Capacity (%)</th>
         <th id="cases">Cases</th>
         <th id="t2aCases"><abbr title="Transition To Adulthood">T2A</abbr></th>
-        <th id="arms"><abbr title="Active Risk Management System">ARMS</abbr></th>
-        <th id="paroms"><abbr title="Parole Assessment Reports by the Offender Manager">PAROMs</abbr></th>
         <th id="fdrs"><abbr title="Fast Delivery Reports">FDRs</abbr></th>
         <th id="sdrs"><abbr title="Standard Delivery Reports">SDRs</abbr></th>
         <th id="gs"><abbr title="Group Supervision Percentage">GS %</abbr></th>
@@ -209,8 +207,6 @@
           <th headers="capacity breakdown">{{ member.capacity | round(1) }}%</th>
           <th headers="cases breakdown">{{ member.totalCases | round(1) }}</th>
           <th headers="t2aCases breakdown">{{ member.totalTotalT2aCases | round(1) }}</th>
-          <th headers="arms breakdown">{{ member.totalARMS }}</th>
-          <th headers="paroms breakdown">{{ member.totalParoms }}</th>
           <th headers="fdrs breakdown">{{ member.totalSdrConversions }}</th>
           <th headers="sdrs breakdown">{{ member.totalSDRs }}</th>
           <th headers="gs breakdown">{{ member.totalGs | round(1) }}%</th>
@@ -230,8 +226,6 @@
           {% endif %}
           <td headers="cases breakdown">{{ member.totalCases | round(1) }}</td>
           <td headers="t2aCases breakdown">{{ member.totalT2aCases | round(1) }}</td>
-          <td headers="arms breakdown">{{ member.armsTotalCases }}</td>
-          <td headers="paroms breakdown">{{ member.paroms }}</td>
           <td headers="fdrs breakdown">{{ member.sdrConversions }}</td>
           <td headers="sdrs breakdown">{{ member.sdrs }}</td>
           <td headers="gs breakdown">{{ member.gsPercentage | round(1) }}%</td>
@@ -261,8 +255,6 @@
           {% endif %}
           <td headers="cases breakdown">{{ member.grades[i].totalCases | round(1) }}</td>
           <td headers="t2aCases breakdown">{{ member.grades[i].totalT2aCases | round(1) }}</td>
-          <td headers="arms breakdown">{{ member.grades[i].armsTotalCases }}</td>
-          <td headers="paroms breakdown">{{ member.grades[i].paroms }}</td>
           <td headers="fdrs breakdown">{{ member.grades[i].sdrConversions }}</td>
           <td headers="sdrs breakdown">{{ member.grades[i].sdrs }}</td>
           <td headers="gs breakdown">{{ member.grades[i].gsPercentage | round(1) }}%</td>
@@ -281,8 +273,6 @@
             <th headers="capacity breakdown">{{ capacityBreakdownTotals.capacity | round(1) }}%</th>
             <th headers="cases breakdown">{{ capacityBreakdownTotals.totalCases | round(1) }}</th>
             <th headers="t2aCases breakdown">{{ capacityBreakdownTotals.totalTotalT2aCases | round(1) }}</th>
-            <th headers="arms breakdown">{{ capacityBreakdownTotals.totalARMS }}</th>
-            <th headers="paroms breakdown">{{ capacityBreakdownTotals.totalParoms }}</th>
             <th headers="fdrs breakdown">{{ capacityBreakdownTotals.totalSdrConversions }}</th>
             <th headers="sdrs breakdown">{{ capacityBreakdownTotals.totalSDRs }}</th>
             <th headers="gs breakdown">{{ capacityBreakdownTotals.totalGs | round(1) }}%</th>
@@ -308,8 +298,6 @@
           {% endif %}
           <td headers="cases breakdown">{{ member.grades[i].totalCases | round(1) }}</td>
           <td headers="t2aCases breakdown">{{ member.grades[i].totalT2aCases | round(1) }}</td>
-          <td headers="arms breakdown">{{ member.grades[i].armsTotalCases }}</td>
-          <td headers="paroms breakdown">{{ member.grades[i].paroms }}</td>
           <td headers="fdrs breakdown">{{ member.grades[i].sdrConversions }}</td>
           <td headers="sdrs breakdown">{{ member.grades[i].sdrs }}</td>
           <td headers="gs breakdown">{{ member.grades[i].gsPercentage | round(1) }}%</td>
@@ -326,8 +314,6 @@
             <th headers="capacity breakdown">{{ member.capacity | round(1) }}%</th>
             <th headers="cases breakdown">{{ member.totalCases | round(1) }}</th>
             <th headers="t2aCases breakdown">{{ member.totalTotalT2aCases | round(1) }}</th>
-            <th headers="arms breakdown">{{ member.totalARMS }}</th>
-            <th headers="paroms breakdown">{{ member.totalParoms }}</th>
             <th headers="fdrs breakdown">{{ member.totalSdrConversions }}</th>
             <th headers="sdrs breakdown">{{ member.totalSDRs }}</th>
             <th headers="gs breakdown">{{ member.totalGs | round(1) }}%</th>

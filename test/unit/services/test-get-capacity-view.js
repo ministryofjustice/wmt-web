@@ -11,10 +11,8 @@ const CAPACITY_RESULTS = [
     totalPoints: 100,
     availablePoints: 100,
     reductionHours: 6,
-    armsTotalCases: 5,
     sdrs: 10,
     sdrConversions: 9,
-    paroms: 8,
     oralReports: 7
   }
 ]
@@ -31,10 +29,8 @@ const TEAM_RESULTS = [
     cmsAdjustmentPoints: 10,
     gsAdjustmentPoints: -10,
     contractedHours: 40,
-    armsTotalCases: 20,
     sdrs: 10,
     sdrConversions: 9,
-    paroms: 8,
     oralReports: 7
   }
 ]
@@ -51,10 +47,8 @@ const LDU_RESULTS = [
     cmsAdjustmentPoints: 9,
     gsAdjustmentPoints: -10,
     contractedHours: 40,
-    armsTotalCases: 20,
     sdrs: 10,
-    sdrConversions: 9,
-    paroms: 8
+    sdrConversions: 9
   },
   {
     name: 'Test ldu 1',
@@ -67,10 +61,8 @@ const LDU_RESULTS = [
     cmsAdjustmentPoints: 7,
     gsAdjustmentPoints: -5,
     contractedHours: 40,
-    armsTotalCases: 20,
     sdrs: 1,
-    sdrConversions: 1,
-    paroms: 3
+    sdrConversions: 1
   }
 ]
 
@@ -88,23 +80,19 @@ const EXPECTED_TEAM_BREAKDOWN = [
     cmsPoints: 10,
     gsPoints: -10,
     gsPercentage: 20,
-    armsTotalCases: 20,
     sdrs: 10,
-    sdrConversions: 9,
-    paroms: 8
+    sdrConversions: 9
   },
   {
     capacity: 40,
     name: 'Total / Average',
     availablePoints: 100,
-    totalARMS: 20,
     totalCMS: 10,
     totalCases: 39,
     totalGs: -25,
     totalCMSPoints: 10,
     totalGSPoints: -10,
     totalSDRs: 10,
-    totalParoms: 8,
     totalSdrConversions: 9,
     totalTotalT2aCases: 29,
     totalPoints: 40
@@ -129,10 +117,8 @@ const EXPECTED_LDU_BREAKDOWN = [
         gsPercentage: 10,
         cmsPoints: 9,
         gsPoints: -10,
-        armsTotalCases: 20,
         sdrs: 10,
-        sdrConversions: 9,
-        paroms: 8
+        sdrConversions: 9
       },
       {
         name: 'Test ldu 1',
@@ -147,10 +133,8 @@ const EXPECTED_LDU_BREAKDOWN = [
         gsPercentage: 12.5,
         cmsPoints: 7,
         gsPoints: -5,
-        armsTotalCases: 20,
         sdrs: 1,
-        sdrConversions: 1,
-        paroms: 3
+        sdrConversions: 1
       }
     ]
   },
@@ -159,13 +143,11 @@ const EXPECTED_LDU_BREAKDOWN = [
     availablePoints: 170,
     capacity: 73.52941176470588,
     totalCases: 79,
-    totalARMS: 40,
     totalGs: -12,
     totalCMS: 9.411764705882353,
     totalCMSPoints: 16,
     totalGSPoints: -15,
     totalSDRs: 11,
-    totalParoms: 11,
     totalSdrConversions: 10,
     totalTotalT2aCases: 59,
     totalPoints: 125
