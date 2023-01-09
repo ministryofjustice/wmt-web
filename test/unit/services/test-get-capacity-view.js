@@ -27,7 +27,6 @@ const TEAM_RESULTS = [
     totalPoints: 40,
     availablePoints: 100,
     cmsAdjustmentPoints: 10,
-    gsAdjustmentPoints: -10,
     contractedHours: 40,
     sdrs: 10,
     sdrConversions: 9,
@@ -45,7 +44,6 @@ const LDU_RESULTS = [
     totalPoints: 90,
     availablePoints: 100,
     cmsAdjustmentPoints: 9,
-    gsAdjustmentPoints: -10,
     contractedHours: 40,
     sdrs: 10,
     sdrConversions: 9
@@ -59,7 +57,6 @@ const LDU_RESULTS = [
     totalPoints: 35,
     availablePoints: 70,
     cmsAdjustmentPoints: 7,
-    gsAdjustmentPoints: -5,
     contractedHours: 40,
     sdrs: 1,
     sdrConversions: 1
@@ -78,8 +75,6 @@ const EXPECTED_TEAM_BREAKDOWN = [
     capacityPercentage: 40,
     cmsPercentage: 10,
     cmsPoints: 10,
-    gsPoints: -10,
-    gsPercentage: 20,
     sdrs: 10,
     sdrConversions: 9
   },
@@ -89,9 +84,7 @@ const EXPECTED_TEAM_BREAKDOWN = [
     availablePoints: 100,
     totalCMS: 10,
     totalCases: 39,
-    totalGs: -25,
     totalCMSPoints: 10,
-    totalGSPoints: -10,
     totalSDRs: 10,
     totalSdrConversions: 9,
     totalTotalT2aCases: 29,
@@ -114,9 +107,7 @@ const EXPECTED_LDU_BREAKDOWN = [
         linkId: 1,
         capacityPercentage: 90,
         cmsPercentage: 9,
-        gsPercentage: 10,
         cmsPoints: 9,
-        gsPoints: -10,
         sdrs: 10,
         sdrConversions: 9
       },
@@ -130,9 +121,7 @@ const EXPECTED_LDU_BREAKDOWN = [
         linkId: 1,
         capacityPercentage: 50,
         cmsPercentage: 10,
-        gsPercentage: 12.5,
         cmsPoints: 7,
-        gsPoints: -5,
         sdrs: 1,
         sdrConversions: 1
       }
@@ -143,10 +132,8 @@ const EXPECTED_LDU_BREAKDOWN = [
     availablePoints: 170,
     capacity: 73.52941176470588,
     totalCases: 79,
-    totalGs: -12,
     totalCMS: 9.411764705882353,
     totalCMSPoints: 16,
-    totalGSPoints: -15,
     totalSDRs: 11,
     totalSdrConversions: 10,
     totalTotalT2aCases: 59,
