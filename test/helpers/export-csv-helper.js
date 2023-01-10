@@ -30,16 +30,6 @@ module.exports.TEAM_CASELOAD_CSV = {
     '"Offender Manager Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","Untiered","Overall"'
 }
 
-module.exports.ARMS_EXPORT_CSV = {
-  filename: ('Test_Arms_Export ' + timestamp + '.csv').replace(replaceSpaces, '_'),
-  csv: '"Region Name","Probation Delivery Unit","Team Name","Assessment Date","CRN","Offender Manager Name","Offender Manager Grade","Sentence Type","Sentence or Release Date","Completion Date"\n' +
-    '"NPS North West","Cumbria","NPS - Carlisle 1","4-10-2018","CASEREF30134","A.N. Offender Manager CMBY478NPSM","PO","Licence","14-9-2018","21-9-2018"\n' +
-    '"NPS North West","Cumbria","NPS - Carlisle 1","9-10-2018","CASEREF30154","A.N. Offender Manager CMBY478NPSM","PO","Community","22-2-2017","22-8-2017"\n' +
-    '"NPS North West","Cumbria","NPS - Carlisle 1","28-9-2018","CASEREF30098","A.N. Offender Manager CMBE297NPSM","PO","Community","1-1-1800","1-10-1800"\n' +
-    '"NPS North West","Cumbria","Rehabilitation","10-9-2018","CASEREF30027","A.N. Offender Manager N01B324NPSM","PO","Community","25-7-2018","01-01-2019"\n' +
-    '"NPS North West","Cumbria","Rehabilitation","19-9-2018","CASEREF30065","A.N. Offender Manager N01B324NPSM","PO","Community","16-12-2016","16-12-2020"'
-}
-
 module.exports.T2A_EXPORT_CSV = {
   filename: ('Test_Arms_Export ' + timestamp + '.csv').replace(replaceSpaces, '_'),
   csv: '"Region Name","Probation Delivery Unit","Team Name","CRN","Offender Manager Name","Grade Code","Event Number","Allocation Date","NSI Outcome Code","NSI Outcome Description"\n' +
@@ -48,71 +38,6 @@ module.exports.T2A_EXPORT_CSV = {
     '"NPS East of England","Essex South","EXS-SEE and Southend OM2","E345090","N56B267 ","PO","1","26-9-2020","ROL01","ROL01"\n' +
     '"NPS East of England","Essex South","EXS-SEE and Southend OM1","E220534","N56B249 ","PO","1","26-9-2020","ROL01","ROL01"\n' +
     '"NPS East of England","Essex South","EXS-SEE and Southend OM1","E324828","N56B252 ","PO","2","25-2-2021","ROL01","ROL01"'
-}
-
-module.exports.ARMS_EXPORT_RESULT = {
-  title: 'ARMS Export',
-  armsExportDetails:
-  [{
-    regionname: 'NPS North West',
-    lduname: 'Cumbria',
-    teamname: 'NPS - Carlisle 1',
-    assessmentdate: '4-10-2018',
-    crn: 'CASEREF30134',
-    omname: 'A.N. Offender Manager CMBY478NPSM',
-    omgrade: 'PO',
-    sentencetype: 'Licence',
-    releasedate: '14-9-2018',
-    completeddate: '21-9-2018'
-  },
-  {
-    regionname: 'NPS North West',
-    lduname: 'Cumbria',
-    teamname: 'NPS - Carlisle 1',
-    assessmentdate: '9-10-2018',
-    crn: 'CASEREF30154',
-    omname: 'A.N. Offender Manager CMBY478NPSM',
-    omgrade: 'PO',
-    sentencetype: 'Community',
-    releasedate: '22-2-2017',
-    completeddate: '22-8-2017'
-  },
-  {
-    regionname: 'NPS North West',
-    lduname: 'Cumbria',
-    teamname: 'NPS - Carlisle 1',
-    assessmentdate: '28-9-2018',
-    crn: 'CASEREF30098',
-    omname: 'A.N. Offender Manager CMBE297NPSM',
-    omgrade: 'PO',
-    sentencetype: 'Community',
-    releasedate: '1-1-1800',
-    completeddate: '1-10-1800'
-  },
-  {
-    regionname: 'NPS North West',
-    lduname: 'Cumbria',
-    teamname: 'Rehabilitation',
-    assessmentdate: '10-9-2018',
-    crn: 'CASEREF30027',
-    omname: 'A.N. Offender Manager N01B324NPSM',
-    omgrade: 'PO',
-    sentencetype: 'Community',
-    releasedate: '25-7-2018',
-    completeddate: '01-01-2019'
-  },
-  {
-    regionname: 'NPS North West',
-    lduname: 'Cumbria',
-    teamname: 'Rehabilitation',
-    assessmentdate: '19-9-2018',
-    crn: 'CASEREF30065',
-    omname: 'A.N. Offender Manager N01B324NPSM',
-    omgrade: 'PO',
-    sentencetype: 'Community',
-    releasedate: '16-12-2016',
-    completeddate: '16-12-2020'
-  }]
 }
 
 module.exports.T2A_EXPORT_RESULT = {
@@ -477,86 +402,6 @@ module.exports.CMS_EXPORT_RESULT = {
     contactcode: 'CMS30',
     contactpoints: 5,
     ompoints: -5
-  }]
-}
-
-module.exports.GS_EXPORT_CSV = {
-  filename: ('Test_Group_Supervision_Export ' + timestamp + '.csv').replace(replaceSpaces, '_'),
-  csv: '"Region Name","Probation Delivery Unit","Team Name","Contact Date","CRN","Offender Manager Name","Offender Manager Grade","Contact Type Description","Contact Code","Points"\n' +
-  '"NPS North West","Lancashire SE","NPS - Burnley 1","10-10-2018","GS2000","A.N. Offender Manager N01B320NPSM","PO","GS Employment session NS","NGS006",-15\n' +
-    '"NPS North West","Lancashire SE","NPS - Burnley 1","10-10-2018","GS2001","A.N. Offender Manager N01B320NPSM","PO","GS Employment session NS","NGS006",-15\n' +
-    '"NPS North West","Lancashire SE","NPS - Burnley 2","10-10-2018","GS2002","A.N. Offender Manager N01C411NPSN","PO","GS Employment session NS","NGS006",-15\n' +
-    '"NPS North West","Lancashire SE","NPS - Burnley 2","10-10-2018","GS2003","A.N. Offender Manager N01B911NPSM","PO","GS Employment session NS","NGS006",-15\n' +
-    '"NPS North West","Lancashire SE","NPS - Burnley 2","10-10-2018","GS2004","A.N. Offender Manager N01C411NPSN","PO","GS Employment session NS","NGS006",-15'
-}
-
-module.exports.GS_EXPORT_RESULT = {
-  title: 'Group Supervision Export',
-  gsExportDetails:
-  [{
-    regionname: 'NPS North West',
-    lduname: 'Lancashire SE',
-    teamname: 'NPS - Burnley 1',
-    contactdate: '10-10-2018',
-    caserefno: 'GS2000',
-    contactid: 1660883167,
-    omname: 'A.N. Offender Manager N01B320NPSM',
-    omgradecode: 'PO',
-    contactdescription: 'GS Employment session NS',
-    contactcode: 'NGS006',
-    points: -15
-  },
-  {
-    regionname: 'NPS North West',
-    lduname: 'Lancashire SE',
-    teamname: 'NPS - Burnley 1',
-    contactdate: '10-10-2018',
-    caserefno: 'GS2001',
-    contactid: 1660858807,
-    omname: 'A.N. Offender Manager N01B320NPSM',
-    omgradecode: 'PO',
-    contactdescription: 'GS Employment session NS',
-    contactcode: 'NGS006',
-    points: -15
-  },
-  {
-    regionname: 'NPS North West',
-    lduname: 'Lancashire SE',
-    teamname: 'NPS - Burnley 2',
-    contactdate: '10-10-2018',
-    caserefno: 'GS2002',
-    contactid: 1661654096,
-    omname: 'A.N. Offender Manager N01C411NPSN',
-    omgradecode: 'PO',
-    contactdescription: 'GS Employment session NS',
-    contactcode: 'NGS006',
-    points: -15
-  },
-  {
-    regionname: 'NPS North West',
-    lduname: 'Lancashire SE',
-    teamname: 'NPS - Burnley 2',
-    contactdate: '10-10-2018',
-    caserefno: 'GS2003',
-    contactid: 1660908486,
-    omname: 'A.N. Offender Manager N01B911NPSM',
-    omgradecode: 'PO',
-    contactdescription: 'GS Employment session NS',
-    contactcode: 'NGS006',
-    points: -15
-  },
-  {
-    regionname: 'NPS North West',
-    lduname: 'Lancashire SE',
-    teamname: 'NPS - Burnley 2',
-    contactdate: '10-10-2018',
-    caserefno: 'GS2004',
-    contactid: 1660902791,
-    omname: 'A.N. Offender Manager N01C411NPSN',
-    omgradecode: 'PO',
-    contactdescription: 'GS Employment session NS',
-    contactcode: 'NGS006',
-    points: -15
   }]
 }
 
