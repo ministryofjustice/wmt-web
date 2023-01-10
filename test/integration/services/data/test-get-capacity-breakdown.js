@@ -16,7 +16,6 @@ const capacityBreakdown = {
   sdrs: 10,
   sdrConversions: 9,
   cmsAdjustmentPoints: 0,
-  gsAdjustmentPoints: -2,
   contractedHours: 37.5
 }
 

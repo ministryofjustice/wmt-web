@@ -189,8 +189,6 @@
         <th id="t2aCases"><abbr title="Transition To Adulthood">T2A</abbr></th>
         <th id="fdrs"><abbr title="Fast Delivery Reports">FDRs</abbr></th>
         <th id="sdrs"><abbr title="Standard Delivery Reports">SDRs</abbr></th>
-        <th id="gs"><abbr title="Group Supervision Percentage">GS %</abbr></th>
-        <th id="gsPoints"><abbr title="Group Supervision Points">GS Points</abbr></th>
         <th id="cms"><abbr title="Case Management Support Percentage">CMS %</abbr></th>
         <th id="cmsPoints"><abbr title="Case Management Support Points">CMS Points</abbr></th>
       </tr>
@@ -209,8 +207,6 @@
           <th headers="t2aCases breakdown">{{ member.totalTotalT2aCases | round(1) }}</th>
           <th headers="fdrs breakdown">{{ member.totalSdrConversions }}</th>
           <th headers="sdrs breakdown">{{ member.totalSDRs }}</th>
-          <th headers="gs breakdown">{{ member.totalGs | round(1) }}%</th>
-          <th headers="breakdown gsPoints">{{ member.totalGSPoints }}</th>
           <th headers="cms breakdown">{{ member.totalCMS | round(1) }}%</th>
           <th headers="breakdown cmsPoints">{{ member.totalCMSPoints }}</th>
         </tr>
@@ -228,8 +224,6 @@
           <td headers="t2aCases breakdown">{{ member.totalT2aCases | round(1) }}</td>
           <td headers="fdrs breakdown">{{ member.sdrConversions }}</td>
           <td headers="sdrs breakdown">{{ member.sdrs }}</td>
-          <td headers="gs breakdown">{{ member.gsPercentage | round(1) }}%</td>
-          <td headers="breakdown gsPoints">{{ member.gsPoints }}</td>
           <td headers="cms breakdown">{{ member.cmsPercentage | round(1) }}%</td>
           <td headers="breakdown cmsPoints">{{ member.cmsPoints }}</td>
         </tr>
@@ -257,8 +251,6 @@
           <td headers="t2aCases breakdown">{{ member.grades[i].totalT2aCases | round(1) }}</td>
           <td headers="fdrs breakdown">{{ member.grades[i].sdrConversions }}</td>
           <td headers="sdrs breakdown">{{ member.grades[i].sdrs }}</td>
-          <td headers="gs breakdown">{{ member.grades[i].gsPercentage | round(1) }}%</td>
-          <td headers="gs points breakdown">{{ member.grades[i].gsPoints }}</td>
           <td headers="cms breakdown">{{ member.grades[i].cmsPercentage | round(1) }}%</td>
           <td headers="cms points breakdown">{{ member.grades[i].cmsPoints }}</td>
         </tr>
@@ -275,8 +267,6 @@
             <th headers="t2aCases breakdown">{{ capacityBreakdownTotals.totalTotalT2aCases | round(1) }}</th>
             <th headers="fdrs breakdown">{{ capacityBreakdownTotals.totalSdrConversions }}</th>
             <th headers="sdrs breakdown">{{ capacityBreakdownTotals.totalSDRs }}</th>
-            <th headers="gs breakdown">{{ capacityBreakdownTotals.totalGs | round(1) }}%</th>
-            <th headers="gs points breakdown">{{ capacityBreakdownTotals.totalGSPoints }}</th>
             <th headers="cms breakdown">{{ capacityBreakdownTotals.totalCMS | round(1) }}%</th>
             <th headers="cms points breakdown">{{ capacityBreakdownTotals.totalCMSPoints }}</th>
         </tr>
@@ -300,8 +290,6 @@
           <td headers="t2aCases breakdown">{{ member.grades[i].totalT2aCases | round(1) }}</td>
           <td headers="fdrs breakdown">{{ member.grades[i].sdrConversions }}</td>
           <td headers="sdrs breakdown">{{ member.grades[i].sdrs }}</td>
-          <td headers="gs breakdown">{{ member.grades[i].gsPercentage | round(1) }}%</td>
-          <td headers="breakdown gsPoints">{{ member.grades[i].gsPoints }}</td>
           <td headers="breakdown cms">{{ member.grades[i].cmsPercentage | round(1) }}%</td>
           <td headers="breakdown cmsPoints">{{ member.grades[i].cmsPoints }}</td>
         </tr>
@@ -316,8 +304,6 @@
             <th headers="t2aCases breakdown">{{ member.totalTotalT2aCases | round(1) }}</th>
             <th headers="fdrs breakdown">{{ member.totalSdrConversions }}</th>
             <th headers="sdrs breakdown">{{ member.totalSDRs }}</th>
-            <th headers="gs breakdown">{{ member.totalGs | round(1) }}%</th>
-            <th headers="breakdown gsPoints">{{ member.totalGSPoints }}</th>
             <th headers="cms breakdown">{{ member.totalCMS | round(1) }}%</th>
             <th headers="breakdown cmsPoints">{{ member.totalCMSPoints }}</th>
         </tr>

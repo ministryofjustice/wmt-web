@@ -47,7 +47,7 @@ module.exports = function (id, capacityDateRange, organisationLevel) {
 const parseCapacityBreakdown = function (workloadReports, organisationLevel) {
   const returnObject = {}
   const capacityBreakdown = []
-  let totals = { name: 'Total / Average', capacity: 0, totalCases: 0, totalGs: 0, totalCMS: 0, totalSDRs: 0, totalSdrConversions: 0, totalTotalT2aCases: 0, totalCMSPoints: 0, totalGSPoints: 0, totalPoints: 0, availablePoints: 0 }
+  let totals = { name: 'Total / Average', capacity: 0, totalCases: 0, totalCMS: 0, totalSDRs: 0, totalSdrConversions: 0, totalTotalT2aCases: 0, totalCMSPoints: 0, totalPoints: 0, availablePoints: 0 }
 
   if (organisationLevel === organisationConstant.TEAM.name) {
     workloadReports.forEach(function (workloadReport) {
@@ -98,12 +98,10 @@ const parseCapacityBreakdown = function (workloadReports, organisationLevel) {
 const addTotals = function (totals, capacityBreakdown) {
   totals.capacity += capacityBreakdown.capacityPercentage
   totals.totalCases += capacityBreakdown.totalCases
-  totals.totalGs += capacityBreakdown.gsPercentage
   totals.totalCMS += capacityBreakdown.cmsPercentage
   totals.totalSDRs += capacityBreakdown.sdrs
   totals.totalSdrConversions += capacityBreakdown.sdrConversions
   totals.totalTotalT2aCases += capacityBreakdown.totalT2aCases
-  totals.totalGSPoints += capacityBreakdown.gsPoints
   totals.totalCMSPoints += capacityBreakdown.cmsPoints
   totals.totalPoints += capacityBreakdown.totalPoints
   totals.availablePoints += capacityBreakdown.availablePoints
@@ -112,7 +110,6 @@ const addTotals = function (totals, capacityBreakdown) {
 
 const averageTotals = function (totals) {
   totals.capacity = percentageCalculator.calculatePercentage(totals.totalPoints, totals.availablePoints)
-  totals.totalGs = percentageCalculator.calculatePercentage(totals.totalGSPoints, totals.totalPoints)
   totals.totalCMS = percentageCalculator.calculatePercentage(totals.totalCMSPoints, totals.availablePoints)
   return totals
 }
@@ -137,8 +134,6 @@ const buildCapacityBreakdownEntry = function (workloadReport) {
     linkId: workloadReport.linkId,
     capacityPercentage: percentageCalculator.calculatePercentage(workloadReport.totalPoints, workloadReport.availablePoints),
     cmsPercentage: cmsPercentageValue,
-    gsPercentage: percentageCalculator.calculatePercentage(-workloadReport.gsAdjustmentPoints, (workloadReport.totalPoints - workloadReport.gsAdjustmentPoints)),
-    cmsPoints: workloadReport.cmsAdjustmentPoints,
-    gsPoints: workloadReport.gsAdjustmentPoints
+    cmsPoints: workloadReport.cmsAdjustmentPoints
   }
 }
