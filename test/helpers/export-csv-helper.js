@@ -137,8 +137,6 @@ module.exports.PERCENTAGE_WORKLOAD_EXPORT_RESULT = {
     capacity: '100%',
     caseContribution: '99%',
     cmsContribution: '98%',
-    gsContribution: '97%',
-    armsContribution: '96%',
     paromsContribution: '95%',
     sdrContribution: '94%',
     fdrContribution: '93%',
@@ -154,8 +152,6 @@ module.exports.PERCENTAGE_WORKLOAD_EXPORT_RESULT = {
     capacity: '99%',
     caseContribution: '98%',
     cmsContribution: '97%',
-    gsContribution: '96%',
-    armsContribution: '95%',
     paromsContribution: '94%',
     sdrContribution: '93%',
     fdrContribution: '92%',
@@ -171,9 +167,6 @@ module.exports.PERCENTAGE_WORKLOAD_EXPORT_RESULT = {
     capacity: '98%',
     caseContribution: '97%',
     cmsContribution: '96%',
-    gsContribution: '95%',
-    armsContribution: '94%',
-    paromsContribution: '93%',
     sdrContribution: '92%',
     fdrContribution: '91%',
     contractedHours: 35,
@@ -188,9 +181,6 @@ module.exports.PERCENTAGE_WORKLOAD_EXPORT_RESULT = {
     capacity: '97%',
     caseContribution: '96%',
     cmsContribution: '95%',
-    gsContribution: '94%',
-    armsContribution: '93%',
-    paromsContribution: '92%',
     sdrContribution: '91%',
     fdrContribution: '90%',
     contractedHours: 34,
@@ -205,9 +195,6 @@ module.exports.PERCENTAGE_WORKLOAD_EXPORT_RESULT = {
     capacity: '96%',
     caseContribution: '95%',
     cmsContribution: '94%',
-    gsContribution: '93%',
-    armsContribution: '92%',
-    paromsContribution: '91%',
     sdrContribution: '90%',
     fdrContribution: '89%',
     contractedHours: 33,
@@ -217,12 +204,12 @@ module.exports.PERCENTAGE_WORKLOAD_EXPORT_RESULT = {
 
 module.exports.PERCENTAGE_WORKLOAD_EXPORT_CSV = {
   filename: ('Test_Percentage_Workload_Export ' + timestamp + '.csv').replace(replaceSpaces, '_'),
-  csv: '"Region Name","Probation Delivery Unit","Team Name","Offender Manager Name","Offender Manager Grade","Contracted Hours","Reduction Hours","Capacity","Case Contribution","CMS Contribution","GS Contribution","ARMS Contribution","PAROMS Contribution","SDR Contribution","FDR Contribution"\n' +
-    '"NPS North West","Cumbria","NPS - Carlisle 1","A.N. Offender Manager CMBY478NPSM","PO",37,10,"100%","99%","98%","97%","96%","95%","94%","93%"\n' +
-    '"NPS North West","Cumbria","NPS - Carlisle 1","A.N. Offender Manager CMBY478NPSM","PO",36,9,"99%","98%","97%","96%","95%","94%","93%","92%"\n' +
-    '"NPS North West","Cumbria","NPS - Carlisle 1","A.N. Offender Manager CMBE297NPSM","PO",35,8,"98%","97%","96%","95%","94%","93%","92%","91%"\n' +
-    '"NPS North West","Cumbria","Rehabilitation","A.N. Offender Manager N01B324NPSM","PO",34,7,"97%","96%","95%","94%","93%","92%","91%","90%"\n' +
-    '"NPS North West","Cumbria","Rehabilitation","A.N. Offender Manager N01B324NPSM","PO",33,6,"96%","95%","94%","93%","92%","91%","90%","89%"'
+  csv: '"Region Name","Probation Delivery Unit","Team Name","Offender Manager Name","Offender Manager Grade","Contracted Hours","Reduction Hours","Capacity","Case Contribution","CMS Contribution","SDR Contribution","FDR Contribution"\n' +
+    '"NPS North West","Cumbria","NPS - Carlisle 1","A.N. Offender Manager CMBY478NPSM","PO",37,10,"100%","99%","98%","94%","93%"\n' +
+    '"NPS North West","Cumbria","NPS - Carlisle 1","A.N. Offender Manager CMBY478NPSM","PO",36,9,"99%","98%","97%","93%","92%"\n' +
+    '"NPS North West","Cumbria","NPS - Carlisle 1","A.N. Offender Manager CMBE297NPSM","PO",35,8,"98%","97%","96%","92%","91%"\n' +
+    '"NPS North West","Cumbria","Rehabilitation","A.N. Offender Manager N01B324NPSM","PO",34,7,"97%","96%","95%","91%","90%"\n' +
+    '"NPS North West","Cumbria","Rehabilitation","A.N. Offender Manager N01B324NPSM","PO",33,6,"96%","95%","94%","90%","89%"'
 }
 
 module.exports.CASE_DETAILS_EXPORT_CSV = {
