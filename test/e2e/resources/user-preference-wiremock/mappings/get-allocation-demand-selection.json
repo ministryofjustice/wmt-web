@@ -2,7 +2,7 @@
   "priority": 2,
   "request": {
     "method": "GET",
-    "urlPathPattern": "/users/.*/preferences/allocation-teams"
+    "urlPathPattern": "/users/.*/preferences/allocation-demand"
   },
   "response": {
     "headers": {
@@ -11,7 +11,7 @@
     "status": 200,
     "jsonBody": {
       "items": [
-        "TM1"
+        "{ \"pdu\": \"PDU1\", \"ldu\": \"LDU1\", \"team\": \"TM1\"}"
       ]
     }
   }
