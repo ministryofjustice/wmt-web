@@ -7,9 +7,9 @@ module.exports = function () {
     try {
       if (res.locals.canAllocate && res.locals.user) {
         const { token, nameID: username } = res.locals.user
-        const { items: teamSelection } = await userPreferenceClient.getTeamsUserPreference(token, username)
-        if (teamSelection.length) {
-          const unallocatedCasesCountByTeams = await allocationsClient.getCaseCountByTeamCodes(token, teamSelection)
+        const { team: teamCode } = await userPreferenceClient.getAllocationDemandSelection(token, username)
+        if (teamCode) {
+          const unallocatedCasesCountByTeams = await allocationsClient.getCaseCountByTeamCodes(token, [teamCode])
           res.locals.unallocatedCaseCount = unallocatedCasesCountByTeams
             .map(teamCount => teamCount.caseCount)
             .reduce((first, second) => first + second, 0)
