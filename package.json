@@ -4,7 +4,7 @@
   "description": "The frontend of the workload measurement tool",
   "engines": {
     "node": "^18",
-    "npm": "^8"
+    "npm": "^8 || ^9"
   },
   "scripts": {
     "prepare": "husky install",
