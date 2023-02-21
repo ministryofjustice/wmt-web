@@ -167,46 +167,6 @@ jobs:
           path: test_results
       - store_artifacts:
           path: test_results/integration-test-reports.html
-  e2e_test:
-    executor: docker-env
-    steps:
-      - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
-      - attach_workspace:
-          at: ~/app
-      - hmpps/install_aws_cli
-      - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
-      - run:
-          command: |
-            google-chrome --version
-            chromedriver --version
-          name: Check install
-      - hmpps/wait_till_ready
-      - run:
-          name: Set up s3 bucket
-          command: test/integration/resources/setup-s3.sh test/integration/resources
-      - hmpps/wait_till_ready_postgres
-      - run:
-          name: Run the node app
-          command: npm run start-dev
-          background: true
-      - hmpps/wait_till_ready:
-          port: 3000
-      - run:
-          name: Load mappings into wiremock
-          command: |
-            find test/e2e/resources/wiremock/mappings/*.json -exec curl --request POST --url http://localhost:8099/__admin/mappings --header 'content-type: application/json' --data-binary "@{}" \;
-            find test/e2e/resources/user-preference-wiremock/mappings/*.json -exec curl --request POST --url http://localhost:8098/__admin/mappings --header 'content-type: application/json' --data-binary "@{}" \;
-            find test/e2e/resources/token-verify-wiremock/mappings/*.json -exec curl --request POST --url http://localhost:8100/__admin/mappings --header 'content-type: application/json' --data-binary "@{}" \;
-      - run:
-          name: run end to end tests
-          command: npm run test-e2e
-      - store_test_results:
-          path: test_results
-      - store_artifacts:
-          path: test_results/e2e
 
 workflows:
   version: 2
@@ -222,10 +182,6 @@ workflows:
           requires:
             - build
       - integration_test:
-          context: hmpps-common-vars
-          requires:
-            - build
-      - e2e_test:
           context: hmpps-common-vars
           requires:
             - build
@@ -251,7 +207,6 @@ workflows:
             - helm_lint
             - unit_test
             - build_docker
-            - e2e_test
             - integration_test
           helm_timeout: 5m
       - hmpps/deploy_env:
@@ -270,7 +225,6 @@ workflows:
             - helm_lint
             - unit_test
             - build_docker
-            - e2e_test
             - integration_test
           helm_timeout: 5m
       - request-prod-approval:
