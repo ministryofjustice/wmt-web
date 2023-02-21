@@ -32,10 +32,17 @@ describe('Region', function () {
       return expect(exists).to.be.false
     })
 
-    it('should include the overview export at region level', async function () {
+    it('should not include the overview export at region level', async function () {
       const exportButton = await $('.sln-export')
       const exists = await exportButton.isExisting()
-      return expect(exists).to.be.true
+      return expect(exists).to.be.false
+    })
+
+    it('should not be able to download overview', async function () {
+      await browser.url(regionDefaultUrl + '/overview/caseload-csv')
+      const header = await $('.govuk-heading-xl')
+      const text = await header.getText()
+      expect(text).to.equal('Access is denied')
     })
 
     it('should not be able to download reductions', async function () {
