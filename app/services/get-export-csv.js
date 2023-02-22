@@ -26,17 +26,13 @@ const GROUPED_ARCHIVE_FIELDS_TEAM = ['startDate', 'endDate', 'regionName', 'lduN
 const REDUCTION_ARCHIVE_FIELD_NAMES = ['Offender Manager Name', 'Team Name', 'Reduction Hours', 'Reduction Reason', 'Comments', 'Start Date', 'End Date', 'Date Updated', 'Reduction Updated By']
 const REDUCTION_ARCHIVE_FIELDS = ['omName', 'teamname', 'hoursReduced', 'reductionReason', 'comments', 'startDate', 'endDate', 'lastUpdatedDate', 'reductionAddedBy']
 
-const ARMS_EXPORT_FIELD_NAMES = ['Region Name', 'Probation Delivery Unit', 'Team Name', 'Assessment Date', 'CRN', 'Offender Manager Name', 'Offender Manager Grade', 'Sentence Type', 'Sentence or Release Date', 'Completion Date']
-const ARMS_EXPORT_FIELDS = ['regionname', 'lduname', 'teamname', 'assessmentdate', 'crn', 'omname', 'omgrade', 'sentencetype', 'releasedate', 'completeddate']
 const CASE_DETAILS_EXPORT_FIELD_NAMES = ['Region Name', 'Probation Delivery Unit', 'Team Name', 'Tier Code', 'Row Type', 'CRN', 'Case Type', 'Offender Manager Name', 'Grade Code']
 const CASE_DETAILS_EXPORT_FIELDS = ['regionname', 'lduname', 'teamname', 'tiercode', 'rowtype', 'casereferenceno', 'casetype', 'offendermanagername', 'gradecode']
 
-const GROUP_SUPERVISION_EXPORT_FIELD_NAMES = ['Region Name', 'Probation Delivery Unit', 'Team Name', 'Contact Date', 'CRN', 'Offender Manager Name', 'Offender Manager Grade', 'Contact Type Description', 'Contact Code', 'Points']
-const GROUP_SUPERVISION_EXPORT_FIELDS = ['regionname', 'lduname', 'teamname', 'contactdate', 'caserefno', 'omname', 'omgradecode', 'contactdescription', 'contactcode', 'points']
 const CMS_EXPORT_FIELD_NAMES = ['Contact Region Name', 'Contact Probation Delivery Unit', 'Contact Team Name', 'Contact Date', 'Contact Name', 'Contact Grade', 'OM Region Name', 'OM Probation Delivery Unit', 'OM Team Name', 'CRN', 'OM Name', 'OM Grade', 'Contact Type Description', 'Contact Code', 'Contact Points', 'OM Points']
 const CMS_EXPORT_FIELDS = ['contactregionname', 'contactlduname', 'contactteamname', 'contactdate', 'contactname', 'contactgradecode', 'omregionname', 'omlduname', 'omteamname', 'caserefno', 'omname', 'omgradecode', 'contactdescription', 'contactcode', 'contactpoints', 'ompoints']
-const WORKLOAD_PERCENTAGE_BREAKDOWN_EXPORT_FIELD_NAMES = ['Region Name', 'Probation Delivery Unit', 'Team Name', 'Offender Manager Name', 'Offender Manager Grade', 'Contracted Hours', 'Reduction Hours', 'Capacity', 'Case Contribution', 'CMS Contribution', 'GS Contribution', 'ARMS Contribution', 'PAROMS Contribution', 'SDR Contribution', 'FDR Contribution']
-const WORKLOAD_PERCENTAGE_BREAKDOWN_EXPORT_FIELDS = ['regionName', 'lduName', 'teamName', 'omName', 'omGrade', 'contractedHours', 'reductionHours', 'capacity', 'caseContribution', 'cmsContribution', 'gsContribution', 'armsContribution', 'paromsContribution', 'sdrContribution', 'fdrContribution']
+const WORKLOAD_PERCENTAGE_BREAKDOWN_EXPORT_FIELD_NAMES = ['Region Name', 'Probation Delivery Unit', 'Team Name', 'Offender Manager Name', 'Offender Manager Grade', 'Contracted Hours', 'Reduction Hours', 'Capacity', 'Case Contribution', 'CMS Contribution', 'SDR Contribution', 'FDR Contribution']
+const WORKLOAD_PERCENTAGE_BREAKDOWN_EXPORT_FIELDS = ['regionName', 'lduName', 'teamName', 'omName', 'omGrade', 'contractedHours', 'reductionHours', 'capacity', 'caseContribution', 'cmsContribution', 'sdrContribution', 'fdrContribution']
 const SUSPENDED_LIFERS_EXPORT_FIELD_NAMES = ['Region Name', 'Probation Delivery Unit', 'Team Name', 'Tier Code', 'Row Type', 'CRN', 'Case Type', 'Offender Manager Name', 'Grade Code', 'In Custody?', 'Register Level', 'Register Category', 'Register Category Description', 'Registration Date']
 const SUSPENDED_LIFERS_EXPORT_FIELDS = ['regionname', 'lduname', 'teamname', 'tiercode', 'rowtype', 'casereferenceno', 'casetype', 'offendermanagername', 'gradecode', 'incustody', 'registerlevel', 'registercategory', 'registercategorydescription', 'registrationdate']
 
@@ -87,23 +83,11 @@ const getFilename = function (orgName, screen) {
     } else {
       return (orgName + ' Archived_Reductions.csv').replace(replaceSpaces, '_')
     }
-  } else if (screen === tabs.EXPORT.ARMS_EXPORT) {
-    if (orgName === null) {
-      return 'ARMS_Export.csv'
-    } else {
-      return (orgName + ' ARMS_Export.csv').replace(replaceSpaces, '_')
-    }
   } else if (screen === tabs.EXPORT.CASE_DETAILS_EXPORT) {
     if (orgName === null) {
       return 'Case_Details_Export.csv'
     } else {
       return (orgName + ' Case_Details_Export.csv').replace(replaceSpaces, '_')
-    }
-  } else if (screen === tabs.EXPORT.GROUP_SUPERVISION_EXPORT) {
-    if (orgName === null) {
-      return 'Group_Supervision_Export.csv'
-    } else {
-      return (orgName + ' Group_Supervision_Export.csv').replace(replaceSpaces, '_')
     }
   } else if (screen === tabs.EXPORT.CMS_EXPORT) {
     if (orgName === null) {
@@ -189,17 +173,9 @@ const getFields = function (organisationLevel, tab) {
       fields = REDUCTION_ARCHIVE_FIELDS
       fieldNames = REDUCTION_ARCHIVE_FIELD_NAMES
       break
-    case tabs.EXPORT.ARMS_EXPORT:
-      fields = ARMS_EXPORT_FIELDS
-      fieldNames = ARMS_EXPORT_FIELD_NAMES
-      break
     case tabs.EXPORT.CASE_DETAILS_EXPORT:
       fields = CASE_DETAILS_EXPORT_FIELDS
       fieldNames = CASE_DETAILS_EXPORT_FIELD_NAMES
-      break
-    case tabs.EXPORT.GROUP_SUPERVISION_EXPORT:
-      fields = GROUP_SUPERVISION_EXPORT_FIELDS
-      fieldNames = GROUP_SUPERVISION_EXPORT_FIELD_NAMES
       break
     case tabs.EXPORT.CMS_EXPORT:
       fields = CMS_EXPORT_FIELDS
@@ -300,9 +276,7 @@ const getCsv = function (organisationLevel, result, tab, fields, fieldNames) {
     case tabs.ADMIN.GROUPED_ARCHIVE:
     case tabs.ADMIN.GROUPED_ARCHIVE_TEAM:
     case tabs.ADMIN.REDUCTION_ARCHIVE:
-    case tabs.EXPORT.ARMS_EXPORT:
     case tabs.EXPORT.CASE_DETAILS_EXPORT:
-    case tabs.EXPORT.GROUP_SUPERVISION_EXPORT:
     case tabs.EXPORT.CMS_EXPORT:
     case tabs.EXPORT.WORKLOAD_PERCENTAGE_EXPORT:
     case tabs.EXPORT.SUSPENDED_LIFERS_EXPORT:

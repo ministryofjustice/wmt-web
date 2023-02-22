@@ -30,7 +30,8 @@ describe('Offender Manager', function () {
 
       let capacity = await $('.sln-capacity')
       capacity = await capacity.getText()
-      expect(capacity).to.equal(`${workloadOwnerCapacity}%`)
+      const capacityPercent = capacity.substring(0, capacity.indexOf('%'))
+      expect(capacityPercent).to.equal(`${workloadOwnerCapacity}`)
     })
 
     after(function () {

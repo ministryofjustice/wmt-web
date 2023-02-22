@@ -52,10 +52,6 @@ describe('services/get-export-csv', function () {
       expect(getExportCsv(orgUnit.REGION.name, helper.REGION_REDUCTIONS_RESULT, tabs.REDUCTIONS_EXPORT).csv).to.eql(helper.REGION_REDUCTIONS_CSV.csv)
     })
 
-    it('for ARMS Export', function () {
-      expect(getExportCsv(orgUnit.TEAM.name, helper.ARMS_EXPORT_RESULT.armsExportDetails, tabs.EXPORT.ARMS_EXPORT).csv).to.eql(helper.ARMS_EXPORT_CSV.csv)
-    })
-
     it('for Workload Percentage Breakdown Export', function () {
       expect(getExportCsv(orgUnit.TEAM.name, helper.PERCENTAGE_WORKLOAD_EXPORT_RESULT.percentageWorkloadExportDetails, tabs.EXPORT.WORKLOAD_PERCENTAGE_EXPORT).csv).to.eql(helper.PERCENTAGE_WORKLOAD_EXPORT_CSV.csv)
     })
@@ -66,10 +62,6 @@ describe('services/get-export-csv', function () {
 
     it('for CMS Export', function () {
       expect(getExportCsv(orgUnit.TEAM.name, helper.CMS_EXPORT_RESULT.cmsExportDetails, tabs.EXPORT.CMS_EXPORT).csv).to.eql(helper.CMS_EXPORT_CSV.csv)
-    })
-
-    it('for Group Supervision Export', function () {
-      expect(getExportCsv(orgUnit.TEAM.name, helper.GS_EXPORT_RESULT.gsExportDetails, tabs.EXPORT.GROUP_SUPERVISION_EXPORT).csv).to.eql(helper.GS_EXPORT_CSV.csv)
     })
 
     it('for Suspended Lifers Export', function () {

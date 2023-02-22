@@ -61,6 +61,18 @@ table.data-table tfoot tr {
     background: rgb(199, 192, 192);
 }
 
+table.data-table tfoot tr th {
+    background: rgb(199, 192, 192);
+    font-size: 16px;
+    font-weight: normal;
+}
+
+table.data-table tfoot tr th:first-child {
+    min-width: 90px !important;
+    padding: 5px 10px 5px 10px;
+    text-align: left;
+}
+
 table.data-table tr td.align-centre{
     text-align: center;
 }
@@ -101,10 +113,6 @@ table.data-table tr.data-sub-header td:nth-child(6),
 table.data-table tr.data-sub-header td:nth-child(7) {
     min-width: 60px;
     font-weight: bold;
-}
-
-table td.capacity-red {
-    color: #942514 !important;
 }
 
 table td a:visited {

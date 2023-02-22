@@ -54,10 +54,10 @@ describe('National', function () {
       return expect(exists).to.be.false
     })
 
-    it('should include the overview export', async function () {
+    it('should not include the overview export', async function () {
       const exportButton = await $('.sln-export')
       const exists = await exportButton.isExisting()
-      return expect(exists).to.be.true
+      return expect(exists).to.be.false
     })
 
     it('should allow the user to navigate down the org hierarchy from the national page', async function () {

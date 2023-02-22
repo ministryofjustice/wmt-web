@@ -15,11 +15,8 @@ const capacityBreakdown = {
   totalT2aCases: 3,
   sdrs: 10,
   sdrConversions: 9,
-  paroms: 8,
   cmsAdjustmentPoints: 0,
-  gsAdjustmentPoints: -2,
-  contractedHours: 37.5,
-  armsTotalCases: 5
+  contractedHours: 37.5
 }
 
 describe('services/data/get-capacity-breakdown', function () {

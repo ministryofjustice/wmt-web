@@ -8,6 +8,7 @@
 
 <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
+            <p class="govuk-body-s"><span class="capacity-red">Red</span> numbers are shown when capacity is over 110%</p>
             <table class="govuk-table override-gov-uk-table" id="offender-manager-overview-table">
                 <tbody>
                     <tr>
@@ -20,7 +21,11 @@
                     </tr>
                     <tr>
                         <th class="bold" scope="row">Capacity</th>
-                        <td class="sln-capacity numeric {% if overviewDetails.capacity > 110 %} capacity-red {% endif %}"> {{ overviewDetails.capacity | round }}%</td>
+                        {% if overviewDetails.capacity > 110 %}
+                            <td class="sln-capacity numeric capacity-red"> {{ overviewDetails.capacity | round }}%<span class="govuk-visually-hidden">. This is over 110% capacity</span></td>
+                        {% else %}
+                            <td class="sln-capacity numeric"> {{ overviewDetails.capacity | round }}%</td>
+                        {% endif %}
                     </tr>
                     <tr>
                         <th class="bold" scope="row">Cases</th>

@@ -7,9 +7,9 @@ const getLastUpdated = require('../services/data/get-last-updated')
 const dateFormatter = require('../services/date-formatter')
 const getScenarioExport = require('../services/get-omic-scenario')
 const Forbidden = require('../services/errors/authentication-error').Forbidden
-const { SUPER_USER, STAFF, MANAGER } = require('../constants/user-roles')
+const { SUPER_USER, MANAGER } = require('../constants/user-roles')
 const messages = require('../constants/messages')
-const canExportRoles = [SUPER_USER, MANAGER, STAFF]
+const canExportRoles = [SUPER_USER, MANAGER]
 const getTabTitle = require('../services/get-tab-title')
 const navTitleConstants = require('../services/nav-title')
 

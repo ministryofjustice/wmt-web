@@ -5,11 +5,9 @@ const authorisation = require('../authorisation')
 const workloadTypes = require('../constants/workload-type')
 const getLastUpdated = require('../services/data/get-last-updated')
 const dateFormatter = require('../services/date-formatter')
-const getArmsExport = require('../services/data/get-arms-export')
 const getCMSExport = require('../services/data/get-cms-export')
 const getCaseDetailsExport = require('../services/data/get-case-details-export')
 const getSuspendedLifersExport = require('../services/data/get-suspended-lifers-export')
-const getGroupSupervisionExport = require('../services/data/get-group-supervision-export')
 const getT2aDetailExport = require('../services/data/get-t2a-detail-export')
 const getScenarioExport = require('../services/get-scenario')
 const getWorkloadPercentageBreakdown = require('../services/data/get-workload-percentage-breakdown')
@@ -97,37 +95,29 @@ module.exports = function (get, post) {
       let exportPromise
       switch (radioButton) {
         case '1':
-          exportPromise = getArmsExport(id, organisationLevel)
-          tabType = tabs.EXPORT.ARMS_EXPORT
-          break
-        case '2':
           exportPromise = getCaseDetailsExport(id, organisationLevel)
           tabType = tabs.EXPORT.CASE_DETAILS_EXPORT
           break
-        case '3':
+        case '2':
           exportPromise = getCMSExport(id, organisationLevel)
           tabType = tabs.EXPORT.CMS_EXPORT
           break
-        case '4':
-          exportPromise = getGroupSupervisionExport(id, organisationLevel)
-          tabType = tabs.EXPORT.GROUP_SUPERVISION_EXPORT
-          break
-        case '5':
+        case '3':
           exportPromise = getScenarioExport(id, organisationLevel)
           break
-        case '6':
+        case '4':
           exportPromise = getSuspendedLifersExport(id, organisationLevel)
           tabType = tabs.EXPORT.SUSPENDED_LIFERS_EXPORT
           break
-        case '7':
+        case '5':
           exportPromise = getWorkloadPercentageBreakdown(id, organisationLevel)
           tabType = tabs.EXPORT.WORKLOAD_PERCENTAGE_EXPORT
           break
-        case '8':
+        case '6':
           exportPromise = getT2aDetailExport(id, organisationLevel)
           tabType = tabs.EXPORT.T2A_EXPORT
           break
-        case '9':
+        case '7':
           exportPromise = getExpiringReductions(id, organisationLevel)
           tabType = tabs.EXPORT.EXPIRING_REDUCTIONS
           break
@@ -136,7 +126,7 @@ module.exports = function (get, post) {
       }
 
       return exportPromise.then(function (results) {
-        if (radioButton === '5') {
+        if (radioButton === '3') {
           const scenarioFileName = `${organisationLevel}_Scenario_${dateFormatter.formatDate(result.date_processed, 'DD-MM-YYYY')}.xlsx`
           results.write(scenarioFileName, res)
         } else {
@@ -158,15 +148,15 @@ module.exports = function (get, post) {
 
 const formatResults = function (results, tabType) {
   let newDate, year, month, dt
-  results.forEach(function (result) {
-    if ((tabType === tabs.EXPORT.GROUP_SUPERVISION_EXPORT) || (tabType === tabs.EXPORT.CMS_EXPORT)) {
+  if (tabType === tabs.EXPORT.CMS_EXPORT) {
+    results.forEach(function (result) {
       newDate = new Date(result.contactDate)
       year = newDate.getFullYear()
       month = newDate.getMonth() + 1
       dt = newDate.getDate()
 
       result.contactDate = dt + '-' + month + '-' + year
-    }
-  })
+    })
+  }
   return results
 }
