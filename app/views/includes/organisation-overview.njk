@@ -36,16 +36,16 @@
               <td headers="grade om">{{ member.gradeCode }}</td>
             {% endif %}
             {% if member.capacityPercentage > 110 %}
-              <td class="capacity-red" headers="current cap">{{ member.capacityPercentage | round(1) }}%<span class="govuk-visually-hidden">. This is over 110% capacity</span></td>
+              <td data-order="{{ member.capacityPercentage }}" class="capacity-red" headers="current cap">{{ member.capacityPercentage | round(1) }}%<span class="govuk-visually-hidden">. This is over 110% capacity</span></td>
             {% else %}
-              <td headers="current cap">{{ member.capacityPercentage | round(1) }}%</td>
+              <td data-order="{{ member.capacityPercentage }}" headers="current cap">{{ member.capacityPercentage | round(1) }}%</td>
             {% endif %}
             <td headers="points cap">{{ member.availablePoints }}</td>
             <td headers="totalPoints cap">{{ member.totalPoints }}</td>
             {% if member.capacityPercentage > 110 %}
-              <td class="capacity-red" headers="remaining cap">{{ member.remainingPoints }}<span class="govuk-visually-hidden">. This is over 110% capacity</span></td>
+              <td data-order="{{ member.remainingPoints }}" class="capacity-red" headers="remaining cap">{{ member.remainingPoints }}<span class="govuk-visually-hidden">. This is over 110% capacity</span></td>
             {% else %}
-              <td headers="remaining cap">{{ member.remainingPoints}}</td>
+              <td data-order="{{ member.remainingPoints }}" headers="remaining cap">{{ member.remainingPoints}}</td>
             {% endif %}
             <td headers="hrs contracted">{{ member.contractedHours }}</td>
             <td headers="hrs reduction">{{ member.reductionHours }}</td>
