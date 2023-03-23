@@ -1,6 +1,6 @@
 const uuidv4 = require('uuid').v4
 const session = require('express-session')
-const connectRedis = require('connect-redis')
+const connectRedis = require('connect-redis').default
 const express = require('express')
 const config = require('../../config')
 const { createRedisClient } = require('../data/redisClient')
