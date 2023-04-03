@@ -37,6 +37,7 @@ executors:
           - SPRING_PROFILES_ACTIVE=dev,delius
           - DELIUS_ENABLED=true
           - SERVER_PORT=9090
+          - MANAGE_USERS_API_ENABLED=true
       - image: postgres:<< pipeline.parameters.postgres_tag >>
         environment:
           - POSTGRES_PASSWORD=<< pipeline.parameters.database_password >>
@@ -63,6 +64,8 @@ executors:
         command: --port 8098 --global-response-templating
       - image: wiremock/wiremock:latest
         command: --port 8100 --global-response-templating
+      - image: wiremock/wiremock:latest
+        command: --port 8302 --global-response-templating
     working_directory: ~/app
 
 jobs:
@@ -200,6 +203,7 @@ jobs:
             find test/e2e/resources/wiremock/mappings/*.json -exec curl --request POST --url http://localhost:8099/__admin/mappings --header 'content-type: application/json' --data-binary "@{}" \;
             find test/e2e/resources/user-preference-wiremock/mappings/*.json -exec curl --request POST --url http://localhost:8098/__admin/mappings --header 'content-type: application/json' --data-binary "@{}" \;
             find test/e2e/resources/token-verify-wiremock/mappings/*.json -exec curl --request POST --url http://localhost:8100/__admin/mappings --header 'content-type: application/json' --data-binary "@{}" \;
+            find test/e2e/resources/manage-users-wiremock/mappings/*.json -exec curl --request POST --url http://localhost:8302/__admin/mappings --header 'content-type: application/json' --data-binary "@{}" \;
       - run:
           name: run end to end tests
           command: npm run test-e2e
