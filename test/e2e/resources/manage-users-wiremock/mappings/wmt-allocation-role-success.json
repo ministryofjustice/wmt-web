@@ -1,0 +1,25 @@
+{
+    "priority": 2,
+    "request": {
+      "method": "GET",
+      "urlPath": "/roles/delius",
+      "queryParameters": {
+        "deliusRoles": {
+          "equalTo": "TEST_WORKLOAD_MEASUREMENT_ROLE,TEST_MANAGE_A_WORKFORCE_ALLOCATE_ROLE"
+        }
+      }
+    },
+    "response": {
+      "transformers": ["response-template"],
+      "status": 200,
+      "jsonBody": [{
+        "name": "ROLE_WORKLOAD_MEASUREMENT"
+      },{
+        "name": "ROLE_MANAGE_A_WORKFORCE_ALLOCATE"
+      }],
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    }
+  }
+  
