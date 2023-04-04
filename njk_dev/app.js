@@ -25,7 +25,7 @@ if (njkFile == null) {
 const { njkName, njkData } = require(`./pages/${njkFile}`)
 
 const currentTime = new Date()
-const njkDevDir = 'test/njk_dev'
+const njkDevDir = 'njk_dev'
 
 console.log(`Nunjucks template development starting at ${currentTime}`)
 console.log(`Monitoring ${njkName}...`)
@@ -38,7 +38,7 @@ const njkEnv = njkEnvConfig()
 const updateHtml = fs.readFileSync(`./${njkDevDir}/auto-refresh.html`).toString()
 
 const output = njkEnv.render(njkName, njkData)
-const fullOutput = output.replaceAll('/public', '../../../app/public')
+const fullOutput = output.replaceAll('/public', '../../app/public')
 const dynamicOutput = fullOutput.replaceAll('</header>', '</header>' + updateHtml)
 
 fs.writeFileSync(

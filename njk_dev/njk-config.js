@@ -1,7 +1,7 @@
 const nunjucks = require('nunjucks')
 const dateFilter = require('nunjucks-date-filter')
-const { googleAnalyticsKey, nav } = require('../../config')
-const { initialiseName } = require('../../app/utils/utils')
+const { googleAnalyticsKey, nav } = require('../config')
+const { initialiseName } = require('../app/utils/utils')
 
 module.exports = {
   njkEnvConfig: function() {

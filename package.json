@@ -23,9 +23,9 @@
     "seed-dev-data": "node ./test/helpers/data/setup-e2e-data-helper.js",
     "clean-dev-data": "node ./test/helpers/data/delete-e2e-data-helper.js",
     "njk-compile": "nunjucks-precompile",
-    "njk-view": "node ./test/njk_dev/app -p $PAGE_FILE",
+    "njk-view": "node ./njk_dev/app -p $PAGE_FILE",
     "watch-views": "nodemon --watch app/views -e html,njk -x npm run njk-view",
-    "watch-njk-dev": "nodemon --watch test/njk_dev --ignore test/njk_dev/output -e html,js -x npm run njk-view",
+    "watch-njk-dev": "nodemon --watch njk_dev --ignore njk_dev/output -e html,js -x npm run njk-view",
     "watch-sass": "npm run compile-sass -- --watch",
     "njk-dev": "npm run njk-view && concurrently -k -p \"[{name}]\" -n \"Views,TypeScript,Node,Sass\" -c \"yellow.bold,cyan.bold,green.bold,blue.bold\" \"npm run watch-views\" \"npm run watch-sass\" \"npm run watch-njk-dev\"",
     "compare-exports": "node ./exportCompare/compareExports.js"
