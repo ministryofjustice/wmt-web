@@ -167,6 +167,14 @@ tr.shown td.details-control {
   max-width: 1475px;
 }
 
+table tr.govuk-table__row th {
+  padding-right: 10px !important;
+}
+
+.govuk-table__header button {
+  color: black;
+}
+
 .data-item {
   display: block;
   line-height: 1;
