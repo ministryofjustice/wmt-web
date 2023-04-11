@@ -1,5 +1,5 @@
 const expect = require('chai').expect
-const knex = require('../../../knex').integrationTests
+const knex = require('../../../../knex').web
 
 const dataHelper = require('../../../helpers/data/aggregated-data-helper')
 const getWorkloadPoints = require('../../../../app/services/data/get-workload-points')

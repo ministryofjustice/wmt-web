@@ -1,12 +1,10 @@
 const config = require('./knexfile').web
 const legacy = require('./knexfile').legacy
 const archive = require('./knexfile').archive
-const integrationTests = require('./knexfile').integrationTests
 
 const knexWebSchema = require('knex')(config)
 const knexLegacy = require('knex')(legacy)
 const knexArchive = require('knex')(archive)
-const knexIntegrationTests = require('knex')(integrationTests)
 
 const pg = require('pg')
 
@@ -25,6 +23,5 @@ pg.types.setTypeParser(pg.types.builtins.NUMERIC, (value) => {
 module.exports = {
   web: knexWebSchema,
   legacy: knexLegacy,
-  archive: knexArchive,
-  integrationTests: knexIntegrationTests
+  archive: knexArchive
 }
