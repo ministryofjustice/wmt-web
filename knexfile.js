@@ -20,7 +20,7 @@ module.exports = {
     debug: false,
     pool: {
       min: 0,
-      max: 50,
+      max: 25,
       idleTimeoutMillis: 5000
     },
     acquireConnectionTimeout: 120000
@@ -31,7 +31,7 @@ module.exports = {
     debug: false,
     pool: {
       min: 0,
-      max: 50,
+      max: 25,
       idleTimeoutMillis: 5000
     }
   },
@@ -41,7 +41,7 @@ module.exports = {
     debug: false,
     pool: {
       min: 0,
-      max: 50,
+      max: 25,
       idleTimeoutMillis: 5000
     },
     acquireConnectionTimeout: 120000
@@ -52,7 +52,7 @@ module.exports = {
     debug: false,
     pool: {
       min: 0,
-      max: 50,
+      max: 25,
       idleTimeoutMillis: 5000
     },
     acquireConnectionTimeout: 120000
