@@ -45,16 +45,5 @@ module.exports = {
       idleTimeoutMillis: 5000
     },
     acquireConnectionTimeout: 120000
-  },
-  integrationTests: {
-    client: 'pg',
-    connection: liveConnection,
-    debug: false,
-    pool: {
-      min: 0,
-      max: 50,
-      idleTimeoutMillis: 5000
-    },
-    acquireConnectionTimeout: 120000
   }
 }

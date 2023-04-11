@@ -1,4 +1,4 @@
-const knex = require('../../knex').integrationTests
+const knex = require('../../knex').web
 const { arrayToPromise } = require('../promise-helper')
 
 const addUserRoleData = function (userId, roleId) {

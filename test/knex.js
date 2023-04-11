@@ -1,4 +1,4 @@
-const knex = require('knex')(require('../knexfile').integrationTests)
+const knex = require('knex')(require('../knexfile').web)
 
 module.exports = {
   integrationTests: knex
