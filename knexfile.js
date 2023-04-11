@@ -21,7 +21,8 @@ module.exports = {
     pool: {
       min: 0,
       max: 25,
-      idleTimeoutMillis: 5000
+      idleTimeoutMillis: 5000,
+      propagateCreateError: false
     },
     acquireConnectionTimeout: 120000
   },
@@ -32,7 +33,8 @@ module.exports = {
     pool: {
       min: 0,
       max: 25,
-      idleTimeoutMillis: 5000
+      idleTimeoutMillis: 5000,
+      propagateCreateError: false
     }
   },
   legacy: {
@@ -42,7 +44,8 @@ module.exports = {
     pool: {
       min: 0,
       max: 25,
-      idleTimeoutMillis: 5000
+      idleTimeoutMillis: 5000,
+      propagateCreateError: false
     },
     acquireConnectionTimeout: 120000
   },
@@ -53,7 +56,8 @@ module.exports = {
     pool: {
       min: 0,
       max: 25,
-      idleTimeoutMillis: 5000
+      idleTimeoutMillis: 5000,
+      propagateCreateError: false
     },
     acquireConnectionTimeout: 120000
   }
