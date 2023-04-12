@@ -37,7 +37,7 @@
             <td class="displayNone"/>
             <td class="displayNone"/>
             <td class="displayNone"/>
-            <td data-sort-value="{{ member.name }}" headers="name om" class="govuk-table__cell table-manual-first-child"><a class="govuk-link" href="/{{ workloadType }}/{{ childOrganisationLevel }}/{{ member.linkId }}">{{ member.name }}</td>
+            <td data-sort-value="{{ member.name }}" headers="name om" class="govuk-table__cell table-first-visible-child"><a class="govuk-link" href="/{{ workloadType }}/{{ childOrganisationLevel }}/{{ member.linkId }}">{{ member.name }}</td>
             {% if organisationLevel === 'team' %}  
               <td headers="grade om" class="govuk-table__cell">{{ member.gradeCode }}</td>
             {% endif %}
