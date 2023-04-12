@@ -167,6 +167,14 @@ tr.shown td.details-control {
   max-width: 1475px;
 }
 
+table tr.govuk-table__row th {
+  padding-right: 10px !important;
+}
+
+.govuk-table__header button {
+  color: black;
+}
+
 .data-item {
   display: block;
   line-height: 1;
@@ -201,6 +209,16 @@ table.override-gov-uk-table {
 
 table.override-gov-uk-table tr{
   line-height: 40px;
+}
+
+.table-first-visible-child {
+  min-width: 90px !important;
+  padding: 5px 10px 5px 10px;
+}
+
+.table-first-visible-child a{
+  text-indent: 0px;
+  float: left;
 }
 
 .wmt-option {

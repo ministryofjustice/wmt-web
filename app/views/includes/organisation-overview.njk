@@ -1,55 +1,60 @@
 
     <p class="govuk-body-s"><span class="capacity-red">Red</span> numbers are shown when capacity is over 110%</p>
 
-    <table id="example" class="govuk-table js-data-table data-table dataTable width100Percent" cellspacing="0" width="100%"  aria-describedby="example_info">
-        <thead>
-            <tr>
+    <table id="example" class="govuk-table data-table width100Percent" data-module="moj-sortable-table" cellspacing="0" width="100%"  aria-describedby="example_info">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row headers">
                 {% if organisationLevel === 'team' %}
-                <th class="sln-table-org-level" id="om" colspan="2">{{ childOrganisationLevelDisplayText }}</th>
+                <th class="sln-table-org-level govuk-table__header" id="om" colspan="2">{{ childOrganisationLevelDisplayText }}</th>
                 {% else %}
-                <th class="sln-table-org-level" id="om">{{ childOrganisationLevelDisplayText }}</th>
+                <th class="sln-table-org-level govuk-table__header" id="om">{{ childOrganisationLevelDisplayText }}</th>
                 {% endif %}
-                <th id="cap" colspan="4">Capacity</th>
-                <th id="hrs" colspan="2">Hours</th>
-                <th id="cases">Cases</th>
+                <th class="govuk-table__header" id="cap" colspan="4">Capacity</th>
+                <th class="govuk-table__header" id="hrs" colspan="2">Hours</th>
+                <th class="govuk-table__header" id="cases">Cases</th>
             </tr>
     
-            <tr class="headers">
-                <th headers="om" id="name">Name</th>
+            <tr class="govuk-table__row headers">
+                <th headers="om" class="govuk-table__header" aria-sort="ascending" id="name">Name</th>
                 {% if organisationLevel === 'team' %}
-                <th headers="om" id="grade">Grade</th>
+                <th headers="om" class="govuk-table__header" aria-sort="ascending" id="grade">Grade</th>
                 {% endif %}
-                <th headers="cap" id="current">Current(%)</th>
-                <th headers="cap" id="points">Available Points</th>
-                <th headers="cap" id="totalPoints">Total Points Used</th>
-                <th headers="cap" id="remaining">Remaining Points</th>
-                <th headers="hrs" id="contracted">Contracted</th>
-                <th headers="hrs" id="reduction">Reduction</th>
-                <th headers="cases" id="total">Total</th>
+                <th headers="cap" class="govuk-table__header govuk-table__header--numeric" aria-sort="none" id="current">Current(%)</th>
+                <th headers="cap" class="govuk-table__header govuk-table__header--numeric" aria-sort="none" id="points">Available Points</th>
+                <th headers="cap" class="govuk-table__header govuk-table__header--numeric" aria-sort="none" id="totalPoints">Total Points Used</th>
+                <th headers="cap" class="govuk-table__header govuk-table__header--numeric" aria-sort="none" id="remaining">Remaining Points</th>
+                <th headers="hrs" class="govuk-table__header govuk-table__header--numeric" aria-sort="none" id="contracted">Contracted</th>
+                <th headers="hrs" class="govuk-table__header govuk-table__header--numeric" aria-sort="none" id="reduction">Reduction</th>
+                <th headers="cases" class="govuk-table__header govuk-table__header--numeric" aria-sort="none" id="total">Total</th>
             </tr>
         </thead>
         <tbody>
-            {% for member in overviewDetails.rows %}
-            <tr>
-              <td headers="name om"><a class="govuk-link" href="/{{ workloadType }}/{{ childOrganisationLevel }}/{{ member.linkId }}">{{ member.name }}</td>
+          {% for member in overviewDetails.rows %}
+          <tr class="govuk-table__row">
+            {## Hidden rows to allow for moj sortable table to identify columns correctly (thanks to having 2 header rows) ##}
+            <td class="displayNone"/>
+            <td class="displayNone"/>
+            <td class="displayNone"/>
+            <td class="displayNone"/>
+            <td data-sort-value="{{ member.name }}" headers="name om" class="govuk-table__cell table-first-visible-child"><a class="govuk-link" href="/{{ workloadType }}/{{ childOrganisationLevel }}/{{ member.linkId }}">{{ member.name }}</td>
             {% if organisationLevel === 'team' %}  
-              <td headers="grade om">{{ member.gradeCode }}</td>
+              <td headers="grade om" class="govuk-table__cell">{{ member.gradeCode }}</td>
             {% endif %}
             {% if member.capacityPercentage > 110 %}
-              <td data-order="{{ member.capacityPercentage }}" class="capacity-red" headers="current cap">{{ member.capacityPercentage | round(1) }}%<span class="govuk-visually-hidden">. This is over 110% capacity</span></td>
+              <td data-sort-value="{{ member.capacityPercentage }}" class="govuk-table__cell capacity-red" headers="current cap">{{ member.capacityPercentage | round(1) }}%<span class="govuk-visually-hidden">. This is over 110% capacity</span></td>
             {% else %}
-              <td data-order="{{ member.capacityPercentage }}" headers="current cap">{{ member.capacityPercentage | round(1) }}%</td>
+              <td data-sort-value="{{ member.capacityPercentage }}" class="govuk-table__cell" headers="current cap">{{ member.capacityPercentage | round(1) }}%</td>
             {% endif %}
-            <td headers="points cap">{{ member.availablePoints }}</td>
-            <td headers="totalPoints cap">{{ member.totalPoints }}</td>
+            <td headers="points cap" class="govuk-table__cell">{{ member.availablePoints }}</td>
+            <td headers="totalPoints cap" class="govuk-table__cell">{{ member.totalPoints }}</td>
             {% if member.capacityPercentage > 110 %}
-              <td data-order="{{ member.remainingPoints }}" class="capacity-red" headers="remaining cap">{{ member.remainingPoints }}<span class="govuk-visually-hidden">. This is over 110% capacity</span></td>
+              <td data-sort-value="{{ member.remainingPoints }}" class="capacity-red govuk-table__cell" headers="remaining cap">{{ member.remainingPoints }}<span class="govuk-visually-hidden">. This is over 110% capacity</span></td>
             {% else %}
-              <td data-order="{{ member.remainingPoints }}" headers="remaining cap">{{ member.remainingPoints}}</td>
+              <td data-sort-value="{{ member.remainingPoints }}" class="govuk-table__cell" headers="remaining cap">{{ member.remainingPoints}}</td>
             {% endif %}
-            <td headers="hrs contracted">{{ member.contractedHours }}</td>
-            <td headers="hrs reduction">{{ member.reductionHours }}</td>
-            <td headers="cases total">{{ member.totalCases }}</td>
+            <td headers="hrs contracted" class="govuk-table__cell">{{ member.contractedHours }}</td>
+            <td headers="hrs reduction" class="govuk-table__cell">{{ member.reductionHours }}</td>
+            <td headers="cases total" class="govuk-table__cell">{{ member.totalCases }}</td>
           </tr>
           {% endfor%}
         </tbody>
@@ -96,8 +101,5 @@
     {% block page_specific_scripts %}
     
         <script src="/public/javascripts/vendor/jquery.min.js"></script>
-        <script src="/public/javascripts/vendor/jquery.dataTables.min.js"></script>
-        <script src="/public/javascripts/fixed-overview-header.js"></script>
-        <script src="/public/javascripts/case-overview.js"></script>
        
     {% endblock %}
