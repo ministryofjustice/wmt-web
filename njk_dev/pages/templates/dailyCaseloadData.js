@@ -1,0 +1,65 @@
+module.exports = {
+  // This filename is relative to the nunjucks directories (configured elsewhere).
+  // From nunjucks node_loaders.getSource: "Only allow the current directory [anything in the above path] and anything underneath it to be searched"
+  njkName: 'daily-caseload-data.njk',
+  njkData: {
+      subNav: [ {
+        active: true,
+        title: 'A Subnav Heading'
+      } ],
+      canExport: true,
+      results: [
+        {
+          workloadDateSortBy: 412,
+          workloadDate: '12th April',
+          regionName: 'Region 1',
+          lduName: 'LDU 1',
+          teamName: 'Team 1',
+          omName: 'Of Man 1',
+          grade: 'SPO',
+          availablePoints: 123,
+          totalPoints: 456,
+          totalCases: 123,
+          capacity: 33,
+          contractedHours: 37,
+          hoursReduction: 6,
+          cmsColumn: 22,
+          gsColumn: 34,
+        },
+        {
+          workloadDateSortBy: 413,
+          workloadDate: '13th April',
+          regionName: 'Region 2',
+          lduName: 'LDU 2',
+          teamName: 'Item 2',
+          omName: 'Of Man 2',
+          grade: 'PO',
+          availablePoints: 1234,
+          totalPoints: 4564,
+          totalCases: 22,
+          capacity: 4,
+          contractedHours: 6,
+          hoursReduction: 22,
+          cmsColumn: 44,
+          gsColumn: 4,
+        },
+        {
+          workloadDateSortBy: 411,
+          workloadDate: '11th April',
+          regionName: 'Region 3',
+          lduName: 'LDU 3',
+          teamName: 'Team 3',
+          omName: 'Of Man 3',
+          grade: 'SPO',
+          availablePoints: 23,
+          totalPoints: 56,
+          totalCases: 23,
+          capacity: 5,
+          contractedHours: 77,
+          hoursReduction: 21,
+          cmsColumn: 53,
+          gsColumn: 5,
+        },
+      ],
+  }
+}
