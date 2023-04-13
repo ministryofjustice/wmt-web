@@ -7,7 +7,7 @@
                 <th class="govuk-table__header govuk-table__header--numeric" aria-sort="none" id="licence">Anticipated Points while on Licence</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="govuk-table__body">
             {% for member in overviewDetails.rows %}
             <tr class="govuk-table__row">
               <td class="govuk-table__cell" headers="name">{% if childOrganisationLevelDisplayText !== 'Team' and childOrganisationLevelDisplayText !== 'Offender Manager' %} <a class="govuk-link" href="/{{ workloadType }}/{{ childOrganisationLevel }}/{{ member.linkId }}">{{ member.name }}</a> {% else %} {{ member.name }} {% endif %}</td>

@@ -28,7 +28,7 @@
                 <th headers="cases" class="govuk-table__header govuk-table__header--numeric" aria-sort="none" id="total">Total</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="govuk-table__body">
           {% for member in overviewDetails.rows %}
           <tr class="govuk-table__row">
             {## Hidden rows to allow for moj sortable table to identify columns correctly (thanks to having 2 header rows) ##}
