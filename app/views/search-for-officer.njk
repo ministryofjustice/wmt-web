@@ -27,14 +27,14 @@
                 <th id="ldu" class="govuk-table__header" aria-sort="none">Probation Delivery Unit</th>
                 <th id="team" class="govuk-table__header" aria-sort="none">Team</th>
                 <th id="surname" class="govuk-table__header" aria-sort="none">Surname</th>
-                <th id="forename" class="govuk-table__header" aria-sort="descending">Forename</th>
+                <th id="forename" class="govuk-table__header" aria-sort="ascending">Forename</th>
                 <th id="link" class="govuk-table__header">Link</th>
             </tr>
         </thead>
-        <tbody class="govuk-table__row">
+        <tbody class="govuk-table__body">
             {% if (results) %}
                 {% for result in results %}
-                <tr>
+                <tr class="govuk-table__row">
                     <td class="govuk-table__cell">{{ result.region }}</td>
                     <td class="govuk-table__cell">{{ result.ldu }}</td>
                     <td class="govuk-table__cell">{{ result.team }}</td>
