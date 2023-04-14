@@ -4,13 +4,8 @@ $(document).ready(function() {
       "pageLength": 100,
       searching: true,
       info: false,
-      order: [[0, 'asc']],
       "aaSorting": [],
-      columnDefs: [{
-        targets: [],
-        orderable: false
-      }
-      ]
+      "ordering": false
     });
 
     
