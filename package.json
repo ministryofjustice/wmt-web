@@ -104,7 +104,7 @@
     "jwt-decode": "3.1.2",
     "knex": "2.4.2",
     "moment": "2.29.4",
-    "nunjucks": "3.2.3",
+    "nunjucks": "3.2.4",
     "nunjucks-date-filter": "0.1.1",
     "passport": "0.6.0",
     "passport-oauth2": "1.7.0",
