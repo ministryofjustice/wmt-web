@@ -61,17 +61,17 @@
         <tfoot>
         
             <tr>
-            <th headers="name om">Total / Average</th>
+            <th class="govuk-table__cell" headers="name om">Total / Average</th>
             {% if organisationLevel === 'team' %}  
-              <th headers="grade om">{{ overviewDetails.totals.gradeCode }}</th>
+              <th class="govuk-table__cell" headers="grade om">{{ overviewDetails.totals.gradeCode }}</th>
             {% endif %}
-            <th headers="current cap">{{ overviewDetails.totals.totalCapacityPercentage | round(1) }}%</th>
-            <th headers="points cap">{{ overviewDetails.totals.totalAvailablePoints }}</th>
-            <th headers="totalPoints cap">{{ overviewDetails.totals.totalPoints }}</th>
-            <th headers="remaining cap">{{ overviewDetails.totals.totalRemainingPoints}}</th>
-            <th headers="hrs contracted">{{ overviewDetails.totals.totalContractedHours }}</th>
-            <th headers="hrs reduction">{{ overviewDetails.totals.totalReduction }}</th>
-            <th headers="cases total">{{ overviewDetails.totals.totalTotalCases }}</th>  
+            <th class="govuk-table__cell" headers="current cap">{{ overviewDetails.totals.totalCapacityPercentage | round(1) }}%</th>
+            <th class="govuk-table__cell" headers="points cap">{{ overviewDetails.totals.totalAvailablePoints }}</th>
+            <th class="govuk-table__cell" headers="totalPoints cap">{{ overviewDetails.totals.totalPoints }}</th>
+            <th class="govuk-table__cell" headers="remaining cap">{{ overviewDetails.totals.totalRemainingPoints}}</th>
+            <th class="govuk-table__cell" headers="hrs contracted">{{ overviewDetails.totals.totalContractedHours }}</th>
+            <th class="govuk-table__cell" headers="hrs reduction">{{ overviewDetails.totals.totalReduction }}</th>
+            <th class="govuk-table__cell" headers="cases total">{{ overviewDetails.totals.totalTotalCases }}</th>  
             </tr>
             
         </tfoot>
