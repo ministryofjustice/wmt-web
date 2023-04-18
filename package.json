@@ -51,11 +51,11 @@
   },
   "devDependencies": {
     "@rpii/wdio-report-events": "8.0.2",
-    "@wdio/cli": "7.30.2",
-    "@wdio/local-runner": "7.30.2",
+    "@wdio/cli": "7.31.1",
+    "@wdio/local-runner": "7.31.1",
     "@wdio/mocha-framework": "7.30.2",
-    "@wdio/selenium-standalone-service": "7.30.2",
-    "@wdio/spec-reporter": "7.30.2",
+    "@wdio/selenium-standalone-service": "7.31.1",
+    "@wdio/spec-reporter": "7.31.1",
     "chai": "4.3.7",
     "concurrently": "8.0.1",
     "cookie-session": "2.0.0",
@@ -73,7 +73,7 @@
     "standard": "17.0.0",
     "supertest": "6.3.3",
     "wdio-html-nice-reporter": "8.0.6",
-    "webdriverio": "7.30.2"
+    "webdriverio": "7.31.1"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.312.0",
