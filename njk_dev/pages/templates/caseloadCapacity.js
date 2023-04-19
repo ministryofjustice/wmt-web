@@ -1,9 +1,50 @@
-const stringifiedCapacity = 
-'{&quot;headings&quot;:[&quot;2021-12-28T06:56:00.250Z&quot;,&quot;2021-12-29T06:56:00.253Z&quot;,&quot;2021-12-30T06:56:00.243Z&quot;],' + 
-'&quot;rows&quot;:' + 
-'[{&quot;label&quot;:&quot;Probation Delivery Unit 385 Capacity&quot;,&quot;values&quot;:[97,97,98]},' + 
-'{&quot;label&quot;:&quot;Probation Delivery Unit 385 Reduction Hours&quot;,&quot;values&quot;:[562.7,562.7,560.8]},' + 
-'{&quot;label&quot;:&quot;Probation Delivery Unit 385 Reduction Hours Percentage&quot;,&quot;values&quot;:[16,16,16}]}'
+const capacityData = {
+  headings: [
+    '2021-12-03T06:56:00.250Z',
+    '2021-12-04T06:56:00.250Z',
+    '2021-12-05T06:56:00.250Z',
+    '2021-12-06T06:56:00.250Z',
+    '2021-12-07T06:56:00.250Z',
+    '2021-12-08T06:56:00.250Z',
+    '2021-12-09T06:56:00.250Z',
+    '2021-12-10T06:56:00.250Z',
+    '2021-12-11T06:56:00.250Z',
+    '2021-12-12T06:56:00.250Z',
+    '2021-12-13T06:56:00.250Z',
+    '2021-12-14T06:56:00.250Z',
+    '2021-12-15T06:56:00.250Z',
+    '2021-12-16T06:56:00.250Z',
+    '2021-12-17T06:56:00.250Z',
+    '2021-12-18T06:56:00.250Z',
+    '2021-12-19T06:56:00.250Z',
+    '2021-12-20T06:56:00.250Z',
+    '2021-12-21T06:56:00.250Z',
+    '2021-12-22T06:56:00.253Z',
+    '2021-12-23T06:56:00.243Z',
+    '2021-12-24T06:56:00.243Z',
+    '2021-12-25T06:56:00.250Z',
+    '2021-12-26T06:56:00.250Z',
+    '2021-12-27T06:56:00.250Z',
+    '2021-12-28T06:56:00.250Z',
+    '2021-12-29T06:56:00.253Z',
+    '2021-12-30T06:56:00.243Z',
+    '2021-12-31T06:56:00.243Z',
+  ],
+  rows: [
+    {
+        label: 'Probation Delivery Unit 385 Capacity',
+        values: [102,97,101,101,102,97,101,101,102,102,97,101,101,102,97,102,97,101,101,102,97,101,102,97,101,101,102,97,101]
+    },
+    {
+        label: 'Probation Delivery Unit 385 Reduction Hours',
+        values: [562.7,562.7,560.8,561.0,562.7,562.7,560.8,561.0,562.7,562.7,562.7,560.8,561.0,562.7,562.7,562.7,562.7,560.8,561.0,562.7,562.7,560.8,562.7,562.7,560.8,561.0,562.7,562.7,560.8]
+    },
+    {
+        label: 'Probation Delivery Unit 385 Reduction Hours Percentage',
+        values: [16,16,16,15,16,16,16,15,16,16,16,16,15,16,16,16,16,16,15,16,16,16,16,16,16,15,16,16,16]
+    },
+  ]
+}
 
 const stringifyCapacityData = function (capacity) {
     const capacityData = Object.assign({}, capacity)
@@ -19,29 +60,8 @@ module.exports = {
           active: true,
           title: 'A Subnav Heading'
         } ],
-        stringifiedCapacity: stringifyCapacityData({
-            headings: [
-                '2021-12-28T06:56:00.250Z',
-                '2021-12-29T06:56:00.253Z',
-                '2021-12-30T06:56:00.243Z',
-            ],
-            rows: [
-                {
-                    label: 'Probation Delivery Unit 385 Capacity',
-                    values: [102,97,101]
-                },
-                {
-                    label: 'Probation Delivery Unit 385 Reduction Hours',
-                    values: [562.7,562.7,560.8]
-                },
-                {
-                    label: 'Probation Delivery Unit 385 Reduction Hours Percentage',
-                    values: [16,16,16]
-                },
-            ]
-        }),
-        // OPTION 1 - OFF MAN LEVEL
-        /*
+        capacity: capacityData,
+        stringifiedCapacity: stringifyCapacityData(capacityData),
         organisationLevel: 'offender-manager',
         caseDetails: [
           {
@@ -220,7 +240,7 @@ module.exports = {
         childOrganisationLevelDisplayText: 'LDU',
         /* */
         // OPTION 4 - HMPPS LEVEL
-        /* */
+        /* 
         organisationLevel: 'hmpps',
         capacityBreakdown: [
           {
