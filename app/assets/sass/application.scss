@@ -231,6 +231,16 @@ table.override-gov-uk-table tr{
   padding-right: 10px !important;
 }
 
+.table-horzontal-scrollable {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+.table-not-scrollable {
+  border-collapse: collapse;
+}
+
 .wmt-option {
   font-family: "nta", Arial, sans-serif;
 }
