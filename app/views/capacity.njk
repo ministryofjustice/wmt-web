@@ -102,33 +102,41 @@
   <span class="govuk-error-message">There is no data for this period ({{query['capacity-from-day'] | int}}/{{query['capacity-from-month'] | int}}/{{query['capacity-from-year'] | int}} - {{query['capacity-to-day'] | int}}/{{query['capacity-to-month'] | int}}/{{query['capacity-to-year'] | int}})</span>
 {% endif %}
 
-<table class="non-javascript">
-    <thead>
-        <tr>
-            <th scope="col"></th>
-             {% for heading in capacity.headings %}
-                <th scope="col">{{ heading | date("MMM DD, YYYY")}}</th>
-            {% endfor %}
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <th scope="row">Capacity</th>
-            {% for i in range(0, capacity.rows[0].values.length)%}
-                <td> {{capacity.rows[0].values[i]}}% </td>
-            {% endfor %}
-        </tr>
-        <tr>
-            <th scope="row">Reductions</th>
-            {% for i in range(0, capacity.rows[0].values.length)%}
-                <td> {{capacity.rows[1].values[i]}}</td>
-            {% endfor %}
-        </tr>
-    </tbody>
-</table>
-
 <div id="plotly-div-line" aria-hidden="true"></div>
 
+<details class="govuk-details" data-module="govuk-details">
+    <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+            Show graph data as a table
+        </span>
+    </summary>
+    <div class="govuk-details__text">
+        <table class="table-horzontal-scrollable data-table">
+           <thead>
+              <tr>
+                  <th scope="col"></th>
+                  {% for heading in capacity.headings %}
+                      <th scope="col">{{ heading | date("MMM DD, YYYY")}}</th>
+                  {% endfor %}
+              </tr>
+           </thead>
+           <tbody>
+              <tr>
+                  <th scope="row">Capacity</th>
+                  {% for i in range(0, capacity.rows[0].values.length)%}
+                      <td> {{capacity.rows[0].values[i]}}% </td>
+                  {% endfor %}
+              </tr>
+              <tr>
+                  <th scope="row">Reductions</th>
+                  {% for i in range(0, capacity.rows[0].values.length)%}
+                      <td> {{capacity.rows[1].values[i]}}</td>
+                  {% endfor %}
+              </tr>
+           </tbody>
+        </table>
+    </div>
+</details>
 
 {% if organisationLevel === 'offender-manager' %}
 
