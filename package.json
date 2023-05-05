@@ -92,7 +92,7 @@
     "datatables.net": "1.13.4",
     "excel4node": "1.8.1",
     "express": "4.18.2",
-    "express-nunjucks": "2.2.5",
+    "express-nunjucks": "3.0.0",
     "express-session": "1.17.3",
     "floatthead": "2.2.5",
     "govuk-frontend": "4.6.0",
