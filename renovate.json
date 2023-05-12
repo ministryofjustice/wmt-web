@@ -17,6 +17,7 @@
       "groupSlug": "all-npm-minor-patch",
       "stabilityDays": 5
     }
-  ]
+  ],
+  "ignoreDeps": ["wdio-html-nice-reporter"]
   
 }
