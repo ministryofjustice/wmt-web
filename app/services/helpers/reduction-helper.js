@@ -1,4 +1,3 @@
-
 const dateFormatter = require('../date-formatter')
 const reductionStatusType = require('../../constants/reduction-status-type')
 

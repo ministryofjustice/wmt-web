@@ -1,4 +1,3 @@
-
 module.exports = function (error) {
   if (error.response) {
     return {

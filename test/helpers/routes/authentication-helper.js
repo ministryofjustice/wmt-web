@@ -1,4 +1,3 @@
-
 const USERS = {
   SuperUser: { username: 'WMT_SUPER_USER', roleId: 3 },
   ApplicationSupport: { username: 'WMT_APPLICATION_SUPPORT', roleId: 2 },
