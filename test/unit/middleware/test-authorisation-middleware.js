@@ -1,4 +1,3 @@
-
 const jwt = require('jsonwebtoken')
 const proxyquire = require('proxyquire')
 const sinon = require('sinon')

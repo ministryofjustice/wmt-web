@@ -1,4 +1,3 @@
-
 module.exports = function () {
   return function (req, res, next) {
     res.set('Cache-control', 'no-store')
