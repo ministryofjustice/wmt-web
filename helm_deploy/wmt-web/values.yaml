@@ -59,9 +59,14 @@ generic-service:
     elasticache-redis:
       REDIS_HOST: "primary_endpoint_address"
       REDIS_AUTH_TOKEN: "auth_token"
+    dashboard-read-only-user-secret:
+      DASHBOARD_AWS_ACCESS_KEY_ID: "access_key_id"
+      DASHBOARD_AWS_SECRET_ACCESS_KEY: "secret_access_key"
     s3-dashboard-bucket-output:
       DASHBOARD_AWS_BUCKET: "bucket_name"
     sqs-hmpps-audit-secret:
+      AUDIT_SQS_ACCESS_KEY_ID: "access_key_id"
+      AUDIT_SQS_SECRET_ACCESS_KEY: "secret_access_key"
       AUDIT_SQS_QUEUE_URL: "sqs_queue_url"
 
   allowlist:
