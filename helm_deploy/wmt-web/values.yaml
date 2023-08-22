@@ -65,8 +65,6 @@ generic-service:
     s3-dashboard-bucket-output:
       DASHBOARD_AWS_BUCKET: "bucket_name"
     sqs-hmpps-audit-secret:
-      AUDIT_SQS_ACCESS_KEY_ID: "access_key_id"
-      AUDIT_SQS_SECRET_ACCESS_KEY: "secret_access_key"
       AUDIT_SQS_QUEUE_URL: "sqs_queue_url"
 
   allowlist:
@@ -89,7 +87,7 @@ generic-service:
     moj-official-ark-f-vodafone: "194.33.249.0/29"
     moj-official-ark-f-expo-e: "51.149.249.32/29"
 
-  serviceAccountName: hmpps-workload
+  service_account_name: hmpps-workload
 
 generic-prometheus-alerts:
   targetApplication: wmt-web
