@@ -3,6 +3,8 @@ generic-service:
   nameOverride: wmt-web
   replicaCount: 2
 
+  serviceAccountName: hmpps-workload
+
   image:
     repository: quay.io/hmpps/wmt-web
     tag: app_version    # override at deployment time
