@@ -1,5 +1,7 @@
 const { SQSClient } = require('@aws-sdk/client-sqs')
 
 module.exports = function (config) {
-  return new SQSClient()
+  return new SQSClient({
+    region: config.region
+  })
 }
