@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   hmpps: ministryofjustice/hmpps@7.3.3
   slack: circleci/slack@4.12.5
-  browser-tools: circleci/browser-tools@1.4.1
+  browser-tools: circleci/browser-tools@1.4.3
 
 parameters:
   alerts-slack-channel:
