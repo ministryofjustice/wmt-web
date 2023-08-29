@@ -114,6 +114,7 @@ module.exports = {
     bucketName: process.env.DASHBOARD_AWS_BUCKET || 'wmt-web'
   },
   audit: {
+    region: process.env.AUDIT_SQS_REGION || 'eu-west-2',
     queueUrl: process.env.AUDIT_SQS_QUEUE_URL || 'http://127.0.0.1:4566/000000000000/audit_event_queue'
   },
   googleAnalyticsKey: get('GOOGLE_ANALYTICS_KEY', null),

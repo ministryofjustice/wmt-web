@@ -8,7 +8,7 @@ const workloadTypes = require('../../app/constants/workload-type')
 const getSqsClient = require('../../app/services/aws/sqs/get-sqs-client')
 const { audit } = require('../../config')
 
-const sqsClient = getSqsClient({ region: audit.region, accessKeyId: audit.accessKeyId, secretAccessKey: audit.secretAccessKey, endpoint: audit.endpoint })
+const sqsClient = getSqsClient({ region: audit.region, endpoint: audit.endpoint })
 const queueURL = audit.queueUrl
 
 let offenderManagerId

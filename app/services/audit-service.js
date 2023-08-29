@@ -10,7 +10,7 @@ const reductionStatusToAuditAction = {
   [ARCHIVED]: 'REDUCTION_ARCHIVED'
 }
 
-const sqsClient = getSqsClient({ region: audit.region, accessKeyId: audit.accessKeyId, secretAccessKey: audit.secretAccessKey, endpoint: audit.endpoint })
+const sqsClient = getSqsClient({ region: audit.region, endpoint: audit.endpoint })
 
 module.exports.auditReductionCreated = function (offenderManagerDetails, reduction, loggedInUserEmail) {
   return sendSqsMessage(sqsClient, audit.queueUrl, messageFrom('REDUCTION_CREATED', getDetailsForReduction(offenderManagerDetails, reduction, reduction), loggedInUserEmail))
