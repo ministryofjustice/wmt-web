@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "The frontend of the workload measurement tool",
   "engines": {
-    "node": "^20",
+    "node": "v18.17.1",
     "npm": "^8 || ^9"
   },
   "scripts": {
