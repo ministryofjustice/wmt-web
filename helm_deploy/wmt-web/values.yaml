@@ -3,6 +3,8 @@ generic-service:
   nameOverride: wmt-web
   replicaCount: 2
 
+  serviceAccountName: hmpps-workload
+
   image:
     repository: quay.io/hmpps/wmt-web
     tag: app_version    # override at deployment time
@@ -65,8 +67,6 @@ generic-service:
     s3-dashboard-bucket-output:
       DASHBOARD_AWS_BUCKET: "bucket_name"
     sqs-hmpps-audit-secret:
-      AUDIT_SQS_ACCESS_KEY_ID: "access_key_id"
-      AUDIT_SQS_SECRET_ACCESS_KEY: "secret_access_key"
       AUDIT_SQS_QUEUE_URL: "sqs_queue_url"
 
   allowlist:

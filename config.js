@@ -115,8 +115,8 @@ module.exports = {
   },
   audit: {
     region: process.env.AUDIT_SQS_REGION || 'eu-west-2',
-    accessKeyId: process.env.AUDIT_SQS_ACCESS_KEY_ID || 'foobar',
-    secretAccessKey: process.env.AUDIT_SQS_SECRET_ACCESS_KEY || 'foobar',
+    accessKeyId: production ? undefined : 'foobar',
+    secretAccessKey: production ? undefined : 'foobar',
     endpoint: production ? null : 'http://127.0.0.1:4566',
     queueUrl: process.env.AUDIT_SQS_QUEUE_URL || 'http://127.0.0.1:4566/000000000000/audit_event_queue'
   },
