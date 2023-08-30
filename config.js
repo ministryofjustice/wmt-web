@@ -108,8 +108,8 @@ module.exports = {
   },
   dashboard: {
     region: process.env.DASHBOARD_S3_REGION || 'eu-west-2',
-    accessKeyId: process.env.DASHBOARD_AWS_ACCESS_KEY_ID || 'foobar',
-    secretAccessKey: process.env.DASHBOARD_AWS_SECRET_ACCESS_KEY || 'foobar',
+    accessKeyId: production ? undefined : 'foobar',
+    secretAccessKey: production ? undefined : 'foobar',
     endpoint: production ? null : 'http://127.0.0.1:4566',
     bucketName: process.env.DASHBOARD_AWS_BUCKET || 'wmt-web'
   },
