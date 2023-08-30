@@ -14,7 +14,7 @@ parameters:
     default: manage_a_workforce_dev
   node-version:
     type: string
-    default: 20.3-bullseye-slim
+    default: 20.3
   postgres_tag:
     default: "11"
     type: string
