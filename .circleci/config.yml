@@ -14,7 +14,7 @@ parameters:
     default: manage_a_workforce_dev
   node-version:
     type: string
-    default: 20.3-browsers
+    default: 20.2-browsers
   postgres_tag:
     default: "11"
     type: string
@@ -179,7 +179,9 @@ jobs:
       - attach_workspace:
           at: ~/app
       - hmpps/install_aws_cli
-      - browser-tools/install-chrome
+      - browser-tools/install-chrome:
+          # TODO remove following line when fixed https://github.com/CircleCI-Public/browser-tools-orb/issues/90
+          chrome-version: 116.0.5845.96
       - browser-tools/install-chromedriver
       - run:
           command: |
