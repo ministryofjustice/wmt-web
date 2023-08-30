@@ -1,8 +1,9 @@
 const { GetObjectCommand } = require('@aws-sdk/client-s3')
 
-module.exports = function (s3Client, bucketName) {
+module.exports = function (s3Client, key, bucketName) {
   return s3Client.send(new GetObjectCommand({
-    Bucket: bucketName
+    Bucket: bucketName,
+    Key: key
   }))
     .then(function (data) {
       return data.Body
