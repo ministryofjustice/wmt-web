@@ -179,6 +179,7 @@ jobs:
       - attach_workspace:
           at: ~/app
       - hmpps/install_aws_cli
+      - run: sudo apt-get update
       - browser-tools/install-chrome:
           # TODO remove following line when fixed https://github.com/CircleCI-Public/browser-tools-orb/issues/90
           chrome-version: 116.0.5845.96
