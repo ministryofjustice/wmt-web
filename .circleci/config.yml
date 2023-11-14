@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  hmpps: ministryofjustice/hmpps@7.3.3
+  hmpps: ministryofjustice/hmpps@7
   slack: circleci/slack@4.12.5
   browser-tools: circleci/browser-tools@1.4.3
 
@@ -48,7 +48,12 @@ executors:
           - DATABASE_PASSWORD=<< pipeline.parameters.database_password >>
           - SPRING_PROFILES_ACTIVE=dev,docker
           - HMPPS_SQS_LOCALSTACK_URL=http://localhost:4566
-        entrypoint: ["/bin/sh", "-c" , "sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar"]
+        entrypoint:
+          [
+            "/bin/sh",
+            "-c",
+            "sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar"
+          ]
       - image: localstack/localstack:2.0.2
         environment:
           - SERVICES=s3,sqs,sns
@@ -138,7 +143,7 @@ jobs:
           name: unit tests
           command: npm run test
       - when:
-          condition: 
+          condition:
             equal: [ main, << pipeline.git.branch >> ]
           steps:
             - slack/notify:
@@ -164,8 +169,8 @@ jobs:
           command: test/integration/resources/setup-s3.sh test/integration/resources
       - hmpps/wait_till_ready_postgres
       - run:
-         name: Run integration tests
-         command: npm run integration-test
+          name: Run integration tests
+          command: npm run integration-test
       - store_test_results:
           path: test_results
       - store_artifacts:
@@ -339,4 +344,3 @@ workflows:
           context:
             - veracode-credentials
             - hmpps-common-vars
- 
