@@ -4,11 +4,12 @@
   "description": "The frontend of the workload measurement tool",
   "engines": {
     "node": "^20",
-    "npm": "^8 || ^9"
+    "npm": "^10"
   },
   "scripts": {
     "prepare": "husky install",
     "start": "node app/bin/www",
+    "start-local": "export $(cat .env) && node app/bin/www",
     "start-dev": "export $(cat feature.env) && node app/bin/www",
     "clean": "rm -rf app/public",
     "compile-sass": "sass --quiet-deps --no-source-map --load-path=node_modules/govuk-frontend --load-path=node_modules/@ministryofjustice/frontend --load-path=. ./app/assets/sass/application.scss:./app/public/stylesheets/application.css ./app/assets/sass/select2.scss:./app/public/stylesheets/select2.css --style compressed",

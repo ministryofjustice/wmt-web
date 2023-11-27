@@ -35,6 +35,8 @@ services:
       test: [ "CMD", "curl", "-f", "http://localhost:8080/auth/health" ]
     environment:
       - SPRING_PROFILES_ACTIVE=dev
+    depends_on:
+      - "postgres"
 
   hmpps-workload:
     image: quay.io/hmpps/hmpps-workload:latest
@@ -56,7 +58,7 @@ services:
     depends_on:
         - "postgres"
   postgres:
-    image: postgres:11
+    image: postgres:14
     networks:
       - hmpps
     container_name: wmt-web-hmpps-workload-postgres

@@ -11,6 +11,10 @@ app/public/*
 node_modules
 app/govuk_modules
 
+# dotenv environment variables file
+.env
+.env.test
+
 *.log
 
 # Ignore dev assets
