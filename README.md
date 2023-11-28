@@ -77,7 +77,7 @@ npm run seed-dev-data
 To run Unit Tests run the following command:
 
 ```
-npm t
+npm test
 ```
 
 ### Integration Tests
