@@ -37,7 +37,7 @@ describe('services/data/get-daily-archive', function () {
   })
   it('should retrieve all twelve columns for archive data', function () {
     return getArchive(archiveDataForm).then(function (results) {
-      expect(results[0].workloadID).to.eql(expectedResult.workloadID)
+      expect(results[0].workloadID).to.eql('temp fail') // expectedResult.workloadID)
       expect(results[0].lduName).to.eql(expectedResult.lduName)
       expect(results[0].teamName).to.eql(expectedResult.teamName)
       expect(results[0].omName).to.eql(expectedResult.omName)
