@@ -74,18 +74,35 @@ npm run seed-dev-data
 ## Testing
 
 ### Unit Tests
-To run Unit Tests run the following command:
-
+- To run Unit Tests run the following command:
 ```
 npm test
 ```
+- if you want to generate an html report so that you can view any failures vid=sually run this command:
+```
+npm run test-generate-report
+```
 
 ### Integration Tests
-To run Integration Tests run the following command:
-
+To run Integration Tests 
+- run docker containers
 ```
 docker-compose up -d
+```
+- jump into localstack container and run shell script (to create the localstack AWS infra)
+```
+docker exec -it wmt-web-localstack bash
+cd /docker-entrypoint-initaws.d
+./setup-s3.sh
+exit
+```
+  - run the following command:
+```
 npm run integration-test
+```
+- if you want to generate an html report so that you can view any failures visually run this command instead:
+```
+npm run integration-test-generate-report
 ```
 
 ## E2E Tests

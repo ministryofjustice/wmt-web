@@ -295,7 +295,7 @@ describe(`GET ${INDEX_URI + '?HPP&TRUE=1/0'}`, function () {
 describe('/overview can be omitted', function () {
   it('should respond with 200 when overview is omitted from the URL', function () {
     return supertest(app)
-      .get(VALID_URL_WITHOUT_OVERVIEW + '/should-fail')
+      .get(VALID_URL_WITHOUT_OVERVIEW)
       .expect(200)
   })
 })
