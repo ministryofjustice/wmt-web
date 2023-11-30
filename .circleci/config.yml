@@ -182,7 +182,7 @@ jobs:
       - run: sudo apt-get update
       - browser-tools/install-chrome:
           # TODO remove following line when fixed https://github.com/CircleCI-Public/browser-tools-orb/issues/90
-          chrome-version: 119.0.6045.199
+          chrome-version: 116.0.5845.96
       - browser-tools/install-chromedriver
       - run:
           command: |
