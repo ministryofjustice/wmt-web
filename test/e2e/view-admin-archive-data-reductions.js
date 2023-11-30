@@ -102,7 +102,7 @@ describe('Admin Archive Data Reductions Page', () => {
       const extraSearchCritera = await $('.select2-search__field')
       await extraSearchCritera.setValue('Test_Forename')
 
-      const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="15"]')
+      const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="16"]')
       await criteriaName.click()
 
       const search = await $('#archive-reductions-filter-submit')

@@ -15,10 +15,7 @@
         "email": "{{request.path.[1]}}@digital.justice.gov.uk",
         "enabled": true,
         "roles": [
-          {
-            "name": "TEST_WORKLOAD_MEASUREMENT_ROLE",
-            "description": "A WMT Test Role"
-          }
+          "TEST_WORKLOAD_MEASUREMENT_ROLE"
         ]
       },
       "headers": {
