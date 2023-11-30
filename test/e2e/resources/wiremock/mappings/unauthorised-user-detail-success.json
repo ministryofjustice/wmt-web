@@ -2,17 +2,17 @@
     "priority": 2,
     "request": {
       "method": "GET",
-      "urlPathPattern": "(?i)/secure/users/UNAUTHN.*/details"
+      "urlPathPattern": "/user/UNAUTHN.*"
     },
     "response": {
       "transformers": ["response-template"],
       "status": 200,
       "jsonBody": {
         "userId": 2500077027,
-        "username": "{{request.path.[2]}}",
+        "username": "{{request.path.[1]}}",
         "firstName": "Unauthorised",
         "surname": "Doe",
-        "email": "{{request.path.[2]}}@justice.gov.uk",
+        "email": "{{request.path.[1]}}@justice.gov.uk",
         "enabled": true,
         "roles": [
           {

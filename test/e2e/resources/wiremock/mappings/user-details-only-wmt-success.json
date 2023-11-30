@@ -2,17 +2,17 @@
     "priority": 2,
     "request": {
       "method": "GET",
-      "urlPathPattern": "(?i)/secure/users/ONLY_WMT.*/details"
+      "urlPathPattern": "/user/ONLY_WMT.*/"
     },
     "response": {
       "transformers": ["response-template"],
       "status": 200,
       "jsonBody": {
         "userId": 2500077027,
-        "username": "{{request.path.[2]}}",
+        "username": "{{request.path.[1]}}",
         "firstName": "WMT",
         "surname": "Doe",
-        "email": "{{request.path.[2]}}@digital.justice.gov.uk",
+        "email": "{{request.path.[1]}}@digital.justice.gov.uk",
         "enabled": true,
         "roles": [
           {

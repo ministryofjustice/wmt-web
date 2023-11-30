@@ -19,12 +19,15 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/auth/health"]
     environment:
-      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_PROFILES_ACTIVE=dev,delius
       - APPLICATION_AUTHENTICATION_UI_ALLOWLIST=0.0.0.0/0
       - DELIUS_ENABLED=true
       - DELIUS_ENDPOINT_URL=http://wiremock:8099
-      - MANAGE_USERS_API_ENABLED=TRUE
+      - MANAGE_USERS_API_ENABLED=true
       - MANAGE_USERS_API_ENDPOINT_URL=http://manage-users-wiremock:8302
+    depends_on:
+      - "wiremock"
+      - "manage-users-wiremock"
 
   allocations-service:
     image: quay.io/hmpps/hmpps-allocations
@@ -57,6 +60,8 @@ services:
     entrypoint: ["/bin/sh", "-c" , "sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar"]
     depends_on:
         - "postgres"
+        - "wiremock"
+        - "localstack"
   postgres:
     image: postgres:14
     networks:

@@ -2,27 +2,21 @@
     "priority": 2,
     "request": {
       "method": "GET",
-      "urlPathPattern": "(?i)/secure/users/WMT.*/details"
+      "urlPathPattern": "/user/WMT.*"
     },
     "response": {
       "transformers": ["response-template"],
       "status": 200,
       "jsonBody": {
         "userId": 2500077027,
-        "username": "{{request.path.[2]}}",
+        "username": "{{request.path.[1]}}",
         "firstName": "WMT",
         "surname": "Doe",
-        "email": "{{request.path.[2]}}@digital.justice.gov.uk",
+        "email": "{{request.path.[1]}}@digital.justice.gov.uk",
         "enabled": true,
         "roles": [
-          {
-            "name": "TEST_WORKLOAD_MEASUREMENT_ROLE",
-            "description": "A WMT Test Role"
-          },
-          {
-            "name": "TEST_MANAGE_A_WORKFORCE_ALLOCATE_ROLE",
-            "description": "A WMT Test Role"
-          }
+          "TEST_WORKLOAD_MEASUREMENT_ROLE",
+          "TEST_MANAGE_A_WORKFORCE_ALLOCATE_ROLE"
         ]
       },
       "headers": {

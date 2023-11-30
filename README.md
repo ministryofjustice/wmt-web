@@ -110,9 +110,19 @@ npm run integration-test-generate-report
 E2E Tests are run using Selenium and webdriver
 
 Run tests using the following commands:
-
+- run docker containers
 ```
 docker-compose up -d
+```
+- jump into localstack container and run shell script (to create the localstack AWS infra)
+```
+docker exec -it wmt-web-localstack bash
+cd /docker-entrypoint-initaws.d
+./setup-s3.sh
+exit
+```
+- run the following command to start the application and run the e2e tests:
+```
 npm run start-dev
-npm run test-e2e # Chrome
+npm run test-e2e
 ```

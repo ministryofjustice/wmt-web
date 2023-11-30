@@ -1,7 +1,7 @@
 {
     "request": {
       "method": "POST",
-      "urlPathPattern": "/secure/authenticate",
+      "urlPathPattern": "/authenticate",
       "bodyPatterns": [
         {
           "matchesJsonPath": "$[?(@.username =~ /WMT.*/i)]"
