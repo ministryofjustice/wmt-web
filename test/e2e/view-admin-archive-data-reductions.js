@@ -100,9 +100,9 @@ describe('Admin Archive Data Reductions Page', () => {
       await archiveToYearField.setValue('2022')
 
       const extraSearchCritera = await $('.select2-search__field')
-      await extraSearchCritera.addValue('Test_Forename')
+      await extraSearchCritera.setValue('Test_Forename')
 
-      const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="16"]')
+      const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="15"]')
       await criteriaName.click()
 
       const search = await $('#archive-reductions-filter-submit')
