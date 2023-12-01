@@ -64,6 +64,16 @@ module.exports = {
       apiClientId: get('API_CLIENT_ID', 'workload-measurement-ui', requiredInProduction),
       apiClientSecret: get('API_CLIENT_SECRET', 'clientsecret', requiredInProduction)
     },
+    manageUsersService: {
+      url: get('MANAGE_USERS_SERVICE_URL', 'http://127.0.0.1:8099', requiredInProduction),
+      timeout: {
+        response: 3000
+      },
+      agent: {
+        timeout: 3000
+      },
+      retries: 2
+    },
     allocationsService: {
       url: get('ALLOCATIONS_SERVICE_URL', 'http://127.0.0.1:8099', requiredInProduction),
       timeout: {
