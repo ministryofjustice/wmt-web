@@ -8,6 +8,7 @@ const liveConnection = {
 
 const historyConnection = {
   host: config.HISTORY_DATABASE_SERVER,
+  port: config.HISTORY_DATABASE_PORT,
   user: config.HISTORY_DATABASE_USERNAME,
   password: config.HISTORY_DATABASE_PASSWORD,
   database: config.HISTORY_DATABASE
