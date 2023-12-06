@@ -38,6 +38,7 @@ executors:
           - DELIUS_ENABLED=true
           - SERVER_PORT=9090
           - MANAGE_USERS_API_ENABLED=true
+          - MANAGE_USERS_API_ENDPOINT_URL=http://localhost:9091
       - image: quay.io/hmpps/hmpps-manage-users-api:latest
         environment:
           - SPRING_PROFILES_ACTIVE=dev,delius
