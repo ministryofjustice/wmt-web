@@ -5,10 +5,10 @@ const config = require('../../config')
 const generateOauthClientToken = require('./clientCredentials')
 const verifyToken = require('../data/tokenVerification')
 const userRoleService = require('../services/user-role-service')
-const hmppsAuthClient = require('../data/manageUsersClient')
+const manageUsersClient = require('../data/manageUsersClient')
 
 passport.serializeUser(async function (user, done) {
-  const { email } = await hmppsAuthClient.getUserEmail(user.token)
+  const { email } = await manageUsersClient.getUserEmail(user.token)
   const displayName = user.username
   const nameID = user.username
   const nameIDFormat = user.username
