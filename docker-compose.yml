@@ -13,7 +13,7 @@ services:
     image: quay.io/hmpps/hmpps-auth:latest
     networks:
       - hmpps
-    container_name: wmt-web-hmpps-auth
+    container_name: hmpps-auth
     ports:
       - "9090:8080"
     healthcheck:
@@ -24,10 +24,48 @@ services:
       - DELIUS_ENABLED=true
       - DELIUS_ENDPOINT_URL=http://wiremock:8099
       - MANAGE_USERS_API_ENABLED=true
-      - MANAGE_USERS_API_ENDPOINT_URL=http://manage-users-wiremock:8302
+      - MANAGE_USERS_API_ENDPOINT_URL=http://hmpps-manage-users-api:8080
     depends_on:
       - "wiremock"
       - "manage-users-wiremock"
+      - "postgres"
+
+  hmpps-manage-users-api:
+    image: quay.io/hmpps/hmpps-manage-users-api:latest
+    networks:
+      - hmpps
+    container_name: hmpps-manage-users-api
+    ports:
+      - "9091:8080"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health/ping" ]
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_PROFILES_ACTIVE=dev,delius
+      - HMPPS-AUTH_ENDPOINT_URL=http://hmpps-auth:8080/auth
+      - AUTHORIZATION-SERVER_TOKEN_ENDPOINT_URL=http://hmpps-auth:8080/auth/oauth/token
+      - EXTERNAL-USERS_ENDPOINT_URL=http://hmpps-external-users-api:8080
+      - DELIUS_ENDPOINT_URL=http://wiremock:8099
+    depends_on:
+      - "hmpps-auth"
+      - "wiremock"
+      - "postgres"
+
+  hmpps-external-users-api:
+    image: quay.io/hmpps/hmpps-external-users-api:latest
+    container_name: hmpps-external-users-api
+    depends_on:
+      - hmpps-auth
+    ports:
+      - "8088:8080"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health/ping" ]
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_PROFILES_ACTIVE=dev,local-postgres
+      - API_BASE_URL_OAUTH=http://hmpps-auth:8080/auth
+      - SPRING_R2DBC_URL=r2dbc:postgresql://auth-db:5432/auth-db?sslmode=prefer
+      - SPRING_FLYWAY_URL=jdbc:postgresql://auth-db:5432/auth-db?sslmode=prefer
 
   allocations-service:
     image: quay.io/hmpps/hmpps-allocations
@@ -62,6 +100,7 @@ services:
         - "postgres"
         - "wiremock"
         - "localstack"
+
   postgres:
     image: postgres:14
     networks:
@@ -106,17 +145,6 @@ services:
     command: ["--port","8100","--global-response-templating"]
     volumes:
       - $PWD/test/e2e/resources/token-verify-wiremock:/home/wiremock:rw
-  manage-users-wiremock:
-    image: wiremock/wiremock
-    networks:
-      - hmpps
-    container_name: manage-users-wiremock
-    restart: always
-    ports:
-      - "8302:8302"
-    command: ["--port","8302","--global-response-templating"]
-    volumes:
-      - $PWD/test/e2e/resources/manage-users-wiremock:/home/wiremock:rw
   localstack:
     image: localstack/localstack:2.0.2
     networks:

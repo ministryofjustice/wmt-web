@@ -65,7 +65,7 @@ module.exports = {
       apiClientSecret: get('API_CLIENT_SECRET', 'clientsecret', requiredInProduction)
     },
     manageUsersService: {
-      url: get('MANAGE_USERS_SERVICE_URL', 'http://127.0.0.1:8099', requiredInProduction),
+      url: get('MANAGE_USERS_SERVICE_URL', 'http://127.0.0.1:9091', requiredInProduction),
       timeout: {
         response: 3000
       },
