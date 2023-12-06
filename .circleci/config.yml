@@ -206,7 +206,6 @@ jobs:
             find test/e2e/resources/wiremock/mappings/*.json -exec curl --request POST --url http://localhost:8099/__admin/mappings --header 'content-type: application/json' --data-binary "@{}" \;
             find test/e2e/resources/user-preference-wiremock/mappings/*.json -exec curl --request POST --url http://localhost:8098/__admin/mappings --header 'content-type: application/json' --data-binary "@{}" \;
             find test/e2e/resources/token-verify-wiremock/mappings/*.json -exec curl --request POST --url http://localhost:8100/__admin/mappings --header 'content-type: application/json' --data-binary "@{}" \;
-            find test/e2e/resources/manage-users-wiremock/mappings/*.json -exec curl --request POST --url http://localhost:8302/__admin/mappings --header 'content-type: application/json' --data-binary "@{}" \;
       - run:
           name: run end to end tests
           command: npm run test-e2e
