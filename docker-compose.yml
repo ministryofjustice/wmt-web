@@ -112,6 +112,7 @@ services:
     environment:
       - POSTGRES_PASSWORD=dev
       - POSTGRES_USER=root
+
   wiremock:
     image: wiremock/wiremock
     networks:
