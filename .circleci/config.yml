@@ -38,6 +38,19 @@ executors:
           - DELIUS_ENABLED=true
           - SERVER_PORT=9090
           - MANAGE_USERS_API_ENABLED=true
+          - MANAGE_USERS_API_ENDPOINT_URL=http://localhost:9091
+      - image: quay.io/hmpps/hmpps-manage-users-api:latest
+        environment:
+          - SPRING_PROFILES_ACTIVE=dev,delius
+          - DELIUS_ENABLED=true
+          - SERVER_PORT=9091
+          - MANAGE_USERS_API_ENABLED=true
+      - image: quay.io/hmpps/hmpps-external-users-api:latest
+        environment:
+          - SPRING_PROFILES_ACTIVE=dev,local-postgres
+          - SERVER_PORT=8088
+          - SPRING_R2DBC_URL=r2dbc:postgresql://auth-db:5432/auth-db?sslmode=prefer
+          - SPRING_FLYWAY_URL=jdbc:postgresql://auth-db:5432/auth-db?sslmode=prefer
       - image: postgres:<< pipeline.parameters.postgres_tag >>
         environment:
           - POSTGRES_PASSWORD=<< pipeline.parameters.database_password >>
@@ -64,8 +77,6 @@ executors:
         command: --port 8098 --global-response-templating
       - image: wiremock/wiremock:latest
         command: --port 8100 --global-response-templating
-      - image: wiremock/wiremock:latest
-        command: --port 8302 --global-response-templating
     working_directory: ~/app
 
 jobs:
@@ -206,7 +217,6 @@ jobs:
             find test/e2e/resources/wiremock/mappings/*.json -exec curl --request POST --url http://localhost:8099/__admin/mappings --header 'content-type: application/json' --data-binary "@{}" \;
             find test/e2e/resources/user-preference-wiremock/mappings/*.json -exec curl --request POST --url http://localhost:8098/__admin/mappings --header 'content-type: application/json' --data-binary "@{}" \;
             find test/e2e/resources/token-verify-wiremock/mappings/*.json -exec curl --request POST --url http://localhost:8100/__admin/mappings --header 'content-type: application/json' --data-binary "@{}" \;
-            find test/e2e/resources/manage-users-wiremock/mappings/*.json -exec curl --request POST --url http://localhost:8302/__admin/mappings --header 'content-type: application/json' --data-binary "@{}" \;
       - run:
           name: run end to end tests
           command: npm run test-e2e
