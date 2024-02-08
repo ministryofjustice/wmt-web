@@ -14,4 +14,5 @@ generic-service:
     USER_PREFERENCE_SERVICE_URL: "https://hmpps-user-preferences.hmpps.service.justice.gov.uk"
 
 generic-prometheus-alerts:
+  alertSeverity: hmpps-workload-prod-alerts
   ingress5xxErrorWindowMinutes: 4
