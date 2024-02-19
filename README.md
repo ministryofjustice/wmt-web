@@ -7,7 +7,7 @@ This is the webserver application that will present the information stored in th
 It is a node.js application using the express web framework.
 
 ## Prerequisites
-- Node v18 (managed using [nvm](https://github.com/creationix/nvm))
+- Node v20 (managed using [nvm](https://github.com/creationix/nvm))
 - Docker
 
 On OSX (using [homebrew](https://brew.sh/)):
@@ -17,8 +17,8 @@ On OSX (using [homebrew](https://brew.sh/)):
 
 - Go to [Docker get started](https://www.docker.com/get-started) to install Docker
 
-Install Node version 18
-- `nvm install 18`
+Install Node version 20
+- `nvm install 20`
 
 ## Run application locally against Dev environment
 - It is possible to get the web application running locally to:
