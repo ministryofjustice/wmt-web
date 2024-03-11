@@ -165,6 +165,13 @@ $(document).ready(function() {
     }
   }
 
+  document.getElementById('help-banner-link').addEventListener("click", openHelpContent)
+
+  function openHelpContent() {
+    const helpContent = document.getElementById('help-content')
+    helpContent.setAttribute('open', true)
+  }
+
   window.onload = function () {
     setHoursAndEndDateToReadOnly()
   }
