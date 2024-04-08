@@ -75,6 +75,22 @@
               <th id="{{caseType.displayName}}_d2">D2</th>
               <th id="{{caseType.displayName}}_d1">D1</th>
               <th id="{{caseType.displayName}}_d0">D0</th>
+              <th id="{{caseType.displayName}}_a3s">A3s</th>
+              <th id="{{caseType.displayName}}_a2s">A2s</th>
+              <th id="{{caseType.displayName}}_a1s">A1s</th>
+              <th id="{{caseType.displayName}}_a0s">A0s</th>
+              <th id="{{caseType.displayName}}_b3s">B3s</th>
+              <th id="{{caseType.displayName}}_b2s">B2s</th>
+              <th id="{{caseType.displayName}}_b1s">B1s</th>
+              <th id="{{caseType.displayName}}_b0s">B0s</th>
+              <th id="{{caseType.displayName}}_c3s">C3s</th>
+              <th id="{{caseType.displayName}}_c2s">C2s</th>
+              <th id="{{caseType.displayName}}_c1s">C1s</th>
+              <th id="{{caseType.displayName}}_c0s">C0s</th>
+              <th id="{{caseType.displayName}}_d3s">D3s</th>
+              <th id="{{caseType.displayName}}_d2s">D2s</th>
+              <th id="{{caseType.displayName}}_d1s">D1s</th>
+              <th id="{{caseType.displayName}}_d0s">D0s</th>
               <th id="{{caseType.displayName}}_untiered">Untiered</th>              
               <th id="{{caseType.displayName}}_total">Total</th>
             </tr>
@@ -105,6 +121,26 @@
                 <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d1">{{ member.d1 }}</td>
                 <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d0">{{ member.d0 }}</td>
 
+                <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_a3s">{{ member.a3s }}</td>
+                <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_a2s">{{ member.a2s }}</td>
+                <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_a1s">{{ member.a1s }}</td>
+                <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_a0s">{{ member.a0s }}</td>
+
+                <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_b3s">{{ member.b3s }}</td>
+                <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_b2s">{{ member.b2s }}</td>
+                <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_b1s">{{ member.b1s }}</td>
+                <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_b0s">{{ member.b0s }}</td>
+
+                <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_c3s">{{ member.c3s }}</td>
+                <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_c2s">{{ member.c2s }}</td>
+                <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_c1s">{{ member.c1s }}</td>
+                <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_c0s">{{ member.c0s }}</td>
+
+                <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d3s">{{ member.d3s }}</td>
+                <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d2s">{{ member.d2s }}</td>
+                <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d1s">{{ member.d1s }}</td>
+                <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d0s">{{ member.d0s }}</td>
+
                 <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_untiered">{{ member.untiered }}</td>                
                 <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_total">{{ member.totalCases }}</td>
               </tr>
@@ -132,6 +168,26 @@
               <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d2">{{ caseType.array.totals.d2 | round(1) }}</th>
               <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d1">{{ caseType.array.totals.d1 | round(1) }}</th>
               <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d0">{{ caseType.array.totals.d0 | round(1) }}</th>
+
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_a3s">{{ caseType.array.totals.a3s }}</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_a2s">{{ caseType.array.totals.a2s }}</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_a1s">{{ caseType.array.totals.a1s }}</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_a0s">{{ caseType.array.totals.a0s }}</td>
+
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_b3s">{{ caseType.array.totals.b3s }}</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_b2s">{{ caseType.array.totals.b2s }}</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_b1s">{{ caseType.array.totals.b1s }}</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_b0s">{{ caseType.array.totals.b0s }}</td>
+
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_c3s">{{ caseType.array.totals.c3s }}</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_c2s">{{ caseType.array.totals.c2s }}</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_c1s">{{ caseType.array.totals.c1s }}</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_c0s">{{ caseType.array.totals.c0s }}</td>
+
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d3s">{{ caseType.array.totals.d3s }}</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d2s">{{ caseType.array.totals.d2s }}</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d1s">{{ caseType.array.totals.d1s }}</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d0s">{{ caseType.array.totals.d0s }}</td>
 
               <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_untiered">{{ caseType.array.totals.untiered | round(1) }}</th>   
               <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_total" >{{ caseType.array.totals.overall | round(1) }}</th>   
@@ -218,6 +274,26 @@
               <th id="{{caseType.displayName}}_d1_grade">D1</th>
               <th id="{{caseType.displayName}}_d0_grade">D0</th>
 
+              <th id="{{caseType.displayName}}_a3s_grade">A3s</th>
+              <th id="{{caseType.displayName}}_a2s_grade">A2s</th>
+              <th id="{{caseType.displayName}}_a1s_grade">A1s</th>
+              <th id="{{caseType.displayName}}_a0s_grade">A0s</th>
+
+              <th id="{{caseType.displayName}}_b3s_grade">B3s</th>
+              <th id="{{caseType.displayName}}_b2s_grade">B2s</th>
+              <th id="{{caseType.displayName}}_b1s_grade">B1s</th>
+              <th id="{{caseType.displayName}}_b0s_grade">B0s</th>
+
+              <th id="{{caseType.displayName}}_c3s_grade">C3s</th>
+              <th id="{{caseType.displayName}}_c2s_grade">C2s</th>
+              <th id="{{caseType.displayName}}_c1s_grade">C1s</th>
+              <th id="{{caseType.displayName}}_c0s_grade">C0s</th>
+
+              <th id="{{caseType.displayName}}_d3s_grade">D3s</th>
+              <th id="{{caseType.displayName}}_d2s_grade">D2s</th>
+              <th id="{{caseType.displayName}}_d1s_grade">D1s</th>
+              <th id="{{caseType.displayName}}_d0s_grade">D0s</th>
+
               <th id="{{caseType.displayName}}_untiered_grade">Untiered</th>          
               <th id="{{caseType.displayName}}_overall_grade">Overall</th>            
             </tr>
@@ -250,6 +326,26 @@
                   <td headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_d1_grade">{{ member.grades[i].d1 | round(1) }}%</td>
                   <td headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_d0_grade">{{ member.grades[i].d0 | round(1) }}%</td>
 
+                  <td headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_a3s_grade">{{ member.grades[i].a3s | round(1) }}%</td>
+                  <td headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_a2s_grade">{{ member.grades[i].a2s | round(1) }}%</td>
+                  <td headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_a1s_grade">{{ member.grades[i].a1s | round(1) }}%</td>
+                  <td headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_a0s_grade">{{ member.grades[i].a0s | round(1) }}%</td>
+
+                  <td headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_b3s_grade">{{ member.grades[i].b3s | round(1) }}%</td>
+                  <td headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_b2s_grade">{{ member.grades[i].b2s | round(1) }}%</td>
+                  <td headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_b1s_grade">{{ member.grades[i].b1s | round(1) }}%</td>
+                  <td headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_b0s_grade">{{ member.grades[i].b0s | round(1) }}%</td>
+
+                  <td headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_c3s_grade">{{ member.grades[i].c3s | round(1) }}%</td>
+                  <td headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_c2s_grade">{{ member.grades[i].c2s | round(1) }}%</td>
+                  <td headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_c1s_grade">{{ member.grades[i].c1s | round(1) }}%</td>
+                  <td headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_c0s_grade">{{ member.grades[i].c0s | round(1) }}%</td>
+
+                  <td headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_d3s_grade">{{ member.grades[i].d3s | round(1) }}%</td>
+                  <td headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_d2s_grade">{{ member.grades[i].d2s | round(1) }}%</td>
+                  <td headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_d1s_grade">{{ member.grades[i].d1s | round(1) }}%</td>
+                  <td headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_d0s_grade">{{ member.grades[i].d0s | round(1) }}%</td>
+
                   <td headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_untiered_grade">{{ member.grades[i].untiered | round(1) }}%</td>            
                   <td headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_overall_grade" >{{ member.grades[i].totalCases | round(1) }}%</td>              
                 </tr>
@@ -280,6 +376,26 @@
                 <th headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_d2_grade">{{ total.d2  | round(1) }}%</th>
                 <th headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_d1_grade">{{ total.d1  | round(1) }}%</th>
                 <th headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_d0_grade">{{ total.d0 | round(1) }}%</th>
+
+                <th headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_a3s_grade">{{ total.a3s  | round(1) }}%</th>
+                <th headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_a2s_grade">{{ total.a2s  | round(1) }}%</th>
+                <th headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_a1s_grade">{{ total.a1s  | round(1) }}%</th>
+                <th headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_a0s_grade">{{ total.a0s | round(1) }}%</th>
+
+                <th headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_b3s_grade">{{ total.b3s  | round(1) }}%</th>
+                <th headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_b2s_grade">{{ total.b2s  | round(1) }}%</th>
+                <th headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_b1s_grade">{{ total.b1s  | round(1) }}%</th>
+                <th headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_b0s_grade">{{ total.b0s | round(1) }}%</th>
+
+                <th headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_c3s_grade">{{ total.c3s  | round(1) }}%</th>
+                <th headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_c2s_grade">{{ total.c2s  | round(1) }}%</th>
+                <th headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_c1s_grade">{{ total.c1s  | round(1) }}%</th>
+                <th headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_c0s_grade">{{ total.c0s | round(1) }}%</th>
+
+                <th headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_d3s_grade">{{ total.d3s  | round(1) }}%</th>
+                <th headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_d2s_grade">{{ total.d2s  | round(1) }}%</th>
+                <th headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_d1s_grade">{{ total.d1s  | round(1) }}%</th>
+                <th headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_d0s_grade">{{ total.d0s | round(1) }}%</th>
 
                 <th headers="{{caseType.displayName}}_tiers_grade {{caseType.displayName}}_untiered_grade">{{ total.untiered | round(1) }}%</th>   
                 <th headers="{{caseType.displayName}}_overall_grade {{caseType.displayName}}_tiers_grade" >{{ total.totalCases | round(1) }}%</th>
@@ -322,6 +438,26 @@
               <th id="{{caseType.displayName}}_d1_caseload">D1</th>
               <th id="{{caseType.displayName}}_d0_caseload">D0</th>
 
+              <th id="{{caseType.displayName}}_a3s_caseload">A3s</th>
+              <th id="{{caseType.displayName}}_a2s_caseload">A2s</th>
+              <th id="{{caseType.displayName}}_a1s_caseload">A1s</th>
+              <th id="{{caseType.displayName}}_a0s_caseload">A0s</th>
+
+              <th id="{{caseType.displayName}}_b3s_caseload">B3s</th>
+              <th id="{{caseType.displayName}}_b2s_caseload">B2s</th>
+              <th id="{{caseType.displayName}}_b1s_caseload">B1s</th>
+              <th id="{{caseType.displayName}}_b0s_caseload">B0s</th>
+
+              <th id="{{caseType.displayName}}_c3s_caseload">C3s</th>
+              <th id="{{caseType.displayName}}_c2s_caseload">C2s</th>
+              <th id="{{caseType.displayName}}_c1s_caseload">C1s</th>
+              <th id="{{caseType.displayName}}_c0s_caseload">C0s</th>
+
+              <th id="{{caseType.displayName}}_d3s_caseload">D3s</th>
+              <th id="{{caseType.displayName}}_d2s_caseload">D2s</th>
+              <th id="{{caseType.displayName}}_d1s_caseload">D1s</th>
+              <th id="{{caseType.displayName}}_d0s_caseload">D0s</th>
+
               <th id="{{caseType.displayName}}_untiered_caseload">Untiered</th>              
               <th id="{{caseType.displayName}}_overall_caseload">Overall</th>            
             </tr>
@@ -354,6 +490,26 @@
                 <td class="{% if member.grades[i].grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_d1_caseload">{{ member.grades[i].d1 | round(1) }}</td>
                 <td class="{% if member.grades[i].grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_d0_caseload">{{ member.grades[i].d0 | round(1) }}</td>
 
+                <td class="{% if member.grades[i].grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_a3s_caseload">{{ member.grades[i].a3s | round(1) }}</td>
+                <td class="{% if member.grades[i].grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_a2s_caseload">{{ member.grades[i].a2s | round(1) }}</td>
+                <td class="{% if member.grades[i].grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_a1s_caseload">{{ member.grades[i].a1s | round(1) }}</td>
+                <td class="{% if member.grades[i].grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_a0s_caseload">{{ member.grades[i].a0s | round(1) }}</td>
+
+                <td class="{% if member.grades[i].grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_b3s_caseload">{{ member.grades[i].b3s | round(1) }}</td>
+                <td class="{% if member.grades[i].grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_b2s_caseload">{{ member.grades[i].b2s | round(1) }}</td>
+                <td class="{% if member.grades[i].grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_b1s_caseload">{{ member.grades[i].b1s | round(1) }}</td>
+                <td class="{% if member.grades[i].grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_b0s_caseload">{{ member.grades[i].b0s | round(1) }}</td>
+
+                <td class="{% if member.grades[i].grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_c3s_caseload">{{ member.grades[i].c3s | round(1) }}</td>
+                <td class="{% if member.grades[i].grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_c2s_caseload">{{ member.grades[i].c2s | round(1) }}</td>
+                <td class="{% if member.grades[i].grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_c1s_caseload">{{ member.grades[i].c1s | round(1) }}</td>
+                <td class="{% if member.grades[i].grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_c0s_caseload">{{ member.grades[i].c0s | round(1) }}</td>
+
+                <td class="{% if member.grades[i].grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_d3s_caseload">{{ member.grades[i].d3s | round(1) }}</td>
+                <td class="{% if member.grades[i].grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_d2s_caseload">{{ member.grades[i].d2s | round(1) }}</td>
+                <td class="{% if member.grades[i].grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_d1s_caseload">{{ member.grades[i].d1s | round(1) }}</td>
+                <td class="{% if member.grades[i].grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_d0s_caseload">{{ member.grades[i].d0s | round(1) }}</td>
+
                 <td class="{% if member.grades[i].grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_untiered_caseload">{{ member.grades[i].untiered | round(1) }}</td>
                 <td class="{% if member.grades[i].grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_overall_caseload" >{{ member.grades[i].totalCases | round(1) }}</td>
               </tr>
@@ -384,6 +540,26 @@
                 <th class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_d2_caseload">{{ total.d2 | round(1) }}</th>
                 <th class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_d1_caseload">{{ total.d1 | round(1) }}</th>
                 <th class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_d0_caseload">{{ total.d0 | round(1) }}</th>
+
+                <th class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_a3s_caseload">{{ total.a3s | round(1) }}</th>
+                <th class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_a2s_caseload">{{ total.a2s | round(1) }}</th>
+                <th class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_a1s_caseload">{{ total.a1s | round(1) }}</th>
+                <th class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_a0s_caseload">{{ total.a0s | round(1) }}</th>
+
+                <th class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_b3s_caseload">{{ total.b3s | round(1) }}</th>
+                <th class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_b2s_caseload">{{ total.b2s | round(1) }}</th>
+                <th class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_b1s_caseload">{{ total.b1s | round(1) }}</th>
+                <th class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_b0s_caseload">{{ total.b0s | round(1) }}</th>
+
+                <th class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_c3s_caseload">{{ total.c3s | round(1) }}</th>
+                <th class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_c2s_caseload">{{ total.c2s | round(1) }}</th>
+                <th class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_c1s_caseload">{{ total.c1s | round(1) }}</th>
+                <th class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_c0s_caseload">{{ total.c0s | round(1) }}</th>
+
+                <th class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_d3s_caseload">{{ total.d3s | round(1) }}</th>
+                <th class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_d2s_caseload">{{ total.d2s | round(1) }}</th>
+                <th class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_d1s_caseload">{{ total.d1s | round(1) }}</th>
+                <th class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_d0s_caseload">{{ total.d0s | round(1) }}</th>
 
                 <th class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_untiered_caseload">{{ total.untiered | round(1) }}</th>   
                 <th class="{% if grade == 'Total' %} bold {% endif %}" headers="{{caseType.displayName}}_tiers_caseload {{caseType.displayName}}_overall_caseload" >{{ total.totalCases | round(1) }}</th>   
@@ -424,6 +600,26 @@
             <th id="{{caseType.displayName}}_d1">D1</th>
             <th id="{{caseType.displayName}}_d0">D0</th>
 
+            <th id="{{caseType.displayName}}_a3s">A3s</th>
+            <th id="{{caseType.displayName}}_a2s">A2s</th>
+            <th id="{{caseType.displayName}}_a1s">A1s</th>
+            <th id="{{caseType.displayName}}_a0s">A0s</th>
+
+            <th id="{{caseType.displayName}}_b3s">B3s</th>
+            <th id="{{caseType.displayName}}_b2s">B2s</th>
+            <th id="{{caseType.displayName}}_b1s">B1s</th>
+            <th id="{{caseType.displayName}}_b0s">B0s</th>
+
+            <th id="{{caseType.displayName}}_c3s">C3s</th>
+            <th id="{{caseType.displayName}}_c2s">C2s</th>
+            <th id="{{caseType.displayName}}_c1s">C1s</th>
+            <th id="{{caseType.displayName}}_c0s">C0s</th>
+
+            <th id="{{caseType.displayName}}_d3s">D3s</th>
+            <th id="{{caseType.displayName}}_d2s">D2s</th>
+            <th id="{{caseType.displayName}}_d1s">D1s</th>
+            <th id="{{caseType.displayName}}_d0s">D0s</th>
+
             <th id="{{caseType.displayName}}_untiered">Untiered</th>          
             <th id="{{caseType.displayName}}_overall">Overall</th>            
           </tr>
@@ -456,6 +652,26 @@
               <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d1">{{ member.grades[i].d1 | round(1) }}%</td>
               <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d0">{{ member.grades[i].d0 | round(1) }}%</td>
 
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_a3s">{{ member.grades[i].a3s | round(1) }}%</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_a2s">{{ member.grades[i].a2s | round(1) }}%</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_a1s">{{ member.grades[i].a1s | round(1) }}%</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_a0s">{{ member.grades[i].a0s | round(1) }}%</td>
+
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_b3s">{{ member.grades[i].b3s | round(1) }}%</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_b2s">{{ member.grades[i].b2s | round(1) }}%</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_b1s">{{ member.grades[i].b1s | round(1) }}%</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_b0s">{{ member.grades[i].b0s | round(1) }}%</td>
+
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_c3s">{{ member.grades[i].c3s | round(1) }}%</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_c2s">{{ member.grades[i].c2s | round(1) }}%</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_c1s">{{ member.grades[i].c1s | round(1) }}%</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_c0s">{{ member.grades[i].c0s | round(1) }}%</td>
+
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d3s">{{ member.grades[i].d3s | round(1) }}%</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d2s">{{ member.grades[i].d2s | round(1) }}%</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d1s">{{ member.grades[i].d1s | round(1) }}%</td>
+              <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d0s">{{ member.grades[i].d0s | round(1) }}%</td>
+
               <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_untiered">{{ member.grades[i].untiered | round(1) }}%</td>            
               <td headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_overall" >{{ member.grades[i].totalCases | round(1) }}%</td>              
             </tr>
@@ -486,6 +702,26 @@
             <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d2">{{ total.d2  | round(1) }}%</th>
             <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d1">{{ total.d1  | round(1) }}%</th>
             <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d0">{{ total.d0  | round(1) }}%</th>
+
+            <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_a3s">{{ total.a3s  | round(1) }}%</th>
+            <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_a2s">{{ total.a2s  | round(1) }}%</th>
+            <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_a1s">{{ total.a1s  | round(1) }}%</th>
+            <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_a0s">{{ total.a0s  | round(1) }}%</th>
+
+            <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_b3s">{{ total.b3s  | round(1) }}%</th>
+            <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_b2s">{{ total.b2s  | round(1) }}%</th>
+            <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_b1s">{{ total.b1s  | round(1) }}%</th>
+            <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_b0s">{{ total.b0s  | round(1) }}%</th>
+
+            <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_c3s">{{ total.c3s  | round(1) }}%</th>
+            <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_c2s">{{ total.c2s  | round(1) }}%</th>
+            <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_c1s">{{ total.c1s  | round(1) }}%</th>
+            <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_c0s">{{ total.c0s  | round(1) }}%</th>
+
+            <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d3s">{{ total.d3s  | round(1) }}%</th>
+            <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d2s">{{ total.d2s  | round(1) }}%</th>
+            <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d1s">{{ total.d1s  | round(1) }}%</th>
+            <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_d0s">{{ total.d0s  | round(1) }}%</th>
 
             <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_untiered">{{ total.untiered | round(1) }}%</th>   
             <th headers="{{caseType.displayName}}_tiers {{caseType.displayName}}_overall" >{{ total.totalCases | round(1) }}%</th>   
