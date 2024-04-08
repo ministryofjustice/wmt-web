@@ -27,7 +27,7 @@ services:
       - MANAGE_USERS_API_ENDPOINT_URL=http://hmpps-manage-users-api:8080
     depends_on:
       - "wiremock"
-      - "manage-users-wiremock"
+      #- "manage-users-wiremock"
       - "postgres"
 
   hmpps-manage-users-api:

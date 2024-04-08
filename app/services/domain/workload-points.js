@@ -56,6 +56,57 @@ class WorkloadPoints {
     this.licA2 = request.licA2
     this.licA3 = request.licA3
 
+    this.commD0s = request.commD0s
+    this.commD1s = request.commD1s
+    this.commD2s = request.commD2s
+    this.commD3s = request.commD3s
+    this.commC0s = request.commC0s
+    this.commC1s = request.commC1s
+    this.commC2s = request.commC2s
+    this.commC3s = request.commC3s
+    this.commB0s = request.commB0s
+    this.commB1s = request.commB1s
+    this.commB2s = request.commB2s
+    this.commB3s = request.commB3s
+    this.commA0s = request.commA0s
+    this.commA1s = request.commA1s
+    this.commA2s = request.commA2s
+    this.commA3s = request.commA3s
+
+    this.cusD0s = request.cusD0s
+    this.cusD1s = request.cusD1s
+    this.cusD2s = request.cusD2s
+    this.cusD3s = request.cusD3s
+    this.cusC0s = request.cusC0s
+    this.cusC1s = request.cusC1s
+    this.cusC2s = request.cusC2s
+    this.cusC3s = request.cusC3s
+    this.cusB0s = request.cusB0s
+    this.cusB1s = request.cusB1s
+    this.cusB2s = request.cusB2s
+    this.cusB3s = request.cusB3s
+    this.cusA0s = request.cusA0s
+    this.cusA1s = request.cusA1s
+    this.cusA2s = request.cusA2s
+    this.cusA3s = request.cusA3s
+
+    this.licD0s = request.licD0s
+    this.licD1s = request.licD1s
+    this.licD2s = request.licD2s
+    this.licD3s = request.licD3s
+    this.licC0s = request.licC0s
+    this.licC1s = request.licC1s
+    this.licC2s = request.licC2s
+    this.licC3s = request.licC3s
+    this.licB0s = request.licB0s
+    this.licB1s = request.licB1s
+    this.licB2s = request.licB2s
+    this.licB3s = request.licB3s
+    this.licA0s = request.licA0s
+    this.licA1s = request.licA1s
+    this.licA2s = request.licA2s
+    this.licA3s = request.licA3s
+
     this.userId = request.userId
     this.sdr = request.sdr
     this.sdrConversion = request.sdrConversion

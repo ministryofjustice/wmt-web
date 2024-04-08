@@ -18,6 +18,9 @@ describe('Edit Workload Points T2A Page', () => {
       const pointField = await $('#cus-a3')
       await pointField.setValue('10')
 
+      const pointFieldSuspended = await $('#cus-a3s')
+      await pointFieldSuspended.setValue('10')
+
       const saveButton = await $('#save-button')
       await saveButton.click()
 
@@ -46,6 +49,9 @@ describe('Edit Workload Points T2A Page', () => {
 
       const pointField = await $('#cus-a3')
       await pointField.setValue('10')
+
+      const pointFieldSuspended = await $('#cus-a3s')
+      await pointFieldSuspended.setValue('10')
 
       const saveButton = await $('#save-button')
       await saveButton.click()
