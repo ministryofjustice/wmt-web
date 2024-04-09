@@ -28,7 +28,23 @@ module.exports = function (id, type) {
     'a0',
     'a1',
     'a2',
-    'a3'
+    'a3',
+    'd0s',
+    'd1s',
+    'd2s',
+    'd3s',
+    'c0s',
+    'c1s',
+    'c2s',
+    'c3s',
+    'b0s',
+    'b1s',
+    'b2s',
+    'b3s',
+    'a0s',
+    'a1s',
+    'a2s',
+    'a3s'
   ]
 
   const requiresWorkloadOwnerName = (type === ORGANISATION_UNIT.TEAM.name)

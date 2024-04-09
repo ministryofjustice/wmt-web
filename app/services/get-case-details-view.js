@@ -75,6 +75,54 @@ const formatTier = function (results) {
       case '16':
         result.tierCode = 'D0'
         break
+      case '17':
+        result.tierCode = 'A3S'
+        break
+      case '18':
+        result.tierCode = 'A2S'
+        break
+      case '19':
+        result.tierCode = 'A1S'
+        break
+      case '20':
+        result.tierCode = 'A0S'
+        break
+      case '21':
+        result.tierCode = 'B3S'
+        break
+      case '22':
+        result.tierCode = 'B2S'
+        break
+      case '23':
+        result.tierCode = 'B1S'
+        break
+      case '24':
+        result.tierCode = 'B0S'
+        break
+      case '25':
+        result.tierCode = 'C3S'
+        break
+      case '26':
+        result.tierCode = 'C2S'
+        break
+      case '27':
+        result.tierCode = 'C1S'
+        break
+      case '28':
+        result.tierCode = 'C0S'
+        break
+      case '29':
+        result.tierCode = 'D3S'
+        break
+      case '30':
+        result.tierCode = 'D2S'
+        break
+      case '31':
+        result.tierCode = 'D1S'
+        break
+      case '32':
+        result.tierCode = 'D0S'
+        break
       case 0:
         result.tierCode = 'Untiered'
         break
@@ -125,6 +173,54 @@ const formatTier = function (results) {
         break
       case 16:
         result.tierCode = 'D0'
+        break
+      case 17:
+        result.tierCode = 'A3S'
+        break
+      case 18:
+        result.tierCode = 'A2S'
+        break
+      case 19:
+        result.tierCode = 'A1S'
+        break
+      case 20:
+        result.tierCode = 'A0S'
+        break
+      case 21:
+        result.tierCode = 'B3S'
+        break
+      case 22:
+        result.tierCode = 'B2S'
+        break
+      case 23:
+        result.tierCode = 'B1S'
+        break
+      case 24:
+        result.tierCode = 'B0S'
+        break
+      case 25:
+        result.tierCode = 'C3S'
+        break
+      case 26:
+        result.tierCode = 'C2S'
+        break
+      case 27:
+        result.tierCode = 'C1S'
+        break
+      case 28:
+        result.tierCode = 'C0S'
+        break
+      case 29:
+        result.tierCode = 'D3S'
+        break
+      case 30:
+        result.tierCode = 'D2S'
+        break
+      case 31:
+        result.tierCode = 'D1S'
+        break
+      case 32:
+        result.tierCode = 'D0S'
         break
     }
   })
