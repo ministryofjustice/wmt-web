@@ -7,17 +7,18 @@ let scenarioObjectsArray
 describe('services/helpers/group-scenario-data', function () {
   before(function () {
     scenarioObjectsArray = groupScenarioData(scenarioData)
+    console.log(scenarioObjectsArray)
   })
 
   it('should return an array with 2 objects', function () {
     expect(scenarioObjectsArray.length).to.eql(2)
   })
 
-  it('should return 3 arrays of 17 objects within each Scenario Object', function () {
+  it('should return 3 arrays of 33 objects within each Scenario Object', function () {
     scenarioObjectsArray.forEach(function (scenarioObject) {
-      expect(scenarioObject.licenceCaseNumbers.length).to.eql(17)
-      expect(scenarioObject.custodyCaseNumbers.length).to.eql(17)
-      expect(scenarioObject.communityCaseNumbers.length).to.eql(17)
+      expect(scenarioObject.licenceCaseNumbers.length).to.eql(33)
+      expect(scenarioObject.custodyCaseNumbers.length).to.eql(33)
+      expect(scenarioObject.communityCaseNumbers.length).to.eql(33)
     })
   })
 })
