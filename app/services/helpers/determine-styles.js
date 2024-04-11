@@ -220,13 +220,21 @@ module.exports.determineCaseStyle = function (header, styles) {
 
 module.exports.determineWeightingStyle = function (columnNo, styles) {
   let styleToApply
-  const commRange = { start: 26, end: 93 }
-  const licRange = { start: 94, end: 161 }
-  const cusRange = { start: 162, end: 229 }
-  const t2aCommRage = { start: 230, end: 297 }
-  const t2aLicRange = { start: 298, end: 365 }
-  const t2aCusRange = { start: 366, end: 433 }
-  const reportsRange = { start: 434, end: 438 }
+  // const commRange = { start: 26, end: 93 }
+  // const licRange = { start: 94, end: 161 }
+  // const cusRange = { start: 162, end: 229 }
+  // const t2aCommRage = { start: 230, end: 297 }
+  // const t2aLicRange = { start: 298, end: 365 }
+  // const t2aCusRange = { start: 366, end: 433 }
+  // const reportsRange = { start: 434, end: 438 }
+
+  const commRange = { start: 26, end: 125 }
+  const licRange = { start: 126, end: 225 }
+  const cusRange = { start: 226, end: 325 }
+  const t2aCommRage = { start: 326, end: 396 }
+  const t2aLicRange = { start: 397, end: 496 }
+  const t2aCusRange = { start: 497, end: 596 }
+  const reportsRange = { start: 597, end: 696 }
 
   if (columnNo >= commRange.start && columnNo <= commRange.end) {
     styleToApply = styles.commStyle
