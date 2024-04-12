@@ -4,8 +4,8 @@ const { Parser } = require('json2csv')
 const tabs = require('../constants/wmt-tabs')
 
 // WMT0160 - Change next 2 lines
-const CASELOAD_FIELDS = ['name', 'gradeCode', 'a3', 'a2', 'a1', 'a0', 'b3', 'b2', 'b1', 'b0', 'c3', 'c2', 'c1', 'c0', 'd3', 'd2', 'd1', 'd0', 'untiered', 'totalCases']
-const CASELOAD_TEAM_FIELDS = ['name', 'grade', 'a3', 'a2', 'a1', 'a0', 'b3', 'b2', 'b1', 'b0', 'c3', 'c2', 'c1', 'c0', 'd3', 'd2', 'd1', 'd0', 'untiered', 'totalCases']
+const CASELOAD_FIELDS = ['name', 'gradeCode', 'a3', 'a2', 'a1', 'a0', 'b3', 'b2', 'b1', 'b0', 'c3', 'c2', 'c1', 'c0', 'd3', 'd2', 'd1', 'd0', 'a3s', 'a2s', 'a1s', 'a0s', 'b3s', 'b2s', 'b1s', 'b0s', 'c3s', 'c2s', 'c1s', 'c0s', 'd3s', 'd2s', 'd1s', 'd0s', 'untiered', 'totalCases']
+const CASELOAD_TEAM_FIELDS = ['name', 'grade', 'a3', 'a2', 'a1', 'a0', 'b3', 'b2', 'b1', 'b0', 'c3', 'c2', 'c1', 'c0', 'd3', 'd2', 'd1', 'd0', 'a3s', 'a2s', 'a1s', 'a0s', 'b3s', 'b2s', 'b1s', 'b0s', 'c3s', 'c2s', 'c1s', 'c0s', 'd3s', 'd2s', 'd1s', 'd0s', 'untiered', 'totalCases']
 const OM_OVERVIEW_FIELDS = ['regionName', 'lduCluster', 'teamName', 'grade', 'capacity', 'cases', 'contractedHours', 'reduction', 'cmsAdjustmentPoints', 'cmsPercentage']
 const OM_OVERVIEW_FIELD_NAMES = ['Region', 'Probation Delivery Unit', 'Team Name', 'Grade Code', 'Capacity Percentage', 'Total Cases', 'Contracted Hours', 'Reduction Hours', 'CMS Points', 'CMS Percentage']
 const ORG_OVERVIEW_FIELDS = ['lduCluster', 'teamName', 'offenderManager', 'gradeCode', 'capacityPercentage', 'availablePoints', 'totalPoints', 'remainingPoints', 'contractedHours', 'reductionHours', 'totalCases', 'cmsAdjustmentPoints', 'cmsPercentage']
@@ -132,7 +132,7 @@ const getFields = function (organisationLevel, tab) {
         fields = CASELOAD_FIELDS
       }
       // WMT0160 - Change this
-      fieldNames = [childOrgForFieldName + ' Name', 'Grade', 'A3', 'A2', 'A1', 'A0', 'B3', 'B2', 'B1', 'B0', 'C3', 'C2', 'C1', 'C0', 'D3', 'D2', 'D1', 'D0', 'Untiered', 'Overall']
+      fieldNames = [childOrgForFieldName + ' Name', 'Grade', 'A3', 'A2', 'A1', 'A0', 'B3', 'B2', 'B1', 'B0', 'C3', 'C2', 'C1', 'C0', 'D3', 'D2', 'D1', 'D0', 'A3S', 'A2S', 'A1S', 'A0S', 'B3S', 'B2S', 'B1S', 'B0S', 'C3S', 'C2S', 'C1S', 'C0S', 'D3S', 'D2S', 'D1S', 'D0S', 'Untiered', 'Overall']
       break
     case tabs.OVERVIEW:
       if (organisationLevel === organisationUnitConstants.OFFENDER_MANAGER.name) {
@@ -249,6 +249,26 @@ const getCsv = function (organisationLevel, result, tab, fields, fieldNames) {
           row.a1 = row.a1.toFixed(2) + '%'
           row.a2 = row.a2.toFixed(2) + '%'
           row.a3 = row.a3.toFixed(2) + '%'
+
+          row.d0s = row.d0s.toFixed(2) + '%'
+          row.d1s = row.d1s.toFixed(2) + '%'
+          row.d2s = row.d2s.toFixed(2) + '%'
+          row.d3s = row.d3s.toFixed(2) + '%'
+
+          row.c0s = row.c0s.toFixed(2) + '%'
+          row.c1s = row.c1s.toFixed(2) + '%'
+          row.c2s = row.c2s.toFixed(2) + '%'
+          row.c3s = row.c3s.toFixed(2) + '%'
+
+          row.b0s = row.b0s.toFixed(2) + '%'
+          row.b1s = row.b1s.toFixed(2) + '%'
+          row.b2s = row.b2s.toFixed(2) + '%'
+          row.b3s = row.b3s.toFixed(2) + '%'
+
+          row.a0s = row.a0s.toFixed(2) + '%'
+          row.a1s = row.a1s.toFixed(2) + '%'
+          row.a2s = row.a2s.toFixed(2) + '%'
+          row.a3s = row.a3s.toFixed(2) + '%'
         })
         const overallByGradeCsv = generateCsv(overallByGradeTable, fields, fieldNames)
 
@@ -333,7 +353,23 @@ const parseCaseloadDetailsTable = function (caseloadDetails) {
         a0: teamGrade.a0,
         a1: teamGrade.a1,
         a2: teamGrade.a2,
-        a3: teamGrade.a3
+        a3: teamGrade.a3,
+        d0s: teamGrade.d0s,
+        d1s: teamGrade.d1s,
+        d2s: teamGrade.d2s,
+        d3s: teamGrade.d3s,
+        c0s: teamGrade.c0s,
+        c1s: teamGrade.c1s,
+        c2s: teamGrade.c2s,
+        c3s: teamGrade.c3s,
+        b0s: teamGrade.b0s,
+        b1s: teamGrade.b1s,
+        b2s: teamGrade.b2s,
+        b3s: teamGrade.b3s,
+        a0s: teamGrade.a0s,
+        a1s: teamGrade.a1s,
+        a2s: teamGrade.a2s,
+        a3s: teamGrade.a3s
       })
     }
   }
