@@ -7,7 +7,6 @@ let scenarioObjectsArray
 describe('services/helpers/group-scenario-data', function () {
   before(function () {
     scenarioObjectsArray = groupScenarioData(scenarioData)
-    console.log(scenarioObjectsArray)
   })
 
   it('should return an array with 2 objects', function () {
