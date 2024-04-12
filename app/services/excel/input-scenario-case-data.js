@@ -23,7 +23,6 @@ const inputCaseData = function (ws, cases, typeTierGroupLength, tiersPerType) {
     for (let i = tiersPerType - 1; i >= 1; i--) {
       casesForThisTier = c.communityCaseNumbers.filter(thisCase => thisCase.tier === i)
       casesForThisTier = casesForThisTier[0]
-      console.log('i=' + i + '/' + tiersPerType + ' case for tier ' + casesForThisTier)
       setTierTotals(ws, rowStart, columnStart, casesForThisTier, false)
       columnStart = columnStart + typeTierGroupLength
     }
