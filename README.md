@@ -77,12 +77,12 @@ WMT_HISTORY_DB_PORT=5433
 ```
 - So, in the locally deployed application, based on this prop we will forward traffic for the history DB o 5433 (hence the second port forward being setup on that port)
 
-#### Run localstack and redis docker services locally
+#### Run localstack, manage-users-api and redis docker services locally
 - we can run `redis` locally as a docker container so that we do not need to integrate with the dev environment's redis datasource
 - we can run `localstack` locally to simulate the AWS resources we need locally
 - run this command from this repo's root directory: 
 ```
-docker-compose up -d redis localstack
+docker-compose up -d redis localstack hmpps-manage-users-api
 ```
 - with the above command you will have noticed that we are specifically running the `redis localstack` containers only. If we were to run the usual `docker-compose up -d` command then we would run the auth service and other downstream services as local containers which is not our intention here
 - just running these containers is good because we limit the amount of mocking and interact with dev services as much as possible
@@ -161,4 +161,5 @@ exit
 ```
 npm run start-dev
 npm run test-e2e
+
 ```

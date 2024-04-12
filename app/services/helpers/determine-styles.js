@@ -18,6 +18,22 @@ module.exports.determineCaseStyle = function (header, styles) {
     case 'Com A1':
     case 'Com A2':
     case 'Com A3':
+    case 'Com D0S':
+    case 'Com D1S':
+    case 'Com D2S':
+    case 'Com D3S':
+    case 'Com C0S':
+    case 'Com C1S':
+    case 'Com C2S':
+    case 'Com C3S':
+    case 'Com B0S':
+    case 'Com B1S':
+    case 'Com B2S':
+    case 'Com B3S':
+    case 'Com A0S':
+    case 'Com A1S':
+    case 'Com A2S':
+    case 'Com A3S':
       styleToApply = styles.commStyle
       break
     case 'Lic Untiered':
@@ -37,6 +53,22 @@ module.exports.determineCaseStyle = function (header, styles) {
     case 'Lic A1':
     case 'Lic A2':
     case 'Lic A3':
+    case 'Lic D0S':
+    case 'Lic D1S':
+    case 'Lic D2S':
+    case 'Lic D3S':
+    case 'Lic C0S':
+    case 'Lic C1S':
+    case 'Lic C2S':
+    case 'Lic C3S':
+    case 'Lic B0S':
+    case 'Lic B1S':
+    case 'Lic B2S':
+    case 'Lic B3S':
+    case 'Lic A0S':
+    case 'Lic A1S':
+    case 'Lic A2S':
+    case 'Lic A3S':
       styleToApply = styles.licStyle
       break
     case 'Cus Untiered':
@@ -56,6 +88,22 @@ module.exports.determineCaseStyle = function (header, styles) {
     case 'Cus A1':
     case 'Cus A2':
     case 'Cus A3':
+    case 'Cus D0S':
+    case 'Cus D1S':
+    case 'Cus D2S':
+    case 'Cus D3S':
+    case 'Cus C0S':
+    case 'Cus C1S':
+    case 'Cus C2S':
+    case 'Cus C3S':
+    case 'Cus B0S':
+    case 'Cus B1S':
+    case 'Cus B2S':
+    case 'Cus B3S':
+    case 'Cus A0S':
+    case 'Cus A1S':
+    case 'Cus A2S':
+    case 'Cus A3S':
       styleToApply = styles.cusStyle
       break
     case 'T2A Com Untiered':
@@ -75,6 +123,22 @@ module.exports.determineCaseStyle = function (header, styles) {
     case 'T2A Com A1':
     case 'T2A Com A2':
     case 'T2A Com A3':
+    case 'T2A Com D0S':
+    case 'T2A Com D1S':
+    case 'T2A Com D2S':
+    case 'T2A Com D3S':
+    case 'T2A Com C0S':
+    case 'T2A Com C1S':
+    case 'T2A Com C2S':
+    case 'T2A Com C3S':
+    case 'T2A Com B0S':
+    case 'T2A Com B1S':
+    case 'T2A Com B2S':
+    case 'T2A Com B3S':
+    case 'T2A Com A0S':
+    case 'T2A Com A1S':
+    case 'T2A Com A2S':
+    case 'T2A Com A3S':
       styleToApply = styles.t2aCommStyle
       break
     case 'T2A Lic Untiered':
@@ -94,6 +158,22 @@ module.exports.determineCaseStyle = function (header, styles) {
     case 'T2A Lic A1':
     case 'T2A Lic A2':
     case 'T2A Lic A3':
+    case 'T2A Lic D0S':
+    case 'T2A Lic D1S':
+    case 'T2A Lic D2S':
+    case 'T2A Lic D3S':
+    case 'T2A Lic C0S':
+    case 'T2A Lic C1S':
+    case 'T2A Lic C2S':
+    case 'T2A Lic C3S':
+    case 'T2A Lic B0S':
+    case 'T2A Lic B1S':
+    case 'T2A Lic B2S':
+    case 'T2A Lic B3S':
+    case 'T2A Lic A0S':
+    case 'T2A Lic A1S':
+    case 'T2A Lic A2S':
+    case 'T2A Lic A3S':
       styleToApply = styles.t2aLicStyle
       break
     case 'T2A Cus Untiered':
@@ -113,6 +193,22 @@ module.exports.determineCaseStyle = function (header, styles) {
     case 'T2A Cus A1':
     case 'T2A Cus A2':
     case 'T2A Cus A3':
+    case 'T2A Cus D0S':
+    case 'T2A Cus D1S':
+    case 'T2A Cus D2S':
+    case 'T2A Cus D3S':
+    case 'T2A Cus C0S':
+    case 'T2A Cus C1S':
+    case 'T2A Cus C2S':
+    case 'T2A Cus C3S':
+    case 'T2A Cus B0S':
+    case 'T2A Cus B1S':
+    case 'T2A Cus B2S':
+    case 'T2A Cus B3S':
+    case 'T2A Cus A0S':
+    case 'T2A Cus A1S':
+    case 'T2A Cus A2S':
+    case 'T2A Cus A3S':
       styleToApply = styles.t2aCusStyle
       break
     default:
@@ -124,13 +220,21 @@ module.exports.determineCaseStyle = function (header, styles) {
 
 module.exports.determineWeightingStyle = function (columnNo, styles) {
   let styleToApply
-  const commRange = { start: 26, end: 93 }
-  const licRange = { start: 94, end: 161 }
-  const cusRange = { start: 162, end: 229 }
-  const t2aCommRage = { start: 230, end: 297 }
-  const t2aLicRange = { start: 298, end: 365 }
-  const t2aCusRange = { start: 366, end: 433 }
-  const reportsRange = { start: 434, end: 438 }
+  // const commRange = { start: 26, end: 93 }
+  // const licRange = { start: 94, end: 161 }
+  // const cusRange = { start: 162, end: 229 }
+  // const t2aCommRage = { start: 230, end: 297 }
+  // const t2aLicRange = { start: 298, end: 365 }
+  // const t2aCusRange = { start: 366, end: 433 }
+  // const reportsRange = { start: 434, end: 438 }
+
+  const commRange = { start: 26, end: 125 }
+  const licRange = { start: 126, end: 225 }
+  const cusRange = { start: 226, end: 325 }
+  const t2aCommRage = { start: 326, end: 396 }
+  const t2aLicRange = { start: 397, end: 496 }
+  const t2aCusRange = { start: 497, end: 596 }
+  const reportsRange = { start: 597, end: 696 }
 
   if (columnNo >= commRange.start && columnNo <= commRange.end) {
     styleToApply = styles.commStyle
