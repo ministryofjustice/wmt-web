@@ -16,6 +16,8 @@
       "groupName": "all non major NPM dependencies",
       "groupSlug": "all-npm-minor-patch",
       "stabilityDays": 5
-    },
+    }
+  ],
   "ignoreDeps": ["wdio-html-nice-reporter"]
 }
+
