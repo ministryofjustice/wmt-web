@@ -18,7 +18,7 @@ RUN addgroup --gid 2000 --system appgroup && \
 
 # Install AWS RDS Root cert into Java truststore
 RUN mkdir /home/appuser/.postgresql
-COPY --from=builder --chown=appuser:appgroup /app/root.crt /home/appuser/.postgresql/root.crt
+COPY --from=base --chown=appuser:appgroup /app/root.crt /home/appuser/.postgresql/root.crt
 
 WORKDIR /app
 
