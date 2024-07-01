@@ -9,8 +9,16 @@ LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
 ENV TZ=Europe/London
 RUN ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime && echo "$TZ" > /etc/timezone
 
+# Grab AWS RDS Root cert
+RUN apt-get update && apt-get install -y curl
+RUN curl https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem  > root.crt
+
 RUN addgroup --gid 2000 --system appgroup && \
     adduser --uid 2000 --system appuser --gid 2000
+
+# Install AWS RDS Root cert into Java truststore
+RUN mkdir /home/appuser/.postgresql
+COPY --from=builder --chown=appuser:appgroup /app/root.crt /home/appuser/.postgresql/root.crt
 
 WORKDIR /app
 
