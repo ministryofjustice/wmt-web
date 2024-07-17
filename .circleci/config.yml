@@ -194,7 +194,7 @@ jobs:
       - browser-tools/install-chrome:
           # TODO remove following line when fixed https://github.com/CircleCI-Public/browser-tools-orb/issues/90
           # chrome-version: 116.0.5845.96
-
+          chrome-version: 126.0.6478.182
       - browser-tools/install-chromedriver
       - run:
           command: |
