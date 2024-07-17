@@ -75,7 +75,7 @@ describe('View your caseload flow', () => {
       licence = await $('[href="#licence"]')
       await licence.click()
       licence = await $('.sln-table-caseload-license')
-      const heading = await $('#license-enhanced .govuk-heading-m')
+      const heading = await $('#licence-enhanced .govuk-heading-m')
       const headingIsDisplayed = await heading.isDisplayed()
       return expect(headingIsDisplayed).to.be.true
     })
@@ -127,7 +127,7 @@ describe('View your caseload flow', () => {
       licence = await $('[href="#licence"]')
       await licence.click()
       licence = await $('.sln-table-caseload-license')
-      const heading = await $('#license-enhanced .govuk-heading-m')
+      const heading = await $('#licence-enhanced .govuk-heading-m')
       const headingIsDisplayed = await heading.isDisplayed()
       return expect(headingIsDisplayed).to.be.true
     })
