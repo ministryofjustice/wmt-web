@@ -48,7 +48,7 @@ describe('View your caseload flow', () => {
       expect(Number(textTotal[0])).to.be.greaterThan(-1) // eslint-disable-line
       expect(textTotal[1]).to.eql('Community cases')
 
-      licence = await $('#licenseTotal')
+      licence = await $('#licenceTotal')
       licence = await licence.getText()
       textTotal = licence.split('\n')
       expect(Number(textTotal[0])).to.be.greaterThan(-1) // eslint-disable-line
@@ -124,7 +124,7 @@ describe('View your caseload flow', () => {
       await community.click()
       community = await $('.sln-table-caseload-community')
 
-      licence = await $('[href="#license"]')
+      licence = await $('[href="#licence"]')
       await licence.click()
       licence = await $('.sln-table-caseload-license')
       const heading = await $('#license-enhanced .govuk-heading-m')
