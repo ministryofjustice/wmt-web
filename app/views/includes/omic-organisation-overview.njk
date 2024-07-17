@@ -4,7 +4,7 @@
                 <th class="govuk-table__header sln-table-org-level" aria-sort="none" id="name">{{ childOrganisationLevelDisplayText }}</th>
                 <th class="govuk-table__header govuk-table__header--numeric" aria-sort="descending" id="cases">OMIC Cases</th>
                 <th class="govuk-table__header govuk-table__header--numeric" aria-sort="none" id="custody">Total Points while in Custody</th>
-                <th class="govuk-table__header govuk-table__header--numeric" aria-sort="none" id="licence">Anticipated Points while on Licence</th>
+                <th class="govuk-table__header govuk-table__header--numeric" aria-sort="none" id="license">Anticipated Points while on Licence</th>
             </tr>
         </thead>
         <tbody class="govuk-table__body">
@@ -13,7 +13,7 @@
               <td class="govuk-table__cell" headers="name">{% if childOrganisationLevelDisplayText !== 'Team' and childOrganisationLevelDisplayText !== 'Offender Manager' %} <a class="govuk-link" href="/{{ workloadType }}/{{ childOrganisationLevel }}/{{ member.linkId }}">{{ member.name }}</a> {% else %} {{ member.name }} {% endif %}</td>
               <td class="govuk-table__cell" headers="cases total">{{ member.totalCases }}</td>
               <td class="govuk-table__cell" headers="custody total">{{ member.custodyPoints }}</td>
-              <td class="govuk-table__cell" headers="licence total">{{ member.licencePoints }}</td>
+              <td class="govuk-table__cell" headers="license total">{{ member.licencePoints }}</td>
           </tr>
           {% endfor %}
         </tbody>
@@ -22,7 +22,7 @@
             <th class="govuk-table__cell" headers="name om">Total/ Average</th>
             <th class="govuk-table__cell" headers="cases total">{{ overviewDetails.totals.totalTotalCases }}</th>
             <th class="govuk-table__cell" headers="custody total">{{ overviewDetails.totals.totalCustodyPoints }}</th>
-            <th class="govuk-table__cell" headers="licence total">{{ overviewDetails.totals.totalLicencePoints }}</th>
+            <th class="govuk-table__cell" headers="licence total">{{ overviewDetails.totals.totalLicensePoints }}</th>
             </tr>
         </tfoot>
       </table>
