@@ -137,7 +137,7 @@ module.exports = function (get) {
           totalSummary: result.caseloadDetails.communityTotalSummary
         },
         {
-          displayName: 'License',
+          displayName: 'Licence',
           array: result.caseloadDetails.licenseCaseloadDetails,
           totalSummary: result.caseloadDetails.licenseTotalSummary
         },
