@@ -44,7 +44,7 @@ const parseCaseloadResults = function (organisationLevel, results, isCSV) {
     // Community cases
     let communityResults = caseloadHelper.getCaseloadByType(results, caseType.COMMUNITY)
     const communitySummary = caseloadHelper.getCaseloadTotalSummary(communityResults)
-    // License cases
+    // Licence cases
     let licenseResults = caseloadHelper.getCaseloadByType(results, caseType.LICENSE)
     const licenseSummary = caseloadHelper.getCaseloadTotalSummary(licenseResults)
 
