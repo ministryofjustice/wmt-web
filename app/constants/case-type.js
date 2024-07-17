@@ -1,5 +1,5 @@
 module.exports = {
   CUSTODY: 'CUSTODY',
   COMMUNITY: 'COMMUNITY',
-  LICENSE: 'LICENSE'
+  LICENSE: 'LICENCE'
 }
