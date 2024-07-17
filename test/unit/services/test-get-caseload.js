@@ -14,9 +14,9 @@ const CASELOAD = [
   { linkId: 1317, grade: 'DMY', totalCases: 2, caseType: caseType.CUSTODY, untiered: 0, d2: 2, d1: 0, c2: 0, c1: 0, b2: 0, b1: 0, a: 0, name: 'NPS UNIT' },
   { linkId: 1317, grade: 'PO', totalCases: 500, caseType: caseType.CUSTODY, untiered: 0, d2: 306, d1: 1, c2: 181, c1: 4, b2: 7, b1: 1, a: 0, name: 'NPS UNIT' },
   { linkId: 1317, grade: 'PSO', totalCases: 206, caseType: caseType.CUSTODY, untiered: 0, d2: 147, d1: 1, c2: 57, c1: 1, b2: 0, b1: 0, a: 0, name: 'NPS UNIT' },
-  { linkId: 1317, grade: 'DMY', totalCases: 0, caseType: caseType.LICENSE, untiered: 0, d2: 0, d1: 0, c2: 0, c1: 0, b2: 0, b1: 0, a: 0, name: 'NPS UNIT' },
-  { linkId: 1317, grade: 'PO', totalCases: 10, caseType: caseType.LICENSE, untiered: 0, d2: 4, d1: 0, c2: 5, c1: 0, b2: 1, b1: 0, a: 0, name: 'NPS UNIT' },
-  { linkId: 1317, grade: 'PSO', totalCases: 2, caseType: caseType.LICENSE, untiered: 0, d2: 1, d1: 0, c2: 1, c1: 0, b2: 0, b1: 0, a: 0, name: 'NPS UNIT' }
+  { linkId: 1317, grade: 'DMY', totalCases: 0, caseType: caseType.LICENCE, untiered: 0, d2: 0, d1: 0, c2: 0, c1: 0, b2: 0, b1: 0, a: 0, name: 'NPS UNIT' },
+  { linkId: 1317, grade: 'PO', totalCases: 10, caseType: caseType.LICENCE, untiered: 0, d2: 4, d1: 0, c2: 5, c1: 0, b2: 1, b1: 0, a: 0, name: 'NPS UNIT' },
+  { linkId: 1317, grade: 'PSO', totalCases: 2, caseType: caseType.LICENCE, untiered: 0, d2: 1, d1: 0, c2: 1, c1: 0, b2: 0, b1: 0, a: 0, name: 'NPS UNIT' }
 ]
 
 const CUSTODY_CASELOAD = [
@@ -26,9 +26,9 @@ const CUSTODY_CASELOAD = [
 ]
 
 const LICENSE_CASELOAD = [
-  { linkId: 1317, grade: 'DMY', totalCases: 0, caseType: caseType.LICENSE, untiered: 0, d2: 0, d1: 0, c2: 0, c1: 0, b2: 0, b1: 0, a: 0, name: 'NPS UNIT' },
-  { linkId: 1317, grade: 'PO', totalCases: 10, caseType: caseType.LICENSE, untiered: 0, d2: 4, d1: 0, c2: 5, c1: 0, b2: 1, b1: 0, a: 0, name: 'NPS UNIT' },
-  { linkId: 1317, grade: 'PSO', totalCases: 2, caseType: caseType.LICENSE, untiered: 0, d2: 1, d1: 0, c2: 1, c1: 0, b2: 0, b1: 0, a: 0, name: 'NPS UNIT' }
+  { linkId: 1317, grade: 'DMY', totalCases: 0, caseType: caseType.LICENCE, untiered: 0, d2: 0, d1: 0, c2: 0, c1: 0, b2: 0, b1: 0, a: 0, name: 'NPS UNIT' },
+  { linkId: 1317, grade: 'PO', totalCases: 10, caseType: caseType.LICENCE, untiered: 0, d2: 4, d1: 0, c2: 5, c1: 0, b2: 1, b1: 0, a: 0, name: 'NPS UNIT' },
+  { linkId: 1317, grade: 'PSO', totalCases: 2, caseType: caseType.LICENCE, untiered: 0, d2: 1, d1: 0, c2: 1, c1: 0, b2: 0, b1: 0, a: 0, name: 'NPS UNIT' }
 ]
 
 const COMMUNITY_CASELOAD = [
@@ -137,7 +137,7 @@ describe('services/get-caseload', function () {
     caseloadHelper.getCaseloadSummaryTotalsByTeam.returns([{}])
     caseloadHelper.getCaseloadByType.withArgs(OVERALL_CASELOAD, caseType.CUSTODY).returns({})
     caseloadHelper.getCaseloadByType.withArgs(OVERALL_CASELOAD, caseType.COMMUNITY).returns({})
-    caseloadHelper.getCaseloadByType.withArgs(OVERALL_CASELOAD, caseType.LICENSE).returns({})
+    caseloadHelper.getCaseloadByType.withArgs(OVERALL_CASELOAD, caseType.LICENCE).returns({})
     caseloadHelper.calculateTotalTiersRow.withArgs([{}]).returns({})
     return getCaseload(id, teamName).then(function (result) {
       assert(getBreadcrumbs.called)
@@ -167,7 +167,7 @@ describe('services/get-caseload', function () {
     caseloadHelper.getCaseloadSummaryTotalsByTeam.returns([{}])
     caseloadHelper.getCaseloadByType.withArgs(OVERALL_CASELOAD, caseType.CUSTODY).returns('custodyCaseloads')
     caseloadHelper.getCaseloadByType.withArgs(OVERALL_CASELOAD, caseType.COMMUNITY).returns('communityCaseloads')
-    caseloadHelper.getCaseloadByType.withArgs(OVERALL_CASELOAD, caseType.LICENSE).returns('licenseCaseloads')
+    caseloadHelper.getCaseloadByType.withArgs(OVERALL_CASELOAD, caseType.LICENCE).returns('licenseCaseloads')
     caseloadHelper.getCaseloadTotalSummary.withArgs('custodyCaseloads').returns('custodySummary')
     caseloadHelper.getCaseloadTotalSummary.withArgs('communityCaseloads').returns('communitySummary')
     caseloadHelper.getCaseloadTotalSummary.withArgs('licenseCaseloads').returns('licenseSummary')
@@ -193,7 +193,7 @@ describe('services/get-caseload', function () {
         expect(caseloadHelper.getCaseloadSummaryTotalsByTeam.calledWith(OVERALL_CASELOAD)).to.be.eql(true)
         expect(caseloadHelper.getCaseloadByType.calledWith(OVERALL_CASELOAD, caseType.CUSTODY)).to.be.eql(true)
         expect(caseloadHelper.getCaseloadByType.calledWith(OVERALL_CASELOAD, caseType.COMMUNITY)).to.be.eql(true)
-        expect(caseloadHelper.getCaseloadByType.calledWith(OVERALL_CASELOAD, caseType.LICENSE)).to.be.eql(true)
+        expect(caseloadHelper.getCaseloadByType.calledWith(OVERALL_CASELOAD, caseType.LICENCE)).to.be.eql(true)
         expect(caseloadHelper.getCaseloadTotalSummary.calledWith('custodyCaseloads')).to.be.eql(true)
         expect(caseloadHelper.getCaseloadTotalSummary.calledWith('communityCaseloads')).to.be.eql(true)
         expect(caseloadHelper.getCaseloadTotalSummary.calledWith('licenseCaseloads')).to.be.eql(true)
@@ -209,7 +209,7 @@ describe('services/get-caseload', function () {
     caseloadHelper.getCaseloadSummaryTotalsByTeam.returns([{}])
     caseloadHelper.getCaseloadByType.withArgs(LDU_CASELOAD, caseType.CUSTODY).returns('custodyCaseloads')
     caseloadHelper.getCaseloadByType.withArgs(LDU_CASELOAD, caseType.COMMUNITY).returns('communityCaseloads')
-    caseloadHelper.getCaseloadByType.withArgs(LDU_CASELOAD, caseType.LICENSE).returns('licenseCaseloads')
+    caseloadHelper.getCaseloadByType.withArgs(LDU_CASELOAD, caseType.LICENCE).returns('licenseCaseloads')
     caseloadHelper.getCaseloadTotalSummary.withArgs('custodyCaseloads').returns('custodySummary')
     caseloadHelper.getCaseloadTotalSummary.withArgs('communityCaseloads').returns('communitySummary')
     caseloadHelper.getCaseloadTotalSummary.withArgs('licenseCaseloads').returns('licenseSummary')
@@ -239,7 +239,7 @@ describe('services/get-caseload', function () {
         expect(caseloadHelper.getCaseloadSummaryTotalsByTeam.calledWith(LDU_CASELOAD)).to.be.eql(true)
         expect(caseloadHelper.getCaseloadByType.calledWith(LDU_CASELOAD, caseType.CUSTODY)).to.be.eql(true)
         expect(caseloadHelper.getCaseloadByType.calledWith(LDU_CASELOAD, caseType.COMMUNITY)).to.be.eql(true)
-        expect(caseloadHelper.getCaseloadByType.calledWith(LDU_CASELOAD, caseType.LICENSE)).to.be.eql(true)
+        expect(caseloadHelper.getCaseloadByType.calledWith(LDU_CASELOAD, caseType.LICENCE)).to.be.eql(true)
         expect(caseloadHelper.getCaseloadTotalSummary.calledWith('custodyCaseloads')).to.be.eql(true)
         expect(caseloadHelper.getCaseloadTotalSummary.calledWith('communityCaseloads')).to.be.eql(true)
         expect(caseloadHelper.getCaseloadTotalSummary.calledWith('licenseCaseloads')).to.be.eql(true)
