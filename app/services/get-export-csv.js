@@ -213,7 +213,7 @@ const getCsv = function (organisationLevel, result, tab, fields, fieldNames) {
         licenseCsv = generateCsv(result.caseloadDetails.licenseCaseloadDetails, fields, fieldNames)
 
         csv = ('OVERALL\n' + overallCsv + '\n\n\nCUSTODY\n' + custodyCsv +
-        '\n\n\nCOMMUNITY\n' + communityCsv + '\n\n\nLICENCE\n' + licenseCsv)
+        '\n\n\nCOMMUNITY\n' + communityCsv + '\n\n\nLICENSE\n' + licenseCsv)
       } else {
         const overallTable = parseTotalSummaryTable(result.caseloadDetails.overallTotalSummary)
         const custodyTable = parseCaseloadDetailsTable(result.caseloadDetails.custodyCaseloadDetails.details)
@@ -273,7 +273,7 @@ const getCsv = function (organisationLevel, result, tab, fields, fieldNames) {
         const overallByGradeCsv = generateCsv(overallByGradeTable, fields, fieldNames)
 
         csv = ('OVERALL\n' + overallCsv + '\n\n\nCUSTODY\n' + custodyCsv +
-        '\n\n\nCOMMUNITY\n' + communityCsv + '\n\n\nLICENCE\n' + licenseCsv +
+        '\n\n\nCOMMUNITY\n' + communityCsv + '\n\n\nLICENSE\n' + licenseCsv +
         '\n\n\nOVERALL: PERCENTAGE SPLIT OF CASES BY GRADE\n' + overallByGradeCsv)
       }
       break

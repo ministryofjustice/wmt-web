@@ -148,7 +148,7 @@ module.exports.calculateTotalTiersRow = function (summary) {
 const updateTotals = function (entryToUpdate, caseload) {
   entryToUpdate.totalCases += caseload.totalCases
 
-  if (caseload.caseType === caseTypes.LICENCE) {
+  if (caseload.caseType === caseTypes.LICENSE) {
     entryToUpdate.licenseTotalCases += caseload.totalCases
   } else if (caseload.caseType === caseTypes.COMMUNITY) {
     entryToUpdate.communityTotalCases += caseload.totalCases

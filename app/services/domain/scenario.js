@@ -19,7 +19,7 @@ class Scenario {
     this.armsCommunity = results[0].arms_community_cases
     this.armsLicense = results[0].arms_license_cases
     this.defaultContractedHours = determineDefaultContractedHours(results[0])
-    this.licenceCaseNumbers = collateCaseTypes(results.filter(result => result.location === locations.LICENCE))
+    this.licenceCaseNumbers = collateCaseTypes(results.filter(result => result.location === locations.LICENSE))
     this.custodyCaseNumbers = collateCaseTypes(results.filter(result => result.location === locations.CUSTODY))
     this.communityCaseNumbers = collateCaseTypes(results.filter(result => result.location === locations.COMMUNITY))
   }

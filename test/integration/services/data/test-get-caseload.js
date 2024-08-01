@@ -43,7 +43,7 @@ describe('services/data/get-caseload', function () {
       .then(function (results) {
         expect(results.length).to.eql(3)
         expect(results.map(e => (e.caseType))).to.include('COMMUNITY')
-        expect(results.map(e => (e.caseType))).to.include('LICENCE')
+        expect(results.map(e => (e.caseType))).to.include('LICENSE')
         expect(results.map(e => (e.caseType))).to.include('CUSTODY')
       })
   })
