@@ -44,7 +44,7 @@
   <div class="js-tabs">
     <ul class="js-tabs-links">
       <li><a class="govuk-link" name="custody" href="#custody" role="anchor-div">Custody</a></li>
-      <li><a class="govuk-link" name="license" href="#license" role="anchor-div">License</a></li>
+      <li><a class="govuk-link" name="license" href="#license" role="anchor-div">Licence</a></li>
       <li><a class="govuk-link" name="community" href="#community" role="anchor-div">Community</a></li>
       {% if not wp.isT2A or wp.isT2A === false or wp.isT2A === 'false' %}
         <li><a class="govuk-link" name="cms" href="#cms" role="anchor-div">CMS</a></li>
@@ -1299,7 +1299,7 @@
                       {% if errors['weightingArmsLicense'][0] %}
                         <span class="govuk-error-message">{{ errors['weightingArmsLicense'][0] }}</span>
                       {% endif %}  
-                      <label class="form-label-bold" for="weightingArmsLicense">ARMS License Cases</label>
+                      <label class="form-label-bold" for="weightingArmsLicense">ARMS Licence Cases</label>
                     </th>
                     <td class="numeric">
                       <input class="govuk-input govuk-input--width-4" id="weightingArmsLicense" name="weightingArmsLicense" type="number" value="{{ wp.weightingArmsLicense }}">

@@ -26,7 +26,7 @@ module.exports.TEAM_CASELOAD_CSV = {
     '"Offender Manager Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","A3S","A2S","A1S","A0S","B3S","B2S","B1S","B0S","C3S","C2S","C1S","C0S","D3S","D2S","D1S","D0S","Untiered","Overall"\n\n\n' +
     'COMMUNITY\n' +
     '"Offender Manager Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","A3S","A2S","A1S","A0S","B3S","B2S","B1S","B0S","C3S","C2S","C1S","C0S","D3S","D2S","D1S","D0S","Untiered","Overall"\n\n\n' +
-    'LICENSE\n' +
+    'LICENCE\n' +
     '"Offender Manager Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","A3S","A2S","A1S","A0S","B3S","B2S","B1S","B0S","C3S","C2S","C1S","C0S","D3S","D2S","D1S","D0S","Untiered","Overall"'
 }
 
@@ -395,11 +395,11 @@ module.exports.CMS_EXPORT_RESULT = {
 module.exports.SUSPENDED_LIFER_CSV = {
   filename: ('Test_Suspended_Lifer_Export ' + timestamp + '.csv').replace(replaceSpaces, '_'),
   csv: '"Region Name","Probation Delivery Unit","Team Name","Tier Code","Row Type","CRN","Case Type","Offender Manager Name","Grade Code","In Custody?","Register Level","Register Category","Register Category Description","Registration Date"\n' +
-  '"NPS North West","Lancashire SE","NPS - Blackburn 2","D2","Suspended Lifer","N144966","LICENSE","Test Forename 511 Test Surname 511","PSO","No","L2","LF01","Lifer - IPP","28/02/2019"\n' +
-  '"NPS North West","Lancashire SE","NPS - Blackburn 2","D2","Suspended Lifer","N145304","LICENSE","Test Forename 511 Test Surname 511","PSO","No","L2","LF03","Lifer - Life Imprisonment","19/12/1990"\n' +
-  '"NPS North West","Lancashire SE","NPS - Blackburn 2","D2","Suspended Lifer","N146588","LICENSE","Test Forename 511 Test Surname 511","PSO","No","L2","LF03","Lifer - Life Imprisonment","28/05/1999"\n' +
-  '"NPS North West","Lancashire SE","NPS - Blackburn 2","D2","Suspended Lifer","N148080","LICENSE","Test Forename 511 Test Surname 511","PSO","No","L2","LF03","Lifer - Life Imprisonment","14/02/2019"\n' +
-  '"NPS North West","Lancashire SE","NPS - Blackburn 2","D2","Suspended Lifer","N148392","LICENSE","Test Forename 511 Test Surname 511","PSO","No","L2","LF03","Lifer - Life Imprisonment","14/02/2019"'
+  '"NPS North West","Lancashire SE","NPS - Blackburn 2","D2","Suspended Lifer","N144966","LICENCE","Test Forename 511 Test Surname 511","PSO","No","L2","LF01","Lifer - IPP","28/02/2019"\n' +
+  '"NPS North West","Lancashire SE","NPS - Blackburn 2","D2","Suspended Lifer","N145304","LICENCE","Test Forename 511 Test Surname 511","PSO","No","L2","LF03","Lifer - Life Imprisonment","19/12/1990"\n' +
+  '"NPS North West","Lancashire SE","NPS - Blackburn 2","D2","Suspended Lifer","N146588","LICENCE","Test Forename 511 Test Surname 511","PSO","No","L2","LF03","Lifer - Life Imprisonment","28/05/1999"\n' +
+  '"NPS North West","Lancashire SE","NPS - Blackburn 2","D2","Suspended Lifer","N148080","LICENCE","Test Forename 511 Test Surname 511","PSO","No","L2","LF03","Lifer - Life Imprisonment","14/02/2019"\n' +
+  '"NPS North West","Lancashire SE","NPS - Blackburn 2","D2","Suspended Lifer","N148392","LICENCE","Test Forename 511 Test Surname 511","PSO","No","L2","LF03","Lifer - Life Imprisonment","14/02/2019"'
 }
 
 module.exports.SUSPENDED_LIFER_EXPORT_RESULT = {
@@ -412,7 +412,7 @@ module.exports.SUSPENDED_LIFER_EXPORT_RESULT = {
     tiercode: 'D2',
     rowtype: 'Suspended Lifer',
     casereferenceno: 'N144966',
-    casetype: 'LICENSE',
+    casetype: 'LICENCE',
     offendermanagername: 'Test Forename 511 Test Surname 511',
     gradecode: 'PSO',
     incustody: 'No',
@@ -428,7 +428,7 @@ module.exports.SUSPENDED_LIFER_EXPORT_RESULT = {
     tiercode: 'D2',
     rowtype: 'Suspended Lifer',
     casereferenceno: 'N145304',
-    casetype: 'LICENSE',
+    casetype: 'LICENCE',
     offendermanagername: 'Test Forename 511 Test Surname 511',
     gradecode: 'PSO',
     incustody: 'No',
@@ -444,7 +444,7 @@ module.exports.SUSPENDED_LIFER_EXPORT_RESULT = {
     tiercode: 'D2',
     rowtype: 'Suspended Lifer',
     casereferenceno: 'N146588',
-    casetype: 'LICENSE',
+    casetype: 'LICENCE',
     offendermanagername: 'Test Forename 511 Test Surname 511',
     gradecode: 'PSO',
     incustody: 'No',
@@ -460,7 +460,7 @@ module.exports.SUSPENDED_LIFER_EXPORT_RESULT = {
     tiercode: 'D2',
     rowtype: 'Suspended Lifer',
     casereferenceno: 'N148080',
-    casetype: 'LICENSE',
+    casetype: 'LICENCE',
     offendermanagername: 'Test Forename 511 Test Surname 511',
     gradecode: 'PSO',
     incustody: 'No',
@@ -476,7 +476,7 @@ module.exports.SUSPENDED_LIFER_EXPORT_RESULT = {
     tiercode: 'D2',
     rowtype: 'Suspended Lifer',
     casereferenceno: 'N148392',
-    casetype: 'LICENSE',
+    casetype: 'LICENCE',
     offendermanagername: 'Test Forename 511 Test Surname 511',
     gradecode: 'PSO',
     incustody: 'No',
@@ -1820,7 +1820,7 @@ module.exports.LDU_CASELOAD_CSV = {
   '"Team Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","A3S","A2S","A1S","A0S","B3S","B2S","B1S","B0S","C3S","C2S","C1S","C0S","D3S","D2S","D1S","D0S","Untiered","Overall"\n' +
   '"Team 2","PO",9,7,6,5,30,20,15,10,5,2,3,11,1,3,3,12,9,7,6,5,30,20,15,10,5,2,3,11,1,3,3,12,0,63\n' +
   '"Team 2","PSO",11,3,4,15,10,20,25,30,5,2,3,11,3,9,9,36,11,3,4,15,10,20,25,30,5,2,3,11,3,9,9,36,0,42\n\n\n' +
-  'LICENSE\n' +
+  'LICENCE\n' +
   '"Team Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","A3S","A2S","A1S","A0S","B3S","B2S","B1S","B0S","C3S","C2S","C1S","C0S","D3S","D2S","D1S","D0S","Untiered","Overall"\n' +
   '"Team 2","PO",8,2,4,5,6,7,8,9,10,20,30,1,2,3,5,0,8,2,4,5,6,7,8,9,10,20,30,1,2,3,5,0,15,75\n' +
   '"Team 2","PSO",2,8,1,5,4,3,2,1,10,20,30,7,0,0,1,2,2,8,1,5,4,3,2,1,10,20,30,7,0,0,1,2,10,50\n\n\n' +
@@ -3161,7 +3161,7 @@ module.exports.REGION_CASELOAD_CSV = {
   '"Probation Delivery Unit Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","A3S","A2S","A1S","A0S","B3S","B2S","B1S","B0S","C3S","C2S","C1S","C0S","D3S","D2S","D1S","D0S","Untiered","Overall"\n' +
   '"Probation Delivery Unit 2","PO",0,1,1,2,3,5,8,13,21,34,55,89,144,233,377,610,0,1,1,2,3,5,8,13,21,34,55,89,144,233,377,610,0,63\n' +
   '"Probation Delivery Unit 2","PSO",610,377,233,144,89,55,34,21,13,8,5,3,2,1,1,0,610,377,233,144,89,55,34,21,13,8,5,3,2,1,1,0,0,42\n\n\n' +
-  'LICENSE\n' +
+  'LICENCE\n' +
   '"Probation Delivery Unit Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","A3S","A2S","A1S","A0S","B3S","B2S","B1S","B0S","C3S","C2S","C1S","C0S","D3S","D2S","D1S","D0S","Untiered","Overall"\n' +
   '"Probation Delivery Unit 2","PO",1,8,9,9,1,9,0,7,1,9,1,1,1,9,1,4,1,8,9,9,1,9,0,7,1,9,1,1,1,9,1,4,15,75\n' +
   '"Probation Delivery Unit 2","PSO",1,9,6,4,1,9,7,0,1,9,7,4,1,9,7,5,1,9,6,4,1,9,7,0,1,9,7,4,1,9,7,5,10,50\n\n\n' +
@@ -5781,7 +5781,7 @@ module.exports.NATIONAL_CASELOAD_CSV = {
   '"Region 2","PSO",6,8,4,2,8,12,8,20,22,24,26,28,30,32,34,36,6,8,4,2,8,12,8,20,22,24,26,28,30,32,34,36,4,304\n' +
   '"Region 3","PO",9,12,6,3,12,18,12,30,33,36,39,42,45,48,51,54,9,12,6,3,12,18,12,30,33,36,39,42,45,48,51,54,6,456\n' +
   '"Region 3","PSO",6,8,4,2,8,12,8,20,22,24,26,28,30,32,34,36,6,8,4,2,8,12,8,20,22,24,26,28,30,32,34,36,4,304\n\n\n' +
-  'LICENSE\n' +
+  'LICENCE\n' +
   '"Region Name","Grade","A3","A2","A1","A0","B3","B2","B1","B0","C3","C2","C1","C0","D3","D2","D1","D0","A3S","A2S","A1S","A0S","B3S","B2S","B1S","B0S","C3S","C2S","C1S","C0S","D3S","D2S","D1S","D0S","Untiered","Overall"\n' +
   '"Region 1","PO",6,6,0,12,24,18,18,60,66,72,78,84,90,96,102,108,6,6,0,12,24,18,18,60,66,72,78,84,90,96,102,108,12,852\n' +
   '"Region 1","PSO",4,4,0,8,16,12,12,40,44,48,52,56,60,64,68,72,4,4,0,8,16,12,12,40,44,48,52,56,60,64,68,72,8,568\n' +
