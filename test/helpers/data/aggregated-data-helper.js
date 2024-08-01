@@ -385,7 +385,7 @@ const addWorkloads = function (inserts) {
       }
 
       const tiers = []
-      const locations = ['COMMUNITY', 'CUSTODY', 'LICENCE']
+      const locations = ['COMMUNITY', 'CUSTODY', 'LICENSE']
       locations.forEach(function (location) {
         for (let tierNumber = 0, totalCases = 0; tierNumber < 17; tierNumber++, totalCases++) {
           tiers.push(Object.assign({}, defaultTier, { tier_number: tierNumber, location, total_cases: totalCases, total_filtered_cases: totalCases }))

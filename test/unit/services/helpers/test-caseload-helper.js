@@ -52,7 +52,7 @@ describe('services/helpers/caseload-helper', function () {
     it('should return any caseload rows of the given type', function () {
       expect(caseloadHelper.getCaseloadByType(helper.TEAM_CASELOAD, caseType.COMMUNITY)).to.eql(helper.TEAM_COMMUNITY_RESULTS)
       expect(caseloadHelper.getCaseloadByType(helper.TEAM_CASELOAD, caseType.CUSTODY)).to.eql(helper.TEAM_CUSTODY_RESULTS)
-      expect(caseloadHelper.getCaseloadByType(helper.TEAM_CASELOAD, caseType.LICENCE)).to.eql(helper.TEAM_LICENSE_RESULTS)
+      expect(caseloadHelper.getCaseloadByType(helper.TEAM_CASELOAD, caseType.LICENSE)).to.eql(helper.TEAM_LICENSE_RESULTS)
     })
   })
 
