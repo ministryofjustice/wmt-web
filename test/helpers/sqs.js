@@ -3,7 +3,7 @@ const deleteSqsMessage = require('../../app/services/aws/sqs/delete-sqs-message'
 
 const deleteAllMessages = async function (sqsClient, queueURL) {
   const data = await receiveSqsMessage(sqsClient, queueURL)
-  if (data.Messages) {
+  if (data.Messages && data.Messages.length > 0) {
     await deleteSqsMessage(sqsClient, queueURL, data.Messages[0].ReceiptHandle)
     return deleteAllMessages(sqsClient, queueURL)
   }
