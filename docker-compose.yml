@@ -30,13 +30,6 @@ services:
       - "manage-users-wiremock"
       - "postgres"
 
-  manage-users-wiremock:
-    image: wiremock/wiremock
-    networks:
-      - hmpps
-    restart: always
-    ports:
-      - "9096:8080"
   hmpps-manage-users-api:
     image: quay.io/hmpps/hmpps-manage-users-api:latest
     networks:
