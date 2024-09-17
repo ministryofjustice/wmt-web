@@ -49,8 +49,8 @@ executors:
         environment:
           - SPRING_PROFILES_ACTIVE=dev,local-postgres
           - SERVER_PORT=8088
-          - SPRING_R2DBC_URL=r2dbc:postgresql://auth-db:5432/auth-db?sslmode=prefer
-          - SPRING_FLYWAY_URL=jdbc:postgresql://auth-db:5432/auth-db?sslmode=prefer
+          - SPRING_R2DBC_URL=r2dbc:postgresql://auth-db:5432/auth-db
+          - SPRING_FLYWAY_URL=jdbc:postgresql://auth-db:5432/auth-db
       - image: postgres:<< pipeline.parameters.postgres_tag >>
         environment:
           - POSTGRES_PASSWORD=<< pipeline.parameters.database_password >>
