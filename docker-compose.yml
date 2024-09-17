@@ -97,9 +97,9 @@ services:
       - HMPPS_SQS_LOCALSTACK_URL=http://localstack:4566
     entrypoint: ["/bin/sh", "-c" , "sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar"]
     depends_on:
-      - "postgres"
-      - "wiremock"
-      - "localstack"
+        - "postgres"
+        - "wiremock"
+        - "localstack"
 
   postgres:
     image: postgres:14
