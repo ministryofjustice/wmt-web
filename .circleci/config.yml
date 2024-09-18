@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   hmpps: ministryofjustice/hmpps@7
   slack: circleci/slack@4.12.5
-  browser-tools: circleci/browser-tools@1.4.3
+  browser-tools: circleci/browser-tools@1.4.8
 
 parameters:
   alerts-slack-channel:
@@ -49,8 +49,8 @@ executors:
         environment:
           - SPRING_PROFILES_ACTIVE=dev,local-postgres
           - SERVER_PORT=8088
-          - SPRING_R2DBC_URL=r2dbc:postgresql://auth-db:5432/auth-db?sslmode=prefer
-          - SPRING_FLYWAY_URL=jdbc:postgresql://auth-db:5432/auth-db?sslmode=prefer
+          - SPRING_R2DBC_URL=r2dbc:postgresql://auth-db:5432/auth-db
+          - SPRING_FLYWAY_URL=jdbc:postgresql://auth-db:5432/auth-db
       - image: postgres:<< pipeline.parameters.postgres_tag >>
         environment:
           - POSTGRES_PASSWORD=<< pipeline.parameters.database_password >>
