@@ -68,7 +68,8 @@ generic-service:
 
   allowlist:
     groups:
-      - internal
+      - digital_staff_and_mojo
+      - moj_cloud_platform
       - probation
     quantum1: "62.25.109.197/32"
     quantum2: "212.137.36.230/32"
