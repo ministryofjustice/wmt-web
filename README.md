@@ -148,7 +148,7 @@ E2E Tests are run using Selenium and webdriver
 Run tests using the following commands:
 - run docker containers
 ```
-docker-compose up -d
+docker compose up -d
 ```
 - jump into localstack container and run shell script (to create the localstack AWS infra)
 ```
