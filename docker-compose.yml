@@ -154,7 +154,7 @@ services:
     volumes:
       - $PWD/test/e2e/resources/token-verify-wiremock:/home/wiremock:rw
   localstack:
-    image: localstack/localstack:2.0.2
+    image: localstack/localstack:2.3.2
     networks:
       - hmpps
     container_name: wmt-web-localstack
