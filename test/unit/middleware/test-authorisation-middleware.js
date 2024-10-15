@@ -1,10 +1,14 @@
 const jwt = require('jsonwebtoken')
 const proxyquire = require('proxyquire')
 const sinon = require('sinon')
-const chai = require('chai')
 const sinonChai = require('sinon-chai')
-chai.should()
-chai.use(sinonChai)
+
+let chai
+async function setupChai () {
+  chai = (await import('chai')).default
+  chai.should()
+  chai.use(sinonChai)
+}
 
 function createToken (authorities) {
   const payload = {
@@ -44,6 +48,9 @@ const authorisationMiddleware = proxyquire('../../../app/middleware/authorisatio
 })
 
 describe('authorisation middleware', function () {
+  before(async function () {
+    await setupChai()
+  })
   beforeEach(function () {
     next = sinon.spy()
   })
