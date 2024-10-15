@@ -72,7 +72,7 @@
     "sass": "1.78.0",
     "selenium-standalone": "10.0.0",
     "sinon": "15.2.0",
-    "sinon-chai": "3.7.0",
+    "sinon-chai": "4.0.0",
     "standard": "17.1.2",
     "supertest": "6.3.4",
     "wdio-html-nice-reporter": "8.0.6",
