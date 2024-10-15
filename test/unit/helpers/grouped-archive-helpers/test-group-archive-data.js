@@ -1,4 +1,3 @@
-const expect = require('chai').expect
 const groupArchiveData = require('../../../../app/helpers/grouped-archive-helpers/group-archive-data')
 
 const preGroupedData = require('../../../helpers/data/archive-test-data/pre-grouped-data')
@@ -35,6 +34,10 @@ const secondTeam = {
 }
 
 describe('helpers/grouped-archive-helpers/group-archive-data', function () {
+  let expect
+  before(async function () {
+    expect = (await import('chai')).expect
+  })
   it('should group data by offender manager producing an array of length 11', function () {
     const groupedArchiveData = groupArchiveData(preGroupedData, 'offenderManager')
     expect(groupedArchiveData.length).to.eql(11)
