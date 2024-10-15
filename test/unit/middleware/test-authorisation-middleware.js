@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken')
 const proxyquire = require('proxyquire')
 const sinon = require('sinon')
-const sinonChai = require('sinon-chai')
 
 let chai
 async function setupChai () {
   chai = (await import('chai')).default
+  const sinonChai = (await import('sinon-chai')).default
   chai.should()
   chai.use(sinonChai)
 }
