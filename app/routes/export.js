@@ -9,7 +9,6 @@ const getCMSExport = require('../services/data/get-cms-export')
 const getCaseDetailsExport = require('../services/data/get-case-details-export')
 const getSuspendedLifersExport = require('../services/data/get-suspended-lifers-export')
 const getT2aDetailExport = require('../services/data/get-t2a-detail-export')
-const getScenarioExport = require('../services/get-scenario')
 const getWorkloadPercentageBreakdown = require('../services/data/get-workload-percentage-breakdown')
 const getExportCsv = require('../services/get-export-csv')
 const tabs = require('../constants/wmt-tabs')
@@ -103,7 +102,7 @@ module.exports = function (get, post) {
           tabType = tabs.EXPORT.CMS_EXPORT
           break
         case '3':
-          exportPromise = getScenarioExport(id, organisationLevel)
+          // exportPromise = getScenarioExport(id, organisationLevel)
           break
         case '4':
           exportPromise = getSuspendedLifersExport(id, organisationLevel)
