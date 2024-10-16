@@ -4,8 +4,8 @@ $path: "/public/images/";
 $govuk-assets-path: "/public";
 $govuk-images-path: "/public/images/";
 $govuk-fonts-path: "/public/fonts/";
-@import 'govuk/all';
-@import 'moj/all';
+//@import 'node_modules/govuk-frontend/dist/govuk/all';
+@import 'node_modules/@ministryofjustice/frontend/moj/all';
 @import 'select2.scss';
 @import 'local.scss';
 // Take a look at in app/assets/sass/patterns/ to see which files are imported.

@@ -1,4 +1,8 @@
-<script src="/public/javascripts/gov-uk.js"></script>
-<script src="/public/javascripts/govukFrontendInit.js"></script>
+<script src="/public/javascripts/govuk-frontend.min.js" type="module"></script>
+<script type="module">
+    import { initAll } from '/public/javascripts/govuk-frontend.min.js'
+    initAll()
+  </script>
 <script src="/public/javascripts/moj.js"></script>
 <script src="/public/javascripts/mojFrontendInit.js"></script>
+
