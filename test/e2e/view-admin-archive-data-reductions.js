@@ -108,6 +108,7 @@ describe('Admin Archive Data Reductions Page', () => {
       const search = await $('#archive-reductions-filter-submit')
       await browser.waitUntil(async () => {
         const rows = await $('#reduction-archive-table tbody tr')
+        console.log()
         return rows.length > 0
       }, {
         timeout: 2000,
