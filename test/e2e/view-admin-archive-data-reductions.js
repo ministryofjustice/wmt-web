@@ -110,7 +110,7 @@ describe('Admin Archive Data Reductions Page', () => {
         const rows = await $('#reduction-archive-table tbody tr')
         return rows.length > 0
       }, {
-        timeout: 5000,
+        timeout: 2000,
         timeoutMsg: 'Expected search results to load in the table'
       })
       await search.click()
