@@ -106,6 +106,13 @@ describe('Admin Archive Data Reductions Page', () => {
       await criteriaName.click()
 
       const search = await $('#archive-reductions-filter-submit')
+      await browser.waitUntil(async () => {
+        const rows = await $('#reduction-archive-table tbody tr')
+        return rows.length > 0
+      }, {
+        timeout: 5000,
+        timeoutMsg: 'Expected search results to load in the table'
+      })
       await search.click()
 
       const firstRow = await $('#reduction-archive-table tbody tr:first-child')
