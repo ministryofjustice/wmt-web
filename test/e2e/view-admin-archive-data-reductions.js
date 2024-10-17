@@ -2,7 +2,7 @@ const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 const aggregatedDataHelper = require('../helpers/data/aggregated-data-helper')
 const archiveReductionDataHelper = require('../helpers/data/archive-reduction-data-helper')
-/* const dateFormatter = require('../../app/services/date-formatter') */
+const dateFormatter = require('../../app/services/date-formatter')
 
 let workloadOwnerId
 let archiveReductionId
@@ -84,7 +84,6 @@ describe('Admin Archive Data Reductions Page', () => {
       expect(pageTitleText).to.equal('Archived Reductions')
     })
 
-    /*
     it('Should be able to search', async function () {
       const archiveFromDayField = await $('#archive-from-day')
       const archiveFromMonthField = await $('#archive-from-month')
@@ -123,9 +122,7 @@ describe('Admin Archive Data Reductions Page', () => {
       const secondRow = await $('#reduction-archive-table tbody tr:last-child')
       const secondRowData = await secondRow.getText()
       expect(secondRowData.replace(/\t+/g, '')).to.equal(`Test_Forename Test_SurnameTest Team10Other.01/01/2020${dateFormatter.formatDate(new Date(), 'DD/MM/YYYY')}wmt_super_user`)
-    }
-     */
-
+    })
     after(async function () {
       await authenticationHelper.logout()
       await archiveReductionDataHelper.deleteArchiveReductionsByIds(archiveReductionId)
