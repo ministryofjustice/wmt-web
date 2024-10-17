@@ -60,7 +60,7 @@
     "@wdio/selenium-standalone-service": "7.33.0",
     "@wdio/spec-reporter": "7.33.0",
     "chai": "4.5.0",
-    "concurrently": "8.2.2",
+    "concurrently": "9.0.1",
     "cookie-session": "2.1.0",
     "csv-parser": "3.0.0",
     "husky": "8.0.3",
