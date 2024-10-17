@@ -101,7 +101,7 @@
     "floatthead": "2.2.5",
     "govuk-frontend": "5.7.1",
     "he": "1.2.0",
-    "helmet": "7.2.0",
+    "helmet": "8.0.0",
     "http-errors": "2.0.0",
     "jquery": "3.7.1",
     "json2csv": "5.0.7",
