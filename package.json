@@ -63,7 +63,7 @@
     "concurrently": "9.0.1",
     "cookie-session": "2.1.0",
     "csv-parser": "3.0.0",
-    "husky": "8.0.3",
+    "husky": "9.1.6",
     "jsonwebtoken": "9.0.2",
     "mocha": "10.7.3",
     "mocha-simple-html-reporter": "2.0.0",
