@@ -115,7 +115,6 @@ describe('Admin Archive Data Reductions Page', () => {
       const secondRowData = await secondRow.getText()
       expect(secondRowData.replace(/\t+/g, '')).to.equal(`Test_Forename Test_SurnameTest Team10Other.01/01/2020${dateFormatter.formatDate(new Date(), 'DD/MM/YYYY')}wmt_super_user`)
     })
-
     after(async function () {
       await authenticationHelper.logout()
       await archiveReductionDataHelper.deleteArchiveReductionsByIds(archiveReductionId)
