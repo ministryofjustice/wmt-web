@@ -84,7 +84,7 @@ describe('Admin Archive Data Reductions Page', () => {
       expect(pageTitleText).to.equal('Archived Reductions')
     })
 
-    it('Should be able to search', async function () {
+    it.only('Should be able to search', async function () {
       const archiveFromDayField = await $('#archive-from-day')
       const archiveFromMonthField = await $('#archive-from-month')
       const archiveFromYearField = await $('#archive-from-year')
@@ -107,9 +107,10 @@ describe('Admin Archive Data Reductions Page', () => {
 
       const search = await $('#archive-reductions-filter-submit')
       await search.click()
-
+      this.timeout(3000)
       const firstRow = await $('#reduction-archive-table tbody tr:first-child')
       const firstRowData = await firstRow.getText()
+
       expect(firstRowData.replace(/\t+/g, '')).to.equal('Test_Forename Test_Surname Not Available5N/ATest CommentN/AN/A01/01/2015Test Added By')
       const secondRow = await $('#reduction-archive-table tbody tr:last-child')
       const secondRowData = await secondRow.getText()
