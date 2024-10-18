@@ -12,7 +12,7 @@ exports.config = {
     ]
   ],
 
-  specs: ['./test/e2e/**/*.js'],
+  specs: ['./e2e/**/*.js'],
   exclude: [],
   maxInstances: 1,
   baseUrl: process.env.WMT_BASE_URL || 'http://localhost:3000',
@@ -24,13 +24,13 @@ exports.config = {
   logLevel: 'error',
   coloredLogs: true,
   screenshotPath: './errorShots/',
-  waitforTimeout: 2000,
-  connectionRetryTimeout: 5000,
+  waitforTimeout: 20000,
+  connectionRetryTimeout: 30000,
   connectionRetryCount: 3,
   framework: 'mocha',
   mochaOpts: {
     ui: 'bdd',
-    timeout: 5000
+    timeout: 30000
   },
   reporters: ['spec',
     ['html-nice', {

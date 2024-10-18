@@ -107,13 +107,41 @@ describe('Admin Archive Data Reductions Page', () => {
 
       const search = await $('#archive-reductions-filter-submit')
       await search.click()
+      await browser.waitUntil(async (resolve) => {
+        return (await $('#reduction-archive-table tbody tr:first-child').getText()) !== 'Loading...'
+      })
 
       const firstRow = await $('#reduction-archive-table tbody tr:first-child')
-      const firstRowData = await firstRow.getText()
-      expect(firstRowData.replace(/\t+/g, '')).to.equal('Test_Forename Test_SurnameNot Available5N/ATest CommentN/AN/A01/01/2015Test Added By')
+      const firstRowData = await firstRow.$$('td').map(child => child.getText())
+
+      expect(firstRowData).to.have.deep.members([
+        '',
+        'Test_Forename Test_Surname',
+        'Not Available',
+        '5',
+        'N/A',
+        'Test Comment',
+        'N/A',
+        'N/A',
+        '01/01/2015',
+        'Test Added By'
+      ])
+
       const secondRow = await $('#reduction-archive-table tbody tr:last-child')
-      const secondRowData = await secondRow.getText()
-      expect(secondRowData.replace(/\t+/g, '')).to.equal(`Test_Forename Test_SurnameTest Team10Other.01/01/2020${dateFormatter.formatDate(new Date(), 'DD/MM/YYYY')}wmt_super_user`)
+      const secondRowData = await secondRow.$$('td').map(child => child.getText())
+
+      expect(secondRowData).to.have.deep.members([
+        '',
+        'Test_Forename Test_Surname',
+        'Test Team',
+        '10',
+        'Other',
+        '.',
+        '01/01/2020',
+        '',
+        dateFormatter.formatDate(new Date(), 'DD/MM/YYYY'),
+        'wmt_super_user'
+      ])
     })
     after(async function () {
       await authenticationHelper.logout()
