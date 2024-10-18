@@ -84,7 +84,7 @@ describe('Admin Archive Data Reductions Page', () => {
       expect(pageTitleText).to.equal('Archived Reductions')
     })
 
-    it.only('Should be able to search', async function (done) {
+    it('Should be able to search', async function (done) {
       const archiveFromDayField = await $('#archive-from-day')
       const archiveFromMonthField = await $('#archive-from-month')
       const archiveFromYearField = await $('#archive-from-year')
