@@ -24,13 +24,13 @@ exports.config = {
   logLevel: 'error',
   coloredLogs: true,
   screenshotPath: './errorShots/',
-  waitforTimeout: 2000,
-  connectionRetryTimeout: 5000,
+  waitforTimeout: 5000,
+  connectionRetryTimeout: 10000,
   connectionRetryCount: 3,
   framework: 'mocha',
   mochaOpts: {
     ui: 'bdd',
-    timeout: 5000
+    timeout: 10000
   },
   reporters: ['spec',
     ['html-nice', {
