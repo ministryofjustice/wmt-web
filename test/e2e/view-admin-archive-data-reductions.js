@@ -110,7 +110,7 @@ describe('Admin Archive Data Reductions Page', () => {
 
       const firstRow = await $('#reduction-archive-table tbody tr:first-child')
       const firstRowData = await firstRow.getText()
-      expect(firstRowData.replace(/\t+/g, '')).to.equal('Test_Forename Test_SurnameNot Available5N/ATest CommentN/AN/A01/01/2015Test Added By')
+      expect(firstRowData.replace(/\t+/g, '')).to.equal('Test_Forename Test_Surname Not Available5N/ATest CommentN/AN/A01/01/2015Test Added By')
       const secondRow = await $('#reduction-archive-table tbody tr:last-child')
       const secondRowData = await secondRow.getText()
       expect(secondRowData.replace(/\t+/g, '')).to.equal(`Test_Forename Test_SurnameTest Team10Other.01/01/2020${dateFormatter.formatDate(new Date(), 'DD/MM/YYYY')}wmt_super_user`)
