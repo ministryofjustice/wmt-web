@@ -84,7 +84,7 @@ describe('Admin Archive Data Reductions Page', () => {
       expect(pageTitleText).to.equal('Archived Reductions')
     })
 
-    it('Should be able to search', async function (done) {
+    it('Should be able to search', async function () {
       const archiveFromDayField = await $('#archive-from-day')
       const archiveFromMonthField = await $('#archive-from-month')
       const archiveFromYearField = await $('#archive-from-year')
@@ -107,7 +107,9 @@ describe('Admin Archive Data Reductions Page', () => {
 
       const search = await $('#archive-reductions-filter-submit')
       await search.click()
-      setTimeout(done, 3000)
+      await browser.waitUntil(async (resolve) => {
+        return await $('#reduction-archive-table tbody tr:first-child').getText().to.notEqual('Loading...')
+      })
       const firstRow = await $('#reduction-archive-table tbody tr:first-child')
       const firstRowData = await firstRow.getText()
 
