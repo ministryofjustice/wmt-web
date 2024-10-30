@@ -14,7 +14,7 @@ parameters:
     default: manage_a_workforce_dev
   node-version:
     type: string
-    default: 20.18-browsers
+    default: 22.11-browsers
   postgres_tag:
     default: "11"
     type: string

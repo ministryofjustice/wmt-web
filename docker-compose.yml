@@ -38,7 +38,7 @@ services:
     ports:
       - "9096:8080"
   hmpps-manage-users-api:
-    image: quay.io/hmpps/hmpps-manage-users-api:latest
+    image: quay.io/hmpps/hmpps-manage-users-api:2024-10-14.5975.1d02d86
     networks:
       - hmpps
     container_name: hmpps-manage-users-api
