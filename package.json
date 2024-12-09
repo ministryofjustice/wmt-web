@@ -65,7 +65,7 @@
     "csv-parser": "3.0.0",
     "husky": "9.1.6",
     "jsonwebtoken": "9.0.2",
-    "mocha": "10.7.3",
+    "mocha": "11.0.1",
     "mocha-simple-html-reporter": "2.0.0",
     "nodemon": "^3.0.0",
     "proxyquire": "2.1.3",
