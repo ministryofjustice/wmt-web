@@ -114,6 +114,6 @@ describe('authorisation middleware', function () {
 
     chai.expect(res.redirect).to.have.been.calledOnceWith('/autherror')
     chai.expect(req.session.authAttempts).to.equal(0)
-    chai.expect(next).to.have.been.called.exactly(maxRetries)
+    chai.expect(next.callCount).to.equal(maxRetries)
   })
 })
