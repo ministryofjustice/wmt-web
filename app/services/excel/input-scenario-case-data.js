@@ -97,27 +97,6 @@ const inputCaseData = function (ws, cases, typeTierGroupLength, tiersPerType) {
     rowStart = rowStart + 1
   }
   inputBottomTotals(ws, rowStart)
-  // var endRow = rowStart - 1
-  // var lockedCellRanges = [
-  //   'F5:' + 'F' + endRow,
-  //   'K5:' + 'K' + endRow,
-  //   'L5:' + 'L' + endRow,
-  //   'M5:' + 'M' + endRow,
-  //   'N5:' + 'N' + endRow,
-  //   'O5:' + 'O' + endRow,
-  //   'P5:' + 'P' + endRow,
-  //   'Q5:' + 'Q' + endRow,
-  //   'R5:' + 'R' + endRow,
-  //   'S5:' + 'S' + endRow,
-  //   'T5:' + 'T' + endRow,
-  //   'U5:' + 'U' + endRow,
-  //   'V5:' + 'V' + endRow,
-  //   'W5:' + 'W' + endRow,
-  //   'X5:' + 'X' + endRow
-  // ]
-  // lockedCellRanges.forEach(function (lockedCellRange) {
-  //   lockCells(ws, lockedCellRange)
-  // })
 }
 
 // Input Offender Manager Name, Grade to the left side of the produced spreadsheet
@@ -231,11 +210,11 @@ const inputMainBodyFormulas = function (ws, row) {
   ws.cell(row, 6).formula(totalCasesFormula(row)).style(this.styles.nonEditableCaseStyle) // Total Cases
   ws.cell(row, 12).formula('=IFERROR((K' + row + '/W' + row + '),0)').style(this.styles.percentageStyle) // CMS %
   ws.cell(row, 14).formula('=IFERROR((M' + row + '/V' + row + '),0)').style(this.styles.percentageStyle) // GS %
-  ws.cell(row, 15).formula('=PR' + row + '*$PR$4').style(this.styles.nonEditableCaseStyle) // SDR Points
-  ws.cell(row, 16).formula('=PS' + row + '*$PS$4').style(this.styles.nonEditableCaseStyle) // FDR Points
-  ws.cell(row, 17).formula('=PT' + row + '*$PT$4').style(this.styles.nonEditableCaseStyle) // Parom Points
-  ws.cell(row, 18).formula('=PU' + row + '*$PU$4').style(this.styles.nonEditableCaseStyle) // ARMS Comm Points
-  ws.cell(row, 19).formula('=PV' + row + '*$PV$4').style(this.styles.nonEditableCaseStyle) // ARMS Licence Points
+  ws.cell(row, 15).formula('=AEL' + row + '*$AEL$4').style(this.styles.nonEditableCaseStyle) // SDR Points
+  ws.cell(row, 16).formula('=AEM' + row + '*$AEM$4').style(this.styles.nonEditableCaseStyle) // FDR Points
+  ws.cell(row, 17).formula('=AEN' + row + '*$AEN$4').style(this.styles.nonEditableCaseStyle) // Parom Points
+  ws.cell(row, 18).formula('=AEO' + row + '*$AEO$4').style(this.styles.nonEditableCaseStyle) // ARMS Comm Points
+  ws.cell(row, 19).formula('=AEP' + row + '*$AEP$4').style(this.styles.nonEditableCaseStyle) // ARMS Licence Points
   ws.cell(row, 20).formula(totalPointsFormulaPart1(row)).style(this.styles.nonEditableCaseStyle) // Total Caseload Points - Non T2A
   ws.cell(row, 21).formula(totalPointsFormulaPart2(row)).style(this.styles.nonEditableCaseStyle) // Total Caseload Points - T2A
   ws.cell(row, 22).formula('=SUM(K' + row + ',M' + row + ',O' + row + ':U' + row + ')').style(this.styles.nonEditableCaseStyle) // Overall Total Points
@@ -273,25 +252,11 @@ const inputBottomTotals = function (ws, row) {
   ws.cell(row, 25).formula('=IFERROR(V' + row + '/W' + row + ',0)').style(this.styles.averagePercentageStyle)
   ws.cell(row, 26).formula('=SUM($Z$' + 5 + ':Z' + dataEndRow + ')').style(this.styles.sumStyle)
 
-  let columnNo = 27
-  let firstLetter
-  let secondLetter
-  let char1
-  let char2
-  // WMT0160: Update this too
-  for (firstLetter = 0; firstLetter < 15; firstLetter++) {
-    for (secondLetter = 0; secondLetter < 26; secondLetter++) {
-      char1 = String.fromCharCode(firstLetter + 65)
-      char2 = String.fromCharCode(secondLetter + 65)
-      ws.cell(row, columnNo).formula('=SUM(' + char1 + char2 + 5 + ':' + char1 + char2 + dataEndRow + ')').style(this.styles.sumStyle)
-      columnNo = columnNo + 1
-    }
-  }
-  for (secondLetter = 0; secondLetter < 22; secondLetter++) {
-    char1 = 'P'
-    char2 = String.fromCharCode(secondLetter + 65)
-    ws.cell(row, columnNo).formula('=SUM(' + char1 + char2 + 5 + ':' + char1 + char2 + dataEndRow + ')').style(this.styles.sumStyle)
-    columnNo = columnNo + 1
+  for (let i = 27; i < 823; i++) {
+    let formula = '=SUM('
+    const col = getColumnName(i - 1)
+    formula += `$${col}5:${col}${dataEndRow}`
+    ws.cell(row, i).formula(formula + ')').style(this.styles.sumStyle)
   }
 }
 
@@ -309,17 +274,16 @@ const setTierTotals = function (ws, rowStart, columnStart, casesForThisTier, t2a
   }
 }
 
-// const lockCells = (ws, range) => {
-//   ws.addDataValidation({
-//     type: 'textLength',
-//     error: 'This cell is locked',
-//     operator: 'equal',
-//     sqref: range,
-//     formulas: ['']
-//   })
-// }
-
 module.exports = function (ws, scenarioData, typeTierGroupLength, tiersPerType, styles) {
   this.styles = styles
   inputCaseData(ws, scenarioData, typeTierGroupLength, tiersPerType)
+}
+
+function getColumnName (index) {
+  let columnName = ''
+  while (index >= 0) {
+    columnName = String.fromCharCode((index % 26) + 65) + columnName
+    index = Math.floor(index / 26) - 1
+  }
+  return columnName
 }
