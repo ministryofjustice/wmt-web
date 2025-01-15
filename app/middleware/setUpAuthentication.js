@@ -20,7 +20,20 @@ module.exports = function () {
 
   router.get('/login', passport.authenticate('oauth2'))
 
-  router.get('/login/callback', function (req, res, next) {
+  const retryMiddleware = (req, res, next) => {
+    const maxRetries = 3
+    const attempts = req.session.authAttempts || 0
+
+    if (attempts < maxRetries) {
+      req.session.authAttempts = attempts + 1
+      next()
+    } else {
+      req.session.authAttempts = 0
+      res.redirect('/autherror')
+    }
+  }
+
+  router.get('/login/callback', retryMiddleware, function (req, res, next) {
     passport.authenticate('oauth2',
       {
         successReturnToOrRedirect: req.session.returnTo || '/',
