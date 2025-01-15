@@ -138,7 +138,7 @@ const totalCasesFormula = function (row, startColumn, endColumn, typeTierGroupLe
 
 // Add formulas to Cells C to U (Data below "Total Cases" Column to "Current % Capacity" Column in produced spreadsheet)
 const inputMainBodyFormulas = function (ws, row) {
-  ws.cell(row, 6).formula(totalCasesFormula(row, 25, 817, 4)).style(this.styles.nonEditableCaseStyle) // Total Cases
+  ws.cell(row, 6).formula(totalCasesFormula(row, 25, 816, 4)).style(this.styles.nonEditableCaseStyle) // Total Cases
   ws.cell(row, 12).formula('=IFERROR((K' + row + '/W' + row + '),0)').style(this.styles.percentageStyle) // CMS %
   ws.cell(row, 14).formula('=IFERROR((M' + row + '/V' + row + '),0)').style(this.styles.percentageStyle) // GS %
   ws.cell(row, 15).formula('=AEL' + row + '*$AEL$4').style(this.styles.nonEditableCaseStyle) // SDR Points
