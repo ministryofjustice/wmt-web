@@ -138,7 +138,7 @@ const totalCasesFormula = function (row, startColumn, endColumn, typeTierGroupLe
 
 // Add formulas to Cells C to U (Data below "Total Cases" Column to "Current % Capacity" Column in produced spreadsheet)
 const inputMainBodyFormulas = function (ws, row) {
-  ws.cell(row, 6).formula(totalCasesFormula(row, 26, 818, 4)).style(this.styles.nonEditableCaseStyle) // Total Cases
+  ws.cell(row, 6).formula(totalCasesFormula(row, 25, 817, 4)).style(this.styles.nonEditableCaseStyle) // Total Cases
   ws.cell(row, 12).formula('=IFERROR((K' + row + '/W' + row + '),0)').style(this.styles.percentageStyle) // CMS %
   ws.cell(row, 14).formula('=IFERROR((M' + row + '/V' + row + '),0)').style(this.styles.percentageStyle) // GS %
   ws.cell(row, 15).formula('=AEL' + row + '*$AEL$4').style(this.styles.nonEditableCaseStyle) // SDR Points
@@ -146,8 +146,8 @@ const inputMainBodyFormulas = function (ws, row) {
   ws.cell(row, 17).formula('=AEN' + row + '*$AEN$4').style(this.styles.nonEditableCaseStyle) // Parom Points
   ws.cell(row, 18).formula('=AEO' + row + '*$AEO$4').style(this.styles.nonEditableCaseStyle) // ARMS Comm Points
   ws.cell(row, 19).formula('=AEP' + row + '*$AEP$4').style(this.styles.nonEditableCaseStyle) // ARMS Licence Points
-  ws.cell(row, 20).formula(totalPointsFormula(row, 26, 422, 4)).style(this.styles.nonEditableCaseStyle) // Total Caseload Points - Non T2A
-  ws.cell(row, 21).formula(totalPointsFormula(row, 422, 818, 4)).style(this.styles.nonEditableCaseStyle) // Total Caseload Points - T2A
+  ws.cell(row, 20).formula(totalPointsFormula(row, 25, 420, 4)).style(this.styles.nonEditableCaseStyle) // Total Caseload Points - Non T2A
+  ws.cell(row, 21).formula(totalPointsFormula(row, 421, 816, 4)).style(this.styles.nonEditableCaseStyle) // Total Caseload Points - T2A
   ws.cell(row, 22).formula('=SUM(K' + row + ',M' + row + ',O' + row + ':U' + row + ')').style(this.styles.nonEditableCaseStyle) // Overall Total Points
   ws.cell(row, 23).formula('=IFERROR(ROUNDDOWN(((G' + row + ' * (H' + row + '/I' + row + '))*((H' + row + '-J' + row + ')/H' + row + ')),0),0)').style(this.styles.roundedStyle) // Available Points
   ws.cell(row, 24).formula('=W' + row + '-V' + row).style(this.styles.roundedStyle) // Remaining Points
