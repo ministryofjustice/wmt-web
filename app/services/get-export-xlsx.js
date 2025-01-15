@@ -130,16 +130,16 @@ const setTierWeightings = function (ws, styles, points) {
     const styleToApply = determineStyles.determineWeightingStyle(start, styles)
     switch (i % tiersPerType) {
       case 0:
-        ws.cell(4, start).number(points[keys[count]]).style(styleToApply)
-        ws.cell(4, start + 1).number(points[keys[count]]).style(styleToApply)
-        ws.cell(4, start + 2).number(points[keys[count]]).style(styleToApply)
-        ws.cell(4, start + 3).number(points[keys[count]]).style(styleToApply)
+        ws.cell(4, start).number(0).style(styleToApply)
+        ws.cell(4, start + 1).number(0).style(styleToApply)
+        ws.cell(4, start + 2).number(0).style(styleToApply)
+        ws.cell(4, start + 3).number(0).style(styleToApply)
         break
       default:
         ws.cell(4, start).number(points[keys[count]]).style(styleToApply)
-        ws.cell(4, start + 1).number(points[keys[count]]).style(styleToApply)
-        ws.cell(4, start + 2).number(points[keys[count]]).style(styleToApply)
-        ws.cell(4, start + 3).number(points[keys[count]]).style(styleToApply)
+        ws.cell(4, start + 1).number(0).style(styleToApply)
+        ws.cell(4, start + 2).number(0).style(styleToApply)
+        ws.cell(4, start + 3).number(0).style(styleToApply)
         count = count + 1
         break
     }

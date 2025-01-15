@@ -228,13 +228,14 @@ module.exports.determineWeightingStyle = function (columnNo, styles) {
   // const t2aCusRange = { start: 366, end: 433 }
   // const reportsRange = { start: 434, end: 438 }
 
-  const commRange = { start: 26, end: 125 }
-  const licRange = { start: 126, end: 225 }
-  const cusRange = { start: 226, end: 325 }
-  const t2aCommRage = { start: 326, end: 396 }
-  const t2aLicRange = { start: 397, end: 496 }
-  const t2aCusRange = { start: 497, end: 596 }
-  const reportsRange = { start: 597, end: 696 }
+  // there are 130 columns in the excel sheet for each range
+  const commRange = { start: 26, end: 156 }
+  const licRange = { start: 157, end: 287 }
+  const cusRange = { start: 288, end: 418 }
+  const t2aCommRage = { start: 419, end: 550 }
+  const t2aLicRange = { start: 551, end: 682 }
+  const t2aCusRange = { start: 683, end: 814 }
+  const reportsRange = { start: 815, end: 822 }
 
   if (columnNo >= commRange.start && columnNo <= commRange.end) {
     styleToApply = styles.commStyle
