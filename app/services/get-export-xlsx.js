@@ -84,7 +84,6 @@ const setReportHeaders = function (ws, styles) {
 
 const mergeCells = function (ws, caseStyle) {
   ws.cell(1, casesColumnStart, 1, reportColumnStart - 1, true).string('Cases').style(caseStyle)
-  // ws.cell(1, t2aCasesColumnStart, 1, reportColumnStart - 1, true).string('T2A Cases').style(caseStyle)
   ws.cell(1, reportColumnStart, 1, reportColumnStart + numberOfReportColumns - 1, true).string('Reports').style(caseStyle)
 }
 

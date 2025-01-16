@@ -101,7 +101,7 @@ const totalCasesFormula = function (row, startColumn, endColumn, typeTierGroupLe
 
 // Add formulas to Cells C to U (Data below "Total Cases" Column to "Current % Capacity" Column in produced spreadsheet)
 const inputMainBodyFormulas = function (ws, row) {
-  ws.cell(row, 6).formula(totalCasesFormula(row, 24, /* 816 */419, 4)).style(this.styles.nonEditableCaseStyle) // Total Cases
+  ws.cell(row, 6).formula(totalCasesFormula(row, 24, 419, 4)).style(this.styles.nonEditableCaseStyle) // Total Cases
   ws.cell(row, 12).formula('=IFERROR((K' + row + '/V' + row + '),0)').style(this.styles.percentageStyle) // CMS %
   ws.cell(row, 14).formula('=IFERROR((M' + row + '/T' + row + '),0)').style(this.styles.percentageStyle) // GS %
   ws.cell(row, 15).formula('=PE' + row + '*$PE$4').style(this.styles.nonEditableCaseStyle) // SDR Points
@@ -109,7 +109,7 @@ const inputMainBodyFormulas = function (ws, row) {
   ws.cell(row, 17).formula('=PG' + row + '*$PG$4').style(this.styles.nonEditableCaseStyle) // Parom Points
   ws.cell(row, 18).formula('=PH' + row + '*$PH$4').style(this.styles.nonEditableCaseStyle) // ARMS Comm Points
   ws.cell(row, 19).formula('=PI' + row + '*$PI$4').style(this.styles.nonEditableCaseStyle) // ARMS Licence Points
-  ws.cell(row, 20).formula(totalPointsFormula(row, 24, 419, 4)).style(this.styles.nonEditableCaseStyle) // Total Caseload Points - Non T2A
+  ws.cell(row, 20).formula(totalPointsFormula(row, 24, 419, 4)).style(this.styles.nonEditableCaseStyle) // Total Caseload Points
   ws.cell(row, 21).formula('=SUM(K' + row + ',M' + row + ',O' + row + ':T' + row + ')').style(this.styles.nonEditableCaseStyle) // Overall Total Points
   ws.cell(row, 22).formula('=IFERROR(ROUNDDOWN(((G' + row + ' * (H' + row + '/I' + row + '))*((H' + row + '-J' + row + ')/H' + row + ')),0),0)').style(this.styles.roundedStyle) // Available Points
   ws.cell(row, 23).formula('=U' + row + '-V' + row).style(this.styles.roundedStyle) // Remaining Points
@@ -144,7 +144,7 @@ const inputBottomTotals = function (ws, row) {
   ws.cell(row, 24).formula('=IFERROR(T' + row + '/U' + row + ',0)').style(this.styles.averagePercentageStyle)
   ws.cell(row, 25).formula('=SUM($Y$' + 5 + ':Y' + dataEndRow + ')').style(this.styles.sumStyle)
 
-  for (let i = 26; i < /* 823 */426; i++) {
+  for (let i = 26; i < 426; i++) {
     let formula = '=SUM('
     const col = getColumnName(i - 1)
     formula += `$${col}5:${col}${dataEndRow}`
