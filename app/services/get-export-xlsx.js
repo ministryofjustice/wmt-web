@@ -10,32 +10,43 @@ const armsCommMultiplier = require('../../config').ARMS_COMMUNITY_MULTIPLIER
 const armsLicMultiplier = require('../../config').ARMS_LICENCE_MULTIPLIER
 const typeTierGroupLength = 4 // the number of fields for each tier and type of case
 const tiersPerType = 33
-const casesColumnStart = 26
-const t2aCasesColumnStart = casesColumnStart + (tiersPerType * typeTierGroupLength * 3)
+const casesColumnStart = 25
 const numberOfReportColumns = 5
-const reportColumnStart = t2aCasesColumnStart + (tiersPerType * typeTierGroupLength * 3)
+const reportColumnStart = casesColumnStart + (tiersPerType * typeTierGroupLength * 3)
 
 module.exports = function (caseData, t2aCaseData, scenarioData) {
   const wb = new excel.Workbook()
-  const ws = wb.addWorksheet('Sheet 1', {
+  const ws = wb.addWorksheet('Scenario Export', {
     sheetFormat: {
       defaultColWidth: 8
     }
   })
+  const gs = wb.addWorksheet('Guidance Sheet', {
+    sheetFormat: {
+      defaultColWidth: 100
+    }
+  })
+
+  gs.cell(1, 1).string('Regional Scenario Modelling Tool').style({ font: { bold: true, size: 16 } })
+  gs.cell(2, 1).string('- Data can only be adjusted in yellow cells - columns Y onwards')
+  gs.cell(3, 1).string('- Do not make changes to cells in grey - these are populated with formulas so shouldn\'t be adjusted')
+  gs.cell(4, 1).string('- To adjust PP\'s caseload, amend numbers in cells Y onwards under the appropriate case tier')
+  gs.cell(5, 1).string('and type heading - this will then automatically calculate in the corresponding grey cells')
+  gs.cell(6, 1).string('and recalculate individual and total capacity')
+  gs.cell(7, 1).string('- All data is prepopulated from WMT, if contracted hours or reductions appear incorrect')
+  gs.cell(8, 1).string('they will need amending in WMT. If caseload numbers or allocations appear incorrect this would')
+  gs.cell(9, 1).string('need to be amended in WMT')
+
   const styles = createStyles(wb)
 
   mergeCells(ws, styles.caseStyle)
-  let start = casesColumnStart
-  let additionalHeading = ''
-  setCaseHeaders(ws, start, styles, additionalHeading)
-  start = t2aCasesColumnStart
-  additionalHeading = 'T2A '
+  const start = casesColumnStart
+  const additionalHeading = ''
   setCaseHeaders(ws, start, styles, additionalHeading)
   setReportHeaders(ws, styles)
   setHeaders(ws, styles.nameHeadersStyle)
   setCaseTypeHeaders(ws, styles)
   setTierWeightings(ws, styles, caseData)
-  setTierWeightings(ws, styles, t2aCaseData)
   setReportWeightings(ws, styles, caseData)
   inputScenarioCaseData(ws, scenarioData, typeTierGroupLength, tiersPerType, styles)
   ws.column(25).setWidth(8)
@@ -55,7 +66,6 @@ module.exports = function (caseData, t2aCaseData, scenarioData) {
   ws.column(18).setWidth(5)
   ws.column(19).setWidth(5)
   ws.column(20).setWidth(7)
-  ws.column(21).setWidth(7)
   setRowHeights(ws)
   return wb
 }
@@ -73,8 +83,8 @@ const setReportHeaders = function (ws, styles) {
 }
 
 const mergeCells = function (ws, caseStyle) {
-  ws.cell(1, casesColumnStart, 1, t2aCasesColumnStart - 1, true).string('Cases').style(caseStyle)
-  ws.cell(1, t2aCasesColumnStart, 1, reportColumnStart - 1, true).string('T2A Cases').style(caseStyle)
+  ws.cell(1, casesColumnStart, 1, reportColumnStart - 1, true).string('Cases').style(caseStyle)
+  // ws.cell(1, t2aCasesColumnStart, 1, reportColumnStart - 1, true).string('T2A Cases').style(caseStyle)
   ws.cell(1, reportColumnStart, 1, reportColumnStart + numberOfReportColumns - 1, true).string('Reports').style(caseStyle)
 }
 
@@ -118,12 +128,7 @@ const setCaseTypeHeaders = function (ws, styles) {
 
 const setTierWeightings = function (ws, styles, points) {
   const keys = Object.keys(points)
-  let start
-  if (points.isT2A) {
-    start = t2aCasesColumnStart
-  } else {
-    start = casesColumnStart
-  }
+  let start = casesColumnStart
   let count = 0
   let i
   for (i = 0; i < (tiersPerType * 3); i++) {
@@ -138,7 +143,7 @@ const setTierWeightings = function (ws, styles, points) {
       default:
         ws.cell(4, start).number(points[keys[count]]).style(styleToApply)
         ws.cell(4, start + 1).number(0).style(styleToApply)
-        ws.cell(4, start + 2).number(0).style(styleToApply)
+        ws.cell(4, start + 2).number(points[keys[count]]).style(styleToApply)
         ws.cell(4, start + 3).number(0).style(styleToApply)
         count = count + 1
         break

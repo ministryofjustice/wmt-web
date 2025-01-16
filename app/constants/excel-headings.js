@@ -120,7 +120,6 @@ const nameHeaders = [
   'ARMS Comm Points',
   'ARMS Licence Points',
   'Total Caseload Points',
-  'Total Caseload Points - T2A',
   'Overall Total Points',
   'Available Points',
   'Remaining Points',
