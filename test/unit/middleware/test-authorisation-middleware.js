@@ -84,4 +84,36 @@ describe('authorisation middleware', function () {
     chai.expect(authorisationResponse).to.equal('/login')
     chai.expect(req.session.returnTo).to.equal(req.originalUrl)
   })
+
+  it('should retry authentication up to max retries and then redirect to /autherror', function () {
+    const maxRetries = 3
+    const req = {
+      session: { authAttempts: 0 },
+      user: null
+    }
+    const res = {
+      redirect: sinon.spy()
+    }
+    const next = sinon.spy()
+
+    const retryMiddleware = (req, res, next) => {
+      if (req.session.authAttempts < maxRetries) {
+        req.session.authAttempts += 1
+        next()
+      } else {
+        req.session.authAttempts = 0
+        res.redirect('/autherror')
+      }
+    }
+
+    for (let i = 0; i < maxRetries; i++) {
+      retryMiddleware(req, res, next)
+    }
+
+    retryMiddleware(req, res, next)
+
+    chai.expect(res.redirect).to.have.been.calledOnceWith('/autherror')
+    chai.expect(req.session.authAttempts).to.equal(0)
+    chai.expect(next.callCount).to.equal(maxRetries)
+  })
 })

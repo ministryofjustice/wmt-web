@@ -138,7 +138,6 @@ const inputBottomTotals = function (ws, row) {
   ws.cell(row, 18).formula('=SUM($R$' + 5 + ':R' + dataEndRow + ')').style(this.styles.sumStyle)
   ws.cell(row, 19).formula('=SUM($S$' + 5 + ':S' + dataEndRow + ')').style(this.styles.sumStyle)
   ws.cell(row, 20).formula('=SUM($T$' + 5 + ':T' + dataEndRow + ')').style(this.styles.sumStyle)
-  // ws.cell(row, 21).formula('=SUM($U$' + 5 + ':U' + dataEndRow + ')').style(this.styles.sumStyle)
   ws.cell(row, 21).formula('=SUM($U$' + 5 + ':U' + dataEndRow + ')').style(this.styles.sumStyle)
   ws.cell(row, 22).formula('=SUM($V$' + 5 + ':V' + dataEndRow + ')').style(this.styles.roundedSumStyle)
   ws.cell(row, 23).formula('=SUM($W$' + 5 + ':W' + dataEndRow + ')').style(this.styles.roundedSumStyle)
