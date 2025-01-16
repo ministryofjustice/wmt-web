@@ -9,7 +9,7 @@
 
 const inputCaseData = function (ws, cases, typeTierGroupLength, tiersPerType) {
   let rowStart = 5
-  let columnStart = 26
+  let columnStart = 25
 
   for (const c of cases) {
     inputMainBodyFormulas(ws, rowStart)
@@ -50,50 +50,13 @@ const inputCaseData = function (ws, cases, typeTierGroupLength, tiersPerType) {
       setTierTotals(ws, rowStart, columnStart, casesForThisTier, false)
       columnStart = columnStart + typeTierGroupLength
     }
-    // t2a
-    // WMT0160: Change tiersPerType for community cases
-    casesForThisTier = c.communityCaseNumbers.filter(thisCase => thisCase.tier === 0)
-    casesForThisTier = casesForThisTier[0]
-    setTierTotals(ws, rowStart, columnStart, casesForThisTier, true)
-    columnStart = columnStart + typeTierGroupLength
-
-    for (let i = tiersPerType - 1; i >= 1; i--) {
-      casesForThisTier = c.communityCaseNumbers.filter(thisCase => thisCase.tier === i)
-      casesForThisTier = casesForThisTier[0]
-      setTierTotals(ws, rowStart, columnStart, casesForThisTier, true)
-      columnStart = columnStart + typeTierGroupLength
-    }
-
-    casesForThisTier = c.licenceCaseNumbers.filter(thisCase => thisCase.tier === 0)
-    casesForThisTier = casesForThisTier[0]
-    setTierTotals(ws, rowStart, columnStart, casesForThisTier, true)
-    columnStart = columnStart + typeTierGroupLength
-
-    for (let i = tiersPerType - 1; i >= 1; i--) {
-      casesForThisTier = c.licenceCaseNumbers.filter(thisCase => thisCase.tier === i)
-      casesForThisTier = casesForThisTier[0]
-      setTierTotals(ws, rowStart, columnStart, casesForThisTier, true)
-      columnStart = columnStart + typeTierGroupLength
-    }
-
-    casesForThisTier = c.custodyCaseNumbers.filter(thisCase => thisCase.tier === 0)
-    casesForThisTier = casesForThisTier[0]
-    setTierTotals(ws, rowStart, columnStart, casesForThisTier, true)
-    columnStart = columnStart + typeTierGroupLength
-
-    for (let i = tiersPerType - 1; i >= 1; i--) {
-      casesForThisTier = c.custodyCaseNumbers.filter(thisCase => thisCase.tier === i)
-      casesForThisTier = casesForThisTier[0]
-      setTierTotals(ws, rowStart, columnStart, casesForThisTier, true)
-      columnStart = columnStart + typeTierGroupLength
-    }
     // reports to go here
     ws.cell(rowStart, columnStart).number(c.sdrTotal).style(this.styles.editableStyle)
     ws.cell(rowStart, columnStart + 1).number(c.sdrConversionsTotal).style(this.styles.editableStyle)
     ws.cell(rowStart, columnStart + 2).number(c.paromsTotal).style(this.styles.editableStyle)
     ws.cell(rowStart, columnStart + 3).number(c.armsCommunity).style(this.styles.editableStyle)
     ws.cell(rowStart, columnStart + 4).number(c.armsLicense).style(this.styles.editableStyle)
-    columnStart = 26
+    columnStart = 25
     rowStart = rowStart + 1
   }
   inputBottomTotals(ws, rowStart)
@@ -138,20 +101,19 @@ const totalCasesFormula = function (row, startColumn, endColumn, typeTierGroupLe
 
 // Add formulas to Cells C to U (Data below "Total Cases" Column to "Current % Capacity" Column in produced spreadsheet)
 const inputMainBodyFormulas = function (ws, row) {
-  ws.cell(row, 6).formula(totalCasesFormula(row, 25, 816, 4)).style(this.styles.nonEditableCaseStyle) // Total Cases
-  ws.cell(row, 12).formula('=IFERROR((K' + row + '/W' + row + '),0)').style(this.styles.percentageStyle) // CMS %
-  ws.cell(row, 14).formula('=IFERROR((M' + row + '/V' + row + '),0)').style(this.styles.percentageStyle) // GS %
-  ws.cell(row, 15).formula('=AEL' + row + '*$AEL$4').style(this.styles.nonEditableCaseStyle) // SDR Points
-  ws.cell(row, 16).formula('=AEM' + row + '*$AEM$4').style(this.styles.nonEditableCaseStyle) // FDR Points
-  ws.cell(row, 17).formula('=AEN' + row + '*$AEN$4').style(this.styles.nonEditableCaseStyle) // Parom Points
-  ws.cell(row, 18).formula('=AEO' + row + '*$AEO$4').style(this.styles.nonEditableCaseStyle) // ARMS Comm Points
-  ws.cell(row, 19).formula('=AEP' + row + '*$AEP$4').style(this.styles.nonEditableCaseStyle) // ARMS Licence Points
-  ws.cell(row, 20).formula(totalPointsFormula(row, 25, 420, 4)).style(this.styles.nonEditableCaseStyle) // Total Caseload Points - Non T2A
-  ws.cell(row, 21).formula(totalPointsFormula(row, 421, 816, 4)).style(this.styles.nonEditableCaseStyle) // Total Caseload Points - T2A
-  ws.cell(row, 22).formula('=SUM(K' + row + ',M' + row + ',O' + row + ':U' + row + ')').style(this.styles.nonEditableCaseStyle) // Overall Total Points
-  ws.cell(row, 23).formula('=IFERROR(ROUNDDOWN(((G' + row + ' * (H' + row + '/I' + row + '))*((H' + row + '-J' + row + ')/H' + row + ')),0),0)').style(this.styles.roundedStyle) // Available Points
-  ws.cell(row, 24).formula('=W' + row + '-V' + row).style(this.styles.roundedStyle) // Remaining Points
-  ws.cell(row, 25).formula('=IFERROR(V' + row + '/W' + row + ',0)').style(this.styles.percentageStyle) // Current % Capacity
+  ws.cell(row, 6).formula(totalCasesFormula(row, 24, 419, 4)).style(this.styles.nonEditableCaseStyle) // Total Cases
+  ws.cell(row, 12).formula('=IFERROR((K' + row + '/V' + row + '),0)').style(this.styles.percentageStyle) // CMS %
+  ws.cell(row, 14).formula('=IFERROR((M' + row + '/T' + row + '),0)').style(this.styles.percentageStyle) // GS %
+  ws.cell(row, 15).formula('=PE' + row + '*$PE$4').style(this.styles.nonEditableCaseStyle) // SDR Points
+  ws.cell(row, 16).formula('=PF' + row + '*$PF$4').style(this.styles.nonEditableCaseStyle) // FDR Points
+  ws.cell(row, 17).formula('=PG' + row + '*$PG$4').style(this.styles.nonEditableCaseStyle) // Parom Points
+  ws.cell(row, 18).formula('=PH' + row + '*$PH$4').style(this.styles.nonEditableCaseStyle) // ARMS Comm Points
+  ws.cell(row, 19).formula('=PI' + row + '*$PI$4').style(this.styles.nonEditableCaseStyle) // ARMS Licence Points
+  ws.cell(row, 20).formula(totalPointsFormula(row, 24, 419, 4)).style(this.styles.nonEditableCaseStyle) // Total Caseload Points
+  ws.cell(row, 21).formula('=SUM(K' + row + ',M' + row + ',O' + row + ':T' + row + ')').style(this.styles.nonEditableCaseStyle) // Overall Total Points
+  ws.cell(row, 22).formula('=IFERROR(ROUNDDOWN(((G' + row + ' * (H' + row + '/I' + row + '))*((H' + row + '-J' + row + ')/H' + row + ')),0),0)').style(this.styles.roundedStyle) // Available Points
+  ws.cell(row, 23).formula('=U' + row + '-V' + row).style(this.styles.roundedStyle) // Remaining Points
+  ws.cell(row, 24).formula('=IFERROR(U' + row + '/V' + row + ',0)').style(this.styles.percentageStyle) // Current % Capacity
 }
 
 const inputBottomTotals = function (ws, row) {
@@ -177,13 +139,12 @@ const inputBottomTotals = function (ws, row) {
   ws.cell(row, 19).formula('=SUM($S$' + 5 + ':S' + dataEndRow + ')').style(this.styles.sumStyle)
   ws.cell(row, 20).formula('=SUM($T$' + 5 + ':T' + dataEndRow + ')').style(this.styles.sumStyle)
   ws.cell(row, 21).formula('=SUM($U$' + 5 + ':U' + dataEndRow + ')').style(this.styles.sumStyle)
-  ws.cell(row, 22).formula('=SUM($V$' + 5 + ':V' + dataEndRow + ')').style(this.styles.sumStyle)
+  ws.cell(row, 22).formula('=SUM($V$' + 5 + ':V' + dataEndRow + ')').style(this.styles.roundedSumStyle)
   ws.cell(row, 23).formula('=SUM($W$' + 5 + ':W' + dataEndRow + ')').style(this.styles.roundedSumStyle)
-  ws.cell(row, 24).formula('=SUM($X$' + 5 + ':X' + dataEndRow + ')').style(this.styles.roundedSumStyle)
-  ws.cell(row, 25).formula('=IFERROR(V' + row + '/W' + row + ',0)').style(this.styles.averagePercentageStyle)
-  ws.cell(row, 26).formula('=SUM($Z$' + 5 + ':Z' + dataEndRow + ')').style(this.styles.sumStyle)
+  ws.cell(row, 24).formula('=IFERROR(T' + row + '/U' + row + ',0)').style(this.styles.averagePercentageStyle)
+  ws.cell(row, 25).formula('=SUM($Y$' + 5 + ':Y' + dataEndRow + ')').style(this.styles.sumStyle)
 
-  for (let i = 27; i < 823; i++) {
+  for (let i = 26; i < 426; i++) {
     let formula = '=SUM('
     const col = getColumnName(i - 1)
     formula += `$${col}5:${col}${dataEndRow}`
@@ -192,17 +153,10 @@ const inputBottomTotals = function (ws, row) {
 }
 
 const setTierTotals = function (ws, rowStart, columnStart, casesForThisTier, t2a) {
-  if (t2a) {
-    ws.cell(rowStart, columnStart).number(casesForThisTier.t2aTotalCases).style(this.styles.editableStyle)
-    ws.cell(rowStart, columnStart + 1).number(casesForThisTier.t2aWarrantsTotal).style(this.styles.editableStyle)
-    ws.cell(rowStart, columnStart + 2).number(casesForThisTier.t2aUPW).style(this.styles.editableStyle)
-    ws.cell(rowStart, columnStart + 3).number(casesForThisTier.t2aOverdueTerminationsTotal).style(this.styles.editableStyle)
-  } else {
-    ws.cell(rowStart, columnStart).number(casesForThisTier.totalCases).style(this.styles.editableStyle)
-    ws.cell(rowStart, columnStart + 1).number(casesForThisTier.warrantsTotal).style(this.styles.editableStyle)
-    ws.cell(rowStart, columnStart + 2).number(casesForThisTier.UPW).style(this.styles.editableStyle)
-    ws.cell(rowStart, columnStart + 3).number(casesForThisTier.overdueTerminationsTotal).style(this.styles.editableStyle)
-  }
+  ws.cell(rowStart, columnStart).number(casesForThisTier.totalCases).style(this.styles.editableStyle)
+  ws.cell(rowStart, columnStart + 1).number(casesForThisTier.warrantsTotal).style(this.styles.editableStyle)
+  ws.cell(rowStart, columnStart + 2).number(casesForThisTier.UPW).style(this.styles.editableStyle)
+  ws.cell(rowStart, columnStart + 3).number(casesForThisTier.overdueTerminationsTotal).style(this.styles.editableStyle)
 }
 
 module.exports = function (ws, scenarioData, typeTierGroupLength, tiersPerType, styles) {
