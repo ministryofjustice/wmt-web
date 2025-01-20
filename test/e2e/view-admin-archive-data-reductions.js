@@ -108,7 +108,7 @@ describe('Admin Archive Data Reductions Page', () => {
       const search = await $('#archive-reductions-filter-submit')
       await search.click()
       await browser.waitUntil(async (resolve) => {
-        return (await $('#reduction-archive-table tbody tr:first-child').getText()) !== 'Searching...'
+        return (await $('#reduction-archive-table tbody tr:first-child').getText()) !== 'Loading...'
       })
 
       const firstRow = await $('#reduction-archive-table tbody tr:first-child')
