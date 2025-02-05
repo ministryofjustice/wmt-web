@@ -96,7 +96,7 @@
     "datatables.net": "^2.2.1",
     "datatables.net-dt": "^2.2.1",
     "excel4node": "1.8.2",
-    "express": "4.21.1",
+    "express": "4.21.2",
     "express-nunjucks": "3.1.2",
     "express-session": "1.18.1",
     "floatthead": "2.2.5",
