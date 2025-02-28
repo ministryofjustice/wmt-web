@@ -1,5 +1,5 @@
 
-FROM node:22.11-bullseye-slim as base
+FROM node:22.14.0-bookworm-slim as base
 
 ARG BUILD_NUMBER=1_0_0
 ARG GIT_REF=not-available
