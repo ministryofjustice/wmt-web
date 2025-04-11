@@ -1,4 +1,4 @@
-/* eslint-disable no-new */
+ 
 const expect = require('chai').expect
 const WorkloadPoints = require('../../../../app/services/domain/workload-points')
 

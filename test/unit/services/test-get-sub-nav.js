@@ -83,10 +83,10 @@ describe('services/get-sub-nav', function () {
 
   it('marks the current link as active', function () {
     const subNav = getSubNav(id, omOrganisationalUnitName, currentLink)
-    expect(subNav[0].active).to.be.true //eslint-disable-line
-    expect(subNav[1].active).to.be.undefined //eslint-disable-line
-    expect(subNav[2].active).to.be.undefined //eslint-disable-line
-    expect(subNav[3].active).to.be.undefined //eslint-disable-line    
-    expect(subNav[4].active).to.be.undefined //eslint-disable-line
+    expect(subNav[0].active).to.be.true  
+    expect(subNav[1].active).to.be.undefined  
+    expect(subNav[2].active).to.be.undefined  
+    expect(subNav[3].active).to.be.undefined  
+    expect(subNav[4].active).to.be.undefined  
   })
 })

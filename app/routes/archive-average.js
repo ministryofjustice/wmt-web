@@ -14,8 +14,8 @@ const title = 'Averaged Caseload Data'
 const archiveDatabaseStartDateString = require('../../config').ARCHIVE_DATABASE_START_DATE
 const currentDatabaseStartDateString = require('../../config').CURRENT_DATABASE_START_DATE
 const heDecode = require('he')
-const archiveDatabaseStartDate = new moment(archiveDatabaseStartDateString, 'DD/MM/YYYY') //eslint-disable-line
-const currentDatabaseStartDate = new moment(currentDatabaseStartDateString, 'DD/MM/YYYY') //eslint-disable-line
+const archiveDatabaseStartDate = new moment(archiveDatabaseStartDateString, 'DD/MM/YYYY')  
+const currentDatabaseStartDate = new moment(currentDatabaseStartDateString, 'DD/MM/YYYY')  
 const getGroupedAveragedArchiveData = require('../services/get-grouped-averaged-archive-data')
 const getArchiveOption = require('../helpers/archive-helpers/get-archive-option')
 const getStringifiedBody = require('../helpers/archive-helpers/get-stringified-body')
@@ -154,7 +154,7 @@ const formatResults = function (results) {
 const getGroupedArchiveData = function (results, groupBy, interval) {
   if (results.length > 0) {
     results = formatResults(results)
-    results = results.sort((a, b) => new moment(a.workloadDate).format('YYYYMMDD') - new moment(b.workloadDate).format('YYYYMMDD')) //eslint-disable-line
+    results = results.sort((a, b) => new moment(a.workloadDate).format('YYYYMMDD') - new moment(b.workloadDate).format('YYYYMMDD'))  
     let endDate = moment(results[results.length - 1].workloadDate).endOf('week').add(1, 'day').startOf('day')
     if (endDate.isBefore(archiveDataForm.archiveToDate)) {
       endDate = endDate.format('YYYY-MM-DD')

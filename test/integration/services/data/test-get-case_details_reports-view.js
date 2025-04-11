@@ -50,7 +50,7 @@ describe('services/data/get-case-details-reports-view', function () {
   it('should return empty object for a given invalid team', function () {
     return getCaseDetailsReportsView(0)
       .then(function (results) {
-        expect(results).to.be.empty //eslint-disable-line
+        expect(results).to.be.empty  
       })
   })
 

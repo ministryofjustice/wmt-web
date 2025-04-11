@@ -68,7 +68,7 @@ describe('contracted-hours route', function () {
       .expect(200)
       .set('Cookie', COOKIES)
       .then(function () {
-          expect(getSubNavStub.calledWith('1', 'offender-manager', OM_CONTRACTED_HOURS_URL)).to.be.true //eslint-disable-line
+          expect(getSubNavStub.calledWith('1', 'offender-manager', OM_CONTRACTED_HOURS_URL)).to.be.true  
         expect(contractedHoursService.getContractedHours.calledWith('1', 'offender-manager', workloadType.PROBATION))
       })
   })

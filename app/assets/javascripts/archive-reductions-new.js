@@ -76,7 +76,7 @@ $(document).ready(function () {
         dataSrc: 'reductions',
         error: function (response) {
           $('#reduction-archive-table_processing').hide()
-          alert('An error occurred when searching for reductions.') // eslint-disable-line no-undef
+          alert('An error occurred when searching for reductions.')  
         }
       },
       columns: [

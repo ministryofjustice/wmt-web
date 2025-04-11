@@ -81,7 +81,7 @@ describe('services/data/get-reduction-notes-export', function () {
       .then(function (id) {
         return getReductionsExport(id, orgUnitConstants.TEAM.name)
           .then(function (results) {
-                expect(results).to.be.empty //eslint-disable-line
+                expect(results).to.be.empty  
           })
       })
   })
@@ -91,7 +91,7 @@ describe('services/data/get-reduction-notes-export', function () {
       .then(function (id) {
         return getReductionsExport(id, orgUnitConstants.LDU.name)
           .then(function (results) {
-                expect(results).to.be.empty //eslint-disable-line
+                expect(results).to.be.empty  
           })
       })
   })
@@ -101,7 +101,7 @@ describe('services/data/get-reduction-notes-export', function () {
       .then(function (id) {
         return getReductionsExport(id, orgUnitConstants.REGION.name)
           .then(function (results) {
-                expect(results).to.be.empty //eslint-disable-line
+                expect(results).to.be.empty  
           })
       })
   })

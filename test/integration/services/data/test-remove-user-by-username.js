@@ -22,7 +22,7 @@ describe('/services/data/remove-user-by-username', function () {
         expect(result).to.be.greaterThan(0)
         return getUserByUsername(username)
           .then(function (result) {
-            expect(result).to.not.exist //eslint-disable-line
+            expect(result).to.not.exist  
           })
       })
   })

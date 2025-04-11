@@ -1,4 +1,4 @@
-/* eslint-disable no-new */
+ 
 const moment = require('moment')
 const expect = require('chai').expect
 const Reduction = require('../../../../app/services/domain/reduction')

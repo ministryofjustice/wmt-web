@@ -57,7 +57,7 @@ describe('services/data/get-organisation-overview', function () {
       .then(function (invalidId) {
         return getOrganisationOverview(invalidId, orgUnitConstants.TEAM.name)
           .then(function (results) {
-        expect(results).to.be.empty //eslint-disable-line
+        expect(results).to.be.empty  
           })
       })
   })
@@ -67,7 +67,7 @@ describe('services/data/get-organisation-overview', function () {
       .then(function (invalidId) {
         return getOrganisationOverview(invalidId, orgUnitConstants.LDU.name)
           .then(function (results) {
-        expect(results).to.be.empty //eslint-disable-line
+        expect(results).to.be.empty  
           })
       })
   })
@@ -77,7 +77,7 @@ describe('services/data/get-organisation-overview', function () {
       .then(function (invalidId) {
         return getOrganisationOverview(invalidId, orgUnitConstants.REGION.name)
           .then(function (results) {
-        expect(results).to.be.empty //eslint-disable-line
+        expect(results).to.be.empty  
           })
       })
   })

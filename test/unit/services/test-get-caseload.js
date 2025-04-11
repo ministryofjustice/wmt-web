@@ -156,7 +156,7 @@ describe('services/get-caseload', function () {
     caseloadHelper.calculateTotalTiersRow.withArgs([{}]).returns({})
     caseloadHelper.getCaseloadSummaryTotalsByTeam.returns([{}])
     return getCaseload(id, lduName).then(function (result) {
-      expect(getCaseloadDetail.calledWith(id, lduName)).to.be.true //eslint-disable-line
+      expect(getCaseloadDetail.calledWith(id, lduName)).to.be.true  
     })
   })
 

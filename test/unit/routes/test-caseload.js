@@ -167,7 +167,7 @@ describe('caseload route', function () {
       .get(TEAM_CASELOAD_URL)
       .expect(200)
       .then(function () {
-        expect(getSubNavStub.calledWith('1', orgUnit.TEAM.name, TEAM_CASELOAD_URL)).to.be.true //eslint-disable-line
+        expect(getSubNavStub.calledWith('1', orgUnit.TEAM.name, TEAM_CASELOAD_URL)).to.be.true  
       })
   })
 
@@ -183,7 +183,7 @@ describe('caseload route', function () {
       .get(LDU_CASELOAD_URL)
       .expect(200)
       .then(function () {
-        expect(getSubNavStub.calledWith('1', orgUnit.LDU.name, LDU_CASELOAD_URL)).to.be.true //eslint-disable-line
+        expect(getSubNavStub.calledWith('1', orgUnit.LDU.name, LDU_CASELOAD_URL)).to.be.true  
         expect(getCaseload.calledWith('1', orgUnit.LDU.name)).to.be.eql(true)
       })
   })
@@ -195,7 +195,7 @@ describe('caseload route', function () {
       .get(REGION_CASELOAD_URL)
       .expect(200)
       .then(function () {
-        expect(getSubNavStub.calledWith('1', orgUnit.REGION.name, REGION_CASELOAD_URL)).to.be.true //eslint-disable-line
+        expect(getSubNavStub.calledWith('1', orgUnit.REGION.name, REGION_CASELOAD_URL)).to.be.true  
         expect(getCaseload.calledWith('1', orgUnit.REGION.name)).to.be.eql(true)
       })
   })
@@ -207,7 +207,7 @@ describe('caseload route', function () {
       .get(NATIONAL_CASELOAD_URL)
       .expect(200)
       .then(function () {
-        expect(getSubNavStub.calledWith('0', orgUnit.NATIONAL.name, NATIONAL_CASELOAD_URL)).to.be.true //eslint-disable-line
+        expect(getSubNavStub.calledWith('0', orgUnit.NATIONAL.name, NATIONAL_CASELOAD_URL)).to.be.true  
         expect(getCaseload.calledWith('0', orgUnit.NATIONAL.name)).to.be.eql(true)
       })
   })
@@ -226,7 +226,7 @@ describe('Caseload csv export route', function () {
         .get(TEAM_CASELOAD_CSV_URL)
         .expect(200)
         .then(function () {
-          expect(getExportCsv.calledWith(orgUnit.TEAM.name, TEAM_CASELOAD, tabs.CASELOAD)).to.be.true //eslint-disable-line
+          expect(getExportCsv.calledWith(orgUnit.TEAM.name, TEAM_CASELOAD, tabs.CASELOAD)).to.be.true  
         })
     })
 
@@ -254,7 +254,7 @@ describe('Caseload csv export route', function () {
         .get(LDU_CASELOAD_CSV_URL)
         .expect(200)
         .then(function () {
-          expect(getExportCsv.calledWith(orgUnit.LDU.name, TEAM_CASELOAD, tabs.CASELOAD)).to.be.true //eslint-disable-line
+          expect(getExportCsv.calledWith(orgUnit.LDU.name, TEAM_CASELOAD, tabs.CASELOAD)).to.be.true  
         })
     })
 

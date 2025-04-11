@@ -39,19 +39,19 @@ describe('View your caseload flow', () => {
       custody = await custody.getText()
       let textTotal = custody.split('\n')
 
-      expect(Number(textTotal[0])).to.be.greaterThan(-1)// eslint-disable-line
+      expect(Number(textTotal[0])).to.be.greaterThan(-1) 
       expect(textTotal[1]).to.eql('Custody cases')
 
       community = await $('#communityTotal')
       community = await community.getText()
       textTotal = community.split('\n')
-      expect(Number(textTotal[0])).to.be.greaterThan(-1) // eslint-disable-line
+      expect(Number(textTotal[0])).to.be.greaterThan(-1)  
       expect(textTotal[1]).to.eql('Community cases')
 
       licence = await $('#licenseTotal')
       licence = await licence.getText()
       textTotal = licence.split('\n')
-      expect(Number(textTotal[0])).to.be.greaterThan(-1) // eslint-disable-line
+      expect(Number(textTotal[0])).to.be.greaterThan(-1)  
       expect(textTotal[1]).to.eql('License cases')
     })
 

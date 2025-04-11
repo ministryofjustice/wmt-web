@@ -53,7 +53,7 @@ describe('view dashboard reports', function () {
     it('should be able to navigate to dashboard page', async function () {
       const link = await $('[href="/probation/hmpps/0/dashboard"]')
       await link.click()
-      const rows = await browser.findElements('xpath', '//*[@id="dashboard-table"]/tbody/tr')
+      const rows = await $$('xpath', '//*[@id="dashboard-table"]/tbody/tr')
 
       expect(rows.length).to.equal(5)
 
@@ -84,7 +84,7 @@ describe('view dashboard reports', function () {
     it('should be able to navigate to dashboard page', async function () {
       const link = await $('[href="/probation/hmpps/0/dashboard"]')
       await link.click()
-      const rows = await browser.findElements('xpath', '//*[@id="dashboard-table"]/tbody/tr')
+      const rows = await $$('xpath', '//*[@id="dashboard-table"]/tbody/tr')
 
       expect(rows.length).to.equal(5)
 
@@ -115,7 +115,7 @@ describe('view dashboard reports', function () {
     it('should be able to navigate to dashboard page', async function () {
       const link = await $('[href="/probation/hmpps/0/dashboard"]')
       await link.click()
-      const rows = await browser.findElements('xpath', '//*[@id="dashboard-table"]/tbody/tr')
+      const rows = await $$('xpath', '//*[@id="dashboard-table"]/tbody/tr')
 
       expect(rows.length).to.equal(5)
 

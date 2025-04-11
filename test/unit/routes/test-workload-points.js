@@ -235,7 +235,7 @@ describe('Admin Workload Points route', function () {
   it('should respond with 200 when the correct admin/workload-points url is called', function () {
     return supertest(app).get(WORKLOAD_POINTS_URL).expect(200)
       .then(function () {
-      expect(workloadPointsService.getWorkloadPoints.calledWith(false)).to.be.true //eslint-disable-line
+      expect(workloadPointsService.getWorkloadPoints.calledWith(false)).to.be.true  
       })
   })
 
@@ -256,7 +256,7 @@ describe('Admin Workload Points T2A route', function () {
   it('should respond with 200 when the correct admin/workload-points/t2a url is called', function () {
     return supertest(app).get(WORKLOAD_POINTS_T2A_URL).expect(200)
       .then(function () {
-      expect(workloadPointsService.getWorkloadPoints.calledWith(true)).to.be.true //eslint-disable-line
+      expect(workloadPointsService.getWorkloadPoints.calledWith(true)).to.be.true  
       })
   })
 

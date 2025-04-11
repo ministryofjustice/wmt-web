@@ -58,7 +58,7 @@ describe('case-progress route', function () {
       .get(OFFENDER_MANAGER_CASE_PROGRESS_URL)
       .expect(200)
       .then(function () {
-          expect(getSubNavStub.calledWith('1', 'offender-manager', OFFENDER_MANAGER_CASE_PROGRESS_URL)).to.be.true //eslint-disable-line
+          expect(getSubNavStub.calledWith('1', 'offender-manager', OFFENDER_MANAGER_CASE_PROGRESS_URL)).to.be.true  
       })
   })
 })

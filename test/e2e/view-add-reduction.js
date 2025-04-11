@@ -60,7 +60,7 @@ describe('View adding a new reduction', () => {
       await notesField.setValue(currentTime)
 
       await submit.click()
-      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
+      const activeReductions = await $$('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
       const viewLink = await $(activeReductions[0])
       await viewLink.click()
       notesField = await $('#textarea')
@@ -184,8 +184,8 @@ describe('View adding a new reduction', () => {
       await notesField.setValue(currentTime)
 
       await submit.click()
-      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
-      const viewLink = await $(activeReductions[0])
+      const activeReductions = await $$('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
+      const viewLink = activeReductions[0]
       await viewLink.click()
       notesField = await $('#textarea')
       notesField = await notesField.getValue()

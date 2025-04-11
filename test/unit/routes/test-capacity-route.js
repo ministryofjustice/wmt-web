@@ -72,7 +72,7 @@ describe('/caseload-capacity', function () {
         .get(LDU_CAPACITY_URI)
         .expect(200)
         .then(() => {
-          expect(getSubNavStub.calledWith('1', 'ldu', LDU_CAPACITY_URI)).to.be.true //eslint-disable-line
+          expect(getSubNavStub.calledWith('1', 'ldu', LDU_CAPACITY_URI)).to.be.true  
         })
     })
   })

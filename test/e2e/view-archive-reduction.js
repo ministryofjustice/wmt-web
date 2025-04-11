@@ -64,8 +64,8 @@ describe('archiving a reduction', () => {
       await submit.click()
 
       await $('#headingActive')
-      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
-      const viewLink = await $(activeReductions[0])
+      const activeReductions = await $$('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
+      const viewLink = activeReductions[0]
       const view = await viewLink.getText()
       expect(view).to.equal('View')
       await viewLink.click()
@@ -162,8 +162,8 @@ describe('archiving a reduction', () => {
     })
 
     it('should not be able to archive the reduction', async () => {
-      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
-      const viewLink = await $(activeReductions[0])
+      const activeReductions = await $$('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
+      const viewLink = activeReductions[0]
       await viewLink.click()
 
       const pageTitle = await $('.govuk-heading-xl')
@@ -223,8 +223,8 @@ describe('archiving a reduction', () => {
       await submit.click()
 
       await $('#headingActive')
-      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
-      const viewLink = await $(activeReductions[0])
+      const activeReductions = await $$('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
+      const viewLink = activeReductions[0]
       const view = await viewLink.getText()
       expect(view).to.equal('View')
       await viewLink.click()

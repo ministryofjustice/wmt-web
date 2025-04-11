@@ -131,7 +131,7 @@ describe('Overview csv export route', function () {
         .get(OM_OVERVIEW_CSV_URL)
         .expect(200)
         .then(function () {
-          expect(getExportCsv.calledWith(orgUnit.OFFENDER_MANAGER.name, OVERVIEW, tabs.OVERVIEW)).to.be.true //eslint-disable-line
+          expect(getExportCsv.calledWith(orgUnit.OFFENDER_MANAGER.name, OVERVIEW, tabs.OVERVIEW)).to.be.true  
         })
     })
   })
@@ -148,7 +148,7 @@ describe('Overview csv export route', function () {
         .get(OM_OVERVIEW_CSV_URL)
         .expect(200)
         .then(function () {
-          expect(getExportCsv.calledWith(orgUnit.OFFENDER_MANAGER.name, OVERVIEW, tabs.OVERVIEW)).to.be.true //eslint-disable-line
+          expect(getExportCsv.calledWith(orgUnit.OFFENDER_MANAGER.name, OVERVIEW, tabs.OVERVIEW)).to.be.true  
         })
     })
   })
@@ -165,7 +165,7 @@ describe('Overview csv export route', function () {
         .get(LDU_OVERVIEW_CSV_URL)
         .expect(200)
         .then(function () {
-          expect(getExportCsv.calledWith(orgUnit.LDU.name, OVERVIEW, tabs.OVERVIEW)).to.be.true //eslint-disable-line
+          expect(getExportCsv.calledWith(orgUnit.LDU.name, OVERVIEW, tabs.OVERVIEW)).to.be.true  
         })
     })
   })
@@ -182,7 +182,7 @@ describe('Overview csv export route', function () {
         .get(REGION_OVERVIEW_CSV_URL)
         .expect(200)
         .then(function () {
-          expect(getExportCsv.calledWith(orgUnit.REGION.name, OVERVIEW, tabs.OVERVIEW)).to.be.true //eslint-disable-line
+          expect(getExportCsv.calledWith(orgUnit.REGION.name, OVERVIEW, tabs.OVERVIEW)).to.be.true  
         })
     })
   })
@@ -199,7 +199,7 @@ describe('Overview csv export route', function () {
         .get(HMPPS_OVERVIEW_CSV_URL)
         .expect(200)
         .then(function () {
-          expect(getExportCsv.calledWith(orgUnit.NATIONAL.name, OVERVIEW, tabs.OVERVIEW)).to.be.true //eslint-disable-line
+          expect(getExportCsv.calledWith(orgUnit.NATIONAL.name, OVERVIEW, tabs.OVERVIEW)).to.be.true  
         })
     })
   })
@@ -228,7 +228,7 @@ describe('reductions notes csv export route', function () {
         .get(TEAM_REDUCTIONS_CSV_URL)
         .expect(200)
         .then(function () {
-          expect(getExportCsv.calledWith(orgUnit.TEAM.name, REDUCTIONS, tabs.REDUCTIONS_EXPORT)).to.be.true //eslint-disable-line
+          expect(getExportCsv.calledWith(orgUnit.TEAM.name, REDUCTIONS, tabs.REDUCTIONS_EXPORT)).to.be.true  
         })
     })
   })
@@ -243,7 +243,7 @@ describe('reductions notes csv export route', function () {
         .get(LDU_REDUCTIONS_CSV_URL)
         .expect(200)
         .then(function () {
-          expect(getExportCsv.calledWith(orgUnit.LDU.name, REDUCTIONS, tabs.REDUCTIONS_EXPORT)).to.be.true //eslint-disable-line
+          expect(getExportCsv.calledWith(orgUnit.LDU.name, REDUCTIONS, tabs.REDUCTIONS_EXPORT)).to.be.true  
         })
     })
   })
@@ -258,7 +258,7 @@ describe('reductions notes csv export route', function () {
         .get(REGION_REDUCTIONS_CSV_URL)
         .expect(200)
         .then(function () {
-          expect(getExportCsv.calledWith(orgUnit.REGION.name, REDUCTIONS, tabs.REDUCTIONS_EXPORT)).to.be.true //eslint-disable-line
+          expect(getExportCsv.calledWith(orgUnit.REGION.name, REDUCTIONS, tabs.REDUCTIONS_EXPORT)).to.be.true  
         })
     })
   })

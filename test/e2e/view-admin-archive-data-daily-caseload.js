@@ -82,9 +82,9 @@ describe('Admin Archive Data Daily Caseload Page', () => {
       const search = await $('#archive-filter-submit')
       await search.click()
 
-      const tableData = await browser.findElements('xpath', '//*[@id="daily-caseload-table"]/tbody/tr/td[position()=5]')
+      const tableData = await $$('xpath', '//*[@id="daily-caseload-table"]/tbody/tr/td[position()=5]')
 
-      const nameElement = await $(tableData[0])
+      const nameElement = tableData[0]
       const nameElementValue = await nameElement.getText()
       expect(nameElementValue).to.equal('Test_Forename Test_Surname')
     })
@@ -141,9 +141,9 @@ describe('Admin Archive Data Daily Caseload Page', () => {
       const search = await $('#archive-filter-submit')
       await search.click()
 
-      const tableData = await browser.findElements('xpath', '//*[@id="daily-caseload-table"]/tbody/tr/td[position()=5]')
+      const tableData = await $$('xpath', '//*[@id="daily-caseload-table"]/tbody/tr/td[position()=5]')
 
-      const nameElement = await $(tableData[0])
+      const nameElement = tableData[0]
       const nameElementValue = await nameElement.getText()
       expect(nameElementValue).to.equal('Test_Forename Test_Surname')
     })

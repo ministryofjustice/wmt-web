@@ -166,7 +166,7 @@ describe('services/reductions-service', function () {
           expect(result.referenceData).to.be.an('array')
           expect(result.title).to.equal('John Doe')
           expect(result.subTitle).to.equal('Offender Management')
-        expect(getContractedHoursForWorkloadOwnerStub.calledWith(1)).to.be.true //eslint-disable-line
+        expect(getContractedHoursForWorkloadOwnerStub.calledWith(1)).to.be.true  
           expect(getBreadcrumbsStub.calledWith(1, orgUnitConstant.OFFENDER_MANAGER.name)).to.be.eql(true)
           assert(getReferenceDataStub.called)
         })
@@ -179,9 +179,9 @@ describe('services/reductions-service', function () {
       addReductionStub.withArgs(workloadOwnerId, reduction).resolves(newReductionId)
       return reductionService.addReduction(workloadOwnerId, reduction)
         .then(function (result) {
-        expect(getLatestIdsForWpRecalc.calledWith(workloadOwnerId)).to.be.true //eslint-disable-line
-        expect(createCalculateWorkloadTaskStub.calledWith(latestWorkloadStagingId, latestWorkloadReportId, 1)).to.be.true //eslint-disable-line
-        expect(addReductionStub.calledWith(workloadOwnerId, reduction)).to.be.true //eslint-disable-line
+        expect(getLatestIdsForWpRecalc.calledWith(workloadOwnerId)).to.be.true  
+        expect(createCalculateWorkloadTaskStub.calledWith(latestWorkloadStagingId, latestWorkloadReportId, 1)).to.be.true  
+        expect(addReductionStub.calledWith(workloadOwnerId, reduction)).to.be.true  
           expect(result).to.equal(1)
         })
     })
@@ -195,9 +195,9 @@ describe('services/reductions-service', function () {
       const email = 'some.email.@justice.gov.uk'
       return reductionService.updateReduction(workloadOwnerId, existingReductionId, reduction, oldReduction, email)
         .then(function (result) {
-          expect(getLatestIdsForWpRecalc.calledWith(workloadOwnerId)).to.be.true //eslint-disable-line
-          expect(createCalculateWorkloadTaskStub.calledWith(latestWorkloadStagingId, latestWorkloadReportId, 1)).to.be.true //eslint-disable-line
-          expect(updateReductionStub.calledWith(existingReductionId, workloadOwnerId,reduction)).to.be.true //eslint-disable-line
+          expect(getLatestIdsForWpRecalc.calledWith(workloadOwnerId)).to.be.true  
+          expect(createCalculateWorkloadTaskStub.calledWith(latestWorkloadStagingId, latestWorkloadReportId, 1)).to.be.true  
+          expect(updateReductionStub.calledWith(existingReductionId, workloadOwnerId,reduction)).to.be.true  
           expect(result).to.equal(1)
         })
     })
@@ -210,9 +210,9 @@ describe('services/reductions-service', function () {
       updateReductionStatusStub.withArgs(existingReductionId, newReductonStatus).resolves(existingReductionId)
       return reductionService.updateReductionStatus(workloadOwnerId, existingReductionId, newReductonStatus)
         .then(function (result) {
-        expect(getLatestIdsForWpRecalc.calledWith(workloadOwnerId)).to.be.true //eslint-disable-line
-        expect(createCalculateWorkloadTaskStub.calledWith(latestWorkloadStagingId, latestWorkloadReportId, 1)).to.be.true //eslint-disable-line
-        expect(updateReductionStatusStub.calledWith(existingReductionId, newReductonStatus)).to.be.true //eslint-disable-line
+        expect(getLatestIdsForWpRecalc.calledWith(workloadOwnerId)).to.be.true  
+        expect(createCalculateWorkloadTaskStub.calledWith(latestWorkloadStagingId, latestWorkloadReportId, 1)).to.be.true  
+        expect(updateReductionStatusStub.calledWith(existingReductionId, newReductonStatus)).to.be.true  
           expect(result).to.equal(1)
         })
     })
@@ -223,7 +223,7 @@ describe('services/reductions-service', function () {
       getReductionById.resolves(reduction)
       return reductionService.getReductionByReductionId(existingReductionId)
         .then(function (result) {
-        expect(getReductionById.calledWith(existingReductionId)).to.be.true //eslint-disable-line
+        expect(getReductionById.calledWith(existingReductionId)).to.be.true  
           expect(result).to.eql(reduction)
         })
     })
@@ -231,7 +231,7 @@ describe('services/reductions-service', function () {
     it('should not call on to service for undefined id and return undefined', function () {
       return reductionService.getReductionByReductionId(undefined)
         .then(function (result) {
-        expect(getReductionById.called).to.be.false //eslint-disable-line        
+        expect(getReductionById.called).to.be.false  
           expect(result).to.equal(undefined)
         })
     })

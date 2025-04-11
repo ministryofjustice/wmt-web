@@ -60,7 +60,7 @@ describe('services/contracted-hours-service', function () {
       getContractedHoursForWorkloadOwner.withArgs(id).resolves(CONTRACTED_HOURS)
       return contractedHoursService.getContractedHours(id, orgUnitConstant.OFFENDER_MANAGER.name)
         .then(function () {
-        expect(getContractedHoursForWorkloadOwner.calledWith(id)).to.be.true //eslint-disable-line
+        expect(getContractedHoursForWorkloadOwner.calledWith(id)).to.be.true  
         })
     })
   })
@@ -70,9 +70,9 @@ describe('services/contracted-hours-service', function () {
       updateContractedHoursForWorkloadOwner.withArgs(id, UPDATED_CONTRACTED_HOURS).resolves(1)
       return contractedHoursService.updateContractedHours(id, UPDATED_CONTRACTED_HOURS)
         .then(function () {
-        expect(updateContractedHoursForWorkloadOwner.calledWith(id, UPDATED_CONTRACTED_HOURS)).to.be.true //eslint-disable-line
-        expect(getLatestIdsForWpRecalc.calledWith(id)).to.be.true //eslint-disable-line
-        expect(createWorkloadPointsRecalculationTask.calledWith(3, 2)).to.be.true //eslint-disable-line
+        expect(updateContractedHoursForWorkloadOwner.calledWith(id, UPDATED_CONTRACTED_HOURS)).to.be.true  
+        expect(getLatestIdsForWpRecalc.calledWith(id)).to.be.true  
+        expect(createWorkloadPointsRecalculationTask.calledWith(3, 2)).to.be.true  
         })
     })
   })

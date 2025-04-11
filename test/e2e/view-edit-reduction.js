@@ -65,8 +65,8 @@ describe('editing a reduction', () => {
       await pollCheckAndDelete(sqsClient, queueURL)
 
       await $('#headingActive')
-      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
-      const viewLink = await $(activeReductions[0])
+      const activeReductions = await $$('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
+      const viewLink = activeReductions[0]
       const view = await viewLink.getText()
       expect(view).to.equal('View')
       await viewLink.click()
@@ -103,8 +103,8 @@ describe('editing a reduction', () => {
 
       await submit.click()
 
-      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
-      const viewLink = await $(activeReductions[0])
+      const activeReductions = await $$('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
+      const viewLink = activeReductions[0]
       const view = await viewLink.getText()
       expect(view).to.equal('View')
       await viewLink.click()
@@ -191,8 +191,8 @@ describe('editing a reduction', () => {
     })
 
     it('should be not be able to edit a reduction', async () => {
-      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
-      const viewLink = await $(activeReductions[0])
+      const activeReductions = await $$('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
+      const viewLink = activeReductions[0]
       await viewLink.click()
 
       const currentTime = moment().format('YYYY-MM-DD HH:mm:ss.SSS')
@@ -255,8 +255,8 @@ describe('editing a reduction', () => {
       await submit.click()
 
       await $('#headingActive')
-      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
-      const viewLink = await $(activeReductions[0])
+      const activeReductions = await $$('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
+      const viewLink = activeReductions[0]
       const view = await viewLink.getText()
       expect(view).to.equal('View')
       await viewLink.click()
@@ -273,8 +273,8 @@ describe('editing a reduction', () => {
 
       await submit.click()
 
-      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
-      const viewLink = await $(activeReductions[0])
+      const activeReductions = await $$('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
+      const viewLink = activeReductions[0]
       const view = await viewLink.getText()
       expect(view).to.equal('View')
       await viewLink.click()

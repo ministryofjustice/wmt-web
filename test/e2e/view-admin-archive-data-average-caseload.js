@@ -82,9 +82,9 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
       const search = await $('#archive-average-filter-submit')
       await search.click()
 
-      const tableData = await browser.findElements('xpath', '//*[@id="average-caseload-table"]/tbody/tr/td[position()=6]')
+      const tableData = await $$('xpath', '//*[@id="average-caseload-table"]/tbody/tr/td[position()=6]')
 
-      const nameElement = await $(tableData[0])
+      const nameElement = tableData[0]
       const nameElementValue = await nameElement.getText()
       expect(nameElementValue).to.equal('Test_Forename Test_Surname')
     })
@@ -141,9 +141,9 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
       const search = await $('#archive-average-filter-submit')
       await search.click()
 
-      const tableData = await browser.findElements('xpath', '//*[@id="average-caseload-table"]/tbody/tr/td[position()=6]')
+      const tableData = await $$('xpath', '//*[@id="average-caseload-table"]/tbody/tr/td[position()=6]')
 
-      const nameElement = await $(tableData[0])
+      const nameElement = tableData[0]
       const nameElementValue = await nameElement.getText()
       expect(nameElementValue).to.equal('Test_Forename Test_Surname')
     })

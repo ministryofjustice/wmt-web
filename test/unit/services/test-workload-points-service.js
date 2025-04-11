@@ -80,19 +80,19 @@ describe('services/workload-points-service', function () {
     it('should call the necesssary functions with the correct parameters', function () {
       const returnedWorkloadPoints = Object.assign({}, WORKLOAD_POINTS_DETAILS, { previousWpId: 123 })
       return workloadPointsService.updateWorkloadPoints(returnedWorkloadPoints, false).then(function (results) {
-        expect(updatePreviousWorkloadPointsEffectiveTo.calledWith(123)).to.be.true //eslint-disable-line  
-        expect(insertNewWorkloadPoints.calledWith(returnedWorkloadPoints)).to.be.true //eslint-disable-line  
-        expect(getWorkloadIdsForWpRecalc.calledWith(123, false)).to.be.true //eslint-disable-line  
-        expect(createRecalculateWorkloadPointsTask.calledWith(recalcIds.workloadReportId)).to.be.true //eslint-disable-line        
+        expect(updatePreviousWorkloadPointsEffectiveTo.calledWith(123)).to.be.true  
+        expect(insertNewWorkloadPoints.calledWith(returnedWorkloadPoints)).to.be.true  
+        expect(getWorkloadIdsForWpRecalc.calledWith(123, false)).to.be.true  
+        expect(createRecalculateWorkloadPointsTask.calledWith(recalcIds.workloadReportId)).to.be.true  
       })
     })
     it('should call the necesssary functions for t2a updated with the correct parameters', function () {
       const returnedT2aWorkloadPoints = Object.assign({}, WORKLOAD_POINTS_DETAILS, { previousWpId: 124, is_t2a: true })
       return workloadPointsService.updateWorkloadPoints(returnedT2aWorkloadPoints, true).then(function (results) {
-        expect(updatePreviousWorkloadPointsEffectiveTo.calledWith(124)).to.be.true //eslint-disable-line  
-        expect(insertNewWorkloadPoints.calledWith(returnedT2aWorkloadPoints)).to.be.true //eslint-disable-line  
-        expect(getWorkloadIdsForWpRecalc.calledWith(124, true)).to.be.true //eslint-disable-line  
-        expect(createRecalculateWorkloadPointsTask.calledWith(recalcIds.workloadReportId)).to.be.true //eslint-disable-line        
+        expect(updatePreviousWorkloadPointsEffectiveTo.calledWith(124)).to.be.true  
+        expect(insertNewWorkloadPoints.calledWith(returnedT2aWorkloadPoints)).to.be.true  
+        expect(getWorkloadIdsForWpRecalc.calledWith(124, true)).to.be.true  
+        expect(createRecalculateWorkloadPointsTask.calledWith(recalcIds.workloadReportId)).to.be.true  
       })
     })
   })

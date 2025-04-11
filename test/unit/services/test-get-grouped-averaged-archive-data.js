@@ -11,7 +11,7 @@ let groupedData
 
 describe('services/get-grouped-averaged-archive-data', function () {
   it('should return the expected array with 77 objects - Group By OM - Weekly', function () {
-    groupedData = getGroupedAveragedArchiveData(preGroupedData, new moment('2021-01-04'), '2021-02-15', 'offenderManager', 'weekly') //eslint-disable-line
+    groupedData = getGroupedAveragedArchiveData(preGroupedData, new moment('2021-01-04'), '2021-02-15', 'offenderManager', 'weekly')  
     expect(groupedData.length).to.eql(77)
     const expected = expectedGroupedDataByOmWeekly.map(item => ({
       startDateSortBy: moment(item.startDate, 'DD-MM-YYYY').unix(),
@@ -24,7 +24,7 @@ describe('services/get-grouped-averaged-archive-data', function () {
   })
 
   it('should return the expected array with 22 objects - Group By OM - Monthly', function () {
-    groupedData = getGroupedAveragedArchiveData(preGroupedData, new moment('2021-01-04'), '2021-02-15', 'offenderManager', 'monthly') //eslint-disable-line
+    groupedData = getGroupedAveragedArchiveData(preGroupedData, new moment('2021-01-04'), '2021-02-15', 'offenderManager', 'monthly')  
     expect(groupedData.length).to.eql(22)
     const expected = expectedGroupedDataByOmMonthly.map(item => ({
       startDateSortBy: moment(item.startDate, 'DD-MM-YYYY').unix(),
@@ -37,7 +37,7 @@ describe('services/get-grouped-averaged-archive-data', function () {
   })
 
   it('should return the expected array with 7 objects - Group By Team - Weekly', function () {
-    groupedData = getGroupedAveragedArchiveData(preGroupedData, new moment('2021-01-04'), '2021-02-15', 'team', 'weekly') //eslint-disable-line
+    groupedData = getGroupedAveragedArchiveData(preGroupedData, new moment('2021-01-04'), '2021-02-15', 'team', 'weekly')  
     expect(groupedData.length).to.eql(7)
     const expected = expectedGroupedDataByTeamWeekly.map(item => ({
       startDateSortBy: moment(item.startDate, 'DD-MM-YYYY').unix(),
@@ -50,7 +50,7 @@ describe('services/get-grouped-averaged-archive-data', function () {
   })
 
   it('should return the expected array with 2 objects - Group By Team - Monthly', function () {
-    groupedData = getGroupedAveragedArchiveData(preGroupedData, new moment('2021-01-04'), '2021-02-15', 'team', 'monthly') //eslint-disable-line
+    groupedData = getGroupedAveragedArchiveData(preGroupedData, new moment('2021-01-04'), '2021-02-15', 'team', 'monthly')  
     expect(groupedData.length).to.eql(2)
     for (let i = 0; i < groupedData.length; i++) {
       expect(groupedData[i]).to.deep.equal(expectedGroupedDataByTeamMonthly[i])

@@ -1,1 +1,1 @@
-NODE_ENV=dev && npm run lint
+NODE_ENV=dev && npx eslint --fix .

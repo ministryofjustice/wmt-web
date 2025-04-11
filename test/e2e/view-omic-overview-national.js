@@ -24,16 +24,16 @@ describe('National Omic Overview', function () {
       let text = await pageTitle.getText()
       expect(text).to.equal('National')
 
-      const activeRegion = await browser.findElements('xpath', '//*[@id="example"]/tbody/tr[position()=1]/td[position()=1]/a')
-      const viewRegionLink = await $(activeRegion[0])
+      const activeRegion = await $$('xpath', '//*[@id="example"]/tbody/tr[position()=1]/td[position()=1]/a')
+      const viewRegionLink = activeRegion[0]
       await viewRegionLink.click()
 
       pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.regionName)
 
-      const activeLdu = await browser.findElements('xpath', '//*[@id="example"]/tbody/tr[position()=1]/td[position()=1]/a')
-      const viewLduLink = await $(activeLdu[0])
+      const activeLdu = await $$('xpath', '//*[@id="example"]/tbody/tr[position()=1]/td[position()=1]/a')
+      const viewLduLink = activeLdu[0]
 
       await viewLduLink.click()
 
@@ -43,8 +43,8 @@ describe('National Omic Overview', function () {
     })
 
     it('should contain breadcrumbs which allow the user to navigate up the org hierarchy', async function () {
-      const breadcrumbRegion = await browser.findElements('xpath', '//*[@class="govuk-breadcrumbs__list"]/li[position()=2]/a')
-      const breadcrumbRegionLink = await $(breadcrumbRegion[0])
+      const breadcrumbRegion = await $$('xpath', '//*[@class="govuk-breadcrumbs__list"]/li[position()=2]/a')
+      const breadcrumbRegionLink = breadcrumbRegion[0]
 
       await breadcrumbRegionLink.click()
 
@@ -52,8 +52,8 @@ describe('National Omic Overview', function () {
       let text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.regionName)
 
-      const breadcrumbNational = await browser.findElements('xpath', '//*[@class="govuk-breadcrumbs__list"]/li[position()=1]/a')
-      const breadcrumbNationalLink = await $(breadcrumbNational[0])
+      const breadcrumbNational = await $$('xpath', '//*[@class="govuk-breadcrumbs__list"]/li[position()=1]/a')
+      const breadcrumbNationalLink = breadcrumbNational[0]
 
       await breadcrumbNationalLink.click()
 
