@@ -76,17 +76,34 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
       const extraSearchCritera = await $('.select2-search__field')
       await extraSearchCritera.setValue('Test_Forename')
 
-      const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="15"]')
+      const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="16"]')
+
       await criteriaName.click()
 
       const search = await $('#archive-average-filter-submit')
       await search.click()
 
-      const tableData = await browser.findElements('xpath', '//*[@id="average-caseload-table"]/tbody/tr/td[position()=6]')
+      const firstRow = await $('#average-caseload-table tbody tr:first-child')
 
-      const nameElement = await $(tableData[0])
-      const nameElementValue = await nameElement.getText()
-      expect(nameElementValue).to.equal('Test_Forename Test_Surname')
+      const firstRowData = await firstRow.$$('td').map(child => child.getText())
+
+      expect(firstRowData).to.have.deep.members([
+        '18-06-2014',
+        '24-06-2014',
+        'NPS Test Region',
+        'Test LDU',
+        'Test Team',
+        'Test_Forename Test_Surname',
+        'PO',
+        '0',
+        '0.00%',
+        '0',
+        '0',
+        '0',
+        '0.00%',
+        '0',
+        '0.00%'
+      ])
     })
 
     after(async function () {
@@ -124,6 +141,7 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
       const archiveToDayField = await $('#archive-to-day')
       const archiveToMonthField = await $('#archive-to-month')
       const archiveToYearField = await $('#archive-to-year')
+      const search = await $('#archive-average-filter-submit')
 
       await archiveFromDayField.setValue('18')
       await archiveFromMonthField.setValue('6')
@@ -135,17 +153,32 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
       const extraSearchCritera = await $('.select2-search__field')
       await extraSearchCritera.setValue('Test_Forename')
 
-      const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="15"]')
+      const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="16"]')
       await criteriaName.click()
 
-      const search = await $('#archive-average-filter-submit')
       await search.click()
 
-      const tableData = await browser.findElements('xpath', '//*[@id="average-caseload-table"]/tbody/tr/td[position()=6]')
+      const firstRow = await $('#average-caseload-table tbody tr:first-child')
 
-      const nameElement = await $(tableData[0])
-      const nameElementValue = await nameElement.getText()
-      expect(nameElementValue).to.equal('Test_Forename Test_Surname')
+      const firstRowData = await firstRow.$$('td').map(child => child.getText())
+
+      expect(firstRowData).to.have.deep.members([
+        '18-06-2014',
+        '24-06-2014',
+        'NPS Test Region',
+        'Test LDU',
+        'Test Team',
+        'Test_Forename Test_Surname',
+        'PO',
+        '0',
+        '0.00%',
+        '0',
+        '0',
+        '0',
+        '0.00%',
+        '0',
+        '0.00%'
+      ])
     })
 
     after(async function () {
