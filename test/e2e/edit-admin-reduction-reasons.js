@@ -9,7 +9,7 @@ describe('Admin Add Reduction Reasons Page', () => {
 
     it('Should not be able to go on page', async function () {
       await browser.url('/edit-reduction-reason?id=6')
-      const header = await $('.govuk-heading-xl')
+      const header = $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -25,7 +25,8 @@ describe('Admin Add Reduction Reasons Page', () => {
 
     it('Should not be able to go on page', async function () {
       await browser.url('/edit-reduction-reason?id=6')
-      const header = await $('.govuk-heading-xl')
+      await $('.govuk-heading-xl').waitForExist({ timeout: 50000 })
+      const header = $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -38,13 +39,13 @@ describe('Admin Add Reduction Reasons Page', () => {
   describe('Application Support', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
-      const link = await $('[href="/admin"]')
+      const link = $('[href="/admin"]')
       await link.click()
     })
 
     it('Should not be able to go on page', async function () {
       await browser.url('/edit-reduction-reason?id=6')
-      const header = await $('.govuk-heading-xl')
+      const header = $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -57,28 +58,28 @@ describe('Admin Add Reduction Reasons Page', () => {
   describe('Super User', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.SuperUser)
-      let link = await $('[href="/admin"]')
+      let link = $('[href="/admin"]')
       await link.click()
-      link = await $('[href="/manage-reduction-reasons"]')
+      link = $('[href="/manage-reduction-reasons"]')
       await link.click()
-      link = await $('[href="/edit-reduction-reason?id=6"]')
+      link = $('[href="/edit-reduction-reason?id=6"]')
       await link.click()
     })
 
     it('Should be able to navigate to page', async function () {
-      const pageTitle = await $('.govuk-heading-xl')
+      const pageTitle = $('.govuk-heading-xl')
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Edit Reduction Reason')
     })
 
     it('Should be able to edit a reduction reason', async function () {
-      const reductionName = await $('#reductionName')
+      const reductionName = $('#reductionName')
       await reductionName.setValue('Edited reduction reason')
 
-      const submitButton = await $('#submit-button')
+      const submitButton = $('#submit-button')
       await submitButton.click()
 
-      const successBanner = await $('.govuk-notification-banner--success .govuk-notification-banner__heading')
+      const successBanner = $('.govuk-notification-banner--success .govuk-notification-banner__heading')
       const successBannerText = await successBanner.getText()
       expect(successBannerText).to.equal('The Reduction Reason was saved successfully!')
     })
