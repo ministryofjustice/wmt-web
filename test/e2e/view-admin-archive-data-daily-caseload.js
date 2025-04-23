@@ -9,7 +9,7 @@ describe('Admin Archive Data Daily Caseload Page', () => {
 
     it('Should not be able to go on page', async function () {
       await browser.url('/archive-data/daily-caseload-data')
-      const header = await $('.govuk-heading-xl')
+      const header = $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -25,7 +25,12 @@ describe('Admin Archive Data Daily Caseload Page', () => {
 
     it('Should not be able to go on page', async function () {
       await browser.url('/archive-data/daily-caseload-data')
-      const header = await $('.govuk-heading-xl')
+      await browser.waitUntil(async (resolve) => {
+        return (await $('.govuk-heading-xl').getText()) === 'Access is denied'
+      })
+
+      const header = $('.govuk-heading-xl')
+      console.log('view-admin-archive-data-daily-caseload header: ', header)
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -38,33 +43,33 @@ describe('Admin Archive Data Daily Caseload Page', () => {
   describe('Application Support', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
-      const link = await $('[href="/admin"]')
+      const link = $('[href="/admin"]')
       await link.click()
-      const optionslink = await $('[href="/archive-options"]')
+      const optionslink = $('[href="/archive-options"]')
       await optionslink.click()
-      const caseloadlink = await $('[href="/archive-data/daily-caseload-data"]')
+      const caseloadlink = $('[href="/archive-data/daily-caseload-data"]')
       await caseloadlink.click()
     })
 
     it('Should be able to navigate to page', async function () {
-      const pageTitle = await $('.govuk-heading-xl')
+      const pageTitle = $('.govuk-heading-xl')
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Daily Caseload Data')
     })
 
     it('should not show the export button', async function () {
-      const exportButton = await $('#archive-csv-submit')
+      const exportButton = $('#archive-csv-submit')
       const buttonExists = await exportButton.isExisting()
       return expect(buttonExists).to.equal(false)
     })
 
     it('should be able to search', async function () {
-      const archiveFromDayField = await $('#archive-from-day')
-      const archiveFromMonthField = await $('#archive-from-month')
-      const archiveFromYearField = await $('#archive-from-year')
-      const archiveToDayField = await $('#archive-to-day')
-      const archiveToMonthField = await $('#archive-to-month')
-      const archiveToYearField = await $('#archive-to-year')
+      const archiveFromDayField = $('#archive-from-day')
+      const archiveFromMonthField = $('#archive-from-month')
+      const archiveFromYearField = $('#archive-from-year')
+      const archiveToDayField = $('#archive-to-day')
+      const archiveToMonthField = $('#archive-to-month')
+      const archiveToYearField = $('#archive-to-year')
 
       await archiveFromDayField.setValue('18')
       await archiveFromMonthField.setValue('6')
@@ -73,20 +78,34 @@ describe('Admin Archive Data Daily Caseload Page', () => {
       await archiveToMonthField.setValue('2')
       await archiveToYearField.setValue('2017')
 
-      const extraSearchCritera = await $('.select2-search__field')
+      const extraSearchCritera = $('.select2-search__field')
       await extraSearchCritera.setValue('Test_Forename')
 
-      const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="15"]')
+      const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="16"]')
       await criteriaName.click()
 
-      const search = await $('#archive-filter-submit')
+      const search = $('#archive-filter-submit')
       await search.click()
+      const firstRow = await $('#daily-caseload-table tbody tr:first-child')
 
-      const tableData = await browser.findElements('xpath', '//*[@id="daily-caseload-table"]/tbody/tr/td[position()=5]')
+      const firstRowData = await firstRow.$$('td').map(child => child.getText())
 
-      const nameElement = await $(tableData[0])
-      const nameElementValue = await nameElement.getText()
-      expect(nameElementValue).to.equal('Test_Forename Test_Surname')
+      expect(firstRowData).to.have.deep.members([
+        '01-01-2017',
+        'NPS Test Region',
+        'Test LDU',
+        'Test Team',
+        'Test_Forename Test_Surname',
+        'PO',
+        '10',
+        '20',
+        '5',
+        '200%',
+        '37.5',
+        '3',
+        '0 - 0%',
+        '-2 - -10%'
+      ])
     })
 
     after(async function () {
@@ -97,33 +116,33 @@ describe('Admin Archive Data Daily Caseload Page', () => {
   describe('Super User', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.SuperUser)
-      const link = await $('[href="/admin"]')
+      const link = $('[href="/admin"]')
       await link.click()
-      const optionslink = await $('[href="/archive-options"]')
+      const optionslink = $('[href="/archive-options"]')
       await optionslink.click()
-      const caseloadlink = await $('[href="/archive-data/daily-caseload-data"]')
+      const caseloadlink = $('[href="/archive-data/daily-caseload-data"]')
       await caseloadlink.click()
     })
 
     it('Should be able to navigate to page', async function () {
-      const pageTitle = await $('.govuk-heading-xl')
+      const pageTitle = $('.govuk-heading-xl')
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Daily Caseload Data')
     })
 
     it('should show the export button', async function () {
-      const exportButton = await $('#archive-csv-submit')
+      const exportButton = $('#archive-csv-submit')
       const buttonExists = await exportButton.isExisting()
       return expect(buttonExists).to.equal(true)
     })
 
     it('should be able to search', async function () {
-      const archiveFromDayField = await $('#archive-from-day')
-      const archiveFromMonthField = await $('#archive-from-month')
-      const archiveFromYearField = await $('#archive-from-year')
-      const archiveToDayField = await $('#archive-to-day')
-      const archiveToMonthField = await $('#archive-to-month')
-      const archiveToYearField = await $('#archive-to-year')
+      const archiveFromDayField = $('#archive-from-day')
+      const archiveFromMonthField = $('#archive-from-month')
+      const archiveFromYearField = $('#archive-from-year')
+      const archiveToDayField = $('#archive-to-day')
+      const archiveToMonthField = $('#archive-to-month')
+      const archiveToYearField = $('#archive-to-year')
 
       await archiveFromDayField.setValue('18')
       await archiveFromMonthField.setValue('6')
@@ -132,20 +151,34 @@ describe('Admin Archive Data Daily Caseload Page', () => {
       await archiveToMonthField.setValue('2')
       await archiveToYearField.setValue('2017')
 
-      const extraSearchCritera = await $('.select2-search__field')
+      const extraSearchCritera = $('.select2-search__field')
       await extraSearchCritera.setValue('Test_Forename')
 
-      const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="15"]')
+      const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="16"]')
       await criteriaName.click()
 
-      const search = await $('#archive-filter-submit')
+      const search = $('#archive-filter-submit')
       await search.click()
+      const firstRow = await $('#daily-caseload-table tbody tr:first-child')
 
-      const tableData = await browser.findElements('xpath', '//*[@id="daily-caseload-table"]/tbody/tr/td[position()=5]')
+      const firstRowData = await firstRow.$$('td').map(child => child.getText())
 
-      const nameElement = await $(tableData[0])
-      const nameElementValue = await nameElement.getText()
-      expect(nameElementValue).to.equal('Test_Forename Test_Surname')
+      expect(firstRowData).to.have.deep.members([
+        '01-01-2017',
+        'NPS Test Region',
+        'Test LDU',
+        'Test Team',
+        'Test_Forename Test_Surname',
+        'PO',
+        '10',
+        '20',
+        '5',
+        '200%',
+        '37.5',
+        '3',
+        '0 - 0%',
+        '-2 - -10%'
+      ])
     })
 
     after(async function () {
