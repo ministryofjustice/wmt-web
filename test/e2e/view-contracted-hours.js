@@ -80,6 +80,7 @@ describe('View contracted hours', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.SuperUser)
       await browser.url(workloadOwnerDefaultUrl + '/contracted-hours')
+      await $('.govuk-breadcrumbs').waitForDisplayed()
     })
 
     it('should navigate to the workload owner contracted-hours page', async function () {
@@ -121,6 +122,7 @@ describe('View contracted hours', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.Staff)
       await browser.url(workloadOwnerDefaultUrl + '/contracted-hours')
+      await $('.govuk-heading-xl').waitForDisplayed()
     })
 
     it('should not be able to navigate to the workload owner contracted-hours page', async function () {
