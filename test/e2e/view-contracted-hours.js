@@ -140,7 +140,7 @@ describe('View contracted hours', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.ApplicationSupport)
       await browser.url(workloadOwnerDefaultUrl + '/contracted-hours')
-      await $('.govuk-breadcrumbs').waitForDisplayed()
+      await $('.govuk-breadcrumbs').waitForDisplayed(({ timeout: 5000 }))
     })
 
     it('should navigate to the workload owner contracted-hours page', async function () {
