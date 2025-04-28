@@ -48,7 +48,6 @@ describe('View contracted hours', function () {
       const submit = await $('.govuk-button')
       await contractedHoursField.setValue('36')
       await submit.click()
-
       const successBanner = await $('.govuk-notification-banner--success .govuk-notification-banner__heading')
       const successBannerText = await successBanner.getText()
       expect(successBannerText).to.equal('You have successfully updated the contracted hours for Test_Forename Test_Surname')
@@ -139,6 +138,7 @@ describe('View contracted hours', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.ApplicationSupport)
       await browser.url(workloadOwnerDefaultUrl + '/contracted-hours')
+      await $('.govuk-breadcrumbs').waitForDisplayed()
     })
 
     it('should navigate to the workload owner contracted-hours page', async function () {
