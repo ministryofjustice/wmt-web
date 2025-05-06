@@ -26,9 +26,6 @@ describe('Admin Archive Data Daily Caseload Page', () => {
 
     it('Should not be able to go on page', async function () {
       await navigateTo('/archive-data/daily-caseload-data')
-      // await browser.waitUntil(async (resolve) => {
-      //   return (await $('.govuk-heading-xl').getText()) === 'Access is denied'
-      // })
 
       const header = $('.govuk-heading-xl')
       const text = await header.getText()

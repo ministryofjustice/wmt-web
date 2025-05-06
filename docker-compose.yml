@@ -101,6 +101,7 @@ services:
       - DATABASE_ENDPOINT=postgres:5432
       - COMMUNITY_ENDPOINT_URL=http://wiremock:8099
       - HMPPS_TIER_ENDPOINT_URL=http://wiremock:8099
+      - WORKFORCE_ALLOCATIONS_URL=http://wiremock:8099
       - HMPPS_SQS_LOCALSTACK_URL=http://localstack:4566
     entrypoint: ["/bin/sh", "-c" , "sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar"]
     depends_on:
@@ -131,6 +132,8 @@ services:
     command: ["--port","8099","--global-response-templating"]
     volumes:
       - $PWD/test/e2e/resources/wiremock:/home/wiremock:rw
+
+
   user-preference-wiremock:
     image: wiremock/wiremock
     networks:
@@ -142,6 +145,7 @@ services:
     command: ["--port","8098","--global-response-templating"]
     volumes:
       - $PWD/test/e2e/resources/user-preference-wiremock:/home/wiremock:rw
+
   token-verify-wiremock:
     image: wiremock/wiremock
     networks:
