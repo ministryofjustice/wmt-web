@@ -1,5 +1,6 @@
 const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
+const { clickAndWaitForPageLoad, navigateTo } = require('../e2e/resources/helpers/browser-helpers')
 
 describe('Admin Add Reduction Reasons Page', () => {
   describe('Staff', function () {
@@ -8,7 +9,7 @@ describe('Admin Add Reduction Reasons Page', () => {
     })
 
     it('Should not be able to go on page', async function () {
-      await browser.url('/edit-reduction-reason?id=6')
+      await navigateTo('/edit-reduction-reason?id=6')
       const header = $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
@@ -24,8 +25,7 @@ describe('Admin Add Reduction Reasons Page', () => {
     })
 
     it('Should not be able to go on page', async function () {
-      await browser.url('/edit-reduction-reason?id=6')
-      await $('.govuk-heading-xl').waitForExist({ timeout: 50000 })
+      await navigateTo('/edit-reduction-reason?id=6')
       const header = $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
@@ -40,11 +40,11 @@ describe('Admin Add Reduction Reasons Page', () => {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
       const link = $('[href="/admin"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
     })
 
     it('Should not be able to go on page', async function () {
-      await browser.url('/edit-reduction-reason?id=6')
+      await navigateTo('/edit-reduction-reason?id=6')
       const header = $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
@@ -59,11 +59,11 @@ describe('Admin Add Reduction Reasons Page', () => {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.SuperUser)
       let link = $('[href="/admin"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
       link = $('[href="/manage-reduction-reasons"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
       link = $('[href="/edit-reduction-reason?id=6"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
     })
 
     it('Should be able to navigate to page', async function () {
@@ -77,7 +77,7 @@ describe('Admin Add Reduction Reasons Page', () => {
       await reductionName.setValue('Edited reduction reason')
 
       const submitButton = $('#submit-button')
-      await submitButton.click()
+      await clickAndWaitForPageLoad(submitButton)
 
       const successBanner = $('.govuk-notification-banner--success .govuk-notification-banner__heading')
       const successBannerText = await successBanner.getText()

@@ -1,5 +1,6 @@
 const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
+const { clickAndWaitForPageLoad, navigateTo } = require('../e2e/resources/helpers/browser-helpers')
 
 describe('Admin Archive Data Daily Caseload Page', () => {
   describe('Staff', function () {
@@ -8,7 +9,7 @@ describe('Admin Archive Data Daily Caseload Page', () => {
     })
 
     it('Should not be able to go on page', async function () {
-      await browser.url('/archive-data/daily-caseload-data')
+      await navigateTo('/archive-data/daily-caseload-data')
       const header = $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
@@ -24,13 +25,12 @@ describe('Admin Archive Data Daily Caseload Page', () => {
     })
 
     it('Should not be able to go on page', async function () {
-      await browser.url('/archive-data/daily-caseload-data')
-      await browser.waitUntil(async (resolve) => {
-        return (await $('.govuk-heading-xl').getText()) === 'Access is denied'
-      })
+      await navigateTo('/archive-data/daily-caseload-data')
+      // await browser.waitUntil(async (resolve) => {
+      //   return (await $('.govuk-heading-xl').getText()) === 'Access is denied'
+      // })
 
       const header = $('.govuk-heading-xl')
-      console.log('view-admin-archive-data-daily-caseload header: ', header)
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -44,11 +44,11 @@ describe('Admin Archive Data Daily Caseload Page', () => {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
       const link = $('[href="/admin"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
       const optionslink = $('[href="/archive-options"]')
-      await optionslink.click()
+      await clickAndWaitForPageLoad(optionslink)
       const caseloadlink = $('[href="/archive-data/daily-caseload-data"]')
-      await caseloadlink.click()
+      await clickAndWaitForPageLoad(caseloadlink)
     })
 
     it('Should be able to navigate to page', async function () {
@@ -82,10 +82,10 @@ describe('Admin Archive Data Daily Caseload Page', () => {
       await extraSearchCritera.setValue('Test_Forename')
 
       const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="16"]')
-      await criteriaName.click()
+      await clickAndWaitForPageLoad(criteriaName)
 
       const search = $('#archive-filter-submit')
-      await search.click()
+      await clickAndWaitForPageLoad(search)
       const firstRow = await $('#daily-caseload-table tbody tr:first-child')
 
       const firstRowData = await firstRow.$$('td').map(child => child.getText())
@@ -117,11 +117,11 @@ describe('Admin Archive Data Daily Caseload Page', () => {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.SuperUser)
       const link = $('[href="/admin"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
       const optionslink = $('[href="/archive-options"]')
-      await optionslink.click()
+      await clickAndWaitForPageLoad(optionslink)
       const caseloadlink = $('[href="/archive-data/daily-caseload-data"]')
-      await caseloadlink.click()
+      await clickAndWaitForPageLoad(caseloadlink)
     })
 
     it('Should be able to navigate to page', async function () {
@@ -158,7 +158,7 @@ describe('Admin Archive Data Daily Caseload Page', () => {
       await criteriaName.click()
 
       const search = $('#archive-filter-submit')
-      await search.click()
+      await clickAndWaitForPageLoad(search)
       const firstRow = await $('#daily-caseload-table tbody tr:first-child')
 
       const firstRowData = await firstRow.$$('td').map(child => child.getText())

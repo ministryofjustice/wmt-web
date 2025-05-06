@@ -1,5 +1,6 @@
 const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
+const { clickAndWaitForPageLoad, navigateTo } = require('../e2e/resources/helpers/browser-helpers')
 
 let adminUserURL
 const username = 'John.Doe@email.com'
@@ -10,7 +11,7 @@ describe('User Rights page', () => {
     })
 
     it('Should not be able to go on page', async function () {
-      await browser.url('/admin/user')
+      await navigateTo('/admin/user')
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
@@ -26,7 +27,7 @@ describe('User Rights page', () => {
     })
 
     it('Should not be able to go on page', async function () {
-      await browser.url('/admin/user')
+      await navigateTo('/admin/user')
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
@@ -41,11 +42,11 @@ describe('User Rights page', () => {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
       adminUserURL = '/admin/user'
-      await browser.url(adminUserURL)
+      await navigateTo(adminUserURL)
     })
 
     it('should navigate to the user rights page and cannot see Super User role', async () => {
-      await browser.url(adminUserURL)
+      await navigateTo(adminUserURL)
 
       const breadcrumbs = await $('.govuk-breadcrumbs')
       const exists = await breadcrumbs.isExisting()
@@ -55,7 +56,7 @@ describe('User Rights page', () => {
       await usernameField.setValue(username)
 
       const submit = await $('.govuk-button')
-      await submit.click()
+      await clickAndWaitForPageLoad(submit)
 
       const pageTitle = await $('.govuk-heading-xl')
       const text = await pageTitle.getText('.govuk-heading-xl')
@@ -66,23 +67,23 @@ describe('User Rights page', () => {
       expect(SuperUserVisible).to.be.equal(false)
 
       radioButton = await $('#applicationSupportRadio')
-      await radioButton.click()
+      await clickAndWaitForPageLoad(radioButton)
       let isSelected = await radioButton.isSelected()
       expect(isSelected).to.be.equal(true)
 
       radioButton = await $('#managerRadio')
-      await radioButton.click()
+      await clickAndWaitForPageLoad(radioButton)
       isSelected = await radioButton.isSelected()
       expect(isSelected).to.be.equal(true)
 
       radioButton = await $('#staffRadio')
-      await radioButton.click()
+      await clickAndWaitForPageLoad(radioButton)
       isSelected = await radioButton.isSelected()
       expect(isSelected).to.be.equal(true)
     })
 
     it('should not be able to demote a Super User to Application Support', async () => {
-      await browser.url(adminUserURL)
+      await navigateTo(adminUserURL)
 
       const breadcrumbs = await $('.govuk-breadcrumbs')
       const exists = await breadcrumbs.isExisting()
@@ -92,19 +93,19 @@ describe('User Rights page', () => {
       await usernameField.setValue(`${authenticationHelper.users.SuperUser.username}@email.com`)
 
       const submit = await $('.govuk-button')
-      await submit.click()
+      await clickAndWaitForPageLoad(submit)
 
       const pageTitle = await $('.govuk-heading-xl')
       const text = await pageTitle.getText('.govuk-heading-xl')
       expect(text).to.equal('Amend user rights')
 
       const radioButton = await $('#managerRadio')
-      await radioButton.click()
+      await clickAndWaitForPageLoad(radioButton)
       const isSelected = await radioButton.isSelected()
       expect(isSelected).to.be.equal(true)
 
       const submitRole = await $('.govuk-button')
-      await submitRole.click()
+      await clickAndWaitForPageLoad(submitRole)
 
       const header = await $('.govuk-heading-xl')
       const headerText = await header.getText('.govuk-heading-xl')
@@ -112,8 +113,7 @@ describe('User Rights page', () => {
     })
 
     it('should not be able to demote a Super User to manager', async () => {
-      await browser.url(adminUserURL)
-
+      await navigateTo(adminUserURL)
       const breadcrumbs = await $('.govuk-breadcrumbs')
       const exists = await breadcrumbs.isExisting()
       expect(exists).to.be.equal(true)
@@ -122,19 +122,19 @@ describe('User Rights page', () => {
       await usernameField.setValue(`${authenticationHelper.users.SuperUser.username}@email.com`)
 
       const submit = await $('.govuk-button')
-      await submit.click()
+      await clickAndWaitForPageLoad(submit)
 
       const pageTitle = await $('.govuk-heading-xl')
       const text = await pageTitle.getText('.govuk-heading-xl')
       expect(text).to.equal('Amend user rights')
 
       const radioButton = await $('#applicationSupportRadio')
-      await radioButton.click()
+      await clickAndWaitForPageLoad(radioButton)
       const isSelected = await radioButton.isSelected()
       expect(isSelected).to.be.equal(true)
 
       const submitRole = await $('.govuk-button')
-      await submitRole.click()
+      await clickAndWaitForPageLoad(submitRole)
 
       const header = await $('.govuk-heading-xl')
       const headerText = await header.getText('.govuk-heading-xl')
@@ -142,7 +142,7 @@ describe('User Rights page', () => {
     })
 
     it('should not be able to demote a Super User to staff', async () => {
-      await browser.url(adminUserURL)
+      await navigateTo(adminUserURL)
 
       const breadcrumbs = await $('.govuk-breadcrumbs')
       const exists = await breadcrumbs.isExisting()
@@ -152,19 +152,19 @@ describe('User Rights page', () => {
       await usernameField.setValue(`${authenticationHelper.users.SuperUser.username}@email.com`)
 
       const submit = await $('.govuk-button')
-      await submit.click()
+      await clickAndWaitForPageLoad(submit)
 
       const pageTitle = await $('.govuk-heading-xl')
       const text = await pageTitle.getText('.govuk-heading-xl')
       expect(text).to.equal('Amend user rights')
 
       const radioButton = await $('#staffRadio')
-      await radioButton.click()
+      await clickAndWaitForPageLoad(radioButton)
       const isSelected = await radioButton.isSelected()
       expect(isSelected).to.be.equal(true)
 
       const submitRole = await $('.govuk-button')
-      await submitRole.click()
+      await clickAndWaitForPageLoad(submitRole)
 
       const header = await $('.govuk-heading-xl')
       const headerText = await header.getText('.govuk-heading-xl')
@@ -180,11 +180,11 @@ describe('User Rights page', () => {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.SuperUser)
       adminUserURL = '/admin/user'
-      await browser.url(adminUserURL)
+      await navigateTo(adminUserURL)
     })
 
     it('should see all roles', async () => {
-      await browser.url(adminUserURL)
+      await navigateTo(adminUserURL)
 
       const breadcrumbs = await $('.govuk-breadcrumbs')
       const exists = await breadcrumbs.isExisting()
@@ -194,29 +194,29 @@ describe('User Rights page', () => {
       await usernameField.setValue(username)
 
       const submit = await $('.govuk-button')
-      await submit.click()
+      await clickAndWaitForPageLoad(submit)
 
       const pageTitle = await $('.govuk-heading-xl')
       const text = await pageTitle.getText('.govuk-heading-xl')
       expect(text).to.equal('Amend user rights')
 
       let radioButton = await $('#superAdminRadio')
-      await radioButton.click()
+      await clickAndWaitForPageLoad(radioButton)
       let isSelected = await radioButton.isSelected()
       expect(isSelected).to.be.equal(true)
 
       radioButton = await $('#applicationSupportRadio')
-      await radioButton.click()
+      await clickAndWaitForPageLoad(radioButton)
       isSelected = await radioButton.isSelected()
       expect(isSelected).to.be.equal(true)
 
       radioButton = await $('#managerRadio')
-      await radioButton.click()
+      await clickAndWaitForPageLoad(radioButton)
       isSelected = await radioButton.isSelected()
       expect(isSelected).to.be.equal(true)
 
       radioButton = await $('#staffRadio')
-      await radioButton.click()
+      await clickAndWaitForPageLoad(radioButton)
       isSelected = await radioButton.isSelected()
       expect(isSelected).to.be.equal(true)
     })

@@ -1,5 +1,6 @@
 const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
+const { clickAndWaitForPageLoad, navigateTo } = require('../e2e/resources/helpers/browser-helpers')
 
 describe('Admin Reduction Reasons Page', () => {
   describe('Staff', function () {
@@ -8,7 +9,7 @@ describe('Admin Reduction Reasons Page', () => {
     })
 
     it('Should not be able to go on page', async function () {
-      await browser.url('/manage-reduction-reasons')
+      await navigateTo('/manage-reduction-reasons')
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
@@ -24,7 +25,7 @@ describe('Admin Reduction Reasons Page', () => {
     })
 
     it('Should not be able to go on page', async function () {
-      await browser.url('/manage-reduction-reasons')
+      await navigateTo('/manage-reduction-reasons')
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
@@ -39,12 +40,12 @@ describe('Admin Reduction Reasons Page', () => {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
       const link = await $('[href="/admin"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
     })
 
     it('Should be able to navigate to page', async function () {
       const link = await $('[href="/manage-reduction-reasons"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
       const pageTitle = await $('.govuk-heading-xl')
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Manage Reduction Reasons')
@@ -65,12 +66,12 @@ describe('Admin Reduction Reasons Page', () => {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.SuperUser)
       const link = await $('[href="/admin"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
     })
 
     it('Should be able to navigate to page', async function () {
       const link = await $('[href="/manage-reduction-reasons"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
       const pageTitle = await $('.govuk-heading-xl')
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Manage Reduction Reasons')

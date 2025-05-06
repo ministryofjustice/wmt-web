@@ -1,5 +1,6 @@
 const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
+const { navigateTo, clickAndWaitForPageLoad } = require('../e2e/resources/helpers/browser-helpers')
 
 describe('view dashboard reports', function () {
   async function extractFileUrl (row) {
@@ -10,7 +11,7 @@ describe('view dashboard reports', function () {
   describe('Staff', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.Staff)
-      await browser.url('/')
+      await navigateTo('/')
     })
 
     it('Dashboard tab does not exist on the home page', async function () {
@@ -20,14 +21,14 @@ describe('view dashboard reports', function () {
     })
 
     it('should not be able to go to dashboard page', async function () {
-      await browser.url('/probation/hmpps/0/dashboard')
+      await navigateTo('/probation/hmpps/0/dashboard')
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
 
     it('should not be able to download a dashboard', async function () {
-      await browser.url('/probation/hmpps/0/dashboard/download?id=generated-dashboards/dashboard_20210802062147.txt')
+      await navigateTo('/probation/hmpps/0/dashboard/download?id=generated-dashboards/dashboard_20210802062147.txt')
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
@@ -41,7 +42,7 @@ describe('view dashboard reports', function () {
   describe('Manager', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.Manager)
-      await browser.url('/')
+      await navigateTo('/')
     })
 
     it('Dashboard tab exists on the home page', async function () {
@@ -52,7 +53,7 @@ describe('view dashboard reports', function () {
 
     it('should be able to navigate to dashboard page', async function () {
       const link = await $('[href="/probation/hmpps/0/dashboard"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
       const rows = await browser.findElements('xpath', '//*[@id="dashboard-table"]/tbody/tr')
 
       expect(rows.length).to.equal(5)
@@ -72,7 +73,7 @@ describe('view dashboard reports', function () {
   describe('Application Support', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
-      await browser.url('/')
+      await navigateTo('/')
     })
 
     it('Dashboard tab exists on the home page', async function () {
@@ -83,7 +84,7 @@ describe('view dashboard reports', function () {
 
     it('should be able to navigate to dashboard page', async function () {
       const link = await $('[href="/probation/hmpps/0/dashboard"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
       const rows = await browser.findElements('xpath', '//*[@id="dashboard-table"]/tbody/tr')
 
       expect(rows.length).to.equal(5)
@@ -103,7 +104,7 @@ describe('view dashboard reports', function () {
   describe('Super User', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.SuperUser)
-      await browser.url('/')
+      await navigateTo('/')
     })
 
     it('Dashboard tab exists on the home page', async function () {
@@ -114,7 +115,7 @@ describe('view dashboard reports', function () {
 
     it('should be able to navigate to dashboard page', async function () {
       const link = await $('[href="/probation/hmpps/0/dashboard"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
       const rows = await browser.findElements('xpath', '//*[@id="dashboard-table"]/tbody/tr')
 
       expect(rows.length).to.equal(5)

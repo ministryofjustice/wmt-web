@@ -1,6 +1,7 @@
 const expect = require('chai').expect
 const authenticationHelp = require('../helpers/routes/authentication-helper')
 const workloadTypes = require('../../app/constants/workload-type')
+const { navigateTo, clickAndWaitForPageLoad } = require('../e2e/resources/helpers/browser-helpers')
 
 const nationalDefaultUrl = '/' + workloadTypes.PROBATION + '/hmpps/0'
 let pageSubtitle
@@ -11,7 +12,7 @@ describe('View national caseload', () => {
   describe('Staff', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.Staff)
-      await browser.url(nationalDefaultUrl + '/caseload')
+      await navigateTo(nationalDefaultUrl + '/caseload')
     })
 
     it('with the correct table, breadcrumbs', async () => {
@@ -27,16 +28,16 @@ describe('View national caseload', () => {
     })
 
     it('should not be able to download export', async function () {
-      await browser.url(nationalDefaultUrl + '/caseload/caseload-csv')
+      await navigateTo(nationalDefaultUrl + '/caseload/caseload-csv')
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
 
     it('should be accessible via the Caseload tab on national overview page', async () => {
-      await browser.url(nationalDefaultUrl)
+      await navigateTo(nationalDefaultUrl)
       national = await $('[href="' + nationalDefaultUrl + '/caseload"]')
-      await national.click()
+      await clickAndWaitForPageLoad(national)
 
       const grade = await $('.sln-table-caseload-by-grade')
       const exists = await grade.isExisting()
@@ -44,23 +45,23 @@ describe('View national caseload', () => {
     })
 
     it('should be accessible via the Case Progress tab when on any other tab', async () => {
-      await browser.url(nationalDefaultUrl)
+      await navigateTo(nationalDefaultUrl)
 
       national = await $('[href="' + nationalDefaultUrl + '/case-progress"]')
-      await national.click()
+      await clickAndWaitForPageLoad(national)
 
       national = await $('[href="' + nationalDefaultUrl + '/caseload"]')
-      await national.click()
+      await clickAndWaitForPageLoad(national)
 
       let grade = await $('.sln-table-caseload-by-grade')
       let exists = await grade.isExisting()
       expect(exists).to.be.equal(true)
 
       national = await $('[href="' + nationalDefaultUrl + '/caseload-capacity"]')
-      await national.click()
+      await clickAndWaitForPageLoad(national)
 
       national = await $('[href="' + nationalDefaultUrl + '/caseload"]')
-      await national.click()
+      await clickAndWaitForPageLoad(national)
 
       grade = await $('.sln-table-caseload-by-grade')
       exists = await grade.isExisting()
@@ -75,7 +76,7 @@ describe('View national caseload', () => {
   describe('Manager', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.Manager)
-      await browser.url(nationalDefaultUrl + '/caseload')
+      await navigateTo(nationalDefaultUrl + '/caseload')
     })
 
     it('should  display export button', async () => {
@@ -92,7 +93,7 @@ describe('View national caseload', () => {
   describe('Application Support', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.ApplicationSupport)
-      await browser.url(nationalDefaultUrl + '/caseload')
+      await navigateTo(nationalDefaultUrl + '/caseload')
     })
 
     it('should not display export button', async () => {
@@ -102,7 +103,7 @@ describe('View national caseload', () => {
     })
 
     it('should not be able to download export', async function () {
-      await browser.url(nationalDefaultUrl + '/caseload/caseload-csv')
+      await navigateTo(nationalDefaultUrl + '/caseload/caseload-csv')
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
@@ -116,7 +117,7 @@ describe('View national caseload', () => {
   describe('Super User', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.SuperUser)
-      await browser.url(nationalDefaultUrl + '/caseload')
+      await navigateTo(nationalDefaultUrl + '/caseload')
     })
 
     it('should  display export button', async () => {

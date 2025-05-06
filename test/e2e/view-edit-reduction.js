@@ -3,6 +3,7 @@ const moment = require('moment')
 
 const authenticationHelp = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
+const { navigateTo, clickAndWaitForPageLoad } = require('../e2e/resources/helpers/browser-helpers')
 const { deleteAllMessages, pollCheckAndDelete } = require('../helpers/sqs')
 
 const workloadTypes = require('../../app/constants/workload-type')
@@ -27,7 +28,7 @@ describe('editing a reduction', () => {
   describe('Manager', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.Manager)
-      await browser.url(offenderManagerUrl + '/add-reduction')
+      await navigateTo(offenderManagerUrl + '/add-reduction')
     })
 
     it('after first adding a new reduction', async () => {
@@ -57,19 +58,18 @@ describe('editing a reduction', () => {
       await startYearField.setValue('2017')
       await endDayField.setValue('1')
       await endMonthField.setValue('2')
-      await endYearField.setValue('2025')
+      await endYearField.setValue('2028')
       await notesField.setValue(notesFieldValue)
 
-      await submit.click()
+      await clickAndWaitForPageLoad(submit)
 
       await pollCheckAndDelete(sqsClient, queueURL)
 
       await $('#headingActive')
-      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
-      const viewLink = await $(activeReductions[0])
+      const viewLink = await $('=View')
       const view = await viewLink.getText()
       expect(view).to.equal('View')
-      await viewLink.click()
+      await clickAndWaitForPageLoad(viewLink)
     })
 
     it('should navigate to the edit reduction screen', async () => {
@@ -98,16 +98,15 @@ describe('editing a reduction', () => {
       notesField = await $('#textarea')
       submit = await $('#submit-button')
 
-      await endYearField.setValue('2027')
+      await endYearField.setValue('2029')
       await notesField.setValue(currentTime)
 
-      await submit.click()
+      await clickAndWaitForPageLoad(submit)
 
-      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
-      const viewLink = await $(activeReductions[0])
+      const viewLink = await $('=View')
       const view = await viewLink.getText()
       expect(view).to.equal('View')
-      await viewLink.click()
+      await clickAndWaitForPageLoad(viewLink)
 
       notesField = await $('#textarea')
       notesField = await notesField.getValue()
@@ -132,8 +131,8 @@ describe('editing a reduction', () => {
       expect(actualDetails.newAdditionalNotes).to.equal(currentTime)
       expect(actualDetails.previousEffectiveFrom).to.equal('2017-02-01T00:00:00.000Z')
       expect(actualDetails.newEffectiveFrom).to.equal('2017-02-01T00:00:00.000Z')
-      expect(actualDetails.previousEffectiveTo).to.equal('2025-02-01T00:00:00.000Z')
-      expect(actualDetails.newEffectiveTo).to.equal('2027-02-01T00:00:00.000Z')
+      expect(actualDetails.previousEffectiveTo).to.equal('2028-02-01T00:00:00.000Z')
+      expect(actualDetails.newEffectiveTo).to.equal('2029-02-01T00:00:00.000Z')
       expect(actualDetails.previousStatus).to.equal('ACTIVE')
       expect(actualDetails.newStatus).to.equal('ACTIVE')
       expect(actualDetails.offenderManagerName).to.equal(`${auditData.forename} ${auditData.surname}`)
@@ -151,7 +150,7 @@ describe('editing a reduction', () => {
   describe('Application Support', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.Manager)
-      await browser.url(offenderManagerUrl + '/add-reduction')
+      await navigateTo(offenderManagerUrl + '/add-reduction')
 
       const breadcrumbs = await $('.govuk-breadcrumbs')
       const exists = await breadcrumbs.isExisting()
@@ -179,31 +178,30 @@ describe('editing a reduction', () => {
       await startYearField.setValue('2017')
       await endDayField.setValue('1')
       await endMonthField.setValue('2')
-      await endYearField.setValue('2025')
+      await endYearField.setValue('2028')
       await notesField.setValue(notesFieldValue)
 
-      await submit.click()
+      await clickAndWaitForPageLoad(submit)
 
       await authenticationHelp.logout()
 
       await authenticationHelp.login(authenticationHelp.users.ApplicationSupport)
-      await browser.url(offenderManagerUrl + '/reductions')
+      await navigateTo(offenderManagerUrl + '/reductions')
     })
 
     it('should be not be able to edit a reduction', async () => {
-      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
-      const viewLink = await $(activeReductions[0])
-      await viewLink.click()
+      const viewLink = await $('=View')
+      await clickAndWaitForPageLoad(viewLink)
 
       const currentTime = moment().format('YYYY-MM-DD HH:mm:ss.SSS')
       endYearField = await $('#end-year')
       notesField = await $('#textarea')
       submit = await $('#submit-button')
 
-      await endYearField.setValue('2027')
+      await endYearField.setValue('2029')
       await notesField.setValue(currentTime)
 
-      await submit.click()
+      await clickAndWaitForPageLoad(submit)
 
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
@@ -219,7 +217,7 @@ describe('editing a reduction', () => {
   describe('Super User', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.SuperUser)
-      await browser.url(offenderManagerUrl + '/add-reduction')
+      await navigateTo(offenderManagerUrl + '/add-reduction')
     })
 
     it('after first adding a new reduction', async () => {
@@ -249,17 +247,16 @@ describe('editing a reduction', () => {
       await startYearField.setValue('2017')
       await endDayField.setValue('1')
       await endMonthField.setValue('2')
-      await endYearField.setValue('2025')
+      await endYearField.setValue('2028')
       await notesField.setValue(notesFieldValue)
 
-      await submit.click()
+      await clickAndWaitForPageLoad(submit)
 
       await $('#headingActive')
-      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
-      const viewLink = await $(activeReductions[0])
+      const viewLink = await $('=View')
       const view = await viewLink.getText()
       expect(view).to.equal('View')
-      await viewLink.click()
+      await clickAndWaitForPageLoad(viewLink)
     })
 
     it('should be able to edit a reduction', async () => {
@@ -268,16 +265,15 @@ describe('editing a reduction', () => {
       notesField = await $('#textarea')
       submit = await $('#submit-button')
 
-      await endYearField.setValue('2027')
+      await endYearField.setValue('2029')
       await notesField.setValue(currentTime)
 
-      await submit.click()
+      await clickAndWaitForPageLoad(submit)
 
-      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
-      const viewLink = await $(activeReductions[0])
+      const viewLink = await $('=View')
       const view = await viewLink.getText()
       expect(view).to.equal('View')
-      await viewLink.click()
+      await clickAndWaitForPageLoad(viewLink)
 
       notesField = await $('#textarea')
       notesField = await notesField.getValue()

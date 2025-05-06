@@ -3,6 +3,7 @@ const authenticationHelper = require('../helpers/routes/authentication-helper')
 const crDataHelper = require('../helpers/data/court-reports-aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 const dailyArchiveData = require('../helpers/data/setup-data')
+const { navigateTo, clickAndWaitForPageLoad } = require('../e2e/resources/helpers/browser-helpers')
 
 let teamDefaultUrl
 let lduDefaultUrl
@@ -20,7 +21,7 @@ describe('View court-reports overview', function () {
   })
 
   it('should navigate to the team court-reports overview page', async function () {
-    await browser.url(teamDefaultUrl + '/overview')
+    await navigateTo(teamDefaultUrl + '/overview')
 
     const breadcrumbs = await $('.govuk-breadcrumbs')
     let exists = await breadcrumbs.isExisting()
@@ -40,7 +41,7 @@ describe('View court-reports overview', function () {
   })
 
   it('should naviagte to the ldu court-reports overview page', async function () {
-    await browser.url(lduDefaultUrl + '/overview')
+    await navigateTo(lduDefaultUrl + '/overview')
 
     const breadcrumbs = await $('.govuk-breadcrumbs')
     let exists = await breadcrumbs.isExisting()
@@ -64,7 +65,7 @@ describe('View court-reports overview', function () {
   })
 
   it('should naviagte to the region court-reports overview page', async function () {
-    await browser.url(regionDefaultUrl + '/overview')
+    await navigateTo(regionDefaultUrl + '/overview')
 
     const breadcrumbs = await $('.govuk-breadcrumbs')
     let exists = await breadcrumbs.isExisting()
@@ -88,7 +89,7 @@ describe('View court-reports overview', function () {
   })
 
   it('should navigate to the national court-reports overview page', async function () {
-    await browser.url(nationalDefaultUrl + '/overview')
+    await navigateTo(nationalDefaultUrl + '/overview')
 
     const breadcrumbs = await $('.govuk-breadcrumbs')
     let exists = await breadcrumbs.isExisting()
@@ -112,28 +113,28 @@ describe('View court-reports overview', function () {
   })
 
   it('should allow the user to navigate down the org hierarchy from the national page', async function () {
-    await browser.url(nationalDefaultUrl + '/overview')
+    await navigateTo(nationalDefaultUrl + '/overview')
 
     let pageTitle = await $('.govuk-heading-xl')
     let text = await pageTitle.getText()
     expect(text).to.equal('National')
 
     let link = await $('[href="' + regionDefaultUrl + '"]')
-    await link.click()
+    await clickAndWaitForPageLoad(link)
 
     pageTitle = await $('.govuk-heading-xl')
     text = await pageTitle.getText()
     expect(text).to.equal(dailyArchiveData.regionName)
 
     link = await $('[href="' + lduDefaultUrl + '"]')
-    await link.click()
+    await clickAndWaitForPageLoad(link)
 
     pageTitle = await $('.govuk-heading-xl')
     text = await pageTitle.getText()
     expect(text).to.equal(dailyArchiveData.lduName)
 
     link = await $('[href="' + teamDefaultUrl + '"]')
-    await link.click()
+    await clickAndWaitForPageLoad(link)
 
     pageTitle = await $('.govuk-heading-xl')
     text = await pageTitle.getText()
@@ -141,7 +142,7 @@ describe('View court-reports overview', function () {
   })
 
   it('should contain breadcrumbs which allow the user to navigate up the org hierarchy', async function () {
-    await browser.url(teamDefaultUrl)
+    await navigateTo(teamDefaultUrl)
     let pageTitle = await $('.govuk-heading-xl')
     let text = await pageTitle.getText()
     expect(text).to.equal(dailyArchiveData.teamName)
@@ -159,21 +160,21 @@ describe('View court-reports overview', function () {
     expect(exists).to.be.equal(true)
 
     link = await $('[href="' + lduDefaultUrl + '"]')
-    await link.click()
+    await clickAndWaitForPageLoad(link)
 
     pageTitle = await $('.govuk-heading-xl')
     text = await pageTitle.getText()
     expect(text).to.equal(dailyArchiveData.lduName)
 
     link = await $('[href="' + regionDefaultUrl + '"]')
-    await link.click()
+    await clickAndWaitForPageLoad(link)
 
     pageTitle = await $('.govuk-heading-xl')
     text = await pageTitle.getText()
     expect(text).to.equal(dailyArchiveData.regionName)
 
     link = await $('[href="' + nationalDefaultUrl + '"]')
-    await link.click()
+    await clickAndWaitForPageLoad(link)
 
     pageTitle = await $('.govuk-heading-xl')
     text = await pageTitle.getText()

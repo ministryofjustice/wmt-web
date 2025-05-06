@@ -1,5 +1,6 @@
 const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
+const { clickAndWaitForPageLoad, navigateTo } = require('../e2e/resources/helpers/browser-helpers')
 
 describe('Admin Archive Data Averaged Caseload Page', () => {
   describe('Staff', function () {
@@ -8,7 +9,7 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
     })
 
     it('Should not be able to go on page', async function () {
-      await browser.url('/archive-data/average-caseload-data')
+      await navigateTo('/archive-data/average-caseload-data')
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
@@ -24,7 +25,7 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
     })
 
     it('Should not be able to go on page', async function () {
-      await browser.url('/archive-data/average-caseload-data')
+      await navigateTo('/archive-data/average-caseload-data')
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
@@ -39,11 +40,11 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
       const link = await $('[href="/admin"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
       const optionslink = await $('[href="/archive-options"]')
-      await optionslink.click()
+      await clickAndWaitForPageLoad(optionslink)
       const caseloadlink = await $('[href="/archive-data/average-caseload-data"]')
-      await caseloadlink.click()
+      await clickAndWaitForPageLoad(caseloadlink)
     })
 
     it('Should be able to navigate to page', async function () {
@@ -78,10 +79,10 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
 
       const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="16"]')
 
-      await criteriaName.click()
+      await clickAndWaitForPageLoad(criteriaName)
 
       const search = await $('#archive-average-filter-submit')
-      await search.click()
+      await clickAndWaitForPageLoad(search)
 
       const firstRow = await $('#average-caseload-table tbody tr:first-child')
 
@@ -115,11 +116,11 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.SuperUser)
       const link = await $('[href="/admin"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
       const optionslink = await $('[href="/archive-options"]')
-      await optionslink.click()
+      await clickAndWaitForPageLoad(optionslink)
       const caseloadlink = await $('[href="/archive-data/average-caseload-data"]')
-      await caseloadlink.click()
+      await clickAndWaitForPageLoad(caseloadlink)
     })
 
     it('Should be able to navigate to page', async function () {
@@ -154,9 +155,9 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
       await extraSearchCritera.setValue('Test_Forename')
 
       const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="16"]')
-      await criteriaName.click()
+      await clickAndWaitForPageLoad(criteriaName)
 
-      await search.click()
+      await clickAndWaitForPageLoad(search)
 
       const firstRow = await $('#average-caseload-table tbody tr:first-child')
 

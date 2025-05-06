@@ -10,9 +10,7 @@ module.exports = function () {
         const { team: teamCode } = await userPreferenceClient.getAllocationDemandSelection(token, username)
         if (teamCode) {
           const unallocatedCasesCountByTeams = await allocationsClient.getCaseCountByTeamCodes(token, [teamCode])
-          res.locals.unallocatedCaseCount = unallocatedCasesCountByTeams
-            .map(teamCount => teamCount.caseCount)
-            .reduce((first, second) => first + second, 0)
+          res.locals.unallocatedCaseCount = unallocatedCasesCountByTeams.count
         }
       }
     } catch (error) {

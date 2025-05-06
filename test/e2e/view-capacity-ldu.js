@@ -3,6 +3,7 @@ const authenticationHelper = require('../helpers/routes/authentication-helper')
 const workloadCapacityHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 const dailyArchiveData = require('../helpers/data/setup-data')
+const { navigateTo, clickAndWaitForPageLoad } = require('../e2e/resources/helpers/browser-helpers')
 
 let workloadOwnerDefaultUrl
 let lduDefaultUrl
@@ -17,13 +18,13 @@ describe('View your caseload capacity flow', () => {
   })
 
   it('should navigate to the ldu caseload capacity screen', async () => {
-    await browser.url(workloadOwnerDefaultUrl)
+    await navigateTo(workloadOwnerDefaultUrl)
     const overviewLink = await $('[href="' + workloadOwnerDefaultUrl + '/overview"]')
-    await overviewLink.click()
+    await clickAndWaitForPageLoad(overviewLink)
     const lduUrl = await $('[href="' + lduDefaultUrl + '"]')
-    await lduUrl.click()
+    await clickAndWaitForPageLoad(lduUrl)
     const caseloadCapacityUrl = await $('[href="' + lduDefaultUrl + '/caseload-capacity"]')
-    await caseloadCapacityUrl.click()
+    await clickAndWaitForPageLoad(caseloadCapacityUrl)
     pageSubtitle = await $('.govuk-heading-xl')
     pageSubtitle = await pageSubtitle.getText()
     expect(pageSubtitle).to.equal(dailyArchiveData.lduName)
@@ -43,7 +44,7 @@ describe('View your caseload capacity flow', () => {
     await toMonthField.setValue('4')
     await toYearField.setValue('2018')
 
-    await submit.click()
+    await clickAndWaitForPageLoad(submit)
 
     const errorMessage = await $('.govuk-error-message')
     const errorText = await errorMessage.getText()

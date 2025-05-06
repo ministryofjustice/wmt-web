@@ -2,6 +2,7 @@ const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
+const { navigateTo } = require('../e2e/resources/helpers/browser-helpers')
 
 let teamDefaultUrl
 describe('Team', function () {
@@ -10,7 +11,7 @@ describe('Team', function () {
       await authenticationHelper.login(authenticationHelper.users.Staff)
       const results = await dataHelper.selectIdsForWorkloadOwner()
       teamDefaultUrl = '/' + workloadTypes.PROBATION + '/team/' + results.filter((item) => item.table === 'team')[0].id
-      await browser.url(teamDefaultUrl + '/overview')
+      await navigateTo(teamDefaultUrl + '/overview')
     })
 
     it('should navigate to the team overview page', async function () {
@@ -32,14 +33,14 @@ describe('Team', function () {
     })
 
     it('should not be able to download overview', async function () {
-      await browser.url(teamDefaultUrl + '/overview/caseload-csv')
+      await navigateTo(teamDefaultUrl + '/overview/caseload-csv')
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
 
     it('should not be able to download reductions', async function () {
-      await browser.url(teamDefaultUrl + '/overview/reductions-csv')
+      await navigateTo(teamDefaultUrl + '/overview/reductions-csv')
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
@@ -53,7 +54,7 @@ describe('Team', function () {
   describe('overview for managers', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.Manager)
-      await browser.url(teamDefaultUrl + '/overview')
+      await navigateTo(teamDefaultUrl + '/overview')
     })
 
     it('should navigate to the team overview page', async function () {
@@ -82,7 +83,7 @@ describe('Team', function () {
   describe('overview for Application Support', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
-      await browser.url(teamDefaultUrl + '/overview')
+      await navigateTo(teamDefaultUrl + '/overview')
     })
 
     it('should navigate to the team overview page', async function () {
@@ -104,14 +105,14 @@ describe('Team', function () {
     })
 
     it('should not be able to download overview', async function () {
-      await browser.url(teamDefaultUrl + '/overview/caseload-csv')
+      await navigateTo(teamDefaultUrl + '/overview/caseload-csv')
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
 
     it('should not be able to download reductions', async function () {
-      await browser.url(teamDefaultUrl + '/overview/reductions-csv')
+      await navigateTo(teamDefaultUrl + '/overview/reductions-csv')
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
@@ -125,7 +126,7 @@ describe('Team', function () {
   describe('overview for Super User', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.SuperUser)
-      await browser.url(teamDefaultUrl + '/overview')
+      await navigateTo(teamDefaultUrl + '/overview')
     })
 
     it('should navigate to the team overview page', async function () {

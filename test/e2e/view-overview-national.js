@@ -4,6 +4,7 @@ const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 const config = require('../../config')
 const dailyArchiveData = require('../helpers/data/setup-data')
+const { clickAndWaitForPageLoad, navigateTo } = require('../e2e/resources/helpers/browser-helpers')
 
 let workloadOwnerIds = []
 let workloadOwnerId
@@ -27,7 +28,7 @@ describe('National', function () {
     })
 
     beforeEach(async function () {
-      await browser.url(nationalDefaultUrl)
+      await navigateTo(nationalDefaultUrl)
     })
 
     it('should display allocations link', async function () {
@@ -39,7 +40,7 @@ describe('National', function () {
     it('should display number of unallocated cases', async function () {
       const allocationsNumber = await $('#notifications')
       const number = await allocationsNumber.getText()
-      return expect(number).to.equal('10')
+      return expect(number).to.equal('42')
     })
 
     it('should show regional breakdown table', async function () {
@@ -61,30 +62,30 @@ describe('National', function () {
     })
 
     it('should allow the user to navigate down the org hierarchy from the national page', async function () {
-      await browser.url(nationalDefaultUrl + '/overview')
+      await navigateTo(nationalDefaultUrl + '/overview')
       let pageTitle = await $('.govuk-heading-xl')
       let text = await pageTitle.getText()
       expect(text).to.equal('National')
       let link = await $('[href="' + regionDefaultUrl + '"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
 
       pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.regionName)
       link = await $('[href="' + lduDefaultUrl + '"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
 
       pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.lduName)
       link = await $('[href="' + teamDefaultUrl + '"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
 
       pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.teamName)
       link = await $('[href="' + workloadOwnerDefaultUrl + '"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
 
       pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
@@ -92,7 +93,7 @@ describe('National', function () {
     })
 
     it('should contain breadcrumbs which allow the user to navigate up the org hierarchy', async function () {
-      await browser.url(workloadOwnerDefaultUrl)
+      await navigateTo(workloadOwnerDefaultUrl)
       let pageTitle = await $('.govuk-heading-xl')
       let text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.omNameDisplayed)
@@ -113,7 +114,7 @@ describe('National', function () {
       exists = await link.isExisting()
       expect(exists).to.be.equal(true)
 
-      await link.click()
+      await clickAndWaitForPageLoad(link)
 
       pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
@@ -123,7 +124,7 @@ describe('National', function () {
       exists = await link.isExisting()
       expect(exists).to.be.equal(true)
 
-      await link.click()
+      await clickAndWaitForPageLoad(link)
 
       pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
@@ -133,7 +134,7 @@ describe('National', function () {
       exists = await link.isExisting()
       expect(exists).to.be.equal(true)
 
-      await link.click()
+      await clickAndWaitForPageLoad(link)
 
       pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
@@ -143,7 +144,7 @@ describe('National', function () {
       exists = await link.isExisting()
       expect(exists).to.be.equal(true)
 
-      await link.click()
+      await clickAndWaitForPageLoad(link)
 
       pageTitle = await $('.govuk-heading-xl')
       text = await pageTitle.getText()
@@ -173,14 +174,14 @@ describe('National', function () {
     })
 
     it('should not include the reductions export at workload owner level', async function () {
-      await browser.url(workloadOwnerDefaultUrl + '/overview')
+      await navigateTo(workloadOwnerDefaultUrl + '/overview')
       const reductionExport = await $('.reduction-export')
       const exists = await reductionExport.isExisting()
       return expect(exists).to.be.false
     })
 
     it('should not include the reductions export', async function () {
-      await browser.url(nationalDefaultUrl + '/overview')
+      await navigateTo(nationalDefaultUrl + '/overview')
       const reductionExport = await $('.reduction-export')
       const exists = await reductionExport.isExisting()
       return expect(exists).to.be.false
@@ -200,7 +201,7 @@ describe('National', function () {
   describe('overview for Application Support', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
-      await browser.url(nationalDefaultUrl + '/overview')
+      await navigateTo(nationalDefaultUrl + '/overview')
     })
 
     it('should display allocations link', async function () {
@@ -216,7 +217,7 @@ describe('National', function () {
     })
 
     it('should not be able to download overview', async function () {
-      await browser.url(nationalDefaultUrl + '/overview/caseload-csv')
+      await navigateTo(nationalDefaultUrl + '/overview/caseload-csv')
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')

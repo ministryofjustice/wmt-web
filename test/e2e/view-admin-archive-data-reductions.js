@@ -3,6 +3,7 @@ const authenticationHelper = require('../helpers/routes/authentication-helper')
 const aggregatedDataHelper = require('../helpers/data/aggregated-data-helper')
 const archiveReductionDataHelper = require('../helpers/data/archive-reduction-data-helper')
 const dateFormatter = require('../../app/services/date-formatter')
+const { clickAndWaitForPageLoad, navigateTo } = require('../e2e/resources/helpers/browser-helpers')
 
 let workloadOwnerId
 let archiveReductionId
@@ -13,7 +14,7 @@ describe('Admin Archive Data Reductions Page', () => {
     })
 
     it('Should not be able to go on page', async function () {
-      await browser.url('/archive-data/reductions')
+      await navigateTo('/archive-data/reductions')
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
@@ -29,7 +30,7 @@ describe('Admin Archive Data Reductions Page', () => {
     })
 
     it('Should not be able to go on page', async function () {
-      await browser.url('/archive-data/reductions')
+      await navigateTo('/archive-data/reductions')
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
@@ -46,7 +47,7 @@ describe('Admin Archive Data Reductions Page', () => {
     })
 
     it('Should not be able to go on page', async function () {
-      await browser.url('/archive-data/reductions')
+      await navigateTo('/archive-data/reductions')
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
@@ -71,14 +72,14 @@ describe('Admin Archive Data Reductions Page', () => {
       await aggregatedDataHelper.createReductionForWorkloadOwner(workloadOwnerId, userId)
       await authenticationHelper.login(authenticationHelper.users.SuperUser)
       const link = await $('[href="/admin"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
       const optionslink = await $('[href="/archive-options"]')
-      await optionslink.click()
+      await clickAndWaitForPageLoad(optionslink)
     })
 
     it('Should be able to navigate to page', async function () {
       const reductionslink = await $('[href="/archive-data/reductions"]')
-      await reductionslink.click()
+      await clickAndWaitForPageLoad(reductionslink)
       const pageTitle = await $('.govuk-heading-xl')
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Archived Reductions')
@@ -102,11 +103,11 @@ describe('Admin Archive Data Reductions Page', () => {
       const extraSearchCritera = await $('.select2-search__field')
       await extraSearchCritera.setValue('Test_Forename')
 
-      const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="15"]')
-      await criteriaName.click()
+      const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="16"]')
+      await clickAndWaitForPageLoad(criteriaName)
 
       const search = await $('#archive-reductions-filter-submit')
-      await search.click()
+      await clickAndWaitForPageLoad(search)
       await browser.waitUntil(async (resolve) => {
         return (await $('#reduction-archive-table tbody tr:first-child').getText()) !== 'Loading...'
       })

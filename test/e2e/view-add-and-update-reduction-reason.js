@@ -1,6 +1,7 @@
 const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
+const { clickAndWaitForPageLoad, navigateTo } = require('../e2e/resources/helpers/browser-helpers')
 
 let pageTitle
 const ids = []
@@ -9,13 +10,13 @@ describe('View admin role', () => {
   before(async function () {
     await authenticationHelper.login(authenticationHelper.users.SuperUser)
     const link = await $('[href="/admin"]')
-    await link.click()
+    await clickAndWaitForPageLoad(link)
   })
 
   describe('should navigate to the manage reduction reasons page', () => {
     it('with the correct breadcrumbs and heading title', async () => {
       const link = await $('[href="/manage-reduction-reasons"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
       pageTitle = await $('.govuk-heading-xl')
       pageTitle = await pageTitle.getText()
       expect(pageTitle, 'Manage Reduction Reasons title should be "Manage Reduction Reasons"').to.equal('Manage Reduction Reasons')
@@ -23,7 +24,7 @@ describe('View admin role', () => {
 
     it('and then navigate to the add reduction reason page with the correct heading title', async () => {
       const link = await $('[href="/add-reduction-reason"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
       pageTitle = await $('.govuk-heading-xl')
       pageTitle = await pageTitle.getText()
       expect(pageTitle, 'Add Reduction Reason title should be "Add Reduction Reason"').to.equal('Add Reduction Reason')
@@ -46,7 +47,7 @@ describe('View admin role', () => {
       await maxAllowancePercentage.setValue(20)
       await monthsToExpiry.setValue(6)
       await isEnabled.selectByVisibleText('Enabled')
-      await submit.click()
+      await clickAndWaitForPageLoad(submit)
       const successMessage = await $('.govuk-notification-banner--success .govuk-notification-banner__heading')
       const successMessageText = await successMessage.getText()
       expect(successMessageText, 'Success message should be displayed').to.equal('The Reduction Reason was saved successfully!')
@@ -58,7 +59,7 @@ describe('View admin role', () => {
       ids.push(lastReductionReason.id)
       const reductionLink = '/edit-reduction-reason?id=' + lastReductionReason.id
       const link = await $('[href="' + reductionLink + '"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
 
       reductionName = await $('#reductionName')
       reductionShortName = await $('#reductionShortName')
@@ -86,7 +87,7 @@ describe('View admin role', () => {
     })
 
     it('and create a new reduction reason with optional fields left blank', async () => {
-      await browser.url('/add-reduction-reason')
+      await navigateTo('/add-reduction-reason')
       const reductionName = await $('#reductionName')
       const reductionShortName = await $('#reductionShortName')
       const category = await $('#category')
@@ -97,7 +98,7 @@ describe('View admin role', () => {
       await reductionShortName.setValue('TRR2')
       await category.selectByVisibleText('Work Circumstances')
       await isEnabled.selectByVisibleText('Enabled')
-      await submit.click()
+      await clickAndWaitForPageLoad(submit)
       const successMessage = await $('.govuk-notification-banner--success .govuk-notification-banner__heading')
       const successMessageText = await successMessage.getText()
       expect(successMessageText, 'Success message should be displayed').to.equal('The Reduction Reason was saved successfully!')
@@ -109,7 +110,7 @@ describe('View admin role', () => {
       ids.push(lastReductionReason.id)
       const reductionLink = '/edit-reduction-reason?id=' + lastReductionReason.id
       const link = await $('[href="' + reductionLink + '"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
 
       reductionName = await $('#reductionName')
       reductionShortName = await $('#reductionShortName')
@@ -145,7 +146,7 @@ describe('View admin role', () => {
       await allowancePercentage.setValue(80)
       await maxAllowancePercentage.setValue(80)
       await monthsToExpiry.setValue(12)
-      await submit.click()
+      await clickAndWaitForPageLoad(submit)
       const successMessage = await $('.govuk-notification-banner--success .govuk-notification-banner__heading')
       const successMessageText = await successMessage.getText()
       expect(successMessageText, 'Success message should be displayed').to.equal('The Reduction Reason was saved successfully!')
@@ -157,7 +158,7 @@ describe('View admin role', () => {
       ids.push(lastReductionReason.id)
       const reductionLink = '/edit-reduction-reason?id=' + lastReductionReason.id
       const link = await $('[href="' + reductionLink + '"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
 
       reductionName = await $('#reductionName')
       reductionShortName = await $('#reductionShortName')

@@ -2,6 +2,7 @@ const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
+const { navigateTo } = require('../e2e/resources/helpers/browser-helpers')
 
 let teamDefaultUrl
 
@@ -11,7 +12,7 @@ describe('team', function () {
       await authenticationHelper.login(authenticationHelper.users.Staff)
       const results = await dataHelper.selectIdsForWorkloadOwner()
       teamDefaultUrl = '/' + workloadTypes.PROBATION + '/team/' + results.filter((item) => item.table === 'team')[0].id
-      await browser.url(teamDefaultUrl + '/overview')
+      await navigateTo(teamDefaultUrl + '/overview')
     })
 
     it('should not be able to view export', async function () {
@@ -28,7 +29,7 @@ describe('team', function () {
   describe('Managers', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.Manager)
-      await browser.url(teamDefaultUrl + '/export')
+      await navigateTo(teamDefaultUrl + '/export')
     })
 
     it('should navigate to the team export page', async function () {
@@ -51,7 +52,7 @@ describe('team', function () {
   describe('export for Application Support', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
-      await browser.url(teamDefaultUrl + '/export')
+      await navigateTo(teamDefaultUrl + '/export')
     })
 
     it('should navigate to the team export page', async function () {
@@ -74,7 +75,7 @@ describe('team', function () {
   describe('export for Super User', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.SuperUser)
-      await browser.url(teamDefaultUrl + '/export')
+      await navigateTo(teamDefaultUrl + '/export')
     })
 
     it('should navigate to the team export page', async function () {

@@ -7,6 +7,7 @@ const { deleteAllMessages, pollCheckAndDelete } = require('../helpers/sqs')
 const workloadTypes = require('../../app/constants/workload-type')
 const getSqsClient = require('../../app/services/aws/sqs/get-sqs-client')
 const { audit } = require('../../config')
+const { clickAndWaitForPageLoad, navigateTo } = require('../e2e/resources/helpers/browser-helpers')
 
 const sqsClient = getSqsClient({ region: audit.region, accessKeyId: audit.accessKeyId, secretAccessKey: audit.secretAccessKey, endpoint: audit.endpoint })
 const queueURL = audit.queueUrl
@@ -27,12 +28,12 @@ describe('View adding a new reduction', () => {
   describe('Manager', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.Manager)
-      await browser.url(offenderManagerUrl + '/reductions')
+      await navigateTo(offenderManagerUrl + '/reductions')
     })
 
     it('should navigate to the add reduction screen and submit a new reduction form', async () => {
       const addLink = await $('[href="' + offenderManagerUrl + '/add-reduction' + '"]')
-      await addLink.click()
+      await clickAndWaitForPageLoad(addLink)
       pageTitle = await $('.govuk-heading-xl')
       pageTitle = await pageTitle.getText()
       expect(pageTitle, 'New reduction Page title should be "New reduction"').to.equal('New reduction')
@@ -59,10 +60,9 @@ describe('View adding a new reduction', () => {
       await endYearField.setValue('2028')
       await notesField.setValue(currentTime)
 
-      await submit.click()
-      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
-      const viewLink = await $(activeReductions[0])
-      await viewLink.click()
+      await clickAndWaitForPageLoad(submit)
+      const viewLink = await $('=View')
+      await clickAndWaitForPageLoad(viewLink)
       notesField = await $('#textarea')
       notesField = await notesField.getValue()
       expect(notesField, 'The notes field of the last inserted reduction should have the following contents: ' + currentTime).to.be.equal(currentTime)
@@ -104,12 +104,12 @@ describe('View adding a new reduction', () => {
   describe('Application Support', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.ApplicationSupport)
-      await browser.url(offenderManagerUrl + '/reductions')
+      await navigateTo(offenderManagerUrl + '/reductions')
     })
 
     it('should navigate to the add reduction screen and not be able to submit a new reduction form', async () => {
       const addLink = await $('[href="' + offenderManagerUrl + '/add-reduction' + '"]')
-      await addLink.click()
+      await clickAndWaitForPageLoad(addLink)
       pageTitle = await $('.govuk-heading-xl')
       pageTitle = await pageTitle.getText()
       expect(pageTitle, 'New reduction Page title should be "New reduction"').to.equal('New reduction')
@@ -136,7 +136,7 @@ describe('View adding a new reduction', () => {
       await endYearField.setValue('2028')
       await notesField.setValue(currentTime)
 
-      await submit.click()
+      await clickAndWaitForPageLoad(submit)
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
@@ -151,12 +151,12 @@ describe('View adding a new reduction', () => {
   describe('Super User', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.SuperUser)
-      await browser.url(offenderManagerUrl + '/reductions')
+      await navigateTo(offenderManagerUrl + '/reductions')
     })
 
     it('should navigate to the add reduction screen and submit a new reduction form', async () => {
       const addLink = await $('[href="' + offenderManagerUrl + '/add-reduction' + '"]')
-      await addLink.click()
+      await clickAndWaitForPageLoad(addLink)
       pageTitle = await $('.govuk-heading-xl')
       pageTitle = await pageTitle.getText()
       expect(pageTitle, 'New reduction Page title should be "New reduction"').to.equal('New reduction')
@@ -183,10 +183,9 @@ describe('View adding a new reduction', () => {
       await endYearField.setValue('2028')
       await notesField.setValue(currentTime)
 
-      await submit.click()
-      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
-      const viewLink = await $(activeReductions[0])
-      await viewLink.click()
+      await clickAndWaitForPageLoad(submit)
+      const viewLink = await $('=View')
+      await clickAndWaitForPageLoad(viewLink)
       notesField = await $('#textarea')
       notesField = await notesField.getValue()
       expect(notesField, 'The notes field of the last inserted reduction should have the following contents: ' + currentTime).to.be.equal(currentTime)

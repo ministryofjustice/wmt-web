@@ -3,6 +3,7 @@ const authenticationHelp = require('../helpers/routes/authentication-helper')
 const caseProgressDataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 const dailyArchiveData = require('../helpers/data/setup-data')
+const { navigateTo, clickAndWaitForPageLoad } = require('../e2e/resources/helpers/browser-helpers')
 
 let workloadOwnerIds = []
 let workloadOwnerDefaultUrl
@@ -21,11 +22,11 @@ describe('View caseload progress flow', () => {
     lduDefaultUrl = '/' + workloadTypes.PROBATION + '/ldu/' + workloadOwnerIds.filter((item) => item.table === 'ldu')[0].id
     regionDefaultUrl = '/' + workloadTypes.PROBATION + '/region/' + workloadOwnerIds.filter((item) => item.table === 'region')[0].id
     nationalDefaultUrl = '/' + workloadTypes.PROBATION + '/hmpps/0'
-    await browser.url(workloadOwnerDefaultUrl + '/caseload-capacity')
+    await navigateTo(workloadOwnerDefaultUrl + '/caseload-capacity')
   })
 
   it('should navigate to the workload owner caseload progress screen', async () => {
-    await browser.url(workloadOwnerDefaultUrl + '/caseload-capacity')
+    await navigateTo(workloadOwnerDefaultUrl + '/caseload-capacity')
 
     const breadcrumbs = await $('.govuk-breadcrumbs')
     let exists = await breadcrumbs.isExisting()
@@ -37,7 +38,7 @@ describe('View caseload progress flow', () => {
 
     // Check the href for case progress using the id exists
     const link = await $('[href="' + workloadOwnerDefaultUrl + '/case-progress"]')
-    await link.click()
+    await clickAndWaitForPageLoad(link)
 
     const plotlyPlot = await $('.js-plotly-plot')
     exists = await plotlyPlot.isExisting()
@@ -49,7 +50,7 @@ describe('View caseload progress flow', () => {
   })
 
   it('should navigate to the team caseload progress screen', async () => {
-    await browser.url(teamDefaultUrl + '/case-progress')
+    await navigateTo(teamDefaultUrl + '/case-progress')
 
     const breadcrumbs = await $('.govuk-breadcrumbs')
     let exists = await breadcrumbs.isExisting()
@@ -77,7 +78,7 @@ describe('View caseload progress flow', () => {
   })
 
   it('should navigate to the ldu caseload progress screen', async () => {
-    await browser.url(lduDefaultUrl + '/case-progress')
+    await navigateTo(lduDefaultUrl + '/case-progress')
 
     const breadcrumbs = await $('.govuk-breadcrumbs')
     let exists = await breadcrumbs.isExisting()
@@ -105,7 +106,7 @@ describe('View caseload progress flow', () => {
   })
 
   it('should navigate to the region caseload progress screen', async () => {
-    await browser.url(regionDefaultUrl + '/case-progress')
+    await navigateTo(regionDefaultUrl + '/case-progress')
 
     const breadcrumbs = await $('.govuk-breadcrumbs')
     let exists = await breadcrumbs.isExisting()
@@ -133,7 +134,7 @@ describe('View caseload progress flow', () => {
   })
 
   it('should navigate to the national caseload progress screen', async () => {
-    await browser.url(nationalDefaultUrl + '/case-progress')
+    await navigateTo(nationalDefaultUrl + '/case-progress')
 
     const breadcrumbs = await $('.govuk-breadcrumbs')
     let exists = await breadcrumbs.isExisting()
@@ -161,12 +162,12 @@ describe('View caseload progress flow', () => {
   })
 
   it('should be accessible via the Case Progress tab on each org levels default view', async () => {
-    await browser.url(nationalDefaultUrl)
+    await navigateTo(nationalDefaultUrl)
 
     const nationalCaseProgressLink = await $('[href="' + nationalDefaultUrl + '/case-progress"]')
     let exists = await nationalCaseProgressLink.isExisting()
     expect(exists).to.be.equal(true)
-    await nationalCaseProgressLink.click()
+    await clickAndWaitForPageLoad(nationalCaseProgressLink)
     let plotlyDivCases = await $('#plotly-div-cases')
     exists = await plotlyDivCases.isExisting()
     expect(exists).to.be.equal(true)
@@ -174,17 +175,17 @@ describe('View caseload progress flow', () => {
     const nationalOverviewLink = await $('[href="' + nationalDefaultUrl + '/overview"]')
     exists = await nationalOverviewLink.isExisting()
     expect(exists).to.be.equal(true)
-    await nationalOverviewLink.click()
+    await clickAndWaitForPageLoad(nationalOverviewLink)
 
     const regionLink = await $('[href="' + regionDefaultUrl + '"]')
     exists = await regionLink.isExisting()
     expect(exists).to.be.equal(true)
-    await regionLink.click()
+    await clickAndWaitForPageLoad(regionLink)
 
     const regionCaseProgressLink = await $('[href="' + regionDefaultUrl + '/case-progress"]')
     exists = await regionCaseProgressLink.isExisting()
     expect(exists).to.be.equal(true)
-    await regionCaseProgressLink.click()
+    await clickAndWaitForPageLoad(regionCaseProgressLink)
     plotlyDivCases = await $('#plotly-div-cases')
     exists = await plotlyDivCases.isExisting()
     expect(exists).to.be.equal(true)
@@ -192,17 +193,17 @@ describe('View caseload progress flow', () => {
     const regionOverviewLink = await $('[href="' + regionDefaultUrl + '/overview"]')
     exists = await regionOverviewLink.isExisting()
     expect(exists).to.be.equal(true)
-    await regionOverviewLink.click()
+    await clickAndWaitForPageLoad(regionOverviewLink)
 
     const lduLink = await $('[href="' + lduDefaultUrl + '"]')
     exists = await lduLink.isExisting()
     expect(exists).to.be.equal(true)
-    await lduLink.click()
+    await clickAndWaitForPageLoad(lduLink)
 
     const lduLCaseProgressLink = await $('[href="' + lduDefaultUrl + '/case-progress"]')
     exists = await lduLCaseProgressLink.isExisting()
     expect(exists).to.be.equal(true)
-    await lduLCaseProgressLink.click()
+    await clickAndWaitForPageLoad(lduLCaseProgressLink)
     plotlyDivCases = await $('#plotly-div-cases')
     exists = await plotlyDivCases.isExisting()
     expect(exists).to.be.equal(true)
@@ -210,17 +211,17 @@ describe('View caseload progress flow', () => {
     const lduOverviewLink = await $('[href="' + lduDefaultUrl + '/overview"]')
     exists = await lduOverviewLink.isExisting()
     expect(exists).to.be.equal(true)
-    await lduOverviewLink.click()
+    await clickAndWaitForPageLoad(lduOverviewLink)
 
     const teamLink = await $('[href="' + teamDefaultUrl + '"]')
     exists = await teamLink.isExisting()
     expect(exists).to.be.equal(true)
-    await teamLink.click()
+    await clickAndWaitForPageLoad(teamLink)
 
     const teamCaseProgressLink = await $('[href="' + teamDefaultUrl + '/case-progress"]')
     exists = await teamCaseProgressLink.isExisting()
     expect(exists).to.be.equal(true)
-    await teamCaseProgressLink.click()
+    await clickAndWaitForPageLoad(teamCaseProgressLink)
     plotlyDivCases = await $('#plotly-div-cases')
     exists = await plotlyDivCases.isExisting()
     expect(exists).to.be.equal(true)
@@ -228,17 +229,17 @@ describe('View caseload progress flow', () => {
     const teamOverviewLink = await $('[href="' + teamDefaultUrl + '/overview"]')
     exists = await teamOverviewLink.isExisting()
     expect(exists).to.be.equal(true)
-    await teamOverviewLink.click()
+    await clickAndWaitForPageLoad(teamOverviewLink)
 
     const workloadOwnerLink = await $('[href="' + workloadOwnerDefaultUrl + '"]')
     exists = await workloadOwnerLink.isExisting()
     expect(exists).to.be.equal(true)
-    await workloadOwnerLink.click()
+    await clickAndWaitForPageLoad(workloadOwnerLink)
 
     const workloadOwnerCaseProgressLink = await $('[href="' + workloadOwnerDefaultUrl + '/case-progress"]')
     exists = await workloadOwnerCaseProgressLink.isExisting()
     expect(exists).to.be.equal(true)
-    await workloadOwnerCaseProgressLink.click()
+    await clickAndWaitForPageLoad(workloadOwnerCaseProgressLink)
     plotlyDivCases = await $('#plotly-div-cases')
     exists = await plotlyDivCases.isExisting()
     expect(exists).to.be.equal(true)
@@ -249,7 +250,7 @@ describe('View caseload progress flow', () => {
     let teamCaseProgressLink = await $('[href="' + teamDefaultUrl + '/case-progress"]')
     let exists = await teamCaseProgressLink.isExisting()
     expect(exists).to.be.equal(true)
-    await teamCaseProgressLink.click()
+    await clickAndWaitForPageLoad(teamCaseProgressLink)
     let plotlyDivCases = await $('#plotly-div-cases')
     exists = await plotlyDivCases.isExisting()
     expect(exists).to.be.equal(true)
@@ -257,12 +258,12 @@ describe('View caseload progress flow', () => {
     const teamCaseloadLink = await $('[href="' + teamDefaultUrl + '/caseload"]')
     exists = await teamCaseloadLink.isExisting()
     expect(exists).to.be.equal(true)
-    await teamCaseloadLink.click()
+    await clickAndWaitForPageLoad(teamCaseloadLink)
 
     teamCaseProgressLink = await $('[href="' + teamDefaultUrl + '/case-progress"]')
     exists = await teamCaseProgressLink.isExisting()
     expect(exists).to.be.equal(true)
-    await teamCaseProgressLink.click()
+    await clickAndWaitForPageLoad(teamCaseProgressLink)
     plotlyDivCases = await $('#plotly-div-cases')
     exists = await plotlyDivCases.isExisting()
     expect(exists).to.be.equal(true)
@@ -270,12 +271,12 @@ describe('View caseload progress flow', () => {
     const teamCaseloadCapacityLink = await $('[href="' + teamDefaultUrl + '/caseload-capacity"]')
     exists = await teamCaseloadCapacityLink.isExisting()
     expect(exists).to.be.equal(true)
-    await teamCaseloadCapacityLink.click()
+    await clickAndWaitForPageLoad(teamCaseloadCapacityLink)
 
     teamCaseProgressLink = await $('[href="' + teamDefaultUrl + '/case-progress"]')
     exists = await teamCaseProgressLink.isExisting()
     expect(exists).to.be.equal(true)
-    await teamCaseProgressLink.click()
+    await clickAndWaitForPageLoad(teamCaseProgressLink)
     plotlyDivCases = await $('#plotly-div-cases')
     exists = await plotlyDivCases.isExisting()
     expect(exists).to.be.equal(true)

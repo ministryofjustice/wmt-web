@@ -1,6 +1,6 @@
 const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
-
+const { clickAndWaitForPageLoad, navigateTo } = require('../e2e/resources/helpers/browser-helpers')
 describe('Admin Archive Data Options Page', () => {
   describe('Staff', function () {
     before(async function () {
@@ -8,7 +8,7 @@ describe('Admin Archive Data Options Page', () => {
     })
 
     it('Should not be able to go on page', async function () {
-      await browser.url('/archive-options')
+      await navigateTo('/archive-options')
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
@@ -24,7 +24,7 @@ describe('Admin Archive Data Options Page', () => {
     })
 
     it('Should not be able to go on page', async function () {
-      await browser.url('/archive-options')
+      await navigateTo('/archive-options')
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
@@ -39,12 +39,12 @@ describe('Admin Archive Data Options Page', () => {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
       const link = await $('[href="/admin"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
     })
 
     it('Should be able to navigate to page', async function () {
       const link = await $('[href="/archive-options"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
       const pageTitle = await $('.govuk-heading-xl')
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Archive Data Options')
@@ -65,12 +65,12 @@ describe('Admin Archive Data Options Page', () => {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.SuperUser)
       const link = await $('[href="/admin"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
     })
 
     it('Should be able to navigate to page', async function () {
       const link = await $('[href="/archive-options"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
       const pageTitle = await $('.govuk-heading-xl')
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Archive Data Options')

@@ -1,19 +1,20 @@
 const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
+const { clickAndWaitForPageLoad } = require('../e2e/resources/helpers/browser-helpers')
 
 describe('Edit Workload Points Page', () => {
   describe('Application Support', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
       const link = await $('[href="/admin"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
       const workloadPointsLink = await $('[href="/admin/workload-points"]')
-      await workloadPointsLink.click()
+      await clickAndWaitForPageLoad(workloadPointsLink)
     })
 
     it('Should not be able to edit Workload Points', async function () {
       const editButton = await $('#edit-button')
-      await editButton.click()
+      await clickAndWaitForPageLoad(editButton)
 
       const pointField = await $('#cus-a3')
       await pointField.setValue('10')
@@ -22,7 +23,7 @@ describe('Edit Workload Points Page', () => {
       await pointFieldSuspended.setValue('10')
 
       const saveButton = await $('#save-button')
-      await saveButton.click()
+      await clickAndWaitForPageLoad(saveButton)
 
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
@@ -38,14 +39,14 @@ describe('Edit Workload Points Page', () => {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.SuperUser)
       const link = await $('[href="/admin"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
       const workloadPointsLink = await $('[href="/admin/workload-points"]')
-      await workloadPointsLink.click()
+      await clickAndWaitForPageLoad(workloadPointsLink)
     })
 
     it('Should be able to edit Workload Points', async function () {
       const editButton = await $('#edit-button')
-      await editButton.click()
+      await clickAndWaitForPageLoad(editButton)
 
       const pointField = await $('#cus-a3')
       await pointField.setValue('10')
@@ -54,7 +55,7 @@ describe('Edit Workload Points Page', () => {
       await pointFieldSuspended.setValue('10')
 
       const saveButton = await $('#save-button')
-      await saveButton.click()
+      await clickAndWaitForPageLoad(saveButton)
 
       const successBanner = await $('.govuk-notification-banner--success .govuk-notification-banner__heading')
       const text = await successBanner.getText()

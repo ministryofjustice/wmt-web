@@ -3,6 +3,7 @@ const authenticationHelp = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 const dailyArchiveData = require('../helpers/data/setup-data')
+const { navigateTo, clickAndWaitForPageLoad } = require('../e2e/resources/helpers/browser-helpers')
 
 let workloadOwnerIds = []
 let teamDefaultUrl
@@ -27,14 +28,14 @@ describe('View your caseload flow', () => {
 
   describe('should navigate to the team caseload screen', () => {
     it('with the correct breadcrumbs, subnav, title and export button', async () => {
-      await browser.url(teamDefaultUrl + '/caseload')
+      await navigateTo(teamDefaultUrl + '/caseload')
       pageSubtitle = await $('.govuk-heading-xl')
       pageSubtitle = await pageSubtitle.getText()
       expect(pageSubtitle).to.equal(dailyArchiveData.teamName)
     })
 
     it('with the correct caseload total summary for each case type', async () => {
-      await browser.url(teamDefaultUrl + '/caseload')
+      await navigateTo(teamDefaultUrl + '/caseload')
       custody = await $('#custodyTotal')
       custody = await custody.getText()
       let textTotal = custody.split('\n')
@@ -56,8 +57,7 @@ describe('View your caseload flow', () => {
     })
 
     it('with the correct tabs and tables', async () => {
-      await browser.url(teamDefaultUrl + '/caseload')
-
+      await navigateTo(teamDefaultUrl + '/caseload')
       overall = await $('[href="#overall"]')
       overall = await $('#overall-enhanced')
       custody = await $('#custody-enhanced')
@@ -65,15 +65,15 @@ describe('View your caseload flow', () => {
       licence = await $('#license-enhanced')
 
       custody = await $('[href="#custody"]')
-      await custody.click()
+      await clickAndWaitForPageLoad(custody)
       custody = await $('.sln-table-caseload-custody')
 
       community = await $('[href="#community"]')
-      await community.click()
+      await clickAndWaitForPageLoad(community)
       community = await $('.sln-table-caseload-community')
 
       licence = await $('[href="#license"]')
-      await licence.click()
+      await clickAndWaitForPageLoad(licence)
       licence = await $('.sln-table-caseload-license')
       const heading = await $('#license-enhanced .govuk-heading-m')
       const headingIsDisplayed = await heading.isDisplayed()
@@ -83,7 +83,7 @@ describe('View your caseload flow', () => {
 
   describe('should navigate to the LDU caseload screen', () => {
     it('with the correct table, breadcrumbs and export button', async () => {
-      await browser.url(lduDefaultUrl + '/caseload')
+      await navigateTo(lduDefaultUrl + '/caseload')
       pageSubtitle = await $('.govuk-heading-xl')
       pageSubtitle = await pageSubtitle.getText()
       expect(pageSubtitle).to.equal(dailyArchiveData.lduName)
@@ -117,15 +117,15 @@ describe('View your caseload flow', () => {
       expect(exists).to.be.equal(true)
 
       custody = await $('[href="#custody"]')
-      await custody.click()
+      await clickAndWaitForPageLoad(custody)
       custody = await $('.sln-table-caseload-custody')
 
       community = await $('[href="#community"]')
-      await community.click()
+      await clickAndWaitForPageLoad(community)
       community = await $('.sln-table-caseload-community')
 
       licence = await $('[href="#license"]')
-      await licence.click()
+      await clickAndWaitForPageLoad(licence)
       licence = await $('.sln-table-caseload-license')
       const heading = await $('#license-enhanced .govuk-heading-m')
       const headingIsDisplayed = await heading.isDisplayed()
@@ -133,47 +133,47 @@ describe('View your caseload flow', () => {
     })
 
     it('should be accessible via the Caseload tab on Team and LDUs default view', async () => {
-      await browser.url(nationalDefaultUrl)
+      await navigateTo(nationalDefaultUrl)
       region = await $('[href="' + regionDefaultUrl + '"]')
-      await region.click()
+      await clickAndWaitForPageLoad(region)
       ldu = await $('[href="' + lduDefaultUrl + '"]')
-      await ldu.click()
+      await clickAndWaitForPageLoad(ldu)
       ldu = await $('[href="' + lduDefaultUrl + '/caseload"]')
-      await ldu.click()
+      await clickAndWaitForPageLoad(ldu)
 
       const grade = await $('.sln-table-caseload-by-grade')
       const exists = await grade.isExisting()
       expect(exists).to.be.equal(true)
 
       ldu = await $('[href="' + lduDefaultUrl + '/overview"]')
-      await ldu.click()
+      await clickAndWaitForPageLoad(ldu)
 
       team = await $('[href="' + teamDefaultUrl + '"]')
-      await team.click()
+      await clickAndWaitForPageLoad(team)
 
       team = await $('[href="' + teamDefaultUrl + '/caseload"]')
-      await team.click()
+      await clickAndWaitForPageLoad(team)
       const heading = await $('#caseloadSummary')
       const headingIsDisplayed = await heading.isDisplayed()
       return expect(headingIsDisplayed).to.be.true
     })
 
     it('should be accessible via the Case Progress tab when on any other tab', async () => {
-      await browser.url(teamDefaultUrl)
+      await navigateTo(teamDefaultUrl)
       team = await $('[href="' + teamDefaultUrl + '/caseload"]')
-      await team.click()
+      await clickAndWaitForPageLoad(team)
 
       team = await $('[href="' + teamDefaultUrl + '/case-progress"]')
-      await team.click()
+      await clickAndWaitForPageLoad(team)
 
       team = await $('[href="' + teamDefaultUrl + '/caseload"]')
-      await team.click()
+      await clickAndWaitForPageLoad(team)
 
       team = await $('[href="' + teamDefaultUrl + '/caseload-capacity"]')
-      await team.click()
+      await clickAndWaitForPageLoad(team)
 
       team = await $('[href="' + teamDefaultUrl + '/caseload"]')
-      await team.click()
+      await clickAndWaitForPageLoad(team)
       const heading = await $('#caseloadSummary')
       const headingIsDisplayed = await heading.isDisplayed()
       return expect(headingIsDisplayed).to.be.true
@@ -182,19 +182,19 @@ describe('View your caseload flow', () => {
 
   describe('should navigate to the Region caseload screen', () => {
     it('with the correct table, breadcrumbs and export button', async () => {
-      await browser.url(regionDefaultUrl + '/caseload')
+      await navigateTo(regionDefaultUrl + '/caseload')
       pageSubtitle = await $('.govuk-heading-xl')
       pageSubtitle = await pageSubtitle.getText()
       expect(pageSubtitle).to.equal(dailyArchiveData.regionName)
     })
 
     it('should be accessible via the Caseload tab on regions default view', async () => {
-      await browser.url(nationalDefaultUrl)
+      await navigateTo(nationalDefaultUrl)
       region = await $('[href="' + regionDefaultUrl + '"]')
-      await region.click()
+      await clickAndWaitForPageLoad(region)
 
       region = await $('[href="' + regionDefaultUrl + '/caseload"]')
-      await region.click()
+      await clickAndWaitForPageLoad(region)
 
       const grade = await $('.sln-table-caseload-by-grade')
       const exists = await grade.isExisting()
@@ -202,28 +202,28 @@ describe('View your caseload flow', () => {
     })
 
     it('should be accessible via the Case Progress tab when on any other tab', async () => {
-      await browser.url(regionDefaultUrl)
+      await navigateTo(regionDefaultUrl)
       region = await $('[href="' + regionDefaultUrl + '/caseload"]')
-      await region.click()
+      await clickAndWaitForPageLoad(region)
 
       let grade = await $('.sln-table-caseload-by-grade')
       let exists = await grade.isExisting()
       expect(exists).to.be.equal(true)
 
       region = await $('[href="' + regionDefaultUrl + '/case-progress"]')
-      await region.click()
+      await clickAndWaitForPageLoad(region)
 
       region = await $('[href="' + regionDefaultUrl + '/caseload"]')
-      await region.click()
+      await clickAndWaitForPageLoad(region)
 
       grade = await $('.sln-table-caseload-by-grade')
       exists = await grade.isExisting()
       expect(exists).to.be.equal(true)
       region = await $('[href="' + regionDefaultUrl + '/caseload-capacity"]')
-      await region.click()
+      await clickAndWaitForPageLoad(region)
 
       region = await $('[href="' + regionDefaultUrl + '/caseload"]')
-      await region.click()
+      await clickAndWaitForPageLoad(region)
 
       grade = await $('.sln-table-caseload-by-grade')
       exists = await grade.isExisting()
@@ -233,16 +233,16 @@ describe('View your caseload flow', () => {
 
   describe('should navigate to the National caseload screen', () => {
     it('with the correct table, breadcrumbs and export button', async () => {
-      await browser.url(nationalDefaultUrl + '/caseload')
+      await navigateTo(nationalDefaultUrl + '/caseload')
       pageSubtitle = await $('.govuk-heading-xl')
       pageSubtitle = await pageSubtitle.getText()
       expect(pageSubtitle).to.equal('National')
     })
 
     it('should be accessible via the Caseload tab on regions default view', async () => {
-      await browser.url(nationalDefaultUrl)
+      await navigateTo(nationalDefaultUrl)
       national = await $('[href="' + nationalDefaultUrl + '/caseload"]')
-      await national.click()
+      await clickAndWaitForPageLoad(national)
 
       const grade = await $('.sln-table-caseload-by-grade')
       const exists = await grade.isExisting()
@@ -250,30 +250,30 @@ describe('View your caseload flow', () => {
     })
 
     it('should be accessible via the Case Progress tab when on any other tab', async () => {
-      await browser.url(nationalDefaultUrl)
+      await navigateTo(nationalDefaultUrl)
 
       national = await $('[href="' + nationalDefaultUrl + '/caseload"]')
-      await national.click()
+      await clickAndWaitForPageLoad(national)
 
       let grade = await $('.sln-table-caseload-by-grade')
       let exists = await grade.isExisting()
       expect(exists).to.be.equal(true)
 
       national = await $('[href="' + nationalDefaultUrl + '/case-progress"]')
-      await national.click()
+      await clickAndWaitForPageLoad(national)
 
       national = await $('[href="' + nationalDefaultUrl + '/caseload"]')
-      await national.click()
+      await clickAndWaitForPageLoad(national)
 
       grade = await $('.sln-table-caseload-by-grade')
       exists = await grade.isExisting()
       expect(exists).to.be.equal(true)
 
       national = await $('[href="' + nationalDefaultUrl + '/caseload-capacity"]')
-      await national.click()
+      await clickAndWaitForPageLoad(national)
 
       national = await $('[href="' + nationalDefaultUrl + '/caseload"]')
-      await national.click()
+      await clickAndWaitForPageLoad(national)
 
       grade = await $('.sln-table-caseload-by-grade')
       exists = await grade.isExisting()

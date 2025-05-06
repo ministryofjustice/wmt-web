@@ -1,5 +1,6 @@
 const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
+const { clickAndWaitForPageLoad, navigateTo } = require('../e2e/resources/helpers/browser-helpers')
 
 describe('Admin Landing Page', () => {
   describe('Staff', function () {
@@ -13,7 +14,7 @@ describe('Admin Landing Page', () => {
     })
 
     it('Should not be able to go on Admin landing page', async function () {
-      await browser.url('/admin')
+      await navigateTo('/admin')
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
@@ -50,7 +51,7 @@ describe('Admin Landing Page', () => {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
       const link = await $('[href="/admin"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
     })
 
     it('Should be able to navigate to admin page', async function () {
@@ -68,7 +69,7 @@ describe('Admin Landing Page', () => {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.SuperUser)
       const link = await $('[href="/admin"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
     })
 
     it('Should be able to navigate to admin page', async function () {

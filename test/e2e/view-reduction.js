@@ -3,6 +3,7 @@ const authenticationHelp = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 const dailyArchiveData = require('../helpers/data/setup-data')
+const { navigateTo } = require('../e2e/resources/helpers/browser-helpers')
 
 let offenderManagerId
 let offenderManagerUrl
@@ -17,7 +18,7 @@ describe('View a reduction', () => {
   describe('Staff', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.Staff)
-      await browser.url(offenderManagerUrl)
+      await navigateTo(offenderManagerUrl)
     })
 
     it('Should not be able to navigate to page', async () => {
@@ -33,7 +34,7 @@ describe('View a reduction', () => {
   describe('Manager', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.Manager)
-      await browser.url(offenderManagerUrl)
+      await navigateTo(offenderManagerUrl)
     })
 
     describe('should navigate to the reduction', () => {
@@ -52,7 +53,7 @@ describe('View a reduction', () => {
       })
 
       it('with an active table', async () => {
-        await browser.url(offenderManagerUrl)
+        await navigateTo(offenderManagerUrl)
 
         let element = await $('#headingActive')
         let text = await element.getText()
@@ -76,7 +77,7 @@ describe('View a reduction', () => {
       })
 
       it('with a scheduled table', async () => {
-        await browser.url(offenderManagerUrl)
+        await navigateTo(offenderManagerUrl)
         let element = await $('#headingScheduled')
         let text = await element.getText()
         expect(text).to.contain('Scheduled')
@@ -99,7 +100,7 @@ describe('View a reduction', () => {
       })
 
       it('with an archived table', async () => {
-        await browser.url(offenderManagerUrl)
+        await navigateTo(offenderManagerUrl)
         let element = await $('#headingArchived')
         let text = await element.getText()
         expect(text).to.contain('Archived')
@@ -129,7 +130,7 @@ describe('View a reduction', () => {
   describe('Application Support', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.Manager)
-      await browser.url(offenderManagerUrl)
+      await navigateTo(offenderManagerUrl)
     })
 
     it('should be able to navigate to page', async () => {
@@ -148,7 +149,7 @@ describe('View a reduction', () => {
       const results = await dataHelper.getAnyExistingWorkloadOwnerId()
       offenderManagerId = results
       offenderManagerUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + offenderManagerId + '/reductions'
-      await browser.url(offenderManagerUrl)
+      await navigateTo(offenderManagerUrl)
     })
 
     it('should be able to navigate to page', async () => {

@@ -3,6 +3,7 @@ const authenticationHelper = require('../helpers/routes/authentication-helper')
 const workloadCapacityHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 const dailyArchiveData = require('../helpers/data/setup-data')
+const { navigateTo, clickAndWaitForPageLoad } = require('../e2e/resources/helpers/browser-helpers')
 
 let workloadOwnerDefaultUrl
 let teamDefaultUrl
@@ -15,11 +16,11 @@ describe('Team', () => {
 
       workloadOwnerDefaultUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + results.filter((item) => item.table === 'workload_owner')[0].id
       teamDefaultUrl = '/' + workloadTypes.PROBATION + '/team/' + results.filter((item) => item.table === 'team')[0].id
-      await browser.url(workloadOwnerDefaultUrl)
+      await navigateTo(workloadOwnerDefaultUrl)
       const teamLink = await $('[href="' + teamDefaultUrl + '"]')
-      await teamLink.click()
+      await clickAndWaitForPageLoad(teamLink)
       const teamCapacityLink = await $('[href="' + teamDefaultUrl + '/caseload-capacity"]')
-      await teamCapacityLink.click()
+      await clickAndWaitForPageLoad(teamCapacityLink)
     })
 
     it('should navigate to the team caseload capacity screen', async () => {
@@ -42,7 +43,7 @@ describe('Team', () => {
       await toMonthField.setValue('3')
       await toYearField.setValue('2018')
 
-      await submit.click()
+      await clickAndWaitForPageLoad(submit)
 
       const errorMessage = await $('.govuk-error-message')
       const errorText = await errorMessage.getText()
@@ -70,11 +71,11 @@ describe('Team', () => {
 
       workloadOwnerDefaultUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + results.filter((item) => item.table === 'workload_owner')[0].id
       teamDefaultUrl = '/' + workloadTypes.PROBATION + '/team/' + results.filter((item) => item.table === 'team')[0].id
-      await browser.url(workloadOwnerDefaultUrl)
+      await navigateTo(workloadOwnerDefaultUrl)
       const teamLink = await $('[href="' + teamDefaultUrl + '"]')
-      await teamLink.click()
+      await clickAndWaitForPageLoad(teamLink)
       const teamCapacityLink = await $('[href="' + teamDefaultUrl + '/caseload-capacity"]')
-      await teamCapacityLink.click()
+      await clickAndWaitForPageLoad(teamCapacityLink)
     })
 
     it('should display export button', async () => {
@@ -95,11 +96,11 @@ describe('Team', () => {
 
       workloadOwnerDefaultUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + results.filter((item) => item.table === 'workload_owner')[0].id
       teamDefaultUrl = '/' + workloadTypes.PROBATION + '/team/' + results.filter((item) => item.table === 'team')[0].id
-      await browser.url(workloadOwnerDefaultUrl)
+      await navigateTo(workloadOwnerDefaultUrl)
       const teamLink = await $('[href="' + teamDefaultUrl + '"]')
-      await teamLink.click()
+      await clickAndWaitForPageLoad(teamLink)
       const teamCapacityLink = await $('[href="' + teamDefaultUrl + '/caseload-capacity"]')
-      await teamCapacityLink.click()
+      await clickAndWaitForPageLoad(teamCapacityLink)
     })
 
     it('should not display export button', async () => {
@@ -109,7 +110,7 @@ describe('Team', () => {
     })
 
     it('should not be able to download outstanding', async function () {
-      await browser.url(teamDefaultUrl + '/capacity/outstanding-csv')
+      await navigateTo(teamDefaultUrl + '/capacity/outstanding-csv')
       const header = await $('.govuk-heading-xl')
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
@@ -127,11 +128,11 @@ describe('Team', () => {
 
       workloadOwnerDefaultUrl = '/' + workloadTypes.PROBATION + '/offender-manager/' + results.filter((item) => item.table === 'workload_owner')[0].id
       teamDefaultUrl = '/' + workloadTypes.PROBATION + '/team/' + results.filter((item) => item.table === 'team')[0].id
-      await browser.url(workloadOwnerDefaultUrl)
+      await navigateTo(workloadOwnerDefaultUrl)
       const teamLink = await $('[href="' + teamDefaultUrl + '"]')
-      await teamLink.click()
+      await clickAndWaitForPageLoad(teamLink)
       const teamCapacityLink = await $('[href="' + teamDefaultUrl + '/caseload-capacity"]')
-      await teamCapacityLink.click()
+      await clickAndWaitForPageLoad(teamCapacityLink)
     })
 
     it('should display export button', async () => {

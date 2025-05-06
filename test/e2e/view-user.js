@@ -1,5 +1,6 @@
 const expect = require('chai').expect
 const authenticationHelp = require('../helpers/routes/authentication-helper')
+const { clickAndWaitForPageLoad, navigateTo } = require('../e2e/resources/helpers/browser-helpers')
 
 let adminUserURL
 
@@ -7,12 +8,12 @@ describe('View adding a new user role', () => {
   before(async function () {
     await authenticationHelp.login(authenticationHelp.users.ApplicationSupport)
     adminUserURL = '/admin/user'
-    await browser.url(adminUserURL)
+    await navigateTo(adminUserURL)
   })
 
   describe('should navigate to the user page', () => {
     it('with the correct breadcrumbs and heading title', async () => {
-      await browser.url(adminUserURL)
+      await navigateTo(adminUserURL)
 
       const breadcrumbs = await $('.govuk-breadcrumbs')
       const exists = await breadcrumbs.isExisting()
@@ -28,7 +29,7 @@ describe('View adding a new user role', () => {
       await username.setValue('John.Doe')
 
       const submit = await $('.govuk-button')
-      await submit.click()
+      await clickAndWaitForPageLoad(submit)
     })
   })
 

@@ -3,6 +3,7 @@ const authenticationHelp = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 const moment = require('moment')
+const { navigateTo, clickAndWaitForPageLoad } = require('../e2e/resources/helpers/browser-helpers')
 
 const { deleteAllMessages, pollCheckAndDelete } = require('../helpers/sqs')
 
@@ -26,7 +27,7 @@ describe('deleting a reduction', () => {
   describe('Manager', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.Manager)
-      await browser.url(offenderManagerUrl + '/add-reduction')
+      await navigateTo(offenderManagerUrl + '/add-reduction')
     })
 
     it('after first adding a new reduction', async () => {
@@ -56,17 +57,16 @@ describe('deleting a reduction', () => {
       await startYearField.setValue('2017')
       await endDayField.setValue('1')
       await endMonthField.setValue('2')
-      await endYearField.setValue('2025')
+      await endYearField.setValue('2028')
       await notesField.setValue(notesFieldValue)
 
-      await submit.click()
+      await clickAndWaitForPageLoad(submit)
 
       await $('#headingActive')
-      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
-      const viewLink = await $(activeReductions[0])
+      const viewLink = await $('=View')
       const view = await viewLink.getText()
       expect(view).to.equal('View')
-      await viewLink.click()
+      await clickAndWaitForPageLoad(viewLink)
       await deleteAllMessages(sqsClient, queueURL)
     })
 
@@ -76,7 +76,7 @@ describe('deleting a reduction', () => {
       expect(text).to.equal('Reduction')
 
       const deleteReduction = await $('#delete-reduction')
-      await deleteReduction.click()
+      await clickAndWaitForPageLoad(deleteReduction)
 
       const successMessage = await $('#reduction-success-text')
       const successText = await successMessage.getText()
@@ -101,8 +101,8 @@ describe('deleting a reduction', () => {
       expect(actualDetails.newAdditionalNotes).to.equal(notesFieldValue)
       expect(actualDetails.previousEffectiveFrom).to.equal('2017-02-01T00:00:00.000Z')
       expect(actualDetails.newEffectiveFrom).to.equal('2017-02-01T00:00:00.000Z')
-      expect(actualDetails.previousEffectiveTo).to.equal('2025-02-01T00:00:00.000Z')
-      expect(actualDetails.newEffectiveTo).to.equal('2025-02-01T00:00:00.000Z')
+      expect(actualDetails.previousEffectiveTo).to.equal('2028-02-01T00:00:00.000Z')
+      expect(actualDetails.newEffectiveTo).to.equal('2028-02-01T00:00:00.000Z')
       expect(actualDetails.previousStatus).to.equal('ACTIVE')
       expect(actualDetails.newStatus).to.equal('DELETED')
       expect(actualDetails.offenderManagerName).to.equal(`${auditData.forename} ${auditData.surname}`)
@@ -120,7 +120,7 @@ describe('deleting a reduction', () => {
   describe('Application Support', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.Manager)
-      await browser.url(offenderManagerUrl + '/add-reduction')
+      await navigateTo(offenderManagerUrl + '/add-reduction')
 
       const breadcrumbs = await $('.govuk-breadcrumbs')
       const exists = await breadcrumbs.isExisting()
@@ -148,28 +148,27 @@ describe('deleting a reduction', () => {
       await startYearField.setValue('2017')
       await endDayField.setValue('1')
       await endMonthField.setValue('2')
-      await endYearField.setValue('2025')
+      await endYearField.setValue('2028')
       await notesField.setValue(notesFieldValue)
 
-      await submit.click()
+      await clickAndWaitForPageLoad(submit)
 
       await authenticationHelp.logout()
 
       await authenticationHelp.login(authenticationHelp.users.ApplicationSupport)
-      await browser.url(offenderManagerUrl + '/reductions')
+      await navigateTo(offenderManagerUrl + '/reductions')
     })
 
     it('should not be able to delete the reduction', async () => {
-      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
-      const viewLink = await $(activeReductions[0])
-      await viewLink.click()
+      const viewLink = await $('=View')
+      await clickAndWaitForPageLoad(viewLink)
 
       const pageTitle = await $('.govuk-heading-xl')
       let text = await pageTitle.getText()
       expect(text).to.equal('Reduction')
 
       const deleteReduction = await $('#delete-reduction')
-      await deleteReduction.click()
+      await clickAndWaitForPageLoad(deleteReduction)
 
       const header = await $('.govuk-heading-xl')
       text = await header.getText()
@@ -185,7 +184,7 @@ describe('deleting a reduction', () => {
   describe('Super User', function () {
     before(async function () {
       await authenticationHelp.login(authenticationHelp.users.SuperUser)
-      await browser.url(offenderManagerUrl + '/add-reduction')
+      await navigateTo(offenderManagerUrl + '/add-reduction')
     })
 
     it('after first adding a new reduction', async () => {
@@ -215,17 +214,16 @@ describe('deleting a reduction', () => {
       await startYearField.setValue('2017')
       await endDayField.setValue('1')
       await endMonthField.setValue('2')
-      await endYearField.setValue('2025')
+      await endYearField.setValue('2028')
       await notesField.setValue(notesFieldValue)
 
-      await submit.click()
+      await clickAndWaitForPageLoad(submit)
 
       await $('#headingActive')
-      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
-      const viewLink = await $(activeReductions[0])
+      const viewLink = await $('=View')
       const view = await viewLink.getText()
       expect(view).to.equal('View')
-      await viewLink.click()
+      await clickAndWaitForPageLoad(viewLink)
     })
 
     it('should navigate to the edit reduction screen and delete it', async () => {
@@ -234,7 +232,7 @@ describe('deleting a reduction', () => {
       expect(text).to.equal('Reduction')
 
       const deleteReduction = await $('#delete-reduction')
-      await deleteReduction.click()
+      await clickAndWaitForPageLoad(deleteReduction)
 
       const successMessage = await $('#reduction-success-text')
       const successText = await successMessage.getText()
