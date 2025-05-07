@@ -14,27 +14,13 @@ exports.config = {
   ],
 
   specs: ['./e2e/**/*.js'],
-  beforeCommand: async function (commandName, args) {
-    const navigationCommands = ['url', 'click', 'navigateTo']
-
-    if (navigationCommands.includes(commandName)) {
-      // If it's a navigation, wait after it
-      await browser.waitUntil(
-        async () => (await browser.execute(() => document.readyState)) === 'complete',
-        {
-          timeout: 60000,
-          timeoutMsg: `Page did not fully load after ${commandName}`
-        }
-      )
-    }
-  },
-
   exclude: [],
   maxInstances: 1,
   baseUrl: process.env.WMT_BASE_URL || 'http://localhost:3000',
   capabilities: [{
     maxInstances: 1,
-    browserName: 'chrome'
+    browserName: 'chrome',
+    'wdio:enforceWebDriverClassic': true
   }],
   sync: false,
   logLevel: 'error',
