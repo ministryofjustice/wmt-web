@@ -5,8 +5,7 @@ let reportAggregator
 exports.config = {
   services: [
     [
-      ['selenium-standalone', { drivers: { chrome: 'latest' } },
-        'devtools'],
+      ['selenium-standalone', { drivers: { chrome: 'latest' } }],
       {
         logs: 'logs'
       }
