@@ -7,18 +7,21 @@ const { navigateTo } = require('../e2e/resources/helpers/browser-helpers')
 let regionDefaultUrl
 
 describe('region', function () {
+  before(async function () {
+    const results = await dataHelper.selectIdsForWorkloadOwner()
+    regionDefaultUrl = '/' + workloadTypes.PROBATION + '/region/' + results.find((item) => item.table === 'region').id
+  })
+
   describe('Staff', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.Staff)
-      const results = await dataHelper.selectIdsForWorkloadOwner()
-      regionDefaultUrl = '/' + workloadTypes.PROBATION + '/region/' + results.filter((item) => item.table === 'region')[0].id
       await navigateTo(regionDefaultUrl + '/overview')
     })
 
     it('should not be able to view export', async function () {
-      const exportLink = await $('[href="' + regionDefaultUrl + '/export"]')
+      const exportLink = await $(`[href="${regionDefaultUrl}/export"]`)
       const exists = await exportLink.isExisting()
-      return expect(exists).to.be.false
+      expect(exists).to.equal(false)
     })
 
     after(function () {
@@ -41,7 +44,7 @@ describe('region', function () {
     it('should include the export button at region level', async function () {
       const exportButton = await $('.sln-export')
       const exists = await exportButton.isExisting()
-      return expect(exists).to.be.true
+      expect(exists).to.equal(true)
     })
 
     after(function () {
@@ -64,7 +67,7 @@ describe('region', function () {
     it('should not include the export button at region level', async function () {
       const exportButton = await $('.sln-export')
       const exists = await exportButton.isExisting()
-      return expect(exists).to.be.false
+      expect(exists).to.equal(false)
     })
 
     after(function () {
@@ -87,7 +90,7 @@ describe('region', function () {
     it('should include the export button at region level', async function () {
       const exportButton = await $('.sln-export')
       const exists = await exportButton.isExisting()
-      return expect(exists).to.be.true
+      expect(exists).to.equal(true)
     })
 
     after(function () {
