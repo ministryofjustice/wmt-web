@@ -282,7 +282,7 @@ describe('View caseload progress flow', () => {
     expect(exists).to.be.equal(true)
   })
 
-  after(function () {
-    authenticationHelp.logout()
+  after(async function () {
+    await authenticationHelp.logout()
   })
 })

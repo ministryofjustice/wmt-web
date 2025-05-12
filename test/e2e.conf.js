@@ -11,14 +11,13 @@ exports.config = {
       }
     ]
   ],
-
   specs: ['./e2e/**/*.js'],
-  exclude: [],
   maxInstances: 1,
   baseUrl: process.env.WMT_BASE_URL || 'http://localhost:3000',
   capabilities: [{
     maxInstances: 1,
     browserName: 'chrome',
+    browserVersion: 'stable',
     'wdio:enforceWebDriverClassic': true
   }],
   sync: false,

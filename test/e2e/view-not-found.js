@@ -47,7 +47,7 @@ describe('View not found page', () => {
     expect(text).to.equal('Page not found')
   })
 
-  after(function () {
-    authenticationHelp.logout()
+  after(async function () {
+    await authenticationHelp.logout()
   })
 })

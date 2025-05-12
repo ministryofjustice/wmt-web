@@ -33,7 +33,7 @@ describe('View adding a new user role', () => {
     })
   })
 
-  after(function () {
-    authenticationHelp.logout()
+  after(async function () {
+    await authenticationHelp.logout()
   })
 })

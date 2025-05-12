@@ -281,7 +281,7 @@ describe('View your caseload flow', () => {
     })
   })
 
-  after(function () {
-    authenticationHelp.logout()
+  after(async function () {
+    await authenticationHelp.logout()
   })
 })

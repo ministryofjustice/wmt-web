@@ -22,6 +22,7 @@ describe('View contracted hours', function () {
   })
   describe('Manager', function () {
     before(async function () {
+      await browser.reloadSession()
       await authenticationHelp.login(authenticationHelp.users.Manager)
       await navigateTo(workloadOwnerDefaultUrl + '/contracted-hours')
     })
@@ -79,6 +80,7 @@ describe('View contracted hours', function () {
 
   describe('Super User', function () {
     before(async function () {
+      await browser.reloadSession()
       await authenticationHelp.login(authenticationHelp.users.SuperUser)
       await navigateTo(workloadOwnerDefaultUrl + '/contracted-hours')
     })
@@ -120,6 +122,7 @@ describe('View contracted hours', function () {
 
   describe('Staff', function () {
     before(async function () {
+      await browser.reloadSession()
       await authenticationHelp.login(authenticationHelp.users.Staff)
       await navigateTo(workloadOwnerDefaultUrl + '/contracted-hours')
     })
@@ -137,6 +140,7 @@ describe('View contracted hours', function () {
 
   describe('Application Support', function () {
     before(async function () {
+      await browser.reloadSession()
       await authenticationHelp.login(authenticationHelp.users.ApplicationSupport)
       await navigateTo(workloadOwnerDefaultUrl + '/contracted-hours')
     })

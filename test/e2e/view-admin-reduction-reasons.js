@@ -5,6 +5,7 @@ const { clickAndWaitForPageLoad, navigateTo } = require('../e2e/resources/helper
 describe('Admin Reduction Reasons Page', () => {
   describe('Staff', function () {
     before(async function () {
+      await browser.reloadSession()
       await authenticationHelper.login(authenticationHelper.users.Staff)
     })
 
@@ -15,12 +16,13 @@ describe('Admin Reduction Reasons Page', () => {
       expect(text).to.equal('Access is denied')
     })
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
   describe('Manager', function () {
     before(async function () {
+      await browser.reloadSession()
       await authenticationHelper.login(authenticationHelper.users.Manager)
     })
 
@@ -32,12 +34,13 @@ describe('Admin Reduction Reasons Page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
   describe('Application Support', function () {
     before(async function () {
+      await browser.reloadSession()
       await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
       const link = await $('[href="/admin"]')
       await clickAndWaitForPageLoad(link)
@@ -58,12 +61,13 @@ describe('Admin Reduction Reasons Page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
   describe('Super User', function () {
     before(async function () {
+      await browser.reloadSession()
       await authenticationHelper.login(authenticationHelper.users.SuperUser)
       const link = await $('[href="/admin"]')
       await clickAndWaitForPageLoad(link)
@@ -84,7 +88,7 @@ describe('Admin Reduction Reasons Page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 })

@@ -26,6 +26,7 @@ describe('deleting a reduction', () => {
 
   describe('Manager', function () {
     before(async function () {
+      await browser.reloadSession()
       await authenticationHelp.login(authenticationHelp.users.Manager)
       await navigateTo(offenderManagerUrl + '/add-reduction')
     })
@@ -119,6 +120,7 @@ describe('deleting a reduction', () => {
 
   describe('Application Support', function () {
     before(async function () {
+      await browser.reloadSession()
       await authenticationHelp.login(authenticationHelp.users.Manager)
       await navigateTo(offenderManagerUrl + '/add-reduction')
 
@@ -183,6 +185,7 @@ describe('deleting a reduction', () => {
 
   describe('Super User', function () {
     before(async function () {
+      await browser.reloadSession()
       await authenticationHelp.login(authenticationHelp.users.SuperUser)
       await navigateTo(offenderManagerUrl + '/add-reduction')
     })

@@ -1,4 +1,9 @@
-async function clickAndWaitForPageLoad (element, timeout = 50000) {
+async function clickAndWaitForPageLoad (element, timeout = 10000) {
+  if (typeof element.click !== 'function') {
+    throw new Error('clickAndWaitForPageLoad: argument is not a WebdriverIO element')
+  }
+
+  await element.waitForClickable({ timeout })
   await element.click()
   await browser.waitUntil(
     async () => (await browser.execute(() => document.readyState)) === 'complete',
