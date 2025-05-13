@@ -79,6 +79,7 @@ describe('Admin Archive Data Daily Caseload Page', () => {
       await extraSearchCritera.setValue('Test_Forename')
 
       const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="16"]')
+      await criteriaName.waitForClickable({ timeout: 10000 })
       await clickAndWaitForPageLoad(criteriaName)
 
       const search = $('#archive-filter-submit')
@@ -152,7 +153,8 @@ describe('Admin Archive Data Daily Caseload Page', () => {
       await extraSearchCritera.setValue('Test_Forename')
 
       const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="16"]')
-      await criteriaName.click()
+      await criteriaName.waitForClickable({ timeout: 10000 })
+      await clickAndWaitForPageLoad(criteriaName)
 
       const search = $('#archive-filter-submit')
       await clickAndWaitForPageLoad(search)

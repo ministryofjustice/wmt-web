@@ -204,6 +204,7 @@ describe('editing a reduction', () => {
       await clickAndWaitForPageLoad(submit)
 
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 10000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })

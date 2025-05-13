@@ -162,7 +162,6 @@ describe('archiving a reduction', () => {
     })
 
     it('should not be able to archive the reduction', async () => {
-      // more table changes
       const viewLink = await $('=View')
       await clickAndWaitForPageLoad(viewLink)
 
@@ -174,6 +173,7 @@ describe('archiving a reduction', () => {
       await clickAndWaitForPageLoad(archiveReduction)
 
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 10000 })
       text = await header.getText()
       expect(text).to.equal('Access is denied')
     })

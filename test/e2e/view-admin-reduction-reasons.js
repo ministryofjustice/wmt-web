@@ -12,6 +12,7 @@ describe('Admin Reduction Reasons Page', () => {
     it('Should not be able to go on page', async function () {
       await navigateTo('/manage-reduction-reasons')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 10000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -29,6 +30,7 @@ describe('Admin Reduction Reasons Page', () => {
     it('Should not be able to go on page', async function () {
       await navigateTo('/manage-reduction-reasons')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 10000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })

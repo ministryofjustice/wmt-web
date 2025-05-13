@@ -11,6 +11,7 @@ describe('Workload Points Page', () => {
     it('Should not be able to go on Workload Points page', async function () {
       await navigateTo('/admin/workload-points')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 10000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -28,6 +29,7 @@ describe('Workload Points Page', () => {
     it('Should not be able to go on Workload Points page', async function () {
       await navigateTo('/admin/workload-points')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 10000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })

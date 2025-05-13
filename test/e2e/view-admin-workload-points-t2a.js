@@ -28,6 +28,7 @@ describe('Workload Points (T2A) Page', () => {
     it('Should not be able to go on Workload Points (T2A) page', async function () {
       await navigateTo('/admin/workload-points/t2a')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 10000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })

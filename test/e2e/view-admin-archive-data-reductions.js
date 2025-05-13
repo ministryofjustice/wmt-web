@@ -16,6 +16,7 @@ describe('Admin Archive Data Reductions Page', () => {
     it('Should not be able to go on page', async function () {
       await navigateTo('/archive-data/reductions')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 10000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -32,6 +33,7 @@ describe('Admin Archive Data Reductions Page', () => {
     it('Should not be able to go on page', async function () {
       await navigateTo('/archive-data/reductions')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 10000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -49,6 +51,7 @@ describe('Admin Archive Data Reductions Page', () => {
     it('Should not be able to go on page', async function () {
       await navigateTo('/archive-data/reductions')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 10000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -104,6 +107,7 @@ describe('Admin Archive Data Reductions Page', () => {
       await extraSearchCritera.setValue('Test_Forename')
 
       const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="16"]')
+      await criteriaName.waitForClickable({ timeout: 10000 })
       await clickAndWaitForPageLoad(criteriaName)
 
       const search = await $('#archive-reductions-filter-submit')
@@ -148,6 +152,12 @@ describe('Admin Archive Data Reductions Page', () => {
       await authenticationHelper.logout()
       await archiveReductionDataHelper.deleteArchiveReductionsByIds(archiveReductionId)
       return aggregatedDataHelper.deleteReductionsForWorkloadOwner(workloadOwnerId)
+    })
+
+    afterEach(async function () {
+      if (this.currentTest.state === 'failed') {
+        await browser.saveScreenshot(`./error-screenshots/${this.currentTest.title}.png`)
+      }
     })
   })
 })

@@ -129,6 +129,7 @@ describe('View contracted hours', function () {
 
     it('should not be able to navigate to the workload owner contracted-hours page', async function () {
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 10000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -170,6 +171,7 @@ describe('View contracted hours', function () {
       await clickAndWaitForPageLoad(submit)
 
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 10000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })

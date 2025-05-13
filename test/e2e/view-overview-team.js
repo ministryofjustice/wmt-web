@@ -35,6 +35,7 @@ describe('Team', function () {
     it('should not be able to download overview', async function () {
       await navigateTo(teamDefaultUrl + '/overview/caseload-csv')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 10000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -114,6 +115,7 @@ describe('Team', function () {
     it('should not be able to download reductions', async function () {
       await navigateTo(teamDefaultUrl + '/overview/reductions-csv')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 10000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })

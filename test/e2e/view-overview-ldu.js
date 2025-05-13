@@ -69,6 +69,7 @@ describe('LDU Overview Page', function () {
         it('should block overview CSV download', async function () {
           await navigateTo(`${lduDefaultUrl}/overview/caseload-csv`)
           const header = await $('.govuk-heading-xl')
+          await header.waitForDisplayed({ timeout: 10000 })
           const text = await header.getText()
           expect(text).to.equal('Access is denied')
         })

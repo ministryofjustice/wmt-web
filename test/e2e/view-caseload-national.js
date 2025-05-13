@@ -29,6 +29,7 @@ describe('View national caseload', () => {
     it('should not be able to download export', async function () {
       await browser.url(nationalDefaultUrl + '/caseload/caseload-csv')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 10000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -104,6 +105,7 @@ describe('View national caseload', () => {
     it('should not be able to download export', async function () {
       await browser.url(nationalDefaultUrl + '/caseload/caseload-csv')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 10000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })

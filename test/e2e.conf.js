@@ -25,7 +25,7 @@ exports.config = {
   coloredLogs: true,
   screenshotPath: './errorShots/',
   waitforTimeout: 50000,
-  connectionRetryTimeout: 50000,
+  connectionRetryTimeout: 120000,
   connectionRetryCount: 3,
   framework: 'mocha',
   mochaOpts: {
@@ -62,5 +62,15 @@ exports.config = {
     (async () => {
       await reportAggregator.createReport()
     })()
+  },
+  afterTest: async function (test, context, { error, result, duration, passed, retries }) {
+    if (!passed) {
+      const timestamp = new Date().toISOString().replace(/:/g, '-')
+      const fileName = `${test.title.replace(/\s+/g, '_')}-${timestamp}.png`
+      const filePath = `./test_results/e2e/screenshots/${fileName}`
+
+      await browser.saveScreenshot(filePath)
+      console.log(`Screenshot captured: ${filePath}`)
+    }
   }
 }
