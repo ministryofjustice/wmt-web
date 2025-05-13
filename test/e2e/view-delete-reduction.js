@@ -37,6 +37,7 @@ describe('deleting a reduction', () => {
       expect(exists).to.be.equal(true)
 
       const pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('New reduction')
 
@@ -73,6 +74,7 @@ describe('deleting a reduction', () => {
 
     it('should navigate to the edit reduction screen and delete it', async () => {
       const pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('Reduction')
 

@@ -51,6 +51,7 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
 
     it('Should be able to navigate to page', async function () {
       const pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Averaged Caseload Data')
     })
@@ -82,7 +83,7 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
       const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="16"]')
       await criteriaName.waitForDisplayed({ timeout: 30000 })
 
-      await clickAndWaitForPageLoad(criteriaName)
+      await criteriaName.click()
 
       const search = await $('#archive-average-filter-submit')
       await clickAndWaitForPageLoad(search)
@@ -128,6 +129,7 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
 
     it('Should be able to navigate to page', async function () {
       const pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Averaged Caseload Data')
     })
@@ -159,7 +161,7 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
 
       const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="16"]')
       await criteriaName.waitForClickable({ timeout: 30000 })
-      await clickAndWaitForPageLoad(criteriaName)
+      await criteriaName.click()
 
       await clickAndWaitForPageLoad(search)
 
