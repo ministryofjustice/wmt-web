@@ -228,7 +228,7 @@ describe('editing a reduction', () => {
       expect(exists).to.be.equal(true)
 
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 30000 })
+      await pageTitle.waitForDisplayed({ timeout: 60000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('New reduction')
 

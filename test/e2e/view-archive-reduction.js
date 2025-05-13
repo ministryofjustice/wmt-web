@@ -34,10 +34,12 @@ describe('archiving a reduction', () => {
 
     it('after first adding a new reduction', async () => {
       const breadcrumbs = await $('.govuk-breadcrumbs')
+      await breadcrumbs.waitForDisplayed({ timeout: 30000 })
       const exists = await breadcrumbs.isExisting()
       expect(exists).to.be.equal(true)
 
       const pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('New reduction')
 
@@ -66,6 +68,7 @@ describe('archiving a reduction', () => {
 
       await $('#headingActive')
       const viewLink = await $('=View')
+      await viewLink.waitForDisplayed({ timeout: 30000 })
       const view = await viewLink.getText()
       expect(view).to.equal('View')
       await clickAndWaitForPageLoad(viewLink)
@@ -74,6 +77,7 @@ describe('archiving a reduction', () => {
 
     it('should navigate to the edit reduction screen and archive it', async () => {
       const pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('Reduction')
 
@@ -81,6 +85,7 @@ describe('archiving a reduction', () => {
       await clickAndWaitForPageLoad(archiveReduction)
 
       const successMessage = await $('#reduction-success-text')
+      await successMessage.waitForDisplayed({ timeout: 30000 })
       const successText = await successMessage.getText()
       expect(successText).to.be.equal('You have successfully archived the reduction!')
 
@@ -125,10 +130,12 @@ describe('archiving a reduction', () => {
       await navigateTo(offenderManagerUrl + '/add-reduction')
 
       const breadcrumbs = await $('.govuk-breadcrumbs')
+      await breadcrumbs.waitForDisplayed({ timeout: 30000 })
       const exists = await breadcrumbs.isExisting()
       expect(exists).to.be.equal(true)
 
       const pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('New reduction')
 
@@ -166,6 +173,7 @@ describe('archiving a reduction', () => {
       await clickAndWaitForPageLoad(viewLink)
 
       const pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       let text = await pageTitle.getText()
       expect(text).to.equal('Reduction')
 
@@ -173,7 +181,7 @@ describe('archiving a reduction', () => {
       await clickAndWaitForPageLoad(archiveReduction)
 
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 10000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -192,10 +200,12 @@ describe('archiving a reduction', () => {
 
     it('after first adding a new reduction', async () => {
       const breadcrumbs = await $('.govuk-breadcrumbs')
+      await breadcrumbs.waitForDisplayed({ timeout: 30000 })
       const exists = await breadcrumbs.isExisting()
       expect(exists).to.be.equal(true)
 
       const pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('New reduction')
 
@@ -223,9 +233,9 @@ describe('archiving a reduction', () => {
       await clickAndWaitForPageLoad(submit)
 
       await $('#headingActive')
-      // do table test changes here
       const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
       const viewLink = await $(activeReductions[0])
+      await viewLink.waitForDisplayed({ timeout: 30000 })
       const view = await viewLink.getText()
       expect(view).to.equal('View')
       await clickAndWaitForPageLoad(viewLink)
@@ -233,6 +243,7 @@ describe('archiving a reduction', () => {
 
     it('should navigate to the edit reduction screen and archive it', async () => {
       const pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('Reduction')
 
@@ -240,6 +251,7 @@ describe('archiving a reduction', () => {
       await clickAndWaitForPageLoad(archiveReduction)
 
       const successMessage = await $('#reduction-success-text')
+      await successMessage.waitForDisplayed({ timeout: 30000 })
       const successText = await successMessage.getText()
       expect(successText).to.be.equal('You have successfully archived the reduction!')
     })

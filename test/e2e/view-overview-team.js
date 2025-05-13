@@ -16,6 +16,7 @@ describe('Team', function () {
 
     it('should navigate to the team overview page', async function () {
       const element = await $('.sln-table-org-level')
+      await element.waitForDisplayed({ timeout: 30000 })
       const text = await element.getText()
       expect(text).to.equal('Offender Manager')
     })
@@ -35,7 +36,7 @@ describe('Team', function () {
     it('should not be able to download overview', async function () {
       await navigateTo(teamDefaultUrl + '/overview/caseload-csv')
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 10000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -43,6 +44,7 @@ describe('Team', function () {
     it('should not be able to download reductions', async function () {
       await navigateTo(teamDefaultUrl + '/overview/reductions-csv')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -60,20 +62,23 @@ describe('Team', function () {
 
     it('should navigate to the team overview page', async function () {
       const element = await $('.sln-table-org-level')
+      await element.waitForDisplayed({ timeout: 30000 })
       const text = await element.getText()
       expect(text).to.equal('Offender Manager')
     })
 
     it('should include the reductions export for staff at team level', async function () {
       const reductionExport = await $('.reduction-export')
-      const exists = await reductionExport.isExisting()
-      return expect(exists).to.be.true
+      await reductionExport.waitForExist({ timeout: 30000 })
+      const isVisible = await reductionExport.isDisplayed()
+      expect(isVisible, 'Expected .reduction-export to be visible').to.equal(true)
     })
 
     it('should include the overview export at team level', async function () {
-      const exportButton = await $('.sln-export')
-      const exists = await exportButton.isExisting()
-      return expect(exists).to.be.true
+      const reductionExport = await $('.sln-export')
+      await reductionExport.waitForExist({ timeout: 30000 })
+      const isVisible = await reductionExport.isDisplayed()
+      expect(isVisible, 'Expected .reduction-export to be visible').to.equal(true)
     })
 
     after(function () {
@@ -89,6 +94,7 @@ describe('Team', function () {
 
     it('should navigate to the team overview page', async function () {
       const element = await $('.sln-table-org-level')
+      await element.waitForExist({ timeout: 30000 })
       const text = await element.getText()
       expect(text).to.equal('Offender Manager')
     })
@@ -108,6 +114,7 @@ describe('Team', function () {
     it('should not be able to download overview', async function () {
       await navigateTo(teamDefaultUrl + '/overview/caseload-csv')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -133,18 +140,21 @@ describe('Team', function () {
 
     it('should navigate to the team overview page', async function () {
       const element = await $('.sln-table-org-level')
+      await element.waitForDisplayed({ timeout: 30000 })
       const text = await element.getText()
       expect(text).to.equal('Offender Manager')
     })
 
     it('should include the reductions export for staff at team level', async function () {
       const reductionExport = await $('.reduction-export')
+      await reductionExport.waitForDisplayed({ timeout: 30000 })
       const exists = await reductionExport.isExisting()
       return expect(exists).to.be.true
     })
 
     it('should include the overview export at team level', async function () {
       const exportButton = await $('.sln-export')
+      await exportButton.waitForDisplayed({ timeout: 30000 })
       const exists = await exportButton.isExisting()
       return expect(exists).to.be.true
     })

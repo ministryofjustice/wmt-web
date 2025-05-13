@@ -15,6 +15,7 @@ describe('National Omic Overview', function () {
 
     it('should show regional breakdown table', async function () {
       const element = await $('.sln-table-org-level')
+      await element.waitForDisplayed({ timeout: 30000 })
       const text = await element.getText()
       expect(text).to.equal('Region')
     })
@@ -22,6 +23,7 @@ describe('National Omic Overview', function () {
     it('should allow the user to navigate down the org hierarchy from the national page', async function () {
       await navigateTo(nationalDefaultUrl + '/overview')
       let pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       let text = await pageTitle.getText()
       expect(text).to.equal('National')
 
@@ -30,6 +32,7 @@ describe('National Omic Overview', function () {
       await clickAndWaitForPageLoad(viewRegionLink)
 
       pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.regionName)
 
@@ -39,6 +42,7 @@ describe('National Omic Overview', function () {
       await clickAndWaitForPageLoad(viewLduLink)
 
       pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.lduName)
     })
@@ -50,6 +54,7 @@ describe('National Omic Overview', function () {
       await clickAndWaitForPageLoad(breadcrumbRegionLink)
 
       let pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       let text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.regionName)
 
@@ -59,6 +64,7 @@ describe('National Omic Overview', function () {
       await clickAndWaitForPageLoad(breadcrumbNationalLink)
 
       pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       text = await pageTitle.getText()
       expect(text).to.equal('National')
     })
@@ -76,6 +82,7 @@ describe('National Omic Overview', function () {
 
     it('should show regional breakdown table', async function () {
       const element = await $('.sln-table-org-level')
+      await element.waitForDisplayed({ timeout: 30000 })
       const text = await element.getText()
       expect(text).to.equal('Region')
     })
@@ -93,6 +100,7 @@ describe('National Omic Overview', function () {
 
     it('should show regional breakdown table', async function () {
       const element = await $('.sln-table-org-level')
+      await element.waitForDisplayed({ timeout: 30000 })
       const text = await element.getText()
       expect(text).to.equal('Region')
     })
@@ -110,6 +118,7 @@ describe('National Omic Overview', function () {
 
     it('should show regional breakdown table', async function () {
       const element = await $('.sln-table-org-level')
+      await element.waitForDisplayed({ timeout: 30000 })
       const text = await element.getText()
       expect(text).to.equal('Region')
     })
