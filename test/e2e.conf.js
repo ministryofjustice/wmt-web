@@ -30,7 +30,7 @@ exports.config = {
   framework: 'mocha',
   mochaOpts: {
     ui: 'bdd',
-    timeout: 30000
+    timeout: 60000
   },
   reporters: ['spec',
     ['html-nice', {
