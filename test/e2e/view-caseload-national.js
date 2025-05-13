@@ -23,9 +23,9 @@ describe('View national caseload', () => {
 
     it('should not display export button', async () => {
       const exportButton = await $('.sln-export')
-      await exportButton.waitForDisplayed({ timeout: 30000 })
       const exists = await exportButton.isExisting()
-      return expect(exists).to.be.false
+      const visible = exists ? await exportButton.isDisplayed() : false
+      expect(visible).to.equal(false)
     })
 
     it('should not be able to download export', async function () {
@@ -101,9 +101,9 @@ describe('View national caseload', () => {
 
     it('should not display export button', async () => {
       const exportButton = await $('.sln-export')
-      await exportButton.waitForDisplayed({ timeout: 30000 })
       const exists = await exportButton.isExisting()
-      return expect(exists).to.be.false
+      const visible = exists ? await exportButton.isDisplayed() : false
+      expect(visible).to.equal(false)
     })
 
     it('should not be able to download export', async function () {
