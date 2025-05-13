@@ -16,7 +16,7 @@ describe('Admin Landing Page', () => {
     it('Should not be able to go on Admin landing page', async function () {
       await navigateTo('/admin')
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 10000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })

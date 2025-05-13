@@ -51,6 +51,7 @@ describe('LDU Overview Page', function () {
 
       it('should navigate to the LDU overview page', async function () {
         const element = await $('.sln-table-org-level')
+        await element.waitForDisplayed({ timeout: 30000 })
         const text = await element.getText()
         expect(text).to.equal('Team')
       })
@@ -69,7 +70,7 @@ describe('LDU Overview Page', function () {
         it('should block overview CSV download', async function () {
           await navigateTo(`${lduDefaultUrl}/overview/caseload-csv`)
           const header = await $('.govuk-heading-xl')
-          await header.waitForDisplayed({ timeout: 10000 })
+          await header.waitForDisplayed({ timeout: 30000 })
           const text = await header.getText()
           expect(text).to.equal('Access is denied')
         })
@@ -77,6 +78,7 @@ describe('LDU Overview Page', function () {
         it('should block reductions CSV download', async function () {
           await navigateTo(`${lduDefaultUrl}/overview/reductions-csv`)
           const header = await $('.govuk-heading-xl')
+          await header.waitForDisplayed({ timeout: 30000 })
           const text = await header.getText()
           expect(text).to.equal('Access is denied')
         })

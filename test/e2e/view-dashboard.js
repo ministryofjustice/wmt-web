@@ -46,10 +46,14 @@ describe('view dashboard reports', function () {
     })
 
     it('Dashboard tab exists on the home page', async function () {
-      const link = await $('[href="/probation/hmpps/0/dashboard"]')
-      await link.waitForDisplayed({ timeout: 50000 })
-      const linkExists = await link.isExisting()
-      expect(linkExists).to.be.equal(true)
+      const selector = '[href="/probation/hmpps/0/dashboard"]'
+      const link = await $(selector)
+
+      const appeared = await link.waitForExist({ timeout: 30000 })
+      expect(appeared).to.equal(true)
+
+      const isVisible = await link.isDisplayed()
+      expect(isVisible).to.equal(true)
     })
 
     it('should be able to navigate to dashboard page', async function () {
@@ -78,9 +82,14 @@ describe('view dashboard reports', function () {
     })
 
     it('Dashboard tab exists on the home page', async function () {
-      const link = await $('[href="/probation/hmpps/0/dashboard"]')
-      const linkExists = await link.isExisting()
-      expect(linkExists).to.be.equal(true)
+      const selector = '[href="/probation/hmpps/0/dashboard"]'
+      const link = await $(selector)
+
+      const appeared = await link.waitForExist({ timeout: 30000 })
+      expect(appeared).to.equal(true)
+
+      const isVisible = await link.isDisplayed()
+      expect(isVisible).to.equal(true)
     })
 
     it('should be able to navigate to dashboard page', async function () {
@@ -109,9 +118,14 @@ describe('view dashboard reports', function () {
     })
 
     it('Dashboard tab exists on the home page', async function () {
-      const link = await $('[href="/probation/hmpps/0/dashboard"]')
-      const linkExists = await link.isExisting()
-      expect(linkExists).to.be.equal(true)
+      const selector = '[href="/probation/hmpps/0/dashboard"]'
+      const link = await $(selector)
+
+      const appeared = await link.waitForExist({ timeout: 30000 })
+      expect(appeared).to.equal(true)
+
+      const isVisible = await link.isDisplayed()
+      expect(isVisible).to.equal(true)
     })
 
     it('should be able to navigate to dashboard page', async function () {
