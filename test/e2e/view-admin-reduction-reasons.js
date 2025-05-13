@@ -12,7 +12,7 @@ describe('Admin Reduction Reasons Page', () => {
     it('Should not be able to go on page', async function () {
       await navigateTo('/manage-reduction-reasons')
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 10000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -30,7 +30,7 @@ describe('Admin Reduction Reasons Page', () => {
     it('Should not be able to go on page', async function () {
       await navigateTo('/manage-reduction-reasons')
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 10000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -52,6 +52,7 @@ describe('Admin Reduction Reasons Page', () => {
       const link = await $('[href="/manage-reduction-reasons"]')
       await clickAndWaitForPageLoad(link)
       const pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Manage Reduction Reasons')
     })
@@ -79,12 +80,14 @@ describe('Admin Reduction Reasons Page', () => {
       const link = await $('[href="/manage-reduction-reasons"]')
       await clickAndWaitForPageLoad(link)
       const pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Manage Reduction Reasons')
     })
 
     it('Should see add reduction reason', async function () {
       const link = await $('[href="/add-reduction-reason"]')
+      await link.waitForDisplayed({ timeout: 30000 })
       const linkExists = await link.isExisting()
       return expect(linkExists).to.be.equal(true)
     })

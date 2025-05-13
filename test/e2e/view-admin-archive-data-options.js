@@ -10,6 +10,7 @@ describe('Admin Archive Data Options Page', () => {
     it('Should not be able to go on page', async function () {
       await navigateTo('/archive-options')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -26,6 +27,7 @@ describe('Admin Archive Data Options Page', () => {
     it('Should not be able to go on page', async function () {
       await navigateTo('/archive-options')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -46,6 +48,7 @@ describe('Admin Archive Data Options Page', () => {
       const link = await $('[href="/archive-options"]')
       await clickAndWaitForPageLoad(link)
       const pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Archive Data Options')
     })
@@ -72,6 +75,7 @@ describe('Admin Archive Data Options Page', () => {
       const link = await $('[href="/archive-options"]')
       await clickAndWaitForPageLoad(link)
       const pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Archive Data Options')
     })

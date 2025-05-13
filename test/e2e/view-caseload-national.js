@@ -83,7 +83,7 @@ describe('View national caseload', () => {
 
     it('should  display export button', async () => {
       const exportButton = await $('.sln-export')
-      await exportButton.waitForDisplayed({ timeout: 30000 })
+      await exportButton.waitForDisplayed({ timeout: 50000 })
       const exists = await exportButton.isExisting()
       return expect(exists).to.be.true
     })

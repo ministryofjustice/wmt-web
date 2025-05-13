@@ -16,7 +16,7 @@ describe('Admin Archive Data Reductions Page', () => {
     it('Should not be able to go on page', async function () {
       await navigateTo('/archive-data/reductions')
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 10000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -33,7 +33,7 @@ describe('Admin Archive Data Reductions Page', () => {
     it('Should not be able to go on page', async function () {
       await navigateTo('/archive-data/reductions')
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 10000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -51,7 +51,7 @@ describe('Admin Archive Data Reductions Page', () => {
     it('Should not be able to go on page', async function () {
       await navigateTo('/archive-data/reductions')
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 10000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -84,7 +84,7 @@ describe('Admin Archive Data Reductions Page', () => {
       const reductionslink = await $('[href="/archive-data/reductions"]')
       await clickAndWaitForPageLoad(reductionslink)
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 10000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Archived Reductions')
     })

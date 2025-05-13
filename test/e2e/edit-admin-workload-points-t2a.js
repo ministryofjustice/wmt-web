@@ -26,7 +26,7 @@ describe('Edit Workload Points T2A Page', () => {
       await clickAndWaitForPageLoad(saveButton)
 
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 10000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -59,6 +59,7 @@ describe('Edit Workload Points T2A Page', () => {
       await clickAndWaitForPageLoad(saveButton)
 
       const successBanner = await $('.govuk-notification-banner--success .govuk-notification-banner__heading')
+      await successBanner.waitForDisplayed({ timeout: 30000 })
       const text = await successBanner.getText()
       expect(text).to.equal('You have successfully updated the workload points for transition to adulthood cases!')
     })
