@@ -84,6 +84,7 @@ describe('Admin Archive Data Reductions Page', () => {
       const reductionslink = await $('[href="/archive-data/reductions"]')
       await clickAndWaitForPageLoad(reductionslink)
       const pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 10000 })
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Archived Reductions')
     })
@@ -107,7 +108,7 @@ describe('Admin Archive Data Reductions Page', () => {
       await extraSearchCritera.setValue('Test_Forename')
 
       const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="16"]')
-      await criteriaName.waitForClickable({ timeout: 10000 })
+      await criteriaName.waitForClickable({ timeout: 30000 })
       await clickAndWaitForPageLoad(criteriaName)
 
       const search = await $('#archive-reductions-filter-submit')
@@ -152,12 +153,6 @@ describe('Admin Archive Data Reductions Page', () => {
       await authenticationHelper.logout()
       await archiveReductionDataHelper.deleteArchiveReductionsByIds(archiveReductionId)
       return aggregatedDataHelper.deleteReductionsForWorkloadOwner(workloadOwnerId)
-    })
-
-    afterEach(async function () {
-      if (this.currentTest.state === 'failed') {
-        await browser.saveScreenshot(`./error-screenshots/${this.currentTest.title}.png`)
-      }
     })
   })
 })

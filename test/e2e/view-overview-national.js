@@ -206,6 +206,7 @@ describe('National', function () {
 
     it('should display allocations link', async function () {
       const allocationsLink = await $(`a[href*="${config.nav.allocations.url}"`)
+      await allocationsLink.waitForDisplayed({ timeout: 30000 })
       const exists = await allocationsLink.isExisting()
       return expect(exists).to.be.true
     })

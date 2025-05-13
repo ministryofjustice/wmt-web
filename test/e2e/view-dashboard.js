@@ -47,6 +47,7 @@ describe('view dashboard reports', function () {
 
     it('Dashboard tab exists on the home page', async function () {
       const link = await $('[href="/probation/hmpps/0/dashboard"]')
+      await link.waitForDisplayed({ timeout: 30000 })
       const linkExists = await link.isExisting()
       expect(linkExists).to.be.equal(true)
     })

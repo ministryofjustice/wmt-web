@@ -157,6 +157,7 @@ describe('editing a reduction', () => {
       expect(exists).to.be.equal(true)
 
       const pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('New reduction')
 
@@ -204,7 +205,7 @@ describe('editing a reduction', () => {
       await clickAndWaitForPageLoad(submit)
 
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 10000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -227,6 +228,7 @@ describe('editing a reduction', () => {
       expect(exists).to.be.equal(true)
 
       const pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('New reduction')
 

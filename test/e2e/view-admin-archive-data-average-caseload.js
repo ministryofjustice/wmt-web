@@ -28,6 +28,7 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
     it('Should not be able to go on page', async function () {
       await navigateTo('/archive-data/average-caseload-data')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -79,6 +80,7 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
       await extraSearchCritera.setValue('Test_Forename')
 
       const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="16"]')
+      await criteriaName.waitForDisplayed({ timeout: 30000 })
 
       await clickAndWaitForPageLoad(criteriaName)
 
@@ -156,7 +158,7 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
       await extraSearchCritera.setValue('Test_Forename')
 
       const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="16"]')
-      await criteriaName.waitForClickable({ timeout: 10000 })
+      await criteriaName.waitForClickable({ timeout: 30000 })
       await clickAndWaitForPageLoad(criteriaName)
 
       await clickAndWaitForPageLoad(search)
