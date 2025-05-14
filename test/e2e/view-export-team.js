@@ -82,29 +82,20 @@ describe('team', function () {
     })
 
     it('should navigate to the team export page', async function () {
-      this.retries(2)
-
       const element = await $('.govuk-heading-m')
-
       const exists = await element.isExisting()
       expect(exists).to.equal(true)
-
       await element.waitForDisplayed({ timeout: 60000 })
-
       const text = await element.getText()
       expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
     })
 
     it('should include the export button at team level', async function () {
       this.retries(2)
-
       const exportButton = await $('.sln-export')
-
       const exists = await exportButton.isExisting()
       expect(exists).to.equal(true)
-
       await exportButton.waitForDisplayed({ timeout: 60000 })
-
       const isVisible = await exportButton.isDisplayed()
       expect(isVisible).to.equal(true)
     })
