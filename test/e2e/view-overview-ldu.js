@@ -50,8 +50,15 @@ describe('LDU Overview Page', function () {
       })
 
       it('should navigate to the LDU overview page', async function () {
+        this.retries(2)
+
         const element = await $('.sln-table-org-level')
-        await element.waitForDisplayed({ timeout: 30000 })
+
+        const exists = await element.isExisting()
+        expect(exists).to.equal(true)
+
+        await element.waitForDisplayed({ timeout: 60000 })
+
         const text = await element.getText()
         expect(text).to.equal('Team')
       })

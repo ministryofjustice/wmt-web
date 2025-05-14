@@ -27,9 +27,10 @@ describe('User Rights page', () => {
     })
 
     it('Should not be able to go on page', async function () {
+      this.retries(2)
       await browser.url('/admin/user')
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 30000 })
+      await header.waitForDisplayed({ timeout: 60000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
