@@ -20,6 +20,7 @@ describe('View adding a new user role', () => {
       expect(exists).to.be.equal(true)
 
       const pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 60000 })
       const text = await pageTitle.getText('.govuk-heading-xl')
       expect(text).to.equal('User rights')
     })

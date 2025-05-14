@@ -26,6 +26,7 @@ describe('View your caseload capacity flow', () => {
     const caseloadCapacityUrl = await $('[href="' + lduDefaultUrl + '/caseload-capacity"]')
     await clickAndWaitForPageLoad(caseloadCapacityUrl)
     pageSubtitle = await $('.govuk-heading-xl')
+    await pageSubtitle.waitForDisplayed({ timeout: 60000 })
     pageSubtitle = await pageSubtitle.getText()
     expect(pageSubtitle).to.equal(dailyArchiveData.lduName)
 
@@ -47,6 +48,7 @@ describe('View your caseload capacity flow', () => {
     await clickAndWaitForPageLoad(submit)
 
     const errorMessage = await $('.govuk-error-message')
+    await errorMessage.waitForDisplayed({ timeout: 60000 })
     const errorText = await errorMessage.getText()
     expect(errorText).to.equal('There is no data for this period (// - //)')
     const errorSummary = await $('.govuk-error-summary')

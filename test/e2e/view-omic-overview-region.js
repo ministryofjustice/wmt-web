@@ -16,6 +16,7 @@ describe('Regional Omic Overview', function () {
     it('should be able to go to Overview for region', async function () {
       await navigateTo(nationalDefaultUrl + '/overview')
       let pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 60000 })
       let text = await pageTitle.getText()
       expect(text).to.equal('National')
 
@@ -24,6 +25,7 @@ describe('Regional Omic Overview', function () {
       await clickAndWaitForPageLoad(viewRegionLink)
 
       pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 60000 })
       text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.regionName)
     })
@@ -42,6 +44,7 @@ describe('Regional Omic Overview', function () {
     it('should be able to go to Overview for region', async function () {
       await browser.url(nationalDefaultUrl + '/overview')
       let pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 60000 })
       let text = await pageTitle.getText()
       expect(text).to.equal('National')
 
@@ -50,6 +53,7 @@ describe('Regional Omic Overview', function () {
       await clickAndWaitForPageLoad(viewRegionLink)
 
       pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 60000 })
       text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.regionName)
     })
@@ -62,6 +66,7 @@ describe('Regional Omic Overview', function () {
       await clickAndWaitForPageLoad(exportTab)
 
       const title = await $('.govuk-heading-m')
+      await title.waitForDisplayed({ timeout: 60000 })
       const text = await title.getText()
       expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
     })
@@ -80,6 +85,7 @@ describe('Regional Omic Overview', function () {
     it('should be able to go to Overview for region', async function () {
       await navigateTo(nationalDefaultUrl + '/overview')
       let pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 60000 })
       let text = await pageTitle.getText()
       expect(text).to.equal('National')
 
@@ -88,6 +94,7 @@ describe('Regional Omic Overview', function () {
       await clickAndWaitForPageLoad(viewRegionLink)
 
       pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 60000 })
       text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.regionName)
     })
@@ -111,6 +118,7 @@ describe('Regional Omic Overview', function () {
     it('should be able to go to Overview for region', async function () {
       await navigateTo(nationalDefaultUrl + '/overview')
       let pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 60000 })
       let text = await pageTitle.getText()
       expect(text).to.equal('National')
 
@@ -119,6 +127,7 @@ describe('Regional Omic Overview', function () {
       await clickAndWaitForPageLoad(viewRegionLink)
 
       pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 60000 })
       text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.regionName)
     })
@@ -131,6 +140,7 @@ describe('Regional Omic Overview', function () {
       await clickAndWaitForPageLoad(exportTab)
 
       const title = await $('.govuk-heading-m')
+      await title.waitForDisplayed({ timeout: 60000 })
       const text = await title.getText()
       expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
     })

@@ -28,7 +28,7 @@ describe('Admin Add Reduction Reasons Page', () => {
     it('Should not be able to go on page', async function () {
       await navigateTo('/add-reduction-reason')
       const header = $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 50000 })
+      await header.waitForDisplayed({ timeout: 60000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })

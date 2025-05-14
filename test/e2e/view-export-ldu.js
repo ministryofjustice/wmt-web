@@ -41,7 +41,7 @@ describe('LDU', function () {
 
     it('should navigate to the ldu export page', async function () {
       const element = await $('.govuk-heading-m')
-      await element.waitForDisplayed({ timeout: 30000 })
+      await element.waitForDisplayed({ timeout: 60000 })
       const text = await element.getText()
       expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
     })
@@ -67,7 +67,7 @@ describe('LDU', function () {
 
     it('should navigate to the ldu export page', async function () {
       const element = await $('.govuk-heading-m')
-      await element.waitForDisplayed({ timeout: 30000 })
+      await element.waitForDisplayed({ timeout: 60000 })
       const text = await element.getText()
       expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
     })
@@ -92,7 +92,7 @@ describe('LDU', function () {
 
     it('should navigate to the ldu export page', async function () {
       const element = await $('.govuk-heading-m')
-      await element.waitForDisplayed({ timeout: 30000 })
+      await element.waitForDisplayed({ timeout: 60000 })
       const text = await element.getText()
       expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
     })

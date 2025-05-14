@@ -39,12 +39,14 @@ describe('National', function () {
 
     it('should display number of unallocated cases', async function () {
       const allocationsNumber = await $('#notifications')
+      await allocationsNumber.waitForDisplayed({ timeout: 60000 })
       const number = await allocationsNumber.getText()
       return expect(number).to.equal('42')
     })
 
     it('should show regional breakdown table', async function () {
       const element = await $('.sln-table-org-level')
+      await element.waitForDisplayed({ timeout: 60000 })
       const text = await element.getText()
       expect(text).to.equal('Region')
     })
@@ -64,30 +66,35 @@ describe('National', function () {
     it('should allow the user to navigate down the org hierarchy from the national page', async function () {
       await navigateTo(nationalDefaultUrl + '/overview')
       let pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 60000 })
       let text = await pageTitle.getText()
       expect(text).to.equal('National')
       let link = await $('[href="' + regionDefaultUrl + '"]')
       await clickAndWaitForPageLoad(link)
 
       pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 60000 })
       text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.regionName)
       link = await $('[href="' + lduDefaultUrl + '"]')
       await clickAndWaitForPageLoad(link)
 
       pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 60000 })
       text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.lduName)
       link = await $('[href="' + teamDefaultUrl + '"]')
       await clickAndWaitForPageLoad(link)
 
       pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 60000 })
       text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.teamName)
       link = await $('[href="' + workloadOwnerDefaultUrl + '"]')
       await clickAndWaitForPageLoad(link)
 
       pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 60000 })
       text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.omNameDisplayed)
     })
@@ -95,6 +102,7 @@ describe('National', function () {
     it('should contain breadcrumbs which allow the user to navigate up the org hierarchy', async function () {
       await navigateTo(workloadOwnerDefaultUrl)
       let pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 60000 })
       let text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.omNameDisplayed)
 
@@ -117,6 +125,7 @@ describe('National', function () {
       await clickAndWaitForPageLoad(link)
 
       pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 60000 })
       text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.teamName)
 
@@ -127,6 +136,7 @@ describe('National', function () {
       await clickAndWaitForPageLoad(link)
 
       pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 60000 })
       text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.lduName)
 
@@ -137,6 +147,7 @@ describe('National', function () {
       await clickAndWaitForPageLoad(link)
 
       pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 60000 })
       text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.regionName)
 
@@ -147,6 +158,7 @@ describe('National', function () {
       await clickAndWaitForPageLoad(link)
 
       pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 60000 })
       text = await pageTitle.getText()
       expect(text).to.equal('National')
     })
@@ -169,6 +181,7 @@ describe('National', function () {
 
     it('should fall back to + when number of unallocated cases cannot be retrieved', async function () {
       const allocationsNumber = await $('#notifications')
+      await allocationsNumber.waitForDisplayed({ timeout: 60000 })
       const number = await allocationsNumber.getText()
       return expect(number).to.equal('+')
     })
@@ -220,6 +233,7 @@ describe('National', function () {
     it('should not be able to download overview', async function () {
       await navigateTo(nationalDefaultUrl + '/overview/caseload-csv')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 60000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })

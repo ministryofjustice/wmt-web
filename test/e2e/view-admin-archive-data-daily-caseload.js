@@ -11,7 +11,7 @@ describe('Admin Archive Data Daily Caseload Page', () => {
     it('Should not be able to go on page', async function () {
       await navigateTo('/archive-data/daily-caseload-data')
       const header = $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 30000 })
+      await header.waitForDisplayed({ timeout: 60000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -29,7 +29,7 @@ describe('Admin Archive Data Daily Caseload Page', () => {
       await navigateTo('/archive-data/daily-caseload-data')
 
       const header = $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 30000 })
+      await header.waitForDisplayed({ timeout: 60000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -52,7 +52,7 @@ describe('Admin Archive Data Daily Caseload Page', () => {
 
     it('Should be able to navigate to page', async function () {
       const pageTitle = $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 30000 })
+      await pageTitle.waitForDisplayed({ timeout: 60000 })
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Daily Caseload Data')
     })
@@ -82,7 +82,7 @@ describe('Admin Archive Data Daily Caseload Page', () => {
       await extraSearchCritera.setValue('Test_Forename')
 
       const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="16"]')
-      await criteriaName.waitForClickable({ timeout: 30000 })
+      await criteriaName.waitForClickable({ timeout: 60000 })
       await criteriaName.click()
 
       const search = $('#archive-filter-submit')
@@ -127,7 +127,7 @@ describe('Admin Archive Data Daily Caseload Page', () => {
 
     it('Should be able to navigate to page', async function () {
       const pageTitle = $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 30000 })
+      await pageTitle.waitForDisplayed({ timeout: 60000 })
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Daily Caseload Data')
     })

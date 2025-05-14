@@ -36,6 +36,7 @@ describe('View court-reports overview', function () {
     expect(exists).to.be.equal(true)
 
     const orgLevelTable = await $('.sln-table-org-level')
+    await orgLevelTable.waitForDisplayed({ timeout: 60000 })
     const text = await orgLevelTable.getText()
     expect(text).to.equal('Offender Manager')
   })
@@ -60,6 +61,7 @@ describe('View court-reports overview', function () {
     expect(exists).to.be.equal(true)
 
     const orgLevelTable = await $('.sln-table-org-level')
+    await orgLevelTable.waitForDisplayed({ timeout: 60000 })
     const text = await orgLevelTable.getText()
     expect(text).to.equal('Team')
   })
@@ -84,6 +86,7 @@ describe('View court-reports overview', function () {
     expect(exists).to.be.equal(true)
 
     const orgLevelTable = await $('.sln-table-org-level')
+    await orgLevelTable.waitForDisplayed({ timeout: 60000 })
     const text = await orgLevelTable.getText()
     expect(text).to.equal('Probation Delivery Unit')
   })
@@ -108,6 +111,7 @@ describe('View court-reports overview', function () {
     expect(exists).to.be.equal(true)
 
     const orgLevelTable = await $('.sln-table-org-level')
+    await orgLevelTable.waitForDisplayed({ timeout: 60000 })
     const text = await orgLevelTable.getText()
     expect(text).to.equal('Region')
   })
@@ -116,6 +120,7 @@ describe('View court-reports overview', function () {
     await navigateTo(nationalDefaultUrl + '/overview')
 
     let pageTitle = await $('.govuk-heading-xl')
+    await pageTitle.waitForDisplayed({ timeout: 60000 })
     let text = await pageTitle.getText()
     expect(text).to.equal('National')
 
@@ -123,6 +128,7 @@ describe('View court-reports overview', function () {
     await clickAndWaitForPageLoad(link)
 
     pageTitle = await $('.govuk-heading-xl')
+    await pageTitle.waitForDisplayed({ timeout: 60000 })
     text = await pageTitle.getText()
     expect(text).to.equal(dailyArchiveData.regionName)
 
@@ -130,6 +136,7 @@ describe('View court-reports overview', function () {
     await clickAndWaitForPageLoad(link)
 
     pageTitle = await $('.govuk-heading-xl')
+    await pageTitle.waitForDisplayed({ timeout: 60000 })
     text = await pageTitle.getText()
     expect(text).to.equal(dailyArchiveData.lduName)
 
@@ -137,6 +144,7 @@ describe('View court-reports overview', function () {
     await clickAndWaitForPageLoad(link)
 
     pageTitle = await $('.govuk-heading-xl')
+    await pageTitle.waitForDisplayed({ timeout: 60000 })
     text = await pageTitle.getText()
     expect(text).to.equal(dailyArchiveData.teamName)
   })
@@ -144,6 +152,7 @@ describe('View court-reports overview', function () {
   it('should contain breadcrumbs which allow the user to navigate up the org hierarchy', async function () {
     await navigateTo(teamDefaultUrl)
     let pageTitle = await $('.govuk-heading-xl')
+    await pageTitle.waitForDisplayed({ timeout: 60000 })
     let text = await pageTitle.getText()
     expect(text).to.equal(dailyArchiveData.teamName)
 
@@ -163,6 +172,7 @@ describe('View court-reports overview', function () {
     await clickAndWaitForPageLoad(link)
 
     pageTitle = await $('.govuk-heading-xl')
+    await pageTitle.waitForDisplayed({ timeout: 60000 })
     text = await pageTitle.getText()
     expect(text).to.equal(dailyArchiveData.lduName)
 
@@ -170,6 +180,7 @@ describe('View court-reports overview', function () {
     await clickAndWaitForPageLoad(link)
 
     pageTitle = await $('.govuk-heading-xl')
+    await pageTitle.waitForDisplayed({ timeout: 60000 })
     text = await pageTitle.getText()
     expect(text).to.equal(dailyArchiveData.regionName)
 
@@ -177,6 +188,7 @@ describe('View court-reports overview', function () {
     await clickAndWaitForPageLoad(link)
 
     pageTitle = await $('.govuk-heading-xl')
+    await pageTitle.waitForDisplayed({ timeout: 60000 })
     text = await pageTitle.getText()
     expect(text).to.equal('National')
   })

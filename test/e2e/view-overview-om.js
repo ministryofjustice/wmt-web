@@ -30,6 +30,7 @@ describe('Offender Manager', function () {
       expect(grade).to.equal(workloadOwnerGrade)
 
       let capacity = await $('.sln-capacity')
+      await capacity.waitForDisplayed({ timeout: 60000 })
       capacity = await capacity.getText()
       const capacityPercent = capacity.substring(0, capacity.indexOf('%'))
       expect(capacityPercent).to.equal(`${workloadOwnerCapacity}`)

@@ -11,6 +11,7 @@ describe('View not found page', () => {
     await navigateTo('/a-url-which-does-not-exist')
 
     const pageTitle = await $('.govuk-heading-xl')
+    await pageTitle.waitForDisplayed({ timeout: 60000 })
     const text = await pageTitle.getText('.govuk-heading-xl')
     expect(text).to.equal('Page not found')
   })
@@ -19,6 +20,7 @@ describe('View not found page', () => {
     await navigateTo('/probation/region/999')
 
     const pageTitle = await $('.govuk-heading-xl')
+    await pageTitle.waitForDisplayed({ timeout: 60000 })
     const text = await pageTitle.getText('.govuk-heading-xl')
     expect(text).to.equal('Page not found')
   })
@@ -27,6 +29,7 @@ describe('View not found page', () => {
     await navigateTo('/probation/ldu/999')
 
     const pageTitle = await $('.govuk-heading-xl')
+    await pageTitle.waitForDisplayed({ timeout: 60000 })
     const text = await pageTitle.getText('.govuk-heading-xl')
     expect(text).to.equal('Page not found')
   })
@@ -35,6 +38,7 @@ describe('View not found page', () => {
     await navigateTo('/probation/team/999')
 
     const pageTitle = await $('.govuk-heading-xl')
+    await pageTitle.waitForDisplayed({ timeout: 60000 })
     const text = await pageTitle.getText('.govuk-heading-xl')
     expect(text).to.equal('Page not found')
   })
@@ -43,6 +47,7 @@ describe('View not found page', () => {
     await navigateTo('/probation/offender-manager/999')
 
     const pageTitle = await $('.govuk-heading-xl')
+    await pageTitle.waitForDisplayed({ timeout: 60000 })
     const text = await pageTitle.getText('.govuk-heading-xl')
     expect(text).to.equal('Page not found')
   })

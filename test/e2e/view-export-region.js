@@ -37,6 +37,7 @@ describe('region', function () {
 
     it('should navigate to the region export page', async function () {
       const element = await $('.govuk-heading-m')
+      await element.waitForDisplayed({ timeout: 60000 })
       const text = await element.getText()
       expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
     })
@@ -60,6 +61,7 @@ describe('region', function () {
 
     it('should navigate to the region export page', async function () {
       const element = await $('.govuk-heading-m')
+      await element.waitForDisplayed({ timeout: 60000 })
       const text = await element.getText()
       expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
     })
@@ -83,6 +85,7 @@ describe('region', function () {
 
     it('should navigate to the region export page', async function () {
       const element = await $('.govuk-heading-m')
+      await element.waitForDisplayed({ timeout: 60000 })
       const text = await element.getText()
       expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
     })

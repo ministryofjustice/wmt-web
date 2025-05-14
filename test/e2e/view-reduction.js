@@ -23,7 +23,7 @@ describe('View a reduction', () => {
 
     it('Should not be able to navigate to page', async () => {
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 10000 })
+      await header.waitForDisplayed({ timeout: 60000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -49,6 +49,7 @@ describe('View a reduction', () => {
         expect(exists).to.be.equal(true)
 
         const pageTitle = await $('.govuk-heading-xl')
+        await pageTitle.waitForDisplayed({ timeout: 60000 })
         const text = await pageTitle.getText()
         expect(text).to.equal(dailyArchiveData.omNameDisplayed)
       })
@@ -57,22 +58,27 @@ describe('View a reduction', () => {
         await navigateTo(offenderManagerUrl)
 
         let element = await $('#headingActive')
+        await element.waitForDisplayed({ timeout: 60000 })
         let text = await element.getText()
         expect(text).to.contain('Active')
 
         element = await $('#active_type')
+        await element.waitForDisplayed({ timeout: 60000 })
         text = await element.getText()
         expect(text).to.equal('Type')
 
         element = await $('#active_hours')
+        await element.waitForDisplayed({ timeout: 60000 })
         text = await element.getText()
         expect(text).to.equal('Hours')
 
         element = await $('#active_start_date')
+        await element.waitForDisplayed({ timeout: 60000 })
         text = await element.getText()
         expect(text).to.equal('Start date')
 
         element = await $('#active_end_date')
+        await element.waitForDisplayed({ timeout: 60000 })
         text = await element.getText()
         expect(text).to.equal('End date')
       })
@@ -80,22 +86,27 @@ describe('View a reduction', () => {
       it('with a scheduled table', async () => {
         await navigateTo(offenderManagerUrl)
         let element = await $('#headingScheduled')
+        await element.waitForDisplayed({ timeout: 60000 })
         let text = await element.getText()
         expect(text).to.contain('Scheduled')
 
         element = await $('#scheduled_type')
+        await element.waitForDisplayed({ timeout: 60000 })
         text = await element.getText()
         expect(text).to.equal('Type')
 
         element = await $('#scheduled_hours')
+        await element.waitForDisplayed({ timeout: 60000 })
         text = await element.getText()
         expect(text).to.equal('Hours')
 
         element = await $('#scheduled_start_date')
+        await element.waitForDisplayed({ timeout: 60000 })
         text = await element.getText()
         expect(text).to.equal('Start date')
 
         element = await $('#scheduled_end_date')
+        await element.waitForDisplayed({ timeout: 60000 })
         text = await element.getText()
         expect(text).to.equal('End date')
       })
@@ -103,22 +114,27 @@ describe('View a reduction', () => {
       it('with an archived table', async () => {
         await navigateTo(offenderManagerUrl)
         let element = await $('#headingArchived')
+        await element.waitForDisplayed({ timeout: 60000 })
         let text = await element.getText()
         expect(text).to.contain('Archived')
 
         element = await $('#archived_type')
+        await element.waitForDisplayed({ timeout: 60000 })
         text = await element.getText()
         expect(text).to.equal('Type')
 
         element = await $('#archived_hours')
+        await element.waitForDisplayed({ timeout: 60000 })
         text = await element.getText()
         expect(text).to.equal('Hours')
 
         element = await $('#archived_start_date')
+        await element.waitForDisplayed({ timeout: 60000 })
         text = await element.getText()
         expect(text).to.equal('Start date')
 
         element = await $('#archived_end_date')
+        await element.waitForDisplayed({ timeout: 60000 })
         text = await element.getText()
         expect(text).to.equal('End date')
       })

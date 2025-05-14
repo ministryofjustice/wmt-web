@@ -16,6 +16,7 @@ describe('View updating page when ETL is running', () => {
     await navigateTo('/')
 
     const pageTitle = await $('.govuk-heading-xl')
+    await pageTitle.waitForDisplayed({ timeout: 60000 })
     const text = await pageTitle.getText('.govuk-heading-xl')
     expect(text).to.equal('WMT Updating')
     const updateTime = await $('#eta')

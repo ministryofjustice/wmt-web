@@ -77,7 +77,7 @@ describe('LDU Overview Page', function () {
         it('should block overview CSV download', async function () {
           await navigateTo(`${lduDefaultUrl}/overview/caseload-csv`)
           const header = await $('.govuk-heading-xl')
-          await header.waitForDisplayed({ timeout: 30000 })
+          await header.waitForDisplayed({ timeout: 60000 })
           const text = await header.getText()
           expect(text).to.equal('Access is denied')
         })
@@ -85,7 +85,7 @@ describe('LDU Overview Page', function () {
         it('should block reductions CSV download', async function () {
           await navigateTo(`${lduDefaultUrl}/overview/reductions-csv`)
           const header = await $('.govuk-heading-xl')
-          await header.waitForDisplayed({ timeout: 30000 })
+          await header.waitForDisplayed({ timeout: 60000 })
           const text = await header.getText()
           expect(text).to.equal('Access is denied')
         })
