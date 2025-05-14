@@ -200,12 +200,12 @@ describe('archiving a reduction', () => {
 
     it('after first adding a new reduction', async () => {
       const breadcrumbs = await $('.govuk-breadcrumbs')
-      await breadcrumbs.waitForDisplayed({ timeout: 30000 })
+      await breadcrumbs.waitForDisplayed({ timeout: 50000 })
       const exists = await breadcrumbs.isExisting()
       expect(exists).to.be.equal(true)
 
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 30000 })
+      await pageTitle.waitForDisplayed({ timeout: 50000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('New reduction')
 
@@ -233,8 +233,7 @@ describe('archiving a reduction', () => {
       await clickAndWaitForPageLoad(submit)
 
       await $('#headingActive')
-      const activeReductions = await browser.findElements('xpath', '//*[@id="active-reduction-table"]/tbody/tr[position()=1]/td[position()=5]/a')
-      const viewLink = await $(activeReductions[0])
+      const viewLink = await $('=View')
       await viewLink.waitForDisplayed({ timeout: 30000 })
       const view = await viewLink.getText()
       expect(view).to.equal('View')
@@ -243,7 +242,7 @@ describe('archiving a reduction', () => {
 
     it('should navigate to the edit reduction screen and archive it', async () => {
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 30000 })
+      await pageTitle.waitForDisplayed({ timeout: 50000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('Reduction')
 

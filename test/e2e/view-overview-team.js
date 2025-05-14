@@ -93,9 +93,13 @@ describe('Team', function () {
     })
 
     it('should navigate to the team overview page', async function () {
+      console.log('Checking for .sln-table-org-level...')
       const element = await $('.sln-table-org-level')
-      await element.waitForExist({ timeout: 30000 })
+      const bodyHTML = await $('body').getHTML(false)
+      console.log('PAGE HTML:', bodyHTML)
+      await element.waitForDisplayed({ timeout: 30000 })
       const text = await element.getText()
+      console.log('Found text:', text)
       expect(text).to.equal('Offender Manager')
     })
 

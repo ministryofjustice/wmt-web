@@ -125,11 +125,20 @@ describe('View national caseload', () => {
       await browser.url(nationalDefaultUrl + '/caseload')
     })
 
-    it('should  display export button', async () => {
+    it('should display the export button', async () => {
       const exportButton = await $('.sln-export')
-      await exportButton.waitForDisplayed({ timeout: 30000 })
-      const exists = await exportButton.isExisting()
-      return expect(exists).to.be.true
+
+      await browser.waitUntil(
+        async () => await exportButton.isDisplayed(),
+        {
+          timeout: 30000,
+          interval: 500,
+          timeoutMsg: 'Expected export button to be visible within 30 seconds'
+        }
+      )
+
+      const isVisible = await exportButton.isDisplayed()
+      expect(isVisible).to.equal(true, 'Export button should be visible on the page')
     })
 
     after(async function () {

@@ -224,25 +224,25 @@ describe('editing a reduction', () => {
 
     it('after first adding a new reduction', async () => {
       const breadcrumbs = await $('.govuk-breadcrumbs')
-      const exists = await breadcrumbs.isExisting()
-      expect(exists).to.be.equal(true)
+      await breadcrumbs.waitForExist({ timeout: 30000 })
+      expect(await breadcrumbs.isExisting()).to.equal(true)
 
       const pageTitle = await $('.govuk-heading-xl')
       await pageTitle.waitForDisplayed({ timeout: 60000 })
-      const text = await pageTitle.getText()
-      expect(text).to.equal('New reduction')
+      expect(await pageTitle.getText()).to.equal('New reduction')
 
-      reductionTypeField = await $('#select-box')
-      hoursField = await $('#hours')
-      startDayField = await $('#start-day')
-      startMonthField = await $('#start-month')
-      startYearField = await $('#start-year')
-      endDayField = await $('#end-day')
-      endMonthField = await $('#end-month')
-      endYearField = await $('#end-year')
-      notesField = await $('#textarea')
-      submit = await $('#submit-button')
+      const reductionTypeField = await $('#select-box')
+      const hoursField = await $('#hours')
+      const startDayField = await $('#start-day')
+      const startMonthField = await $('#start-month')
+      const startYearField = await $('#start-year')
+      const endDayField = await $('#end-day')
+      const endMonthField = await $('#end-month')
+      const endYearField = await $('#end-year')
+      const notesField = await $('#textarea')
+      const submit = await $('#submit-button')
 
+      await reductionTypeField.waitForDisplayed({ timeout: 10000 })
       await reductionTypeField.selectByVisibleText('Other')
       await hoursField.setValue('10')
       await startDayField.setValue('1')
@@ -251,36 +251,56 @@ describe('editing a reduction', () => {
       await endDayField.setValue('1')
       await endMonthField.setValue('2')
       await endYearField.setValue('2028')
+
+      const notesFieldValue = `Test Note - ${Date.now()}`
       await notesField.setValue(notesFieldValue)
 
       await clickAndWaitForPageLoad(submit)
 
-      await $('#headingActive')
+      const heading = await $('#headingActive')
+      await heading.waitForExist({ timeout: 30000 })
+
       const viewLink = await $('=View')
-      const view = await viewLink.getText()
-      expect(view).to.equal('View')
+      await viewLink.waitForDisplayed({ timeout: 30000 })
+      expect(await viewLink.getText()).to.equal('View')
+
       await clickAndWaitForPageLoad(viewLink)
     })
 
     it('should be able to edit a reduction', async () => {
       const currentTime = moment().format('YYYY-MM-DD HH:mm:ss.SSS')
-      endYearField = await $('#end-year')
-      notesField = await $('#textarea')
-      submit = await $('#submit-button')
+
+      const endYearField = await $('#end-year')
+      await endYearField.waitForExist({ timeout: 30000 })
+
+      const notesField = await $('#textarea')
+      await notesField.waitForExist({ timeout: 30000 })
+
+      const submitButton = await $('#submit-button')
+      await submitButton.waitForExist({ timeout: 30000 })
 
       await endYearField.setValue('2029')
       await notesField.setValue(currentTime)
 
-      await clickAndWaitForPageLoad(submit)
+      await clickAndWaitForPageLoad(submitButton)
 
       const viewLink = await $('=View')
-      const view = await viewLink.getText()
-      expect(view).to.equal('View')
+      await viewLink.waitForDisplayed({ timeout: 10000 })
+
+      const viewText = await viewLink.getText()
+      expect(viewText).to.equal('View')
+
       await clickAndWaitForPageLoad(viewLink)
 
-      notesField = await $('#textarea')
-      notesField = await notesField.getValue()
-      expect(notesField, 'The notes field of the last inserted reduction should have the following contents: ' + currentTime).to.be.equal(currentTime)
+      const updatedNotesField = await $('#textarea')
+      await updatedNotesField.waitForExist({ timeout: 30000 })
+
+      const updatedNotesValue = await updatedNotesField.getValue()
+
+      expect(
+        updatedNotesValue,
+        `Expected notes field to contain "${currentTime}", but got "${updatedNotesValue}"`
+      ).to.equal(currentTime)
     })
 
     after(async function () {

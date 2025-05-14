@@ -165,18 +165,22 @@ describe('deleting a reduction', () => {
 
     it('should not be able to delete the reduction', async () => {
       const viewLink = await $('=View')
+      await viewLink.waitForClickable({ timeout: 30000 })
       await clickAndWaitForPageLoad(viewLink)
 
       const pageTitle = await $('.govuk-heading-xl')
-      let text = await pageTitle.getText()
-      expect(text).to.equal('Reduction')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
+      const titleText = await pageTitle.getText()
+      expect(titleText).to.equal('Reduction')
 
       const deleteReduction = await $('#delete-reduction')
+      await deleteReduction.waitForClickable({ timeout: 30000 })
       await clickAndWaitForPageLoad(deleteReduction)
 
       const header = await $('.govuk-heading-xl')
-      text = await header.getText()
-      expect(text).to.equal('Access is denied')
+      await header.waitForDisplayed({ timeout: 30000 })
+      const headerText = await header.getText()
+      expect(headerText).to.equal('Access is denied')
     })
 
     after(async function () {
@@ -193,24 +197,25 @@ describe('deleting a reduction', () => {
     })
 
     it('after first adding a new reduction', async () => {
-      const breadcrumbs = await $('.govuk-breadcrumbs')
-      const exists = await breadcrumbs.isExisting()
-      expect(exists).to.be.equal(true)
-
       const pageTitle = await $('.govuk-heading-xl')
-      const text = await pageTitle.getText()
-      expect(text).to.equal('New reduction')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
+      const titleText = await pageTitle.getText()
+      expect(titleText).to.equal('New reduction')
 
-      reductionTypeField = await $('#select-box')
-      hoursField = await $('#hours')
-      startDayField = await $('#start-day')
-      startMonthField = await $('#start-month')
-      startYearField = await $('#start-year')
-      endDayField = await $('#end-day')
-      endMonthField = await $('#end-month')
-      endYearField = await $('#end-year')
-      notesField = await $('#textarea')
-      submit = await $('#submit-button')
+      const breadcrumbs = await $('.govuk-breadcrumbs')
+      await breadcrumbs.waitForExist({ timeout: 10000 })
+      expect(await breadcrumbs.isExisting()).to.equal(true)
+
+      const reductionTypeField = await $('#select-box')
+      const hoursField = await $('#hours')
+      const startDayField = await $('#start-day')
+      const startMonthField = await $('#start-month')
+      const startYearField = await $('#start-year')
+      const endDayField = await $('#end-day')
+      const endMonthField = await $('#end-month')
+      const endYearField = await $('#end-year')
+      const notesField = await $('#textarea')
+      const submitButton = await $('#submit-button')
 
       await reductionTypeField.selectByVisibleText('Other')
       await hoursField.setValue('10')
@@ -222,17 +227,21 @@ describe('deleting a reduction', () => {
       await endYearField.setValue('2028')
       await notesField.setValue(notesFieldValue)
 
-      await clickAndWaitForPageLoad(submit)
+      await clickAndWaitForPageLoad(submitButton)
 
-      await $('#headingActive')
+      const activeHeading = await $('#headingActive')
+      await activeHeading.waitForExist({ timeout: 10000 })
+
       const viewLink = await $('=View')
-      const view = await viewLink.getText()
-      expect(view).to.equal('View')
+      await viewLink.waitForDisplayed({ timeout: 10000 })
+      expect(await viewLink.getText()).to.equal('View')
+
       await clickAndWaitForPageLoad(viewLink)
     })
 
     it('should navigate to the edit reduction screen and delete it', async () => {
       const pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('Reduction')
 
@@ -240,6 +249,7 @@ describe('deleting a reduction', () => {
       await clickAndWaitForPageLoad(deleteReduction)
 
       const successMessage = await $('#reduction-success-text')
+      await successMessage.waitForDisplayed({ timeout: 30000 })
       const successText = await successMessage.getText()
       expect(successText).to.be.equal('You have successfully deleted the reduction!')
     })

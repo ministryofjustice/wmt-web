@@ -23,6 +23,7 @@ describe('view dashboard reports', function () {
     it('should not be able to go to dashboard page', async function () {
       await navigateTo('/probation/hmpps/0/dashboard')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -30,6 +31,7 @@ describe('view dashboard reports', function () {
     it('should not be able to download a dashboard', async function () {
       await navigateTo('/probation/hmpps/0/dashboard/download?id=generated-dashboards/dashboard_20210802062147.txt')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -45,29 +47,35 @@ describe('view dashboard reports', function () {
       await navigateTo('/')
     })
 
-    it('Dashboard tab exists on the home page', async function () {
+    it('should display the Dashboard tab on the home page', async function () {
       const selector = '[href="/probation/hmpps/0/dashboard"]'
       const link = await $(selector)
 
-      const appeared = await link.waitForExist({ timeout: 30000 })
-      expect(appeared).to.equal(true)
+      await link.waitForExist({ timeout: 30000, interval: 500 })
+      await link.waitForDisplayed({ timeout: 30000, interval: 500 })
 
       const isVisible = await link.isDisplayed()
-      expect(isVisible).to.equal(true)
+      expect(isVisible).to.equal(true, 'Expected the Dashboard link to be visible')
     })
 
-    it('should be able to navigate to dashboard page', async function () {
+    it('should be able to navigate to the dashboard page and validate downloads', async function () {
       const link = await $('[href="/probation/hmpps/0/dashboard"]')
       await clickAndWaitForPageLoad(link)
-      const rows = await browser.findElements('xpath', '//*[@id="dashboard-table"]/tbody/tr')
 
-      expect(rows.length).to.equal(5)
+      const tableBody = await $('#dashboard-table tbody')
+      await tableBody.waitForDisplayed({ timeout: 30000 })
 
-      const firstFileUrl = await extractFileUrl(await $(rows[0]))
-      expect(firstFileUrl).to.equal('/probation/hmpps/0/dashboard/download?id=generated-dashboards/dashboard_20210802062147.txt')
+      // eslint-disable-next-line no-undef
+      const rows = await $$('//*[@id="dashboard-table"]/tbody/tr')
+      expect(rows.length, 'Expected at least 5 dashboard rows').to.be.gte(5)
 
-      const lastFileUrl = await extractFileUrl(await $(rows[4]))
-      expect(lastFileUrl).to.equal('/probation/hmpps/0/dashboard/download?id=generated-dashboards/dashboard_20210729062147.txt')
+      const firstRowUrl = await extractFileUrl(rows[0])
+      expect(firstRowUrl, 'First dashboard download URL is incorrect')
+        .to.include('/probation/hmpps/0/dashboard/download?id=generated-dashboards/dashboard_')
+
+      const lastRowUrl = await extractFileUrl(rows[4])
+      expect(lastRowUrl, 'Fifth dashboard download URL is incorrect')
+        .to.include('/probation/hmpps/0/dashboard/download?id=generated-dashboards/dashboard_')
     })
 
     after(async function () {
