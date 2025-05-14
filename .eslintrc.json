@@ -1,11 +1,6 @@
 {
     "parserOptions": {
         "ecmaVersion": "latest"
-    },
-    "globals": {
-        "$$": "readonly",
-        "$": "readonly",
-        "browser": "readonly"
     }
 }
 
