@@ -30,7 +30,7 @@ describe('View your caseload flow', () => {
     it('with the correct breadcrumbs, subnav, title and export button', async () => {
       await navigateTo(teamDefaultUrl + '/caseload')
       pageSubtitle = await $('.govuk-heading-xl')
-      await pageSubtitle.waitForDisplayed({ timeout: 60000 })
+      await pageSubtitle.waitForDisplayed({ timeout: 30000 })
       pageSubtitle = await pageSubtitle.getText()
       expect(pageSubtitle).to.equal(dailyArchiveData.teamName)
     })
@@ -45,14 +45,14 @@ describe('View your caseload flow', () => {
       expect(textTotal[1]).to.eql('Custody cases')
 
       community = await $('#communityTotal')
-      await community.waitForDisplayed({ timeout: 60000 })
+      await community.waitForDisplayed({ timeout: 30000 })
       community = await community.getText()
       textTotal = community.split('\n')
       expect(Number(textTotal[0])).to.be.greaterThan(-1) // eslint-disable-line
       expect(textTotal[1]).to.eql('Community cases')
 
       licence = await $('#licenseTotal')
-      await licence.waitForDisplayed({ timeout: 60000 })
+      await licence.waitForDisplayed({ timeout: 30000 })
       licence = await licence.getText()
       textTotal = licence.split('\n')
       expect(Number(textTotal[0])).to.be.greaterThan(-1) // eslint-disable-line
@@ -88,7 +88,7 @@ describe('View your caseload flow', () => {
     it('with the correct table, breadcrumbs and export button', async () => {
       await navigateTo(lduDefaultUrl + '/caseload')
       pageSubtitle = await $('.govuk-heading-xl')
-      await pageSubtitle.waitForDisplayed({ timeout: 60000 })
+      await pageSubtitle.waitForDisplayed({ timeout: 30000 })
       pageSubtitle = await pageSubtitle.getText()
       expect(pageSubtitle).to.equal(dailyArchiveData.lduName)
 
@@ -188,7 +188,7 @@ describe('View your caseload flow', () => {
     it('with the correct table, breadcrumbs and export button', async () => {
       await navigateTo(regionDefaultUrl + '/caseload')
       pageSubtitle = await $('.govuk-heading-xl')
-      await pageSubtitle.waitForDisplayed({ timeout: 60000 })
+      await pageSubtitle.waitForDisplayed({ timeout: 30000 })
       pageSubtitle = await pageSubtitle.getText()
       expect(pageSubtitle).to.equal(dailyArchiveData.regionName)
     })
@@ -240,7 +240,7 @@ describe('View your caseload flow', () => {
     it('with the correct table, breadcrumbs and export button', async () => {
       await navigateTo(nationalDefaultUrl + '/caseload')
       pageSubtitle = await $('.govuk-heading-xl')
-      await pageSubtitle.waitForDisplayed({ timeout: 60000 })
+      await pageSubtitle.waitForDisplayed({ timeout: 30000 })
       pageSubtitle = await pageSubtitle.getText()
       expect(pageSubtitle).to.equal('National')
     })

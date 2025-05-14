@@ -37,7 +37,7 @@ describe('editing a reduction', () => {
       expect(exists).to.be.equal(true)
 
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('New reduction')
 
@@ -79,7 +79,7 @@ describe('editing a reduction', () => {
       expect(exists).to.be.equal(true)
 
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('Reduction')
 
@@ -106,7 +106,7 @@ describe('editing a reduction', () => {
       await clickAndWaitForPageLoad(submit)
 
       const viewLink = await $('=View')
-      await viewLink.waitForDisplayed({ timeout: 60000 })
+      await viewLink.waitForDisplayed({ timeout: 30000 })
       const view = await viewLink.getText()
       expect(view).to.equal('View')
       await clickAndWaitForPageLoad(viewLink)
@@ -160,7 +160,7 @@ describe('editing a reduction', () => {
       expect(exists).to.be.equal(true)
 
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('New reduction')
 
@@ -208,7 +208,7 @@ describe('editing a reduction', () => {
       await clickAndWaitForPageLoad(submit)
 
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -231,7 +231,7 @@ describe('editing a reduction', () => {
       expect(await breadcrumbs.isExisting()).to.equal(true)
 
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       expect(await pageTitle.getText()).to.equal('New reduction')
 
       const reductionTypeField = await $('#select-box')
@@ -264,7 +264,7 @@ describe('editing a reduction', () => {
       await heading.waitForExist({ timeout: 60000 })
 
       const viewLink = await $('=View')
-      await viewLink.waitForDisplayed({ timeout: 60000 })
+      await viewLink.waitForDisplayed({ timeout: 30000 })
       expect(await viewLink.getText()).to.equal('View')
 
       await clickAndWaitForPageLoad(viewLink)
@@ -288,7 +288,7 @@ describe('editing a reduction', () => {
       await clickAndWaitForPageLoad(submitButton)
 
       const viewLink = await $('=View')
-      await viewLink.waitForDisplayed({ timeout: 60000 })
+      await viewLink.waitForDisplayed({ timeout: 30000 })
 
       const viewText = await viewLink.getText()
       expect(viewText).to.equal('View')

@@ -43,7 +43,7 @@ describe('Region', function () {
     it('should not be able to download overview', async function () {
       await navigateTo(regionDefaultUrl + '/overview/caseload-csv')
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -51,7 +51,7 @@ describe('Region', function () {
     it('should not be able to download reductions', async function () {
       await navigateTo(regionDefaultUrl + '/overview/reductions-csv')
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -69,21 +69,21 @@ describe('Region', function () {
 
     it('should navigate to the region overview page', async function () {
       const element = await $('.sln-table-org-level')
-      await element.waitForDisplayed({ timeout: 60000 })
+      await element.waitForDisplayed({ timeout: 30000 })
       const text = await element.getText()
       expect(text).to.equal('Probation Delivery Unit')
     })
 
     it('should include the reductions export at region level', async function () {
       const reductionExport = await $('.reduction-export')
-      await reductionExport.waitForDisplayed({ timeout: 60000 })
+      await reductionExport.waitForDisplayed({ timeout: 30000 })
       const exists = await reductionExport.isExisting()
       return expect(exists).to.be.true
     })
 
     it('should include the overview export at region level', async function () {
       const exportButton = await $('.sln-export')
-      await exportButton.waitForDisplayed({ timeout: 60000 })
+      await exportButton.waitForDisplayed({ timeout: 30000 })
       const exists = await exportButton.isExisting()
       return expect(exists).to.be.true
     })
@@ -108,7 +108,7 @@ describe('Region', function () {
     it('should not be able to download overview', async function () {
       await navigateTo(regionDefaultUrl + '/overview/caseload-csv')
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -116,7 +116,7 @@ describe('Region', function () {
     it('should not be able to download reductions', async function () {
       await navigateTo(regionDefaultUrl + '/overview/reductions-csv')
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -134,21 +134,21 @@ describe('Region', function () {
 
     it('should navigate to the region overview page', async function () {
       const element = await $('.sln-table-org-level')
-      await element.waitForDisplayed({ timeout: 60000 })
+      await element.waitForDisplayed({ timeout: 30000 })
       const text = await element.getText()
       expect(text).to.equal('Probation Delivery Unit')
     })
 
     it('should include the reductions export at region level', async function () {
       const reductionExport = await $('.reduction-export')
-      await reductionExport.waitForDisplayed({ timeout: 60000 })
+      await reductionExport.waitForDisplayed({ timeout: 30000 })
       const exists = await reductionExport.isExisting()
       return expect(exists).to.be.true
     })
 
     it('should include the overview export at region level', async function () {
       const exportButton = await $('.sln-export')
-      await exportButton.waitForDisplayed({ timeout: 60000 })
+      await exportButton.waitForDisplayed({ timeout: 30000 })
       const exists = await exportButton.isExisting()
       return expect(exists).to.be.true
     })

@@ -12,7 +12,7 @@ describe('User Rights page', () => {
     it('Should not be able to go on page', async function () {
       await browser.url('/admin/user')
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -29,7 +29,7 @@ describe('User Rights page', () => {
     it('Should not be able to go on page', async function () {
       await browser.url('/admin/user')
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -60,7 +60,7 @@ describe('User Rights page', () => {
       await submit.click()
 
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText('.govuk-heading-xl')
       expect(text).to.equal('Amend user rights')
 
@@ -111,7 +111,7 @@ describe('User Rights page', () => {
       await submitRole.click()
 
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const headerText = await header.getText('.govuk-heading-xl')
       expect(headerText).to.equal('Access is denied')
     })
@@ -130,7 +130,7 @@ describe('User Rights page', () => {
       await submit.click()
 
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText('.govuk-heading-xl')
       expect(text).to.equal('Amend user rights')
 
@@ -143,7 +143,7 @@ describe('User Rights page', () => {
       await submitRole.click()
 
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const headerText = await header.getText('.govuk-heading-xl')
       expect(headerText).to.equal('Access is denied')
     })
@@ -162,7 +162,7 @@ describe('User Rights page', () => {
       await submit.click()
 
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText('.govuk-heading-xl')
       expect(text).to.equal('Amend user rights')
 
@@ -175,7 +175,7 @@ describe('User Rights page', () => {
       await submitRole.click()
 
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const headerText = await header.getText('.govuk-heading-xl')
       expect(headerText).to.equal('Access is denied')
     })
@@ -206,7 +206,7 @@ describe('User Rights page', () => {
       await submit.click()
 
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText('.govuk-heading-xl')
       expect(text).to.equal('Amend user rights')
 

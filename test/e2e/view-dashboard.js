@@ -23,7 +23,7 @@ describe('view dashboard reports', function () {
     it('should not be able to go to dashboard page', async function () {
       await navigateTo('/probation/hmpps/0/dashboard')
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -31,7 +31,7 @@ describe('view dashboard reports', function () {
     it('should not be able to download a dashboard', async function () {
       await navigateTo('/probation/hmpps/0/dashboard/download?id=generated-dashboards/dashboard_20210802062147.txt')
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -63,7 +63,7 @@ describe('view dashboard reports', function () {
       await clickAndWaitForPageLoad(link)
 
       const tableBody = await $('#dashboard-table tbody')
-      await tableBody.waitForDisplayed({ timeout: 60000 })
+      await tableBody.waitForDisplayed({ timeout: 30000 })
 
       // eslint-disable-next-line no-undef
       const rows = await $$('//*[@id="dashboard-table"]/tbody/tr')

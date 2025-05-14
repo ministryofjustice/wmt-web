@@ -11,7 +11,7 @@ describe('Admin Archive Data Daily Caseload Page', () => {
     it('Should not be able to go on page', async function () {
       await navigateTo('/archive-data/daily-caseload-data')
       const header = $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -27,9 +27,7 @@ describe('Admin Archive Data Daily Caseload Page', () => {
 
     it('Should not be able to go on page', async function () {
       await navigateTo('/archive-data/daily-caseload-data')
-
       const header = $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -52,7 +50,7 @@ describe('Admin Archive Data Daily Caseload Page', () => {
 
     it('Should be able to navigate to page', async function () {
       const pageTitle = $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Daily Caseload Data')
     })
@@ -127,7 +125,7 @@ describe('Admin Archive Data Daily Caseload Page', () => {
 
     it('Should be able to navigate to page', async function () {
       const pageTitle = $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Daily Caseload Data')
     })

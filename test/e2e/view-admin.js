@@ -16,7 +16,7 @@ describe('Admin Landing Page', () => {
     it('Should not be able to go on Admin landing page', async function () {
       await navigateTo('/admin')
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -39,7 +39,7 @@ describe('Admin Landing Page', () => {
     it('Should not be able to go on Admin landing page', async function () {
       await browser.url('/admin')
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -58,7 +58,7 @@ describe('Admin Landing Page', () => {
 
     it('Should be able to navigate to admin page', async function () {
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText, 'Admin Page title should be "Admin"').to.equal('Admin')
     })
@@ -77,7 +77,7 @@ describe('Admin Landing Page', () => {
 
     it('Should be able to navigate to admin page', async function () {
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText, 'Admin Page title should be "Admin"').to.equal('Admin')
     })

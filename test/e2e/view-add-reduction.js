@@ -35,7 +35,7 @@ describe('View adding a new reduction', () => {
       const addLink = await $('[href="' + offenderManagerUrl + '/add-reduction' + '"]')
       await clickAndWaitForPageLoad(addLink)
       pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       pageTitle = await pageTitle.getText()
       expect(pageTitle, 'New reduction Page title should be "New reduction"').to.equal('New reduction')
 
@@ -112,7 +112,7 @@ describe('View adding a new reduction', () => {
       const addLink = await $('[href="' + offenderManagerUrl + '/add-reduction' + '"]')
       await clickAndWaitForPageLoad(addLink)
       pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       pageTitle = await pageTitle.getText()
       expect(pageTitle, 'New reduction Page title should be "New reduction"').to.equal('New reduction')
 
@@ -140,7 +140,7 @@ describe('View adding a new reduction', () => {
 
       await clickAndWaitForPageLoad(submit)
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -161,7 +161,7 @@ describe('View adding a new reduction', () => {
       const addLink = await $('[href="' + offenderManagerUrl + '/add-reduction' + '"]')
       await clickAndWaitForPageLoad(addLink)
       pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       pageTitle = await pageTitle.getText()
       expect(pageTitle, 'New reduction Page title should be "New reduction"').to.equal('New reduction')
 

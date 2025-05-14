@@ -41,7 +41,7 @@ describe('View contracted hours', function () {
       expect(exists).to.be.equal(true)
 
       const pageTitle = await $('.govuk-heading-l')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('Contracted hours')
     })
@@ -52,7 +52,7 @@ describe('View contracted hours', function () {
       await contractedHoursField.setValue('36')
       await clickAndWaitForPageLoad(submit)
       const successBanner = await $('.govuk-notification-banner--success .govuk-notification-banner__heading')
-      await successBanner.waitForDisplayed({ timeout: 60000 })
+      await successBanner.waitForDisplayed({ timeout: 30000 })
       const successBannerText = await successBanner.getText()
       expect(successBannerText).to.equal('You have successfully updated the contracted hours for Test_Forename Test_Surname')
 
@@ -101,7 +101,7 @@ describe('View contracted hours', function () {
       expect(exists).to.be.equal(true)
 
       const pageTitle = await $('.govuk-heading-l')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('Contracted hours')
     })
@@ -113,7 +113,7 @@ describe('View contracted hours', function () {
       await clickAndWaitForPageLoad(submit)
 
       const successBanner = await $('.govuk-notification-banner--success .govuk-notification-banner__heading')
-      await successBanner.waitForDisplayed({ timeout: 60000 })
+      await successBanner.waitForDisplayed({ timeout: 30000 })
       const successBannerText = await successBanner.getText()
       expect(successBannerText).to.equal('You have successfully updated the contracted hours for Test_Forename Test_Surname')
     })
@@ -133,7 +133,7 @@ describe('View contracted hours', function () {
 
     it('should not be able to navigate to the workload owner contracted-hours page', async function () {
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -164,7 +164,7 @@ describe('View contracted hours', function () {
       expect(exists).to.be.equal(true)
 
       const pageTitle = await $('.govuk-heading-l')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('Contracted hours')
     })
@@ -176,7 +176,7 @@ describe('View contracted hours', function () {
       await clickAndWaitForPageLoad(submit)
 
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })

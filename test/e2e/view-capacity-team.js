@@ -25,7 +25,7 @@ describe('Team', () => {
 
     it('should navigate to the team caseload capacity screen', async () => {
       pageSubtitle = await $('.govuk-heading-xl')
-      await pageSubtitle.waitForDisplayed({ timeout: 60000 })
+      await pageSubtitle.waitForDisplayed({ timeout: 30000 })
       pageSubtitle = await pageSubtitle.getText()
       expect(pageSubtitle).to.equal(dailyArchiveData.teamName)
 
@@ -47,7 +47,7 @@ describe('Team', () => {
       await clickAndWaitForPageLoad(submit)
 
       const errorMessage = await $('.govuk-error-message')
-      await errorMessage.waitForDisplayed({ timeout: 60000 })
+      await errorMessage.waitForDisplayed({ timeout: 30000 })
       const errorText = await errorMessage.getText()
       expect(errorText).to.equal('There is no data for this period (// - //)')
       const errorSummary = await $('.govuk-error-summary')
@@ -114,7 +114,7 @@ describe('Team', () => {
     it('should not be able to download outstanding', async function () {
       await navigateTo(teamDefaultUrl + '/capacity/outstanding-csv')
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })

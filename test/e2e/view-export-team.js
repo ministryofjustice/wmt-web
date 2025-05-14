@@ -34,14 +34,14 @@ describe('team', function () {
 
     it('should navigate to the team export page', async function () {
       const element = await $('.govuk-heading-m')
-      await element.waitForDisplayed({ timeout: 60000 })
+      await element.waitForDisplayed({ timeout: 30000 })
       const text = await element.getText()
       expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
     })
 
     it('should include the export button at team level', async function () {
       const exportButton = await $('.sln-export')
-      await exportButton.waitForDisplayed({ timeout: 60000 })
+      await exportButton.waitForDisplayed({ timeout: 30000 })
       const exists = await exportButton.isExisting()
       return expect(exists).to.be.true
     })
@@ -59,7 +59,7 @@ describe('team', function () {
 
     it('should navigate to the team export page', async function () {
       const element = await $('.govuk-heading-m')
-      await element.waitForDisplayed({ timeout: 60000 })
+      await element.waitForDisplayed({ timeout: 30000 })
       const text = await element.getText()
       expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
     })
@@ -85,7 +85,7 @@ describe('team', function () {
       const element = await $('.govuk-heading-m')
       const exists = await element.isExisting()
       expect(exists).to.equal(true)
-      await element.waitForDisplayed({ timeout: 60000 })
+      await element.waitForDisplayed({ timeout: 30000 })
       const text = await element.getText()
       expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
     })
@@ -95,7 +95,7 @@ describe('team', function () {
       const exportButton = await $('.sln-export')
       const exists = await exportButton.isExisting()
       expect(exists).to.equal(true)
-      await exportButton.waitForDisplayed({ timeout: 60000 })
+      await exportButton.waitForDisplayed({ timeout: 30000 })
       const isVisible = await exportButton.isDisplayed()
       expect(isVisible).to.equal(true)
     })

@@ -24,7 +24,7 @@ describe('LDU Omic Overview', function () {
       await clickAndWaitForPageLoad(viewLduLink)
 
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.lduName)
     })
@@ -52,7 +52,7 @@ describe('LDU Omic Overview', function () {
       await clickAndWaitForPageLoad(viewLduLink)
 
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.lduName)
     })
@@ -65,7 +65,7 @@ describe('LDU Omic Overview', function () {
       await clickAndWaitForPageLoad(exportTab)
 
       const title = await $('.govuk-heading-m')
-      await title.waitForDisplayed({ timeout: 60000 })
+      await title.waitForDisplayed({ timeout: 30000 })
       const text = await title.getText()
       expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
     })
@@ -93,7 +93,7 @@ describe('LDU Omic Overview', function () {
       await clickAndWaitForPageLoad(viewLduLink)
 
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal(dailyArchiveData.lduName)
     })
@@ -125,7 +125,7 @@ describe('LDU Omic Overview', function () {
         await clickAndWaitForPageLoad(viewLduLink)
 
         const pageTitle = await $('.govuk-heading-xl')
-        await pageTitle.waitForDisplayed({ timeout: 60000 })
+        await pageTitle.waitForDisplayed({ timeout: 30000 })
         const text = await pageTitle.getText()
         expect(text).to.equal(dailyArchiveData.lduName)
       })
@@ -138,7 +138,7 @@ describe('LDU Omic Overview', function () {
         await clickAndWaitForPageLoad(exportTab)
 
         const title = await $('.govuk-heading-m')
-        await title.waitForDisplayed({ timeout: 60000 })
+        await title.waitForDisplayed({ timeout: 30000 })
         const text = await title.getText()
         expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
       })

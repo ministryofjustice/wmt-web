@@ -25,11 +25,11 @@ describe('Edit Workload Points Page', () => {
       await clickAndWaitForPageLoad(editButton)
 
       const pointField = await $('#cus-a3')
-      await pointField.waitForDisplayed({ timeout: 60000 })
+      await pointField.waitForDisplayed({ timeout: 30000 })
       await pointField.setValue('10')
 
       const pointFieldSuspended = await $('#cus-a3s')
-      await pointFieldSuspended.waitForDisplayed({ timeout: 60000 })
+      await pointFieldSuspended.waitForDisplayed({ timeout: 30000 })
       await pointFieldSuspended.setValue('10')
 
       const saveButton = await $('#save-button')
@@ -37,7 +37,7 @@ describe('Edit Workload Points Page', () => {
       await clickAndWaitForPageLoad(saveButton)
 
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied', 'Expected denial message was not shown')
     })

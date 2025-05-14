@@ -37,7 +37,7 @@ describe('deleting a reduction', () => {
       expect(exists).to.be.equal(true)
 
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('New reduction')
 
@@ -74,7 +74,7 @@ describe('deleting a reduction', () => {
 
     it('should navigate to the edit reduction screen and delete it', async () => {
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('Reduction')
 
@@ -82,7 +82,7 @@ describe('deleting a reduction', () => {
       await clickAndWaitForPageLoad(deleteReduction)
 
       const successMessage = await $('#reduction-success-text')
-      await successMessage.waitForDisplayed({ timeout: 60000 })
+      await successMessage.waitForDisplayed({ timeout: 30000 })
       const successText = await successMessage.getText()
       expect(successText).to.be.equal('You have successfully deleted the reduction!')
 
@@ -132,7 +132,7 @@ describe('deleting a reduction', () => {
       expect(exists).to.be.equal(true)
 
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('New reduction')
 
@@ -171,7 +171,7 @@ describe('deleting a reduction', () => {
       await clickAndWaitForPageLoad(viewLink)
 
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const titleText = await pageTitle.getText()
       expect(titleText).to.equal('Reduction')
 
@@ -180,7 +180,7 @@ describe('deleting a reduction', () => {
       await clickAndWaitForPageLoad(deleteReduction)
 
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const headerText = await header.getText()
       expect(headerText).to.equal('Access is denied')
     })
@@ -200,7 +200,7 @@ describe('deleting a reduction', () => {
 
     it('after first adding a new reduction', async () => {
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const titleText = await pageTitle.getText()
       expect(titleText).to.equal('New reduction')
 
@@ -235,7 +235,7 @@ describe('deleting a reduction', () => {
       await activeHeading.waitForExist({ timeout: 60000 })
 
       const viewLink = await $('=View')
-      await viewLink.waitForDisplayed({ timeout: 60000 })
+      await viewLink.waitForDisplayed({ timeout: 30000 })
       expect(await viewLink.getText()).to.equal('View')
 
       await clickAndWaitForPageLoad(viewLink)
@@ -243,7 +243,7 @@ describe('deleting a reduction', () => {
 
     it('should navigate to the edit reduction screen and delete it', async () => {
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('Reduction')
 
@@ -251,7 +251,7 @@ describe('deleting a reduction', () => {
       await clickAndWaitForPageLoad(deleteReduction)
 
       const successMessage = await $('#reduction-success-text')
-      await successMessage.waitForDisplayed({ timeout: 60000 })
+      await successMessage.waitForDisplayed({ timeout: 30000 })
       const successText = await successMessage.getText()
       expect(successText).to.be.equal('You have successfully deleted the reduction!')
     })

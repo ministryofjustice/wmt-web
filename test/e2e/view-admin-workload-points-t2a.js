@@ -11,7 +11,7 @@ describe('Workload Points (T2A) Page', () => {
     it('Should not be able to go on Workload Points (T2A) page', async function () {
       await navigateTo('/admin/workload-points/t2a')
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -26,10 +26,12 @@ describe('Workload Points (T2A) Page', () => {
       await authenticationHelper.login(authenticationHelper.users.Manager)
     })
 
-    it('Should not be able to go on Workload Points (T2A) page', async function () {
+    it('Should not be able to access the Workload Points (T2A) page', async function () {
       await navigateTo('/admin/workload-points/t2a')
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 60000 })
+      await header.waitForExist({ timeout: 10000 })
+      const isDisplayed = await header.isDisplayed()
+      expect(isDisplayed).to.equal(true)
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -50,7 +52,6 @@ describe('Workload Points (T2A) Page', () => {
 
     it('Should be able to navigate to Workload Points (T2A) page', async function () {
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Workload Points (T2A)')
     })
@@ -71,7 +72,6 @@ describe('Workload Points (T2A) Page', () => {
 
     it('Should be able to navigate to Workload Points (T2A) page', async function () {
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 60000 })
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Workload Points (T2A)')
     })
