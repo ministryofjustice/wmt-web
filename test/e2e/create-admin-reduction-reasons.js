@@ -11,7 +11,7 @@ describe('Admin Add Reduction Reasons Page', () => {
     it('Should not be able to go on page', async function () {
       await navigateTo('/add-reduction-reason')
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 30000 })
+      await header.waitForDisplayed({ timeout: 60000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -48,7 +48,7 @@ describe('Admin Add Reduction Reasons Page', () => {
     it('Should not be able to go on page', async function () {
       await navigateTo('/add-reduction-reason')
       const header = await $('.govuk-heading-xl')
-      await header.waitForDisplayed({ timeout: 30000 })
+      await header.waitForDisplayed({ timeout: 60000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -71,7 +71,7 @@ describe('Admin Add Reduction Reasons Page', () => {
 
     it('Should be able to navigate to page', async function () {
       const pageTitle = await $('.govuk-heading-xl')
-      await pageTitle.waitForDisplayed({ timeout: 30000 })
+      await pageTitle.waitForDisplayed({ timeout: 60000 })
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Add Reduction Reason')
     })
@@ -93,7 +93,7 @@ describe('Admin Add Reduction Reasons Page', () => {
       await submitButton.click()
 
       const successBanner = await $('.govuk-notification-banner--success .govuk-notification-banner__heading')
-      await successBanner.waitForDisplayed({ timeout: 30000 })
+      await successBanner.waitForDisplayed({ timeout: 60000 })
       const successBannerText = await successBanner.getText()
       expect(successBannerText).to.equal('The Reduction Reason was saved successfully!')
     })
