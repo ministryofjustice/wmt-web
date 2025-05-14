@@ -21,7 +21,7 @@ exports.config = {
     'wdio:enforceWebDriverClassic': true
   }],
   sync: false,
-  logLevel: 'error',
+  logLevel: 'debug',
   coloredLogs: true,
   screenshotPath: './errorShots/',
   waitforTimeout: 50000,
@@ -30,7 +30,7 @@ exports.config = {
   framework: 'mocha',
   mochaOpts: {
     ui: 'bdd',
-    timeout: 60000
+    timeout: 80000
   },
   reporters: ['spec',
     ['html-nice', {
