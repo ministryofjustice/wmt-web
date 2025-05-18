@@ -14,7 +14,8 @@ exports.config = {
   baseUrl: process.env.WMT_BASE_URL || 'http://localhost:3000',
   capabilities: [{
     maxInstances: 1,
-    browserName: 'chrome'
+    browserName: 'chrome',
+    browserVersion: 'stable'
   }],
   sync: false,
   logLevel: 'error',
