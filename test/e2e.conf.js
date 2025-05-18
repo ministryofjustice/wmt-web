@@ -11,26 +11,30 @@ exports.config = {
       }
     ]
   ],
+
   specs: ['./e2e/**/*.js'],
+  exclude: [],
   maxInstances: 1,
   baseUrl: process.env.WMT_BASE_URL || 'http://localhost:3000',
   capabilities: [{
     maxInstances: 1,
     browserName: 'chrome',
-    browserVersion: 'stable',
+    'goog:chromeOptions': {
+      args: ['--no-sandbox', '--disable-dev-shm-usage']
+    },
     'wdio:enforceWebDriverClassic': true
   }],
   sync: false,
-  logLevel: 'debug',
+  logLevel: 'error',
   coloredLogs: true,
   screenshotPath: './errorShots/',
-  waitforTimeout: 50000,
-  connectionRetryTimeout: 120000,
+  waitforTimeout: 20000,
+  connectionRetryTimeout: 60000,
   connectionRetryCount: 3,
   framework: 'mocha',
   mochaOpts: {
     ui: 'bdd',
-    timeout: 80000
+    timeout: 60000
   },
   reporters: ['spec',
     ['html-nice', {
@@ -62,15 +66,5 @@ exports.config = {
     (async () => {
       await reportAggregator.createReport()
     })()
-  },
-  afterTest: async function (test, context, { error, result, duration, passed, retries }) {
-    if (!passed) {
-      const timestamp = new Date().toISOString().replace(/:/g, '-')
-      const fileName = `${test.title.replace(/\s+/g, '_')}-${timestamp}.png`
-      const filePath = `./test_results/e2e/screenshots/${fileName}`
-
-      await browser.saveScreenshot(filePath)
-      console.log(`Screenshot captured: ${filePath}`)
-    }
   }
 }
