@@ -3,10 +3,12 @@ const dns = require('node:dns')
 let reportAggregator
 
 exports.config = {
-  services: [['selenium-standalone', {
-    drivers: { chrome: 'latest' },
-    logPath: 'logs'
-  }]],
+  services: [
+    ['selenium-standalone', {
+      drivers: { chrome: 'latest' },
+      logPath: 'logs'
+    }]
+  ],
 
   specs: ['./e2e/**/*.js'],
   exclude: [],
@@ -15,9 +17,10 @@ exports.config = {
   capabilities: [{
     maxInstances: 1,
     browserName: 'chrome',
-    browserVersion: 'stable'
+    'goog:chromeOptions': {
+      args: ['--no-sandbox', '--disable-dev-shm-usage']
+    }
   }],
-  sync: false,
   logLevel: 'error',
   coloredLogs: true,
   screenshotPath: './errorShots/',
@@ -34,13 +37,9 @@ exports.config = {
       outputDir: './test_results/e2e/',
       filename: 'report.html',
       reportTitle: 'Test Report Title',
-
-      // to show the report in a browser when done
       collapseTests: false,
-      // to turn on screenshots after every test
       useOnAfterCommandForScreenshot: false
-    }
-    ]
+    }]
   ],
   beforeSession: () => {
     dns.setDefaultResultOrder('ipv4first')
@@ -55,7 +54,7 @@ exports.config = {
     })
     reportAggregator.clean()
   },
-  onComplete: function (exitCode, config, capabilities, results) {
+  onComplete: function () {
     (async () => {
       await reportAggregator.createReport()
     })()
