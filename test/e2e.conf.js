@@ -4,14 +4,12 @@ let reportAggregator
 
 exports.config = {
   services: [
-    ['selenium-standalone', {
-      logPath: 'logs',
-      drivers: {
-        chrome: {
-          version: '136.0.0'
-        }
+    [
+      ['selenium-standalone', { drivers: { chrome: 'latest' } }],
+      {
+        logs: 'logs'
       }
-    }]
+    ]
   ],
 
   specs: ['./e2e/**/*.js'],
@@ -23,12 +21,14 @@ exports.config = {
     browserName: 'chrome',
     'goog:chromeOptions': {
       args: ['--no-sandbox', '--disable-dev-shm-usage']
-    }
+    },
+    'wdio:enforceWebDriverClassic': true
   }],
+  sync: false,
   logLevel: 'error',
   coloredLogs: true,
   screenshotPath: './errorShots/',
-  waitforTimeout: 30000,
+  waitforTimeout: 20000,
   connectionRetryTimeout: 60000,
   connectionRetryCount: 3,
   framework: 'mocha',
@@ -41,9 +41,13 @@ exports.config = {
       outputDir: './test_results/e2e/',
       filename: 'report.html',
       reportTitle: 'Test Report Title',
+
+      // to show the report in a browser when done
       collapseTests: false,
+      // to turn on screenshots after every test
       useOnAfterCommandForScreenshot: false
-    }]
+    }
+    ]
   ],
   beforeSession: () => {
     dns.setDefaultResultOrder('ipv4first')
@@ -58,7 +62,7 @@ exports.config = {
     })
     reportAggregator.clean()
   },
-  onComplete: function () {
+  onComplete: function (exitCode, config, capabilities, results) {
     (async () => {
       await reportAggregator.createReport()
     })()
