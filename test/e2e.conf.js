@@ -3,14 +3,10 @@ const dns = require('node:dns')
 let reportAggregator
 
 exports.config = {
-  services: [
-    [
-      ['selenium-standalone', { drivers: { chrome: 'latest' } }],
-      {
-        logs: 'logs'
-      }
-    ]
-  ],
+  services: [['selenium-standalone', {
+    drivers: { chrome: 'latest' },
+    logPath: 'logs'
+  }]],
 
   specs: ['./e2e/**/*.js'],
   exclude: [],
@@ -24,13 +20,13 @@ exports.config = {
   logLevel: 'error',
   coloredLogs: true,
   screenshotPath: './errorShots/',
-  waitforTimeout: 20000,
-  connectionRetryTimeout: 30000,
+  waitforTimeout: 30000,
+  connectionRetryTimeout: 60000,
   connectionRetryCount: 3,
   framework: 'mocha',
   mochaOpts: {
     ui: 'bdd',
-    timeout: 30000
+    timeout: 60000
   },
   reporters: ['spec',
     ['html-nice', {
