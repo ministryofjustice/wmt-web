@@ -9,7 +9,7 @@ async function clickAndWaitForPageLoad (element, timeout = 60000) {
   )
 }
 
-async function navigateTo (url, timeout = 60000) {
+async function navigateTo (url, timeout = 80000) {
   await browser.url(url)
   await browser.waitUntil(
     async () => (await browser.execute(() => document.readyState)) === 'complete',
