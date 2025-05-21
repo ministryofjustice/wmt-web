@@ -107,8 +107,10 @@ describe('Admin Archive Data Reductions Page', () => {
       const extraSearchCritera = await $('.select2-search__field')
       await extraSearchCritera.setValue('Test_Forename')
 
-      const criteriaName = await $('#select2-multi-search-field-results li[data-select2-id="16"]')
-      await criteriaName.waitForClickable({ timeout: 60000 })
+      const resultList = await $('#select2-multi-search-field-results')
+      await resultList.waitForDisplayed({ timeout: 5000 })
+
+      const criteriaName = await resultList.$('li*=Test_Forename Test_Surname')
       await clickAndWaitForPageLoad(criteriaName)
 
       const search = await $('#archive-reductions-filter-submit')
