@@ -33,6 +33,7 @@ describe('View adding a new reduction', () => {
 
     it('should navigate to the add reduction screen and submit a new reduction form', async () => {
       const addLink = await $('[href="' + offenderManagerUrl + '/add-reduction' + '"]')
+      await addLink.waitForDisplayed({ timeout: 10000 })
       await clickAndWaitForPageLoad(addLink)
       pageTitle = await $('.govuk-heading-xl')
       await pageTitle.waitForDisplayed({ timeout: 30000 })
