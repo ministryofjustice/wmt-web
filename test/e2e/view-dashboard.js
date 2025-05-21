@@ -48,18 +48,15 @@ describe('view dashboard reports', function () {
     })
 
     it('should display the Dashboard tab on the home page', async function () {
-      const selector = '[href="/probation/hmpps/0/dashboard"]'
-      const link = await $(selector)
-
-      await link.waitForExist({ timeout: 30000, interval: 500 })
-      await link.waitForDisplayed({ timeout: 30000, interval: 500 })
-
+      const link = await $('[href="/probation/hmpps/0/dashboard"]')
+      await link.waitForDisplayed({ timeout: 30000 })
       const isVisible = await link.isDisplayed()
-      expect(isVisible).to.equal(true, 'Expected the Dashboard link to be visible')
+      expect(isVisible).to.equal(true)
     })
 
     it('should be able to navigate to the dashboard page and validate downloads', async function () {
       const link = await $('[href="/probation/hmpps/0/dashboard"]')
+      await link.waitForDisplayed({ timeout: 30000 })
       await clickAndWaitForPageLoad(link)
 
       const tableBody = await $('#dashboard-table tbody')
@@ -67,14 +64,14 @@ describe('view dashboard reports', function () {
 
       // eslint-disable-next-line no-undef
       const rows = await $$('//*[@id="dashboard-table"]/tbody/tr')
-      expect(rows.length, 'Expected at least 5 dashboard rows').to.be.gte(5)
+      expect(rows.length).to.be.gte(5)
 
       const firstRowUrl = await extractFileUrl(rows[0])
-      expect(firstRowUrl, 'First dashboard download URL is incorrect')
+      expect(firstRowUrl)
         .to.include('/probation/hmpps/0/dashboard/download?id=generated-dashboards/dashboard_')
 
       const lastRowUrl = await extractFileUrl(rows[4])
-      expect(lastRowUrl, 'Fifth dashboard download URL is incorrect')
+      expect(lastRowUrl)
         .to.include('/probation/hmpps/0/dashboard/download?id=generated-dashboards/dashboard_')
     })
 
@@ -102,6 +99,7 @@ describe('view dashboard reports', function () {
 
     it('should be able to navigate to dashboard page', async function () {
       const link = await $('[href="/probation/hmpps/0/dashboard"]')
+      await link.waitForDisplayed({ timeout: 30000 })
       await clickAndWaitForPageLoad(link)
       const rows = await browser.findElements('xpath', '//*[@id="dashboard-table"]/tbody/tr')
 
@@ -138,6 +136,7 @@ describe('view dashboard reports', function () {
 
     it('should be able to navigate to dashboard page', async function () {
       const link = await $('[href="/probation/hmpps/0/dashboard"]')
+      await link.waitForDisplayed({ timeout: 30000 })
       await clickAndWaitForPageLoad(link)
       const rows = await browser.findElements('xpath', '//*[@id="dashboard-table"]/tbody/tr')
 

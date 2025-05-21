@@ -152,7 +152,7 @@ describe('View a reduction', () => {
 
     it('should display the active reduction heading', async () => {
       const activeReductionHeading = await $('#headingActive')
-      await activeReductionHeading.waitForExist({ timeout: 10000 })
+      await activeReductionHeading.waitForDisplayed({ timeout: 30000 })
       expect(await activeReductionHeading.isExisting()).to.equal(true)
     })
 

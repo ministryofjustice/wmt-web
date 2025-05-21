@@ -108,7 +108,9 @@ describe('View contracted hours', function () {
 
     it('should be able to edit contracted hours', async function () {
       const contractedHoursField = await $('#contracted-hours')
+      await contractedHoursField.waitForDisplayed({ timeout: 30000 })
       const submit = await $('.govuk-button')
+      await submit.waitForDisplayed({ timeout: 30000 })
       await contractedHoursField.setValue('35')
       await clickAndWaitForPageLoad(submit)
 
