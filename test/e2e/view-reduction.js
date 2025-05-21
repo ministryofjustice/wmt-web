@@ -150,10 +150,10 @@ describe('View a reduction', () => {
       await navigateTo(offenderManagerUrl)
     })
 
-    it('should be able to navigate to page', async () => {
+    it('should display the active reduction heading', async () => {
       const activeReductionHeading = await $('#headingActive')
-      const exists = await activeReductionHeading.isExisting()
-      expect(exists).to.be.equal(true)
+      await activeReductionHeading.waitForExist({ timeout: 10000 })
+      expect(await activeReductionHeading.isExisting()).to.equal(true)
     })
 
     after(async function () {
@@ -171,8 +171,8 @@ describe('View a reduction', () => {
 
     it('should be able to navigate to page', async () => {
       const activeReductionHeading = await $('#headingActive')
-      const exists = await activeReductionHeading.isExisting()
-      expect(exists).to.be.equal(true)
+      await activeReductionHeading.waitForExist({ timeout: 10000 })
+      expect(await activeReductionHeading.isExisting()).to.equal(true)
     })
 
     after(async function () {
