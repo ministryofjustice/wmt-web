@@ -11,7 +11,11 @@
     "status": 200,
     "jsonBody": {
       "items": [
-        "{ \"pdu\": \"PDU1\", \"ldu\": \"LDU1\", \"team\": \"TM1\"}"
+        {
+          "pdu": "PDU1",
+          "ldu": "LDU1",
+          "team": "TM1"
+        }
       ]
     }
   }

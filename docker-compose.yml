@@ -131,6 +131,8 @@ services:
     command: ["--port","8099","--global-response-templating"]
     volumes:
       - $PWD/test/e2e/resources/wiremock:/home/wiremock:rw
+
+
   user-preference-wiremock:
     image: wiremock/wiremock
     networks:
@@ -142,6 +144,7 @@ services:
     command: ["--port","8098","--global-response-templating"]
     volumes:
       - $PWD/test/e2e/resources/user-preference-wiremock:/home/wiremock:rw
+
   token-verify-wiremock:
     image: wiremock/wiremock
     networks:

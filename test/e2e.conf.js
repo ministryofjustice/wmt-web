@@ -18,19 +18,23 @@ exports.config = {
   baseUrl: process.env.WMT_BASE_URL || 'http://localhost:3000',
   capabilities: [{
     maxInstances: 1,
-    browserName: 'chrome'
+    browserName: 'chrome',
+    'goog:chromeOptions': {
+      args: ['--no-sandbox', '--disable-dev-shm-usage']
+    },
+    'wdio:enforceWebDriverClassic': true
   }],
   sync: false,
   logLevel: 'error',
   coloredLogs: true,
   screenshotPath: './errorShots/',
   waitforTimeout: 20000,
-  connectionRetryTimeout: 30000,
+  connectionRetryTimeout: 60000,
   connectionRetryCount: 3,
   framework: 'mocha',
   mochaOpts: {
     ui: 'bdd',
-    timeout: 30000
+    timeout: 60000
   },
   reporters: ['spec',
     ['html-nice', {

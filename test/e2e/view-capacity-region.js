@@ -3,6 +3,7 @@ const authenticationHelper = require('../helpers/routes/authentication-helper')
 const workloadCapacityHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
 const dailyArchiveData = require('../helpers/data/setup-data')
+const { navigateTo, clickAndWaitForPageLoad } = require('../e2e/resources/helpers/browser-helpers')
 
 let regionDefaultUrl
 let pageSubtitle
@@ -15,12 +16,13 @@ describe('View your caseload capacity flow', () => {
   })
 
   it('should navigate to the region caseload capacity screen', async () => {
-    await browser.url('/')
+    await navigateTo('/')
     const regionLink = await $('[href="' + regionDefaultUrl + '"]')
-    await regionLink.click()
+    await clickAndWaitForPageLoad(regionLink)
     const regionCasloadLink = await $('[href="' + regionDefaultUrl + '/caseload-capacity"]')
-    await regionCasloadLink.click()
+    await clickAndWaitForPageLoad(regionCasloadLink)
     pageSubtitle = await $('.govuk-heading-xl')
+    await pageSubtitle.waitForDisplayed({ timeout: 30000 })
     pageSubtitle = await pageSubtitle.getText()
     expect(pageSubtitle).to.equal(dailyArchiveData.regionName)
 
@@ -39,9 +41,10 @@ describe('View your caseload capacity flow', () => {
     await toMonthField.setValue('5')
     await toYearField.setValue('2018')
 
-    await submit.click()
+    await clickAndWaitForPageLoad(submit)
 
     const errorMessage = await $('.govuk-error-message')
+    await errorMessage.waitForDisplayed({ timeout: 30000 })
     const errorText = await errorMessage.getText()
     expect(errorText).to.equal('There is no data for this period (// - //)')
     const errorSummary = await $('.govuk-error-summary')

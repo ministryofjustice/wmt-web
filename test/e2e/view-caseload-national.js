@@ -16,6 +16,7 @@ describe('View national caseload', () => {
 
     it('with the correct table, breadcrumbs', async () => {
       pageSubtitle = await $('.govuk-heading-xl')
+      await pageSubtitle.waitForDisplayed({ timeout: 30000 })
       pageSubtitle = await pageSubtitle.getText()
       expect(pageSubtitle).to.equal('National')
     })
@@ -23,12 +24,14 @@ describe('View national caseload', () => {
     it('should not display export button', async () => {
       const exportButton = await $('.sln-export')
       const exists = await exportButton.isExisting()
-      return expect(exists).to.be.false
+      const visible = exists ? await exportButton.isDisplayed() : false
+      expect(visible).to.equal(false)
     })
 
     it('should not be able to download export', async function () {
       await browser.url(nationalDefaultUrl + '/caseload/caseload-csv')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -80,6 +83,7 @@ describe('View national caseload', () => {
 
     it('should  display export button', async () => {
       const exportButton = await $('.sln-export')
+      await exportButton.waitForDisplayed({ timeout: 30000 })
       const exists = await exportButton.isExisting()
       return expect(exists).to.be.true
     })
@@ -98,12 +102,14 @@ describe('View national caseload', () => {
     it('should not display export button', async () => {
       const exportButton = await $('.sln-export')
       const exists = await exportButton.isExisting()
-      return expect(exists).to.be.false
+      const visible = exists ? await exportButton.isDisplayed() : false
+      expect(visible).to.equal(false)
     })
 
     it('should not be able to download export', async function () {
       await browser.url(nationalDefaultUrl + '/caseload/caseload-csv')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -119,10 +125,20 @@ describe('View national caseload', () => {
       await browser.url(nationalDefaultUrl + '/caseload')
     })
 
-    it('should  display export button', async () => {
+    it('should display the export button', async () => {
       const exportButton = await $('.sln-export')
-      const exists = await exportButton.isExisting()
-      return expect(exists).to.be.true
+
+      await browser.waitUntil(
+        async () => await exportButton.isDisplayed(),
+        {
+          timeout: 30000,
+          interval: 500,
+          timeoutMsg: 'Expected export button to be visible within 30 seconds'
+        }
+      )
+
+      const isVisible = await exportButton.isDisplayed()
+      expect(isVisible).to.equal(true, 'Export button should be visible on the page')
     })
 
     after(async function () {

@@ -2,155 +2,113 @@ const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
+const { navigateTo } = require('../e2e/resources/helpers/browser-helpers')
 
-let workloadOwnerIds = []
 let lduDefaultUrl
 
-describe('LDU', function () {
-  describe('View overview for staff', function () {
-    before(async function () {
-      await authenticationHelper.login(authenticationHelper.users.Staff)
-      const results = await dataHelper.selectIdsForWorkloadOwner()
-      workloadOwnerIds = results
-      lduDefaultUrl = '/' + workloadTypes.PROBATION + '/ldu/' + workloadOwnerIds.filter((item) => item.table === 'ldu')[0].id
-      await browser.url(lduDefaultUrl + '/overview')
-    })
+async function validateAndGetLduUrl () {
+  const results = await dataHelper.selectIdsForWorkloadOwner()
 
-    it('should navigate to the ldu overview page', async function () {
-      const element = await $('.sln-table-org-level')
-      const text = await element.getText()
-      expect(text).to.equal('Team')
-    })
+  console.log('🔍 Workload Owner ID Results:', JSON.stringify(results, null, 2))
 
-    it('should not include the reductions export for staff at ldu level', async function () {
-      const reductionExport = await $('.reduction-export')
-      const exists = await reductionExport.isExisting()
-      return expect(exists).to.be.false
-    })
+  const ldu = results.find(item => item.table === 'ldu')
+  if (!ldu || !ldu.id) {
+    throw new Error('Could not find a valid LDU from workload owner ID selection.')
+  }
 
-    it('should not include the overview export at ldu level', async function () {
-      const exportButton = await $('.sln-export')
-      const exists = await exportButton.isExisting()
-      return expect(exists).to.be.false
-    })
+  return `/${workloadTypes.PROBATION}/ldu/${ldu.id}`
+}
 
-    it('should not be able to download overview', async function () {
-      await browser.url(lduDefaultUrl + '/overview/caseload-csv')
-      const header = await $('.govuk-heading-xl')
-      const text = await header.getText()
-      expect(text).to.equal('Access is denied')
-    })
+async function safeElementExists (selector, timeout = 300) {
+  try {
+    const element = await $(selector)
+    await element.waitForExist({ timeout })
+    return await element.isExisting()
+  } catch (err) {
+    console.warn(`Element ${selector} not found within ${timeout}ms`)
+    return false
+  }
+}
 
-    it('should not be able to download reductions', async function () {
-      await browser.url(lduDefaultUrl + '/overview/reductions-csv')
-      const header = await $('.govuk-heading-xl')
-      const text = await header.getText()
-      expect(text).to.equal('Access is denied')
-    })
-
-    after(function () {
-      authenticationHelper.logout()
-    })
+describe('LDU Overview Page', function () {
+  before(async function () {
+    await authenticationHelper.login(authenticationHelper.users.Staff)
+    lduDefaultUrl = await validateAndGetLduUrl()
+    await authenticationHelper.logout()
   })
 
-  describe('overview for managers', function () {
-    before(async function () {
-      await authenticationHelper.login(authenticationHelper.users.Manager)
-      await browser.url(lduDefaultUrl + '/overview')
-    })
+  function testForUserRole (roleName, expectations) {
+    describe(`as ${roleName}`, function () {
+      before(async function () {
+        await authenticationHelper.login(authenticationHelper.users[roleName])
+        await browser.execute(() => console.log('User role:', window.userRole || 'unknown'))
+        await navigateTo(`${lduDefaultUrl}/overview`)
+      })
 
-    it('should navigate to the ldu overview page', async function () {
-      const element = await $('.sln-table-org-level')
-      const text = await element.getText()
-      expect(text).to.equal('Team')
-    })
+      after(async function () {
+        await authenticationHelper.logout()
+      })
 
-    it('should include the reductions export for staff at ldu level', async function () {
-      const reductionExport = await $('.reduction-export')
-      const exists = await reductionExport.isExisting()
-      return expect(exists).to.be.true
-    })
+      it('should navigate to the LDU overview page', async function () {
+        const element = await $('.sln-table-org-level')
+        const exists = await element.isExisting()
+        expect(exists).to.equal(true)
+        await element.waitForDisplayed({ timeout: 30000 })
+        const text = await element.getText()
+        expect(text).to.equal('Team')
+      })
 
-    it('should include the overview export at ldu level', async function () {
-      const exportButton = await $('.sln-export')
-      const exists = await exportButton.isExisting()
-      return expect(exists).to.be.true
-    })
+      it(`should ${expectations.showReductionsExport ? '' : 'not '}show reductions export`, async function () {
+        const exists = await safeElementExists('.reduction-export')
+        expect(exists).to.equal(expectations.showReductionsExport)
+      })
 
-    after(function () {
-      authenticationHelper.logout()
+      it(`should ${expectations.showOverviewExport ? '' : 'not '}show overview export`, async function () {
+        const exists = await safeElementExists('.sln-export')
+        expect(exists).to.equal(expectations.showOverviewExport)
+      })
+
+      if (!expectations.allowCsvDownloads) {
+        it('should block overview CSV download', async function () {
+          await navigateTo(`${lduDefaultUrl}/overview/caseload-csv`)
+          const header = await $('.govuk-heading-xl')
+          await header.waitForDisplayed({ timeout: 30000 })
+          const text = await header.getText()
+          expect(text).to.equal('Access is denied')
+        })
+
+        it('should block reductions CSV download', async function () {
+          await navigateTo(`${lduDefaultUrl}/overview/reductions-csv`)
+          const header = await $('.govuk-heading-xl')
+          await header.waitForDisplayed({ timeout: 30000 })
+          const text = await header.getText()
+          expect(text).to.equal('Access is denied')
+        })
+      }
     })
+  }
+
+  testForUserRole('Staff', {
+    showReductionsExport: false,
+    showOverviewExport: false,
+    allowCsvDownloads: false
   })
 
-  describe('overview for Application Support', function () {
-    before(async function () {
-      await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
-      await browser.url(lduDefaultUrl + '/overview')
-    })
-
-    it('should navigate to the ldu overview page', async function () {
-      const element = await $('.sln-table-org-level')
-      const text = await element.getText()
-      expect(text).to.equal('Team')
-    })
-
-    it('should not include the reductions export at ldu level', async function () {
-      const reductionExport = await $('.reduction-export')
-      const exists = await reductionExport.isExisting()
-      return expect(exists).to.be.false
-    })
-
-    it('should not include the overview export at ldu level', async function () {
-      const exportButton = await $('.sln-export')
-      const exists = await exportButton.isExisting()
-      return expect(exists).to.be.false
-    })
-
-    it('should not be able to download overview', async function () {
-      await browser.url(lduDefaultUrl + '/overview/caseload-csv')
-      const header = await $('.govuk-heading-xl')
-      const text = await header.getText()
-      expect(text).to.equal('Access is denied')
-    })
-
-    it('should not be able to download reductions', async function () {
-      await browser.url(lduDefaultUrl + '/overview/reductions-csv')
-      const header = await $('.govuk-heading-xl')
-      const text = await header.getText()
-      expect(text).to.equal('Access is denied')
-    })
-
-    after(function () {
-      authenticationHelper.logout()
-    })
+  testForUserRole('Manager', {
+    showReductionsExport: true,
+    showOverviewExport: true,
+    allowCsvDownloads: true
   })
 
-  describe('overview for Super User', function () {
-    before(async function () {
-      await authenticationHelper.login(authenticationHelper.users.SuperUser)
-      await browser.url(lduDefaultUrl + '/overview')
-    })
+  testForUserRole('ApplicationSupport', {
+    showReductionsExport: false,
+    showOverviewExport: false,
+    allowCsvDownloads: false
+  })
 
-    it('should navigate to the ldu overview page', async function () {
-      const element = await $('.sln-table-org-level')
-      const text = await element.getText()
-      expect(text).to.equal('Team')
-    })
-
-    it('should include the reductions export for staff at ldu level', async function () {
-      const reductionExport = await $('.reduction-export')
-      const exists = await reductionExport.isExisting()
-      return expect(exists).to.be.true
-    })
-
-    it('should include the overview export at ldu level', async function () {
-      const exportButton = await $('.sln-export')
-      const exists = await exportButton.isExisting()
-      return expect(exists).to.be.true
-    })
-
-    after(function () {
-      authenticationHelper.logout()
-    })
+  testForUserRole('SuperUser', {
+    showReductionsExport: true,
+    showOverviewExport: true,
+    allowCsvDownloads: true
   })
 })

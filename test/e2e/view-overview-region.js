@@ -2,6 +2,7 @@ const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
+const { navigateTo } = require('../e2e/resources/helpers/browser-helpers')
 
 let workloadOwnerIds = []
 
@@ -17,11 +18,12 @@ describe('Region', function () {
     })
 
     beforeEach(async function () {
-      await browser.url(regionDefaultUrl + '/overview')
+      await navigateTo(regionDefaultUrl + '/overview')
     })
 
     it('should navigate to the region overview page', async function () {
       const element = await $('.sln-table-org-level')
+      await element.waitForDisplayed({ timeout: 30000 })
       const text = await element.getText()
       expect(text).to.equal('Probation Delivery Unit')
     })
@@ -39,15 +41,17 @@ describe('Region', function () {
     })
 
     it('should not be able to download overview', async function () {
-      await browser.url(regionDefaultUrl + '/overview/caseload-csv')
+      await navigateTo(regionDefaultUrl + '/overview/caseload-csv')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
 
     it('should not be able to download reductions', async function () {
-      await browser.url(regionDefaultUrl + '/overview/reductions-csv')
+      await navigateTo(regionDefaultUrl + '/overview/reductions-csv')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -60,23 +64,26 @@ describe('Region', function () {
   describe('overview for managers', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.Manager)
-      await browser.url(regionDefaultUrl + '/overview')
+      await navigateTo(regionDefaultUrl + '/overview')
     })
 
     it('should navigate to the region overview page', async function () {
       const element = await $('.sln-table-org-level')
+      await element.waitForDisplayed({ timeout: 30000 })
       const text = await element.getText()
       expect(text).to.equal('Probation Delivery Unit')
     })
 
     it('should include the reductions export at region level', async function () {
       const reductionExport = await $('.reduction-export')
+      await reductionExport.waitForDisplayed({ timeout: 30000 })
       const exists = await reductionExport.isExisting()
       return expect(exists).to.be.true
     })
 
     it('should include the overview export at region level', async function () {
       const exportButton = await $('.sln-export')
+      await exportButton.waitForDisplayed({ timeout: 30000 })
       const exists = await exportButton.isExisting()
       return expect(exists).to.be.true
     })
@@ -89,7 +96,7 @@ describe('Region', function () {
   describe('overview for Application Support', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
-      await browser.url(regionDefaultUrl + '/overview')
+      await navigateTo(regionDefaultUrl + '/overview')
     })
 
     it('should not include the overview export', async function () {
@@ -99,15 +106,17 @@ describe('Region', function () {
     })
 
     it('should not be able to download overview', async function () {
-      await browser.url(regionDefaultUrl + '/overview/caseload-csv')
+      await navigateTo(regionDefaultUrl + '/overview/caseload-csv')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
 
     it('should not be able to download reductions', async function () {
-      await browser.url(regionDefaultUrl + '/overview/reductions-csv')
+      await navigateTo(regionDefaultUrl + '/overview/reductions-csv')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -120,23 +129,26 @@ describe('Region', function () {
   describe('overview for Super User', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.SuperUser)
-      await browser.url(regionDefaultUrl + '/overview')
+      await navigateTo(regionDefaultUrl + '/overview')
     })
 
     it('should navigate to the region overview page', async function () {
       const element = await $('.sln-table-org-level')
+      await element.waitForDisplayed({ timeout: 30000 })
       const text = await element.getText()
       expect(text).to.equal('Probation Delivery Unit')
     })
 
     it('should include the reductions export at region level', async function () {
       const reductionExport = await $('.reduction-export')
+      await reductionExport.waitForDisplayed({ timeout: 30000 })
       const exists = await reductionExport.isExisting()
       return expect(exists).to.be.true
     })
 
     it('should include the overview export at region level', async function () {
       const exportButton = await $('.sln-export')
+      await exportButton.waitForDisplayed({ timeout: 30000 })
       const exists = await exportButton.isExisting()
       return expect(exists).to.be.true
     })

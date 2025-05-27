@@ -2,6 +2,7 @@ const expect = require('chai').expect
 const authenticationHelp = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const { deleteAllMessages, pollCheckAndDelete } = require('../helpers/sqs')
+const { navigateTo, clickAndWaitForPageLoad } = require('../e2e/resources/helpers/browser-helpers')
 const workloadTypes = require('../../app/constants/workload-type')
 const getSqsClient = require('../../app/services/aws/sqs/get-sqs-client')
 const { audit } = require('../../config')
@@ -21,8 +22,9 @@ describe('View contracted hours', function () {
   })
   describe('Manager', function () {
     before(async function () {
+      await browser.reloadSession()
       await authenticationHelp.login(authenticationHelp.users.Manager)
-      await browser.url(workloadOwnerDefaultUrl + '/contracted-hours')
+      await navigateTo(workloadOwnerDefaultUrl + '/contracted-hours')
     })
 
     it('should navigate to the workload owner contracted-hours page', async function () {
@@ -39,6 +41,7 @@ describe('View contracted hours', function () {
       expect(exists).to.be.equal(true)
 
       const pageTitle = await $('.govuk-heading-l')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('Contracted hours')
     })
@@ -47,9 +50,9 @@ describe('View contracted hours', function () {
       const contractedHoursField = await $('#contracted-hours')
       const submit = await $('.govuk-button')
       await contractedHoursField.setValue('36')
-      await submit.click()
-
+      await clickAndWaitForPageLoad(submit)
       const successBanner = await $('.govuk-notification-banner--success .govuk-notification-banner__heading')
+      await successBanner.waitForDisplayed({ timeout: 30000 })
       const successBannerText = await successBanner.getText()
       expect(successBannerText).to.equal('You have successfully updated the contracted hours for Test_Forename Test_Surname')
 
@@ -79,8 +82,9 @@ describe('View contracted hours', function () {
 
   describe('Super User', function () {
     before(async function () {
+      await browser.reloadSession()
       await authenticationHelp.login(authenticationHelp.users.SuperUser)
-      await browser.url(workloadOwnerDefaultUrl + '/contracted-hours')
+      await navigateTo(workloadOwnerDefaultUrl + '/contracted-hours')
     })
 
     it('should navigate to the workload owner contracted-hours page', async function () {
@@ -97,17 +101,21 @@ describe('View contracted hours', function () {
       expect(exists).to.be.equal(true)
 
       const pageTitle = await $('.govuk-heading-l')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('Contracted hours')
     })
 
     it('should be able to edit contracted hours', async function () {
       const contractedHoursField = await $('#contracted-hours')
+      await contractedHoursField.waitForDisplayed({ timeout: 30000 })
       const submit = await $('.govuk-button')
+      await submit.waitForDisplayed({ timeout: 30000 })
       await contractedHoursField.setValue('35')
-      await submit.click()
+      await clickAndWaitForPageLoad(submit)
 
       const successBanner = await $('.govuk-notification-banner--success .govuk-notification-banner__heading')
+      await successBanner.waitForDisplayed({ timeout: 30000 })
       const successBannerText = await successBanner.getText()
       expect(successBannerText).to.equal('You have successfully updated the contracted hours for Test_Forename Test_Surname')
     })
@@ -120,12 +128,14 @@ describe('View contracted hours', function () {
 
   describe('Staff', function () {
     before(async function () {
+      await browser.reloadSession()
       await authenticationHelp.login(authenticationHelp.users.Staff)
-      await browser.url(workloadOwnerDefaultUrl + '/contracted-hours')
+      await navigateTo(workloadOwnerDefaultUrl + '/contracted-hours')
     })
 
     it('should not be able to navigate to the workload owner contracted-hours page', async function () {
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -137,8 +147,9 @@ describe('View contracted hours', function () {
 
   describe('Application Support', function () {
     before(async function () {
+      await browser.reloadSession()
       await authenticationHelp.login(authenticationHelp.users.ApplicationSupport)
-      await browser.url(workloadOwnerDefaultUrl + '/contracted-hours')
+      await navigateTo(workloadOwnerDefaultUrl + '/contracted-hours')
     })
 
     it('should navigate to the workload owner contracted-hours page', async function () {
@@ -155,6 +166,7 @@ describe('View contracted hours', function () {
       expect(exists).to.be.equal(true)
 
       const pageTitle = await $('.govuk-heading-l')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const text = await pageTitle.getText()
       expect(text).to.equal('Contracted hours')
     })
@@ -163,9 +175,10 @@ describe('View contracted hours', function () {
       const contractedHoursField = await $('#contracted-hours')
       const submit = await $('.govuk-button')
       await contractedHoursField.setValue('5')
-      await submit.click()
+      await clickAndWaitForPageLoad(submit)
 
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })

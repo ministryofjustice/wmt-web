@@ -1,6 +1,7 @@
 const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 const workloadTypes = require('../../app/constants/workload-type')
+const { navigateTo, clickAndWaitForPageLoad } = require('../e2e/resources/helpers/browser-helpers')
 
 let nationalDefaultUrl
 let pageSubtitle
@@ -12,10 +13,11 @@ describe('View your caseload capacity flow at national level', () => {
   })
 
   it('should navigate to the national caseload capacity screen', async () => {
-    await browser.url('/')
+    await navigateTo('/')
     const nationalCaseloadLink = await $('[href="' + nationalDefaultUrl + '"]')
-    await nationalCaseloadLink.click()
+    await clickAndWaitForPageLoad(nationalCaseloadLink)
     pageSubtitle = await $('.govuk-heading-xl')
+    await pageSubtitle.waitForDisplayed({ timeout: 30000 })
     pageSubtitle = await pageSubtitle.getText()
     expect(pageSubtitle).to.equal('National')
 
@@ -34,9 +36,10 @@ describe('View your caseload capacity flow at national level', () => {
     await toMonthField.setValue('6')
     await toYearField.setValue('2018')
 
-    await submit.click()
+    await clickAndWaitForPageLoad(submit)
 
     const errorMessage = await $('.govuk-error-message')
+    await errorMessage.waitForDisplayed({ timeout: 30000 })
     const errorText = await errorMessage.getText()
     expect(errorText).to.equal('There is no data for this period (// - //)')
     const errorSummary = await $('.govuk-error-summary')

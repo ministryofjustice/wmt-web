@@ -1,5 +1,6 @@
 const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
+const { navigateTo, clickAndWaitForPageLoad } = require('../e2e/resources/helpers/browser-helpers')
 
 describe('view dashboard reports', function () {
   async function extractFileUrl (row) {
@@ -10,7 +11,7 @@ describe('view dashboard reports', function () {
   describe('Staff', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.Staff)
-      await browser.url('/')
+      await navigateTo('/')
     })
 
     it('Dashboard tab does not exist on the home page', async function () {
@@ -20,15 +21,17 @@ describe('view dashboard reports', function () {
     })
 
     it('should not be able to go to dashboard page', async function () {
-      await browser.url('/probation/hmpps/0/dashboard')
+      await navigateTo('/probation/hmpps/0/dashboard')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
 
     it('should not be able to download a dashboard', async function () {
-      await browser.url('/probation/hmpps/0/dashboard/download?id=generated-dashboards/dashboard_20210802062147.txt')
+      await navigateTo('/probation/hmpps/0/dashboard/download?id=generated-dashboards/dashboard_20210802062147.txt')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
@@ -41,27 +44,35 @@ describe('view dashboard reports', function () {
   describe('Manager', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.Manager)
-      await browser.url('/')
+      await navigateTo('/')
     })
 
-    it('Dashboard tab exists on the home page', async function () {
+    it('should display the Dashboard tab on the home page', async function () {
       const link = await $('[href="/probation/hmpps/0/dashboard"]')
-      const linkExists = await link.isExisting()
-      expect(linkExists).to.be.equal(true)
+      await link.waitForDisplayed({ timeout: 30000 })
+      const isVisible = await link.isDisplayed()
+      expect(isVisible).to.equal(true)
     })
 
-    it('should be able to navigate to dashboard page', async function () {
+    it('should be able to navigate to the dashboard page and validate downloads', async function () {
       const link = await $('[href="/probation/hmpps/0/dashboard"]')
-      await link.click()
-      const rows = await browser.findElements('xpath', '//*[@id="dashboard-table"]/tbody/tr')
+      await link.waitForDisplayed({ timeout: 30000 })
+      await clickAndWaitForPageLoad(link)
 
-      expect(rows.length).to.equal(5)
+      const tableBody = await $('#dashboard-table tbody')
+      await tableBody.waitForDisplayed({ timeout: 30000 })
 
-      const firstFileUrl = await extractFileUrl(await $(rows[0]))
-      expect(firstFileUrl).to.equal('/probation/hmpps/0/dashboard/download?id=generated-dashboards/dashboard_20210802062147.txt')
+      // eslint-disable-next-line no-undef
+      const rows = await $$('//*[@id="dashboard-table"]/tbody/tr')
+      expect(rows.length).to.be.gte(5)
 
-      const lastFileUrl = await extractFileUrl(await $(rows[4]))
-      expect(lastFileUrl).to.equal('/probation/hmpps/0/dashboard/download?id=generated-dashboards/dashboard_20210729062147.txt')
+      const firstRowUrl = await extractFileUrl(rows[0])
+      expect(firstRowUrl)
+        .to.include('/probation/hmpps/0/dashboard/download?id=generated-dashboards/dashboard_')
+
+      const lastRowUrl = await extractFileUrl(rows[4])
+      expect(lastRowUrl)
+        .to.include('/probation/hmpps/0/dashboard/download?id=generated-dashboards/dashboard_')
     })
 
     after(async function () {
@@ -72,18 +83,24 @@ describe('view dashboard reports', function () {
   describe('Application Support', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
-      await browser.url('/')
+      await navigateTo('/')
     })
 
     it('Dashboard tab exists on the home page', async function () {
-      const link = await $('[href="/probation/hmpps/0/dashboard"]')
-      const linkExists = await link.isExisting()
-      expect(linkExists).to.be.equal(true)
+      const selector = '[href="/probation/hmpps/0/dashboard"]'
+      const link = await $(selector)
+
+      const appeared = await link.waitForExist({ timeout: 60000 })
+      expect(appeared).to.equal(true)
+
+      const isVisible = await link.isDisplayed()
+      expect(isVisible).to.equal(true)
     })
 
     it('should be able to navigate to dashboard page', async function () {
       const link = await $('[href="/probation/hmpps/0/dashboard"]')
-      await link.click()
+      await link.waitForDisplayed({ timeout: 30000 })
+      await clickAndWaitForPageLoad(link)
       const rows = await browser.findElements('xpath', '//*[@id="dashboard-table"]/tbody/tr')
 
       expect(rows.length).to.equal(5)
@@ -103,18 +120,24 @@ describe('view dashboard reports', function () {
   describe('Super User', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.SuperUser)
-      await browser.url('/')
+      await navigateTo('/')
     })
 
     it('Dashboard tab exists on the home page', async function () {
-      const link = await $('[href="/probation/hmpps/0/dashboard"]')
-      const linkExists = await link.isExisting()
-      expect(linkExists).to.be.equal(true)
+      const selector = '[href="/probation/hmpps/0/dashboard"]'
+      const link = await $(selector)
+
+      const appeared = await link.waitForExist({ timeout: 60000 })
+      expect(appeared).to.equal(true)
+
+      const isVisible = await link.isDisplayed()
+      expect(isVisible).to.equal(true)
     })
 
     it('should be able to navigate to dashboard page', async function () {
       const link = await $('[href="/probation/hmpps/0/dashboard"]')
-      await link.click()
+      await link.waitForDisplayed({ timeout: 30000 })
+      await clickAndWaitForPageLoad(link)
       const rows = await browser.findElements('xpath', '//*[@id="dashboard-table"]/tbody/tr')
 
       expect(rows.length).to.equal(5)

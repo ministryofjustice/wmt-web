@@ -2,6 +2,7 @@ const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
+const { navigateTo } = require('../e2e/resources/helpers/browser-helpers')
 
 let workloadOwnerIds = []
 let workloadOwnerId
@@ -20,7 +21,7 @@ describe('Offender Manager', function () {
 
       workloadOwnerGrade = await dataHelper.selectGradeForWorkloadOwner(workloadOwnerId)
       workloadOwnerCapacity = await dataHelper.selectCapacityForWorkloadOwner(workloadOwnerId)
-      await browser.url(workloadOwnerDefaultUrl + '/overview')
+      await navigateTo(workloadOwnerDefaultUrl + '/overview')
     })
 
     it('should navigate to the workload owner overview page', async function () {
@@ -29,6 +30,7 @@ describe('Offender Manager', function () {
       expect(grade).to.equal(workloadOwnerGrade)
 
       let capacity = await $('.sln-capacity')
+      await capacity.waitForDisplayed({ timeout: 30000 })
       capacity = await capacity.getText()
       const capacityPercent = capacity.substring(0, capacity.indexOf('%'))
       expect(capacityPercent).to.equal(`${workloadOwnerCapacity}`)

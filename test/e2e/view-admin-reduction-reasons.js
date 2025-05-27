@@ -1,51 +1,58 @@
 const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
+const { clickAndWaitForPageLoad, navigateTo } = require('../e2e/resources/helpers/browser-helpers')
 
 describe('Admin Reduction Reasons Page', () => {
   describe('Staff', function () {
     before(async function () {
+      await browser.reloadSession()
       await authenticationHelper.login(authenticationHelper.users.Staff)
     })
 
     it('Should not be able to go on page', async function () {
-      await browser.url('/manage-reduction-reasons')
+      await navigateTo('/manage-reduction-reasons')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
   describe('Manager', function () {
     before(async function () {
+      await browser.reloadSession()
       await authenticationHelper.login(authenticationHelper.users.Manager)
     })
 
     it('Should not be able to go on page', async function () {
-      await browser.url('/manage-reduction-reasons')
+      await navigateTo('/manage-reduction-reasons')
       const header = await $('.govuk-heading-xl')
+      await header.waitForDisplayed({ timeout: 30000 })
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
   describe('Application Support', function () {
     before(async function () {
+      await browser.reloadSession()
       await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
       const link = await $('[href="/admin"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
     })
 
     it('Should be able to navigate to page', async function () {
       const link = await $('[href="/manage-reduction-reasons"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
       const pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Manage Reduction Reasons')
     })
@@ -57,33 +64,36 @@ describe('Admin Reduction Reasons Page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
   describe('Super User', function () {
     before(async function () {
+      await browser.reloadSession()
       await authenticationHelper.login(authenticationHelper.users.SuperUser)
       const link = await $('[href="/admin"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
     })
 
     it('Should be able to navigate to page', async function () {
       const link = await $('[href="/manage-reduction-reasons"]')
-      await link.click()
+      await clickAndWaitForPageLoad(link)
       const pageTitle = await $('.govuk-heading-xl')
+      await pageTitle.waitForDisplayed({ timeout: 30000 })
       const pageTitleText = await pageTitle.getText()
       expect(pageTitleText).to.equal('Manage Reduction Reasons')
     })
 
     it('Should see add reduction reason', async function () {
       const link = await $('[href="/add-reduction-reason"]')
+      await link.waitForDisplayed({ timeout: 30000 })
       const linkExists = await link.isExisting()
       return expect(linkExists).to.be.equal(true)
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 })

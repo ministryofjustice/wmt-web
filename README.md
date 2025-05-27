@@ -7,7 +7,7 @@ This is the webserver application that will present the information stored in th
 It is a node.js application using the express web framework.
 
 ## Prerequisites
-- Node v20 (managed using [nvm](https://github.com/creationix/nvm))
+- Node v22 (managed using [nvm](https://github.com/creationix/nvm))
 - Docker
 
 On OSX (using [homebrew](https://brew.sh/)):

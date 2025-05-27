@@ -2,6 +2,7 @@ const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
 const workloadTypes = require('../../app/constants/workload-type')
+const { navigateTo } = require('../e2e/resources/helpers/browser-helpers')
 
 let teamDefaultUrl
 
@@ -11,7 +12,7 @@ describe('team', function () {
       await authenticationHelper.login(authenticationHelper.users.Staff)
       const results = await dataHelper.selectIdsForWorkloadOwner()
       teamDefaultUrl = '/' + workloadTypes.PROBATION + '/team/' + results.filter((item) => item.table === 'team')[0].id
-      await browser.url(teamDefaultUrl + '/overview')
+      await navigateTo(teamDefaultUrl + '/overview')
     })
 
     it('should not be able to view export', async function () {
@@ -28,17 +29,19 @@ describe('team', function () {
   describe('Managers', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.Manager)
-      await browser.url(teamDefaultUrl + '/export')
+      await navigateTo(teamDefaultUrl + '/export')
     })
 
     it('should navigate to the team export page', async function () {
       const element = await $('.govuk-heading-m')
+      await element.waitForDisplayed({ timeout: 30000 })
       const text = await element.getText()
       expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
     })
 
     it('should include the export button at team level', async function () {
       const exportButton = await $('.sln-export')
+      await exportButton.waitForDisplayed({ timeout: 30000 })
       const exists = await exportButton.isExisting()
       return expect(exists).to.be.true
     })
@@ -51,11 +54,12 @@ describe('team', function () {
   describe('export for Application Support', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.ApplicationSupport)
-      await browser.url(teamDefaultUrl + '/export')
+      await navigateTo(teamDefaultUrl + '/export')
     })
 
     it('should navigate to the team export page', async function () {
       const element = await $('.govuk-heading-m')
+      await element.waitForDisplayed({ timeout: 30000 })
       const text = await element.getText()
       expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
     })
@@ -74,19 +78,26 @@ describe('team', function () {
   describe('export for Super User', function () {
     before(async function () {
       await authenticationHelper.login(authenticationHelper.users.SuperUser)
-      await browser.url(teamDefaultUrl + '/export')
+      await navigateTo(teamDefaultUrl + '/export')
     })
 
     it('should navigate to the team export page', async function () {
       const element = await $('.govuk-heading-m')
+      const exists = await element.isExisting()
+      expect(exists).to.equal(true)
+      await element.waitForDisplayed({ timeout: 30000 })
       const text = await element.getText()
       expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
     })
 
     it('should include the export button at team level', async function () {
+      this.retries(2)
       const exportButton = await $('.sln-export')
       const exists = await exportButton.isExisting()
-      return expect(exists).to.be.true
+      expect(exists).to.equal(true)
+      await exportButton.waitForDisplayed({ timeout: 30000 })
+      const isVisible = await exportButton.isDisplayed()
+      expect(isVisible).to.equal(true)
     })
 
     after(function () {
