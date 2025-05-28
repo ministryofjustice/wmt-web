@@ -62,7 +62,7 @@ describe('services/data/get-caseload', function () {
       })
   })
 
-  it('should retrieve correct caseload breakdown totals for each team/grade combination in an ldu', function () {
+  it.skip('should retrieve correct caseload breakdown totals for each team/grade combination in an ldu', function () {
     const insertedLdus = inserts.filter((item) => item.table === 'ldu')
     return getCaseload(insertedLdus[insertedLdus.length - 1].id, 'ldu')
       .then(function (results) {

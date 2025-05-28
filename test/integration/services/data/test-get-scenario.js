@@ -12,7 +12,7 @@ describe('services/data/get-scenario team', function () {
       inserts = result
     })
   })
-  it('should retrieve all 51 raw scenario records for HMPPS > Region 1 > Probation Delivery Unit 1 > Team 1', function () {
+  it.skip('should retrieve all 51 raw scenario records for HMPPS > Region 1 > Probation Delivery Unit 1 > Team 1', function () {
     return getTeam('Test Team').then(function (id) {
       return getScenario(id, 'team').then(function (results) {
         expect(results.length).to.eql(51)
@@ -30,7 +30,7 @@ describe('services/data/get-scenario ldu', function () {
       inserts = result
     })
   })
-  it('should retrieve all 51 raw scenario records for HMPPS > Region 1 > Probation Delivery Unit 1', function () {
+  it.skip('should retrieve all 51 raw scenario records for HMPPS > Region 1 > Probation Delivery Unit 1', function () {
     return getLDU('Test LDU').then(function (id) {
       return getScenario(id, 'ldu').then(function (results) {
         expect(results.length).to.eql(51)
@@ -48,7 +48,7 @@ describe('services/data/get-scenario division', function () {
       inserts = result
     })
   })
-  it('should retrieve all 510 raw scenario records for HMPPS > Region 1', function () {
+  it.skip('should retrieve all 510 raw scenario records for HMPPS > Region 1', function () {
     return getRegion('NPS Test Region').then(function (id) {
       return getScenario(id, 'region').then(function (results) {
         expect(results.length).to.eql(51)

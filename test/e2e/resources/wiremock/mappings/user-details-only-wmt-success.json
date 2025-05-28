@@ -15,7 +15,8 @@
         "email": "{{request.path.[1]}}@digital.justice.gov.uk",
         "enabled": true,
         "roles": [
-          "TEST_WORKLOAD_MEASUREMENT_ROLE"
+          "TEST_WORKLOAD_MEASUREMENT_ROLE",
+          "ROLE_WORKLOAD_MEASUREMENT"
         ]
       },
       "headers": {

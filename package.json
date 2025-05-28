@@ -22,7 +22,7 @@
     "test-e2e": "export $(cat feature.env) && npm run clean-dev-data && npm run seed-dev-data && wdio test/e2e.conf.js && npm run clean-dev-data",
     "record-build-info": "node ./bin/record-build-info",
     "security_audit": "npx audit-ci --config audit-ci.json",
-    "lint": "standard",
+    "lint": "npx standard --fix",
     "seed-dev-data": "node ./test/helpers/data/setup-e2e-data-helper.js",
     "clean-dev-data": "node ./test/helpers/data/delete-e2e-data-helper.js",
     "njk-compile": "nunjucks-precompile",
@@ -73,7 +73,7 @@
     "selenium-standalone": "10.0.0",
     "sinon": "19.0.2",
     "sinon-chai": "3.7.0",
-    "standard": "17.1.2",
+    "standard": "^17.1.2",
     "supertest": "7.0.0",
     "wdio-html-nice-reporter": "8.0.6",
     "webdriverio": "^9.13.0"
