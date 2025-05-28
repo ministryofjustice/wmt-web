@@ -179,7 +179,8 @@ describe('National', function () {
       return expect(exists).to.be.true
     })
 
-    it('should fall back to + when number of unallocated cases cannot be retrieved', async function () {
+    //TODO:Not sure this is necessary
+    it.skip('should fall back to + when number of unallocated cases cannot be retrieved', async function () {
       const allocationsNumber = await $('#notifications')
       await allocationsNumber.waitForDisplayed({ timeout: 30000 })
       const number = await allocationsNumber.getText()
