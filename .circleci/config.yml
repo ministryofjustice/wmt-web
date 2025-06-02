@@ -73,6 +73,8 @@ executors:
           - TMPDIR=/private
       - image: wiremock/wiremock:latest
         command: --port 8099 --global-response-templating
+        volumes:
+          - $PWD/test/e2e/resources/wiremock:/home/wiremock:rw
       - image: wiremock/wiremock:latest
         command: --port 8098 --global-response-templating
       - image: wiremock/wiremock:latest
