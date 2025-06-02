@@ -14,8 +14,9 @@ describe('Admin Add Reduction Reasons Page', () => {
       const text = await header.getText()
       expect(text).to.equal('Access is denied')
     })
+
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
@@ -32,7 +33,7 @@ describe('Admin Add Reduction Reasons Page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
@@ -51,7 +52,7 @@ describe('Admin Add Reduction Reasons Page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
@@ -94,7 +95,7 @@ describe('Admin Add Reduction Reasons Page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 })

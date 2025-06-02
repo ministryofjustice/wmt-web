@@ -23,6 +23,7 @@
     "record-build-info": "node ./bin/record-build-info",
     "security_audit": "npx audit-ci --config audit-ci.json",
     "lint": "standard",
+    "lint-fix": "standard --fix",
     "seed-dev-data": "node ./test/helpers/data/setup-e2e-data-helper.js",
     "clean-dev-data": "node ./test/helpers/data/delete-e2e-data-helper.js",
     "njk-compile": "nunjucks-precompile",
@@ -76,7 +77,7 @@
     "standard": "17.1.2",
     "supertest": "7.0.0",
     "wdio-html-nice-reporter": "8.0.6",
-    "webdriverio": "^9.13.0"
+    "webdriverio": "9.2.1"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.398.0",

@@ -47,7 +47,7 @@ describe('View your caseload capacity flow at national level', () => {
     expect(exists).to.be.equal(false)
   })
 
-  after(function () {
-    authenticationHelper.logout()
+  after(async function () {
+    await authenticationHelper.logout()
   })
 })

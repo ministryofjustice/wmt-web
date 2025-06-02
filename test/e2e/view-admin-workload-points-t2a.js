@@ -17,7 +17,7 @@ describe('Workload Points (T2A) Page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
@@ -37,7 +37,7 @@ describe('Workload Points (T2A) Page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
@@ -57,7 +57,7 @@ describe('Workload Points (T2A) Page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
@@ -77,7 +77,7 @@ describe('Workload Points (T2A) Page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 })

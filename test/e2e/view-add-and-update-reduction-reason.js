@@ -193,6 +193,6 @@ describe('View admin role', () => {
 
   after(async function () {
     await dataHelper.deleteRecordsFromTableForIds('reduction_reason', ids)
-    authenticationHelper.logout()
+    await authenticationHelper.logout()
   })
 })

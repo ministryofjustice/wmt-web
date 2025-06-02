@@ -24,8 +24,8 @@ describe('region', function () {
       expect(exists).to.equal(false)
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 
@@ -48,8 +48,8 @@ describe('region', function () {
       expect(exists).to.equal(true)
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 
@@ -72,8 +72,8 @@ describe('region', function () {
       expect(exists).to.equal(false)
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 
@@ -96,8 +96,8 @@ describe('region', function () {
       expect(exists).to.equal(true)
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 })

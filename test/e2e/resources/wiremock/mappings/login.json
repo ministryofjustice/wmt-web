@@ -1,0 +1,114 @@
+{
+    "mappings": [
+      {
+        "request": {
+          "method": "GET",
+          "urlPattern": "/favicon.ico"
+        },
+        "response": {
+          "status": 200
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "urlPattern": "/auth/oauth/authorize\\?response_type=code&redirect_uri=.+?&state=.+?&client_id=workload-measurement-ui"
+        },
+        "response": {
+          "status": 302,
+          "headers": {
+            "Content-Type": "text/html",
+            "Location": "http://localhost:3000/login/callback?code=codexxxx&state={{ request.query.state }}"
+          },
+          "transformers": ["response-template"]
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "urlPattern": "/auth/sign-out.*"
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "Content-Type": "text/html"
+          },
+          "body": "<html><body>SignIn page<h1>Sign in</h1></body></html>"
+        }
+      },
+      {
+        "id": "ddd92112-5010-4dc3-8f5b-57b4f15d02d5",
+        "request": {
+          "urlPattern": "/auth/oauth/token",
+          "method": "POST"
+        },
+        "response": {
+          "status": 200,
+          "jsonBody": {
+            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJVU0VSMSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJhdXRoX3NvdXJjZSI6Im5vbWlzIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9NQU5BR0VfQV9XT1JLRk9SQ0VfQUxMT0NBVEUiLCJST0xFX1dPUktMT0FEX01FQVNVUkVNRU5UIl0sImp0aSI6ImE2MTBhMTAtY2NhNi00MWRiLTk4NWYtZTg3ZWZiMzAzYWFmIiwiY2xpZW50X2lkIjoiY2xpZW50aWQiLCJpYXQiOjE3NDg1MzE2NTksImV4cCI6MTc0ODUzNTI1OX0.g8M2QmC31IY9GMYXUIEQTLW5UNLUQDyunRP8bq0FQBo",
+            "token_type": "bearer",
+            "user_name": "USER1",
+            "expires_in": 599,
+            "scope": "read",
+            "internalUser": true
+          },
+          "headers": {
+            "Content-Type": "application/json;charset=UTF-8",
+            "Location": "http://localhost:3000/login/callback?code=codexxxx&state=stateyyyy"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "POST",
+          "urlPathPattern": "/token/verify"
+        },
+        "response": {
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "status": 200,
+          "jsonBody": {
+            "active": true
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "urlPattern": "/users/me/email"
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "Content-Type": "application/json;charset=UTF-8"
+          },
+          "jsonBody": {
+            "staffId": 231232,
+            "username": "USER1",
+            "active": true,
+            "name": "john smith",
+            "email": "wmt_application_support@digital.justice.gov.uk"
+          }
+        }
+      },
+      {
+        "request": {
+          "method": "GET",
+          "urlPattern": "/users/me"
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "Content-Type": "application/json;charset=UTF-8"
+          },
+          "jsonBody": {
+            "staffId": 231232,
+            "username": "USER1",
+            "active": true,
+            "name": "john smith"
+          }
+        }
+      }
+    ]
+  }

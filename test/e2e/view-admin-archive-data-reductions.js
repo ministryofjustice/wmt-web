@@ -39,7 +39,7 @@ describe('Admin Archive Data Reductions Page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
