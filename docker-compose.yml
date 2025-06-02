@@ -130,7 +130,7 @@ services:
       - "8099:8099"
     command: ["--port","8099","--global-response-templating"]
     volumes:
-      - $PWD/test/e2e/resources/wiremock:/home/wiremock:rw
+      - ./test/e2e/resources/wiremock/mappings:/home/wiremock/mappings
 
 
   user-preference-wiremock:
