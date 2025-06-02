@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPattern": "/auth/oauth/authorize\\?response_type=code&redirect_uri=.+?&state=.+?&client_id=workload-measurement-ui"
+  },
+  "response": {
+    "status": 302,
+    "headers": {
+      "Content-Type": "text/html",
+      "Location": "http://localhost:3000/login/callback?code=codexxxx&state={{ request.query.state }}"
+    },
+    "transformers": ["response-template"]
+  }
+}
