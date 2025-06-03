@@ -129,8 +129,6 @@ services:
     ports:
       - "8099:8099"
     command: ["--port","8099","--global-response-templating"]
-    volumes:
-      - ./test/e2e/resources/wiremock/mappings:/home/wiremock/mappings
 
 
   user-preference-wiremock:

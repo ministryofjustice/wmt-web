@@ -1,5 +1,12 @@
 const config = require('../../../config')
 const axios = require('axios')
+const fs = require('fs')
+const path = require('path')
+
+const mappings = fs.readdirSync(path.join(__dirname, '../../e2e/resources/wiremock/mappings')).filter(file => path.extname(file) === '.json').map(file => {
+  const fileData = fs.readFileSync(path.join(__dirname, '../../e2e/resources/wiremock/mappings', file))
+  return JSON.parse(fileData.toString())
+})
 
 const USERS = {
   SuperUser: { username: 'WMT_SUPER_USER', roleId: 3 },
@@ -43,7 +50,11 @@ const login = async function ({ username }) {
 const logout = async function () {
   const link = await $('[href="/sign-out"]')
   await link.click()
-  await axios.post(`${config.apis.manageUsersService.url}/__admin/mappings/reset`)
+  await axios.post(`${config.apis.manageUsersService.url}/__admin/reset`)
+
+  for (const mapping of mappings) {
+    await axios.post(`${config.apis.manageUsersService.url}/__admin/mappings`, mapping)
+  }
 }
 
 module.exports.login = login
