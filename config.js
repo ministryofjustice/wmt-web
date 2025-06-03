@@ -52,8 +52,8 @@ module.exports = {
   APPINSIGHTS_INSTRUMENTATIONKEY: process.env.APPINSIGHTS_INSTRUMENTATIONKEY,
   apis: {
     hmppsAuth: {
-      url: get('HMPPS_AUTH_URL', 'http://127.0.0.1:8099/auth', requiredInProduction),
-      externalUrl: get('HMPPS_AUTH_EXTERNAL_URL', get('HMPPS_AUTH_URL', 'http://127.0.0.1:8099/auth')),
+      url: get('HMPPS_AUTH_URL', 'http://127.0.0.1:9090/auth', requiredInProduction),
+      externalUrl: get('HMPPS_AUTH_EXTERNAL_URL', get('HMPPS_AUTH_URL', 'http://127.0.0.1:9090/auth')),
       timeout: {
         response: get('HMPPS_AUTH_TIMEOUT_RESPONSE', 3000)
       },
@@ -65,7 +65,7 @@ module.exports = {
       apiClientSecret: get('API_CLIENT_SECRET', 'clientsecret', requiredInProduction)
     },
     manageUsersService: {
-      url: get('MANAGE_USERS_SERVICE_URL', 'http://127.0.0.1:8099', requiredInProduction),
+      url: get('MANAGE_USERS_SERVICE_URL', 'http://127.0.0.1:9091', requiredInProduction),
       timeout: {
         response: 3000
       },
