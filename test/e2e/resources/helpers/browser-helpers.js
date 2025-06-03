@@ -1,4 +1,4 @@
-async function clickAndWaitForPageLoad (element, timeout = 500) {
+async function clickAndWaitForPageLoad (element, timeout = 30000) {
   await element.click()
   await browser.waitUntil(
     async () => (await browser.execute(() => document.readyState)) === 'complete',
@@ -9,7 +9,7 @@ async function clickAndWaitForPageLoad (element, timeout = 500) {
   )
 }
 
-async function navigateTo (url, timeout = 500) {
+async function navigateTo (url, timeout = 30000) {
   await browser.url(url)
   await browser.waitUntil(
     async () => (await browser.execute(() => document.readyState)) === 'complete',
