@@ -16,7 +16,7 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
       expect(text).to.equal('Access is denied')
     })
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
@@ -34,7 +34,7 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
@@ -113,7 +113,7 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
@@ -192,7 +192,7 @@ describe('Admin Archive Data Averaged Caseload Page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 })

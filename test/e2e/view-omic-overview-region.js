@@ -30,8 +30,8 @@ describe('Regional Omic Overview', function () {
       expect(text).to.equal(dailyArchiveData.regionName)
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 
@@ -71,8 +71,8 @@ describe('Regional Omic Overview', function () {
       expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 
@@ -104,8 +104,8 @@ describe('Regional Omic Overview', function () {
       return expect(exportElement.length).to.be.equal(0)
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 
@@ -145,8 +145,8 @@ describe('Regional Omic Overview', function () {
       expect(text).to.equal('Select the data type to export (this will download as a .CSV file):')
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 })

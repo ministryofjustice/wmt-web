@@ -150,12 +150,17 @@ Run tests using the following commands:
 ```
 docker compose up -d
 ```
+
 - jump into localstack container and run shell script (to create the localstack AWS infra)
 ```
 docker exec -it wmt-web-localstack bash
 cd /docker-entrypoint-initaws.d
 ./setup-s3.sh
 exit
+```
+- post mappings to wiremock
+```
+npm run post-wiremock-mappings
 ```
 - run the following command to start the application and run the e2e tests:
 ```

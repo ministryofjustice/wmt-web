@@ -129,33 +129,6 @@ services:
     ports:
       - "8099:8099"
     command: ["--port","8099","--global-response-templating"]
-    volumes:
-      - $PWD/test/e2e/resources/wiremock:/home/wiremock:rw
-
-
-  user-preference-wiremock:
-    image: wiremock/wiremock
-    networks:
-      - hmpps
-    container_name: user-preferencewiremock
-    restart: always
-    ports:
-      - "8098:8098"
-    command: ["--port","8098","--global-response-templating"]
-    volumes:
-      - $PWD/test/e2e/resources/user-preference-wiremock:/home/wiremock:rw
-
-  token-verify-wiremock:
-    image: wiremock/wiremock
-    networks:
-      - hmpps
-    container_name: token-verify-wiremock
-    restart: always
-    ports:
-      - "8100:8100"
-    command: ["--port","8100","--global-response-templating"]
-    volumes:
-      - $PWD/test/e2e/resources/token-verify-wiremock:/home/wiremock:rw
   localstack:
     image: localstack/localstack:3.8.1
     networks:

@@ -56,7 +56,7 @@ describe('View your caseload capacity flow', () => {
     expect(exists).to.be.equal(false)
   })
 
-  after(function () {
-    authenticationHelper.logout()
+  after(async function () {
+    await authenticationHelper.logout()
   })
 })

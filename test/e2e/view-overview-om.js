@@ -36,8 +36,8 @@ describe('Offender Manager', function () {
       expect(capacityPercent).to.equal(`${workloadOwnerCapacity}`)
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 })

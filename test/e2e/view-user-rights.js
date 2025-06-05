@@ -17,7 +17,7 @@ describe('User Rights page', () => {
       expect(text).to.equal('Access is denied')
     })
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
@@ -35,7 +35,7 @@ describe('User Rights page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
@@ -180,8 +180,8 @@ describe('User Rights page', () => {
       expect(headerText).to.equal('Access is denied')
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 
@@ -231,8 +231,8 @@ describe('User Rights page', () => {
       expect(isSelected).to.be.equal(true)
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 })

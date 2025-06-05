@@ -69,8 +69,8 @@ describe('National Omic Overview', function () {
       expect(text).to.equal('National')
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 
@@ -87,8 +87,8 @@ describe('National Omic Overview', function () {
       expect(text).to.equal('Region')
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 
@@ -105,8 +105,8 @@ describe('National Omic Overview', function () {
       expect(text).to.equal('Region')
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 
@@ -123,8 +123,8 @@ describe('National Omic Overview', function () {
       expect(text).to.equal('Region')
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 })

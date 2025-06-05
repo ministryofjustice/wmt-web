@@ -61,8 +61,8 @@ describe('Team', () => {
       return expect(exists).to.be.true
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 
@@ -86,8 +86,8 @@ describe('Team', () => {
       return expect(exists).to.be.true
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 
@@ -119,8 +119,8 @@ describe('Team', () => {
       expect(text).to.equal('Access is denied')
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 
@@ -144,8 +144,8 @@ describe('Team', () => {
       return expect(exists).to.be.true
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 })

@@ -15,6 +15,7 @@
         "email": "{{request.path.[1]}}@justice.gov.uk",
         "enabled": true,
         "roles": [
+          "ROLE_TEST_MANAGE_A_WORKFORCE_ALLOCATE",
           "TEST_MANAGE_A_WORKFORCE_ALLOCATE_ROLE"
         ]
       },

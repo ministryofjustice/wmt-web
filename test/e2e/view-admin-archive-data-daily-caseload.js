@@ -16,7 +16,7 @@ describe('Admin Archive Data Daily Caseload Page', () => {
       expect(text).to.equal('Access is denied')
     })
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
@@ -33,7 +33,7 @@ describe('Admin Archive Data Daily Caseload Page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
@@ -110,7 +110,7 @@ describe('Admin Archive Data Daily Caseload Page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
@@ -187,7 +187,7 @@ describe('Admin Archive Data Daily Caseload Page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 })

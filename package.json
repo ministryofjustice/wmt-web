@@ -23,6 +23,7 @@
     "record-build-info": "node ./bin/record-build-info",
     "security_audit": "npx audit-ci --config audit-ci.json",
     "lint": "standard",
+    "lint-fix": "standard --fix",
     "seed-dev-data": "node ./test/helpers/data/setup-e2e-data-helper.js",
     "clean-dev-data": "node ./test/helpers/data/delete-e2e-data-helper.js",
     "njk-compile": "nunjucks-precompile",
@@ -31,7 +32,8 @@
     "watch-njk-dev": "nodemon --watch njk_dev --ignore njk_dev/output -e html,js -x npm run njk-view",
     "watch-sass": "npm run compile-sass -- --watch",
     "njk-dev": "npm run njk-view && concurrently -k -p \"[{name}]\" -n \"Views,TypeScript,Node,Sass\" -c \"yellow.bold,cyan.bold,green.bold,blue.bold\" \"npm run watch-views\" \"npm run watch-sass\" \"npm run watch-njk-dev\"",
-    "compare-exports": "node ./exportCompare/compareExports.js"
+    "compare-exports": "node ./exportCompare/compareExports.js",
+    "post-wiremock-mappings": "for file in test/e2e/resources/wiremock/mappings/*.json; do curl --request POST --url http://localhost:8099/__admin/mappings --header 'content-type: application/json' --data-binary @$file; done"
   },
   "standard": {
     "ignore": [
@@ -76,7 +78,7 @@
     "standard": "17.1.2",
     "supertest": "7.0.0",
     "wdio-html-nice-reporter": "8.0.6",
-    "webdriverio": "^9.13.0"
+    "webdriverio": "9.2.1"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.398.0",

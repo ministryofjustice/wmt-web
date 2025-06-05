@@ -30,7 +30,7 @@ describe('View your caseload capacity flow', () => {
     expect(errorText).to.equal('There is no data for this period (// - //)')
   })
 
-  after(function () {
-    authenticationHelper.logout()
+  after(async function () {
+    await authenticationHelper.logout()
   })
 })

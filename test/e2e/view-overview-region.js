@@ -56,8 +56,8 @@ describe('Region', function () {
       expect(text).to.equal('Access is denied')
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 
@@ -88,8 +88,8 @@ describe('Region', function () {
       return expect(exists).to.be.true
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 
@@ -121,8 +121,8 @@ describe('Region', function () {
       expect(text).to.equal('Access is denied')
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 
@@ -153,8 +153,8 @@ describe('Region', function () {
       return expect(exists).to.be.true
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 })

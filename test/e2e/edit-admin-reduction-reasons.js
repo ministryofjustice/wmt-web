@@ -16,7 +16,7 @@ describe('Admin Add Reduction Reasons Page', () => {
       expect(text).to.equal('Access is denied')
     })
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
@@ -34,7 +34,7 @@ describe('Admin Add Reduction Reasons Page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
@@ -54,7 +54,7 @@ describe('Admin Add Reduction Reasons Page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 
@@ -90,7 +90,7 @@ describe('Admin Add Reduction Reasons Page', () => {
     })
 
     after(async function () {
-      authenticationHelper.logout()
+      await authenticationHelper.logout()
     })
   })
 })

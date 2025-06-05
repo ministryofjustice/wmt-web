@@ -193,7 +193,7 @@ describe('View court-reports overview', function () {
     expect(text).to.equal('National')
   })
 
-  after(function () {
-    authenticationHelper.logout()
+  after(async function () {
+    await authenticationHelper.logout()
   })
 })

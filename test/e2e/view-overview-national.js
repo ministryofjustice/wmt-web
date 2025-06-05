@@ -5,6 +5,8 @@ const workloadTypes = require('../../app/constants/workload-type')
 const config = require('../../config')
 const dailyArchiveData = require('../helpers/data/setup-data')
 const { clickAndWaitForPageLoad, navigateTo } = require('../e2e/resources/helpers/browser-helpers')
+const axios = require('axios')
+const jwt = require('jsonwebtoken')
 
 let workloadOwnerIds = []
 let workloadOwnerId
@@ -163,8 +165,8 @@ describe('National', function () {
       expect(text).to.equal('National')
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 
@@ -177,13 +179,6 @@ describe('National', function () {
       const allocationsLink = await $(`a[href*="${config.nav.allocations.url}"`)
       const exists = await allocationsLink.isExisting()
       return expect(exists).to.be.true
-    })
-
-    it('should fall back to + when number of unallocated cases cannot be retrieved', async function () {
-      const allocationsNumber = await $('#notifications')
-      await allocationsNumber.waitForDisplayed({ timeout: 30000 })
-      const number = await allocationsNumber.getText()
-      return expect(number).to.equal('+')
     })
 
     it('should not include the reductions export at workload owner level', async function () {
@@ -206,8 +201,44 @@ describe('National', function () {
       return expect(exists).to.be.true
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    describe('with error', function () {
+      before(async function () {
+        const { data } = await axios.get(`${config.apis.manageUsersService.url}/__admin/mappings`)
+        const { mappings } = data
+        const { id } = mappings.find(m => m.request.urlPathPattern === '/users/.*/preferences/allocation-demand')
+
+        await axios.put(`${config.apis.manageUsersService.url}/__admin/mappings/${id}`,
+          {
+            request: {
+              urlPathPattern: '/users/.*/preferences/allocation-demand',
+              method: 'GET'
+            },
+            response: {
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              status: 500
+            }
+          }
+        )
+
+        await authenticationHelper.login(authenticationHelper.users.Manager)
+      })
+
+      it('should fall back to + when number of unallocated cases cannot be retrieved', async function () {
+        const allocationsNumber = await $('#notifications')
+        await allocationsNumber.waitForDisplayed({ timeout: 30000 })
+        const number = await allocationsNumber.getText()
+        return expect(number).to.equal('+')
+      })
+
+      after(async function () {
+        await axios.post(`${config.apis.manageUsersService.url}/__admin/mappings/reset`)
+      })
+    })
+
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 
@@ -238,8 +269,8 @@ describe('National', function () {
       expect(text).to.equal('Access is denied')
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 
@@ -260,13 +291,52 @@ describe('National', function () {
       return expect(exists).to.be.true
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 
   describe('overview for only WMT User', function () {
     before(async function () {
+      const { data } = await axios.get(`${config.apis.manageUsersService.url}/__admin/mappings`)
+      const { mappings } = data
+      const { id } = mappings.find(m => m.request.urlPattern === '/auth/oauth/token')
+
+      function createToken (authorities) {
+        const payload = {
+          user_name: 'USER1',
+          scope: ['read', 'write'],
+          auth_source: 'nomis',
+          authorities,
+          jti: 'a610a10-cca6-41db-985f-e87efb303aaf',
+          client_id: 'clientid'
+        }
+
+        return jwt.sign(payload, 'secret', { expiresIn: '1h' })
+      }
+
+      await axios.put(`${config.apis.manageUsersService.url}/__admin/mappings/${id}`, {
+        request: {
+          urlPattern: '/auth/oauth/token',
+          method: 'POST'
+        },
+        response: {
+          status: 200,
+          jsonBody: {
+            access_token: createToken(['ROLE_WORKLOAD_MEASUREMENT']),
+            token_type: 'bearer',
+            user_name: 'USER1',
+            expires_in: 599,
+            scope: 'read',
+            internalUser: true
+          },
+          headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            Location: 'http://localhost:3000/login/callback?code=codexxxx&state=stateyyyy'
+          }
+        }
+      })
+
       await authenticationHelper.login(authenticationHelper.users.onlyWmtUser)
     })
 
@@ -276,8 +346,8 @@ describe('National', function () {
       return expect(exists).to.be.false
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 })

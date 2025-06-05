@@ -28,8 +28,8 @@ describe('LDU', function () {
       return expect(exists).to.be.false
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 
@@ -52,8 +52,8 @@ describe('LDU', function () {
       return expect(exists).to.be.true
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 
@@ -78,8 +78,8 @@ describe('LDU', function () {
       return expect(exists).to.be.false
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 
@@ -103,8 +103,8 @@ describe('LDU', function () {
       return expect(exists).to.be.true
     })
 
-    after(function () {
-      authenticationHelper.logout()
+    after(async function () {
+      await authenticationHelper.logout()
     })
   })
 })

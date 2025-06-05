@@ -85,7 +85,7 @@ module.exports = {
       retries: 2
     },
     userPreferenceService: {
-      url: get('USER_PREFERENCE_SERVICE_URL', 'http://127.0.0.1:8098', requiredInProduction),
+      url: get('USER_PREFERENCE_SERVICE_URL', 'http://127.0.0.1:8099', requiredInProduction),
       timeout: {
         response: 2000
       },
@@ -95,7 +95,7 @@ module.exports = {
       retries: 2
     },
     tokenVerification: {
-      url: get('TOKEN_VERIFICATION_API_URL', 'http://127.0.0.1:8100', requiredInProduction),
+      url: get('TOKEN_VERIFICATION_API_URL', 'http://127.0.0.1:8099', requiredInProduction),
       timeout: {
         response: get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 8000)
       },
