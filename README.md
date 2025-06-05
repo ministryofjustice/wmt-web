@@ -150,16 +150,17 @@ Run tests using the following commands:
 ```
 docker compose up -d
 ```
-- post mappings to wiremock
-```
-find test/e2e/resources/wiremock/mappings/*.json -exec curl --request POST --url http://localhost:8099/__admin/mappings --header 'content-type: application/json' --data-binary "@{}" \;
-```
+
 - jump into localstack container and run shell script (to create the localstack AWS infra)
 ```
 docker exec -it wmt-web-localstack bash
 cd /docker-entrypoint-initaws.d
 ./setup-s3.sh
 exit
+```
+- post mappings to wiremock
+```
+npm run post-wiremock-mappings
 ```
 - run the following command to start the application and run the e2e tests:
 ```
