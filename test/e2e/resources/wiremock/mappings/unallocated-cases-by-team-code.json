@@ -10,9 +10,10 @@
   },
   "response": {
     "status": 200,
-    "jsonBody": {
-      "count": 42
-    },
+    "jsonBody": [{
+      "teamCode": "TM1",
+      "caseCount": 42
+    }],
     "headers": {
       "Content-Type": "application/json"
     }

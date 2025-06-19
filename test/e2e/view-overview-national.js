@@ -43,7 +43,7 @@ describe('National', function () {
       const allocationsNumber = await $('#notifications')
       await allocationsNumber.waitForDisplayed({ timeout: 30000 })
       const number = await allocationsNumber.getText()
-      return expect(number).to.equal('+42')
+      return expect(number).to.equal('42')
     })
 
     it('should show regional breakdown table', async function () {
