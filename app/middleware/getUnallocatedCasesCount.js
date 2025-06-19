@@ -11,8 +11,8 @@ module.exports = function () {
         if (teamCode) {
           const unallocatedCasesCountByTeams = await allocationsClient.getCaseCountByTeamCodes(token, [teamCode])
           res.locals.unallocatedCaseCount = unallocatedCasesCountByTeams
-            .map(teamCount => teamCount.caseCount)
-            .reduce((first, second) => first + second, 0)
+            .map(team => team.caseCount || 0)
+            .reduce((sum, count) => sum + count, 0)
         }
       }
     } catch (error) {
