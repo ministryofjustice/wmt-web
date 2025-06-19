@@ -1,20 +1,21 @@
 {
   "request": {
     "method": "GET",
-    "urlPathPattern": "/cases/unallocated/teamCount",
-    "queryParameters": {
-      "teams": {
-        "equalTo": "TM1"
-      }
-    }
+    "urlPathPattern": "/cases/unallocated/teamCount.*"
   },
   "response": {
     "status": 200,
-    "jsonBody": {
-      "count": 42
-    },
+    "jsonBody":
+      [
+        {
+          "teamCode": "{{request.query.teams}}",
+          "caseCount": 42
+        }
+      ]
+    ,
     "headers": {
       "Content-Type": "application/json"
-    }
+    },
+    "transformers": ["response-template"]
   }
 }
