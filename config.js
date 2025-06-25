@@ -131,7 +131,7 @@ module.exports = {
     endpoint: production ? null : 'http://127.0.0.1:4566',
     queueUrl: process.env.AUDIT_SQS_QUEUE_URL || 'http://127.0.0.1:4566/000000000000/audit_event_queue'
   },
-  googleAnalyticsKey: get('GOOGLE_ANALYTICS_KEY', null),
+  tagManagerContainerid: get('TAG_MANAGER_CONTAINER_ID', ''),
   nav: {
     allocations: {
       url: get('WORKFORCE_ALLOCATIONS_URL', 'http://127.0.0.1:3010', requiredInProduction)
