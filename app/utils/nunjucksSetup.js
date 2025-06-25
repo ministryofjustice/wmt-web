@@ -1,6 +1,6 @@
 const nunjucks = require('nunjucks')
 const dateFilter = require('nunjucks-date-filter')
-const { googleAnalyticsKey, nav } = require('../../config')
+const { tagManagerContainerid, nav } = require('../../config')
 const { initialiseName } = require('./utils')
 
 module.exports = function (app, path) {
@@ -33,6 +33,6 @@ module.exports = function (app, path) {
     return cases > 99 ? '99+' : `${cases}`
   })
 
-  njkEnv.addGlobal('googleAnalyticsKey', googleAnalyticsKey)
+  njkEnv.addGlobal('tagManagerContainerid', tagManagerContainerid)
   njkEnv.addGlobal('allocationsUrl', nav.allocations.url)
 }
