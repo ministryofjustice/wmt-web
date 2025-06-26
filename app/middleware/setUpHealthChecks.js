@@ -5,7 +5,7 @@ module.exports = function () {
 
   router.get('/health', function (req, res) {
     res.send({
-      status: 'ok'
+      status: 'UP'
     })
   })
 
