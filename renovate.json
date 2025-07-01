@@ -18,5 +18,5 @@
       "stabilityDays": 5
     }
   ],
-  "ignoreDeps": ["wdio-html-nice-reporter", "chai"]
+  "ignoreDeps": ["wdio-html-nice-reporter", "chai", "sinon-chai"]
 }
