@@ -11,7 +11,7 @@ module.exports = async function () {
   const router = express.Router()
   router.use(
     session({
-      store: new RedisStore({ client }),
+      store: RedisStore({ client }),
       name: 'wmt-web',
       cookie: { secure: config.https, sameSite: 'lax', maxAge: config.session.expiryMinutes * 60 * 1000 },
       secret: config.session.secret,
