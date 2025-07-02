@@ -5,13 +5,14 @@ const config = require('../../config')
 const { createRedisClient } = require('../data/redisClient')
 
 module.exports = async function () {
-  const RedisStore = (await import('connect-redis')).default
+  const redisModule = await import('connect-redis')
+  const RedisStore = redisModule.default?.RedisStore || redisModule.default
   const client = createRedisClient()
   client.connect()
   const router = express.Router()
   router.use(
     session({
-      store: RedisStore({ client }),
+      store: new RedisStore({ client }),
       name: 'wmt-web',
       cookie: { secure: config.https, sameSite: 'lax', maxAge: config.session.expiryMinutes * 60 * 1000 },
       secret: config.session.secret,
