@@ -1,11 +1,11 @@
 const uuidv4 = require('uuid').v4
 const session = require('express-session')
-const RedisStore = require('connect-redis').default
 const express = require('express')
 const config = require('../../config')
 const { createRedisClient } = require('../data/redisClient')
 
-module.exports = function () {
+module.exports = async function () {
+  const RedisStore = (await import('connect-redis')).default
   const client = createRedisClient()
   client.connect()
   const router = express.Router()
