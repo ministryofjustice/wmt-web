@@ -29,7 +29,7 @@ executors:
   docker-env:
     docker:
       - image: cimg/node:<< pipeline.parameters.node-version >>
-      - image: bitnami/redis:7.0
+      - image: bitnami/redis:8.0
         environment:
           - ALLOW_EMPTY_PASSWORD=yes
       - image: quay.io/hmpps/hmpps-auth:latest
