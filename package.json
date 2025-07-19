@@ -80,7 +80,7 @@
     "@aws-sdk/client-s3": "3.821.0",
     "@aws-sdk/client-sqs": "3.821.0",
     "@ministryofjustice/frontend": "3.7.2",
-    "agentkeepalive": "4.2.1",
+    "agentkeepalive": "4.6.0",
     "applicationinsights": "2.9.7",
     "axios": "1.9.0",
     "axios-retry": "3.3.1",
