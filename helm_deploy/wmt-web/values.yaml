@@ -6,7 +6,7 @@ generic-service:
   serviceAccountName: hmpps-workload
 
   image:
-    repository: quay.io/hmpps/wmt-web
+    repository: ghcr.io/ministryofjustice/wmt-web
     tag: app_version    # override at deployment time
     port: 3000
 
