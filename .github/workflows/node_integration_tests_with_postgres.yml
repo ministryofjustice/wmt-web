@@ -60,11 +60,20 @@ jobs:
           for i in {1..60}; do pg_isready -h 127.0.0.1 -p 5432 -U postgres -d postgres && break; sleep 1; done
           curl -sfS --retry 20 --retry-connrefused --retry-delay 2 "$LS/_localstack/health" || exit 1
           curl -sfS --retry 20 --retry-connrefused --retry-delay 2 "http://127.0.0.1:8099/__admin" || exit 1
+          for i in {1..60}; do
+            if redis-cli -h 127.0.0.1 -p 6379 ping 2>/dev/null | grep -q PONG; then
+              echo "Redis is ready"
+              break
+            fi
+            echo "Waiting for Redis... ($i/60)"
+            sleep 1
+          done
 
       - name: Install jq & psql client
         run: |
           sudo apt-get update -y
           sudo apt-get install -y jq postgresql-client
+          redis-cli --version
 
       - name: Setup AWS CLI
         run: |
@@ -166,6 +175,10 @@ jobs:
         image: wiremock/wiremock:2.35.0
         ports:
           - 8099:8080
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
 
     env:
       AWS_DEFAULT_REGION: eu-west-2
@@ -191,6 +204,7 @@ jobs:
         run: |
           sudo apt-get update -y
           sudo apt-get install -y jq
+          redis-cli --version
           python3 -m pip install --user --upgrade pip
           python3 -m pip install --user "awscli==1.*"
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
@@ -236,6 +250,9 @@ jobs:
       - name: Start app (start-dev on :3000)
         env:
           PORT: 3000
+          REDIS_HOST: 127.0.0.1
+          REDIS_PORT: "6379"
+          REDIS_URL: redis://127.0.0.1:6379
         run: |
           set -euo pipefail
           # start-dev exports feature.env then starts the server
