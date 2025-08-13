@@ -261,7 +261,15 @@ jobs:
           curl -sS -i "$WIREMOCK_URL/auth/health/ping" | head -n 20 || true
           curl -sS -i "$WIREMOCK_URL/auth/oauth/token" | head -n 20 || true
           curl -sS -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=$BASE_URL/sign-in/callback&response_type=code&state=x" | head -n 20 || true
-    
+
+      - name: Sanity: which auth path matches?
+        run: |
+          set -e
+          echo "Hitting with /auth prefix:"
+          curl -s -o /dev/null -w "code=%{http_code}\n" "http://127.0.0.1:8099/auth/oauth/authorize?client_id=x&redirect_uri=http://127.0.0.1:3000/sign-in/callback&response_type=code&state=y" || true
+          echo "Hitting without /auth:"
+          curl -s -o /dev/null -w "code=%{http_code}\n" "http://127.0.0.1:8099/oauth/authorize?client_id=x&redirect_uri=http://127.0.0.1:3000/sign-in/callback&response_type=code&state=y" || true
+
 
       - name: Build assets
         run: npm run build
@@ -378,7 +386,6 @@ jobs:
 
       - name: Run E2E (wdio with isolated Chrome profile)
         env:
-          SPEC_FILE: test/e2e/create-admin-reduction-reasons.js
           BASE_URL: ${{ env.BASE_URL }}
           DATABASE_SERVER: 127.0.0.1
           DATABASE_USERNAME: postgres
