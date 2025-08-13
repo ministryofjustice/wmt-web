@@ -262,7 +262,7 @@ jobs:
           curl -sS -i "$WIREMOCK_URL/auth/oauth/token" | head -n 20 || true
           curl -sS -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=$BASE_URL/sign-in/callback&response_type=code&state=x" | head -n 20 || true
 
-      - name: Sanity: which auth path matches?
+      - name: INSanity? which auth path matches?
         run: |
           set -e
           echo "Hitting with /auth prefix:"
