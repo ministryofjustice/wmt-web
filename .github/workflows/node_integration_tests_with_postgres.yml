@@ -52,10 +52,6 @@ jobs:
       DOMAIN_QUEUE: domain_event_queue
       DOMAIN_TOPIC: domain-events
 
-      # used for uploads below
-      DASHBOARD_FILE: dashboard-file.txt
-      DASHBOARD_PREFIX: generated-dashboards
-
     steps:
       - uses: actions/checkout@v4
 
@@ -76,6 +72,77 @@ jobs:
           # AWS CLI v1 via pip (works fine for our commands)
           python3 -m pip install --user --upgrade pip
           python3 -m pip install --user "awscli==1.*"
-      
+
           # add ~/.local/bin to PATH for subsequent steps
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Verify aws/jq
+        run: |
+          which aws || true
+          aws --version
+          jq --version
+
+      - name: Create sample dashboard file (used for uploads)
+        run: |
+          echo "dummy dashboard content" > dashboard-file.txt
+
+      # >>> ONLY THIS STEP POPULATES AWS, MIRRORING YOUR SCRIPT <<<
+      - name: Create AWS resources in LocalStack (mirror script)
+        run: |
+          set -euo pipefail
+
+          # queue (script: audit_event_queue only)
+          aws --endpoint-url="$LS" sqs create-queue --queue-name audit_event_queue
+
+          # bucket + five objects (script uses generated-dashboards/dashboard_*.txt)
+          aws --endpoint-url="$LS" s3api create-bucket \
+            --bucket wmt-web \
+            --region "$AWS_DEFAULT_REGION" \
+            --create-bucket-configuration LocationConstraint="$AWS_DEFAULT_REGION"
+
+          for ts in 20210729062147 20210730062147 20210731062147 20210801062147 20210802062147; do
+            aws --endpoint-url="$LS" s3api put-object \
+              --bucket wmt-web \
+              --key generated-dashboards/dashboard_${ts}.txt \
+              --body dashboard-file.txt
+            sleep 1
+          done
+
+          echo "S3 created bucket"
+
+      - name: Start hmpps_workload container
+        run: |
+          docker run -d --name hmpps_workload \
+            --add-host=host.docker.internal:host-gateway \
+            -e SPRING_PROFILES_ACTIVE=dev,docker \
+            -e DATABASE_USERNAME=postgres \
+            -e DATABASE_PASSWORD=postgres \
+            -e DATABASE_ENDPOINT=host.docker.internal:5432 \
+            -e HMPPS_SQS_LOCALSTACK_URL=http://host.docker.internal:4566 \
+            ghcr.io/ministryofjustice/hmpps-workload:latest \
+            /bin/sh -lc 'sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar'
+
+      - name: Wait for DB schema
+        env:
+          PGPASSWORD: postgres
+        run: |
+          for i in {1..120}; do
+            docker run --rm --network host -e PGPASSWORD=$PGPASSWORD postgres:15 \
+              psql -h 127.0.0.1 -U postgres -d postgres -tAc "SELECT 1 FROM information_schema.tables WHERE table_name='flyway_schema_history'" \
+              | grep -q 1 && exit 0
+            sleep 2
+          done
+          echo "Schema not ready in time"; docker logs hmpps_workload || true; exit 1
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Run integration tests
+        env:
+          DATABASE_SERVER: 127.0.0.1
+          DATABASE_USERNAME: postgres
+          DATABASE_PASSWORD: postgres
+          DATABASE: postgres
+          DATABASE_PORT: "5432"
+          DATABASE_SSL: "false"
+        run: npm run integration-test
