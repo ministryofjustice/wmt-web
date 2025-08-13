@@ -1,9 +1,13 @@
 name: Integration & E2E Tests
 
 on:
-  push:
-    branches: ['**']
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      node_version_file:
+        description: "setup-node reads Node version from here"
+        required: false
+        type: string
+        default: ".nvmrc"
 
 permissions:
   contents: read
