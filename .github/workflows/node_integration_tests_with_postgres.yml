@@ -89,7 +89,7 @@ jobs:
 
       - name: Create sample dashboard file (used for uploads)
         run: |
-          echo "dummy dashboard content" > dashboard-file.txt
+          echo "dashboard" > dashboard-file.txt
 
       # >>> ONLY THIS STEP POPULATES AWS, MIRRORING YOUR SCRIPT <<<
       - name: Create AWS resources in LocalStack (mirror script)
