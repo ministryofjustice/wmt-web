@@ -154,7 +154,7 @@ jobs:
 
   node_integration_tests:
     name: node integration tests
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_integration_tests.yml@v2
+    uses: ./.github/workflows/node_integration_tests_with_postgres.yml
     needs: [node_build]
     secrets: inherit
 
