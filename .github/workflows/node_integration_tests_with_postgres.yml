@@ -260,9 +260,13 @@ jobs:
           npm run post-wiremock-mappings
           curl -fsS http://localhost:8099/__admin/mappings | jq '.mappings | length as $n | "Loaded \($n) mappings"'
 
-      - name: Start app (localhost:3000 with WireMock endpoints)
+      - name: Start app (robust wait; with WireMock & DB/Redis overrides)
         env:
-          # DB (hmpps_workload migrated)
+          # Required secrets for boot in CI
+          WMT_WEB_APPLICATION_SECRET: ci-dev-secret
+          SESSION_SECRET: ci-session-secret
+
+          # DB (same Postgres that hmpps_workload migrated)
           WMT_LIVE_DB_SERVER: localhost
           WMT_LIVE_DB_NAME: postgres
           WMT_LIVE_DB_USERNAME: postgres
@@ -272,10 +276,12 @@ jobs:
           WMT_HISTORY_DB_NAME: postgres
           WMT_HISTORY_DB_USERNAME: postgres
           WMT_HISTORY_DB_PASSWORD: postgres
+
           # Redis
           REDIS_HOST: localhost
           REDIS_PORT: "6379"
           REDIS_URL: redis://localhost:6379
+
           # WireMock endpoints
           HMPPS_AUTH_URL: http://localhost:8099/auth
           HMPPS_AUTH_EXTERNAL_URL: http://localhost:8099/auth
@@ -283,25 +289,42 @@ jobs:
           ALLOCATIONS_SERVICE_URL: http://localhost:8099
           USER_PREFERENCE_SERVICE_URL: http://localhost:8099
           TOKEN_VERIFICATION_API_URL: http://localhost:8099
+
           PORT: 3000
         run: |
           set -euo pipefail
-          # start with feature.env + our overrides
-          nohup env $(cat feature.env | xargs) \
+      
+          # Start the app with feature.env + our overrides
+          nohup env $(grep -v '^\s*#' feature.env | xargs) \
             PORT=$PORT \
             WMT_LIVE_DB_SERVER=$WMT_LIVE_DB_SERVER WMT_LIVE_DB_NAME=$WMT_LIVE_DB_NAME WMT_LIVE_DB_USERNAME=$WMT_LIVE_DB_USERNAME WMT_LIVE_DB_PASSWORD=$WMT_LIVE_DB_PASSWORD \
             WMT_HISTORY_DB_SERVER=$WMT_HISTORY_DB_SERVER WMT_HISTORY_DB_PORT=$WMT_HISTORY_DB_PORT WMT_HISTORY_DB_NAME=$WMT_HISTORY_DB_NAME WMT_HISTORY_DB_USERNAME=$WMT_HISTORY_DB_USERNAME WMT_HISTORY_DB_PASSWORD=$WMT_HISTORY_DB_PASSWORD \
             REDIS_HOST=$REDIS_HOST REDIS_PORT=$REDIS_PORT REDIS_URL=$REDIS_URL \
             HMPPS_AUTH_URL=$HMPPS_AUTH_URL HMPPS_AUTH_EXTERNAL_URL=$HMPPS_AUTH_EXTERNAL_URL MANAGE_USERS_SERVICE_URL=$MANAGE_USERS_SERVICE_URL \
             ALLOCATIONS_SERVICE_URL=$ALLOCATIONS_SERVICE_URL USER_PREFERENCE_SERVICE_URL=$USER_PREFERENCE_SERVICE_URL TOKEN_VERIFICATION_API_URL=$TOKEN_VERIFICATION_API_URL \
-            node app/bin/www >/tmp/app.log 2>&1 &
-          for i in {1..60}; do
-            code=$(curl -fsS -o /dev/null -w "%{http_code}" "http://localhost:3000/")
-            if echo "$code" | grep -qE '200|302'; then
-              echo "App ready at http://localhost:3000 (${code})"; break
+            node app/bin/www > /tmp/app.log 2>&1 &
+      
+          # Wait up to 120s for the app to respond (don’t use -f so we don’t exit on 000/503)
+          ready=""
+          for i in {1..120}; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:3000/" || echo "000")
+            if [ "$code" = "200" ] || [ "$code" = "302" ]; then
+              echo "App ready at http://localhost:3000 ($code)"
+              ready="yes"
+              break
             fi
-            echo "Waiting for app... ($i/60)"; sleep 2
+            echo "Waiting for app... ($i/120) got $code"
+            sleep 2
           done
+      
+          # If not ready, show logs and fail
+          if [ -z "$ready" ]; then
+            echo "App did not become ready. Last 400 lines of /tmp/app.log:"
+            tail -n 400 /tmp/app.log || true
+            exit 1
+          fi
+      
+          echo '--- app log tail ---'
           tail -n 200 /tmp/app.log || true
 
       - name: Create WDIO CI config (unique Chrome profile + absolute specs + baseUrl)
