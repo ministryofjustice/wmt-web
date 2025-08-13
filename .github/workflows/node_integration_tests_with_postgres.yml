@@ -299,7 +299,14 @@ jobs:
           DATABASE_PORT: "5432"
           DATABASE_SSL: "false"
           CHROME_BIN: ${{ env.CHROME_BIN }}
-        run: npm run test-e2e
+        run: |
+          set -euo pipefail
+          # mirror: "export $(cat feature.env) && npm run clean-dev-data && npm run seed-dev-data && wdio test/e2e.conf.js && npm run clean-dev-data"
+          export $(cat feature.env | xargs)
+          npm run clean-dev-data
+          npm run seed-dev-data
+          npx wdio test/e2e.conf.js --workers 1
+          npm run clean-dev-data
 
       - name: Upload E2E artifacts (on failure)
         if: failure()
