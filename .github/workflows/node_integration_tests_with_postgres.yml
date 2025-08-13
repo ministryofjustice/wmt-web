@@ -166,9 +166,6 @@ jobs:
         image: wiremock/wiremock:2.35.0
         ports:
           - 8099:8080
-        options: >-
-          --mount type=bind,source=${{ github.workspace }}/test/e2e/resources/wiremock/mappings,target=/home/wiremock/mappings,readonly
-          --mount type=bind,source=${{ github.workspace }}/test/e2e/resources/wiremock/__files,target=/home/wiremock/__files,readonly
       redis:
         image: redis:7-alpine
         ports:
@@ -187,6 +184,26 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Verify mapping files exist
+        run: |
+          ls -lah test/e2e/resources/wiremock || (echo "wiremock folder missing" && exit 1)
+          ls -lah test/e2e/resources/wiremock/mappings || (echo "mappings folder missing" && exit 1)
+          ls -lah test/e2e/resources/wiremock/__files || (echo "__files folder missing" && exit 1)
+
+      - name: Load WireMock mappings (retry)
+        run: |
+          set -euo pipefail
+          for i in {1..10}; do
+            if curl -fsS http://localhost:8099/__admin; then break; fi
+            echo "Waiting for WireMock... ($i/10)"; sleep 2
+          done
+          npm run post-wiremock-mappings
+
+      - name: Assert mappings loaded
+        run: |
+          curl -fsS http://localhost:8099/__admin/mappings \
+            | jq '.mappings | length as $n | "Loaded \($n) mappings"'
 
       - name: Wait for services
         run: |
