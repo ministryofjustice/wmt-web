@@ -2,8 +2,7 @@ name: Pipeline [test -> build -> deploy]
 
 on:
   push:
-    branches:
-      - '**'
+    branches: ['**']
   workflow_dispatch:
     inputs:
       additional_docker_tag:
@@ -17,11 +16,10 @@ on:
         default: false
         type: boolean
 
-# Default token perms for all jobs in this workflow
 permissions:
   contents: read
   packages: write
-  actions: read    # needed to list/download artifacts in this run
+  actions: read   # needed to list/download artifacts
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && github.sha || github.ref }}
@@ -29,15 +27,64 @@ concurrency:
 
 jobs:
   node_build:
-    name: node build
-    # Let the called workflow upload artifacts
+    name: node build (inline)
+    runs-on: ubuntu-latest
     permissions:
       contents: read
-      actions: write
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_build.yml@v2
-    secrets: inherit
+      actions: write       # <-- lets us upload artifacts
+    steps:
+      - uses: actions/checkout@v4
 
-  # --- OPTIONAL: Consumer job to prove & use the build artifacts from this SAME run ---
+      - name: Use Node.js from .nvmrc
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Update npm
+        run: sudo npm i -g npm@latest
+
+      - name: Restore cache
+        id: restore-cache
+        uses: actions/cache/restore@v4
+        env:
+          cache-name: node-modules
+        with:
+          path: |
+            ./node_modules
+            ~/.cache/Cypress
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install deps
+        if: steps.restore-cache.outputs.cache-hit != 'true'
+        run: npm ci --no-audit
+
+      - name: Build
+        run: npm run build
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm_build_artifacts
+          path: |
+            build/
+            dist/
+            assets/stylesheets/
+          if-no-files-found: error   # fail fast if nothing was produced
+
+      - name: Save cache
+        uses: actions/cache/save@v4
+        if: always()
+        env:
+          cache-name: node-modules
+        with:
+          path: |
+            ./node_modules
+            ~/.cache/Cypress
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+
   use_built_assets:
     name: Use npm build artifacts
     needs: node_build
@@ -51,28 +98,15 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: gh api repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts --jq '.artifacts[].name'
 
-      # broad download to inspect everything; delete after you confirm the exact name you want
-      - name: Download all artifacts (debug)
-        uses: actions/download-artifact@v5
-        with:
-          path: ./artifacts_all
-      - run: ls -R ./artifacts_all || true
-
-      # precise download — what you actually want to keep
-      - name: Download npm build artifacts (exact)
+      - name: Download npm build artifacts
         uses: actions/download-artifact@v5
         with:
           name: npm_build_artifacts
           path: ./artifacts
-      - run: ls -lah ./artifacts || true
 
-      # (Alternative) if you prefer a pattern:
-      # - uses: actions/download-artifact@v5
-      #   with:
-      #     pattern: npm_*_artifacts
-      #     merge-multiple: true
-      #     path: ./artifacts
+      - run: ls -R ./artifacts
 
+  # Keep your existing jobs below (unit/integration tests, docker build, deploys)
   node_unit_tests:
     name: node unit tests
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_unit_tests.yml@v2
@@ -99,9 +133,7 @@ jobs:
     name: Build docker image from hmpps-github-actions
     if: github.ref == 'refs/heads/main'
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@v2
-    needs:
-      - node_integration_tests
-      - node_unit_tests
+    needs: [node_integration_tests, node_unit_tests]
     with:
       docker_registry: 'ghcr.io'
       registry_org: 'ministryofjustice'
@@ -110,11 +142,8 @@ jobs:
       docker_multiplatform: false
 
   deploy_dev:
-    name: Deploy to the dev environment
     if: github.ref == 'refs/heads/main'
-    needs:
-      - build
-      - helm_lint
+    needs: [build, helm_lint]
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2
     secrets: inherit
     with:
@@ -123,11 +152,8 @@ jobs:
       helm_timeout: '5m'
 
   deploy_preprod:
-    name: Deploy to the preprod environment
     if: github.ref == 'refs/heads/main'
-    needs:
-      - build
-      - helm_lint
+    needs: [build, helm_lint]
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2
     secrets: inherit
     with:
@@ -136,12 +162,7 @@ jobs:
       helm_timeout: '5m'
 
   deploy_prod:
-    name: Deploy to the prod environment
-    needs:
-      - build
-      - helm_lint
-      - deploy_preprod
-      - deploy_dev
+    needs: [build, helm_lint, deploy_preprod, deploy_dev]
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2
     secrets: inherit
     with:
