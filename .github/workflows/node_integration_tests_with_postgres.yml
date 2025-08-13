@@ -148,3 +148,283 @@ jobs:
         image: wiremock/wiremock:2.35.0
         ports:
           - 8099:8080
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+
+    env:
+      AWS_DEFAULT_REGION: eu-west-2
+      AWS_ACCESS_KEY_ID: foobar
+      AWS_SECRET_ACCESS_KEY: foobar
+      LS: http://127.0.0.1:4566
+
+      APP_PORT: "3000"
+      BASE_URL: http://127.0.0.1:3000
+      WIREMOCK_URL: http://127.0.0.1:8099
+      CHROME_BIN: /usr/bin/google-chrome
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wait for services
+        run: |
+          for i in {1..60}; do pg_isready -h 127.0.0.1 -p 5432 -U postgres -d postgres && break; sleep 1; done
+          curl -sfS --retry 30 --retry-connrefused --retry-delay 2 "$LS/_localstack/health" || exit 1
+          curl -sfS --retry 30 --retry-connrefused --retry-delay 2 "$WIREMOCK_URL/__admin" || exit 1
+
+      - name: Setup AWS CLI + jq
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y jq
+          python3 -m pip install --user --upgrade pip
+          python3 -m pip install --user "awscli==1.*"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Seed LocalStack (queue + sample dashboards)
+        run: |
+          set -euo pipefail
+          aws --endpoint-url="$LS" sqs create-queue --queue-name audit_event_queue || true
+          aws --endpoint-url="$LS" s3api create-bucket \
+            --bucket wmt-web \
+            --region "$AWS_DEFAULT_REGION" \
+            --create-bucket-configuration LocationConstraint="$AWS_DEFAULT_REGION" || true
+          printf 'dashboard' > dashboard-file.txt
+          for ts in 20210729062147 20210730062147 20210731062147 20210801062147 20210802062147; do
+            aws --endpoint-url="$LS" s3api put-object \
+              --bucket wmt-web \
+              --key generated-dashboards/dashboard_${ts}.txt \
+              --body dashboard-file.txt
+          done
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ${{ inputs.node_version_file }}
+
+      - name: Install deps
+        run: npm ci --no-audit
+
+      - name: Install Google Chrome (for WDIO)
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y wget gpg
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-linux-signing-keyring.gpg
+          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-linux-signing-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list >/dev/null
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+          google-chrome --version
+
+      - name: Install psql client
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y postgresql-client
+
+      - name: Start hmpps_workload container
+        run: |
+          docker run -d --name hmpps_workload \
+            --add-host=host.docker.internal:host-gateway \
+            -e SPRING_PROFILES_ACTIVE=dev,docker \
+            -e DATABASE_USERNAME=postgres \
+            -e DATABASE_PASSWORD=postgres \
+            -e DATABASE_ENDPOINT=host.docker.internal:5432 \
+            -e HMPPS_SQS_LOCALSTACK_URL=http://host.docker.internal:4566 \
+            ghcr.io/ministryofjustice/hmpps-workload:latest \
+            /bin/sh -lc 'sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar'
+
+      - name: Wait for DB schema
+        env:
+          PGPASSWORD: postgres
+        run: |
+          for i in {1..120}; do
+            psql -h 127.0.0.1 -U postgres -d postgres -tAc "SELECT 1 FROM information_schema.tables WHERE table_name='flyway_schema_history'" | grep -q 1 && exit 0
+            echo "Waiting for Flyway schema... ($i/120)"
+            sleep 2
+          done
+          echo "Schema not ready in time"; docker logs hmpps_workload || true; exit 1
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Start app (direct; env aligned to 127.0.0.1)
+        env:
+          # required secrets
+          WMT_WEB_APPLICATION_SECRET: ci-dev-secret
+          SESSION_SECRET: ci-session-secret
+
+          # DB
+          WMT_LIVE_DB_SERVER: 127.0.0.1
+          WMT_LIVE_DB_NAME: postgres
+          WMT_LIVE_DB_USERNAME: postgres
+          WMT_LIVE_DB_PASSWORD: postgres
+          WMT_HISTORY_DB_SERVER: 127.0.0.1
+          WMT_HISTORY_DB_PORT: "5432"
+          WMT_HISTORY_DB_NAME: postgres
+          WMT_HISTORY_DB_USERNAME: postgres
+          WMT_HISTORY_DB_PASSWORD: postgres
+
+          # Redis
+          REDIS_HOST: 127.0.0.1
+          REDIS_PORT: "6379"
+          REDIS_URL: redis://127.0.0.1:6379
+
+          # External URLs (WireMock)
+          HMPPS_AUTH_URL: http://127.0.0.1:8099/auth
+          HMPPS_AUTH_EXTERNAL_URL: http://127.0.0.1:8099/auth
+          MANAGE_USERS_SERVICE_URL: http://127.0.0.1:8099
+          ALLOCATIONS_SERVICE_URL: http://127.0.0.1:8099
+          USER_PREFERENCE_SERVICE_URL: http://127.0.0.1:8099
+          TOKEN_VERIFICATION_API_URL: http://127.0.0.1:8099
+          TOKEN_VERIFICATION_ENABLED: "true"
+
+          # App URL (cookie domain)
+          INGRESS_URL: http://127.0.0.1:3000
+          PORT: 3000
+        run: |
+          set -euo pipefail
+          # Load any feature.env vars (ours above take precedence if duplicated)
+          export $(grep -v '^\s*#' feature.env | xargs) || true
+          nohup node app/bin/www > /tmp/app.log 2>&1 &
+          for i in {1..120}; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:3000/" || echo "000")
+            [[ "$code" =~ ^(200|302)$ ]] && echo "App ready ($code)" && break
+            echo "Waiting for app… ($i/120) got $code"; sleep 2
+          done
+          tail -n 200 /tmp/app.log || true
+
+      - name: Load WireMock mappings from repo
+        run: npm run post-wiremock-mappings
+
+      # >>> THIS PATCH fixes the mismatches you saw (health path, authorize param order, redirect host/path).
+      - name: Patch WireMock auth endpoints (health + authorize + token)
+        env:
+          WIREMOCK_URL: http://127.0.0.1:8099
+          BASE_URL: http://127.0.0.1:3000
+        run: |
+          set -euo pipefail
+          W="$WIREMOCK_URL"; APP="$BASE_URL"
+
+          # 1) /auth/health/ping (your mappings only had /health/ping)
+          curl -s -X POST "$W/__admin/mappings" -H 'Content-Type: application/json' --data '{
+            "priority": 1,
+            "request": { "method":"GET", "urlPath":"/auth/health/ping" },
+            "response": { "status":200, "jsonBody":{"status":"UP"} }
+          }' >/dev/null
+
+          # 2) /auth/oauth/authorize (order-agnostic params; redirect to /sign-in/callback on 127.0.0.1)
+          curl -s -X POST "$W/__admin/mappings" -H 'Content-Type: application/json' --data @- >/dev/null <<JSON
+          {
+            "priority": 1,
+            "request": {
+              "method": "GET",
+              "urlPath": "/auth/oauth/authorize",
+              "queryParameters": {
+                "client_id":     { "matches": "workload-measurement-ui" },
+                "response_type": { "matches": "code" },
+                "state":         { "matches": ".+" },
+                "redirect_uri":  { "matches": ".+" }
+              }
+            },
+            "response": {
+              "status": 302,
+              "headers": { "Location": "$APP/sign-in/callback?code=fakecode&state=fakestate" }
+            }
+          }
+  JSON
+
+# 3) /auth/oauth/token (POST → 200 token)
+curl -s -X POST "$W/__admin/mappings" -H 'Content-Type: application/json' --data '{
+  "priority": 1,
+  "request": { "method":"POST", "urlPath":"/auth/oauth/token" },
+  "response": { "status":200, "jsonBody":{"access_token":"fake-token","token_type":"bearer","expires_in":3600} }
+}' >/dev/null
+
+          # Sanity (should be 302, 200, 200 respectively)
+          echo -n "authorize => "; curl -s -o /dev/null -w "%{http_code}\n" "$W/auth/oauth/authorize?client_id=workload-measurement-ui&state=x&response_type=code&redirect_uri=$APP/sign-in/callback"
+          echo -n "token(POST)=> "; curl -s -o /dev/null -w "%{http_code}\n" -X POST "$W/auth/oauth/token"
+          echo -n "health => "; curl -s -o /dev/null -w "%{http_code}\n" "$W/auth/health/ping"
+
+      - name: Create WDIO CI config (unique Chrome profile; single worker)
+        run: |
+          cat > wdio.ci.conf.js <<'JS'
+  const path = require('path');
+  const os = require('os');
+  const fs = require('fs');
+  const basePath = path.resolve(__dirname, 'test/e2e.conf.js');
+  const baseMod = require(basePath);
+  const base = baseMod.config || baseMod;
+  
+  const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'wdio-chrome-'));
+  
+  const ensureArgs = (c = {}) => {
+  const opts = c['goog:chromeOptions'] || {};
+  const args = new Set([...(opts.args || []),
+  '--no-sandbox',
+  '--disable-dev-shm-usage',
+  '--window-size=1920,1080',
+  `--user-data-dir=${profile}`,
+  '--headless=new'
+]);
+  const out = {
+browserName: c.browserName || 'chrome',
+  ...c,
+'goog:chromeOptions': { ...opts, args: Array.from(args) },
+'wdio:enforceWebDriverClassic': true
+};
+  if (process.env.CHROME_BIN) out['goog:chromeOptions'].binary = process.env.CHROME_BIN;
+  return out;
+};
+  
+  const caps = Array.isArray(base.capabilities)
+? base.capabilities.map(ensureArgs)
+  : [ensureArgs(base.capabilities || {})];
+  
+  const baseDir = path.dirname(basePath);
+const toAbs = (p) => path.isAbsolute(p) ? p : path.join(baseDir, p);
+const specs = (base.specs && base.specs.length ? base.specs : ['e2e/**/*.js','e2e/*.js']).map(toAbs);
+  const exclude = (base.exclude || []).map(toAbs);
+  
+  exports.config = {
+  ...base,
+baseUrl: process.env.BASE_URL || base.baseUrl || 'http://127.0.0.1:3000',
+  specs,
+  exclude,
+maxInstances: 1,
+capabilities: caps,
+logLevel: base.logLevel || 'info',
+outputDir: base.outputDir || './wdio-logs'
+};
+  JS
+
+- name: Run E2E (wdio with isolated Chrome profile)
+  env:
+    BASE_URL: ${{ env.BASE_URL }}
+    DATABASE_SERVER: 127.0.0.1
+    DATABASE_USERNAME: postgres
+    DATABASE_PASSWORD: postgres
+    DATABASE: postgres
+    DATABASE_PORT: "5432"
+    DATABASE_SSL: "false"
+    CHROME_BIN: ${{ env.CHROME_BIN }}
+  run: |
+    set -euo pipefail
+    export $(grep -v '^\s*#' feature.env | xargs) || true
+    npm run clean-dev-data
+    npm run seed-dev-data
+    pkill -f "chrome" || true
+    npx wdio wdio.ci.conf.js --workers 1
+    npm run clean-dev-data
+
+- name: Upload E2E artifacts (on failure)
+  if: failure()
+  uses: actions/upload-artifact@v4
+  with:
+    name: e2e-artifacts
+    path: |
+      /tmp/app.log
+      ./screenshots
+      ./videos
+      ./wdio-*.log
+      ./wdio-logs
+    if-no-files-found: ignore
