@@ -238,3 +238,24 @@ jobs:
           tail -n 200 /tmp/app.log || true
 
       - name: Run E2E (npm run test-e2e)
+        env:
+          BASE_URL: ${{ env.BASE_URL }}
+          DATABASE_SERVER: 127.0.0.1
+          DATABASE_USERNAME: postgres
+          DATABASE_PASSWORD: postgres
+          DATABASE: postgres
+          DATABASE_PORT: "5432"
+          DATABASE_SSL: "false"
+          CHROME_BIN: ${{ env.CHROME_BIN }}
+        run: npm run test-e2e
+
+      - name: Upload E2E artifacts (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-artifacts
+          path: |
+            ./screenshots
+            ./videos
+            ./wdio-*.log
+          if-no-files-found: ignore
