@@ -19,11 +19,14 @@ on:
 permissions:
   contents: read
   packages: write
-  actions: read   # needed to list/download artifacts
+  actions: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && github.sha || github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+env:
+  PROJECT_DIR: app
 
 jobs:
   node_build:
@@ -31,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      actions: write       # <-- lets us upload artifacts
+      actions: write
     steps:
       - uses: actions/checkout@v4
 
@@ -50,29 +53,65 @@ jobs:
           cache-name: node-modules
         with:
           path: |
-            ./node_modules
+            ${{ env.PROJECT_DIR }}/node_modules
             ~/.cache/Cypress
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install deps
         if: steps.restore-cache.outputs.cache-hit != 'true'
+        working-directory: ${{ env.PROJECT_DIR }}
         run: npm ci --no-audit
 
       - name: Build
+        working-directory: ${{ env.PROJECT_DIR }}
         run: npm run build
 
       - name: Lint
+        working-directory: ${{ env.PROJECT_DIR }}
         run: npm run lint
+
+      - name: Show build outputs (debug)
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: |
+          echo "PWD=$(pwd)"
+          ls -la
+          find . -maxdepth 2 -type d -name 'dist' -o -name 'build' -o -name 'assets' -o -name '.next' -o -name 'out' | sort
+
+      # Collect only the folders that actually exist, then upload them
+      - id: collect
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$PROJECT_DIR"
+          candidates=(dist build assets/stylesheets .next out public)
+          found=()
+          for p in "${candidates[@]}"; do
+            if [ -e "$p" ]; then
+              echo "Found $p"
+              # prefix with PROJECT_DIR so upload sees the correct path from repo root
+              if [ "$PROJECT_DIR" = "." ]; then
+                found+=("$p")
+              else
+                found+=("$PROJECT_DIR/$p")
+              fi
+            fi
+          done
+          if [ ${#found[@]} -eq 0 ]; then
+            echo "No build outputs found in $PROJECT_DIR (looked for: ${candidates[*]})"
+            exit 1
+          fi
+          {
+            echo "paths<<EOF"
+            printf "%s\n" "${found[@]}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: npm_build_artifacts
-          path: |
-            build/
-            dist/
-            assets/stylesheets/
-          if-no-files-found: error   # fail fast if nothing was produced
+          path: ${{ steps.collect.outputs.paths }}
+          if-no-files-found: error
 
       - name: Save cache
         uses: actions/cache/save@v4
@@ -81,7 +120,7 @@ jobs:
           cache-name: node-modules
         with:
           path: |
-            ./node_modules
+            ${{ env.PROJECT_DIR }}/node_modules
             ~/.cache/Cypress
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
 
@@ -106,7 +145,7 @@ jobs:
 
       - run: ls -R ./artifacts
 
-  # Keep your existing jobs below (unit/integration tests, docker build, deploys)
+  # keep your existing jobs below
   node_unit_tests:
     name: node unit tests
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_unit_tests.yml@v2
@@ -133,7 +172,9 @@ jobs:
     name: Build docker image from hmpps-github-actions
     if: github.ref == 'refs/heads/main'
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@v2
-    needs: [node_integration_tests, node_unit_tests]
+    needs:
+      - node_integration_tests
+      - node_unit_tests
     with:
       docker_registry: 'ghcr.io'
       registry_org: 'ministryofjustice'
@@ -142,8 +183,11 @@ jobs:
       docker_multiplatform: false
 
   deploy_dev:
+    name: Deploy to the dev environment
     if: github.ref == 'refs/heads/main'
-    needs: [build, helm_lint]
+    needs:
+      - build
+      - helm_lint
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2
     secrets: inherit
     with:
@@ -152,8 +196,11 @@ jobs:
       helm_timeout: '5m'
 
   deploy_preprod:
+    name: Deploy to the preprod environment
     if: github.ref == 'refs/heads/main'
-    needs: [build, helm_lint]
+    needs:
+      - build
+      - helm_lint
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2
     secrets: inherit
     with:
@@ -162,7 +209,12 @@ jobs:
       helm_timeout: '5m'
 
   deploy_prod:
-    needs: [build, helm_lint, deploy_preprod, deploy_dev]
+    name: Deploy to the prod environment
+    needs:
+      - build
+      - helm_lint
+      - deploy_preprod
+      - deploy_dev
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2
     secrets: inherit
     with:
