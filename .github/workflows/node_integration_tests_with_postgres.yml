@@ -35,6 +35,15 @@ jobs:
           - 4566:4566
         env:
           SERVICES: s3,sqs,sns
+      wiremock:
+        image: wiremock/wiremock:2.35.0
+        ports:
+          - 8099:8080
+        options: >-
+          --health-cmd="wget -qO- http://localhost:8080/__admin || exit 1"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
 
     # 👇 only AWS values live here
     env:
@@ -59,6 +68,7 @@ jobs:
         run: |
           for i in {1..60}; do pg_isready -h 127.0.0.1 -p 5432 -U postgres -d postgres && break; sleep 1; done
           curl -sfS --retry 20 --retry-connrefused --retry-delay 2 "$LS/_localstack/health" || exit 1
+          curl -sfS --retry 20 --retry-connrefused --retry-delay 2 http://127.0.0.1:8099/__admin || exit 1
 
       - name: Ensure real AWS CLI + jq
         run: |
