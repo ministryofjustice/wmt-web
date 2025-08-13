@@ -74,4 +74,8 @@ jobs:
           sudo apt-get install -y jq
 
           # AWS CLI v1 via pip (works fine for our commands)
-          python3 -m pip install --user --upgra
+          python3 -m pip install --user --upgrade pip
+          python3 -m pip install --user "awscli==1.*"
+      
+          # add ~/.local/bin to PATH for subsequent steps
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
