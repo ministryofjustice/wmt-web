@@ -40,6 +40,10 @@ jobs:
         image: wiremock/wiremock:2.35.0
         ports:
           - 8099:8080
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
 
     env:
       # AWS / endpoints
