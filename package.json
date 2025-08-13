@@ -19,6 +19,7 @@
     "test-generate-report": "mocha --recursive test/unit/ --timeout=3000 --exit --reporter mocha-simple-html-reporter --reporter-options output=test_results/unit-test-reports.html",
     "integration-test": "export $(cat feature.env) && npm run build && mocha --recursive test/integration --timeout=60000 --exit",
     "test": "mocha --recursive test/unit/ --timeout=3000 --exit",
+    "test:ci": "npm run -s test",
     "test-e2e": "export $(cat feature.env) && npm run clean-dev-data && npm run seed-dev-data && wdio test/e2e.conf.js && npm run clean-dev-data",
     "record-build-info": "node ./bin/record-build-info",
     "security_audit": "npx audit-ci --config audit-ci.json",
