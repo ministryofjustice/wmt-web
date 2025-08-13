@@ -73,7 +73,7 @@ jobs:
         run: |
           set -xeuo pipefail
           LS=http://127.0.0.1:4566
-          BUCKET=wmt-worker
+          BUCKET=wmt-web
           
           # Buckets (idempotent)
           aws --endpoint-url=$LS s3api create-bucket --bucket "$BUCKET" \
