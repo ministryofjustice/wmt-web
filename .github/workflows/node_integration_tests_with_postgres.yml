@@ -39,11 +39,6 @@ jobs:
         image: wiremock/wiremock:2.35.0
         ports:
           - 8099:8080
-        options: >-
-          --health-cmd="wget -qO- http://localhost:8080/__admin || exit 1"
-          --health-interval=5s
-          --health-timeout=5s
-          --health-retries=20
 
     # 👇 only AWS values live here
     env:
