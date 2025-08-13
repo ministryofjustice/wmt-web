@@ -156,6 +156,7 @@ jobs:
       AWS_ACCESS_KEY_ID: foobar
       AWS_SECRET_ACCESS_KEY: foobar
       LS: http://localhost:4566
+
       APP_PORT: "3000"
       BASE_URL: http://localhost:3000
       WIREMOCK_URL: http://localhost:8099
@@ -242,15 +243,12 @@ jobs:
           done
           echo "Schema not ready in time"; docker logs hmpps_workload || true; exit 1
 
-      - name: Build assets
-        run: npm run build
-
-      - name: Verify mapping files exist
+      - name: Verify WireMock mappings exist in repo
         run: |
           ls -lah test/e2e/resources/wiremock || (echo "wiremock folder missing" && exit 1)
           ls -lah test/e2e/resources/wiremock/mappings || (echo "mappings folder missing" && exit 1)
 
-      - name: Load WireMock mappings (retry)
+      - name: Load WireMock mappings (retry) + quick auth smoke
         run: |
           set -euo pipefail
           for i in {1..10}; do
@@ -258,15 +256,22 @@ jobs:
             echo "Waiting for WireMock... ($i/10)"; sleep 2
           done
           npm run post-wiremock-mappings
-          curl -fsS http://localhost:8099/__admin/mappings | jq '.mappings | length as $n | "Loaded \($n) mappings"'
+          echo "Mappings loaded: $(curl -s http://localhost:8099/__admin/mappings | jq '.mappings | length')"
+          # Auth stubs sanity (won't fail build; just logs)
+          echo "--- WireMock auth /health/ping ---"
+          curl -sS -i http://localhost:8099/auth/health/ping | head -n 20 || true
+          echo "--- WireMock auth /oauth/authorize (expect a 302) ---"
+          curl -sS -i "http://localhost:8099/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=http://localhost:3000/sign-in/callback&response_type=code&state=x" | head -n 20 || true
 
-      - name: Start app (robust wait; with WireMock & DB/Redis overrides)
+      - name: Build assets
+        run: npm run build
+
+      - name: Start app (via start-dev, robust wait, WireMock/DB/Redis overrides)
         env:
-          # Required secrets for boot in CI
+          # Required secrets for app boot
           WMT_WEB_APPLICATION_SECRET: ci-dev-secret
           SESSION_SECRET: ci-session-secret
-
-          # DB (same Postgres that hmpps_workload migrated)
+          # DB (hmpps_workload migrated)
           WMT_LIVE_DB_SERVER: localhost
           WMT_LIVE_DB_NAME: postgres
           WMT_LIVE_DB_USERNAME: postgres
@@ -276,12 +281,10 @@ jobs:
           WMT_HISTORY_DB_NAME: postgres
           WMT_HISTORY_DB_USERNAME: postgres
           WMT_HISTORY_DB_PASSWORD: postgres
-
           # Redis
           REDIS_HOST: localhost
           REDIS_PORT: "6379"
           REDIS_URL: redis://localhost:6379
-
           # WireMock endpoints
           HMPPS_AUTH_URL: http://localhost:8099/auth
           HMPPS_AUTH_EXTERNAL_URL: http://localhost:8099/auth
@@ -289,42 +292,24 @@ jobs:
           ALLOCATIONS_SERVICE_URL: http://localhost:8099
           USER_PREFERENCE_SERVICE_URL: http://localhost:8099
           TOKEN_VERIFICATION_API_URL: http://localhost:8099
-
+          # Domain
+          INGRESS_URL: http://localhost:3000
           PORT: 3000
         run: |
           set -euo pipefail
-      
-          # Start the app with feature.env + our overrides
-          nohup env $(grep -v '^\s*#' feature.env | xargs) \
-            PORT=$PORT \
-            WMT_LIVE_DB_SERVER=$WMT_LIVE_DB_SERVER WMT_LIVE_DB_NAME=$WMT_LIVE_DB_NAME WMT_LIVE_DB_USERNAME=$WMT_LIVE_DB_USERNAME WMT_LIVE_DB_PASSWORD=$WMT_LIVE_DB_PASSWORD \
-            WMT_HISTORY_DB_SERVER=$WMT_HISTORY_DB_SERVER WMT_HISTORY_DB_PORT=$WMT_HISTORY_DB_PORT WMT_HISTORY_DB_NAME=$WMT_HISTORY_DB_NAME WMT_HISTORY_DB_USERNAME=$WMT_HISTORY_DB_USERNAME WMT_HISTORY_DB_PASSWORD=$WMT_HISTORY_DB_PASSWORD \
-            REDIS_HOST=$REDIS_HOST REDIS_PORT=$REDIS_PORT REDIS_URL=$REDIS_URL \
-            HMPPS_AUTH_URL=$HMPPS_AUTH_URL HMPPS_AUTH_EXTERNAL_URL=$HMPPS_AUTH_EXTERNAL_URL MANAGE_USERS_SERVICE_URL=$MANAGE_USERS_SERVICE_URL \
-            ALLOCATIONS_SERVICE_URL=$ALLOCATIONS_SERVICE_URL USER_PREFERENCE_SERVICE_URL=$USER_PREFERENCE_SERVICE_URL TOKEN_VERIFICATION_API_URL=$TOKEN_VERIFICATION_API_URL \
-            node app/bin/www > /tmp/app.log 2>&1 &
-      
-          # Wait up to 120s for the app to respond (don’t use -f so we don’t exit on 000/503)
+          # start-dev will export feature.env; we still inject overrides above
+          nohup env $(grep -v '^\s*#' feature.env | xargs) npm run start-dev > /tmp/app.log 2>&1 &
           ready=""
           for i in {1..120}; do
             code=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:3000/" || echo "000")
             if [ "$code" = "200" ] || [ "$code" = "302" ]; then
-              echo "App ready at http://localhost:3000 ($code)"
-              ready="yes"
-              break
+              echo "App ready at http://localhost:3000 ($code)"; ready="yes"; break
             fi
-            echo "Waiting for app... ($i/120) got $code"
-            sleep 2
+            echo "Waiting for app... ($i/120) got $code"; sleep 2
           done
-      
-          # If not ready, show logs and fail
           if [ -z "$ready" ]; then
-            echo "App did not become ready. Last 400 lines of /tmp/app.log:"
-            tail -n 400 /tmp/app.log || true
-            exit 1
+            echo "App did not become ready. Last 400 lines of /tmp/app.log:"; tail -n 400 /tmp/app.log || true; exit 1
           fi
-      
-          echo '--- app log tail ---'
           tail -n 200 /tmp/app.log || true
 
       - name: Create WDIO CI config (unique Chrome profile + absolute specs + baseUrl)
@@ -392,7 +377,7 @@ jobs:
           CHROME_BIN: ${{ env.CHROME_BIN }}
         run: |
           set -euo pipefail
-          export $(cat feature.env | xargs)
+          export $(grep -v '^\s*#' feature.env | xargs)
           export BASE_URL="${BASE_URL}"
           npm run clean-dev-data
           npm run seed-dev-data
