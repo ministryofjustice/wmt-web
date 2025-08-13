@@ -226,20 +226,29 @@ jobs:
           sudo apt-get install -y google-chrome-stable
           google-chrome --version
 
-      - name: Start app
+      - name: Build assets
+        run: npm run build
+
+      - name: Start app (start-dev on :3000)
         env:
-          PORT: ${{ env.APP_PORT }}
+          PORT: 3000
         run: |
           set -euo pipefail
-          # prefer start:e2e or start:test if present; else start
-          START_SCRIPT=$(node -e "const s=require('./package.json').scripts||{}; const order=['start:e2e','start:test','start']; const f=order.find(k=>s[k]); if(!f){process.exit(1)}; console.log(f)")
-          echo "Using start script: $START_SCRIPT"
-          nohup npm run "$START_SCRIPT" >/tmp/app.log 2>&1 &
+          # start-dev exports feature.env then starts the server
+          nohup npm run start-dev >/tmp/app.log 2>&1 &
           for i in {1..60}; do
-            if curl -fsS "http://127.0.0.1:${APP_PORT}/" >/dev/null; then echo "App ready"; break; fi
+            if curl -fsS http://127.0.0.1:3000/ >/dev/null; then
+              echo "App ready on :3000"
+              break
+            fi
             sleep 2
           done
+          echo '--- app log tail ---'
           tail -n 200 /tmp/app.log || true
+
+      - name: Load WireMock mappings
+        run: npm run post-wiremock-mappings
+
 
       - name: Run E2E (npm run test-e2e)
         env:
