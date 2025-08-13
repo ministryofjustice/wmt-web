@@ -234,6 +234,34 @@ jobs:
           sudo apt-get install -y google-chrome-stable
           google-chrome --version
 
+      - name: Install psql client
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y postgresql-client
+
+      - name: Start hmpps_workload container
+        run: |
+          docker run -d --name hmpps_workload \
+            --add-host=host.docker.internal:host-gateway \
+            -e SPRING_PROFILES_ACTIVE=dev,docker \
+            -e DATABASE_USERNAME=postgres \
+            -e DATABASE_PASSWORD=postgres \
+            -e DATABASE_ENDPOINT=host.docker.internal:5432 \
+            -e HMPPS_SQS_LOCALSTACK_URL=http://host.docker.internal:4566 \
+            ghcr.io/ministryofjustice/hmpps-workload:latest \
+            /bin/sh -lc 'sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar'
+
+      - name: Wait for DB schema
+        env:
+          PGPASSWORD: postgres
+        run: |
+          for i in {1..120}; do
+            psql -h 127.0.0.1 -U postgres -d postgres -tAc "SELECT 1 FROM information_schema.tables WHERE table_name='flyway_schema_history'" | grep -q 1 && exit 0
+            echo "Waiting for Flyway schema... ($i/120)"
+            sleep 2
+          done
+          echo "Schema not ready in time"; docker logs hmpps_workload || true; exit 1
+
       - name: Build assets
         run: npm run build
 
