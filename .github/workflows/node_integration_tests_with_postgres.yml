@@ -23,30 +23,23 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-        ports:
-          - 5432:5432
+        ports: [ "5432:5432" ]
         options: >-
           --health-cmd="pg_isready -U postgres -d postgres"
-          --health-interval=5s
-          --health-timeout=5s
-          --health-retries=20
+          --health-interval=5s --health-timeout=5s --health-retries=20
       localstack:
         image: localstack/localstack:latest
-        ports:
-          - 4566:4566
+        ports: [ "4566:4566" ]
         env:
           SERVICES: s3,sqs,sns
       wiremock:
         image: wiremock/wiremock:2.35.0
-        ports:
-          - 8099:8080
+        ports: [ "8099:8080" ]
       redis:
         image: redis:7-alpine
-        ports:
-          - 6379:6379
+        ports: [ "6379:6379" ]
 
     env:
-      # AWS / endpoints
       AWS_DEFAULT_REGION: eu-west-2
       AWS_ACCESS_KEY_ID: foobar
       AWS_SECRET_ACCESS_KEY: foobar
@@ -59,7 +52,8 @@ jobs:
         run: |
           for i in {1..60}; do pg_isready -h 127.0.0.1 -p 5432 -U postgres -d postgres && break; sleep 1; done
           curl -sfS --retry 20 --retry-connrefused --retry-delay 2 "$LS/_localstack/health" || exit 1
-          curl -sfS --retry 20 --retry-connrefused --retry-delay 2 "http://127.0.0.1:8099/__admin" || exit 1
+          curl -sfS --retry 20 --retry-connrefused --retry-delay 2 "http://localhost:8099/__admin" || exit 1
+          for i in {1..60}; do (echo > /dev/tcp/127.0.0.1/6379) >/dev/null 2>&1 && break; sleep 1; done
 
       - name: Install jq & psql client
         run: |
@@ -73,23 +67,16 @@ jobs:
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
       - name: Create sample dashboard file (used for uploads)
-        run: |
-          # exact content, no trailing newline
-          printf 'dashboard' > dashboard-file.txt
+        run: printf 'dashboard' > dashboard-file.txt
 
-      # ==== AWS population (mirrors your script) ====
       - name: Seed LocalStack (S3 + SQS)
         run: |
           set -euo pipefail
-          # queue: audit_event_queue
           aws --endpoint-url="$LS" sqs create-queue --queue-name audit_event_queue || true
-
-          # bucket: wmt-web + five objects under generated-dashboards/
           aws --endpoint-url="$LS" s3api create-bucket \
             --bucket wmt-web \
             --region "$AWS_DEFAULT_REGION" \
             --create-bucket-configuration LocationConstraint="$AWS_DEFAULT_REGION" || true
-
           for ts in 20210729062147 20210730062147 20210731062147 20210801062147 20210802062147; do
             aws --endpoint-url="$LS" s3api put-object \
               --bucket wmt-web \
@@ -97,7 +84,6 @@ jobs:
               --body dashboard-file.txt
           done
 
-      # (kept from your previous flow) start workload container and wait for schema
       - name: Start hmpps_workload container
         run: |
           docker run -d --name hmpps_workload \
@@ -111,11 +97,11 @@ jobs:
             /bin/sh -lc 'sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar'
 
       - name: Wait for DB schema
-        env:
-          PGPASSWORD: postgres
+        env: { PGPASSWORD: postgres }
         run: |
           for i in {1..120}; do
-            psql -h 127.0.0.1 -U postgres -d postgres -tAc "SELECT 1 FROM information_schema.tables WHERE table_name='flyway_schema_history'" | grep -q 1 && exit 0
+            psql -h 127.0.0.1 -U postgres -d postgres -tAc \
+              "SELECT 1 FROM information_schema.tables WHERE table_name='flyway_schema_history'" | grep -q 1 && exit 0
             sleep 2
           done
           echo "Schema not ready in time"; docker logs hmpps_workload || true; exit 1
@@ -123,7 +109,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: .nvmrc
+          node-version-file: ${{ inputs.node_version_file }}
 
       - name: Install deps
         run: npm ci --no-audit
@@ -149,34 +135,27 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-        ports:
-          - 5432:5432
+        ports: [ "5432:5432" ]
         options: >-
           --health-cmd="pg_isready -U postgres -d postgres"
-          --health-interval=5s
-          --health-timeout=5s
-          --health-retries=20
+          --health-interval=5s --health-timeout=5s --health-retries=20
       localstack:
         image: localstack/localstack:latest
-        ports:
-          - 4566:4566
+        ports: [ "4566:4566" ]
         env:
           SERVICES: s3,sqs,sns
       wiremock:
         image: wiremock/wiremock:2.35.0
-        ports:
-          - 8099:8080
+        ports: [ "8099:8080" ]
       redis:
         image: redis:7-alpine
-        ports:
-          - 6379:6379
+        ports: [ "6379:6379" ]
 
     env:
       AWS_DEFAULT_REGION: eu-west-2
       AWS_ACCESS_KEY_ID: foobar
       AWS_SECRET_ACCESS_KEY: foobar
       LS: http://localhost:4566
-
       APP_PORT: "3000"
       BASE_URL: http://localhost:3000
       WIREMOCK_URL: http://localhost:8099
@@ -185,31 +164,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Verify mapping files exist
-        run: |
-          ls -lah test/e2e/resources/wiremock || (echo "wiremock folder missing" && exit 1)
-          ls -lah test/e2e/resources/wiremock/mappings || (echo "mappings folder missing" && exit 1)
-          ls -lah test/e2e/resources/wiremock/__files || (echo "__files folder missing" && exit 1)
-
-      - name: Load WireMock mappings (retry)
-        run: |
-          set -euo pipefail
-          for i in {1..10}; do
-            if curl -fsS http://localhost:8099/__admin; then break; fi
-            echo "Waiting for WireMock... ($i/10)"; sleep 2
-          done
-          npm run post-wiremock-mappings
-
-      - name: Assert mappings loaded
-        run: |
-          curl -fsS http://localhost:8099/__admin/mappings \
-            | jq '.mappings | length as $n | "Loaded \($n) mappings"'
-
       - name: Wait for services
         run: |
           for i in {1..60}; do pg_isready -h 127.0.0.1 -p 5432 -U postgres -d postgres && break; sleep 1; done
           curl -sfS --retry 30 --retry-connrefused --retry-delay 2 "$LS/_localstack/health" || exit 1
           curl -sfS --retry 30 --retry-connrefused --retry-delay 2 "http://localhost:8099/__admin" || exit 1
+          for i in {1..60}; do (echo > /dev/tcp/127.0.0.1/6379) >/dev/null 2>&1 && break; sleep 1; done
 
       - name: Setup AWS CLI + jq
         run: |
@@ -238,7 +198,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: .nvmrc
+          node-version-file: ${{ inputs.node_version_file }}
 
       - name: Install deps
         run: npm ci --no-audit
@@ -272,11 +232,11 @@ jobs:
             /bin/sh -lc 'sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar'
 
       - name: Wait for DB schema
-        env:
-          PGPASSWORD: postgres
+        env: { PGPASSWORD: postgres }
         run: |
           for i in {1..120}; do
-            psql -h 127.0.0.1 -U postgres -d postgres -tAc "SELECT 1 FROM information_schema.tables WHERE table_name='flyway_schema_history'" | grep -q 1 && exit 0
+            psql -h 127.0.0.1 -U postgres -d postgres -tAc \
+              "SELECT 1 FROM information_schema.tables WHERE table_name='flyway_schema_history'" | grep -q 1 && exit 0
             echo "Waiting for Flyway schema... ($i/120)"
             sleep 2
           done
@@ -285,8 +245,24 @@ jobs:
       - name: Build assets
         run: npm run build
 
-      - name: Start app (start-dev on :3000)
+      - name: Verify mapping files exist
+        run: |
+          ls -lah test/e2e/resources/wiremock || (echo "wiremock folder missing" && exit 1)
+          ls -lah test/e2e/resources/wiremock/mappings || (echo "mappings folder missing" && exit 1)
+
+      - name: Load WireMock mappings (retry)
+        run: |
+          set -euo pipefail
+          for i in {1..10}; do
+            if curl -fsS http://localhost:8099/__admin; then break; fi
+            echo "Waiting for WireMock... ($i/10)"; sleep 2
+          done
+          npm run post-wiremock-mappings
+          curl -fsS http://localhost:8099/__admin/mappings | jq '.mappings | length as $n | "Loaded \($n) mappings"'
+
+      - name: Start app (localhost:3000 with WireMock endpoints)
         env:
+          # DB (hmpps_workload migrated)
           WMT_LIVE_DB_SERVER: localhost
           WMT_LIVE_DB_NAME: postgres
           WMT_LIVE_DB_USERNAME: postgres
@@ -296,19 +272,21 @@ jobs:
           WMT_HISTORY_DB_NAME: postgres
           WMT_HISTORY_DB_USERNAME: postgres
           WMT_HISTORY_DB_PASSWORD: postgres
-          PORT: 3000
+          # Redis
           REDIS_HOST: localhost
           REDIS_PORT: "6379"
           REDIS_URL: redis://localhost:6379
+          # WireMock endpoints
           HMPPS_AUTH_URL: http://localhost:8099/auth
           HMPPS_AUTH_EXTERNAL_URL: http://localhost:8099/auth
           MANAGE_USERS_SERVICE_URL: http://localhost:8099
           ALLOCATIONS_SERVICE_URL: http://localhost:8099
           USER_PREFERENCE_SERVICE_URL: http://localhost:8099
           TOKEN_VERIFICATION_API_URL: http://localhost:8099
+          PORT: 3000
         run: |
           set -euo pipefail
-          # Feature env + our overrides (so we don’t lose your other vars)
+          # start with feature.env + our overrides
           nohup env $(cat feature.env | xargs) \
             PORT=$PORT \
             WMT_LIVE_DB_SERVER=$WMT_LIVE_DB_SERVER WMT_LIVE_DB_NAME=$WMT_LIVE_DB_NAME WMT_LIVE_DB_USERNAME=$WMT_LIVE_DB_USERNAME WMT_LIVE_DB_PASSWORD=$WMT_LIVE_DB_PASSWORD \
@@ -320,19 +298,13 @@ jobs:
           for i in {1..60}; do
             code=$(curl -fsS -o /dev/null -w "%{http_code}" "http://localhost:3000/")
             if echo "$code" | grep -qE '200|302'; then
-            echo "App ready at http://localhost:3000 (${code})"
-            break
+              echo "App ready at http://localhost:3000 (${code})"; break
             fi
-            echo "Waiting for app... ($i/60)"
-            sleep 2
+            echo "Waiting for app... ($i/60)"; sleep 2
           done
-          echo '--- app log tail ---'
           tail -n 200 /tmp/app.log || true
 
-      - name: Load WireMock mappings
-        run: npm run post-wiremock-mappings
-
-      - name: Create WDIO CI config (unique Chrome profile + absolute specs)
+      - name: Create WDIO CI config (unique Chrome profile + absolute specs + baseUrl)
         run: |
           cat > wdio.ci.conf.js <<'JS'
           const path = require('path');
@@ -349,6 +321,7 @@ jobs:
             const args = new Set([...(opts.args || []),
               '--no-sandbox',
               '--disable-dev-shm-usage',
+              '--window-size=1920,1080',
               `--user-data-dir=${profile}`,
               '--headless=new'
             ]);
@@ -358,9 +331,7 @@ jobs:
               'goog:chromeOptions': { ...opts, args: Array.from(args) },
               'wdio:enforceWebDriverClassic': true
             };
-            if (process.env.CHROME_BIN) {
-              out['goog:chromeOptions'].binary = process.env.CHROME_BIN;
-            }
+            if (process.env.CHROME_BIN) out['goog:chromeOptions'].binary = process.env.CHROME_BIN;
             return out;
           };
 
@@ -368,14 +339,22 @@ jobs:
             ? base.capabilities.map(ensureArgs)
             : [ensureArgs(base.capabilities || {})];
 
-          // Make specs absolute so moving the config file doesn't break glob resolution
+          const toAbs = (p, root) => (path.isAbsolute(p) ? p : path.join(root, p));
           const baseDir = path.dirname(basePath);
-          const toAbs = (p) => path.isAbsolute(p) ? p : path.join(baseDir, p);
           const specs = (base.specs && base.specs.length ? base.specs : ['e2e/**/*.js','e2e/*.js'])
-            .map(toAbs);
-          const exclude = (base.exclude || []).map(toAbs);
+            .map(p => toAbs(p, baseDir));
+          const exclude = (base.exclude || []).map(p => toAbs(p, baseDir));
 
-          exports.config = { ...base, specs, exclude, maxInstances: 1, capabilities: caps };
+          exports.config = {
+            ...base,
+            baseUrl: process.env.BASE_URL || base.baseUrl || 'http://localhost:3000',
+            maxInstances: 1,
+            capabilities: caps,
+            specs,
+            exclude,
+            logLevel: base.logLevel || 'info',
+            outputDir: base.outputDir || './wdio-logs'
+          };
           JS
 
       - name: Run E2E (wdio with isolated Chrome profile)
@@ -391,6 +370,7 @@ jobs:
         run: |
           set -euo pipefail
           export $(cat feature.env | xargs)
+          export BASE_URL="${BASE_URL}"
           npm run clean-dev-data
           npm run seed-dev-data
           pkill -f "chrome" || true
@@ -406,4 +386,6 @@ jobs:
             ./screenshots
             ./videos
             ./wdio-*.log
+            ./wdio-logs
+            /tmp/app.log
           if-no-files-found: ignore
