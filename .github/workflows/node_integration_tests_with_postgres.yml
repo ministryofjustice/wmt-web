@@ -50,7 +50,7 @@ jobs:
       AWS_DEFAULT_REGION: eu-west-2
       AWS_ACCESS_KEY_ID: foobar
       AWS_SECRET_ACCESS_KEY: foobar
-      LS: http://127.0.0.1:4566
+      LS: http://localhost:4566
 
     steps:
       - uses: actions/checkout@v4
@@ -130,7 +130,7 @@ jobs:
 
       - name: Run integration tests
         env:
-          DATABASE_SERVER: 127.0.0.1
+          DATABASE_SERVER: localhost
           DATABASE_USERNAME: postgres
           DATABASE_PASSWORD: postgres
           DATABASE: postgres
@@ -166,6 +166,9 @@ jobs:
         image: wiremock/wiremock:2.35.0
         ports:
           - 8099:8080
+        options: >-
+          --mount type=bind,source=${{ github.workspace }}/test/e2e/resources/wiremock/mappings,target=/home/wiremock/mappings,readonly
+          --mount type=bind,source=${{ github.workspace }}/test/e2e/resources/wiremock/__files,target=/home/wiremock/__files,readonly
       redis:
         image: redis:7-alpine
         ports:
@@ -175,11 +178,11 @@ jobs:
       AWS_DEFAULT_REGION: eu-west-2
       AWS_ACCESS_KEY_ID: foobar
       AWS_SECRET_ACCESS_KEY: foobar
-      LS: http://127.0.0.1:4566
+      LS: http://localhost:4566
 
       APP_PORT: "3000"
-      BASE_URL: http://127.0.0.1:3000
-      WIREMOCK_URL: http://127.0.0.1:8099
+      BASE_URL: http://localhost:3000
+      WIREMOCK_URL: http://localhost:8099
       CHROME_BIN: /usr/bin/google-chrome
 
     steps:
@@ -189,7 +192,7 @@ jobs:
         run: |
           for i in {1..60}; do pg_isready -h 127.0.0.1 -p 5432 -U postgres -d postgres && break; sleep 1; done
           curl -sfS --retry 30 --retry-connrefused --retry-delay 2 "$LS/_localstack/health" || exit 1
-          curl -sfS --retry 30 --retry-connrefused --retry-delay 2 "http://127.0.0.1:8099/__admin" || exit 1
+          curl -sfS --retry 30 --retry-connrefused --retry-delay 2 "http://localhost:8099/__admin" || exit 1
 
       - name: Setup AWS CLI + jq
         run: |
@@ -267,19 +270,43 @@ jobs:
 
       - name: Start app (start-dev on :3000)
         env:
+          WMT_LIVE_DB_SERVER: localhost
+          WMT_LIVE_DB_NAME: postgres
+          WMT_LIVE_DB_USERNAME: postgres
+          WMT_LIVE_DB_PASSWORD: postgres
+          WMT_HISTORY_DB_SERVER: localhost
+          WMT_HISTORY_DB_PORT: "5432"
+          WMT_HISTORY_DB_NAME: postgres
+          WMT_HISTORY_DB_USERNAME: postgres
+          WMT_HISTORY_DB_PASSWORD: postgres
           PORT: 3000
-          REDIS_HOST: 127.0.0.1
+          REDIS_HOST: localhost
           REDIS_PORT: "6379"
-          REDIS_URL: redis://127.0.0.1:6379
+          REDIS_URL: redis://localhost:6379
+          HMPPS_AUTH_URL: http://localhost:8099/auth
+          HMPPS_AUTH_EXTERNAL_URL: http://localhost:8099/auth
+          MANAGE_USERS_SERVICE_URL: http://localhost:8099
+          ALLOCATIONS_SERVICE_URL: http://localhost:8099
+          USER_PREFERENCE_SERVICE_URL: http://localhost:8099
+          TOKEN_VERIFICATION_API_URL: http://localhost:8099
         run: |
           set -euo pipefail
-          # start-dev exports feature.env then starts the server
-          nohup npm run start-dev >/tmp/app.log 2>&1 &
+          # Feature env + our overrides (so we don’t lose your other vars)
+          nohup env $(cat feature.env | xargs) \
+            PORT=$PORT \
+            WMT_LIVE_DB_SERVER=$WMT_LIVE_DB_SERVER WMT_LIVE_DB_NAME=$WMT_LIVE_DB_NAME WMT_LIVE_DB_USERNAME=$WMT_LIVE_DB_USERNAME WMT_LIVE_DB_PASSWORD=$WMT_LIVE_DB_PASSWORD \
+            WMT_HISTORY_DB_SERVER=$WMT_HISTORY_DB_SERVER WMT_HISTORY_DB_PORT=$WMT_HISTORY_DB_PORT WMT_HISTORY_DB_NAME=$WMT_HISTORY_DB_NAME WMT_HISTORY_DB_USERNAME=$WMT_HISTORY_DB_USERNAME WMT_HISTORY_DB_PASSWORD=$WMT_HISTORY_DB_PASSWORD \
+            REDIS_HOST=$REDIS_HOST REDIS_PORT=$REDIS_PORT REDIS_URL=$REDIS_URL \
+            HMPPS_AUTH_URL=$HMPPS_AUTH_URL HMPPS_AUTH_EXTERNAL_URL=$HMPPS_AUTH_EXTERNAL_URL MANAGE_USERS_SERVICE_URL=$MANAGE_USERS_SERVICE_URL \
+            ALLOCATIONS_SERVICE_URL=$ALLOCATIONS_SERVICE_URL USER_PREFERENCE_SERVICE_URL=$USER_PREFERENCE_SERVICE_URL TOKEN_VERIFICATION_API_URL=$TOKEN_VERIFICATION_API_URL \
+            node app/bin/www >/tmp/app.log 2>&1 &
           for i in {1..60}; do
-            if curl -fsS http://127.0.0.1:3000/ >/dev/null; then
-              echo "App ready on :3000"
-              break
+            code=$(curl -fsS -o /dev/null -w "%{http_code}" "http://localhost:3000/")
+            if echo "$code" | grep -qE '200|302'; then
+            echo "App ready at http://localhost:3000 (${code})"
+            break
             fi
+            echo "Waiting for app... ($i/60)"
             sleep 2
           done
           echo '--- app log tail ---'
@@ -337,7 +364,7 @@ jobs:
       - name: Run E2E (wdio with isolated Chrome profile)
         env:
           BASE_URL: ${{ env.BASE_URL }}
-          DATABASE_SERVER: 127.0.0.1
+          DATABASE_SERVER: localhost
           DATABASE_USERNAME: postgres
           DATABASE_PASSWORD: postgres
           DATABASE: postgres
