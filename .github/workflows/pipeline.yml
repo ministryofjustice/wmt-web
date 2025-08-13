@@ -18,6 +18,7 @@ on:
 permissions:
   contents: read
   packages: write
+  actions: read
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && github.sha || github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
@@ -26,6 +27,9 @@ jobs:
     name: node build
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_build.yml@v2 # WORKFLOW_VERSION
     secrets: inherit
+    permissions:
+      contents: read
+      actions: write
   use_built_assets:
     name: Use npm build artifacts
     needs: node_build
