@@ -288,49 +288,50 @@ jobs:
       - name: Load WireMock mappings
         run: npm run post-wiremock-mappings
 
-      - name: Create WDIO CI config (unique Chrome profile)
+      - name: Create WDIO CI config (unique Chrome profile + absolute specs)
         run: |
           cat > wdio.ci.conf.js <<'JS'
           const path = require('path');
           const os = require('os');
           const fs = require('fs');
-          const baseMod = require('./test/e2e.conf.js');
+          const basePath = path.resolve(__dirname, 'test/e2e.conf.js');
+          const baseMod = require(basePath);
           const base = baseMod.config || baseMod;
-          
+
           const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'wdio-chrome-'));
-          
+
           const ensureArgs = (c = {}) => {
-          const opts = c['goog:chromeOptions'] || {};
-          const args = new Set([...(opts.args || []),
-           '--no-sandbox',
-           '--disable-dev-shm-usage',
-           `--user-data-dir=${profile}`,
-           '--headless=new'
-          ]);
-          const out = {
-           browserName: c.browserName || 'chrome',
-           ...c,
-           'goog:chromeOptions': {
-             ...opts,
-             args: Array.from(args)
-           },
-           'wdio:enforceWebDriverClassic': true
+            const opts = c['goog:chromeOptions'] || {};
+            const args = new Set([...(opts.args || []),
+              '--no-sandbox',
+              '--disable-dev-shm-usage',
+              `--user-data-dir=${profile}`,
+              '--headless=new'
+            ]);
+            const out = {
+              browserName: c.browserName || 'chrome',
+              ...c,
+              'goog:chromeOptions': { ...opts, args: Array.from(args) },
+              'wdio:enforceWebDriverClassic': true
+            };
+            if (process.env.CHROME_BIN) {
+              out['goog:chromeOptions'].binary = process.env.CHROME_BIN;
+            }
+            return out;
           };
-          if (process.env.CHROME_BIN) {
-           out['goog:chromeOptions'].binary = process.env.CHROME_BIN;
-          }
-          return out;
-          };
-          
+
           const caps = Array.isArray(base.capabilities)
-          ? base.capabilities.map(ensureArgs)
-          : [ensureArgs(base.capabilities || {})];
-          
-          exports.config = {
-          ...base,
-          maxInstances: 1,           // serialize to avoid other conflicts
-          capabilities: caps
-          };
+            ? base.capabilities.map(ensureArgs)
+            : [ensureArgs(base.capabilities || {})];
+
+          // Make specs absolute so moving the config file doesn't break glob resolution
+          const baseDir = path.dirname(basePath);
+          const toAbs = (p) => path.isAbsolute(p) ? p : path.join(baseDir, p);
+          const specs = (base.specs && base.specs.length ? base.specs : ['e2e/**/*.js','e2e/*.js'])
+            .map(toAbs);
+          const exclude = (base.exclude || []).map(toAbs);
+
+          exports.config = { ...base, specs, exclude, maxInstances: 1, capabilities: caps };
           JS
 
       - name: Run E2E (wdio with isolated Chrome profile)
@@ -345,11 +346,9 @@ jobs:
           CHROME_BIN: ${{ env.CHROME_BIN }}
         run: |
           set -euo pipefail
-          # mirror your script: export env -> clean -> seed -> run -> clean
           export $(cat feature.env | xargs)
           npm run clean-dev-data
           npm run seed-dev-data
-          # ensure no stray Chrome from previous attempts
           pkill -f "chrome" || true
           npx wdio wdio.ci.conf.js --workers 1
           npm run clean-dev-data
