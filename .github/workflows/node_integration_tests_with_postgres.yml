@@ -43,7 +43,7 @@ jobs:
       AWS_DEFAULT_REGION: eu-west-2
       AWS_ACCESS_KEY_ID: foobar
       AWS_SECRET_ACCESS_KEY: foobar
-      LS: http://localhost:4566
+      LS: http://127.0.0.1:4566
 
     steps:
       - uses: actions/checkout@v4
@@ -52,7 +52,7 @@ jobs:
         run: |
           for i in {1..60}; do pg_isready -h 127.0.0.1 -p 5432 -U postgres -d postgres && break; sleep 1; done
           curl -sfS --retry 20 --retry-connrefused --retry-delay 2 "$LS/_localstack/health" || exit 1
-          curl -sfS --retry 20 --retry-connrefused --retry-delay 2 "http://localhost:8099/__admin" || exit 1
+          curl -sfS --retry 20 --retry-connrefused --retry-delay 2 "http://127.0.0.1:8099/__admin" || exit 1
           for i in {1..60}; do (echo > /dev/tcp/127.0.0.1/6379) >/dev/null 2>&1 && break; sleep 1; done
 
       - name: Install jq & psql client
@@ -116,7 +116,7 @@ jobs:
 
       - name: Run integration tests
         env:
-          DATABASE_SERVER: localhost
+          DATABASE_SERVER: 127.0.0.1
           DATABASE_USERNAME: postgres
           DATABASE_PASSWORD: postgres
           DATABASE: postgres
@@ -155,11 +155,11 @@ jobs:
       AWS_DEFAULT_REGION: eu-west-2
       AWS_ACCESS_KEY_ID: foobar
       AWS_SECRET_ACCESS_KEY: foobar
-      LS: http://localhost:4566
+      LS: http://127.0.0.1:4566
 
       APP_PORT: "3000"
-      BASE_URL: http://localhost:3000
-      WIREMOCK_URL: http://localhost:8099
+      BASE_URL: http://127.0.0.1:3000
+      WIREMOCK_URL: http://127.0.0.1:8099
       CHROME_BIN: /usr/bin/google-chrome
 
     steps:
@@ -169,7 +169,7 @@ jobs:
         run: |
           for i in {1..60}; do pg_isready -h 127.0.0.1 -p 5432 -U postgres -d postgres && break; sleep 1; done
           curl -sfS --retry 30 --retry-connrefused --retry-delay 2 "$LS/_localstack/health" || exit 1
-          curl -sfS --retry 30 --retry-connrefused --retry-delay 2 "http://localhost:8099/__admin" || exit 1
+          curl -sfS --retry 30 --retry-connrefused --retry-delay 2 "http://127.0.0.1:8099/__admin" || exit 1
           for i in {1..60}; do (echo > /dev/tcp/127.0.0.1/6379) >/dev/null 2>&1 && break; sleep 1; done
 
       - name: Setup AWS CLI + jq
@@ -248,69 +248,80 @@ jobs:
           ls -lah test/e2e/resources/wiremock || (echo "wiremock folder missing" && exit 1)
           ls -lah test/e2e/resources/wiremock/mappings || (echo "mappings folder missing" && exit 1)
 
-      - name: Load WireMock mappings (retry) + quick auth smoke
+      - name: Load WireMock mappings (retry) + auth sanity
         run: |
           set -euo pipefail
           for i in {1..10}; do
-            if curl -fsS http://localhost:8099/__admin; then break; fi
+            if curl -fsS "$WIREMOCK_URL/__admin"; then break; fi
             echo "Waiting for WireMock... ($i/10)"; sleep 2
           done
           npm run post-wiremock-mappings
-          echo "Mappings loaded: $(curl -s http://localhost:8099/__admin/mappings | jq '.mappings | length')"
-          # Auth stubs sanity (won't fail build; just logs)
-          echo "--- WireMock auth /health/ping ---"
-          curl -sS -i http://localhost:8099/auth/health/ping | head -n 20 || true
-          echo "--- WireMock auth /oauth/authorize (expect a 302) ---"
-          curl -sS -i "http://localhost:8099/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=http://localhost:3000/sign-in/callback&response_type=code&state=x" | head -n 20 || true
+          echo "Mappings: $(curl -s $WIREMOCK_URL/__admin/mappings | jq '.mappings | length')"
+          # smoke important auth endpoints your app uses
+          curl -sS -i "$WIREMOCK_URL/auth/health/ping" | head -n 20 || true
+          curl -sS -i "$WIREMOCK_URL/auth/oauth/token" | head -n 20 || true
+          curl -sS -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=$BASE_URL/sign-in/callback&response_type=code&state=x" | head -n 20 || true
+    
 
       - name: Build assets
         run: npm run build
 
-      - name: Start app (via start-dev, robust wait, WireMock/DB/Redis overrides)
+      - name: Start app (direct; robust wait; 127.0.0.1 everywhere)
         env:
-          # Required secrets for app boot
+          # required secrets for boot
           WMT_WEB_APPLICATION_SECRET: ci-dev-secret
           SESSION_SECRET: ci-session-secret
-          # DB (hmpps_workload migrated)
-          WMT_LIVE_DB_SERVER: localhost
+
+          # DB (migrated by hmpps_workload)
+          WMT_LIVE_DB_SERVER: 127.0.0.1
           WMT_LIVE_DB_NAME: postgres
           WMT_LIVE_DB_USERNAME: postgres
           WMT_LIVE_DB_PASSWORD: postgres
-          WMT_HISTORY_DB_SERVER: localhost
+          WMT_HISTORY_DB_SERVER: 127.0.0.1
           WMT_HISTORY_DB_PORT: "5432"
           WMT_HISTORY_DB_NAME: postgres
           WMT_HISTORY_DB_USERNAME: postgres
           WMT_HISTORY_DB_PASSWORD: postgres
+
           # Redis
-          REDIS_HOST: localhost
+          REDIS_HOST: 127.0.0.1
           REDIS_PORT: "6379"
-          REDIS_URL: redis://localhost:6379
-          # WireMock endpoints
-          HMPPS_AUTH_URL: http://localhost:8099/auth
-          HMPPS_AUTH_EXTERNAL_URL: http://localhost:8099/auth
-          MANAGE_USERS_SERVICE_URL: http://localhost:8099
-          ALLOCATIONS_SERVICE_URL: http://localhost:8099
-          USER_PREFERENCE_SERVICE_URL: http://localhost:8099
-          TOKEN_VERIFICATION_API_URL: http://localhost:8099
-          # Domain
-          INGRESS_URL: http://localhost:3000
+          REDIS_URL: redis://127.0.0.1:6379
+
+          # WireMock endpoints (match feature.env)
+          HMPPS_AUTH_URL: http://127.0.0.1:8099/auth
+          HMPPS_AUTH_EXTERNAL_URL: http://127.0.0.1:8099/auth
+          MANAGE_USERS_SERVICE_URL: http://127.0.0.1:8099
+          ALLOCATIONS_SERVICE_URL: http://127.0.0.1:8099
+          USER_PREFERENCE_SERVICE_URL: http://127.0.0.1:8099
+          TOKEN_VERIFICATION_API_URL: http://127.0.0.1:8099
+          TOKEN_VERIFICATION_ENABLED: "true"
+
+          # Domain must match what app builds redirects/cookies against
+          INGRESS_URL: http://127.0.0.1:3000
           PORT: 3000
         run: |
           set -euo pipefail
-          # start-dev will export feature.env; we still inject overrides above
-          nohup env $(grep -v '^\s*#' feature.env | xargs) npm run start-dev > /tmp/app.log 2>&1 &
+          # export feature.env first so our explicit env below wins if keys overlap
+          export $(grep -v '^\s*#' feature.env | xargs) || true
+
+          # start app directly so our overrides are authoritative
+          nohup node app/bin/www > /tmp/app.log 2>&1 &
+
+          # wait (don’t use -f so we don’t exit early)
           ready=""
           for i in {1..120}; do
-            code=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:3000/" || echo "000")
+            code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:3000/" || echo "000")
             if [ "$code" = "200" ] || [ "$code" = "302" ]; then
-              echo "App ready at http://localhost:3000 ($code)"; ready="yes"; break
+              echo "App ready at http://127.0.0.1:3000 ($code)"; ready="yes"; break
             fi
             echo "Waiting for app... ($i/120) got $code"; sleep 2
           done
           if [ -z "$ready" ]; then
-            echo "App did not become ready. Last 400 lines of /tmp/app.log:"; tail -n 400 /tmp/app.log || true; exit 1
+            echo "App failed to become ready. Tail of /tmp/app.log:"; tail -n 400 /tmp/app.log || true; exit 1
           fi
           tail -n 200 /tmp/app.log || true
+
 
       - name: Create WDIO CI config (unique Chrome profile + absolute specs + baseUrl)
         run: |
@@ -355,7 +366,7 @@ jobs:
 
           exports.config = {
             ...base,
-            baseUrl: process.env.BASE_URL || base.baseUrl || 'http://localhost:3000',
+            baseUrl: process.env.BASE_URL || base.baseUrl || 'http://127.0.0.1:3000',
             maxInstances: 1,
             capabilities: caps,
             specs,
@@ -368,7 +379,7 @@ jobs:
       - name: Run E2E (wdio with isolated Chrome profile)
         env:
           BASE_URL: ${{ env.BASE_URL }}
-          DATABASE_SERVER: localhost
+          DATABASE_SERVER: 127.0.0.1
           DATABASE_USERNAME: postgres
           DATABASE_PASSWORD: postgres
           DATABASE: postgres
