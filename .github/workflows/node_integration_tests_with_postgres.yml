@@ -30,24 +30,22 @@ jobs:
           --health-timeout=5s
           --health-retries=20
       localstack:
-        image: localstack/localstack:3
+        image: localstack/localstack:latest
         ports:
           - 4566:4566
         env:
           SERVICES: s3,sqs,sns
-          AWS_DEFAULT_REGION: eu-west-2
 
+    # 👇 only AWS values live here
     env:
-      # Common
       AWS_DEFAULT_REGION: eu-west-2
       AWS_ACCESS_KEY_ID: foobar
       AWS_SECRET_ACCESS_KEY: foobar
       LS: http://127.0.0.1:4566
 
-      # App resources (adjust names if your app expects different)
+      # resource names (change to suit your app)
       DASHBOARD_BUCKET: wmt-web
-      DASHBOARD_FILE: dashboard-file.txt
-      DASHBOARD_PREFIX: generated-dashboards
+      SECOND_BUCKET: wmt-worker-dashboard
 
       S3_EXTRACT_QUEUE: s3_extract_event_queue
       AUDIT_QUEUE: audit_event_queue
@@ -60,55 +58,61 @@ jobs:
       - name: Wait for services
         run: |
           for i in {1..60}; do pg_isready -h 127.0.0.1 -p 5432 -U postgres -d postgres && break; sleep 1; done
-          curl -sfS --retry 30 --retry-connrefused --retry-delay 2 "$LS/_localstack/health" | jq -e '.services.s3=="running" and .services.sqs=="running" and .services.sns=="running"'
+          curl -sfS --retry 20 --retry-connrefused --retry-delay 2 "$LS/_localstack/health" || exit 1
 
-      - name: Setup AWS CLI v2
-        uses: aws-actions/setup-aws-cli@v4
-
-      - name: Install jq and psql client
+      - name: Ensure real AWS CLI + jq
         run: |
+          # remove any dockerized wrapper we created earlier
+          sudo rm -f /usr/local/bin/aws || true
+
+          # jq from apt (still available)
           sudo apt-get update -y
-          sudo apt-get install -y jq postgresql-client
+          sudo apt-get install -y jq
 
-      - name: Create sample dashboard file
+          # AWS CLI v1 via pip (works fine for our commands)
+          python3 -m pip install --user --upgrade pip
+          python3 -m pip install --user "awscli==1.*"
+
+          # add ~/.local/bin to PATH for subsequent steps
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Verify aws/jq
         run: |
-          echo "dummy dashboard content" > "$DASHBOARD_FILE"
+          which aws || true
+          aws --version
+          jq --version
 
       - name: Create AWS resources in LocalStack
         run: |
-          set -euxo pipefail
+          set -xeuo pipefail
 
-          # S3 buckets
+          # Buckets (idempotent)
           aws --endpoint-url="$LS" s3api create-bucket \
             --bucket "$DASHBOARD_BUCKET" \
             --region "$AWS_DEFAULT_REGION" \
             --create-bucket-configuration LocationConstraint="$AWS_DEFAULT_REGION" || true
 
-          # Upload a few test files
-          for ts in 20210729062147 20210730062147 20210731062147 20210801062147 20210802062147; do
-            aws --endpoint-url="$LS" s3api put-object \
-              --bucket "$DASHBOARD_BUCKET" \
-              --key "$DASHBOARD_PREFIX/dashboard_${ts}.txt" \
-              --body "$DASHBOARD_FILE"
-            sleep 1
-          done
+          aws --endpoint-url="$LS" s3api create-bucket \
+            --bucket "$SECOND_BUCKET" \
+            --region "$AWS_DEFAULT_REGION" \
+            --create-bucket-configuration LocationConstraint="$AWS_DEFAULT_REGION" || true
 
-          # SQS queues
+          # Queues (idempotent)
           aws --endpoint-url="$LS" sqs create-queue --queue-name "$S3_EXTRACT_QUEUE" >/dev/null || true
           aws --endpoint-url="$LS" sqs create-queue --queue-name "$AUDIT_QUEUE"       >/dev/null || true
           aws --endpoint-url="$LS" sqs create-queue --queue-name "$DOMAIN_QUEUE"      >/dev/null || true
 
-          # SNS topic
+          # Topic (idempotent)
           TOPIC_ARN=$(aws --endpoint-url="$LS" sns create-topic --name "$DOMAIN_TOPIC" --query 'TopicArn' --output text)
 
-          # Resolve queue URLs/ARNs
+          # Resolve ARNs/URLs
           S3Q_URL=$(aws --endpoint-url="$LS" sqs get-queue-url --queue-name "$S3_EXTRACT_QUEUE" --query 'QueueUrl' --output text)
           S3Q_ARN=$(aws --endpoint-url="$LS" sqs get-queue-attributes --queue-url "$S3Q_URL" --attribute-names QueueArn --query 'Attributes.QueueArn' --output text)
 
           DEQ_URL=$(aws --endpoint-url="$LS" sqs get-queue-url --queue-name "$DOMAIN_QUEUE" --query 'QueueUrl' --output text)
           DEQ_ARN=$(aws --endpoint-url="$LS" sqs get-queue-attributes --queue-url "$DEQ_URL" --attribute-names QueueArn --query 'Attributes.QueueArn' --output text)
 
-          # Allow S3 -> SQS (policy on the SQS queue)
+          # S3 -> SQS policy (on $S3_EXTRACT_QUEUE)
           S3Q_POLICY=$(jq -c --null-input \
             --arg qArn "$S3Q_ARN" \
             --arg bucket "$DASHBOARD_BUCKET" \
@@ -121,16 +125,17 @@ jobs:
                 Resource:$qArn,
                 Condition:{ArnEquals:{"aws:SourceArn":("arn:aws:s3:::"+$bucket)}}
               }]}')
+          S3Q_ATTRS=$(jq -c -n --arg policy "$S3Q_POLICY" '{Policy:$policy}')
           aws --endpoint-url="$LS" sqs set-queue-attributes \
             --queue-url "$S3Q_URL" \
-            --attributes "{\"Policy\":$S3Q_POLICY}"
+            --attributes "$S3Q_ATTRS"
 
-          # Configure S3 notifications -> SQS
+          # S3 notifications -> SQS
           aws --endpoint-url="$LS" s3api put-bucket-notification-configuration \
             --bucket "$DASHBOARD_BUCKET" \
             --notification-configuration "{\"QueueConfigurations\":[{\"QueueArn\":\"$S3Q_ARN\",\"Events\":[\"s3:ObjectCreated:*\"]}]}"
 
-          # Allow SNS -> SQS (policy on the DOMAIN_QUEUE)
+          # SNS -> SQS policy (on $DOMAIN_QUEUE)
           DEQ_POLICY=$(jq -c --null-input \
             --arg qArn "$DEQ_ARN" \
             --arg topic "$TOPIC_ARN" \
@@ -143,31 +148,22 @@ jobs:
                 Resource:$qArn,
                 Condition:{ArnEquals:{"aws:SourceArn":$topic}}
               }]}')
+          DEQ_ATTRS=$(jq -c -n --arg policy "$DEQ_POLICY" '{Policy:$policy}')
           aws --endpoint-url="$LS" sqs set-queue-attributes \
             --queue-url "$DEQ_URL" \
-            --attributes "{\"Policy\":$DEQ_POLICY}"
+            --attributes "$DEQ_ATTRS"
 
-          # Subscribe DOMAIN_QUEUE to DOMAIN_TOPIC with a filter
+          # Subscribe with filter
           aws --endpoint-url="$LS" sns subscribe \
             --topic-arn "$TOPIC_ARN" \
             --protocol sqs \
             --notification-endpoint "$DEQ_ARN" \
             --attributes '{"FilterPolicy":"{\"eventType\":[\"staff.available.hours.changed\"]}","RawMessageDelivery":"true"}'
 
-          # Surface endpoints/ids to the rest of the job (adjust to your app env names)
-          {
-            echo "AWS_ENDPOINT_URL=$LS"
-            echo "S3_DASHBOARD_BUCKET=$DASHBOARD_BUCKET"
-            echo "S3_DASHBOARD_PREFIX=$DASHBOARD_PREFIX"
-            echo "S3_EXTRACT_QUEUE_URL=$S3Q_URL"
-            echo "DOMAIN_QUEUE_URL=$DEQ_URL"
-            echo "DOMAIN_TOPIC_ARN=$TOPIC_ARN"
-          } >> "$GITHUB_ENV"
-
-          # Sanity
+          # Sanity checks (optional)
           aws --endpoint-url="$LS" s3 ls
-          aws --endpoint-url="$LS" sqs list-queues || true
-          aws --endpoint-url="$LS" sns list-topics || true
+          aws --endpoint-url="$LS" sqs list-queues
+          aws --endpoint-url="$LS" sns list-topics
 
       - name: Start hmpps_workload container
         run: |
@@ -186,37 +182,22 @@ jobs:
           PGPASSWORD: postgres
         run: |
           for i in {1..120}; do
-            psql -h 127.0.0.1 -U postgres -d postgres -tAc "SELECT 1 FROM information_schema.tables WHERE table_name='flyway_schema_history'" | grep -q 1 && exit 0
+            docker run --rm --network host -e PGPASSWORD=$PGPASSWORD postgres:15 \
+              psql -h 127.0.0.1 -U postgres -d postgres -tAc "SELECT 1 FROM information_schema.tables WHERE table_name='flyway_schema_history'" \
+              | grep -q 1 && exit 0
             sleep 2
           done
           echo "Schema not ready in time"; docker logs hmpps_workload || true; exit 1
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ${{ inputs.node_version_file }}
-
       - name: Install deps
-        run: npm ci --no-audit
+        run: npm ci
 
       - name: Run integration tests
         env:
-          # Map to whatever your app reads in tests; these are examples:
-          AWS_ENDPOINT_URL: ${{ env.AWS_ENDPOINT_URL }}
-          S3_BUCKET: ${{ env.S3_DASHBOARD_BUCKET }}
-          S3_PREFIX: ${{ env.S3_DASHBOARD_PREFIX }}
-          S3_EXTRACT_QUEUE_URL: ${{ env.S3_EXTRACT_QUEUE_URL }}
-          DOMAIN_QUEUE_URL: ${{ env.DOMAIN_QUEUE_URL }}
-          DOMAIN_TOPIC_ARN: ${{ env.DOMAIN_TOPIC_ARN }}
           DATABASE_SERVER: 127.0.0.1
           DATABASE_USERNAME: postgres
           DATABASE_PASSWORD: postgres
           DATABASE: postgres
           DATABASE_PORT: "5432"
           DATABASE_SSL: "false"
-        run: |
-          if npm run -s | grep -qE '^\s*test:integration'; then
-            npm run test:integration
-          else
-            npm test
-          fi
+        run: npm run integration-test
