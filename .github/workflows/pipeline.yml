@@ -152,8 +152,8 @@ jobs:
     needs: [node_build]
     secrets: inherit
 
-  node_integration_tests:
-    name: node integration tests
+  node_integration_and_e2e_tests:
+    name: node integration and e2e tests
     uses: ./.github/workflows/node_integration_tests_with_postgres.yml
     needs: [node_build]
     secrets: inherit

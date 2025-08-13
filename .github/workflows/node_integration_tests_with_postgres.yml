@@ -1,19 +1,16 @@
-name: Integration tests
+name: Integration & E2E Tests
 
 on:
-  workflow_call:
-    inputs:
-      node_version_file:
-        description: "setup-node reads Node version from here"
-        required: false
-        type: string
-        default: ".nvmrc"
+  push:
+    branches: ['**']
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
   integration-tests:
+    name: integration tests
     runs-on: ubuntu-latest
 
     services:
@@ -40,21 +37,12 @@ jobs:
         ports:
           - 8099:8080
 
-    # 👇 only AWS values live here
     env:
+      # AWS / endpoints
       AWS_DEFAULT_REGION: eu-west-2
       AWS_ACCESS_KEY_ID: foobar
       AWS_SECRET_ACCESS_KEY: foobar
       LS: http://127.0.0.1:4566
-
-      # resource names (change to suit your app)
-      DASHBOARD_BUCKET: wmt-web
-      SECOND_BUCKET: wmt-worker-dashboard
-
-      S3_EXTRACT_QUEUE: s3_extract_event_queue
-      AUDIT_QUEUE: audit_event_queue
-      DOMAIN_QUEUE: domain_event_queue
-      DOMAIN_TOPIC: domain-events
 
     steps:
       - uses: actions/checkout@v4
@@ -63,58 +51,45 @@ jobs:
         run: |
           for i in {1..60}; do pg_isready -h 127.0.0.1 -p 5432 -U postgres -d postgres && break; sleep 1; done
           curl -sfS --retry 20 --retry-connrefused --retry-delay 2 "$LS/_localstack/health" || exit 1
-          curl -sfS --retry 20 --retry-connrefused --retry-delay 2 http://127.0.0.1:8099/__admin || exit 1
+          curl -sfS --retry 20 --retry-connrefused --retry-delay 2 "http://127.0.0.1:8099/__admin" || exit 1
 
-      - name: Ensure real AWS CLI + jq
+      - name: Install jq & psql client
         run: |
-          # remove any dockerized wrapper we created earlier
-          sudo rm -f /usr/local/bin/aws || true
-
-          # jq from apt (still available)
           sudo apt-get update -y
-          sudo apt-get install -y jq
+          sudo apt-get install -y jq postgresql-client
 
-          # AWS CLI v1 via pip (works fine for our commands)
+      - name: Setup AWS CLI
+        run: |
           python3 -m pip install --user --upgrade pip
           python3 -m pip install --user "awscli==1.*"
-
-          # add ~/.local/bin to PATH for subsequent steps
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-
-      - name: Verify aws/jq
-        run: |
-          which aws || true
-          aws --version
-          jq --version
 
       - name: Create sample dashboard file (used for uploads)
         run: |
-          printf "dashboard" > dashboard-file.txt
+          # exact content, no trailing newline
+          printf 'dashboard' > dashboard-file.txt
 
-      # >>> ONLY THIS STEP POPULATES AWS, MIRRORING YOUR SCRIPT <<<
-      - name: Create AWS resources in LocalStack (mirror script)
+      # ==== AWS population (mirrors your script) ====
+      - name: Seed LocalStack (S3 + SQS)
         run: |
           set -euo pipefail
+          # queue: audit_event_queue
+          aws --endpoint-url="$LS" sqs create-queue --queue-name audit_event_queue || true
 
-          # queue (script: audit_event_queue only)
-          aws --endpoint-url="$LS" sqs create-queue --queue-name audit_event_queue
-
-          # bucket + five objects (script uses generated-dashboards/dashboard_*.txt)
+          # bucket: wmt-web + five objects under generated-dashboards/
           aws --endpoint-url="$LS" s3api create-bucket \
             --bucket wmt-web \
             --region "$AWS_DEFAULT_REGION" \
-            --create-bucket-configuration LocationConstraint="$AWS_DEFAULT_REGION"
+            --create-bucket-configuration LocationConstraint="$AWS_DEFAULT_REGION" || true
 
           for ts in 20210729062147 20210730062147 20210731062147 20210801062147 20210802062147; do
             aws --endpoint-url="$LS" s3api put-object \
               --bucket wmt-web \
               --key generated-dashboards/dashboard_${ts}.txt \
               --body dashboard-file.txt
-            sleep 1
           done
 
-          echo "S3 created bucket"
-
+      # (kept from your previous flow) start workload container and wait for schema
       - name: Start hmpps_workload container
         run: |
           docker run -d --name hmpps_workload \
@@ -132,15 +107,18 @@ jobs:
           PGPASSWORD: postgres
         run: |
           for i in {1..120}; do
-            docker run --rm --network host -e PGPASSWORD=$PGPASSWORD postgres:15 \
-              psql -h 127.0.0.1 -U postgres -d postgres -tAc "SELECT 1 FROM information_schema.tables WHERE table_name='flyway_schema_history'" \
-              | grep -q 1 && exit 0
+            psql -h 127.0.0.1 -U postgres -d postgres -tAc "SELECT 1 FROM information_schema.tables WHERE table_name='flyway_schema_history'" | grep -q 1 && exit 0
             sleep 2
           done
           echo "Schema not ready in time"; docker logs hmpps_workload || true; exit 1
 
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
       - name: Install deps
-        run: npm ci
+        run: npm ci --no-audit
 
       - name: Run integration tests
         env:
@@ -151,3 +129,112 @@ jobs:
           DATABASE_PORT: "5432"
           DATABASE_SSL: "false"
         run: npm run integration-test
+
+  e2e-tests:
+    name: e2e tests
+    needs: integration-tests
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d postgres"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+      localstack:
+        image: localstack/localstack:latest
+        ports:
+          - 4566:4566
+        env:
+          SERVICES: s3,sqs,sns
+      wiremock:
+        image: wiremock/wiremock:2.35.0
+        ports:
+          - 8099:8080
+
+    env:
+      AWS_DEFAULT_REGION: eu-west-2
+      AWS_ACCESS_KEY_ID: foobar
+      AWS_SECRET_ACCESS_KEY: foobar
+      LS: http://127.0.0.1:4566
+
+      APP_PORT: "3000"
+      BASE_URL: http://127.0.0.1:3000
+      WIREMOCK_URL: http://127.0.0.1:8099
+      CHROME_BIN: /usr/bin/google-chrome
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wait for services
+        run: |
+          for i in {1..60}; do pg_isready -h 127.0.0.1 -p 5432 -U postgres -d postgres && break; sleep 1; done
+          curl -sfS --retry 30 --retry-connrefused --retry-delay 2 "$LS/_localstack/health" || exit 1
+          curl -sfS --retry 30 --retry-connrefused --retry-delay 2 "http://127.0.0.1:8099/__admin" || exit 1
+
+      - name: Setup AWS CLI + jq
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y jq
+          python3 -m pip install --user --upgrade pip
+          python3 -m pip install --user "awscli==1.*"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Seed LocalStack (queue + sample dashboards)
+        run: |
+          set -euo pipefail
+          aws --endpoint-url="$LS" sqs create-queue --queue-name audit_event_queue || true
+          aws --endpoint-url="$LS" s3api create-bucket \
+            --bucket wmt-web \
+            --region "$AWS_DEFAULT_REGION" \
+            --create-bucket-configuration LocationConstraint="$AWS_DEFAULT_REGION" || true
+          printf 'dashboard' > dashboard-file.txt
+          for ts in 20210729062147 20210730062147 20210731062147 20210801062147 20210802062147; do
+            aws --endpoint-url="$LS" s3api put-object \
+              --bucket wmt-web \
+              --key generated-dashboards/dashboard_${ts}.txt \
+              --body dashboard-file.txt
+          done
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install deps
+        run: npm ci --no-audit
+
+      - name: Install Google Chrome (for WDIO)
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y wget gpg
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-linux-signing-keyring.gpg
+          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-linux-signing-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list >/dev/null
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+          google-chrome --version
+
+      - name: Start app
+        env:
+          PORT: ${{ env.APP_PORT }}
+        run: |
+          set -euo pipefail
+          # prefer start:e2e or start:test if present; else start
+          START_SCRIPT=$(node -e "const s=require('./package.json').scripts||{}; const order=['start:e2e','start:test','start']; const f=order.find(k=>s[k]); if(!f){process.exit(1)}; console.log(f)")
+          echo "Using start script: $START_SCRIPT"
+          nohup npm run "$START_SCRIPT" >/tmp/app.log 2>&1 &
+          for i in {1..60}; do
+            if curl -fsS "http://127.0.0.1:${APP_PORT}/" >/dev/null; then echo "App ready"; break; fi
+            sleep 2
+          done
+          tail -n 200 /tmp/app.log || true
+
+      - name: Run E2E (npm run test-e2e)
