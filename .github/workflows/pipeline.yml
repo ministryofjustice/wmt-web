@@ -26,6 +26,19 @@ jobs:
     name: node build
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_build.yml@v2 # WORKFLOW_VERSION
     secrets: inherit
+  use_built_assets:
+    name: Use npm build artifacts
+    needs: node_build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read        # required to read artifacts within the same run
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: npm_build_artifacts
+          path: ./artifacts
+      - run: ls -lah ./artifacts
   node_unit_tests:
     name: node unit tests
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_unit_tests.yml@v2 # WORKFLOW_VERSION
