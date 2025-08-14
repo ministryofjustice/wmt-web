@@ -258,43 +258,57 @@ jobs:
           npm run post-wiremock-mappings
           echo "Mappings: $(curl -s $WIREMOCK_URL/__admin/mappings | jq '.mappings | length')"
 
-      - name: Patch WireMock authorize mapping to use redirect_uri
+      - name: Patch & Load WireMock mappings (redirect_uri + templating)
         run: |
           set -euo pipefail
-          # delete any hard-coded /login/callback authorize mapping
-          curl -s "$WIREMOCK_URL/__admin/mappings" | jq -r '
-            (.mappings // [])[]
-            | select(.request.urlPattern? | tostring | test("/auth/oauth/authorize"))
-            | select(.response.headers.Location? | contains("login/callback"))
-            | .id' | while read -r id; do
-              echo "Deleting legacy authorize mapping: $id"
-              curl -s -X DELETE "$WIREMOCK_URL/__admin/mappings/$id" >/dev/null
-            done
 
-          # ensure the generic authorize mapping exists (redirects to provided redirect_uri)
-          cat > /tmp/authorize_redirect_uri.json <<'JSON'
-          {
-            "request": {
-              "urlPath": "/auth/oauth/authorize",
-              "method": "GET"
-            },
-            "response": {
-              "status": 302,
-              "headers": {
-                "Location": "{{request.query.redirect_uri}}?code=codexxxx&state={{request.query.state}}"
-              },
-              "transformers": [ "response-template" ]
-            },
-            "priority": 1
-          }
-          JSON
+          # Wait for WireMock to be ready
+          for i in {1..20}; do
+            if curl -fsS "$WIREMOCK_URL/__admin" >/dev/null; then break; fi
+            echo "Waiting for WireMock... ($i/20)"; sleep 2
+          done
 
-          curl -s -X POST "$WIREMOCK_URL/__admin/mappings" \
-            -H 'content-type: application/json' \
-            --data-binary @/tmp/authorize_redirect_uri.json >/dev/null
+          # Enable global templating (equivalent to --global-response-templating)
+          curl -s -X POST "$WIREMOCK_URL/__admin/settings" \
+            -H 'Content-Type: application/json' \
+            -d '{"globalTemplating": true}' >/dev/null || true
 
-          echo "Authorize mappings after patch:"
-          curl -s "$WIREMOCK_URL/__admin/mappings" | jq '[.mappings[] | select(.request.urlPath? == "/auth/oauth/authorize" or (.request.urlPattern? | tostring | test("auth/oauth/authorize"))) ] | length as $n | "count=\($n)"'
+          # Build patched copies of your mappings
+          PATCH_DIR="$(mktemp -d)"
+          echo "Patching mappings into: $PATCH_DIR"
+
+          for f in test/e2e/resources/wiremock/mappings/*.json; do
+            base="$(basename "$f")"
+            jq '
+              # If this is an authorize stub (by path or pattern), fix Location + ensure templating
+              if ((.request.urlPath? == "/auth/oauth/authorize")
+                  or ((.request.urlPattern? // .request.urlPathPattern? // "") | test("auth/oauth/authorize")))
+              then
+                .response.headers = (.response.headers // {}) |
+                .response.headers.Location = "{{request.query.redirect_uri}}?code=codexxxx&state={{request.query.state}}" |
+                .response.transformers = ((.response.transformers // []) + ["response-template"] | unique)
+              else
+                .
+              end
+            ' "$f" > "$PATCH_DIR/$base"
+          done
+
+          # Post patched mappings (only these — we are not posting the originals)
+          for f in "$PATCH_DIR"/*.json; do
+            curl --silent --fail \
+              --request POST \
+              --url "$WIREMOCK_URL/__admin/mappings" \
+              --header 'content-type: application/json' \
+              --data-binary @"$f" >/dev/null
+          done
+
+          # Quick sanity: how many authorize mappings, and does one 302 with our redirect_uri?
+          echo -n "Authorize mapping count: "
+          curl -s "$WIREMOCK_URL/__admin/mappings" \
+            | jq '[.mappings[] | select(.request.urlPath? == "/auth/oauth/authorize" or ((.request.urlPattern? // .request.urlPathPattern? // "") | test("auth/oauth/authorize"))) ] | length'
+
+          echo "Probe authorize with redirect_uri=${BASE_URL}/sign-in/callback"
+          curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/sign-in/callback&response_type=code&state=x" | head -n 20
 
 
       - name: Build assets
