@@ -330,7 +330,7 @@ jobs:
           CURL="curl -sS --fail-with-body -H 'Content-Type: application/json'"
 
           # ✅ valid dummy JWT; header+payload decode; signature is junk (fine for jwt-decode)
-          STATIC_JWT='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJ3bXRfc3RhZmYiLCJhdXRob3JpdGllcyI6WyJXTVRfQURNSU4iLCJXTVRfU1RBRkYiXSwic2NvcGUiOlsicmVhZCJdLCJpbnRlcm5hbFVzZXIiOnRydWUsImV4cCI6MTg5MzQ1NjAwMCwiaXNzIjoid2lyZW1vY2siLCJzdWIiOiJ3bXRfc3RhZmYifQ.Y2ktc2ln'
+          STATIC_JWT='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJVU0VSMSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJhdXRoX3NvdXJjZSI6Im5vbWlzIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9NQU5BR0VfQV9XT1JLRk9SQ0VfQUxMT0NBVEUiLCJST0xFX1dPUktMT0FEX01FQVNVUkVNRU5UIl0sImp0aSI6ImE2MTBhMTAtY2NhNi00MWRiLTk4NWYtZTg3ZWZiMzAzYWFmIiwiY2xpZW50X2lkIjoiY2xpZW50aWQiLCJpYXQiOjE3NDg1MzE2NTksImV4cCI6MTc0ODUzNTI1OX0.g8M2QmC31IY9GMYXUIEQTLW5UNLUQDyunRP8bq0FQBo'
 
           echo "Posting WireMock overrides…"
 
