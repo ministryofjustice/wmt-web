@@ -136,8 +136,7 @@ jobs:
         run: npm run integration-test
 
   e2e-tests:
-    name: e2e tests (diagnostic)
-    needs: integration-tests
+    name: e2e tests
     runs-on: ubuntu-latest
 
     services:
@@ -161,30 +160,6 @@ jobs:
         image: redis:7-alpine
         ports: [ "6379:6379" ]
 
-      # Dedicated DB for external-users (host must be 'auth-db')
-      auth-db:
-        image: postgres:15
-        # no port mapping needed; other services talk to it on the Docker network
-        env:
-          POSTGRES_USER: auth-db
-          POSTGRES_PASSWORD: auth-db
-          POSTGRES_DB: auth-db
-        options: >-
-          --health-cmd="pg_isready -U auth-db -d auth-db -h 127.0.0.1 || pg_isready -U auth-db -d auth-db -h ::1"
-          --health-interval=5s --health-timeout=5s --health-retries=30
-
-      hmpps-external-users-api:
-        image: quay.io/hmpps/hmpps-external-users-api:latest
-        ports: [ "8088:8088" ]
-        env:
-          SPRING_PROFILES_ACTIVE: dev,local-postgres
-          SERVER_PORT: "8088"
-          SPRING_R2DBC_URL: r2dbc:postgresql://auth-db:5432/auth-db
-          SPRING_FLYWAY_URL: jdbc:postgresql://auth-db:5432/auth-db
-        options: >-
-          --health-cmd="curl -fsS http://localhost:8088/health/ping || exit 1"
-          --health-interval=5s --health-timeout=5s --health-retries=50
-
       hmpps-manage-users-api:
         image: quay.io/hmpps/hmpps-manage-users-api:latest
         ports: [ "9091:9091" ]
@@ -206,13 +181,9 @@ jobs:
           SERVER_PORT: "9090"
           MANAGE_USERS_API_ENABLED: "true"
           MANAGE_USERS_API_ENDPOINT_URL: http://hmpps-manage-users-api:9091
-          # If hmpps-auth needs external-users explicitly, it often picks it up via profile defaults.
-          # If not, uncomment the next line:
-          # EXTERNAL_USERS_API_URL: http://hmpps-external-users-api:8088
         options: >-
           --health-cmd="curl -fsS http://localhost:9090/health/ping || curl -fsS http://localhost:9090/auth/health/ping || exit 1"
           --health-interval=5s --health-timeout=5s --health-retries=60
-    
 
     env:
       AWS_DEFAULT_REGION: eu-west-2
@@ -229,34 +200,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Environment snapshot
+      # Start WireMock (separately so we can curl __admin and POST mappings)
+      - name: Start WireMock (global response templating)
         run: |
           set -euxo pipefail
-          node -v; npm -v || true
-          docker version || true
-          echo "Kernel: $(uname -a)"
-          echo "Free space:"; df -h
-
-      # Start WireMock as a normal container, not a service (so we can pass flags)
-      - name: Start WireMock (verbose + templating)
-        run: |
-          set -euxo pipefail
-          docker run -d --name wiremock-8099 \
-            -p 8099:8080 \
-            wiremock/wiremock:2.35.0 \
-            --port 8080 --global-response-templating --verbose
-          for i in {1..45}; do
-            if curl -fsS "http://127.0.0.1:8099/__admin" >/dev/null; then break; fi
-            echo "Waiting for WireMock... ($i/45)"; sleep 2
+          docker run -d --name wiremock-ci -p 8099:8080 wiremock/wiremock:2.35.0 \
+            --port 8080 --global-response-templating
+          for i in {1..60}; do
+            curl -fsS "http://127.0.0.1:8099/__admin" >/dev/null && break
+            echo "Waiting for WireMock... ($i/60)"; sleep 2
           done
-          # Clean slate + clear journals
-          curl -fsS -X POST "http://127.0.0.1:8099/__admin/reset" >/dev/null
-          curl -fsS -X POST "http://127.0.0.1:8099/__admin/mappings/reset" >/dev/null || true
-          curl -fsS -X POST "http://127.0.0.1:8099/__admin/requests/reset" >/dev/null
-          echo "WireMock container:"
-          docker ps --filter "name=wiremock-8099"
-          echo "WireMock logs (first 100 lines):"
-          docker logs --tail 100 wiremock-8099 || true
+          curl -s "http://127.0.0.1:8099/__admin" | head -c 400 || true
 
       - name: Wait for platform services (robust, with logs on failure)
         run: |
@@ -266,14 +220,11 @@ jobs:
             local name="$1" url="$2" tries="${3:-60}"
             echo "Probing $name at $url"
             for i in $(seq 1 "$tries"); do
-              if code=$(curl -sS -o /dev/null -w '%{http_code}' --connect-timeout 5 --max-time 10 "$url" || true); then
-                if [ "$code" = "200" ]; then echo "$name is up (200)"; return 0; fi
-              fi
-              echo "[$i/$tries] $name not ready (code=${code:-none}); sleeping..."
-              sleep 2
+              code=$(curl -sS -o /dev/null -w '%{http_code}' --connect-timeout 5 --max-time 10 "$url" || echo "000")
+              if [ "$code" = "200" ]; then echo "$name is up (200)"; return 0; fi
+              echo "[$i/$tries] $name not ready (code=$code); sleeping..."; sleep 2
             done
-            echo "$name failed to become healthy after $tries attempts"
-            return 1
+            echo "$name failed to become healthy after $tries attempts"; return 1
           }
 
           # Core infra
@@ -281,26 +232,21 @@ jobs:
           curl -fsS --retry 60 --retry-connrefused --retry-delay 2 "$LS/_localstack/health" >/dev/null
           for i in {1..60}; do (echo > /dev/tcp/127.0.0.1/6379) >/dev/null 2>&1 && break; sleep 1; done
 
-          # App dependencies: try both health paths where applicable
+          # App deps
           set +e
           probe "manage-users" "http://127.0.0.1:9091/health/ping" 90 || MU_FAIL=1
-          probe "external-users" "http://127.0.0.1:8088/health/ping" 90 || EU_FAIL=1
-          # hmpps-auth often exposes one of these:
           probe "hmpps-auth (/health/ping)" "http://127.0.0.1:9090/health/ping" 120 || AUTH_DIRECT_FAIL=1
           if [ "${AUTH_DIRECT_FAIL:-}" = "1" ]; then
             probe "hmpps-auth (/auth/health/ping)" "http://127.0.0.1:9090/auth/health/ping" 30 || AUTH_FAIL=1
           fi
           set -e
 
-          # If any failed, dump container logs for quick triage and then fail
-          if [ "${MU_FAIL:-0}" = "1" ] || [ "${EU_FAIL:-0}" = "1" ] || [ "${AUTH_FAIL:-0}" = "1" ] || [ "${AUTH_DIRECT_FAIL:-0}" = "1" ]; then
+          if [ "${MU_FAIL:-0}" = "1" ] || [ "${AUTH_FAIL:-0}" = "1" ] || [ "${AUTH_DIRECT_FAIL:-0}" = "1" ]; then
             echo "=== Container list ==="; docker ps
             echo "=== hmpps-auth logs ==="
             docker logs "$(docker ps -q --filter "ancestor=quay.io/hmpps/hmpps-auth:latest" | head -n1)" || true
             echo "=== manage-users logs ==="
             docker logs "$(docker ps -q --filter "ancestor=quay.io/hmpps/hmpps-manage-users-api:latest" | head -n1)" || true
-            echo "=== external-users logs ==="
-            docker logs "$(docker ps -q --filter "ancestor=quay.io/hmpps/hmpps-external-users-api:latest" | head -n1)" || true
             exit 1
           fi
 
@@ -315,7 +261,6 @@ jobs:
           python3 -m pip install --user --upgrade pip
           python3 -m pip install --user "awscli==1.*"
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-          aws --version
 
       - name: Seed LocalStack (queue + sample dashboards)
         run: |
@@ -329,21 +274,17 @@ jobs:
           for ts in 20210729062147 20210730062147 20210801062147 20210802062147; do
             aws --endpoint-url="$LS" s3api put-object \
               --bucket wmt-web \
-              --key "generated-dashboards/dashboard_${ts}.txt" \
+              --key generated-dashboards/dashboard_${ts}.txt \
               --body dashboard-file.txt
           done
-          echo "Buckets:"; aws --endpoint-url="$LS" s3api list-buckets | jq '.Buckets[].Name'
 
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: .nvmrc
+          node-version-file: ${{ inputs.node_version_file }}
 
       - name: Install deps
-        run: |
-          set -euxo pipefail
-          npm ci --no-audit
-          npm run -s lint || true
+        run: npm ci --no-audit
 
       - name: Install Google Chrome (for WDIO)
         run: |
@@ -358,10 +299,8 @@ jobs:
 
       - name: Install psql client
         run: |
-          set -euxo pipefail
           sudo apt-get update -y
           sudo apt-get install -y postgresql-client
-          psql --version
 
       - name: Start hmpps_workload container
         run: |
@@ -375,34 +314,25 @@ jobs:
             -e HMPPS_SQS_LOCALSTACK_URL=http://host.docker.internal:4566 \
             ghcr.io/ministryofjustice/hmpps-workload:latest \
             /bin/sh -lc 'sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar'
-          docker ps --filter "name=hmpps_workload"
 
-      - name: Wait for DB schema (and show workload logs if slow)
+      - name: Wait for DB schema
         env: { PGPASSWORD: postgres }
         run: |
           set -euxo pipefail
           for i in {1..120}; do
-            if psql -h 127.0.0.1 -U postgres -d postgres -tAc \
-              "SELECT 1 FROM information_schema.tables WHERE table_name='flyway_schema_history'" | grep -q 1; then
-              echo "Flyway schema ready"; break
-            fi
-            echo "Waiting for Flyway schema... ($i/120)"
-            docker logs --tail 50 hmpps_workload || true
-            sleep 2
+            psql -h 127.0.0.1 -U postgres -d postgres -tAc \
+              "SELECT 1 FROM information_schema.tables WHERE table_name='flyway_schema_history'" | grep -q 1 && exit 0
+            echo "Waiting for Flyway schema... ($i/120)"; sleep 2
           done
+          echo "Schema not ready in time"; docker logs hmpps_workload || true; exit 1
 
       - name: Build assets
-        run: |
-          set -euxo pipefail
-          npm run build
-          ls -lh dist || true
+        run: npm run build
 
       - name: Start app (direct)
         env:
           WMT_WEB_APPLICATION_SECRET: ci-dev-secret
           SESSION_SECRET: ci-session-secret
-
-          # DBs
           WMT_LIVE_DB_SERVER: 127.0.0.1
           WMT_LIVE_DB_NAME: postgres
           WMT_LIVE_DB_USERNAME: postgres
@@ -412,24 +342,20 @@ jobs:
           WMT_HISTORY_DB_NAME: postgres
           WMT_HISTORY_DB_USERNAME: postgres
           WMT_HISTORY_DB_PASSWORD: postgres
-
-          # Cache & inbound
           REDIS_HOST: 127.0.0.1
           REDIS_PORT: "6379"
           REDIS_URL: redis://127.0.0.1:6379
-          INGRESS_URL: http://127.0.0.1:3000
-          PORT: 3000
-
-          # Real auth + manage-users
+          # Real auth + manage users
           HMPPS_AUTH_URL: http://127.0.0.1:9090/auth
           HMPPS_AUTH_EXTERNAL_URL: http://127.0.0.1:9090/auth
           MANAGE_USERS_SERVICE_URL: http://127.0.0.1:9091
-
           # Everything else via WireMock
           ALLOCATIONS_SERVICE_URL: http://127.0.0.1:8099
           USER_PREFERENCE_SERVICE_URL: http://127.0.0.1:8099
           TOKEN_VERIFICATION_API_URL: http://127.0.0.1:8099
           TOKEN_VERIFICATION_ENABLED: "true"
+          INGRESS_URL: http://127.0.0.1:3000
+          PORT: 3000
         run: |
           set -euxo pipefail
           export $(grep -v '^\s*#' feature.env | xargs) || true
@@ -437,30 +363,18 @@ jobs:
           for i in {1..120}; do
             code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:3000/" || echo "000")
             if [ "$code" = "200" ] || [ "$code" = "302" ]; then
-              echo "App ready ($code)"; break
+              echo "App ready at http://127.0.0.1:3000 ($code)"; break
             fi
             echo "Waiting for app... ($i/120)"; sleep 2
           done
           tail -n 200 /tmp/app.log || true
 
-      # === WireMock load + diagnostics ===
-      - name: Load WireMock mappings from repo (clean) + list
-        env:
-          WIREMOCK_URL: ${{ env.WIREMOCK_URL }}
-        run: |
-          set -euxo pipefail
-          mkdir -p diag
-          curl -fsS -X POST "$WIREMOCK_URL/__admin/reset" >/dev/null
-          curl -fsS -X POST "$WIREMOCK_URL/__admin/mappings/reset" >/dev/null || true
-          curl -fsS -X POST "$WIREMOCK_URL/__admin/requests/reset" >/dev/null
-          npm run post-wiremock-mappings
-          curl -fsS "$WIREMOCK_URL/__admin/mappings" | tee diag/wiremock-mappings.json | jq '.mappings | length as $n | "Total mappings: \($n)"'
-          # Quick list of URLs + methods for human scan
-          jq -r '.mappings[] | "\(.request.method) \(.request.url // .request.urlPattern // .request.urlPath)"' diag/wiremock-mappings.json | sort > diag/wiremock-mapping-list.txt
-          echo "Top of WireMock log after load:"
-          docker logs --tail 200 wiremock-8099 || true
+      - name: Load WireMock mappings from repo
+        run: npm run post-wiremock-mappings
 
-      - name: Create WDIO CI config (single worker, headless, debug)
+      # (No auth override here; we’re using real hmpps-auth)
+
+      - name: Create WDIO CI config (single worker, headless)
         run: |
           cat > wdio.ci.conf.js <<'JS'
           const path = require('path');
@@ -498,15 +412,14 @@ jobs:
           exports.config = { ...base,
             baseUrl: process.env.BASE_URL || base.baseUrl || 'http://127.0.0.1:3000',
             maxInstances: 1, capabilities: caps, specs, exclude,
-            logLevel: process.env.WDIO_LOG_LEVEL || 'info',
-            outputDir: './wdio-logs'
+            logLevel: process.env.WDIO_LOG_LEVEL || 'info', outputDir: './wdio-logs'
           };
           JS
 
       - name: Pick one E2E spec
         id: pickspec
         run: |
-          set -euo pipefail
+          set -euxo pipefail
           SPEC="${SPEC:-}"
           if [ -z "$SPEC" ]; then
             SPEC=$(ls -1 test/e2e/*.js test/e2e/**/*.js 2>/dev/null | head -n 1 || true)
@@ -532,47 +445,18 @@ jobs:
           npm run clean-dev-data
           npm run seed-dev-data
           pkill -f "chrome" || true
-          # Fresh WireMock journal for the test
-          curl -fsS -X POST "$WIREMOCK_URL/__admin/requests/reset" >/dev/null
           npx wdio wdio.ci.conf.js --workers 1 --spec "${{ steps.pickspec.outputs.spec }}"
           npm run clean-dev-data
 
-      # Always take snapshots after test run (pass or fail)
-      - name: Collect diagnostics (always)
-        if: always()
-        run: |
-          set -euxo pipefail
-          mkdir -p diag
-          # App & container logs
-          cp -f /tmp/app.log diag/app.log || true
-          docker logs wiremock-8099 > diag/wiremock.log 2>&1 || true
-          docker logs hmpps_workload > diag/hmpps_workload.log 2>&1 || true
-          docker logs $(docker ps -q --filter "name=hmpps-auth") > diag/hmpps-auth.log 2>&1 || true
-          docker logs $(docker ps -q --filter "name=hmpps-manage-users-api") > diag/hmpps-manage-users-api.log 2>&1 || true
-          # WireMock requests (matched + unmatched)
-          curl -fsS "$WIREMOCK_URL/__admin/requests" | tee diag/wiremock-requests.json >/dev/null
-          curl -fsS "$WIREMOCK_URL/__admin/requests/unmatched" | tee diag/wiremock-unmatched.json >/dev/null
-          # Simple summaries for quick triage
-          echo "Matched count:"   $(jq '.requests | length' diag/wiremock-requests.json || echo 0) | tee diag/summary.txt
-          echo "Unmatched count:" $(jq '.requests | length' diag/wiremock-unmatched.json || echo 0) | tee -a diag/summary.txt
-          jq -r '.requests[]? | "\(.request.method) \(.request.url) -> \(.response.status)"' diag/wiremock-requests.json \
-            | sort > diag/wiremock-requests-list.txt || true
-          jq -r '.requests[]? | "\(.request.method) \(.request.url)"' diag/wiremock-unmatched.json \
-            | sort > diag/wiremock-unmatched-list.txt || true
-          # Container list & ports
-          docker ps > diag/docker-ps.txt
-          docker inspect wiremock-8099 > diag/wiremock-inspect.json || true
-
-      - name: Upload diagnostics (on failure)
+      - name: Upload E2E artifacts (on failure)
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: e2e-diagnostics
+          name: e2e-artifacts-failure
           path: |
             ./screenshots
             ./videos
             ./wdio-*.log
             ./wdio-logs
             /tmp/app.log
-            diag/**
           if-no-files-found: ignore
