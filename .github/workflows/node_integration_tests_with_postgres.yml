@@ -186,7 +186,8 @@ jobs:
       wiremock:
         image: wiremock/wiremock:2.35.0
         ports: [ "8099:8080" ]
-        command: [ "--port", "8080", "--global-response-templating" ]
+        env:
+          WIREMOCK_OPTIONS: "--port 8080 --global-response-templating"
 
     env:
       AWS_DEFAULT_REGION: eu-west-2
