@@ -155,7 +155,6 @@ jobs:
         ports: [ "4566:4566" ]
         env:
           SERVICES: s3,sqs,sns
-      # REMOVE wiremock service here
       redis:
         image: redis:7-alpine
         ports: [ "6379:6379" ]
@@ -174,21 +173,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # NEW: start WireMock with response templating enabled (exactly like CircleCI)
+      # Start WireMock with global response templating (like CircleCI)
       - name: Start WireMock (global response templating)
         run: |
           docker run -d --name wiremock-ci \
             -p 8099:8080 \
             wiremock/wiremock:2.35.0 \
             --port 8080 --global-response-templating
-          # wait until ready
           for i in {1..30}; do
             curl -fsS "http://127.0.0.1:8099/__admin" >/dev/null && break
             echo "Waiting for WireMock... ($i/30)"; sleep 2
           done
-          # quick proof that templating is ON (this endpoint exists in v2.35 but doesn't reflect global flag,
-          # so we'll do a live render check right after mappings are loaded)
 
+      # Post the minimum viable auth stubs (health, token, authorize -> 302 with templating)
       - name: Post critical Auth stubs (authorize/token/health)
         env:
           BASE_URL: ${{ env.BASE_URL }}
@@ -201,40 +198,31 @@ jobs:
               -d "$1" >/dev/null
           }
 
-          # 200 health
-          post '{
-            "request": { "method":"GET", "url":"/auth/health/ping" },
-            "response": { "status":200, "jsonBody":{ "status":"UP" } }
-          }'
+          # health checks (both forms)
+          post '{ "priority":1, "request":{"method":"GET","url":"/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }'
+          post '{ "priority":1, "request":{"method":"GET","url":"/auth/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }'
 
-          # token endpoint
+          # token endpoint (lenient match: method+path only)
           post '{
+            "priority": 1,
             "request": { "method":"POST", "url":"/auth/oauth/token" },
             "response": {
               "status":200,
-              "headers": { "Content-Type":"application/json" },
+              "headers": { "Content-Type":"application/json;charset=UTF-8" },
               "jsonBody": {
-                "access_token":"***", "token_type":"bearer", "user_name":"USER1",
-                "expires_in":599, "scope":"read", "internalUser":true
+                "access_token":"***", "token_type":"bearer",
+                "user_name":"USER1", "expires_in":599,
+                "scope":"read", "internalUser":true
               }
             }
           }'
 
-          # authorize -> 302 to redirect_uri with code & state (uses response-template)
+          # authorize: 302 to whatever redirect_uri is passed (templated)
           post '{
             "priority": 1,
-            "request": {
-              "method":"GET",
-              "urlPath":"/auth/oauth/authorize",
-              "queryParameters": {
-                "response_type": { "equalTo":"code" },
-                "redirect_uri": { "matches":".*" },
-                "state": { "matches":".*" },
-                "client_id": { "equalTo":"workload-measurement-ui" }
-              }
-            },
+            "request": { "method":"GET", "urlPattern": "^/auth/oauth/authorize(\\?.*)?$" },
             "response": {
-              "status":302,
+              "status": 302,
               "headers": {
                 "Location": "{{request.query.redirect_uri}}?code=codexxxx&state={{request.query.state}}"
               },
@@ -242,13 +230,11 @@ jobs:
             }
           }'
 
-          # prove they’re loaded and matching
           echo -n "Mappings now: "
           curl -s "$WIREMOCK_URL/__admin/mappings" | jq '.mappings | length'
           echo
-          echo "Authorize probe (should be 302 with Location to ${BASE_URL}/sign-in/callback):"
-          curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/sign-in/callback&response_type=code&state=xyz" | head -n 20
-
+          echo "Authorize probe (expect 302 to .../login or .../sign-in callback depending on your app):"
+          curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/login/callback&response_type=code&state=xyz" | head -n 20 || true
 
       - name: Wait for other services
         run: |
@@ -330,106 +316,6 @@ jobs:
       - name: Build assets
         run: npm run build
 
-      - name: Start app (direct)
-        env:
-          WMT_WEB_APPLICATION_SECRET: ci-dev-secret
-          SESSION_SECRET: ci-session-secret
-          WMT_LIVE_DB_SERVER: 127.0.0.1
-          WMT_LIVE_DB_NAME: postgres
-          WMT_LIVE_DB_USERNAME: postgres
-          WMT_LIVE_DB_PASSWORD: postgres
-          WMT_HISTORY_DB_SERVER: 127.0.0.1
-          WMT_HISTORY_DB_PORT: "5432"
-          WMT_HISTORY_DB_NAME: postgres
-          WMT_HISTORY_DB_USERNAME: postgres
-          WMT_HISTORY_DB_PASSWORD: postgres
-          REDIS_HOST: 127.0.0.1
-          REDIS_PORT: "6379"
-          REDIS_URL: redis://127.0.0.1:6379
-          HMPPS_AUTH_URL: http://127.0.0.1:8099/auth
-          HMPPS_AUTH_EXTERNAL_URL: http://127.0.0.1:8099/auth
-          MANAGE_USERS_SERVICE_URL: http://127.0.0.1:8099
-          ALLOCATIONS_SERVICE_URL: http://127.0.0.1:8099
-          USER_PREFERENCE_SERVICE_URL: http://127.0.0.1:8099
-          TOKEN_VERIFICATION_API_URL: http://127.0.0.1:8099
-          TOKEN_VERIFICATION_ENABLED: "true"
-          INGRESS_URL: http://127.0.0.1:3000
-          PORT: 3000
-        run: |
-          set -euo pipefail
-          export $(grep -v '^\s*#' feature.env | xargs) || true
-          nohup node app/bin/www > /tmp/app.log 2>&1 &
-          for i in {1..120}; do
-            code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:3000/" || echo "000")
-            if [ "$code" = "200" ] || [ "$code" = "302" ]; then
-              echo "App ready at http://127.0.0.1:3000 ($code)"; break
-            fi
-            echo "Waiting for app... ($i/120)"; sleep 2
-          done
-          tail -n 200 /tmp/app.log || true
-
-      - name: Load WireMock mappings (your script)
-        run: npm run post-wiremock-mappings
-
-      - name: Augment WireMock (no reset) - add high-priority /auth/authorize + ensure health stubs
-        env:
-          BASE_URL: ${{ env.BASE_URL }}
-          WIREMOCK_URL: ${{ env.WIREMOCK_URL }}
-        run: |
-          set -euo pipefail
-
-          post() {
-            curl -fsS -X POST "$WIREMOCK_URL/__admin/mappings" \
-              -H 'Content-Type: application/json' \
-              -d "$1" >/dev/null
-          }
-
-          # Keep your repo mappings, just add a high-priority authorize override that always 302s
-          post '{
-            "priority": 1,
-            "request": { "method":"GET", "urlPattern": "/auth/oauth/authorize.*" },
-            "response": {
-              "status": 302,
-              "headers": {
-                "Location": "{{request.query.redirect_uri}}?code=codexxxx&state={{request.query.state}}"
-              },
-              "transformers": ["response-template"]
-            }
-          }'
-
-          # Ensure BOTH health endpoints exist (your app hits /health/ping; hmppsAuth hits /auth/health/ping)
-          post '{ "priority":1, "request":{"method":"GET","url":"/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }'
-          post '{ "priority":1, "request":{"method":"GET","url":"/auth/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }'
-
-          # (Optional, but harmless) ensure token endpoint too
-          post '{
-            "priority": 1,
-            "request": { "method":"POST", "url":"/auth/oauth/token" },
-            "response": {
-              "status":200,
-              "headers": { "Content-Type":"application/json;charset=UTF-8" },
-              "jsonBody": {
-                "access_token":"***", "token_type":"bearer",
-                "user_name":"USER1", "expires_in":599,
-                "scope":"read", "internalUser":true
-              }
-            }
-          }'
-
-          echo -n "Total mappings: "
-          curl -s "$WIREMOCK_URL/__admin/mappings" | jq '.mappings | length'
-
-          echo "Authorize probe (expect 302 to ${BASE_URL}/sign-in/callback):"
-          curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/sign-in/callback&response_type=code&state=xyz" | head -n 20
-
-
-      - name: Sanity check authorize redirect renders
-        run: |
-          curl -s -i "http://127.0.0.1:8099/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/sign-in/callback&response_type=code&state=xyz" | head -n 20
-
-      - name: Build assets
-        run: npm run build
-
       - name: Start app (direct; robust wait; 127.0.0.1 everywhere)
         env:
           WMT_WEB_APPLICATION_SECRET: ci-dev-secret
@@ -470,7 +356,6 @@ jobs:
           if [ -z "$ready" ]; then
             echo "App failed to become ready. Tail of /tmp/app.log:"; tail -n 400 /tmp/app.log || true; exit 1
           fi
-          # quick curls for e2e landing/sign-in pages
           curl -sS -D /tmp/home.headers http://127.0.0.1:3000/ -o /tmp/home.html || true
           curl -sS -D /tmp/login.headers http://127.0.0.1:3000/login -o /tmp/login.html || true
           tail -n 200 /tmp/app.log || true
@@ -550,6 +435,11 @@ jobs:
           echo "Running single spec: $SPEC"
           echo "spec=$SPEC" >> "$GITHUB_OUTPUT"
 
+      - name: WireMock unmatched BEFORE tests
+        run: |
+          mkdir -p diag
+          curl -s "$WIREMOCK_URL/__admin/requests/unmatched" | jq . > diag/wm_unmatched_pre.json || true
+
       - name: Pre-run diagnostics (WireMock + app)
         run: |
           set -euo pipefail
@@ -558,56 +448,8 @@ jobs:
           curl -sS "$WIREMOCK_URL/__admin/requests/recent" > diag/wiremock_requests_pre.json || true
           curl -sS -D diag/app_home.headers "$BASE_URL/" -o diag/app_home.html || true
           curl -sS -D diag/app_login.headers "$BASE_URL/login" -o diag/app_login.html || true
-
-      - name: DIAG capture end-to-end auth roundtrip (headers, cookies, WM mappings)
-        run: |
-          set -euo pipefail
-          mkdir -p diag
-
-          echo "=== ENV SNAPSHOT ===" > diag/env.txt
-          env | sort >> diag/env.txt
-
-          echo "=== APP / (no follow) ==="
-          curl -s -I "$BASE_URL/" | tee diag/app_root.headers || true
-
-          echo "=== APP / (follow, keep cookies) ==="
-          curl -s -I -L -c diag/cookies1.txt -b diag/cookies1.txt "$BASE_URL/" | tee diag/app_root_follow.headers || true
-
-          echo "=== WireMock settings ==="
-          curl -s "$WIREMOCK_URL/__admin/settings" | jq . > diag/wm_settings.json || true
-
-          echo "=== WireMock ALL mappings ==="
-          curl -s "$WIREMOCK_URL/__admin/mappings" | jq . > diag/wm_mappings.json || true
-
-          echo "=== WireMock authorize probe (with redirect_uri) ==="
-          curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/sign-in/callback&response_type=code&state=xyz" > diag/wm_authorize_probe.txt || true
-
-          echo "=== WireMock token probe ==="
-          curl -s -i -X POST "$WIREMOCK_URL/auth/oauth/token" > diag/wm_token_probe.txt || true
-
-          echo "=== Cookie jars ===" > diag/cookies.dump
-          echo "--- cookies1.txt ---" >> diag/cookies.dump
-          cat diag/cookies1.txt >> diag/cookies.dump || true
-
-          echo "=== APP / final (follow, save body) ==="
-          curl -s -L -c diag/cookies2.txt -b diag/cookies2.txt "$BASE_URL/" -o diag/app_root_final.html || true
-          wc -c diag/app_root_final.html | tee diag/app_root_final.size || true
-          echo "--- cookies2.txt ---" >> diag/cookies.dump
-          cat diag/cookies2.txt >> diag/cookies.dump || true
-
-          echo "=== Sanity for callback route existence ==="
-          # Try both common callback paths; the one your app really handles should 200/302, not 404
-          curl -s -I "${BASE_URL}/sign-in/callback?code=test&state=s" | tee diag/app_callback_signin.headers || true
-          curl -s -I "${BASE_URL}/login/callback?code=test&state=s"   | tee diag/app_callback_login.headers  || true
-
-      - name: Upload DIAG artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: e2e-auth-diag
-          path: diag
-          if-no-files-found: warn
-
+          echo "sign-in callback:"; curl -s -o /dev/null -w "code=%{http_code}\n" "${BASE_URL}/sign-in/callback?code=test&state=s" || true
+          echo "login    callback:"; curl -s -o /dev/null -w "code=%{http_code}\n" "${BASE_URL}/login/callback?code=test&state=s"   || true
 
       - name: Run E2E (single spec; isolated Chrome profile)
         env:
@@ -628,6 +470,12 @@ jobs:
           pkill -f "chrome" || true
           npx wdio wdio.ci.conf.js --workers 1 --spec "${{ steps.pickspec.outputs.spec }}"
           npm run clean-dev-data
+
+      - name: WireMock unmatched AFTER tests
+        if: always()
+        run: |
+          mkdir -p diag
+          curl -s "$WIREMOCK_URL/__admin/requests/unmatched" | jq . > diag/wm_unmatched_post.json || true
 
       - name: Post-run diagnostics (always)
         if: always()
