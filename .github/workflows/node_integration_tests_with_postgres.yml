@@ -88,11 +88,17 @@ jobs:
             --bucket wmt-web \
             --region "$AWS_DEFAULT_REGION" \
             --create-bucket-configuration LocationConstraint="$AWS_DEFAULT_REGION" || true
-          for ts in 20210729062147 20210730062147 20210801062147 20210802062147; do
+          # 5 dummy dashboard files
+          for ts in \
+            20210729062147 \
+            20210730062147 \
+            20210801062147 \
+            20210802062147 \
+            20210803062147; do
             aws --endpoint-url="$LS" s3api put-object \
-              --bucket wmt-web \
-              --key generated-dashboards/dashboard_${ts}.txt \
-              --body dashboard-file.txt
+            --bucket wmt-web \
+            --key generated-dashboards/dashboard_${ts}.txt \
+            --body dashboard-file.txt
           done
 
       - name: Start hmpps_workload container
@@ -216,11 +222,17 @@ jobs:
             --region "$AWS_DEFAULT_REGION" \
             --create-bucket-configuration LocationConstraint="$AWS_DEFAULT_REGION" || true
           printf 'dashboard' > dashboard-file.txt
-          for ts in 20210729062147 20210730062147 20210801062147 20210802062147; do
+          # 5 dummy dashboard files
+          for ts in \
+            20210729062147 \
+            20210730062147 \
+            20210801062147 \
+            20210802062147 \
+            20210803062147; do
             aws --endpoint-url="$LS" s3api put-object \
-              --bucket wmt-web \
-              --key generated-dashboards/dashboard_${ts}.txt \
-              --body dashboard-file.txt
+            --bucket wmt-web \
+            --key generated-dashboards/dashboard_${ts}.txt \
+            --body dashboard-file.txt
           done
 
       - name: Use Node.js
