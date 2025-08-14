@@ -270,45 +270,74 @@ jobs:
           curl -sS -i "$WIREMOCK_URL/auth/oauth/token" | head -n 20 || true
           curl -sS -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=$BASE_URL/sign-in/callback&response_type=code&state=x" | head -n 20 || true
 
-      - name: Patch WireMock auth endpoints (health + authorize + token)
+      - name: Patch WireMock auth endpoints (/auth prefix)
         env:
           WIREMOCK_URL: http://127.0.0.1:8099
           BASE_URL: http://127.0.0.1:3000
         run: |
           set -euo pipefail
           W="$WIREMOCK_URL"; APP="$BASE_URL"
-          curl -s -X POST "$W/__admin/mappings" -H 'Content-Type: application/json' --data '{
-            "priority": 1,
-            "request": { "method":"GET", "urlPath":"/auth/health/ping" },
-            "response": { "status":200, "jsonBody":{"status":"UP"} }
-          }' >/dev/null
-          curl -s -X POST "$W/__admin/mappings" -H 'Content-Type: application/json' --data @- >/dev/null <<JSON
+
+          # /auth/health/ping
+          curl -s -X POST "$W/__admin/mappings" \
+            -H 'Content-Type: application/json' --data-binary @- >/dev/null <<'JSON'
+          { "priority":1,
+            "request":{"method":"GET","urlPath":"/auth/health/ping"},
+            "response":{"status":200,"jsonBody":{"status":"UP"}}
+          }
+          JSON
+
+          # /auth/oauth/token (POST)
+          curl -s -X POST "$W/__admin/mappings" \
+            -H 'Content-Type: application/json' --data-binary @- >/dev/null <<'JSON'
+          { "priority":1,
+            "request":{"method":"POST","urlPath":"/auth/oauth/token"},
+            "response":{"status":200,"headers":{"Content-Type":"application/json"},
+                        "jsonBody":{"access_token":"fake-token","token_type":"bearer","expires_in":3600}}
+          }
+          JSON
+
+          # /auth/oauth/token (GET) – some flows accidentally GET it; be tolerant
+          curl -s -X POST "$W/__admin/mappings" \
+            -H 'Content-Type: application/json' --data-binary @- >/dev/null <<'JSON'
+          { "priority":1,
+            "request":{"method":"GET","urlPath":"/auth/oauth/token"},
+            "response":{"status":200,"headers":{"Content-Type":"application/json"},
+                        "jsonBody":{"access_token":"fake-token","token_type":"bearer","expires_in":3600}}
+          }
+          JSON
+
+          # /auth/oauth/authorize (GET → 302 to /sign-in/callback with state echo)
+          # Use response-template so ?state=… is preserved
+          curl -s -X POST "$W/__admin/mappings" \
+            -H 'Content-Type: application/json' --data-binary @- >/dev/null <<'JSON'
           {
             "priority": 1,
-            "request": {
-              "method": "GET",
-              "urlPath": "/auth/oauth/authorize",
-              "queryParameters": {
-                "client_id":     { "matches": "workload-measurement-ui" },
-                "response_type": { "matches": "code" },
-                "state":         { "matches": ".+" },
-                "redirect_uri":  { "matches": ".+" }
-              }
-            },
+            "request": { "method": "GET", "urlPath": "/auth/oauth/authorize" },
             "response": {
               "status": 302,
-              "headers": { "Location": "$APP/sign-in/callback?code=fakecode&state=fakestate" }
+              "headers": {
+                "Location": "http://127.0.0.1:3000/sign-in/callback?code=codexxxx&state={{ request.query.state }}"
+              },
+              "transformers": ["response-template"]
             }
           }
           JSON
-          curl -s -X POST "$W/__admin/mappings" -H 'Content-Type: application/json' --data '{
-          "priority": 1,
-          "request": { "method":"POST", "urlPath":"/auth/oauth/token" },
-          "response": { "status":200, "jsonBody":{"access_token":"fake-token","token_type":"bearer","expires_in":3600} }
-          }' >/dev/null
-          echo -n "authorize => "; curl -s -o /dev/null -w "%{http_code}\n" "$W/auth/oauth/authorize?client_id=workload-measurement-ui&state=x&response_type=code&redirect_uri=$APP/sign-in/callback"
-          echo -n "token(POST)=> "; curl -s -o /dev/null -w "%{http_code}\n" -X POST "$W/auth/oauth/token"
-          echo -n "health => "; curl -s -o /dev/null -w "%{http_code}\n" "$W/auth/health/ping"
+
+          # Quick sanity
+          echo -n "authorize => "
+          curl -s -o /dev/null -w "%{http_code}\n" \
+            "$W/auth/oauth/authorize?client_id=workload-measurement-ui&state=xyz&response_type=code&redirect_uri=$APP/sign-in/callback"
+
+          echo -n "token POST => "
+          curl -s -o /dev/null -w "%{http_code}\n" -X POST "$W/auth/oauth/token"
+
+          echo -n "token GET  => "
+          curl -s -o /dev/null -w "%{http_code}\n" "$W/auth/oauth/token"
+
+          echo -n "health     => "
+          curl -s -o /dev/null -w "%{http_code}\n" "$W/auth/health/ping"
+
 
       - name: Build assets
         run: npm run build
@@ -364,9 +393,9 @@ jobs:
           const basePath = path.resolve(__dirname, 'test/e2e.conf.js');
           const baseMod = require(basePath);
           const base = baseMod.config || baseMod;
-          
+
           const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'wdio-chrome-'));
-          
+
           const ensureArgs = (c = {}) => {
             const opts = c['goog:chromeOptions'] || {};
             const args = new Set([...(opts.args || []),
@@ -380,22 +409,24 @@ jobs:
               browserName: c.browserName || 'chrome',
               ...c,
               'goog:chromeOptions': { ...opts, args: Array.from(args) },
+              // 👇 enable browser console logs
+              'goog:loggingPrefs': { browser: 'ALL' },
               'wdio:enforceWebDriverClassic': true
             };
             if (process.env.CHROME_BIN) out['goog:chromeOptions'].binary = process.env.CHROME_BIN;
             return out;
           };
-          
+
           const caps = Array.isArray(base.capabilities)
             ? base.capabilities.map(ensureArgs)
             : [ensureArgs(base.capabilities || {})];
-          
+
           const toAbs = (p, root) => (path.isAbsolute(p) ? p : path.join(root, p));
           const baseDir = path.dirname(basePath);
           const specs = (base.specs && base.specs.length ? base.specs : ['e2e/**/*.js','e2e/*.js'])
             .map(p => toAbs(p, baseDir));
           const exclude = (base.exclude || []).map(p => toAbs(p, baseDir));
-          
+
           exports.config = {
             ...base,
             baseUrl: process.env.BASE_URL || base.baseUrl || 'http://127.0.0.1:3000',
@@ -403,8 +434,27 @@ jobs:
             capabilities: caps,
             specs,
             exclude,
-            logLevel: base.logLevel || 'info',
-            outputDir: base.outputDir || './wdio-logs'
+            // 👇 honor env, default to info
+            logLevel: process.env.WDIO_LOG_LEVEL || base.logLevel || 'info',
+            outputDir: base.outputDir || './wdio-logs',
+            // 👇 save page HTML + console logs for failures
+            afterTest: async function (test, context, { error, passed }) {
+              if (passed) return
+              const outDir = path.resolve(process.cwd(), 'wdio-logs')
+              fs.mkdirSync(outDir, { recursive: true })
+              try {
+                const url = await browser.getUrl()
+                fs.writeFileSync(path.join(outDir, `FAILED_${Date.now()}_url.txt`), url)
+              } catch {}
+              try {
+                const html = await browser.getPageSource()
+                fs.writeFileSync(path.join(outDir, `FAILED_${Date.now()}.html`), html)
+              } catch {}
+              try {
+                const logs = await browser.getLogs('browser')
+                fs.writeFileSync(path.join(outDir, `FAILED_${Date.now()}_console.json`), JSON.stringify(logs, null, 2))
+              } catch {}
+            }
           };
           JS
 
@@ -418,6 +468,10 @@ jobs:
           DATABASE_PORT: "5432"
           DATABASE_SSL: "false"
           CHROME_BIN: ${{ env.CHROME_BIN }}
+          # 👇 set this to the one spec you want to run
+          E2E_SPEC: test/e2e/create-admin-reduction-reasons.js
+          # optional: increase WDIO verbosity
+          WDIO_LOG_LEVEL: debug
         run: |
           set -euo pipefail
           export $(grep -v '^\s*#' feature.env | xargs)
@@ -425,7 +479,9 @@ jobs:
           npm run clean-dev-data
           npm run seed-dev-data
           pkill -f "chrome" || true
-          npx wdio wdio.ci.conf.js --workers 1
+          EXTRA=""
+          if [ -n "${E2E_SPEC:-}" ]; then EXTRA="--spec ${E2E_SPEC}"; fi
+          npx wdio wdio.ci.conf.js --workers 1 $EXTRA
           npm run clean-dev-data
 
       - name: Upload E2E artifacts (on failure)
