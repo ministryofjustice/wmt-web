@@ -321,43 +321,29 @@ jobs:
 
       # … keep your existing “Load WireMock mappings from repo” step …
 
-      - name: Override Auth in WireMock with a valid JWT (no jq)
+      - name: Override Auth in WireMock (token only; keep your /authorize)
         env:
           BASE_URL: ${{ env.BASE_URL }}
           WIREMOCK_URL: ${{ env.WIREMOCK_URL }}
         run: |
           set -euo pipefail
+          CURL="curl -sS --fail-with-body -H 'Content-Type: application/json'"
 
-          # Valid dummy JWT (header+payload are base64url JSON; signature is junk, which is fine for jwt-decode)
+          # ✅ valid dummy JWT; header+payload decode; signature is junk (fine for jwt-decode)
           STATIC_JWT='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJ3bXRfc3RhZmYiLCJhdXRob3JpdGllcyI6WyJXTVRfQURNSU4iLCJXTVRfU1RBRkYiXSwic2NvcGUiOlsicmVhZCJdLCJpbnRlcm5hbFVzZXIiOnRydWUsImV4cCI6MTg5MzQ1NjAwMCwiaXNzIjoid2lyZW1vY2siLCJzdWIiOiJ3bXRfc3RhZmYifQ.Y2ktc2ln'
 
           echo "Posting WireMock overrides…"
 
-          # /auth/health/ping (helps auth warmup logs)
-          curl -fsS -X POST "$WIREMOCK_URL/__admin/mappings" -H 'Content-Type: application/json' -d @- <<JSON
+          # Health pings (optional, useful in logs)
+          $CURL -X POST "$WIREMOCK_URL/__admin/mappings" -d @- <<'JSON'
           { "priority":1, "request":{"method":"GET","url":"/auth/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }
           JSON
-
-          # (Optional) /health/ping (some clients call the non-prefixed variant)
-          curl -fsS -X POST "$WIREMOCK_URL/__admin/mappings" -H 'Content-Type: application/json' -d @- <<JSON
+          $CURL -X POST "$WIREMOCK_URL/__admin/mappings" -d @- <<'JSON'
           { "priority":1, "request":{"method":"GET","url":"/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }
           JSON
 
-          # /auth/oauth/authorize -> 302 back to app with code
-          curl -fsS -X POST "$WIREMOCK_URL/__admin/mappings" -H 'Content-Type: application/json' -d @- <<JSON
-          {
-            "priority": 1,
-            "request": { "method":"GET", "urlPattern": "^/auth/oauth/authorize(\\?.*)?$" },
-            "response": {
-              "status": 302,
-              "headers": { "Location": "{{request.query.redirect_uri}}?code=codexxxx&state={{request.query.state}}" },
-              "transformers": ["response-template"]
-            }
-          }
-          JSON
-
-          # /auth/oauth/token -> JSON with our STATIC_JWT
-          curl -fsS -X POST "$WIREMOCK_URL/__admin/mappings" -H 'Content-Type: application/json' -d @- <<JSON
+          # Token (/auth/oauth/token) -> fixed JSON with our STATIC_JWT
+          $CURL -X POST "$WIREMOCK_URL/__admin/mappings" -d @- <<JSON
           {
             "priority": 1,
             "request": { "method": "POST", "url": "/auth/oauth/token" },
@@ -376,8 +362,8 @@ jobs:
           }
           JSON
 
-          # /oauth/token (non-prefixed) -> same JSON
-          curl -fsS -X POST "$WIREMOCK_URL/__admin/mappings" -H 'Content-Type: application/json' -d @- <<JSON
+          # Token (/oauth/token) -> same JSON
+          $CURL -X POST "$WIREMOCK_URL/__admin/mappings" -d @- <<JSON
           {
             "priority": 1,
             "request": { "method": "POST", "url": "/oauth/token" },
@@ -397,11 +383,11 @@ jobs:
           JSON
 
           echo "Quick probes:"
-          curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/login/callback&response_type=code&state=xyz" | head -n 8 || true
+          curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/login/callback&response_type=code&state=xyz" | head -n 12 || true
           curl -s -i -X POST "$WIREMOCK_URL/auth/oauth/token" -H 'Content-Type: application/x-www-form-urlencoded' \
-            --data "grant_type=authorization_code&code=codexxxx&redirect_uri=${BASE_URL}/login/callback" | head -n 8 || true
+            --data "grant_type=authorization_code&code=codexxxx&redirect_uri=${BASE_URL}/login/callback" | head -n 12 || true
           curl -s -i -X POST "$WIREMOCK_URL/oauth/token" -H 'Content-Type: application/x-www-form-urlencoded' \
-            --data "grant_type=authorization_code&code=codexxxx&redirect_uri=${BASE_URL}/login/callback" | head -n 8 || true
+            --data "grant_type=authorization_code&code=codexxxx&redirect_uri=${BASE_URL}/login/callback" | head -n 12 || true
 
 
 
