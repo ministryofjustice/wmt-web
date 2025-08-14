@@ -32,9 +32,6 @@ jobs:
         ports: [ "4566:4566" ]
         env:
           SERVICES: s3,sqs,sns
-      wiremock:
-        image: wiremock/wiremock:2.35.0
-        ports: [ "8099:8080" ]
       redis:
         image: redis:7-alpine
         ports: [ "6379:6379" ]
@@ -47,6 +44,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Start WireMock (global response templating)
+        run: |
+          docker run -d --name wiremock-ci \
+            -p 8099:8080 \
+            wiremock/wiremock:2.35.0 \
+            --port 8080 --global-response-templating
+          # wait until ready
+          for i in {1..30}; do
+            curl -fsS "http://127.0.0.1:8099/__admin" >/dev/null && break
+            echo "Waiting for WireMock... ($i/30)"; sleep 2
+          done
+          # quick proof that templating is ON (this endpoint exists in v2.35 but doesn't reflect global flag,
+          # so we'll do a live render check right after mappings are loaded)
 
       - name: Wait for services
         run: |
@@ -144,9 +155,6 @@ jobs:
         ports: [ "4566:4566" ]
         env:
           SERVICES: s3,sqs,sns
-      wiremock:
-        image: wiremock/wiremock:2.35.0
-        ports: [ "8099:8080" ]
       redis:
         image: redis:7-alpine
         ports: [ "6379:6379" ]
@@ -164,6 +172,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Start WireMock (global response templating)
+        run: |
+          docker run -d --name wiremock-ci \
+            -p 8099:8080 \
+            wiremock/wiremock:2.35.0 \
+            --port 8080 --global-response-templating
+          # wait until ready
+          for i in {1..30}; do
+            curl -fsS "http://127.0.0.1:8099/__admin" >/dev/null && break
+            echo "Waiting for WireMock... ($i/30)"; sleep 2
+          done
+          # quick proof that templating is ON (this endpoint exists in v2.35 but doesn't reflect global flag,
+          # so we'll do a live render check right after mappings are loaded)
 
       - name: Wait for services
         run: |
