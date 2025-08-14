@@ -319,7 +319,7 @@ jobs:
       - name: Load WireMock mappings from repo
         run: npm run post-wiremock-mappings
 
-      - name: Overlay resilient auth stubs (priority=1) + quick probes
+      - name: Overlay resilient auth stubs (priority=1) + probes
         env:
           BASE_URL: ${{ env.BASE_URL }}
           WIREMOCK_URL: ${{ env.WIREMOCK_URL }}
@@ -331,8 +331,9 @@ jobs:
               -H 'Content-Type: application/json' -d "$1" >/dev/null
           }
 
-          # Authorize: ignore parameter order, require the four keys, reflect redirect_uri
+          # Authorize -> 302 back to whatever redirect_uri was sent, using your codexxxx
           post '{
+            "name": "Authorize 302 (reflect redirect_uri; code=codexxxx)",
             "priority": 1,
             "request": {
               "method": "GET",
@@ -347,13 +348,13 @@ jobs:
             "response": {
               "status": 302,
               "headers": {
-                "Location": "{{request.query.redirect_uri}}?code=WMT_E2E&state={{request.query.state}}"
+                "Location": "{{request.query.redirect_uri}}?code=codexxxx&state={{request.query.state}}"
               },
               "transformers": ["response-template"]
             }
           }'
 
-          # Token: simple fixed JSON, accept both /auth/oauth/token and /oauth/token
+          # Token -> simple fixed JSON, accept both /auth/oauth/token and /oauth/token
           STATIC_TOKEN='{
             "status": 200,
             "headers": { "Content-Type": "application/json; charset=UTF-8" },
@@ -367,6 +368,7 @@ jobs:
             }
           }'
           post "$(jq -cn --argjson resp "$STATIC_TOKEN" '{
+            name: "Token 200 (accept /auth prefix or not)",
             priority: 1,
             request: { method: "POST", urlPathPattern: "^(/auth)?/oauth/token$" },
             response: $resp
@@ -380,84 +382,50 @@ jobs:
           token_status=$(curl -s -o /dev/null -w '%{http_code}' \
             -X POST "$WIREMOCK_URL/auth/oauth/token" \
             -H 'Content-Type: application/x-www-form-urlencoded' \
-            --data "grant_type=authorization_code&code=WMT_E2E&redirect_uri=${BASE_URL}/login/callback")
+            --data "grant_type=authorization_code&code=codexxxx&redirect_uri=${BASE_URL}/login/callback")
           echo "Token status: $token_status"; [ "$token_status" = "200" ]
 
           echo -n "Mappings now loaded: "
           curl -s "$WIREMOCK_URL/__admin/mappings" | jq '.mappings | length'
+      
+      
 
-
-      # Diagnostics + conditional auth stubs (only if your repo didn't provide them)
-      - name: WireMock diagnostics and (if needed) add minimal auth stubs
+      - name: WireMock diagnostics (richer)
+        if: failure()
         env:
-          BASE_URL: ${{ env.BASE_URL }}
           WIREMOCK_URL: ${{ env.WIREMOCK_URL }}
         run: |
           set -euxo pipefail
-
-          echo "=== WireMock mappings summary ==="
-          curl -fsS "$WIREMOCK_URL/__admin/mappings" | jq '.meta | del(.)"' || true
-          echo -n "Total mappings: "
-          curl -fsS "$WIREMOCK_URL/__admin/mappings" | jq '.mappings | length'
-          echo "First 15 mapping names/urls:"
-          curl -fsS "$WIREMOCK_URL/__admin/mappings" \
-            | jq -r '.mappings[] | .name // (.request.method + " " + (.request.url // .request.urlPattern))' | head -n 15
-
-          have_token=$(curl -fsS "$WIREMOCK_URL/__admin/mappings" \
-            | jq 'reduce (.mappings[].request | (.url // .urlPattern // "")) as $u (false; . or ($u|test("(^/auth)?/oauth/token")))')
-
-          have_authz=$(curl -fsS "$WIREMOCK_URL/__admin/mappings" \
-            | jq 'reduce (.mappings[].request | (.url // .urlPattern // "")) as $u (false; . or ($u|test("^/auth/oauth/authorize|^/oauth/authorize")))')
-
-          post() {
-            curl -fsS -X POST "$WIREMOCK_URL/__admin/mappings" \
-              -H 'Content-Type: application/json' -d "$1" >/dev/null
-          }
-
-          # Health stubs (safe even if already present)
-          post '{ "priority":1, "request":{"method":"GET","url":"/auth/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }'
-          post '{ "priority":1, "request":{"method":"GET","url":"/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }'
-
-          if [ "$have_authz" != "true" ]; then
-            echo "Adding minimal /auth/oauth/authorize 302 stub"
-            post "{
-              \"priority\": 1,
-              \"request\": { \"method\":\"GET\", \"urlPattern\": \"^/auth/oauth/authorize(\\\\?.*)?$\" },
-              \"response\": {
-                \"status\": 302,
-                \"headers\": { \"Location\": \"{{request.query.redirect_uri}}?code=WMT_E2E&state={{request.query.state}}\" },
-                \"transformers\": [\"response-template\"]
-              }
-            }"
-          fi
-
-          if [ "$have_token" != "true" ]; then
-            echo "Adding minimal /oauth/token JSON stub (both with/without /auth)"
-            STATIC_TOKEN='{
-              "status": 200,
-              "headers": { "Content-Type": "application/json; charset=UTF-8" },
-              "jsonBody": {
-                "access_token": "header.payload.signature",
-                "token_type": "bearer",
-                "user_name": "USER1",
-                "expires_in": 599,
-                "scope": "read",
-                "internalUser": true
-              }
-            }'
-            post "$(jq -cn --argjson resp "$STATIC_TOKEN" '{ priority:1, request:{method:"POST", url:"/auth/oauth/token"}, response:$resp }')"
-            post "$(jq -cn --argjson resp "$STATIC_TOKEN" '{ priority:1, request:{method:"POST", url:"/oauth/token"},      response:$resp }')"
-          fi
-
-          echo "=== Quick probes ==="
-          curl -s -i "$WIREMOCK_URL/auth/health/ping" | head -n 10 || true
-          curl -s -i "$WIREMOCK_URL/health/ping" | head -n 10 || true
-          curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/login/callback&response_type=code&state=xyz" | head -n 10 || true
-          curl -s -i -X POST "$WIREMOCK_URL/auth/oauth/token" -H 'Content-Type: application/x-www-form-urlencoded' \
-            --data "grant_type=authorization_code&code=WMT_E2E&redirect_uri=${BASE_URL}/login/callback" | head -n 10 || true
-
-          echo -n "Mappings total (after auth overlays if any): "
-          curl -s "$WIREMOCK_URL/__admin/mappings" | jq '.mappings | length'
+          echo "=== Container list ==="; docker ps || true
+      
+          echo "=== WireMock last 200 lines ==="
+          docker logs --tail=200 wiremock-ci || true
+      
+          echo "=== Mapping names (first 25) ==="
+          curl -fsS "$WIREMOCK_URL/__admin/mappings" | \
+            jq -r '.mappings[] | (.name // (.request.method + " " + (.request.url // .request.urlPattern // .request.urlPath // .request.urlPathPattern)))' \
+            | head -n 25 || true
+      
+          echo "=== Requests summary ==="
+          curl -fsS "$WIREMOCK_URL/__admin/requests" | \
+            jq '{ total: (.requests|length),
+                  unmatched: ([.requests[] | select(.wasMatched==false)] | length),
+                  sample_unmatched: ([.requests[] | select(.wasMatched==false)][0:5]) }' || true
+      
+          echo "=== Unmatched only (first 10) ==="
+          curl -fsS "$WIREMOCK_URL/__admin/requests/unmatched" | \
+            jq '{ unmatched: (.requests|length), items: (.requests[0:10]) }' || true
+      
+          echo "=== Requests count (POST body avoids 500) ==="
+          curl -fsS -X POST "$WIREMOCK_URL/__admin/requests/count" \
+            -H 'Content-Type: application/json' -d '{ "method":"ANY", "urlPattern":".*" }' | jq .
+      
+          # Capture JSON snapshots as artifacts
+          mkdir -p wiremock-dump
+          curl -fsS "$WIREMOCK_URL/__admin/requests" > wiremock-dump/requests.json || true
+          curl -fsS "$WIREMOCK_URL/__admin/requests/unmatched" > wiremock-dump/unmatched.json || true
+          curl -fsS -X POST "$WIREMOCK_URL/__admin/mappings/snapshot" -H 'Content-Type: application/json' \
+            -d '{ "captures": { "mappings": "true" } }' > wiremock-dump/mappings-snapshot.json || true
 
       - name: Create WDIO CI config (single worker, headless)
         run: |
