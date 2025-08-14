@@ -155,6 +155,7 @@ jobs:
         ports: [ "4566:4566" ]
         env:
           SERVICES: s3,sqs,sns
+      # REMOVE wiremock service here
       redis:
         image: redis:7-alpine
         ports: [ "6379:6379" ]
@@ -173,6 +174,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # NEW: start WireMock with response templating enabled (exactly like CircleCI)
       - name: Start WireMock (global response templating)
         run: |
           docker run -d --name wiremock-ci \
@@ -187,11 +189,10 @@ jobs:
           # quick proof that templating is ON (this endpoint exists in v2.35 but doesn't reflect global flag,
           # so we'll do a live render check right after mappings are loaded)
 
-      - name: Wait for services
+      - name: Wait for other services
         run: |
           for i in {1..60}; do pg_isready -h 127.0.0.1 -p 5432 -U postgres -d postgres && break; sleep 1; done
           curl -sfS --retry 30 --retry-connrefused --retry-delay 2 "$LS/_localstack/health" || exit 1
-          curl -sfS --retry 30 --retry-connrefused --retry-delay 2 "http://127.0.0.1:8099/__admin" || exit 1
           for i in {1..60}; do (echo > /dev/tcp/127.0.0.1/6379) >/dev/null 2>&1 && break; sleep 1; done
 
       - name: Setup AWS CLI + jq
@@ -265,113 +266,56 @@ jobs:
           done
           echo "Schema not ready in time"; docker logs hmpps_workload || true; exit 1
 
-      - name: Verify WireMock mappings exist in repo
-        run: |
-          ls -lah test/e2e/resources/wiremock || (echo "wiremock folder missing" && exit 1)
-          ls -lah test/e2e/resources/wiremock/mappings || (echo "mappings folder missing" && exit 1)
+      - name: Build assets
+        run: npm run build
 
-      - name: Load WireMock mappings (retry) + basic sanity
+      - name: Start app (direct)
+        env:
+          WMT_WEB_APPLICATION_SECRET: ci-dev-secret
+          SESSION_SECRET: ci-session-secret
+          WMT_LIVE_DB_SERVER: 127.0.0.1
+          WMT_LIVE_DB_NAME: postgres
+          WMT_LIVE_DB_USERNAME: postgres
+          WMT_LIVE_DB_PASSWORD: postgres
+          WMT_HISTORY_DB_SERVER: 127.0.0.1
+          WMT_HISTORY_DB_PORT: "5432"
+          WMT_HISTORY_DB_NAME: postgres
+          WMT_HISTORY_DB_USERNAME: postgres
+          WMT_HISTORY_DB_PASSWORD: postgres
+          REDIS_HOST: 127.0.0.1
+          REDIS_PORT: "6379"
+          REDIS_URL: redis://127.0.0.1:6379
+          HMPPS_AUTH_URL: http://127.0.0.1:8099/auth
+          HMPPS_AUTH_EXTERNAL_URL: http://127.0.0.1:8099/auth
+          MANAGE_USERS_SERVICE_URL: http://127.0.0.1:8099
+          ALLOCATIONS_SERVICE_URL: http://127.0.0.1:8099
+          USER_PREFERENCE_SERVICE_URL: http://127.0.0.1:8099
+          TOKEN_VERIFICATION_API_URL: http://127.0.0.1:8099
+          TOKEN_VERIFICATION_ENABLED: "true"
+          INGRESS_URL: http://127.0.0.1:3000
+          PORT: 3000
         run: |
           set -euo pipefail
-          for i in {1..10}; do
-            if curl -fsS "$WIREMOCK_URL/__admin"; then break; fi
-            echo "Waiting for WireMock... ($i/10)"; sleep 2
+          export $(grep -v '^\s*#' feature.env | xargs) || true
+          nohup node app/bin/www > /tmp/app.log 2>&1 &
+          for i in {1..120}; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:3000/" || echo "000")
+            if [ "$code" = "200" ] || [ "$code" = "302" ]; then
+              echo "App ready at http://127.0.0.1:3000 ($code)"; break
+            fi
+            echo "Waiting for app... ($i/120)"; sleep 2
           done
-          npm run post-wiremock-mappings
-          echo "Mappings: $(curl -s $WIREMOCK_URL/__admin/mappings | jq '.mappings | length')"
+          tail -n 200 /tmp/app.log || true
 
-      - name: Patch & Load WireMock mappings (order-safe authorize + templating)
+      - name: Load WireMock mappings (your script)
+        run: npm run post-wiremock-mappings
+
+      # optional proof: authorize now renders a concrete Location (no {{...}})
+      - name: Sanity check authorize redirect renders
         run: |
-          set -euo pipefail
+          curl -s -i "http://127.0.0.1:8099/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/sign-in/callback&response_type=code&state=xyz" | head -n 20
 
-          # Wait for WireMock to be ready
-          for i in {1..20}; do
-            if curl -fsS "$WIREMOCK_URL/__admin" >/dev/null; then break; fi
-            echo "Waiting for WireMock... ($i/20)"; sleep 2
-          done
-
-          # Enable global templating (like --global-response-templating)
-          curl -s -X POST "$WIREMOCK_URL/__admin/settings" \
-            -H 'Content-Type: application/json' \
-            -d '{"globalTemplating": true}' >/dev/null || true
-
-          # Build patched copies of your mappings (fix response Location for any authorize stubs)
-          PATCH_DIR="$(mktemp -d)"
-          echo "Patching mappings into: $PATCH_DIR"
-
-          for f in test/e2e/resources/wiremock/mappings/*.json; do
-            base="$(basename "$f")"
-            jq '
-              # If this is an authorize stub (by path or pattern), fix Location + ensure templating
-              if ((.request.urlPath? == "/auth/oauth/authorize")
-                  or ((.request.urlPattern? // .request.urlPathPattern? // "") | test("auth/oauth/authorize")))
-              then
-                .response.headers = (.response.headers // {}) |
-                .response.headers.Location = "{{request.query.redirect_uri}}?code=codexxxx&state={{request.query.state}}" |
-                .response.transformers = ((.response.transformers // []) + ["response-template"] | unique)
-              else
-                .
-              end
-            ' "$f" > "$PATCH_DIR/$base"
-          done
-
-          # Post patched mappings (all of them)
-          for f in "$PATCH_DIR"/*.json; do
-            curl --silent --fail \
-              --request POST \
-              --url "$WIREMOCK_URL/__admin/mappings" \
-              --header 'content-type: application/json' \
-              --data-binary @"$f" >/dev/null
-          done
-
-          # NOW: delete ALL existing authorize stubs (patterns can be order-sensitive)
-          curl -s "$WIREMOCK_URL/__admin/mappings" | jq -r '
-            (.mappings // [])[]
-            | select(
-                (.request.urlPath? == "/auth/oauth/authorize")
-                or ((.request.urlPattern? // .request.urlPathPattern? // "") | test("auth/oauth/authorize"))
-              )
-            | .id
-          ' | while read -r id; do
-              echo "Deleting existing authorize mapping: $id"
-              curl -s -X DELETE "$WIREMOCK_URL/__admin/mappings/$id" >/dev/null
-            done
-
-          # Install a canonical, order-independent authorize mapping
-          cat > /tmp/authorize_canonical.json <<'JSON'
-          {
-            "priority": 1,
-            "request": {
-              "method": "GET",
-              "urlPath": "/auth/oauth/authorize",
-              "queryParameters": {
-                "response_type": { "equalTo": "code" },
-                "redirect_uri": { "matches": ".*" },
-                "state":        { "matches": ".*" },
-                "client_id":    { "equalTo": "workload-measurement-ui" }
-              }
-            },
-            "response": {
-              "status": 302,
-              "headers": {
-                "Location": "{{request.query.redirect_uri}}?code=codexxxx&state={{request.query.state}}"
-              },
-              "transformers": ["response-template"]
-            }
-          }
-          JSON
-
-          curl -s -X POST "$WIREMOCK_URL/__admin/mappings" \
-            -H 'content-type: application/json' \
-            --data-binary @/tmp/authorize_canonical.json >/dev/null
-
-          # Sanity: count & probe
-          echo -n "Authorize mapping count (expect 1): "
-          curl -s "$WIREMOCK_URL/__admin/mappings" \
-            | jq '[.mappings[] | select(.request.urlPath? == "/auth/oauth/authorize")] | length'
-
-          echo "Probe authorize with redirect_uri=${BASE_URL}/sign-in/callback"
-          curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/sign-in/callback&response_type=code&state=x" | head -n 20
+      # ... your existing WDIO config + run steps continue here (unchanged) ...
 
 
       - name: Build assets
