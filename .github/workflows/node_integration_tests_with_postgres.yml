@@ -173,7 +173,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Start WireMock with global response templating (like CircleCI)
+      # Start WireMock (no HTML pages; we’ll only 302 from /auth/oauth/authorize)
       - name: Start WireMock (global response templating)
         run: |
           docker run -d --name wiremock-ci \
@@ -184,93 +184,6 @@ jobs:
             curl -fsS "http://127.0.0.1:8099/__admin" >/dev/null && break
             echo "Waiting for WireMock... ($i/30)"; sleep 2
           done
-
-      - name: Mock Auth with username passthrough (robust; logs on failure)
-        env:
-          BASE_URL: ${{ env.BASE_URL }}
-          WIREMOCK_URL: ${{ env.WIREMOCK_URL }}
-        run: |
-          set -euo pipefail
-      
-          postmap() {
-            tmp="$(mktemp)"; cat > "$tmp"
-            code=$(curl -sS -o /tmp/wm_resp.txt -w '%{http_code}' \
-              -X POST "$WIREMOCK_URL/__admin/mappings" \
-              -H 'Content-Type: application/json' \
-              --data-binary @"$tmp")
-            if [ "$code" != "201" ]; then
-              echo "WireMock mapping POST failed (HTTP $code). Response was:" >&2
-              cat /tmp/wm_resp.txt >&2
-              exit 1
-            fi
-          }
-      
-          # Health endpoints
-          postmap <<'JSON'
-          { "priority":1, "request":{"method":"GET","url":"/auth/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }
-          JSON
-          postmap <<'JSON'
-          { "priority":1, "request":{"method":"GET","url":"/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }
-          JSON
-      
-          # 1) Authorize page that renders a simple login form (single-line JSON body!)
-          postmap <<'JSON'
-          {
-            "priority": 1,
-            "request": { "method":"GET", "urlPath":"/auth/oauth/authorize" },
-            "response": {
-              "status": 200,
-              "headers": { "Content-Type": "text/html; charset=utf-8" },
-              "body": "<!doctype html><html><body><h1>Sign in</h1><form method='post' action='/auth/login'><label for='username'>Username</label><input id='username' name='username'/><input type='hidden' name='redirect_uri' value='{{{ request.query.redirect_uri }}}'/><input type='hidden' name='state' value='{{{ request.query.state }}}'/><input type='hidden' name='client_id' value='{{{ request.query.client_id }}}'/><button type='submit'>Sign in</button></form></body></html>",
-              "transformers": ["response-template"]
-            }
-          }
-          JSON
-      
-          # 2) Submit login: 302 back to redirect_uri with code=<typed username>
-          postmap <<'JSON'
-          {
-            "priority": 1,
-            "request": { "method":"POST", "url":"/auth/login" },
-            "response": {
-              "status": 302,
-              "headers": {
-                "Location": "{{{ formData request.body 'redirect_uri' }}}?code={{{ formData request.body 'username' }}}&state={{{ formData request.body 'state' }}}"
-              },
-              "transformers": ["response-template"]
-            }
-          }
-          JSON
-      
-          # 3) Token exchange: reflect code as user_name so your Manage Users stubs match /user/WMT..., etc.
-          postmap <<'JSON'
-          {
-            "priority": 1,
-            "request": { "method": "POST", "url": "/auth/oauth/token" },
-            "response": {
-              "status": 200,
-              "headers": { "Content-Type": "application/json; charset=UTF-8" },
-              "jsonBody": {
-                "access_token": "***",
-                "token_type": "bearer",
-                "user_name": "{{{ formData request.body 'code' }}}",
-                "expires_in": 599,
-                "scope": "read",
-                "internalUser": true
-              },
-              "transformers": ["response-template"]
-            }
-          }
-          JSON
-      
-          echo -n "Total mappings loaded: "
-          curl -s "$WIREMOCK_URL/__admin/mappings" | jq '.mappings | length'
-      
-          echo
-          echo "Authorize probe:"
-          curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/login/callback&response_type=code&state=xyz" | head -n 20 || true
-    
-    
 
       - name: Wait for other services
         run: |
@@ -295,7 +208,7 @@ jobs:
             --region "$AWS_DEFAULT_REGION" \
             --create-bucket-configuration LocationConstraint="$AWS_DEFAULT_REGION" || true
           printf 'dashboard' > dashboard-file.txt
-          for ts in 20210729062147 20210730062147 20210731062147 20210801062147 20210802062147; do
+          for ts in 20210729062147 20210730062147 20210801062147 20210802062147; do
             aws --endpoint-url="$LS" s3api put-object \
               --bucket wmt-web \
               --key generated-dashboards/dashboard_${ts}.txt \
@@ -352,7 +265,7 @@ jobs:
       - name: Build assets
         run: npm run build
 
-      - name: Start app (direct; robust wait; 127.0.0.1 everywhere)
+      - name: Start app (direct)
         env:
           WMT_WEB_APPLICATION_SECRET: ci-dev-secret
           SESSION_SECRET: ci-session-secret
@@ -381,22 +294,74 @@ jobs:
           set -euo pipefail
           export $(grep -v '^\s*#' feature.env | xargs) || true
           nohup node app/bin/www > /tmp/app.log 2>&1 &
-          ready=""
           for i in {1..120}; do
             code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:3000/" || echo "000")
             if [ "$code" = "200" ] || [ "$code" = "302" ]; then
-              echo "App ready at http://127.0.0.1:3000 ($code)"; ready="yes"; break
+              echo "App ready at http://127.0.0.1:3000 ($code)"; break
             fi
-            echo "Waiting for app... ($i/120) got $code"; sleep 2
+            echo "Waiting for app... ($i/120)"; sleep 2
           done
-          if [ -z "$ready" ]; then
-            echo "App failed to become ready. Tail of /tmp/app.log:"; tail -n 400 /tmp/app.log || true; exit 1
-          fi
-          curl -sS -D /tmp/home.headers http://127.0.0.1:3000/ -o /tmp/home.html || true
-          curl -sS -D /tmp/login.headers http://127.0.0.1:3000/login -o /tmp/login.html || true
           tail -n 200 /tmp/app.log || true
 
-      - name: Create WDIO CI config (trace logs + screenshots on fail)
+      # Load your repo mappings first…
+      - name: Load WireMock mappings from repo
+        run: npm run post-wiremock-mappings
+
+      # …then override just auth with high-priority 302 + echo-code token
+      - name: Override Auth in WireMock (302 authorize; echo code in token)
+        env:
+          BASE_URL: ${{ env.BASE_URL }}
+          WIREMOCK_URL: ${{ env.WIREMOCK_URL }}
+        run: |
+          set -euo pipefail
+          post() {
+            curl -fsS -X POST "$WIREMOCK_URL/__admin/mappings" \
+              -H 'Content-Type: application/json' \
+              -d "$1" >/dev/null
+          }
+          # health endpoints (both forms)
+          post '{ "priority":1, "request":{"method":"GET","url":"/auth/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }'
+          post '{ "priority":1, "request":{"method":"GET","url":"/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }'
+
+          # /auth/oauth/authorize -> 302 straight back to your app
+          post '{
+            "priority": 1,
+            "request": { "method":"GET", "urlPathPattern": "/auth/oauth/authorize.*" },
+            "response": {
+              "status": 302,
+              "headers": {
+                "Location": "{{request.query.redirect_uri}}?code=WMT_E2E&state={{request.query.state}}"
+              },
+              "transformers": ["response-template"]
+            }
+          }'
+
+          # /auth/oauth/token -> reflect code into user_name
+          post '{
+            "priority": 1,
+            "request": { "method": "POST", "url": "/auth/oauth/token" },
+            "response": {
+              "status": 200,
+              "headers": { "Content-Type": "application/json; charset=UTF-8" },
+              "jsonBody": {
+                "access_token": "***",
+                "token_type": "bearer",
+                "user_name": "{{{ formData request.body \"code\" }}}",
+                "expires_in": 599,
+                "scope": "read",
+                "internalUser": true
+              },
+              "transformers": ["response-template"]
+            }
+          }'
+
+          echo -n "Mappings total: "
+          curl -s "$WIREMOCK_URL/__admin/mappings" | jq '.mappings | length'
+          echo
+          echo "Authorize probe (expect 302 to ${BASE_URL}/login/callback or /sign-in/callback):"
+          curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/login/callback&response_type=code&state=xyz" | head -n 20 || true
+
+      - name: Create WDIO CI config (single worker, headless)
         run: |
           cat > wdio.ci.conf.js <<'JS'
           const path = require('path');
@@ -407,19 +372,13 @@ jobs:
           const base = baseMod.config || baseMod;
 
           const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'wdio-chrome-'));
-
           const ensureArgs = (c = {}) => {
             const opts = c['goog:chromeOptions'] || {};
             const args = new Set([...(opts.args || []),
-              '--no-sandbox',
-              '--disable-dev-shm-usage',
-              '--window-size=1920,1080',
-              `--user-data-dir=${profile}`,
-              '--headless=new'
+              '--no-sandbox','--disable-dev-shm-usage','--window-size=1920,1080',
+              `--user-data-dir=${profile}`,'--headless=new'
             ]);
-            const out = {
-              browserName: c.browserName || 'chrome',
-              ...c,
+            const out = { browserName: c.browserName || 'chrome', ...c,
               'goog:chromeOptions': { ...opts, args: Array.from(args) },
               'wdio:enforceWebDriverClassic': true
             };
@@ -437,23 +396,10 @@ jobs:
             .map(p => toAbs(p, baseDir));
           const exclude = (base.exclude || []).map(p => toAbs(p, baseDir));
 
-          exports.config = {
-            ...base,
+          exports.config = { ...base,
             baseUrl: process.env.BASE_URL || base.baseUrl || 'http://127.0.0.1:3000',
-            maxInstances: 1,
-            capabilities: caps,
-            specs,
-            exclude,
-            logLevel: 'trace',
-            outputDir: './wdio-logs',
-            reporters: (base.reporters || ['spec']),
-            afterTest: async function (_test, _context, { passed }) {
-              if (!passed) {
-                const dir = path.resolve(__dirname, 'screenshots');
-                if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-                try { await browser.saveScreenshot(path.join(dir, `${Date.now()}_fail.png`)); } catch (e) {}
-              }
-            }
+            maxInstances: 1, capabilities: caps, specs, exclude,
+            logLevel: 'info', outputDir: './wdio-logs'
           };
           JS
 
@@ -465,29 +411,11 @@ jobs:
           if [ -z "$SPEC" ]; then
             SPEC=$(ls -1 test/e2e/*.js test/e2e/**/*.js 2>/dev/null | head -n 1 || true)
           fi
-          if [ -z "$SPEC" ]; then
-            echo "No spec files found under test/e2e/"; exit 1
-          fi
+          [ -n "$SPEC" ] || { echo "No spec files in test/e2e/"; exit 1; }
           echo "Running single spec: $SPEC"
           echo "spec=$SPEC" >> "$GITHUB_OUTPUT"
 
-      - name: WireMock unmatched BEFORE tests
-        run: |
-          mkdir -p diag
-          curl -s "$WIREMOCK_URL/__admin/requests/unmatched" | jq . > diag/wm_unmatched_pre.json || true
-
-      - name: Pre-run diagnostics (WireMock + app)
-        run: |
-          set -euo pipefail
-          mkdir -p diag
-          curl -sS "$WIREMOCK_URL/__admin/mappings" > diag/wiremock_mappings.json || true
-          curl -sS "$WIREMOCK_URL/__admin/requests/recent" > diag/wiremock_requests_pre.json || true
-          curl -sS -D diag/app_home.headers "$BASE_URL/" -o diag/app_home.html || true
-          curl -sS -D diag/app_login.headers "$BASE_URL/login" -o diag/app_login.html || true
-          echo "sign-in callback:"; curl -s -o /dev/null -w "code=%{http_code}\n" "${BASE_URL}/sign-in/callback?code=test&state=s" || true
-          echo "login    callback:"; curl -s -o /dev/null -w "code=%{http_code}\n" "${BASE_URL}/login/callback?code=test&state=s"   || true
-
-      - name: Run E2E (single spec; isolated Chrome profile)
+      - name: Run E2E (single spec)
         env:
           BASE_URL: ${{ env.BASE_URL }}
           DATABASE_SERVER: 127.0.0.1
@@ -507,24 +435,6 @@ jobs:
           npx wdio wdio.ci.conf.js --workers 1 --spec "${{ steps.pickspec.outputs.spec }}"
           npm run clean-dev-data
 
-      - name: WireMock unmatched AFTER tests
-        if: always()
-        run: |
-          mkdir -p diag
-          curl -s "$WIREMOCK_URL/__admin/requests/unmatched" | jq . > diag/wm_unmatched_post.json || true
-
-      - name: Post-run diagnostics (always)
-        if: always()
-        run: |
-          set -euo pipefail
-          mkdir -p diag
-          echo "=== tail app.log ===" >> diag/app_tail.txt
-          tail -n 400 /tmp/app.log >> diag/app_tail.txt || true
-          echo "=== docker ps ===" > diag/docker_ps.txt
-          docker ps -a >> diag/docker_ps.txt || true
-          echo "=== wiremock requests (recent) ===" > diag/wiremock_requests_post.json
-          curl -sS "$WIREMOCK_URL/__admin/requests/recent" >> diag/wiremock_requests_post.json || true
-
       - name: Upload E2E artifacts (on failure)
         if: failure()
         uses: actions/upload-artifact@v4
@@ -536,19 +446,4 @@ jobs:
             ./wdio-*.log
             ./wdio-logs
             /tmp/app.log
-            ./diag
-          if-no-files-found: ignore
-
-      - name: Upload minimal diagnostics (always)
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: e2e-diag
-          path: |
-            ./wdio-logs
-            ./diag
-            /tmp/home.html
-            /tmp/login.html
-            /tmp/home.headers
-            /tmp/login.headers
           if-no-files-found: ignore
