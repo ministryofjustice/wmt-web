@@ -161,6 +161,30 @@ jobs:
         image: redis:7-alpine
         ports: [ "6379:6379" ]
 
+      # Dedicated DB for external-users (host must be 'auth-db')
+      auth-db:
+        image: postgres:15
+        # no port mapping needed; other services talk to it on the Docker network
+        env:
+          POSTGRES_USER: auth-db
+          POSTGRES_PASSWORD: auth-db
+          POSTGRES_DB: auth-db
+        options: >-
+          --health-cmd="pg_isready -U auth-db -d auth-db -h 127.0.0.1 || pg_isready -U auth-db -d auth-db -h ::1"
+          --health-interval=5s --health-timeout=5s --health-retries=30
+
+      hmpps-external-users-api:
+        image: quay.io/hmpps/hmpps-external-users-api:latest
+        ports: [ "8088:8088" ]
+        env:
+          SPRING_PROFILES_ACTIVE: dev,local-postgres
+          SERVER_PORT: "8088"
+          SPRING_R2DBC_URL: r2dbc:postgresql://auth-db:5432/auth-db
+          SPRING_FLYWAY_URL: jdbc:postgresql://auth-db:5432/auth-db
+        options: >-
+          --health-cmd="curl -fsS http://localhost:8088/health/ping || exit 1"
+          --health-interval=5s --health-timeout=5s --health-retries=50
+
       hmpps-manage-users-api:
         image: quay.io/hmpps/hmpps-manage-users-api:latest
         ports: [ "9091:9091" ]
@@ -169,6 +193,9 @@ jobs:
           DELIUS_ENABLED: "true"
           SERVER_PORT: "9091"
           MANAGE_USERS_API_ENABLED: "true"
+        options: >-
+          --health-cmd="curl -fsS http://localhost:9091/health/ping || exit 1"
+          --health-interval=5s --health-timeout=5s --health-retries=50
 
       hmpps-auth:
         image: quay.io/hmpps/hmpps-auth:latest
@@ -179,6 +206,13 @@ jobs:
           SERVER_PORT: "9090"
           MANAGE_USERS_API_ENABLED: "true"
           MANAGE_USERS_API_ENDPOINT_URL: http://hmpps-manage-users-api:9091
+          # If hmpps-auth needs external-users explicitly, it often picks it up via profile defaults.
+          # If not, uncomment the next line:
+          # EXTERNAL_USERS_API_URL: http://hmpps-external-users-api:8088
+        options: >-
+          --health-cmd="curl -fsS http://localhost:9090/health/ping || curl -fsS http://localhost:9090/auth/health/ping || exit 1"
+          --health-interval=5s --health-timeout=5s --health-retries=60
+    
 
     env:
       AWS_DEFAULT_REGION: eu-west-2
@@ -224,15 +258,54 @@ jobs:
           echo "WireMock logs (first 100 lines):"
           docker logs --tail 100 wiremock-8099 || true
 
-      - name: Wait for platform services (with probes)
+      - name: Wait for platform services (robust, with logs on failure)
         run: |
           set -euxo pipefail
+
+          probe () {
+            local name="$1" url="$2" tries="${3:-60}"
+            echo "Probing $name at $url"
+            for i in $(seq 1 "$tries"); do
+              if code=$(curl -sS -o /dev/null -w '%{http_code}' --connect-timeout 5 --max-time 10 "$url" || true); then
+                if [ "$code" = "200" ]; then echo "$name is up (200)"; return 0; fi
+              fi
+              echo "[$i/$tries] $name not ready (code=${code:-none}); sleeping..."
+              sleep 2
+            done
+            echo "$name failed to become healthy after $tries attempts"
+            return 1
+          }
+
+          # Core infra
           for i in {1..60}; do pg_isready -h 127.0.0.1 -p 5432 -U postgres -d postgres && break; sleep 1; done
-          curl -sv --retry 30 --retry-connrefused --retry-delay 2 "$LS/_localstack/health" | cat
+          curl -fsS --retry 60 --retry-connrefused --retry-delay 2 "$LS/_localstack/health" >/dev/null
           for i in {1..60}; do (echo > /dev/tcp/127.0.0.1/6379) >/dev/null 2>&1 && break; sleep 1; done
-          curl -sv "http://127.0.0.1:9090/auth/health/ping" | cat
-          curl -sv "http://127.0.0.1:9091/health/ping" | cat
-          curl -sv "http://127.0.0.1:8099/__admin" | head -n 40
+
+          # App dependencies: try both health paths where applicable
+          set +e
+          probe "manage-users" "http://127.0.0.1:9091/health/ping" 90 || MU_FAIL=1
+          probe "external-users" "http://127.0.0.1:8088/health/ping" 90 || EU_FAIL=1
+          # hmpps-auth often exposes one of these:
+          probe "hmpps-auth (/health/ping)" "http://127.0.0.1:9090/health/ping" 120 || AUTH_DIRECT_FAIL=1
+          if [ "${AUTH_DIRECT_FAIL:-}" = "1" ]; then
+            probe "hmpps-auth (/auth/health/ping)" "http://127.0.0.1:9090/auth/health/ping" 30 || AUTH_FAIL=1
+          fi
+          set -e
+
+          # If any failed, dump container logs for quick triage and then fail
+          if [ "${MU_FAIL:-0}" = "1" ] || [ "${EU_FAIL:-0}" = "1" ] || [ "${AUTH_FAIL:-0}" = "1" ] || [ "${AUTH_DIRECT_FAIL:-0}" = "1" ]; then
+            echo "=== Container list ==="; docker ps
+            echo "=== hmpps-auth logs ==="
+            docker logs "$(docker ps -q --filter "ancestor=quay.io/hmpps/hmpps-auth:latest" | head -n1)" || true
+            echo "=== manage-users logs ==="
+            docker logs "$(docker ps -q --filter "ancestor=quay.io/hmpps/hmpps-manage-users-api:latest" | head -n1)" || true
+            echo "=== external-users logs ==="
+            docker logs "$(docker ps -q --filter "ancestor=quay.io/hmpps/hmpps-external-users-api:latest" | head -n1)" || true
+            exit 1
+          fi
+
+          # Sanity peek at WireMock admin
+          curl -fsS "http://127.0.0.1:8099/__admin" | head -c 400 || true
 
       - name: Setup AWS CLI + jq
         run: |
