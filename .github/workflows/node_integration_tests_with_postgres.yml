@@ -168,7 +168,7 @@ jobs:
       LS: http://127.0.0.1:4566
 
       APP_PORT: "3000"
-      BASE_URL: http://127.0.0.1:3000
+      BASE_URL: http://localhost:3000
       WIREMOCK_URL: http://127.0.0.1:8099
       CHROME_BIN: /usr/bin/google-chrome
       WDIO_LOG_LEVEL: debug
@@ -300,16 +300,16 @@ jobs:
           TOKEN_VERIFICATION_API_URL: http://127.0.0.1:8099
           TOKEN_VERIFICATION_ENABLED: "true"
 
-          INGRESS_URL: http://127.0.0.1:3000
+          INGRESS_URL: http://localhost:3000
           PORT: 3000
         run: |
           set -euxo pipefail
           export $(grep -v '^\s*#' feature.env | xargs) || true
           nohup node app/bin/www > /tmp/app.log 2>&1 &
           for i in {1..120}; do
-            code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:3000/" || echo "000")
+            code=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:3000/" || echo "000")
             if [ "$code" = "200" ] || [ "$code" = "302" ]; then
-              echo "App ready at http://127.0.0.1:3000 ($code)"; break
+              echo "App ready at http://localhost:3000 ($code)"; break
             fi
             echo "Waiting for app... ($i/120)"; sleep 2
           done
@@ -383,12 +383,42 @@ jobs:
           JSON
 
           echo "Quick probes:"
-          curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/login/callback&response_type=code&state=xyz" | head -n 12 || true
+          curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?response_type=code&redirect_uri=${BASE_URL}/login/callback&state=xyz&client_id=workload-measurement-ui" | head -n 12 || true
           curl -s -i -X POST "$WIREMOCK_URL/auth/oauth/token" -H 'Content-Type: application/x-www-form-urlencoded' \
             --data "grant_type=authorization_code&code=codexxxx&redirect_uri=${BASE_URL}/login/callback" | head -n 12 || true
           curl -s -i -X POST "$WIREMOCK_URL/oauth/token" -H 'Content-Type: application/x-www-form-urlencoded' \
             --data "grant_type=authorization_code&code=codexxxx&redirect_uri=${BASE_URL}/login/callback" | head -n 12 || true
 
+      - name: Assert WireMock saw /authorize and /token (no mapping changes)
+        if: always()
+        env:
+          WIREMOCK_URL: ${{ env.WIREMOCK_URL }}
+        run: |
+          set -euo pipefail
+      
+          find_req() {
+            # $1 = METHOD, $2 = urlPattern
+            curl -fsS -X POST "$WIREMOCK_URL/__admin/requests/find" \
+              -H 'Content-Type: application/json' \
+              -d "{\"method\":\"$1\",\"urlPattern\":\"$2\"}"
+          }
+      
+          echo "== /auth/oauth/authorize requests =="
+          AUTH_JSON=$(find_req GET "/auth/oauth/authorize.*")
+          echo "$AUTH_JSON" | jq '{count: (.requests|length), sample: (.requests[0:3]|[.[]|{url: .url, wasMatched}])}'
+      
+          echo "== token requests (/auth/oauth/token or /oauth/token) =="
+          TOKEN_JSON=$(find_req POST "^/(auth/)?oauth/token$")
+          echo "$TOKEN_JSON" | jq '{count: (.requests|length), sample: (.requests[0:3]|[.[]|{url: .url, wasMatched}])}'
+      
+          AUTH_COUNT=$(echo "$AUTH_JSON" | jq '.requests | length')
+          TOKEN_COUNT=$(echo "$TOKEN_JSON" | jq '.requests | length')
+      
+          if [ "$AUTH_COUNT" -eq 0 ] || [ "$TOKEN_COUNT" -eq 0 ]; then
+            echo "Either /authorize ($AUTH_COUNT) or /token ($TOKEN_COUNT) wasn’t hit. Dumping unmatched for clues…" >&2
+            curl -fsS "$WIREMOCK_URL/__admin/requests/unmatched" | jq '{unmatched: (.requests|length), items: (.requests[0:10])}'
+            exit 1
+          fi
 
 
       - name: WireMock diagnostics (richer)
@@ -463,11 +493,21 @@ jobs:
             .map(p => toAbs(p, baseDir));
           const exclude = (base.exclude || []).map(p => toAbs(p, baseDir));
 
-          exports.config = { ...base,
-            baseUrl: process.env.BASE_URL || base.baseUrl || 'http://127.0.0.1:3000',
-            maxInstances: 1, capabilities: caps, specs, exclude,
-            logLevel: process.env.WDIO_LOG_LEVEL || 'info', outputDir: './wdio-logs'
-          };
+          exports.config = {
+#            ...base,
+#            baseUrl: process.env.BASE_URL || base.baseUrl || 'http://127.0.0.1:3000',
+#            maxInstances: 1,
+#            capabilities: caps,
+#            specs, exclude,
+#            logLevel: process.env.WDIO_LOG_LEVEL || 'info',
+#            outputDir: './wdio-logs',
+#            reporters: [
+#              'spec',
+#              ['junit', { outputDir: './wdio-logs', outputFileFormat: (opts) => `junit-results-${opts.cid}.xml` }]
+#            ],
+#            waitforTimeout: 15000,
+#            connectionRetryTimeout: 120000
+#          };
           JS
 
       - name: Pick one E2E spec
