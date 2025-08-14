@@ -185,59 +185,50 @@ jobs:
             echo "Waiting for WireMock... ($i/30)"; sleep 2
           done
 
-      - name: Mock Auth with real username passthrough (authorize page ➜ login ➜ token)
+      - name: Mock Auth with username passthrough (robust; logs on failure)
         env:
           BASE_URL: ${{ env.BASE_URL }}
           WIREMOCK_URL: ${{ env.WIREMOCK_URL }}
         run: |
           set -euo pipefail
-          postfile() {
-            tmp="$(mktemp)"; cat > "$tmp"; \
-            curl -fsS -X POST "$WIREMOCK_URL/__admin/mappings" \
-              -H 'Content-Type: application/json' --data-binary @"$tmp" >/dev/null
+      
+          postmap() {
+            tmp="$(mktemp)"; cat > "$tmp"
+            code=$(curl -sS -o /tmp/wm_resp.txt -w '%{http_code}' \
+              -X POST "$WIREMOCK_URL/__admin/mappings" \
+              -H 'Content-Type: application/json' \
+              --data-binary @"$tmp")
+            if [ "$code" != "201" ]; then
+              echo "WireMock mapping POST failed (HTTP $code). Response was:" >&2
+              cat /tmp/wm_resp.txt >&2
+              exit 1
+            fi
           }
-
-          # Health endpoints your app pings
-          postfile <<'JSON'
-          {
-            "priority": 1,
-            "request": { "method":"GET", "url":"/auth/health/ping" },
-            "response": { "status":200, "jsonBody":{ "status":"UP" } }
-          }
+      
+          # Health endpoints
+          postmap <<'JSON'
+          { "priority":1, "request":{"method":"GET","url":"/auth/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }
           JSON
-          postfile <<'JSON'
-          {
-            "priority": 1,
-            "request": { "method":"GET", "url":"/health/ping" },
-            "response": { "status":200, "jsonBody":{ "status":"UP" } }
-          }
+          postmap <<'JSON'
+          { "priority":1, "request":{"method":"GET","url":"/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }
           JSON
-
-          # 1) Authorize page that looks like a login form the tests can type into
-          #    It preserves redirect_uri/state/client_id from the query string.
-          postfile <<'JSON'
+      
+          # 1) Authorize page that renders a simple login form (single-line JSON body!)
+          postmap <<'JSON'
           {
             "priority": 1,
             "request": { "method":"GET", "urlPath":"/auth/oauth/authorize" },
             "response": {
               "status": 200,
               "headers": { "Content-Type": "text/html; charset=utf-8" },
-              "body": "<!doctype html><html><body><h1>Sign in</h1>\
-              <form method='post' action='/auth/login'>\
-                <label for='username'>Username</label>\
-                <input id='username' name='username'/>\
-                <input type='hidden' name='redirect_uri' value='{{{ request.query.redirect_uri }}}'/>\
-                <input type='hidden' name='state' value='{{{ request.query.state }}}'/>\
-                <input type='hidden' name='client_id' value='{{{ request.query.client_id }}}'/>\
-                <button type='submit'>Sign in</button>\
-              </form></body></html>",
+              "body": "<!doctype html><html><body><h1>Sign in</h1><form method='post' action='/auth/login'><label for='username'>Username</label><input id='username' name='username'/><input type='hidden' name='redirect_uri' value='{{{ request.query.redirect_uri }}}'/><input type='hidden' name='state' value='{{{ request.query.state }}}'/><input type='hidden' name='client_id' value='{{{ request.query.client_id }}}'/><button type='submit'>Sign in</button></form></body></html>",
               "transformers": ["response-template"]
             }
           }
           JSON
-
-          # 2) "Submit" the login: 302 back to your app's redirect_uri with code=<username> & state passthrough
-          postfile <<'JSON'
+      
+          # 2) Submit login: 302 back to redirect_uri with code=<typed username>
+          postmap <<'JSON'
           {
             "priority": 1,
             "request": { "method":"POST", "url":"/auth/login" },
@@ -250,9 +241,9 @@ jobs:
             }
           }
           JSON
-
-          # 3) Token exchange: echo the code from the form-encoded body as user_name
-          postfile <<'JSON'
+      
+          # 3) Token exchange: reflect code as user_name so your Manage Users stubs match /user/WMT..., etc.
+          postmap <<'JSON'
           {
             "priority": 1,
             "request": { "method": "POST", "url": "/auth/oauth/token" },
@@ -271,14 +262,15 @@ jobs:
             }
           }
           JSON
-
-          # Prove: typing a username yields a 302 to your callback
-          echo "Authorize (HTML) ➜ POST /auth/login ➜ 302 Location to callback:"
-          curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/login/callback&response_type=code&state=xyz" | head -n 20 || true
-
+      
           echo -n "Total mappings loaded: "
           curl -s "$WIREMOCK_URL/__admin/mappings" | jq '.mappings | length'
       
+          echo
+          echo "Authorize probe:"
+          curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/login/callback&response_type=code&state=xyz" | head -n 20 || true
+    
+    
 
       - name: Wait for other services
         run: |
