@@ -136,7 +136,8 @@ jobs:
         run: npm run integration-test
 
   e2e-tests:
-    name: e2e tests
+    name: e2e tests (WireMock-only auth + manage-users)
+    needs: integration-tests
     runs-on: ubuntu-latest
 
     services:
@@ -160,32 +161,6 @@ jobs:
         image: redis:7-alpine
         ports: [ "6379:6379" ]
 
-      hmpps-manage-users-api:
-        image: quay.io/hmpps/hmpps-manage-users-api:latest
-        ports: [ "9091:9091" ]
-        env:
-          SPRING_PROFILES_ACTIVE: dev,delius
-          DELIUS_ENABLED: "true"
-          SERVER_PORT: "9091"
-          MANAGE_USERS_API_ENABLED: "true"
-        options: >-
-          --health-cmd="curl -fsS http://localhost:9091/health/ping || exit 1"
-          --health-interval=5s --health-timeout=5s --health-retries=50
-
-      hmpps-auth:
-        image: quay.io/hmpps/hmpps-auth:latest
-        ports: [ "9090:9090" ]
-        env:
-          SPRING_PROFILES_ACTIVE: dev,delius
-          DELIUS_ENABLED: "true"
-          SERVER_PORT: "9090"
-          MANAGE_USERS_API_ENABLED: "true"
-          MANAGE_USERS_API_ENDPOINT_URL: http://hmpps-manage-users-api:9091
-        options: >-
-          --health-cmd="curl -fsS http://localhost:9090/auth/health/ping || curl -fsS http://localhost:9090/health/ping || curl -fsS http://localhost:9090/actuator/health || exit 1"
-          --health-interval=5s --health-timeout=5s --health-retries=60
-    
-
     env:
       AWS_DEFAULT_REGION: eu-west-2
       AWS_ACCESS_KEY_ID: foobar
@@ -201,71 +176,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Start WireMock (separately so we can curl __admin and POST mappings)
+      # WireMock (single instance @ 8099) — clean start with response-templating
       - name: Start WireMock (global response templating)
         run: |
           set -euxo pipefail
-          docker run -d --name wiremock-ci -p 8099:8080 wiremock/wiremock:2.35.0 \
+          docker run -d --name wiremock-ci \
+            -p 8099:8080 \
+            wiremock/wiremock:2.35.0 \
             --port 8080 --global-response-templating
-          for i in {1..60}; do
-            curl -fsS "http://127.0.0.1:8099/__admin" >/dev/null && break
-            echo "Waiting for WireMock... ($i/60)"; sleep 2
+          for i in {1..40}; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:8099/__admin" || true)
+            [ "$code" = "200" ] && break
+            echo "Waiting for WireMock... ($i/40) code=$code"; sleep 2
           done
-          curl -s "http://127.0.0.1:8099/__admin" | head -c 400 || true
+          curl -fsS "http://127.0.0.1:8099/__admin" | jq '.'
 
-      - name: Wait for platform services (robust, discovers auth base)
+      - name: Wait for core services (Postgres, LocalStack, Redis)
         run: |
           set -euxo pipefail
-
-          probe () {
-            local name="$1" url="$2" tries="${3:-60}"
-            echo "Probing $name at $url"
-            for i in $(seq 1 "$tries"); do
-              code=$(curl -sS -o /dev/null -w '%{http_code}' --connect-timeout 5 --max-time 10 "$url" || echo "000")
-              if [ "$code" = "200" ]; then
-                echo "$name is up (200)"; return 0
-              fi
-              echo "[$i/$tries] $name not ready (code=$code); sleeping..."; sleep 2
-            done
-            return 1
-          }
-
-          # Core infra
           for i in {1..60}; do pg_isready -h 127.0.0.1 -p 5432 -U postgres -d postgres && break; sleep 1; done
-          curl -fsS --retry 60 --retry-connrefused --retry-delay 2 "${LS}/_localstack/health" >/dev/null
+          curl -sv --retry 30 --retry-connrefused --retry-delay 2 "$LS/_localstack/health" | cat
           for i in {1..60}; do (echo > /dev/tcp/127.0.0.1/6379) >/dev/null 2>&1 && break; sleep 1; done
-
-          # Manage users first (it can be an auth dependency)
-          probe "manage-users" "http://127.0.0.1:9091/health/ping" 90 || {
-            echo "=== manage-users logs ==="
-            docker logs "$(docker ps -q --filter 'publish=9091' | head -n1)" || true
-            exit 1
-          }
-
-          # Discover which base path hmpps-auth uses
-          AUTH_BASE=""
-          if probe "hmpps-auth (/auth/health/ping)" "http://127.0.0.1:9090/auth/health/ping" 30; then
-            AUTH_BASE="/auth"
-          elif probe "hmpps-auth (/health/ping)" "http://127.0.0.1:9090/health/ping" 30; then
-            AUTH_BASE=""
-          elif probe "hmpps-auth (/actuator/health)" "http://127.0.0.1:9090/actuator/health" 30; then
-            AUTH_BASE=""  # actuator without context-path; app endpoints may still be under /auth
-          else
-            echo "hmpps-auth didn't respond healthy on any known endpoint."
-            echo "=== docker ps (ports) ==="; docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Ports}}'
-            echo "=== hmpps-auth logs ==="
-            docker logs "$(docker ps -q --filter 'publish=9090' | head -n1)" || true
-            exit 1
-          fi
-
-          echo "AUTH_BASE=${AUTH_BASE}" >> "$GITHUB_ENV"
-
-          echo "--- quick curls for visibility ---"
-          curl -sv "http://127.0.0.1:9090${AUTH_BASE}/health/ping" | head -n 20 || true
-          curl -sv "http://127.0.0.1:9090/actuator/health" | head -n 20 || true
-          curl -sv "http://127.0.0.1:9091/health/ping" | head -n 20 || true
-          curl -sv "http://127.0.0.1:8099/__admin" | head -n 20 || true
-      
 
       - name: Setup AWS CLI + jq
         run: |
@@ -295,7 +226,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: ${{ inputs.node_version_file }}
+          node-version-file: .nvmrc
 
       - name: Install deps
         run: npm ci --no-audit
@@ -345,11 +276,32 @@ jobs:
 
       - name: Start app (direct)
         env:
-          # ...
-          HMPPS_AUTH_URL: http://127.0.0.1:9090${{ env.AUTH_BASE }}
-          HMPPS_AUTH_EXTERNAL_URL: http://127.0.0.1:9090${{ env.AUTH_BASE }}
-          MANAGE_USERS_SERVICE_URL: http://127.0.0.1:9091
-          # Keep the rest identical…
+          WMT_WEB_APPLICATION_SECRET: ci-dev-secret
+          SESSION_SECRET: ci-session-secret
+          WMT_LIVE_DB_SERVER: 127.0.0.1
+          WMT_LIVE_DB_NAME: postgres
+          WMT_LIVE_DB_USERNAME: postgres
+          WMT_LIVE_DB_PASSWORD: postgres
+          WMT_HISTORY_DB_SERVER: 127.0.0.1
+          WMT_HISTORY_DB_PORT: "5432"
+          WMT_HISTORY_DB_NAME: postgres
+          WMT_HISTORY_DB_USERNAME: postgres
+          WMT_HISTORY_DB_PASSWORD: postgres
+          REDIS_HOST: 127.0.0.1
+          REDIS_PORT: "6379"
+          REDIS_URL: redis://127.0.0.1:6379
+
+          # point the app to WireMock for everything auth/manage-users/token-verification
+          HMPPS_AUTH_URL: http://127.0.0.1:8099/auth
+          HMPPS_AUTH_EXTERNAL_URL: http://127.0.0.1:8099/auth
+          MANAGE_USERS_SERVICE_URL: http://127.0.0.1:8099
+          ALLOCATIONS_SERVICE_URL: http://127.0.0.1:8099
+          USER_PREFERENCE_SERVICE_URL: http://127.0.0.1:8099
+          TOKEN_VERIFICATION_API_URL: http://127.0.0.1:8099
+          TOKEN_VERIFICATION_ENABLED: "true"
+
+          INGRESS_URL: http://127.0.0.1:3000
+          PORT: 3000
         run: |
           set -euxo pipefail
           export $(grep -v '^\s*#' feature.env | xargs) || true
@@ -362,12 +314,82 @@ jobs:
             echo "Waiting for app... ($i/120)"; sleep 2
           done
           tail -n 200 /tmp/app.log || true
-      
 
+      # Load your repo mappings first
       - name: Load WireMock mappings from repo
         run: npm run post-wiremock-mappings
 
-      # (No auth override here; we’re using real hmpps-auth)
+      # Diagnostics + conditional auth stubs (only if your repo didn't provide them)
+      - name: WireMock diagnostics and (if needed) add minimal auth stubs
+        env:
+          BASE_URL: ${{ env.BASE_URL }}
+          WIREMOCK_URL: ${{ env.WIREMOCK_URL }}
+        run: |
+          set -euxo pipefail
+
+          echo "=== WireMock mappings summary ==="
+          curl -fsS "$WIREMOCK_URL/__admin/mappings" | jq '.meta | del(.)"' || true
+          echo -n "Total mappings: "
+          curl -fsS "$WIREMOCK_URL/__admin/mappings" | jq '.mappings | length'
+          echo "First 15 mapping names/urls:"
+          curl -fsS "$WIREMOCK_URL/__admin/mappings" \
+            | jq -r '.mappings[] | .name // (.request.method + " " + (.request.url // .request.urlPattern))' | head -n 15
+
+          have_token=$(curl -fsS "$WIREMOCK_URL/__admin/mappings" \
+            | jq 'reduce (.mappings[].request | (.url // .urlPattern // "")) as $u (false; . or ($u|test("(^/auth)?/oauth/token")))')
+
+          have_authz=$(curl -fsS "$WIREMOCK_URL/__admin/mappings" \
+            | jq 'reduce (.mappings[].request | (.url // .urlPattern // "")) as $u (false; . or ($u|test("^/auth/oauth/authorize|^/oauth/authorize")))')
+
+          post() {
+            curl -fsS -X POST "$WIREMOCK_URL/__admin/mappings" \
+              -H 'Content-Type: application/json' -d "$1" >/dev/null
+          }
+
+          # Health stubs (safe even if already present)
+          post '{ "priority":1, "request":{"method":"GET","url":"/auth/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }'
+          post '{ "priority":1, "request":{"method":"GET","url":"/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }'
+
+          if [ "$have_authz" != "true" ]; then
+            echo "Adding minimal /auth/oauth/authorize 302 stub"
+            post "{
+              \"priority\": 1,
+              \"request\": { \"method\":\"GET\", \"urlPattern\": \"^/auth/oauth/authorize(\\\\?.*)?$\" },
+              \"response\": {
+                \"status\": 302,
+                \"headers\": { \"Location\": \"{{request.query.redirect_uri}}?code=WMT_E2E&state={{request.query.state}}\" },
+                \"transformers\": [\"response-template\"]
+              }
+            }"
+          fi
+
+          if [ "$have_token" != "true" ]; then
+            echo "Adding minimal /oauth/token JSON stub (both with/without /auth)"
+            STATIC_TOKEN='{
+              "status": 200,
+              "headers": { "Content-Type": "application/json; charset=UTF-8" },
+              "jsonBody": {
+                "access_token": "header.payload.signature",
+                "token_type": "bearer",
+                "user_name": "USER1",
+                "expires_in": 599,
+                "scope": "read",
+                "internalUser": true
+              }
+            }'
+            post "$(jq -cn --argjson resp "$STATIC_TOKEN" '{ priority:1, request:{method:"POST", url:"/auth/oauth/token"}, response:$resp }')"
+            post "$(jq -cn --argjson resp "$STATIC_TOKEN" '{ priority:1, request:{method:"POST", url:"/oauth/token"},      response:$resp }')"
+          fi
+
+          echo "=== Quick probes ==="
+          curl -s -i "$WIREMOCK_URL/auth/health/ping" | head -n 10 || true
+          curl -s -i "$WIREMOCK_URL/health/ping" | head -n 10 || true
+          curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/login/callback&response_type=code&state=xyz" | head -n 10 || true
+          curl -s -i -X POST "$WIREMOCK_URL/auth/oauth/token" -H 'Content-Type: application/x-www-form-urlencoded' \
+            --data "grant_type=authorization_code&code=WMT_E2E&redirect_uri=${BASE_URL}/login/callback" | head -n 10 || true
+
+          echo -n "Mappings total (after auth overlays if any): "
+          curl -s "$WIREMOCK_URL/__admin/mappings" | jq '.mappings | length'
 
       - name: Create WDIO CI config (single worker, headless)
         run: |
@@ -442,6 +464,19 @@ jobs:
           pkill -f "chrome" || true
           npx wdio wdio.ci.conf.js --workers 1 --spec "${{ steps.pickspec.outputs.spec }}"
           npm run clean-dev-data
+
+      # Extra diagnostics on failure
+      - name: Dump logs and unmatched requests (on failure)
+        if: failure()
+        run: |
+          set -euxo pipefail
+          echo "=== Container list ==="; docker ps
+          echo "=== WireMock last 200 lines ==="; docker logs --tail=200 wiremock-ci || true
+          echo "=== WireMock unmatched requests ==="
+          curl -fsS "$WIREMOCK_URL/__admin/requests/unmatched" | jq '.requests | length as $n | {unmatched:$n, items:.requests[0:25]}' || true
+          echo "=== WireMock requests count ==="
+          curl -fsS "$WIREMOCK_URL/__admin/requests/count" | jq .
+          echo "=== App log tail ==="; tail -n 400 /tmp/app.log || true
 
       - name: Upload E2E artifacts (on failure)
         if: failure()
