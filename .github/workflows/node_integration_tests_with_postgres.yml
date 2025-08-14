@@ -341,9 +341,9 @@ jobs:
             "status": 200,
             "headers": { "Content-Type": "application/json; charset=UTF-8" },
             "jsonBody": {
-              "access_token": "token-ci",
+              "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJ3bXRfc3RhZmYiLCJhdXRob3JpdGllcyI6WyJXTVRfQURNSU4iLCJXTVRfU1RBRkYiXSwic2NvcGUiOlsicmVhZCJdLCJpbnRlcm5hbFVzZXIiOnRydWUsImV4cCI6MTg5MzQ1NjAwMCwiaXNzIjoid2lyZW1vY2siLCJzdWIiOiJ3bXRfc3RhZmYifQ.ci-sig",
               "token_type": "bearer",
-              "user_name": "WMT_E2E",
+              "user_name": "USER1",
               "expires_in": 599,
               "scope": "read",
               "internalUser": true
@@ -452,9 +452,6 @@ jobs:
           npm run seed-dev-data
           pkill -f "chrome" || true
           npx wdio wdio.ci.conf.js --workers 1 --spec "${{ steps.pickspec.outputs.spec }}"
-          echo "Last 50 WireMock requests touching /oauth:"
-          curl -s "$WIREMOCK_URL/__admin/requests" \
-            | jq '.requests | map(select(.request.url|test("/oauth"))) | .[-50:] | map({url:.request.url,method:.request.method,status:.response.status})'
           npm run clean-dev-data
 
       - name: Upload E2E artifacts (on failure)
