@@ -458,7 +458,7 @@ jobs:
       
           const toAbs = (p, root) => (path.isAbsolute(p) ? p : path.join(root, p));
           const baseDir = path.dirname(basePath);
-          const specs = (base.specs && base.specs.length ? base.specs : ['e2e/**/*.js','e2e/*.js'])
+          const specs = (base.specs && base.specs.length ? base.specs : ['test/e2e/**/*.js','test/e2e/*.js'])
             .map(p => toAbs(p, baseDir));
           const exclude = (base.exclude || []).map(p => toAbs(p, baseDir));
       
@@ -467,17 +467,17 @@ jobs:
             baseUrl: process.env.BASE_URL || base.baseUrl || 'http://localhost:3000',
             maxInstances: 1,
             capabilities: caps,
-            specs, exclude,
+            specs,
+            exclude,
             logLevel: process.env.WDIO_LOG_LEVEL || 'info',
             outputDir: './wdio-logs',
-            reporters: [
-              'spec',
-              ['junit', { outputDir: './wdio-logs', outputFileFormat: (opts) => `junit-results-${opts.cid}.xml` }]
-            ],
-            waitforTimeout: 15000,
-            connectionRetryTimeout: 120000
+            // ✅ avoid requiring @wdio/junit-reporter
+            reporters: ['spec'],
+            waitforTimeout: base.waitforTimeout || 15000,
+            connectionRetryTimeout: base.connectionRetryTimeout || 120000,
           };
           JS
+
 
 
       - name: Pick one E2E spec
