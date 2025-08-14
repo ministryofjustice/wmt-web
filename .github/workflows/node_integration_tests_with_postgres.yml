@@ -182,8 +182,9 @@ jobs:
           MANAGE_USERS_API_ENABLED: "true"
           MANAGE_USERS_API_ENDPOINT_URL: http://hmpps-manage-users-api:9091
         options: >-
-          --health-cmd="curl -fsS http://localhost:9090/health/ping || curl -fsS http://localhost:9090/auth/health/ping || exit 1"
+          --health-cmd="curl -fsS http://localhost:9090/auth/health/ping || curl -fsS http://localhost:9090/health/ping || curl -fsS http://localhost:9090/actuator/health || exit 1"
           --health-interval=5s --health-timeout=5s --health-retries=60
+    
 
     env:
       AWS_DEFAULT_REGION: eu-west-2
@@ -212,7 +213,7 @@ jobs:
           done
           curl -s "http://127.0.0.1:8099/__admin" | head -c 400 || true
 
-      - name: Wait for platform services (robust, with logs on failure)
+      - name: Wait for platform services (robust, discovers auth base)
         run: |
           set -euxo pipefail
 
@@ -221,37 +222,50 @@ jobs:
             echo "Probing $name at $url"
             for i in $(seq 1 "$tries"); do
               code=$(curl -sS -o /dev/null -w '%{http_code}' --connect-timeout 5 --max-time 10 "$url" || echo "000")
-              if [ "$code" = "200" ]; then echo "$name is up (200)"; return 0; fi
+              if [ "$code" = "200" ]; then
+                echo "$name is up (200)"; return 0
+              fi
               echo "[$i/$tries] $name not ready (code=$code); sleeping..."; sleep 2
             done
-            echo "$name failed to become healthy after $tries attempts"; return 1
+            return 1
           }
 
           # Core infra
           for i in {1..60}; do pg_isready -h 127.0.0.1 -p 5432 -U postgres -d postgres && break; sleep 1; done
-          curl -fsS --retry 60 --retry-connrefused --retry-delay 2 "$LS/_localstack/health" >/dev/null
+          curl -fsS --retry 60 --retry-connrefused --retry-delay 2 "${LS}/_localstack/health" >/dev/null
           for i in {1..60}; do (echo > /dev/tcp/127.0.0.1/6379) >/dev/null 2>&1 && break; sleep 1; done
 
-          # App deps
-          set +e
-          probe "manage-users" "http://127.0.0.1:9091/health/ping" 90 || MU_FAIL=1
-          probe "hmpps-auth (/health/ping)" "http://127.0.0.1:9090/health/ping" 120 || AUTH_DIRECT_FAIL=1
-          if [ "${AUTH_DIRECT_FAIL:-}" = "1" ]; then
-            probe "hmpps-auth (/auth/health/ping)" "http://127.0.0.1:9090/auth/health/ping" 30 || AUTH_FAIL=1
-          fi
-          set -e
-
-          if [ "${MU_FAIL:-0}" = "1" ] || [ "${AUTH_FAIL:-0}" = "1" ] || [ "${AUTH_DIRECT_FAIL:-0}" = "1" ]; then
-            echo "=== Container list ==="; docker ps
-            echo "=== hmpps-auth logs ==="
-            docker logs "$(docker ps -q --filter "ancestor=quay.io/hmpps/hmpps-auth:latest" | head -n1)" || true
+          # Manage users first (it can be an auth dependency)
+          probe "manage-users" "http://127.0.0.1:9091/health/ping" 90 || {
             echo "=== manage-users logs ==="
-            docker logs "$(docker ps -q --filter "ancestor=quay.io/hmpps/hmpps-manage-users-api:latest" | head -n1)" || true
+            docker logs "$(docker ps -q --filter 'publish=9091' | head -n1)" || true
+            exit 1
+          }
+
+          # Discover which base path hmpps-auth uses
+          AUTH_BASE=""
+          if probe "hmpps-auth (/auth/health/ping)" "http://127.0.0.1:9090/auth/health/ping" 30; then
+            AUTH_BASE="/auth"
+          elif probe "hmpps-auth (/health/ping)" "http://127.0.0.1:9090/health/ping" 30; then
+            AUTH_BASE=""
+          elif probe "hmpps-auth (/actuator/health)" "http://127.0.0.1:9090/actuator/health" 30; then
+            AUTH_BASE=""  # actuator without context-path; app endpoints may still be under /auth
+          else
+            echo "hmpps-auth didn't respond healthy on any known endpoint."
+            echo "=== docker ps (ports) ==="; docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Ports}}'
+            echo "=== hmpps-auth logs ==="
+            docker logs "$(docker ps -q --filter 'publish=9090' | head -n1)" || true
             exit 1
           fi
 
-          # Sanity peek at WireMock admin
-          curl -fsS "http://127.0.0.1:8099/__admin" | head -c 400 || true
+          echo "AUTH_BASE=${AUTH_BASE}" >> "$GITHUB_ENV"
+
+          echo "--- quick curls for visibility ---"
+          curl -sv "http://127.0.0.1:9090${AUTH_BASE}/health/ping" | head -n 20 || true
+          curl -sv "http://127.0.0.1:9090/actuator/health" | head -n 20 || true
+          curl -sv "http://127.0.0.1:9091/health/ping" | head -n 20 || true
+          curl -sv "http://127.0.0.1:8099/__admin" | head -n 20 || true
+      
 
       - name: Setup AWS CLI + jq
         run: |
@@ -331,31 +345,11 @@ jobs:
 
       - name: Start app (direct)
         env:
-          WMT_WEB_APPLICATION_SECRET: ci-dev-secret
-          SESSION_SECRET: ci-session-secret
-          WMT_LIVE_DB_SERVER: 127.0.0.1
-          WMT_LIVE_DB_NAME: postgres
-          WMT_LIVE_DB_USERNAME: postgres
-          WMT_LIVE_DB_PASSWORD: postgres
-          WMT_HISTORY_DB_SERVER: 127.0.0.1
-          WMT_HISTORY_DB_PORT: "5432"
-          WMT_HISTORY_DB_NAME: postgres
-          WMT_HISTORY_DB_USERNAME: postgres
-          WMT_HISTORY_DB_PASSWORD: postgres
-          REDIS_HOST: 127.0.0.1
-          REDIS_PORT: "6379"
-          REDIS_URL: redis://127.0.0.1:6379
-          # Real auth + manage users
-          HMPPS_AUTH_URL: http://127.0.0.1:9090/auth
-          HMPPS_AUTH_EXTERNAL_URL: http://127.0.0.1:9090/auth
+          # ...
+          HMPPS_AUTH_URL: http://127.0.0.1:9090${{ env.AUTH_BASE }}
+          HMPPS_AUTH_EXTERNAL_URL: http://127.0.0.1:9090${{ env.AUTH_BASE }}
           MANAGE_USERS_SERVICE_URL: http://127.0.0.1:9091
-          # Everything else via WireMock
-          ALLOCATIONS_SERVICE_URL: http://127.0.0.1:8099
-          USER_PREFERENCE_SERVICE_URL: http://127.0.0.1:8099
-          TOKEN_VERIFICATION_API_URL: http://127.0.0.1:8099
-          TOKEN_VERIFICATION_ENABLED: "true"
-          INGRESS_URL: http://127.0.0.1:3000
-          PORT: 3000
+          # Keep the rest identical…
         run: |
           set -euxo pipefail
           export $(grep -v '^\s*#' feature.env | xargs) || true
@@ -368,6 +362,7 @@ jobs:
             echo "Waiting for app... ($i/120)"; sleep 2
           done
           tail -n 200 /tmp/app.log || true
+      
 
       - name: Load WireMock mappings from repo
         run: npm run post-wiremock-mappings
