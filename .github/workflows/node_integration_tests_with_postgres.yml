@@ -77,7 +77,7 @@ jobs:
             --bucket wmt-web \
             --region "$AWS_DEFAULT_REGION" \
             --create-bucket-configuration LocationConstraint="$AWS_DEFAULT_REGION" || true
-          for ts in 20210729062147 20210730062147 20210731062147 20210801062147 20210802062147; do
+          for ts in 20210729062147 20210730062147 20210801062147 20210802062147; do
             aws --endpoint-url="$LS" s3api put-object \
               --bucket wmt-web \
               --key generated-dashboards/dashboard_${ts}.txt \
@@ -261,31 +261,23 @@ jobs:
       - name: Patch WireMock auth mappings
         run: |
           set -euo pipefail
-
-          curl -sS -X POST "$WIREMOCK_URL/__admin/mappings" \
-            -H 'Content-Type: application/json' -d @- <<'JSON'
+          curl -sS -X POST "$WIREMOCK_URL/__admin/mappings" -H 'Content-Type: application/json' -d @- <<'JSON'
           { "priority": 1, "request": { "method": "GET", "urlPath": "/auth/oauth/authorize" },
             "response": { "status": 302,
               "headers": { "Location": "{{request.query.redirect_uri}}?code=codexxxx&state={{request.query.state}}" },
               "transformers": ["response-template"] } }
           JSON
-
-          curl -sS -X POST "$WIREMOCK_URL/__admin/mappings" \
-            -H 'Content-Type: application/json' -d @- <<'JSON'
+          curl -sS -X POST "$WIREMOCK_URL/__admin/mappings" -H 'Content-Type: application/json' -d @- <<'JSON'
           { "priority": 1, "request": { "method": "GET", "urlPath": "/oauth/authorize" },
             "response": { "status": 302,
               "headers": { "Location": "{{request.query.redirect_uri}}?code=codexxxx&state={{request.query.state}}" },
               "transformers": ["response-template"] } }
           JSON
-
-          curl -sS -X POST "$WIREMOCK_URL/__admin/mappings" \
-            -H 'Content-Type: application/json' -d @- <<'JSON'
+          curl -sS -X POST "$WIREMOCK_URL/__admin/mappings" -H 'Content-Type: application/json' -d @- <<'JSON'
           { "priority": 1, "request": { "method": "GET", "urlPath": "/auth/health/ping" },
             "response": { "status": 200, "jsonBody": { "status": "UP" } } }
           JSON
-
-          curl -sS -X POST "$WIREMOCK_URL/__admin/mappings" \
-            -H 'Content-Type: application/json' -d @- <<'JSON'
+          curl -sS -X POST "$WIREMOCK_URL/__admin/mappings" -H 'Content-Type: application/json' -d @- <<'JSON'
           { "priority": 1, "request": { "method": "POST", "urlPath": "/auth/oauth/token" },
             "response": { "status": 200,
               "headers": { "Content-Type": "application/json;charset=UTF-8" },
@@ -336,9 +328,12 @@ jobs:
           if [ -z "$ready" ]; then
             echo "App failed to become ready. Tail of /tmp/app.log:"; tail -n 400 /tmp/app.log || true; exit 1
           fi
+          # quick curls for e2e landing/sign-in pages
+          curl -sS -D /tmp/home.headers http://127.0.0.1:3000/ -o /tmp/home.html || true
+          curl -sS -D /tmp/login.headers http://127.0.0.1:3000/login -o /tmp/login.html || true
           tail -n 200 /tmp/app.log || true
 
-      - name: Create WDIO CI config (unique Chrome profile + absolute specs + baseUrl)
+      - name: Create WDIO CI config (trace logs + screenshots on fail)
         run: |
           cat > wdio.ci.conf.js <<'JS'
           const path = require('path');
@@ -386,12 +381,19 @@ jobs:
             capabilities: caps,
             specs,
             exclude,
-            logLevel: base.logLevel || 'info',
-            outputDir: base.outputDir || './wdio-logs'
+            logLevel: 'trace',
+            outputDir: './wdio-logs',
+            reporters: (base.reporters || ['spec']),
+            afterTest: async function (_test, _context, { passed }) {
+              if (!passed) {
+                const dir = path.resolve(__dirname, 'screenshots');
+                if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+                try { await browser.saveScreenshot(path.join(dir, `${Date.now()}_fail.png`)); } catch (e) {}
+              }
+            }
           };
           JS
 
-      # NEW: run only ONE spec (override by setting SPEC env if you want a different file)
       - name: Pick one E2E spec
         id: pickspec
         run: |
@@ -405,6 +407,15 @@ jobs:
           fi
           echo "Running single spec: $SPEC"
           echo "spec=$SPEC" >> "$GITHUB_OUTPUT"
+
+      - name: Pre-run diagnostics (WireMock + app)
+        run: |
+          set -euo pipefail
+          mkdir -p diag
+          curl -sS "$WIREMOCK_URL/__admin/mappings" > diag/wiremock_mappings.json || true
+          curl -sS "$WIREMOCK_URL/__admin/requests/recent" > diag/wiremock_requests_pre.json || true
+          curl -sS -D diag/app_home.headers "$BASE_URL/" -o diag/app_home.html || true
+          curl -sS -D diag/app_login.headers "$BASE_URL/login" -o diag/app_login.html || true
 
       - name: Run E2E (single spec; isolated Chrome profile)
         env:
@@ -426,15 +437,42 @@ jobs:
           npx wdio wdio.ci.conf.js --workers 1 --spec "${{ steps.pickspec.outputs.spec }}"
           npm run clean-dev-data
 
+      - name: Post-run diagnostics (always)
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p diag
+          echo "=== tail app.log ===" >> diag/app_tail.txt
+          tail -n 400 /tmp/app.log >> diag/app_tail.txt || true
+          echo "=== docker ps ===" > diag/docker_ps.txt
+          docker ps -a >> diag/docker_ps.txt || true
+          echo "=== wiremock requests (recent) ===" > diag/wiremock_requests_post.json
+          curl -sS "$WIREMOCK_URL/__admin/requests/recent" >> diag/wiremock_requests_post.json || true
+
       - name: Upload E2E artifacts (on failure)
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: e2e-artifacts
+          name: e2e-artifacts-failure
           path: |
             ./screenshots
             ./videos
             ./wdio-*.log
             ./wdio-logs
             /tmp/app.log
+            ./diag
+          if-no-files-found: ignore
+
+      - name: Upload minimal diagnostics (always)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-diag
+          path: |
+            ./wdio-logs
+            ./diag
+            /tmp/home.html
+            /tmp/login.html
+            /tmp/home.headers
+            /tmp/login.headers
           if-no-files-found: ignore
