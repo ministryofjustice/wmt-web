@@ -314,52 +314,71 @@ jobs:
           WIREMOCK_URL: ${{ env.WIREMOCK_URL }}
         run: |
           set -euo pipefail
-          post() {
+            post() {
             curl -fsS -X POST "$WIREMOCK_URL/__admin/mappings" \
-              -H 'Content-Type: application/json' \
-              -d "$1" >/dev/null
+          -H 'Content-Type: application/json' -d "$1" >/dev/null
           }
-          # health endpoints (both forms)
-          post '{ "priority":1, "request":{"method":"GET","url":"/auth/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }'
-          post '{ "priority":1, "request":{"method":"GET","url":"/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }'
-
-          # /auth/oauth/authorize -> 302 straight back to your app
-          post '{
-            "priority": 1,
-            "request": { "method":"GET", "urlPathPattern": "/auth/oauth/authorize.*" },
-            "response": {
-              "status": 302,
-              "headers": {
-                "Location": "{{request.query.redirect_uri}}?code=WMT_E2E&state={{request.query.state}}"
-              },
-              "transformers": ["response-template"]
+          
+          # Health (both forms)
+            post '{ "priority":1, "request":{"method":"GET","url":"/auth/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }'
+            post '{ "priority":1, "request":{"method":"GET","url":"/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }'
+            
+            # Authorize -> 302 back to your app with a fixed code
+            post '{
+          "priority": 1,
+          "request": { "method":"GET", "urlPattern": "^/auth/oauth/authorize(\\?.*)?$" },
+          "response": {
+            "status": 302,
+            "headers": {
+              "Location": "{{request.query.redirect_uri}}?code=WMT_E2E&state={{request.query.state}}"
+            },
+            "transformers": ["response-template"]
+          }
+          }'
+          
+          # Token -> ALWAYS 200 JSON; accept both with/without /auth prefix; no templating
+          STATIC_TOKEN='{
+            "status": 200,
+            "headers": { "Content-Type": "application/json; charset=UTF-8" },
+            "jsonBody": {
+              "access_token": "token-ci",
+              "token_type": "bearer",
+              "user_name": "WMT_E2E",
+              "expires_in": 599,
+              "scope": "read",
+              "internalUser": true
             }
           }'
-
-          # /auth/oauth/token -> reflect code into user_name
-          post '{
-            "priority": 1,
-            "request": { "method": "POST", "url": "/auth/oauth/token" },
-            "response": {
-              "status": 200,
-              "headers": { "Content-Type": "application/json; charset=UTF-8" },
-              "jsonBody": {
-                "access_token": "***",
-                "token_type": "bearer",
-                "user_name": "{{{ formData request.body \"code\" }}}",
-                "expires_in": 599,
-                "scope": "read",
-                "internalUser": true
-              },
-              "transformers": ["response-template"]
-            }
-          }'
-
+          
+          post "$(jq -cn --argjson resp "$STATIC_TOKEN" '{
+            priority: 1,
+            request: { method: "POST", url: "/auth/oauth/token" },
+            response: $resp
+          }')"
+          
+          post "$(jq -cn --argjson resp "$STATIC_TOKEN" '{
+            priority: 1,
+            request: { method: "POST", url: "/oauth/token" },
+            response: $resp
+          }')"
+          
+          # Quick probes so we fail fast if anything is off
+          echo "Authorize probe:"
+          curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/login/callback&response_type=code&state=xyz" | head -n 10 || true
+          
+          echo "Token probe (/auth/oauth/token):"
+          curl -s -i -X POST "$WIREMOCK_URL/auth/oauth/token" \
+            -H 'Content-Type: application/x-www-form-urlencoded' \
+                   --data "grant_type=authorization_code&code=WMT_E2E&redirect_uri=${BASE_URL}/login/callback" | head -n 10 || true
+            
+            echo "Token probe (/oauth/token):"
+            curl -s -i -X POST "$WIREMOCK_URL/oauth/token" \
+          -H 'Content-Type: application/x-www-form-urlencoded' \
+            --data "grant_type=authorization_code&code=WMT_E2E&redirect_uri=${BASE_URL}/login/callback" | head -n 10 || true
+          
           echo -n "Mappings total: "
           curl -s "$WIREMOCK_URL/__admin/mappings" | jq '.mappings | length'
-          echo
-          echo "Authorize probe (expect 302 to ${BASE_URL}/login/callback or /sign-in/callback):"
-          curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/login/callback&response_type=code&state=xyz" | head -n 20 || true
+                                     
 
       - name: Create WDIO CI config (single worker, headless)
         run: |
@@ -433,6 +452,9 @@ jobs:
           npm run seed-dev-data
           pkill -f "chrome" || true
           npx wdio wdio.ci.conf.js --workers 1 --spec "${{ steps.pickspec.outputs.spec }}"
+          echo "Last 50 WireMock requests touching /oauth:"
+          curl -s "$WIREMOCK_URL/__admin/requests" \
+            | jq '.requests | map(select(.request.url|test("/oauth"))) | .[-50:] | map({url:.request.url,method:.request.method,status:.response.status})'
           npm run clean-dev-data
 
       - name: Upload E2E artifacts (on failure)
