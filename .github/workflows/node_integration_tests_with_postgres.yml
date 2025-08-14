@@ -319,6 +319,74 @@ jobs:
       - name: Load WireMock mappings from repo
         run: npm run post-wiremock-mappings
 
+      - name: Overlay resilient auth stubs (priority=1) + quick probes
+        env:
+          BASE_URL: ${{ env.BASE_URL }}
+          WIREMOCK_URL: ${{ env.WIREMOCK_URL }}
+        run: |
+          set -euo pipefail
+
+          post() {
+            curl -fsS -X POST "$WIREMOCK_URL/__admin/mappings" \
+              -H 'Content-Type: application/json' -d "$1" >/dev/null
+          }
+
+          # Authorize: ignore parameter order, require the four keys, reflect redirect_uri
+          post '{
+            "priority": 1,
+            "request": {
+              "method": "GET",
+              "urlPath": "/auth/oauth/authorize",
+              "queryParameters": {
+                "client_id":     { "equalTo": "workload-measurement-ui" },
+                "response_type": { "equalTo": "code" },
+                "redirect_uri":  { "matches": ".+" },
+                "state":         { "matches": ".+" }
+              }
+            },
+            "response": {
+              "status": 302,
+              "headers": {
+                "Location": "{{request.query.redirect_uri}}?code=WMT_E2E&state={{request.query.state}}"
+              },
+              "transformers": ["response-template"]
+            }
+          }'
+
+          # Token: simple fixed JSON, accept both /auth/oauth/token and /oauth/token
+          STATIC_TOKEN='{
+            "status": 200,
+            "headers": { "Content-Type": "application/json; charset=UTF-8" },
+            "jsonBody": {
+              "access_token": "header.payload.signature",
+              "token_type": "bearer",
+              "user_name": "USER1",
+              "expires_in": 599,
+              "scope": "read",
+              "internalUser": true
+            }
+          }'
+          post "$(jq -cn --argjson resp "$STATIC_TOKEN" '{
+            priority: 1,
+            request: { method: "POST", urlPathPattern: "^(/auth)?/oauth/token$" },
+            response: $resp
+          }')"
+
+          echo "=== Quick probes ==="
+          auth_status=$(curl -s -o /dev/null -w '%{http_code}' \
+            "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/login/callback&response_type=code&state=xyz")
+          echo "Authorize status: $auth_status"; [ "$auth_status" = "302" ]
+
+          token_status=$(curl -s -o /dev/null -w '%{http_code}' \
+            -X POST "$WIREMOCK_URL/auth/oauth/token" \
+            -H 'Content-Type: application/x-www-form-urlencoded' \
+            --data "grant_type=authorization_code&code=WMT_E2E&redirect_uri=${BASE_URL}/login/callback")
+          echo "Token status: $token_status"; [ "$token_status" = "200" ]
+
+          echo -n "Mappings now loaded: "
+          curl -s "$WIREMOCK_URL/__admin/mappings" | jq '.mappings | length'
+
+
       # Diagnostics + conditional auth stubs (only if your repo didn't provide them)
       - name: WireMock diagnostics and (if needed) add minimal auth stubs
         env:
