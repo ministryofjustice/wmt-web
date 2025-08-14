@@ -353,7 +353,7 @@ jobs:
               "jsonBody": {
                 "access_token": "${STATIC_JWT}",
                 "token_type": "bearer",
-                "user_name": "wmt_staff",
+                "user_name": "USER1",
                 "expires_in": 599,
                 "scope": "read",
                 "internalUser": true
