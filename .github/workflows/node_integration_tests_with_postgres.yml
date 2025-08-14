@@ -189,6 +189,67 @@ jobs:
           # quick proof that templating is ON (this endpoint exists in v2.35 but doesn't reflect global flag,
           # so we'll do a live render check right after mappings are loaded)
 
+      - name: Post critical Auth stubs (authorize/token/health)
+        env:
+          BASE_URL: ${{ env.BASE_URL }}
+          WIREMOCK_URL: ${{ env.WIREMOCK_URL }}
+        run: |
+          set -euo pipefail
+          post() {
+            curl -fsS -X POST "$WIREMOCK_URL/__admin/mappings" \
+              -H 'Content-Type: application/json' \
+              -d "$1" >/dev/null
+          }
+
+          # 200 health
+          post '{
+            "request": { "method":"GET", "url":"/auth/health/ping" },
+            "response": { "status":200, "jsonBody":{ "status":"UP" } }
+          }'
+
+          # token endpoint
+          post '{
+            "request": { "method":"POST", "url":"/auth/oauth/token" },
+            "response": {
+              "status":200,
+              "headers": { "Content-Type":"application/json" },
+              "jsonBody": {
+                "access_token":"***", "token_type":"bearer", "user_name":"USER1",
+                "expires_in":599, "scope":"read", "internalUser":true
+              }
+            }
+          }'
+
+          # authorize -> 302 to redirect_uri with code & state (uses response-template)
+          post '{
+            "priority": 1,
+            "request": {
+              "method":"GET",
+              "urlPath":"/auth/oauth/authorize",
+              "queryParameters": {
+                "response_type": { "equalTo":"code" },
+                "redirect_uri": { "matches":".*" },
+                "state": { "matches":".*" },
+                "client_id": { "equalTo":"workload-measurement-ui" }
+              }
+            },
+            "response": {
+              "status":302,
+              "headers": {
+                "Location": "{{request.query.redirect_uri}}?code=codexxxx&state={{request.query.state}}"
+              },
+              "transformers": ["response-template"]
+            }
+          }'
+
+          # prove they’re loaded and matching
+          echo -n "Mappings now: "
+          curl -s "$WIREMOCK_URL/__admin/mappings" | jq '.mappings | length'
+          echo
+          echo "Authorize probe (should be 302 with Location to ${BASE_URL}/sign-in/callback):"
+          curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/sign-in/callback&response_type=code&state=xyz" | head -n 20
+
+
       - name: Wait for other services
         run: |
           for i in {1..60}; do pg_isready -h 127.0.0.1 -p 5432 -U postgres -d postgres && break; sleep 1; done
