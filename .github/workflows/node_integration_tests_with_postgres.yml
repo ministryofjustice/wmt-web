@@ -258,32 +258,44 @@ jobs:
           npm run post-wiremock-mappings
           echo "Mappings: $(curl -s $WIREMOCK_URL/__admin/mappings | jq '.mappings | length')"
 
-      - name: Patch WireMock auth mappings
+      - name: Patch WireMock authorize mapping to use redirect_uri
         run: |
           set -euo pipefail
-          curl -sS -X POST "$WIREMOCK_URL/__admin/mappings" -H 'Content-Type: application/json' -d @- <<'JSON'
-          { "priority": 1, "request": { "method": "GET", "urlPath": "/auth/oauth/authorize" },
-            "response": { "status": 302,
-              "headers": { "Location": "{{request.query.redirect_uri}}?code=codexxxx&state={{request.query.state}}" },
-              "transformers": ["response-template"] } }
+          # delete any hard-coded /login/callback authorize mapping
+          curl -s "$WIREMOCK_URL/__admin/mappings" | jq -r '
+            (.mappings // [])[]
+            | select(.request.urlPattern? | tostring | test("/auth/oauth/authorize"))
+            | select(.response.headers.Location? | contains("login/callback"))
+            | .id' | while read -r id; do
+              echo "Deleting legacy authorize mapping: $id"
+              curl -s -X DELETE "$WIREMOCK_URL/__admin/mappings/$id" >/dev/null
+            done
+
+          # ensure the generic authorize mapping exists (redirects to provided redirect_uri)
+          cat > /tmp/authorize_redirect_uri.json <<'JSON'
+          {
+            "request": {
+              "urlPath": "/auth/oauth/authorize",
+              "method": "GET"
+            },
+            "response": {
+              "status": 302,
+              "headers": {
+                "Location": "{{request.query.redirect_uri}}?code=codexxxx&state={{request.query.state}}"
+              },
+              "transformers": [ "response-template" ]
+            },
+            "priority": 1
+          }
           JSON
-          curl -sS -X POST "$WIREMOCK_URL/__admin/mappings" -H 'Content-Type: application/json' -d @- <<'JSON'
-          { "priority": 1, "request": { "method": "GET", "urlPath": "/oauth/authorize" },
-            "response": { "status": 302,
-              "headers": { "Location": "{{request.query.redirect_uri}}?code=codexxxx&state={{request.query.state}}" },
-              "transformers": ["response-template"] } }
-          JSON
-          curl -sS -X POST "$WIREMOCK_URL/__admin/mappings" -H 'Content-Type: application/json' -d @- <<'JSON'
-          { "priority": 1, "request": { "method": "GET", "urlPath": "/auth/health/ping" },
-            "response": { "status": 200, "jsonBody": { "status": "UP" } } }
-          JSON
-          curl -sS -X POST "$WIREMOCK_URL/__admin/mappings" -H 'Content-Type: application/json' -d @- <<'JSON'
-          { "priority": 1, "request": { "method": "POST", "urlPath": "/auth/oauth/token" },
-            "response": { "status": 200,
-              "headers": { "Content-Type": "application/json;charset=UTF-8" },
-              "jsonBody": { "access_token": "***", "token_type": "bearer",
-                "user_name": "USER1", "expires_in": 599, "scope": "read", "internalUser": true } } }
-          JSON
+
+          curl -s -X POST "$WIREMOCK_URL/__admin/mappings" \
+            -H 'content-type: application/json' \
+            --data-binary @/tmp/authorize_redirect_uri.json >/dev/null
+
+          echo "Authorize mappings after patch:"
+          curl -s "$WIREMOCK_URL/__admin/mappings" | jq '[.mappings[] | select(.request.urlPath? == "/auth/oauth/authorize" or (.request.urlPattern? | tostring | test("auth/oauth/authorize"))) ] | length as $n | "count=\($n)"'
+
 
       - name: Build assets
         run: npm run build
