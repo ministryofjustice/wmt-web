@@ -319,7 +319,9 @@ jobs:
       - name: Load WireMock mappings from repo
         run: npm run post-wiremock-mappings
 
-      - name: Overlay resilient auth stubs (priority=1) + probes
+      # … keep your existing “Load WireMock mappings from repo” step …
+
+      - name: Override Auth in WireMock with a real JWT token
         env:
           BASE_URL: ${{ env.BASE_URL }}
           WIREMOCK_URL: ${{ env.WIREMOCK_URL }}
@@ -331,20 +333,11 @@ jobs:
               -H 'Content-Type: application/json' -d "$1" >/dev/null
           }
 
-          # Authorize -> 302 back to whatever redirect_uri was sent, using your codexxxx
+          # Keep your 302 /authorize as-is (you already have this in your repo)
+          # Shown here only for completeness:
           post '{
-            "name": "Authorize 302 (reflect redirect_uri; code=codexxxx)",
             "priority": 1,
-            "request": {
-              "method": "GET",
-              "urlPath": "/auth/oauth/authorize",
-              "queryParameters": {
-                "client_id":     { "equalTo": "workload-measurement-ui" },
-                "response_type": { "equalTo": "code" },
-                "redirect_uri":  { "matches": ".+" },
-                "state":         { "matches": ".+" }
-              }
-            },
+            "request": { "method":"GET", "urlPattern": "^/auth/oauth/authorize(\\?.*)?$" },
             "response": {
               "status": 302,
               "headers": {
@@ -354,41 +347,61 @@ jobs:
             }
           }'
 
-          # Token -> simple fixed JSON, accept both /auth/oauth/token and /oauth/token
-          STATIC_TOKEN='{
+          # --- A syntactically valid JWT (base64url header + payload; dummy signature) ---
+          # header  = {"alg":"HS256","typ":"JWT"}  -> eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+          # payload = {
+          #   "user_name":"wmt_staff",
+          #   "authorities":["WMT_ADMIN","WMT_STAFF"],
+          #   "scope":["read"], "internalUser":true,
+          #   "exp":1893456000, "iss":"wiremock", "sub":"wmt_staff"
+          # }
+          # -> eyJ1c2VyX25hbWUiOiJ3bXRfc3RhZmYiLCJhdXRob3JpdGllcyI6WyJXTVRfQURNSU4iLCJXTVRfU1RBRkYiXSwic2NvcGUiOlsicmVhZCJdLCJpbnRlcm5hbFVzZXIiOnRydWUsImV4cCI6MTg5MzQ1NjAwMCwiaXNzIjoid2lyZW1vY2siLCJzdWIiOiJ3bXRfc3RhZmYifQ
+          # signature = base64url("ci-sig") -> Y2ktc2ln
+          STATIC_JWT='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJ3bXRfc3RhZmYiLCJhdXRob3JpdGllcyI6WyJXTVRfQURNSU4iLCJXTVRfU1RBRkYiXSwic2NvcGUiOlsicmVhZCJdLCJpbnRlcm5hbFVzZXIiOnRydWUsImV4cCI6MTg5MzQ1NjAwMCwiaXNzIjoid2lyZW1vY2siLCJzdWIiOiJ3bXRfc3RhZmYifQ.Y2ktc2ln'
+
+          read -r -d '' STATIC_TOKEN_JSON <<JSON || true
+          {
             "status": 200,
             "headers": { "Content-Type": "application/json; charset=UTF-8" },
             "jsonBody": {
-              "access_token": "header.payload.signature",
+              "access_token": "${STATIC_JWT}",
               "token_type": "bearer",
-              "user_name": "USER1",
+              "user_name": "wmt_staff",
               "expires_in": 599,
               "scope": "read",
               "internalUser": true
             }
-          }'
-          post "$(jq -cn --argjson resp "$STATIC_TOKEN" '{
-            name: "Token 200 (accept /auth prefix or not)",
+          }
+          JSON
+
+          # Token endpoints (accept either with or without /auth prefix)
+          post "$(jq -cn --argjson resp "$STATIC_TOKEN_JSON" '{
             priority: 1,
-            request: { method: "POST", urlPathPattern: "^(/auth)?/oauth/token$" },
+            request: { method: "POST", url": "/auth/oauth/token" },
             response: $resp
-          }')"
+          }' | sed 's/"url":/ "url":/')"
 
-          echo "=== Quick probes ==="
-          auth_status=$(curl -s -o /dev/null -w '%{http_code}' \
-            "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/login/callback&response_type=code&state=xyz")
-          echo "Authorize status: $auth_status"; [ "$auth_status" = "302" ]
+          post "$(jq -cn --argjson resp "$STATIC_TOKEN_JSON" '{
+            priority: 1,
+            request: { method: "POST", url": "/oauth/token" },
+            response: $resp
+          }' | sed 's/"url":/ "url":/')"
 
-          token_status=$(curl -s -o /dev/null -w '%{http_code}' \
-            -X POST "$WIREMOCK_URL/auth/oauth/token" \
+          # Quick probes (should show 302 and 200)
+          echo "Authorize probe:"
+          curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/login/callback&response_type=code&state=xyz" | head -n 10 || true
+
+          echo "Token probe (/auth/oauth/token):"
+          curl -s -i -X POST "$WIREMOCK_URL/auth/oauth/token" \
             -H 'Content-Type: application/x-www-form-urlencoded' \
-            --data "grant_type=authorization_code&code=codexxxx&redirect_uri=${BASE_URL}/login/callback")
-          echo "Token status: $token_status"; [ "$token_status" = "200" ]
+            --data "grant_type=authorization_code&code=codexxxx&redirect_uri=${BASE_URL}/login/callback" | head -n 10 || true
 
-          echo -n "Mappings now loaded: "
-          curl -s "$WIREMOCK_URL/__admin/mappings" | jq '.mappings | length'
-      
-      
+          echo "Token probe (/oauth/token):"
+          curl -s -i -X POST "$WIREMOCK_URL/oauth/token" \
+            -H 'Content-Type: application/x-www-form-urlencoded' \
+            --data "grant_type=authorization_code&code=codexxxx&redirect_uri=${BASE_URL}/login/callback" | head -n 10 || true
+
+
 
       - name: WireMock diagnostics (richer)
         if: failure()
