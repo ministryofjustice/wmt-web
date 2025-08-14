@@ -23,25 +23,21 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-        ports:
-          - "5432:5432"
+        ports: [ "5432:5432" ]
         options: >-
           --health-cmd="pg_isready -U postgres -d postgres"
           --health-interval=5s --health-timeout=5s --health-retries=20
       localstack:
         image: localstack/localstack:latest
-        ports:
-          - "4566:4566"
+        ports: [ "4566:4566" ]
         env:
           SERVICES: s3,sqs,sns
       wiremock:
         image: wiremock/wiremock:2.35.0
-        ports:
-          - "8099:8080"
+        ports: [ "8099:8080" ]
       redis:
         image: redis:7-alpine
-        ports:
-          - "6379:6379"
+        ports: [ "6379:6379" ]
 
     env:
       AWS_DEFAULT_REGION: eu-west-2
@@ -101,8 +97,7 @@ jobs:
             /bin/sh -lc 'sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar'
 
       - name: Wait for DB schema
-        env:
-          PGPASSWORD: postgres
+        env: { PGPASSWORD: postgres }
         run: |
           for i in {1..120}; do
             psql -h 127.0.0.1 -U postgres -d postgres -tAc \
@@ -140,31 +135,28 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-        ports:
-          - "5432:5432"
+        ports: [ "5432:5432" ]
         options: >-
           --health-cmd="pg_isready -U postgres -d postgres"
           --health-interval=5s --health-timeout=5s --health-retries=20
       localstack:
         image: localstack/localstack:latest
-        ports:
-          - "4566:4566"
+        ports: [ "4566:4566" ]
         env:
           SERVICES: s3,sqs,sns
       wiremock:
         image: wiremock/wiremock:2.35.0
-        ports:
-          - "8099:8080"
+        ports: [ "8099:8080" ]
       redis:
         image: redis:7-alpine
-        ports:
-          - "6379:6379"
+        ports: [ "6379:6379" ]
 
     env:
       AWS_DEFAULT_REGION: eu-west-2
       AWS_ACCESS_KEY_ID: foobar
       AWS_SECRET_ACCESS_KEY: foobar
       LS: http://127.0.0.1:4566
+
       APP_PORT: "3000"
       BASE_URL: http://127.0.0.1:3000
       WIREMOCK_URL: http://127.0.0.1:8099
@@ -241,8 +233,7 @@ jobs:
             /bin/sh -lc 'sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar'
 
       - name: Wait for DB schema
-        env:
-          PGPASSWORD: postgres
+        env: { PGPASSWORD: postgres }
         run: |
           for i in {1..120}; do
             psql -h 127.0.0.1 -U postgres -d postgres -tAc \
@@ -257,7 +248,7 @@ jobs:
           ls -lah test/e2e/resources/wiremock || (echo "wiremock folder missing" && exit 1)
           ls -lah test/e2e/resources/wiremock/mappings || (echo "mappings folder missing" && exit 1)
 
-      - name: Load WireMock mappings (retry) + auth sanity
+      - name: Load WireMock mappings (retry) + basic sanity
         run: |
           set -euo pipefail
           for i in {1..10}; do
@@ -266,78 +257,41 @@ jobs:
           done
           npm run post-wiremock-mappings
           echo "Mappings: $(curl -s $WIREMOCK_URL/__admin/mappings | jq '.mappings | length')"
-          curl -sS -i "$WIREMOCK_URL/auth/health/ping" | head -n 20 || true
-          curl -sS -i "$WIREMOCK_URL/auth/oauth/token" | head -n 20 || true
-          curl -sS -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=$BASE_URL/sign-in/callback&response_type=code&state=x" | head -n 20 || true
 
-      - name: Patch WireMock auth endpoints (/auth prefix)
-        env:
-          WIREMOCK_URL: http://127.0.0.1:8099
-          BASE_URL: http://127.0.0.1:3000
+      - name: Patch WireMock auth mappings
         run: |
           set -euo pipefail
-          W="$WIREMOCK_URL"; APP="$BASE_URL"
 
-          # /auth/health/ping
-          curl -s -X POST "$W/__admin/mappings" \
-            -H 'Content-Type: application/json' --data-binary @- >/dev/null <<'JSON'
-          { "priority":1,
-            "request":{"method":"GET","urlPath":"/auth/health/ping"},
-            "response":{"status":200,"jsonBody":{"status":"UP"}}
-          }
+          curl -sS -X POST "$WIREMOCK_URL/__admin/mappings" \
+            -H 'Content-Type: application/json' -d @- <<'JSON'
+          { "priority": 1, "request": { "method": "GET", "urlPath": "/auth/oauth/authorize" },
+            "response": { "status": 302,
+              "headers": { "Location": "{{request.query.redirect_uri}}?code=codexxxx&state={{request.query.state}}" },
+              "transformers": ["response-template"] } }
           JSON
 
-          # /auth/oauth/token (POST)
-          curl -s -X POST "$W/__admin/mappings" \
-            -H 'Content-Type: application/json' --data-binary @- >/dev/null <<'JSON'
-          { "priority":1,
-            "request":{"method":"POST","urlPath":"/auth/oauth/token"},
-            "response":{"status":200,"headers":{"Content-Type":"application/json"},
-                        "jsonBody":{"access_token":"fake-token","token_type":"bearer","expires_in":3600}}
-          }
+          curl -sS -X POST "$WIREMOCK_URL/__admin/mappings" \
+            -H 'Content-Type: application/json' -d @- <<'JSON'
+          { "priority": 1, "request": { "method": "GET", "urlPath": "/oauth/authorize" },
+            "response": { "status": 302,
+              "headers": { "Location": "{{request.query.redirect_uri}}?code=codexxxx&state={{request.query.state}}" },
+              "transformers": ["response-template"] } }
           JSON
 
-          # /auth/oauth/token (GET) – some flows accidentally GET it; be tolerant
-          curl -s -X POST "$W/__admin/mappings" \
-            -H 'Content-Type: application/json' --data-binary @- >/dev/null <<'JSON'
-          { "priority":1,
-            "request":{"method":"GET","urlPath":"/auth/oauth/token"},
-            "response":{"status":200,"headers":{"Content-Type":"application/json"},
-                        "jsonBody":{"access_token":"fake-token","token_type":"bearer","expires_in":3600}}
-          }
+          curl -sS -X POST "$WIREMOCK_URL/__admin/mappings" \
+            -H 'Content-Type: application/json' -d @- <<'JSON'
+          { "priority": 1, "request": { "method": "GET", "urlPath": "/auth/health/ping" },
+            "response": { "status": 200, "jsonBody": { "status": "UP" } } }
           JSON
 
-          # /auth/oauth/authorize (GET → 302 to /sign-in/callback with state echo)
-          # Use response-template so ?state=… is preserved
-          curl -s -X POST "$W/__admin/mappings" \
-            -H 'Content-Type: application/json' --data-binary @- >/dev/null <<'JSON'
-          {
-            "priority": 1,
-            "request": { "method": "GET", "urlPath": "/auth/oauth/authorize" },
-            "response": {
-              "status": 302,
-              "headers": {
-                "Location": "http://127.0.0.1:3000/sign-in/callback?code=codexxxx&state={{ request.query.state }}"
-              },
-              "transformers": ["response-template"]
-            }
-          }
+          curl -sS -X POST "$WIREMOCK_URL/__admin/mappings" \
+            -H 'Content-Type: application/json' -d @- <<'JSON'
+          { "priority": 1, "request": { "method": "POST", "urlPath": "/auth/oauth/token" },
+            "response": { "status": 200,
+              "headers": { "Content-Type": "application/json;charset=UTF-8" },
+              "jsonBody": { "access_token": "***", "token_type": "bearer",
+                "user_name": "USER1", "expires_in": 599, "scope": "read", "internalUser": true } } }
           JSON
-
-          # Quick sanity
-          echo -n "authorize => "
-          curl -s -o /dev/null -w "%{http_code}\n" \
-            "$W/auth/oauth/authorize?client_id=workload-measurement-ui&state=xyz&response_type=code&redirect_uri=$APP/sign-in/callback"
-
-          echo -n "token POST => "
-          curl -s -o /dev/null -w "%{http_code}\n" -X POST "$W/auth/oauth/token"
-
-          echo -n "token GET  => "
-          curl -s -o /dev/null -w "%{http_code}\n" "$W/auth/oauth/token"
-
-          echo -n "health     => "
-          curl -s -o /dev/null -w "%{http_code}\n" "$W/auth/health/ping"
-
 
       - name: Build assets
         run: npm run build
@@ -373,14 +327,14 @@ jobs:
           nohup node app/bin/www > /tmp/app.log 2>&1 &
           ready=""
           for i in {1..120}; do
-          code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:3000/" || echo "000")
-          if [ "$code" = "200" ] || [ "$code" = "302" ]; then
-          echo "App ready at http://127.0.0.1:3000 ($code)"; ready="yes"; break
-          fi
-          echo "Waiting for app... ($i/120) got $code"; sleep 2
+            code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:3000/" || echo "000")
+            if [ "$code" = "200" ] || [ "$code" = "302" ]; then
+              echo "App ready at http://127.0.0.1:3000 ($code)"; ready="yes"; break
+            fi
+            echo "Waiting for app... ($i/120) got $code"; sleep 2
           done
           if [ -z "$ready" ]; then
-          echo "App failed to become ready. Tail of /tmp/app.log:"; tail -n 400 /tmp/app.log || true; exit 1
+            echo "App failed to become ready. Tail of /tmp/app.log:"; tail -n 400 /tmp/app.log || true; exit 1
           fi
           tail -n 200 /tmp/app.log || true
 
@@ -409,8 +363,6 @@ jobs:
               browserName: c.browserName || 'chrome',
               ...c,
               'goog:chromeOptions': { ...opts, args: Array.from(args) },
-              // 👇 enable browser console logs
-              'goog:loggingPrefs': { browser: 'ALL' },
               'wdio:enforceWebDriverClassic': true
             };
             if (process.env.CHROME_BIN) out['goog:chromeOptions'].binary = process.env.CHROME_BIN;
@@ -434,31 +386,27 @@ jobs:
             capabilities: caps,
             specs,
             exclude,
-            // 👇 honor env, default to info
-            logLevel: process.env.WDIO_LOG_LEVEL || base.logLevel || 'info',
-            outputDir: base.outputDir || './wdio-logs',
-            // 👇 save page HTML + console logs for failures
-            afterTest: async function (test, context, { error, passed }) {
-              if (passed) return
-              const outDir = path.resolve(process.cwd(), 'wdio-logs')
-              fs.mkdirSync(outDir, { recursive: true })
-              try {
-                const url = await browser.getUrl()
-                fs.writeFileSync(path.join(outDir, `FAILED_${Date.now()}_url.txt`), url)
-              } catch {}
-              try {
-                const html = await browser.getPageSource()
-                fs.writeFileSync(path.join(outDir, `FAILED_${Date.now()}.html`), html)
-              } catch {}
-              try {
-                const logs = await browser.getLogs('browser')
-                fs.writeFileSync(path.join(outDir, `FAILED_${Date.now()}_console.json`), JSON.stringify(logs, null, 2))
-              } catch {}
-            }
+            logLevel: base.logLevel || 'info',
+            outputDir: base.outputDir || './wdio-logs'
           };
           JS
 
-      - name: Run E2E (wdio with isolated Chrome profile)
+      # NEW: run only ONE spec (override by setting SPEC env if you want a different file)
+      - name: Pick one E2E spec
+        id: pickspec
+        run: |
+          set -euo pipefail
+          SPEC="${SPEC:-}"
+          if [ -z "$SPEC" ]; then
+            SPEC=$(ls -1 test/e2e/*.js test/e2e/**/*.js 2>/dev/null | head -n 1 || true)
+          fi
+          if [ -z "$SPEC" ]; then
+            echo "No spec files found under test/e2e/"; exit 1
+          fi
+          echo "Running single spec: $SPEC"
+          echo "spec=$SPEC" >> "$GITHUB_OUTPUT"
+
+      - name: Run E2E (single spec; isolated Chrome profile)
         env:
           BASE_URL: ${{ env.BASE_URL }}
           DATABASE_SERVER: 127.0.0.1
@@ -468,10 +416,6 @@ jobs:
           DATABASE_PORT: "5432"
           DATABASE_SSL: "false"
           CHROME_BIN: ${{ env.CHROME_BIN }}
-          # 👇 set this to the one spec you want to run
-          E2E_SPEC: test/e2e/create-admin-reduction-reasons.js
-          # optional: increase WDIO verbosity
-          WDIO_LOG_LEVEL: debug
         run: |
           set -euo pipefail
           export $(grep -v '^\s*#' feature.env | xargs)
@@ -479,9 +423,7 @@ jobs:
           npm run clean-dev-data
           npm run seed-dev-data
           pkill -f "chrome" || true
-          EXTRA=""
-          if [ -n "${E2E_SPEC:-}" ]; then EXTRA="--spec ${E2E_SPEC}"; fi
-          npx wdio wdio.ci.conf.js --workers 1 $EXTRA
+          npx wdio wdio.ci.conf.js --workers 1 --spec "${{ steps.pickspec.outputs.spec }}"
           npm run clean-dev-data
 
       - name: Upload E2E artifacts (on failure)
