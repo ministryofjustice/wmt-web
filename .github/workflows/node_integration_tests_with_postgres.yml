@@ -371,32 +371,12 @@ jobs:
       - name: Load WireMock mappings (your script)
         run: npm run post-wiremock-mappings
 
-      - name: Sanity check authorize redirect renders
-        run: |
-          curl -s -i "http://127.0.0.1:8099/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/sign-in/callback&response_type=code&state=xyz" | head -n 20
-
-      - name: Build assets
-        run: npm run build
-
-      - name: Reset WireMock & load critical auth stubs (priority 1)
+      - name: Augment WireMock (no reset) - add high-priority /auth/authorize + ensure health stubs
         env:
           BASE_URL: ${{ env.BASE_URL }}
           WIREMOCK_URL: ${{ env.WIREMOCK_URL }}
         run: |
           set -euo pipefail
-
-          # Make sure WireMock is up
-          for i in {1..20}; do
-            if curl -fsS "$WIREMOCK_URL/__admin" >/dev/null; then break; fi
-            echo "Waiting for WireMock... ($i/20)"; sleep 2
-          done
-
-          # Start clean & enable templating
-          curl -fsS -X POST "$WIREMOCK_URL/__admin/mappings/reset" >/dev/null || true
-          curl -fsS -X POST "$WIREMOCK_URL/__admin/reset"           >/dev/null || true
-          curl -fsS -X POST "$WIREMOCK_URL/__admin/settings" \
-            -H 'Content-Type: application/json' \
-            -d '{"globalTemplating": true}' >/dev/null || true
 
           post() {
             curl -fsS -X POST "$WIREMOCK_URL/__admin/mappings" \
@@ -404,14 +384,24 @@ jobs:
               -d "$1" >/dev/null
           }
 
-          # /auth/health/ping
+          # Keep your repo mappings, just add a high-priority authorize override that always 302s
           post '{
             "priority": 1,
-            "request": { "method":"GET", "url":"/auth/health/ping" },
-            "response": { "status":200, "jsonBody":{ "status":"UP" } }
+            "request": { "method":"GET", "urlPattern": "/auth/oauth/authorize.*" },
+            "response": {
+              "status": 302,
+              "headers": {
+                "Location": "{{request.query.redirect_uri}}?code=codexxxx&state={{request.query.state}}"
+              },
+              "transformers": ["response-template"]
+            }
           }'
 
-          # /auth/oauth/token
+          # Ensure BOTH health endpoints exist (your app hits /health/ping; hmppsAuth hits /auth/health/ping)
+          post '{ "priority":1, "request":{"method":"GET","url":"/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }'
+          post '{ "priority":1, "request":{"method":"GET","url":"/auth/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }'
+
+          # (Optional, but harmless) ensure token endpoint too
           post '{
             "priority": 1,
             "request": { "method":"POST", "url":"/auth/oauth/token" },
@@ -426,30 +416,19 @@ jobs:
             }
           }'
 
-          # /auth/oauth/authorize -> always 302 to whatever redirect_uri is provided
-          # urlPattern matches ANY query param order
-          post '{
-            "priority": 1,
-            "request": {
-              "method":"GET",
-              "urlPattern": "/auth/oauth/authorize.*"
-            },
-            "response": {
-              "status": 302,
-              "headers": {
-                "Location": "{{request.query.redirect_uri}}?code=codexxxx&state={{request.query.state}}"
-              },
-              "transformers": ["response-template"]
-            }
-          }'
-
-          # Prove it: should be a 302 to BASE_URL/sign-in/callback (or whatever redirect_uri you pass)
-          echo -e "Authorize probe (expect 302):"
-          curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/sign-in/callback&response_type=code&state=xyz" | head -n 20
-
-          echo -n "Total mappings now: "
+          echo -n "Total mappings: "
           curl -s "$WIREMOCK_URL/__admin/mappings" | jq '.mappings | length'
 
+          echo "Authorize probe (expect 302 to ${BASE_URL}/sign-in/callback):"
+          curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/sign-in/callback&response_type=code&state=xyz" | head -n 20
+
+
+      - name: Sanity check authorize redirect renders
+        run: |
+          curl -s -i "http://127.0.0.1:8099/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/sign-in/callback&response_type=code&state=xyz" | head -n 20
+
+      - name: Build assets
+        run: npm run build
 
       - name: Start app (direct; robust wait; 127.0.0.1 everywhere)
         env:
