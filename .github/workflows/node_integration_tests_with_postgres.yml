@@ -150,14 +150,43 @@ jobs:
         options: >-
           --health-cmd="pg_isready -U postgres -d postgres"
           --health-interval=5s --health-timeout=5s --health-retries=20
+
       localstack:
         image: localstack/localstack:latest
         ports: [ "4566:4566" ]
         env:
           SERVICES: s3,sqs,sns
+
       redis:
         image: redis:7-alpine
         ports: [ "6379:6379" ]
+
+      # Real auth stack like local compose
+      hmpps-auth:
+        image: quay.io/hmpps/hmpps-auth:latest
+        ports: [ "9090:9090" ]
+        env:
+          SPRING_PROFILES_ACTIVE: dev,delius
+          DELIUS_ENABLED: "true"
+          SERVER_PORT: "9090"
+          MANAGE_USERS_API_ENABLED: "true"
+          # inside this container, reach the manage-users service via the host
+          MANAGE_USERS_API_ENDPOINT_URL: http://host.docker.internal:9091
+
+      hmpps-manage-users-api:
+        image: quay.io/hmpps/hmpps-manage-users-api:latest
+        ports: [ "9091:9091" ]
+        env:
+          SPRING_PROFILES_ACTIVE: dev,delius
+          DELIUS_ENABLED: "true"
+          SERVER_PORT: "9091"
+          MANAGE_USERS_API_ENABLED: "true"
+
+      # Single WireMock like local compose
+      wiremock:
+        image: wiremock/wiremock:2.35.0
+        ports: [ "8099:8080" ]
+        command: [ "--port", "8080", "--global-response-templating" ]
 
     env:
       AWS_DEFAULT_REGION: eu-west-2
@@ -167,36 +196,25 @@ jobs:
 
       APP_PORT: "3000"
       BASE_URL: http://127.0.0.1:3000
-      # default WireMock used by app config; mappings will be loaded to all three ports
       WIREMOCK_URL: http://127.0.0.1:8099
       CHROME_BIN: /usr/bin/google-chrome
 
     steps:
       - uses: actions/checkout@v4
 
-      # Start three WireMock containers exactly like CircleCI, enable response templating, and wait for readiness
-      - name: Start WireMock (8098/8099/8100) cleanly
+      - name: Wait for platform services
         run: |
           set -euo pipefail
-          start_wm() {
-            local PORT="$1"
-            docker run -d --name "wiremock-${PORT}" -p "${PORT}:8080" \
-              wiremock/wiremock:2.35.0 --port 8080 --global-response-templating
-            for i in {1..30}; do
-              curl -fsS "http://127.0.0.1:${PORT}/__admin" >/dev/null && break
-              echo "Waiting for WireMock on ${PORT}... ($i/30)"; sleep 2
-            done
-            # Clean slate (journal + mappings state)
-            curl -fsS -X POST "http://127.0.0.1:${PORT}/__admin/reset" >/dev/null
-            curl -fsS -X POST "http://127.0.0.1:${PORT}/__admin/mappings/reset" >/dev/null || true
-          }
-          for PORT in 8098 8099 8100; do start_wm "$PORT"; done
-
-      - name: Wait for other services
-        run: |
           for i in {1..60}; do pg_isready -h 127.0.0.1 -p 5432 -U postgres -d postgres && break; sleep 1; done
-          curl -sfS --retry 30 --retry-connrefused --retry-delay 2 "$LS/_localstack/health" || exit 1
+          curl -sfS --retry 30 --retry-connrefused --retry-delay 2 "$LS/_localstack/health" >/dev/null
           for i in {1..60}; do (echo > /dev/tcp/127.0.0.1/6379) >/dev/null 2>&1 && break; sleep 1; done
+          # Auth stack health (both forms for safety)
+          for i in {1..60}; do curl -fsS "http://127.0.0.1:9090/auth/health/ping" >/dev/null && break; echo "wait auth $i"; sleep 2; done
+          for i in {1..60}; do curl -fsS "http://127.0.0.1:9091/health/ping" >/dev/null && break; echo "wait manage-users $i"; sleep 2; done
+          # WireMock readiness + clean slate
+          for i in {1..30}; do curl -fsS "http://127.0.0.1:8099/__admin" >/dev/null && break; echo "wait wiremock $i"; sleep 2; done
+          curl -fsS -X POST "http://127.0.0.1:8099/__admin/reset" >/dev/null
+          curl -fsS -X POST "http://127.0.0.1:8099/__admin/mappings/reset" >/dev/null || true
 
       - name: Setup AWS CLI + jq
         run: |
@@ -276,6 +294,8 @@ jobs:
         env:
           WMT_WEB_APPLICATION_SECRET: ci-dev-secret
           SESSION_SECRET: ci-session-secret
+
+          # DBs
           WMT_LIVE_DB_SERVER: 127.0.0.1
           WMT_LIVE_DB_NAME: postgres
           WMT_LIVE_DB_USERNAME: postgres
@@ -285,18 +305,24 @@ jobs:
           WMT_HISTORY_DB_NAME: postgres
           WMT_HISTORY_DB_USERNAME: postgres
           WMT_HISTORY_DB_PASSWORD: postgres
+
+          # Caches & inbound
           REDIS_HOST: 127.0.0.1
           REDIS_PORT: "6379"
           REDIS_URL: redis://127.0.0.1:6379
-          HMPPS_AUTH_URL: http://127.0.0.1:8099/auth
-          HMPPS_AUTH_EXTERNAL_URL: http://127.0.0.1:8099/auth
-          MANAGE_USERS_SERVICE_URL: http://127.0.0.1:8099
+          INGRESS_URL: http://127.0.0.1:3000
+          PORT: 3000
+
+          # Real auth + manage-users like local compose
+          HMPPS_AUTH_URL: http://127.0.0.1:9090/auth
+          HMPPS_AUTH_EXTERNAL_URL: http://127.0.0.1:9090/auth
+          MANAGE_USERS_SERVICE_URL: http://127.0.0.1:9091
+
+          # Everything else via WireMock 8099 (your existing mappings)
           ALLOCATIONS_SERVICE_URL: http://127.0.0.1:8099
           USER_PREFERENCE_SERVICE_URL: http://127.0.0.1:8099
           TOKEN_VERIFICATION_API_URL: http://127.0.0.1:8099
           TOKEN_VERIFICATION_ENABLED: "true"
-          INGRESS_URL: http://127.0.0.1:3000
-          PORT: 3000
         run: |
           set -euo pipefail
           export $(grep -v '^\s*#' feature.env | xargs) || true
@@ -310,16 +336,16 @@ jobs:
           done
           tail -n 200 /tmp/app.log || true
 
-      # Load your repo mappings into ALL WireMock instances (8098, 8099, 8100)
-      - name: Load WireMock mappings from repo (all ports)
+      - name: Load WireMock mappings from repo (clean)
+        env:
+          WIREMOCK_URL: ${{ env.WIREMOCK_URL }}
         run: |
           set -euo pipefail
-          for PORT in 8098 8099 8100; do
-            echo "Loading mappings into WireMock on :${PORT}"
-            WIREMOCK_URL="http://127.0.0.1:${PORT}" npm run post-wiremock-mappings
-            echo -n "Mappings total on ${PORT}: "
-            curl -s "http://127.0.0.1:${PORT}/__admin/mappings" | jq '.mappings | length'
-          done
+          curl -fsS -X POST "$WIREMOCK_URL/__admin/reset" >/dev/null
+          curl -fsS -X POST "$WIREMOCK_URL/__admin/mappings/reset" >/dev/null || true
+          npm run post-wiremock-mappings
+          echo -n "Mappings total on 8099: "
+          curl -s "$WIREMOCK_URL/__admin/mappings" | jq '.mappings | length'
 
       - name: Create WDIO CI config (single worker, headless)
         run: |
@@ -407,4 +433,3 @@ jobs:
             ./wdio-logs
             /tmp/app.log
           if-no-files-found: ignore
-
