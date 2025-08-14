@@ -258,7 +258,7 @@ jobs:
           npm run post-wiremock-mappings
           echo "Mappings: $(curl -s $WIREMOCK_URL/__admin/mappings | jq '.mappings | length')"
 
-      - name: Patch & Load WireMock mappings (redirect_uri + templating)
+      - name: Patch & Load WireMock mappings (order-safe authorize + templating)
         run: |
           set -euo pipefail
 
@@ -268,12 +268,12 @@ jobs:
             echo "Waiting for WireMock... ($i/20)"; sleep 2
           done
 
-          # Enable global templating (equivalent to --global-response-templating)
+          # Enable global templating (like --global-response-templating)
           curl -s -X POST "$WIREMOCK_URL/__admin/settings" \
             -H 'Content-Type: application/json' \
             -d '{"globalTemplating": true}' >/dev/null || true
 
-          # Build patched copies of your mappings
+          # Build patched copies of your mappings (fix response Location for any authorize stubs)
           PATCH_DIR="$(mktemp -d)"
           echo "Patching mappings into: $PATCH_DIR"
 
@@ -293,7 +293,7 @@ jobs:
             ' "$f" > "$PATCH_DIR/$base"
           done
 
-          # Post patched mappings (only these — we are not posting the originals)
+          # Post patched mappings (all of them)
           for f in "$PATCH_DIR"/*.json; do
             curl --silent --fail \
               --request POST \
@@ -302,10 +302,51 @@ jobs:
               --data-binary @"$f" >/dev/null
           done
 
-          # Quick sanity: how many authorize mappings, and does one 302 with our redirect_uri?
-          echo -n "Authorize mapping count: "
+          # NOW: delete ALL existing authorize stubs (patterns can be order-sensitive)
+          curl -s "$WIREMOCK_URL/__admin/mappings" | jq -r '
+            (.mappings // [])[]
+            | select(
+                (.request.urlPath? == "/auth/oauth/authorize")
+                or ((.request.urlPattern? // .request.urlPathPattern? // "") | test("auth/oauth/authorize"))
+              )
+            | .id
+          ' | while read -r id; do
+              echo "Deleting existing authorize mapping: $id"
+              curl -s -X DELETE "$WIREMOCK_URL/__admin/mappings/$id" >/dev/null
+            done
+
+          # Install a canonical, order-independent authorize mapping
+          cat > /tmp/authorize_canonical.json <<'JSON'
+          {
+            "priority": 1,
+            "request": {
+              "method": "GET",
+              "urlPath": "/auth/oauth/authorize",
+              "queryParameters": {
+                "response_type": { "equalTo": "code" },
+                "redirect_uri": { "matches": ".*" },
+                "state":        { "matches": ".*" },
+                "client_id":    { "equalTo": "workload-measurement-ui" }
+              }
+            },
+            "response": {
+              "status": 302,
+              "headers": {
+                "Location": "{{request.query.redirect_uri}}?code=codexxxx&state={{request.query.state}}"
+              },
+              "transformers": ["response-template"]
+            }
+          }
+          JSON
+
+          curl -s -X POST "$WIREMOCK_URL/__admin/mappings" \
+            -H 'content-type: application/json' \
+            --data-binary @/tmp/authorize_canonical.json >/dev/null
+
+          # Sanity: count & probe
+          echo -n "Authorize mapping count (expect 1): "
           curl -s "$WIREMOCK_URL/__admin/mappings" \
-            | jq '[.mappings[] | select(.request.urlPath? == "/auth/oauth/authorize" or ((.request.urlPattern? // .request.urlPathPattern? // "") | test("auth/oauth/authorize"))) ] | length'
+            | jq '[.mappings[] | select(.request.urlPath? == "/auth/oauth/authorize")] | length'
 
           echo "Probe authorize with redirect_uri=${BASE_URL}/sign-in/callback"
           curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?client_id=workload-measurement-ui&redirect_uri=${BASE_URL}/sign-in/callback&response_type=code&state=x" | head -n 20
