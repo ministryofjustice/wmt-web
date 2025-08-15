@@ -145,7 +145,6 @@ jobs:
 
       - run: ls -R ./artifacts
 
-  # keep your existing jobs below
   node_unit_tests:
     name: node unit tests
     uses: ./.github/workflows/node_unit_tests.yml
