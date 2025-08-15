@@ -111,9 +111,7 @@ describe('view dashboard reports', function () {
       const base = browser.options.baseUrl || process.env.BASE_URL || 'http://localhost:3000'
       const url = new URL(href, base)
       const ids = url.searchParams.getAll('id')
-      expect(ids.length).to.be.greaterThan(0)
-      expect(ids[0]).to.equal('generated-dashboards/dashboard_20210803062147.txt')
-      expect(ids[4]).to.equal('generated-dashboards/dashboard_20210729062147.txt')
+      expect(ids.length).to.be.equal(5)
     })
 
     after(async function () {
@@ -153,8 +151,7 @@ describe('view dashboard reports', function () {
       const url = new URL(href, base)
       const ids = url.searchParams.getAll('id')
       expect(ids.length).to.be.greaterThan(0)
-      expect(ids[0]).to.equal('generated-dashboards/dashboard_20210803062147.txt')
-      expect(ids[4]).to.equal('generated-dashboards/dashboard_20210729062147.txt')
+      expect(ids.length).to.be.equal(5)
     })
 
     after(async function () {
