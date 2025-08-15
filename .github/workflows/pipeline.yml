@@ -145,10 +145,9 @@ jobs:
 
       - run: ls -R ./artifacts
 
-  # keep your existing jobs below
   node_unit_tests:
     name: node unit tests
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_unit_tests.yml@v2
+    uses: ./.github/workflows/node_unit_tests.yml
     needs: [node_build]
     secrets: inherit
 
