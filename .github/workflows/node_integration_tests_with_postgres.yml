@@ -1,0 +1,551 @@
+name: Integration & E2E Tests
+
+on:
+  workflow_call:
+    inputs:
+      node_version_file:
+        description: "setup-node reads Node version from here"
+        required: false
+        type: string
+        default: ".nvmrc"
+
+permissions:
+  contents: read
+
+jobs:
+  integration-tests:
+    name: integration tests
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports: [ "5432:5432" ]
+        options: >-
+          --health-cmd="pg_isready -U postgres -d postgres"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+      localstack:
+        image: localstack/localstack:latest
+        ports: [ "4566:4566" ]
+        env:
+          SERVICES: s3,sqs,sns
+      redis:
+        image: redis:7-alpine
+        ports: [ "6379:6379" ]
+
+    env:
+      AWS_DEFAULT_REGION: eu-west-2
+      AWS_ACCESS_KEY_ID: foobar
+      AWS_SECRET_ACCESS_KEY: foobar
+      LS: http://127.0.0.1:4566
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start WireMock (global response templating)
+        run: |
+          docker run -d --name wiremock-ci \
+            -p 8099:8080 \
+            wiremock/wiremock:2.35.0 \
+            --port 8080 --global-response-templating
+          # wait until ready
+          for i in {1..30}; do
+            curl -fsS "http://127.0.0.1:8099/__admin" >/dev/null && break
+            echo "Waiting for WireMock... ($i/30)"; sleep 2
+          done
+          # quick proof that templating is ON (this endpoint exists in v2.35 but doesn't reflect global flag,
+          # so we'll do a live render check right after mappings are loaded)
+
+      - name: Wait for services
+        run: |
+          for i in {1..60}; do pg_isready -h 127.0.0.1 -p 5432 -U postgres -d postgres && break; sleep 1; done
+          curl -sfS --retry 20 --retry-connrefused --retry-delay 2 "$LS/_localstack/health" || exit 1
+          curl -sfS --retry 20 --retry-connrefused --retry-delay 2 "http://127.0.0.1:8099/__admin" || exit 1
+          for i in {1..60}; do (echo > /dev/tcp/127.0.0.1/6379) >/dev/null 2>&1 && break; sleep 1; done
+
+      - name: Install jq & psql client
+        run: |
+          set -euxo pipefail
+          sudo sed -i 's|^deb |# deb |' /etc/apt/sources.list.d/azure-cli*.list || true
+          sudo sed -i 's|^deb |# deb |' /etc/apt/sources.list.d/dotnet*.list || true
+
+          # Update with retries and shorter timeouts
+          sudo apt-get update \
+            -o Acquire::Retries=5 \
+            -o Acquire::http::Timeout=15 \
+            -o Acquire::https::Timeout=15
+
+          sudo apt-get install -y --no-install-recommends jq postgresql-client
+
+      - name: Setup AWS CLI
+        run: |
+          python3 -m pip install --user --upgrade pip
+          python3 -m pip install --user "awscli==1.*"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Create sample dashboard file (used for uploads)
+        run: printf 'dashboard' > dashboard-file.txt
+
+      - name: Seed LocalStack (S3 + SQS)
+        run: |
+          set -euo pipefail
+          aws --endpoint-url="$LS" sqs create-queue --queue-name audit_event_queue || true
+          aws --endpoint-url="$LS" s3api create-bucket \
+            --bucket wmt-web \
+            --region "$AWS_DEFAULT_REGION" \
+            --create-bucket-configuration LocationConstraint="$AWS_DEFAULT_REGION" || true
+          # 5 dummy dashboard files
+          for ts in \
+            20210729062147 \
+            20210730062147 \
+            20210801062147 \
+            20210802062147 \
+            20210803062147; do
+            aws --endpoint-url="$LS" s3api put-object \
+            --bucket wmt-web \
+            --key generated-dashboards/dashboard_${ts}.txt \
+            --body dashboard-file.txt
+          done
+
+      - name: Start hmpps_workload container
+        run: |
+          docker run -d --name hmpps_workload \
+            --add-host=host.docker.internal:host-gateway \
+            -e SPRING_PROFILES_ACTIVE=dev,docker \
+            -e DATABASE_USERNAME=postgres \
+            -e DATABASE_PASSWORD=postgres \
+            -e DATABASE_ENDPOINT=host.docker.internal:5432 \
+            -e HMPPS_SQS_LOCALSTACK_URL=http://host.docker.internal:4566 \
+            ghcr.io/ministryofjustice/hmpps-workload:latest \
+            /bin/sh -lc 'sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar'
+
+      - name: Wait for DB schema
+        env: { PGPASSWORD: postgres }
+        run: |
+          for i in {1..120}; do
+            psql -h 127.0.0.1 -U postgres -d postgres -tAc \
+              "SELECT 1 FROM information_schema.tables WHERE table_name='flyway_schema_history'" | grep -q 1 && exit 0
+            sleep 2
+          done
+          echo "Schema not ready in time"; docker logs hmpps_workload || true; exit 1
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ${{ inputs.node_version_file }}
+
+      - name: Install deps
+        run: npm ci --no-audit
+
+      - name: Run integration tests
+        env:
+          DATABASE_SERVER: 127.0.0.1
+          DATABASE_USERNAME: postgres
+          DATABASE_PASSWORD: postgres
+          DATABASE: postgres
+          DATABASE_PORT: "5432"
+          DATABASE_SSL: "false"
+        run: npm run integration-test
+
+  e2e-tests:
+    name: e2e tests (WireMock-only auth + manage-users)
+    needs: integration-tests
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports: [ "5432:5432" ]
+        options: >-
+          --health-cmd="pg_isready -U postgres -d postgres"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+
+      localstack:
+        image: localstack/localstack:latest
+        ports: [ "4566:4566" ]
+        env:
+          SERVICES: s3,sqs,sns
+
+      redis:
+        image: redis:7-alpine
+        ports: [ "6379:6379" ]
+
+    env:
+      AWS_DEFAULT_REGION: eu-west-2
+      AWS_ACCESS_KEY_ID: foobar
+      AWS_SECRET_ACCESS_KEY: foobar
+      LS: http://127.0.0.1:4566
+
+      APP_PORT: "3000"
+      BASE_URL: http://localhost:3000
+      WIREMOCK_URL: http://127.0.0.1:8099
+      CHROME_BIN: /usr/bin/google-chrome
+      WDIO_LOG_LEVEL: debug
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # WireMock (single instance @ 8099) — clean start with response-templating
+      - name: Start WireMock (global response templating)
+        run: |
+          set -euxo pipefail
+          docker run -d --name wiremock-ci \
+            -p 8099:8080 \
+            wiremock/wiremock:2.35.0 \
+            --port 8080 --global-response-templating
+          for i in {1..40}; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:8099/__admin" || true)
+            [ "$code" = "200" ] && break
+            echo "Waiting for WireMock... ($i/40) code=$code"; sleep 2
+          done
+          curl -fsS "http://127.0.0.1:8099/__admin" | jq '.'
+
+      - name: Wait for core services (Postgres, LocalStack, Redis)
+        run: |
+          set -euxo pipefail
+          for i in {1..60}; do pg_isready -h 127.0.0.1 -p 5432 -U postgres -d postgres && break; sleep 1; done
+          curl -sv --retry 30 --retry-connrefused --retry-delay 2 "$LS/_localstack/health" | cat
+          for i in {1..60}; do (echo > /dev/tcp/127.0.0.1/6379) >/dev/null 2>&1 && break; sleep 1; done
+
+      - name: Setup AWS CLI + jq
+        run: |
+          set -euxo pipefail
+          sudo apt-get update -y
+          sudo apt-get install -y jq
+          python3 -m pip install --user --upgrade pip
+          python3 -m pip install --user "awscli==1.*"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Seed LocalStack (queue + sample dashboards)
+        run: |
+          set -euxo pipefail
+          aws --endpoint-url="$LS" sqs create-queue --queue-name audit_event_queue || true
+          aws --endpoint-url="$LS" s3api create-bucket \
+            --bucket wmt-web \
+            --region "$AWS_DEFAULT_REGION" \
+            --create-bucket-configuration LocationConstraint="$AWS_DEFAULT_REGION" || true
+          printf 'dashboard' > dashboard-file.txt
+          # 5 dummy dashboard files
+          for ts in \
+            20210729062147 \
+            20210730062147 \
+            20210801062147 \
+            20210802062147 \
+            20210803062147; do
+            aws --endpoint-url="$LS" s3api put-object \
+            --bucket wmt-web \
+            --key generated-dashboards/dashboard_${ts}.txt \
+            --body dashboard-file.txt
+          done
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install deps
+        run: npm ci --no-audit
+
+      - name: Install Google Chrome (for WDIO)
+        run: |
+          set -euxo pipefail
+          sudo apt-get update
+          sudo apt-get install -y wget gpg
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-linux-signing-keyring.gpg
+          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-linux-signing-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list >/dev/null
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+          google-chrome --version
+
+      - name: Install psql client
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y postgresql-client
+
+      - name: Start hmpps_workload container
+        run: |
+          set -euxo pipefail
+          docker run -d --name hmpps_workload \
+            --add-host=host.docker.internal:host-gateway \
+            -e SPRING_PROFILES_ACTIVE=dev,docker \
+            -e DATABASE_USERNAME=postgres \
+            -e DATABASE_PASSWORD=postgres \
+            -e DATABASE_ENDPOINT=host.docker.internal:5432 \
+            -e HMPPS_SQS_LOCALSTACK_URL=http://host.docker.internal:4566 \
+            ghcr.io/ministryofjustice/hmpps-workload:latest \
+            /bin/sh -lc 'sleep 10 && java -javaagent:/app/agent.jar -jar /app/app.jar'
+
+      - name: Wait for DB schema
+        env: { PGPASSWORD: postgres }
+        run: |
+          set -euxo pipefail
+          for i in {1..120}; do
+            psql -h 127.0.0.1 -U postgres -d postgres -tAc \
+              "SELECT 1 FROM information_schema.tables WHERE table_name='flyway_schema_history'" | grep -q 1 && exit 0
+            echo "Waiting for Flyway schema... ($i/120)"; sleep 2
+          done
+          echo "Schema not ready in time"; docker logs hmpps_workload || true; exit 1
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Start app (direct)
+        env:
+          WMT_WEB_APPLICATION_SECRET: ci-dev-secret
+          SESSION_SECRET: ci-session-secret
+          WMT_LIVE_DB_SERVER: 127.0.0.1
+          WMT_LIVE_DB_NAME: postgres
+          WMT_LIVE_DB_USERNAME: postgres
+          WMT_LIVE_DB_PASSWORD: postgres
+          WMT_HISTORY_DB_SERVER: 127.0.0.1
+          WMT_HISTORY_DB_PORT: "5432"
+          WMT_HISTORY_DB_NAME: postgres
+          WMT_HISTORY_DB_USERNAME: postgres
+          WMT_HISTORY_DB_PASSWORD: postgres
+          REDIS_HOST: 127.0.0.1
+          REDIS_PORT: "6379"
+          REDIS_URL: redis://127.0.0.1:6379
+
+          # point the app to WireMock for everything auth/manage-users/token-verification
+          HMPPS_AUTH_URL: http://127.0.0.1:8099/auth
+          HMPPS_AUTH_EXTERNAL_URL: http://127.0.0.1:8099/auth
+          MANAGE_USERS_SERVICE_URL: http://127.0.0.1:8099
+          ALLOCATIONS_SERVICE_URL: http://127.0.0.1:8099
+          USER_PREFERENCE_SERVICE_URL: http://127.0.0.1:8099
+          TOKEN_VERIFICATION_API_URL: http://127.0.0.1:8099
+          TOKEN_VERIFICATION_ENABLED: "true"
+
+          INGRESS_URL: http://localhost:3000
+          PORT: 3000
+        run: |
+          set -euxo pipefail
+          export $(grep -v '^\s*#' feature.env | xargs) || true
+          nohup node app/bin/www > /tmp/app.log 2>&1 &
+          for i in {1..120}; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:3000/" || echo "000")
+            if [ "$code" = "200" ] || [ "$code" = "302" ]; then
+              echo "App ready at http://localhost:3000 ($code)"; break
+            fi
+            echo "Waiting for app... ($i/120)"; sleep 2
+          done
+          tail -n 200 /tmp/app.log || true
+
+      # Load your repo mappings first
+      - name: Load WireMock mappings from repo
+        run: npm run post-wiremock-mappings
+
+      # … keep your existing “Load WireMock mappings from repo” step …
+
+      - name: Override Auth in WireMock (token only; keep your /authorize)
+        env:
+          BASE_URL: ${{ env.BASE_URL }}
+          WIREMOCK_URL: ${{ env.WIREMOCK_URL }}
+        run: |
+          set -euo pipefail
+          CURL="curl -sS --fail-with-body -H 'Content-Type: application/json'"
+
+          # ✅ valid dummy JWT; header+payload decode; signature is junk (fine for jwt-decode)
+          STATIC_JWT='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJVU0VSMSIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdLCJhdXRoX3NvdXJjZSI6Im5vbWlzIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9NQU5BR0VfQV9XT1JLRk9SQ0VfQUxMT0NBVEUiLCJST0xFX1dPUktMT0FEX01FQVNVUkVNRU5UIl0sImp0aSI6ImE2MTBhMTAtY2NhNi00MWRiLTk4NWYtZTg3ZWZiMzAzYWFmIiwiY2xpZW50X2lkIjoiY2xpZW50aWQiLCJpYXQiOjE3NDg1MzE2NTksImV4cCI6MTc0ODUzNTI1OX0.g8M2QmC31IY9GMYXUIEQTLW5UNLUQDyunRP8bq0FQBo'
+
+          echo "Posting WireMock overrides…"
+
+          # Health pings (optional, useful in logs)
+          $CURL -X POST "$WIREMOCK_URL/__admin/mappings" -d @- <<'JSON'
+          { "priority":1, "request":{"method":"GET","url":"/auth/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }
+          JSON
+          $CURL -X POST "$WIREMOCK_URL/__admin/mappings" -d @- <<'JSON'
+          { "priority":1, "request":{"method":"GET","url":"/health/ping"}, "response":{"status":200,"jsonBody":{"status":"UP"}} }
+          JSON
+
+          # Token (/auth/oauth/token) -> fixed JSON with our STATIC_JWT
+          $CURL -X POST "$WIREMOCK_URL/__admin/mappings" -d @- <<JSON
+          {
+            "priority": 1,
+            "request": { "method": "POST", "url": "/auth/oauth/token" },
+            "response": {
+              "status": 200,
+              "headers": { "Content-Type": "application/json; charset=UTF-8" },
+              "jsonBody": {
+                "access_token": "${STATIC_JWT}",
+                "token_type": "bearer",
+                "user_name": "USER1",
+                "expires_in": 599,
+                "scope": "read",
+                "internalUser": true
+              }
+            }
+          }
+          JSON
+
+          # Token (/oauth/token) -> same JSON
+          $CURL -X POST "$WIREMOCK_URL/__admin/mappings" -d @- <<JSON
+          {
+            "priority": 1,
+            "request": { "method": "POST", "url": "/oauth/token" },
+            "response": {
+              "status": 200,
+              "headers": { "Content-Type": "application/json; charset=UTF-8" },
+              "jsonBody": {
+                "access_token": "${STATIC_JWT}",
+                "token_type": "bearer",
+                "user_name": "wmt_staff",
+                "expires_in": 599,
+                "scope": "read",
+                "internalUser": true
+              }
+            }
+          }
+          JSON
+
+          echo "Quick probes:"
+          curl -s -i "$WIREMOCK_URL/auth/oauth/authorize?response_type=code&redirect_uri=${BASE_URL}/login/callback&state=xyz&client_id=workload-measurement-ui" | head -n 12 || true
+          curl -s -i -X POST "$WIREMOCK_URL/auth/oauth/token" -H 'Content-Type: application/x-www-form-urlencoded' \
+            --data "grant_type=authorization_code&code=codexxxx&redirect_uri=${BASE_URL}/login/callback" | head -n 12 || true
+          curl -s -i -X POST "$WIREMOCK_URL/oauth/token" -H 'Content-Type: application/x-www-form-urlencoded' \
+            --data "grant_type=authorization_code&code=codexxxx&redirect_uri=${BASE_URL}/login/callback" | head -n 12 || true
+
+
+      - name: WireMock diagnostics (richer)
+        if: failure()
+        env:
+          WIREMOCK_URL: ${{ env.WIREMOCK_URL }}
+        run: |
+          set -euxo pipefail
+          echo "=== Container list ==="; docker ps || true
+      
+          echo "=== WireMock last 200 lines ==="
+          docker logs --tail=200 wiremock-ci || true
+      
+          echo "=== Mapping names (first 25) ==="
+          curl -fsS "$WIREMOCK_URL/__admin/mappings" | \
+            jq -r '.mappings[] | (.name // (.request.method + " " + (.request.url // .request.urlPattern // .request.urlPath // .request.urlPathPattern)))' \
+            | head -n 25 || true
+      
+          echo "=== Requests summary ==="
+          curl -fsS "$WIREMOCK_URL/__admin/requests" | \
+            jq '{ total: (.requests|length),
+                  unmatched: ([.requests[] | select(.wasMatched==false)] | length),
+                  sample_unmatched: ([.requests[] | select(.wasMatched==false)][0:5]) }' || true
+      
+          echo "=== Unmatched only (first 10) ==="
+          curl -fsS "$WIREMOCK_URL/__admin/requests/unmatched" | \
+            jq '{ unmatched: (.requests|length), items: (.requests[0:10]) }' || true
+      
+          echo "=== Requests count (POST body avoids 500) ==="
+          curl -fsS -X POST "$WIREMOCK_URL/__admin/requests/count" \
+            -H 'Content-Type: application/json' -d '{ "method":"ANY", "urlPattern":".*" }' | jq .
+      
+          # Capture JSON snapshots as artifacts
+          mkdir -p wiremock-dump
+          curl -fsS "$WIREMOCK_URL/__admin/requests" > wiremock-dump/requests.json || true
+          curl -fsS "$WIREMOCK_URL/__admin/requests/unmatched" > wiremock-dump/unmatched.json || true
+          curl -fsS -X POST "$WIREMOCK_URL/__admin/mappings/snapshot" -H 'Content-Type: application/json' \
+            -d '{ "captures": { "mappings": "true" } }' > wiremock-dump/mappings-snapshot.json || true
+
+      - name: Create WDIO CI config (single worker, headless)
+        run: |
+          cat > wdio.ci.conf.js <<'JS'
+          const path = require('path');
+          const os = require('os');
+          const fs = require('fs');
+          const basePath = path.resolve(__dirname, 'test/e2e.conf.js');
+          const baseMod = require(basePath);
+          const base = baseMod.config || baseMod;
+      
+          const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'wdio-chrome-'));
+          const ensureArgs = (c = {}) => {
+            const opts = c['goog:chromeOptions'] || {};
+            const args = new Set([...(opts.args || []),
+              '--no-sandbox','--disable-dev-shm-usage','--window-size=1920,1080',
+              `--user-data-dir=${profile}`,'--headless=new'
+            ]);
+            const out = { browserName: c.browserName || 'chrome', ...c,
+              'goog:chromeOptions': { ...opts, args: Array.from(args) },
+              'wdio:enforceWebDriverClassic': true
+            };
+            if (process.env.CHROME_BIN) out['goog:chromeOptions'].binary = process.env.CHROME_BIN;
+            return out;
+          };
+      
+          const caps = Array.isArray(base.capabilities)
+            ? base.capabilities.map(ensureArgs)
+            : [ensureArgs(base.capabilities || {})];
+      
+          const toAbs = (p, root) => (path.isAbsolute(p) ? p : path.join(root, p));
+          const baseDir = path.dirname(basePath);
+          const specs = (base.specs && base.specs.length ? base.specs : ['test/e2e/**/*.js','test/e2e/*.js'])
+            .map(p => toAbs(p, baseDir));
+          const exclude = (base.exclude || []).map(p => toAbs(p, baseDir));
+      
+          exports.config = {
+            ...base,
+            baseUrl: process.env.BASE_URL || base.baseUrl || 'http://localhost:3000',
+            maxInstances: 1,
+            capabilities: caps,
+            specs,
+            exclude,
+            logLevel: process.env.WDIO_LOG_LEVEL || 'info',
+            outputDir: './wdio-logs',
+            reporters: ['spec'],
+            waitforTimeout: base.waitforTimeout || 15000,
+            connectionRetryTimeout: base.connectionRetryTimeout || 120000,
+          };
+          JS
+
+      - name: Run E2E (all specs)
+        env:
+          BASE_URL: ${{ env.BASE_URL }}
+          DATABASE_SERVER: 127.0.0.1
+          DATABASE_USERNAME: postgres
+          DATABASE_PASSWORD: postgres
+          DATABASE: postgres
+          DATABASE_PORT: "5432"
+          DATABASE_SSL: "false"
+          CHROME_BIN: ${{ env.CHROME_BIN }}
+        run: |
+          set -euxo pipefail
+          export $(grep -v '^\s*#' feature.env | xargs) || true
+          export BASE_URL="${BASE_URL}"
+
+          npm run clean-dev-data
+          npm run seed-dev-data
+
+          # ensure no stray Chrome from earlier runs
+          pkill -f "chrome" || true
+
+          # run WDIO across ALL specs (respecting your config’s specs/include/exclude)
+          npx wdio wdio.ci.conf.js --workers 1
+
+          npm run clean-dev-data
+
+      # Extra diagnostics on failure
+      - name: Dump logs and unmatched requests (on failure)
+        if: failure()
+        run: |
+          set -euxo pipefail
+          echo "=== Container list ==="; docker ps
+          echo "=== WireMock last 200 lines ==="; docker logs --tail=200 wiremock-ci || true
+          echo "=== WireMock unmatched requests ==="
+          curl -fsS "$WIREMOCK_URL/__admin/requests/unmatched" | jq '.requests | length as $n | {unmatched:$n, items:.requests[0:25]}' || true
+          echo "=== WireMock requests count ==="
+          curl -fsS "$WIREMOCK_URL/__admin/requests/count" | jq .
+          echo "=== App log tail ==="; tail -n 400 /tmp/app.log || true
+
+      - name: Upload E2E artifacts (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-artifacts-failure
+          path: |
+            ./screenshots
+            ./videos
+            ./wdio-*.log
+            ./wdio-logs
+            /tmp/app.log
+          if-no-files-found: ignore

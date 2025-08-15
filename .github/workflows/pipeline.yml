@@ -1,0 +1,223 @@
+name: Pipeline [test -> build -> deploy]
+
+on:
+  push:
+    branches: ['**']
+  workflow_dispatch:
+    inputs:
+      additional_docker_tag:
+        description: Additional docker tag that can be used to specify stable or testing tags
+        required: false
+        default: ''
+        type: string
+      push:
+        description: Push docker image to registry flag
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+  packages: write
+  actions: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && github.sha || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+env:
+  PROJECT_DIR: app
+
+jobs:
+  node_build:
+    name: node build (inline)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js from .nvmrc
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Update npm
+        run: sudo npm i -g npm@latest
+
+      - name: Restore cache
+        id: restore-cache
+        uses: actions/cache/restore@v4
+        env:
+          cache-name: node-modules
+        with:
+          path: |
+            ${{ env.PROJECT_DIR }}/node_modules
+            ~/.cache/Cypress
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install deps
+        if: steps.restore-cache.outputs.cache-hit != 'true'
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: npm ci --no-audit
+
+      - name: Build
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: npm run build
+
+      - name: Lint
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: npm run lint
+
+      - name: Show build outputs (debug)
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: |
+          echo "PWD=$(pwd)"
+          ls -la
+          find . -maxdepth 2 -type d -name 'dist' -o -name 'build' -o -name 'assets' -o -name '.next' -o -name 'out' | sort
+
+      # Collect only the folders that actually exist, then upload them
+      - id: collect
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$PROJECT_DIR"
+          candidates=(dist build assets/stylesheets .next out public)
+          found=()
+          for p in "${candidates[@]}"; do
+            if [ -e "$p" ]; then
+              echo "Found $p"
+              # prefix with PROJECT_DIR so upload sees the correct path from repo root
+              if [ "$PROJECT_DIR" = "." ]; then
+                found+=("$p")
+              else
+                found+=("$PROJECT_DIR/$p")
+              fi
+            fi
+          done
+          if [ ${#found[@]} -eq 0 ]; then
+            echo "No build outputs found in $PROJECT_DIR (looked for: ${candidates[*]})"
+            exit 1
+          fi
+          {
+            echo "paths<<EOF"
+            printf "%s\n" "${found[@]}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm_build_artifacts
+          path: ${{ steps.collect.outputs.paths }}
+          if-no-files-found: error
+
+      - name: Save cache
+        uses: actions/cache/save@v4
+        if: always()
+        env:
+          cache-name: node-modules
+        with:
+          path: |
+            ${{ env.PROJECT_DIR }}/node_modules
+            ~/.cache/Cypress
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+
+  use_built_assets:
+    name: Use npm build artifacts
+    needs: node_build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - name: List artifacts in this run (debug)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts --jq '.artifacts[].name'
+
+      - name: Download npm build artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: npm_build_artifacts
+          path: ./artifacts
+
+      - run: ls -R ./artifacts
+
+  # keep your existing jobs below
+  node_unit_tests:
+    name: node unit tests
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_unit_tests.yml@v2
+    needs: [node_build]
+    secrets: inherit
+
+  node_integration_and_e2e_tests:
+    name: node integration and e2e tests
+    uses: ./.github/workflows/node_integration_tests_with_postgres.yml
+    needs: [node_build]
+    secrets: inherit
+
+  helm_lint:
+    strategy:
+      matrix:
+        environments: ['dev', 'preprod', 'prod']
+    name: helm lint
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@v2
+    secrets: inherit
+    with:
+      environment: ${{ matrix.environments }}
+
+  build:
+    name: Build docker image from hmpps-github-actions
+    if: github.ref == 'refs/heads/main'
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@v2
+    needs:
+      - node_integration_and_e2e_tests
+      - node_unit_tests
+    with:
+      docker_registry: 'ghcr.io'
+      registry_org: 'ministryofjustice'
+      additional_docker_tag: ${{ inputs.additional_docker_tag }}
+      push: ${{ inputs.push || true }}
+      docker_multiplatform: false
+
+  deploy_dev:
+    name: Deploy to the dev environment
+    if: github.ref == 'refs/heads/main'
+    needs:
+      - build
+      - helm_lint
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2
+    secrets: inherit
+    with:
+      environment: 'dev'
+      app_version: '${{ needs.build.outputs.app_version }}'
+      helm_timeout: '5m'
+
+  deploy_preprod:
+    name: Deploy to the preprod environment
+    if: github.ref == 'refs/heads/main'
+    needs:
+      - build
+      - helm_lint
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2
+    secrets: inherit
+    with:
+      environment: 'preprod'
+      app_version: '${{ needs.build.outputs.app_version }}'
+      helm_timeout: '5m'
+
+  deploy_prod:
+    name: Deploy to the prod environment
+    needs:
+      - build
+      - helm_lint
+      - deploy_preprod
+      - deploy_dev
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2
+    secrets: inherit
+    with:
+      environment: 'prod'
+      app_version: '${{ needs.build.outputs.app_version }}'
+      helm_timeout: '5m'

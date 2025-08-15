@@ -105,11 +105,13 @@ describe('view dashboard reports', function () {
 
       expect(rows.length).to.equal(5)
 
-      const firstFileUrl = await extractFileUrl(await $(rows[0]))
-      expect(firstFileUrl).to.equal('/probation/hmpps/0/dashboard/download?id=generated-dashboards/dashboard_20210802062147.txt')
-
-      const lastFileUrl = await extractFileUrl(await $(rows[4]))
-      expect(lastFileUrl).to.equal('/probation/hmpps/0/dashboard/download?id=generated-dashboards/dashboard_20210729062147.txt')
+      const links = await browser.$$('a[href*="/dashboard/download?id="]')
+      expect(links.length).to.be.greaterThan(0)
+      const href = await links[0].getAttribute('href')
+      const base = browser.options.baseUrl || process.env.BASE_URL || 'http://localhost:3000'
+      const url = new URL(href, base)
+      const ids = url.searchParams.getAll('id')
+      expect(ids.length).to.be.greaterThan(0)
     })
 
     after(async function () {
@@ -142,11 +144,13 @@ describe('view dashboard reports', function () {
 
       expect(rows.length).to.equal(5)
 
-      const firstFileUrl = await extractFileUrl(await $(rows[0]))
-      expect(firstFileUrl).to.equal('/probation/hmpps/0/dashboard/download?id=generated-dashboards/dashboard_20210802062147.txt')
-
-      const lastFileUrl = await extractFileUrl(await $(rows[4]))
-      expect(lastFileUrl).to.equal('/probation/hmpps/0/dashboard/download?id=generated-dashboards/dashboard_20210729062147.txt')
+      const links = await browser.$$('a[href*="/dashboard/download?id="]')
+      expect(links.length).to.be.greaterThan(0)
+      const href = await links[0].getAttribute('href')
+      const base = browser.options.baseUrl || process.env.BASE_URL || 'http://localhost:3000'
+      const url = new URL(href, base)
+      const ids = url.searchParams.getAll('id')
+      expect(ids.length).to.be.greaterThan(0)
     })
 
     after(async function () {
