@@ -68,8 +68,17 @@ jobs:
 
       - name: Install jq & psql client
         run: |
-          sudo apt-get update -y
-          sudo apt-get install -y jq postgresql-client
+          set -euxo pipefail
+          sudo sed -i 's|^deb |# deb |' /etc/apt/sources.list.d/azure-cli*.list || true
+          sudo sed -i 's|^deb |# deb |' /etc/apt/sources.list.d/dotnet*.list || true
+
+          # Update with retries and shorter timeouts
+          sudo apt-get update \
+            -o Acquire::Retries=5 \
+            -o Acquire::http::Timeout=15 \
+            -o Acquire::https::Timeout=15
+
+          sudo apt-get install -y --no-install-recommends jq postgresql-client
 
       - name: Setup AWS CLI
         run: |
