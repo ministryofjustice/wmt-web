@@ -1,6 +1,14 @@
 {% extends "govuk/template.njk" %}
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 
+{% for js in feComponents.jsIncludes %}
+    <script src="{{ js }}" nonce="{{ cspNonce }}"></script>
+{% endfor %}
+
+{% for css in feComponents.cssIncludes %}
+    <link href="{{ css }}" nonce="{{ cspNonce }}" rel="stylesheet"/>
+{% endfor %}
+
 {% block pageTitle %}
     {% include "includes/page-title.njk" %}
 {% endblock %}
@@ -10,76 +18,20 @@
 {% endblock %}
 
 {% block cookie_message %}
-    <p>{{'GOV.UK uses cookies to make the site simpler.'}} </p>
+    <p>{{ 'GOV.UK uses cookies to make the site simpler.' }} </p>
 {% endblock %}
 
 {% block header %}
-    {% include "includes/header.njk" %}
-    <div class="govuk-width-container">
-        {{ govukPhaseBanner({
-            tag: {
-                text: "Beta"
-            },
-            classes: 'maw-no-border',
-            html: 'This is a new service - your <a class="govuk-link" href="mailto:manageaworkforce@justice.gov.uk">feedback</a> will help us to improve it.'
-        }) }}
-    </div>
-
-    <div class="moj-primary-navigation">
-
-        <div class="moj-primary-navigation__container">
-
-            <div class="moj-primary-navigation__nav">
-
-                <nav class="moj-primary-navigation" aria-label="Primary navigation">
-
-                    <ul class="moj-primary-navigation__list">
-                        {% if canAllocate %}
-                            <li class="moj-primary-navigation__item">
-                                <a class="moj-primary-navigation__link"
-                                   href="{{ allocationsUrl }}">Allocations {% if unallocatedCaseCount %}
-                                        <span id="notifications" class="moj-notification-badge">{{ unallocatedCaseCount | getCaseCount }}</span>
-                                    {% endif %}</a>
-                            </li>
-                        {% endif %}
-
-                        {% if canViewAdmin %}
-                            <li class="moj-primary-navigation__item">
-                                <a class="moj-primary-navigation__link" href="/admin" {% if onAdmin %} aria-current="page" {% endif%}>Admin</a>
-                            </li>
-                        {% endif %}
-
-                        <li class="moj-primary-navigation__item">
-                            <a class="moj-primary-navigation__link" href="/probation/hmpps/0" {% if onOffenderManager %} aria-current="page" {% endif%}>Offender Management</a>
-                        </li>
-
-                        <li class="moj-primary-navigation__item">
-                            <a class="moj-primary-navigation__link" href="/omic/hmpps/0"  {% if onOmic %} aria-current="page" {% endif%}>OMIC</a>
-                        </li>
-
-                        <li class="moj-primary-navigation__item">
-                            <a class="moj-primary-navigation__link" href="/court-reports/hmpps/0"  {% if onCourtReports %} aria-current="page" {% endif%} id="courts-link">Courts</a>
-                        </li>
-
-                        <li class="moj-primary-navigation__item">
-                            <a class="moj-primary-navigation__link" href="/officer-search" id="search-link"  {% if onOfficerSearch %} aria-current="page" {% endif%}>Search</a>
-                        </li>
-                    </ul>
-
-                </nav>
-
-            </div>
-        </div>
-
-    </div>
+    {{ feComponents.header | safe }}
 {% endblock %}
 
 {% block beforeContent %}
     {% include "includes/breadcrumbs.njk" %}
 {% endblock %}  
 
+
 {% block footer %}
-    {% include "includes/footer.njk" %}
+    {{ feComponents.footer | safe }}
     {% include "includes/scripts.njk" %}
 {% endblock %}
 
