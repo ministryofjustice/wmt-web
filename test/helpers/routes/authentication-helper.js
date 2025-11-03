@@ -49,7 +49,7 @@ const login = async function ({ username }) {
 
 const logout = async function () {
   const accountToggle = $('.probation-common-header__user-menu-toggle')
-  await accountToggle.waitForClickable({ timeout: 5000 })
+  await accountToggle.waitForExist({ timeout: 10000 })
   await accountToggle.click()
   const signOutLink = $('a[href="/sign-out"]')
   await signOutLink.waitForDisplayed({ timeout: 5000 })
