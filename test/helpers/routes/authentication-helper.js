@@ -48,10 +48,13 @@ const login = async function ({ username }) {
 }
 
 const logout = async function () {
-  const link = await $('[href="/sign-out"]')
-  await link.click()
+  const accountToggle = await $('.probation-common-header__user-menu-toggle')
+  await accountToggle.waitForClickable({ timeout: 5000 })
+  await accountToggle.click()
+  const signOutLink = await $('a[href="/sign-out"]')
+  await signOutLink.waitForDisplayed({ timeout: 5000 })
+  await signOutLink.click()
   await axios.post(`${config.apis.manageUsersService.url}/__admin/reset`)
-
   for (const mapping of mappings) {
     await axios.post(`${config.apis.manageUsersService.url}/__admin/mappings`, mapping)
   }
