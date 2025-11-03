@@ -3,7 +3,7 @@ const passport = require('passport')
 const flash = require('connect-flash')
 const config = require('../../config')
 const auth = require('../authentication/auth')
-const pdsComponents = require('@ministryofjustice/hmpps-probation-frontend-components')
+const pdsComponents = require('@ministryofjustice/hmpps-probation-frontend-components').default
 
 const router = express.Router()
 module.exports = function () {
@@ -15,7 +15,7 @@ module.exports = function () {
 
   router.get(
     '/autherror',
-    pdsComponents.getPageComponents({ pdsUrl: config.serviceUrls.digitalProbation }),
+    pdsComponents.getPageComponents({ pdsUrl: config.apis.probationApi.url }),
     (req, res) => {
       res.status(401)
       return res.render('autherror')
