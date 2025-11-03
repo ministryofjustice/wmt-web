@@ -66,6 +66,7 @@ describe('deleting a reduction', () => {
 
       await $('#headingActive')
       const viewLink = await $('=View')
+      await viewLink.waitForDisplayed({ timeout: 50000 })
       const view = await viewLink.getText()
       expect(view).to.equal('View')
       await clickAndWaitForPageLoad(viewLink)
