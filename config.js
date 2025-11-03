@@ -84,6 +84,10 @@ module.exports = {
       },
       retries: 2
     },
+    probationApi: {
+      url: get('COMPONENT_API_URL', 'https://probation-frontend-components-dev.hmpps.service.justice.gov.uk', requiredInProduction),
+      healthPath: '/health/ping'
+    },
     userPreferenceService: {
       url: get('USER_PREFERENCE_SERVICE_URL', 'http://127.0.0.1:8099', requiredInProduction),
       timeout: {

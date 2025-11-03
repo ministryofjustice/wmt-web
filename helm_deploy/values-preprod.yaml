@@ -12,3 +12,4 @@ generic-service:
     WORKFORCE_ALLOCATIONS_URL: "https://workforce-management-preprod.hmpps.service.justice.gov.uk"
     ALLOCATIONS_SERVICE_URL: "https://hmpps-allocations-preprod.hmpps.service.justice.gov.uk"
     USER_PREFERENCE_SERVICE_URL: "https://hmpps-user-preferences-preprod.hmpps.service.justice.gov.uk"
+    COMPONENT_API_URL: "https://probation-frontend-components-preprod.hmpps.service.justice.gov.uk"

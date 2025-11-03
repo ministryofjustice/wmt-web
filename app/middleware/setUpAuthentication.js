@@ -3,6 +3,7 @@ const passport = require('passport')
 const flash = require('connect-flash')
 const config = require('../../config')
 const auth = require('../authentication/auth')
+const pdsComponents = require('@ministryofjustice/hmpps-probation-frontend-components')
 
 const router = express.Router()
 module.exports = function () {
@@ -12,11 +13,14 @@ module.exports = function () {
   router.use(passport.session())
   router.use(flash())
 
-  router.get('/autherror', function (req, res) {
-    res.status(401)
-    res.locals.user = req.user
-    return res.render('autherror')
-  })
+  router.get(
+    '/autherror',
+    pdsComponents.getPageComponents({ pdsUrl: config.serviceUrls.digitalProbation }),
+    (req, res) => {
+      res.status(401)
+      return res.render('autherror')
+    }
+  )
 
   router.get('/login', passport.authenticate('oauth2'))
 
