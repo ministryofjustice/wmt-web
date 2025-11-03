@@ -17,6 +17,9 @@ const setUpCsrf = require('./middleware/setUpCsrf')
 const setUpCurrentUser = require('./middleware/setUpCurrentUser')
 const getUnallocatedCasesCount = require('./middleware/getUnallocatedCasesCount')
 const errorHandler = require('./errorHandler')
+const pdsComponents = require('@ministryofjustice/hmpps-probation-frontend-components').default
+const config = require('../config')
+const logger = require('./logger')
 
 module.exports.createApplication = async function () {
   const app = express()
@@ -37,7 +40,10 @@ module.exports.createApplication = async function () {
   app.use(setupCacheControl())
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
-
+  app.use(pdsComponents.getPageComponents({
+    pdsUrl: config.apis.probationApi.url,
+    logger
+  }))
   app.use(checkEtlInProgress)
   app.use(getUnallocatedCasesCount())
 

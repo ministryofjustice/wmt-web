@@ -103,6 +103,10 @@ module.exports = {
         timeout: 8000
       },
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true'
+    },
+    probationApi: {
+      url: get('COMPONENT_API_URL', 'https://probation-frontend-components-dev.hmpps.service.justice.gov.uk', requiredInProduction),
+      healthPath: '/health/ping'
     }
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
