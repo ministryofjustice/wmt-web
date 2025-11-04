@@ -195,6 +195,8 @@ describe('editing a reduction', () => {
 
     it('should be not be able to edit a reduction', async () => {
       const viewLink = await $('=View')
+      await viewLink.waitForDisplayed({ timeout: 30000 })
+      expect(await viewLink.getText()).to.equal('View')
       await clickAndWaitForPageLoad(viewLink)
 
       const currentTime = moment().format('YYYY-MM-DD HH:mm:ss.SSS')

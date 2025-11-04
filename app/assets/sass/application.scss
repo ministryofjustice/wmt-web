@@ -11,6 +11,9 @@ $govuk-fonts-path: "/public/fonts/";
 // Take a look at in app/assets/sass/patterns/ to see which files are imported.
 // Autocomplete styles from https://github.com/ministryofjustice/prison-visits-public
 
+//@import probation header and footer
+@import 'node_modules/@ministryofjustice/hmpps-probation-frontend-components/dist/assets/header';
+
 .js-enabled .non-javascript {
   clip: rect(1px, 1px, 1px, 1px);
   height: 1px;

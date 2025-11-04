@@ -171,6 +171,8 @@ describe('archiving a reduction', () => {
     it('should not be able to archive the reduction', async () => {
       const viewLink = await $('=View')
       await viewLink.waitForDisplayed({ timeout: 50000 })
+      const view = await viewLink.getText()
+      expect(view).to.equal('View')
       await clickAndWaitForPageLoad(viewLink)
       const pageTitle = await $('.govuk-heading-xl')
       await pageTitle.waitForDisplayed({ timeout: 30000 })
