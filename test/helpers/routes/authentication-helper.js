@@ -48,7 +48,8 @@ const login = async function ({ username }) {
 }
 
 const logout = async function () {
-  await browser.url('/sign-out')
+  const link = await $('[href="/sign-out"]')
+  await link.click()
   await axios.post(`${config.apis.manageUsersService.url}/__admin/reset`)
 
   for (const mapping of mappings) {
