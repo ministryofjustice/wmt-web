@@ -1,0 +1,46 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPathPattern": "/api/components?component=header&component=footer"
+  },
+  "response": {
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "status": 200,
+    "jsonBody": {
+      "items": [
+        {
+          "header": {
+            "html": "<div>...</div>",
+            "css": [
+              "https://example.com/header-styles.css"
+            ],
+            "javascript": [
+              "https://example.com/header-scripts.js"
+            ]
+          },
+          "footer": {
+            "html": "<div>...</div>",
+            "css": [
+              "https://example.com/footer-styles.css"
+            ],
+            "javascript": [
+              "https://example.com/footer-scripts.js"
+            ]
+          },
+          "meta": {
+            "services": [
+              {
+                "id": "example-service",
+                "heading": "Example Service",
+                "description": "An example service",
+                "href": "https://service.example.com"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
