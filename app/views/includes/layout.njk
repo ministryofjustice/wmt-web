@@ -48,8 +48,13 @@
                                         <span id="notifications" class="moj-notification-badge">{{ unallocatedCaseCount | getCaseCount }}</span>
                                     {% endif %}</a>
                             </li>
-                        {% endif %}
 
+                        {% if featureFlag %}
+                            <li class="moj-primary-navigation__item">
+                                <a class="moj-primary-navigation__link" href="{{ allocationsUrl }}/reallocations">Reallocations</a>
+                            </li>
+                        {% endif %}
+                        {% endif %}
                         {% if canViewAdmin %}
                             <li class="moj-primary-navigation__item">
                                 <a class="moj-primary-navigation__link" href="/admin" {% if onAdmin %} aria-current="page" {% endif%}>Admin</a>

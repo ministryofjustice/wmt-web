@@ -74,6 +74,9 @@ generic-service:
       DASHBOARD_AWS_BUCKET: "bucket_name"
     sqs-hmpps-audit-secret:
       AUDIT_SQS_QUEUE_URL: "sqs_queue_url"
+    flipt:
+      FLIPT_API_KEY: 'API_KEY'
+      FLIPT_URL: 'URL'
 
   allowlist:
     groups:
