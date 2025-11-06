@@ -1,3 +1,4 @@
+/* global $$ */
 const expect = require('chai').expect
 const authenticationHelper = require('../helpers/routes/authentication-helper')
 const dataHelper = require('../helpers/data/aggregated-data-helper')
@@ -340,9 +341,9 @@ describe('National', function () {
       await authenticationHelper.login(authenticationHelper.users.onlyWmtUser)
     })
 
-    it('should not display allocations link', async function () {
-      const allocationsLink = await $(`a[href*="${config.nav.allocations.url}"`)
-      const exists = await allocationsLink.isExisting()
+    it('should not display any allocations link', async function () {
+      const allocationsLinks = await $$(`a[href^="${config.nav.allocations.url}"]`)
+      const exists = await allocationsLinks.length > 0
       return expect(exists).to.be.false
     })
 

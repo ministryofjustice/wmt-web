@@ -121,6 +121,17 @@ module.exports = {
     password: process.env.REDIS_AUTH_TOKEN,
     tls_enabled: get('REDIS_TLS_ENABLED', 'false')
   },
+  fliptClient: {
+    url: get('FLIPT_URL', 'http://127.0.0.1:9089', requiredInProduction),
+    namespace: 'ManageAWorkforce',
+    timeout: {
+      response: 60000
+    },
+    agent: {
+      timeout: 5000
+    },
+    apiClientSecret: get('FLIPT_API_KEY', 'clientsecret', requiredInProduction)
+  },
   dashboard: {
     region: process.env.DASHBOARD_S3_REGION || 'eu-west-2',
     accessKeyId: production ? undefined : 'foobar',

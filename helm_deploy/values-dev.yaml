@@ -13,6 +13,7 @@ generic-service:
     ALLOCATIONS_SERVICE_URL: "https://hmpps-allocations-dev.hmpps.service.justice.gov.uk"
     USER_PREFERENCE_SERVICE_URL: "https://hmpps-user-preferences-dev.hmpps.service.justice.gov.uk"
     COMPONENT_API_URL: "https://probation-frontend-components-dev.hmpps.service.justice.gov.uk"
+    FLIPT_URL: "https://feature-toggles-dev.hmpps.service.justice.gov.uk"
   
   scheduledDowntime:
     enabled: true

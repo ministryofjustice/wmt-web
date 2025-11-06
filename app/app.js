@@ -18,6 +18,7 @@ const setUpCurrentUser = require('./middleware/setUpCurrentUser')
 const getUnallocatedCasesCount = require('./middleware/getUnallocatedCasesCount')
 const errorHandler = require('./errorHandler')
 const pdsComponents = require('@ministryofjustice/hmpps-probation-frontend-components').default
+const featureFlagMiddleware = require('./middleware/featureFlagMiddleware')
 const config = require('../config')
 const logger = require('./logger')
 
@@ -27,6 +28,8 @@ module.exports.createApplication = async function () {
   app.set('json spaces', 2)
   app.set('trust proxy', true)
   app.set('port', process.env.PORT || 3000)
+
+  app.use(featureFlagMiddleware('Reallocations', 'Reallocations'))
 
   app.use(setUpHealthChecks())
   app.use(setUpWebSecurity())
