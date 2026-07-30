@@ -1,3 +1,4 @@
+docker-compose up -d
 # Workload Measurement Tool - Web application
 
 [![CircleCI](https://circleci.com/gh/ministryofjustice/wmt-web/tree/main.svg?style=svg)](https://circleci.com/gh/ministryofjustice/wmt-web/tree/main)
@@ -41,7 +42,7 @@ If your global npm is newer, run project commands with npm 10 via `npx`:
   - `hmpps-workload`
   - `rds-history-instance-output`
   - `rds-live-instance-output`
-- Here is a guide for [connecting to the Kubernetes Cluster](https://user-guide.cloud-platform.service.justice.gov.uk/documentation/getting-started/kubectl-config.html#connecting-to-the-cloud-platform-39-s-kubernetes-cluster) to access the namespace/secrets
+- here is a guide for [connecting to the Kubernetes Cluster](https://user-guide.cloud-platform.service.justice.gov.uk/documentation/getting-started/kubectl-config.html#connecting-to-the-cloud-platform-39-s-kubernetes-cluster) to access the namespace/secrets
 
 #### Connect to DEV DBs
 * If you have just done the previous section, you may have noticed that in your resulting `.env` file you have secrets for two databases
@@ -80,19 +81,19 @@ port-forward-history-pod 5433:5432
 ```
 WMT_HISTORY_DB_PORT=5433
 ```
-- So, in the locally deployed application, based on this property we forward traffic for the history DB to 5433 (hence the second port forward being set up on that port)
+- So, in the locally deployed application, this property we forward traffic for the history DB to 5433 (hence the second port forward being set up on that port)
 
 #### Run localstack, manage-users-api and redis docker services locally
 - we can run `redis` locally as a docker container so that we do not need to integrate with the dev environment's redis datasource
 - we can run `localstack` locally to simulate the AWS resources we need locally
 - run this command from this repo's root directory: 
-```bash
-docker compose up -d redis localstack hmpps-manage-users-api
 ```
-- with the above command you will have noticed that we are specifically running the `redis` and `localstack` containers only. If we were to run the usual `docker compose up -d` command then we would run the auth service and other downstream services as local containers, which is not our intention here
+docker-compose up -d redis localstack hmpps-manage-users-api
+```
+- with the above command you will have noticed that we are specifically running the `redis localstack` containers only. If we were to run the usual `docker-compose up -d` command then we would run the auth service and other downstream services as local containers which is not our intention here
 - just running these containers is good because we limit the amount of mocking and interact with dev services as much as possible
 - jump into localstack container and run shell script (to create the localstack AWS infra)
-```bash
+```
 docker exec -it wmt-web-localstack bash
 cd /docker-entrypoint-initaws.d
 ./setup-s3.sh
@@ -100,7 +101,7 @@ exit
 ```
 
 #### Start the web application
-- In IntelliJ create a new configuration by clicking `Edit Configuration` in the dropdown next to the `Run` and `Debug` buttons
+- In Intellij create a new Configuration by clicking `Edit Configuration` in the dropdown next to the `Run` and `Debug` buttons
 - Click the `Add new configuration` button (the button with the `+` sign in the top left)
 - In the resulting list find `npm` in the list and click on it
 - In the resulting form take the defaults and set the following values:
@@ -109,56 +110,63 @@ exit
 - Hit `Apply` button
 - Hit `OK` button
 - Now you should see a new `start-local` run configuration in the dropdown next to the `Run` and `Debug` buttons
-- You should now be in a position to run (as well as debug) the application and it will use the properties set in your new `.env` file to fire network calls at the dev environment
+- You should now be in a position to run (as well as debug) the application and it will use the properties set in your new `.env` file to fire the networks calls at the dev environment
 - Navigate to `http://localhost:3000` to see the running application.
 
 ## Testing
 
 ### Unit Tests
 - To run Unit Tests run the following command:
-```bash
 ```
+npm test
+npm test
+```
+- if you want to generate an html report so that you can view any failures vid=sually run this command:
+```
+npm run test-generate-report
 
 ### Integration Tests
-To run Integration Tests:
+To run Integration Tests
 - run docker containers
 ```bash
 docker compose up -d
 ```
 
-- optionally verify schemas were created before running tests:
-```bash
-docker exec wmt-web-hmpps-workload-postgres psql -U root -d postgres -c '\dn'
-```
-Expected schemas include `app`, `dbo`, and `staging`.
 - jump into localstack container and run shell script (to create the localstack AWS infra)
-```bash
+```
 docker exec -it wmt-web-localstack bash
 cd /docker-entrypoint-initaws.d
 ./setup-s3.sh
 exit
+  - run the following command:
 ```
+npm run integration-test
 ```
-
+- if you want to generate an html report so that you can view any failures visually run this command instead:
+```
+npm run integration-test-generate-report
 
 ## E2E Tests
 
-E2E tests are run using Selenium and WebDriver
+E2E Tests are run using Selenium and webdriver
 
 Run tests using the following commands:
 - run docker containers
-```bash
+```
 docker compose up -d
 ```
 
 - jump into localstack container and run shell script (to create the localstack AWS infra)
-```bash
+```
 docker exec -it wmt-web-localstack bash
 cd /docker-entrypoint-initaws.d
 ./setup-s3.sh
 exit
 ```
 - post mappings to wiremock
-
+```
+npm run post-wiremock-mappings
 - run the following command to start the application and run the e2e tests:
-
+```
+npm run start-dev
+npm run test-e2e
