@@ -117,26 +117,15 @@ exit
 ### Unit Tests
 - To run Unit Tests run the following command:
 ```bash
-npx -y npm@10 test
-```
-- if you want to generate an HTML report so that you can view any failures visually, run this command:
-```bash
-npx -y npm@10 run test-generate-report
 ```
 
 ### Integration Tests
 To run Integration Tests:
 - run docker containers
 ```bash
-docker compose up -d --force-recreate --renew-anon-volumes postgres hmpps-workload redis localstack hmpps-auth hmpps-manage-users-api hmpps-external-users-api wiremock manage-users-wiremock
+docker compose up -d
 ```
-- ensure integration DB credentials in `feature.env` match the local Postgres container:
-```dotenv
-WMT_LIVE_DB_USERNAME=root
-WMT_LIVE_DB_PASSWORD=dev
-WMT_HISTORY_DB_USERNAME=root
-WMT_HISTORY_DB_PASSWORD=dev
-```
+
 - optionally verify schemas were created before running tests:
 ```bash
 docker exec wmt-web-hmpps-workload-postgres psql -U root -d postgres -c '\dn'
@@ -149,14 +138,8 @@ cd /docker-entrypoint-initaws.d
 ./setup-s3.sh
 exit
 ```
-- run the following command:
-```bash
-nvm exec 22.14.0 npx -y npm@10 run integration-test
 ```
-- if you want to generate an HTML report so that you can view any failures visually, run this command instead:
-```bash
-nvm exec 22.14.0 npx -y npm@10 run integration-test-generate-report
-```
+
 
 ## E2E Tests
 
@@ -176,12 +159,6 @@ cd /docker-entrypoint-initaws.d
 exit
 ```
 - post mappings to wiremock
-```bash
-npx -y npm@10 run post-wiremock-mappings
-```
-- run the following command to start the application and run the e2e tests:
-```bash
-npx -y npm@10 run start-dev
-npx -y npm@10 run test-e2e
 
-```
+- run the following command to start the application and run the e2e tests:
+
