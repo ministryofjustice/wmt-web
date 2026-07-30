@@ -17,13 +17,18 @@ On OSX (using [homebrew](https://brew.sh/)):
 
 - Go to [Docker get started](https://www.docker.com/get-started) to install Docker
 
-Install Node version 20
-- `nvm install 20`
+Install Node version 22.14.0
+- `nvm install 22.14.0`
+- `nvm use 22.14.0`
+
+This project enforces npm 10 via `engines` and `.npmrc` (`engine-strict=true`).
+If your global npm is newer, run project commands with npm 10 via `npx`:
+- `npx -y npm@10 install`
 
 ## Run application locally against Dev environment
 - It is possible to get the web application running locally to:
   - authenticate against the dev environment
-  - make networks calls to the dev environment APIs
+  - make network calls to the dev environment APIs
   - integrate with the dev databases
 - The below sections describe how to achieve all of the above...
 
@@ -32,18 +37,18 @@ Install Node version 20
 - You will notice that in your new `.env` file you have the properties that the application requires
 - You will also notice that the secret values (that are intentionally left out of `values.dev.yml` for deployments) are also intentionally not included `.env.template`
 - The placeholder values of the properties in `.env.template` will need to be swapped out for the real secrets
-- these secrets are stored in `Kubenetes` and can be accessed in the `hmpps-workload-dev` namespace in the following secrets: 
+- these secrets are stored in `Kubernetes` and can be accessed in the `hmpps-workload-dev` namespace in the following secrets:
   - `hmpps-workload`
   - `rds-history-instance-output`
   - `rds-live-instance-output`
-- here is a guide for [connecting to the Kubernetes Cluster](https://user-guide.cloud-platform.service.justice.gov.uk/documentation/getting-started/kubectl-config.html#connecting-to-the-cloud-platform-39-s-kubernetes-cluster) to access the namespace/secrets
+- Here is a guide for [connecting to the Kubernetes Cluster](https://user-guide.cloud-platform.service.justice.gov.uk/documentation/getting-started/kubectl-config.html#connecting-to-the-cloud-platform-39-s-kubernetes-cluster) to access the namespace/secrets
 
 #### Connect to DEV DBs
 * If you have just done the previous section, you may have noticed that in your resulting `.env` file you have secrets for two databases
 * To connect to the DEV databases, we will need to port forward to both of them
-* Here is the wiki on how to port forward to dbs in general [Access the DEV RDS Database](https://user-guide.cloud-platform.service.justice.gov.uk/documentation/other-topics/rds-external-access.html#accessing-your-rds-database)
+* Here is the wiki on how to port forward to DBs in general [Access the DEV RDS Database](https://user-guide.cloud-platform.service.justice.gov.uk/documentation/other-topics/rds-external-access.html#accessing-your-rds-database)
 * This wiki explains how to do a single port forward to a single DB, in our case we will need to do it twice (once for each database):
-* So re this command in the wiki:
+* Use this command from the wiki:
 ```
 kubectl \
   -n [your namespace] \
@@ -75,19 +80,19 @@ port-forward-history-pod 5433:5432
 ```
 WMT_HISTORY_DB_PORT=5433
 ```
-- So, in the locally deployed application, based on this prop we will forward traffic for the history DB o 5433 (hence the second port forward being setup on that port)
+- So, in the locally deployed application, based on this property we forward traffic for the history DB to 5433 (hence the second port forward being set up on that port)
 
 #### Run localstack, manage-users-api and redis docker services locally
 - we can run `redis` locally as a docker container so that we do not need to integrate with the dev environment's redis datasource
 - we can run `localstack` locally to simulate the AWS resources we need locally
 - run this command from this repo's root directory: 
+```bash
+docker compose up -d redis localstack hmpps-manage-users-api
 ```
-docker-compose up -d redis localstack hmpps-manage-users-api
-```
-- with the above command you will have noticed that we are specifically running the `redis localstack` containers only. If we were to run the usual `docker-compose up -d` command then we would run the auth service and other downstream services as local containers which is not our intention here
+- with the above command you will have noticed that we are specifically running the `redis` and `localstack` containers only. If we were to run the usual `docker compose up -d` command then we would run the auth service and other downstream services as local containers, which is not our intention here
 - just running these containers is good because we limit the amount of mocking and interact with dev services as much as possible
 - jump into localstack container and run shell script (to create the localstack AWS infra)
-```
+```bash
 docker exec -it wmt-web-localstack bash
 cd /docker-entrypoint-initaws.d
 ./setup-s3.sh
@@ -95,7 +100,7 @@ exit
 ```
 
 #### Start the web application
-- In Intellij create a new Configuration by clicking `Edit Configuration` in the dropdown next to the `Run` and `Debug` buttons
+- In IntelliJ create a new configuration by clicking `Edit Configuration` in the dropdown next to the `Run` and `Debug` buttons
 - Click the `Add new configuration` button (the button with the `+` sign in the top left)
 - In the resulting list find `npm` in the list and click on it
 - In the resulting form take the defaults and set the following values:
@@ -104,67 +109,79 @@ exit
 - Hit `Apply` button
 - Hit `OK` button
 - Now you should see a new `start-local` run configuration in the dropdown next to the `Run` and `Debug` buttons
-- You should now be in a position to run (as well as debug) the application and it will use the properties set in your new `.env` file to fire the networks calls at the dev environment
+- You should now be in a position to run (as well as debug) the application and it will use the properties set in your new `.env` file to fire network calls at the dev environment
 - Navigate to `http://localhost:3000` to see the running application.
 
 ## Testing
 
 ### Unit Tests
 - To run Unit Tests run the following command:
+```bash
+npx -y npm@10 test
 ```
-npm test
-```
-- if you want to generate an html report so that you can view any failures vid=sually run this command:
-```
-npm run test-generate-report
+- if you want to generate an HTML report so that you can view any failures visually, run this command:
+```bash
+npx -y npm@10 run test-generate-report
 ```
 
 ### Integration Tests
-To run Integration Tests 
+To run Integration Tests:
 - run docker containers
+```bash
+docker compose up -d --force-recreate --renew-anon-volumes postgres hmpps-workload redis localstack hmpps-auth hmpps-manage-users-api hmpps-external-users-api wiremock manage-users-wiremock
 ```
-docker-compose up -d
+- ensure integration DB credentials in `feature.env` match the local Postgres container:
+```dotenv
+WMT_LIVE_DB_USERNAME=root
+WMT_LIVE_DB_PASSWORD=dev
+WMT_HISTORY_DB_USERNAME=root
+WMT_HISTORY_DB_PASSWORD=dev
 ```
+- optionally verify schemas were created before running tests:
+```bash
+docker exec wmt-web-hmpps-workload-postgres psql -U root -d postgres -c '\dn'
+```
+Expected schemas include `app`, `dbo`, and `staging`.
 - jump into localstack container and run shell script (to create the localstack AWS infra)
-```
+```bash
 docker exec -it wmt-web-localstack bash
 cd /docker-entrypoint-initaws.d
 ./setup-s3.sh
 exit
 ```
-  - run the following command:
+- run the following command:
+```bash
+nvm exec 22.14.0 npx -y npm@10 run integration-test
 ```
-npm run integration-test
-```
-- if you want to generate an html report so that you can view any failures visually run this command instead:
-```
-npm run integration-test-generate-report
+- if you want to generate an HTML report so that you can view any failures visually, run this command instead:
+```bash
+nvm exec 22.14.0 npx -y npm@10 run integration-test-generate-report
 ```
 
 ## E2E Tests
 
-E2E Tests are run using Selenium and webdriver
+E2E tests are run using Selenium and WebDriver
 
 Run tests using the following commands:
 - run docker containers
-```
+```bash
 docker compose up -d
 ```
 
 - jump into localstack container and run shell script (to create the localstack AWS infra)
-```
+```bash
 docker exec -it wmt-web-localstack bash
 cd /docker-entrypoint-initaws.d
 ./setup-s3.sh
 exit
 ```
 - post mappings to wiremock
-```
-npm run post-wiremock-mappings
+```bash
+npx -y npm@10 run post-wiremock-mappings
 ```
 - run the following command to start the application and run the e2e tests:
-```
-npm run start-dev
-npm run test-e2e
+```bash
+npx -y npm@10 run start-dev
+npx -y npm@10 run test-e2e
 
 ```
