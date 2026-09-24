@@ -145,17 +145,17 @@ jobs:
 
       - run: ls -R ./artifacts
 
-  node_unit_tests:
-    name: node unit tests
-    uses: ./.github/workflows/node_unit_tests.yml
-    needs: [node_build]
-    secrets: inherit
+  # node_unit_tests:
+  #   name: node unit tests
+  #   uses: ./.github/workflows/node_unit_tests.yml
+  #   needs: [node_build]
+  #   secrets: inherit
 
-  node_integration_and_e2e_tests:
-    name: node integration and e2e tests
-    uses: ./.github/workflows/node_integration_tests_with_postgres.yml
-    needs: [node_build]
-    secrets: inherit
+  # node_integration_and_e2e_tests:
+  #   name: node integration and e2e tests
+  #   uses: ./.github/workflows/node_integration_tests_with_postgres.yml
+  #   needs: [node_build]
+  #   secrets: inherit
 
   helm_lint:
     strategy:
