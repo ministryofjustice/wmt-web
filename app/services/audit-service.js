@@ -66,7 +66,7 @@ function messageFrom (what, details, loggedInUserEmail) {
     when: new Date(),
     operationId: crypto.randomUUID(),
     who: loggedInUserEmail,
-    service: 'wmt',
+    service: 'wmt-web',
     details: JSON.stringify(details)
   })
 }
