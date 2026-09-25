@@ -27,7 +27,7 @@ module.exports = function () {
   // })
 
   get('*', function (_req, res) {
-    return res.render('decommision')
+    return res.render('decommission')
   })
 
   return router
