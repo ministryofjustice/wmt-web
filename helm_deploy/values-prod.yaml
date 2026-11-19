@@ -3,7 +3,6 @@ generic-service:
 
   ingress:
     className: modsec
-    host: workload-measurement.hmpps.service.justice.gov.uk
 
   env:
     INGRESS_URL: "https://workload-measurement.hmpps.service.justice.gov.uk"
